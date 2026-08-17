@@ -1,0 +1,36 @@
+# 默认忽略根目录下的所有内容
+/*
+
+# 保留 Git 配置
+!/.gitignore
+!/.gitattributes
+
+# 只同步以下三个目录
+!/Genshin_Project/
+!/Docs/
+!/Charts/
+
+# Unity 自动生成内容
+Genshin_Project/[Ll]ibrary/
+Genshin_Project/[Tt]emp/
+Genshin_Project/[Oo]bj/
+Genshin_Project/[Bb]uild/
+Genshin_Project/[Bb]uilds/
+Genshin_Project/[Ll]ogs/
+Genshin_Project/[Uu]ser[Ss]ettings/
+Genshin_Project/MemoryCaptures/
+
+# IDE 和版本控制缓存
+Genshin_Project/.vs/
+Genshin_Project/.idea/
+Genshin_Project/.svn/
+
+# 自动生成的工程文件
+Genshin_Project/*.csproj
+Genshin_Project/*.sln
+Genshin_Project/*.suo
+Genshin_Project/*.user
+Genshin_Project/*.userprefs
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,76 @@
+{
+  "characters": [
+    {
+      "characterID": 1009,
+      "name": "安柏",
+      "star": 4,
+      "element": "Pyro",
+      "baseHP": 793,
+      "baseATK": 42,
+      "baseDEF": 50,
+      "maxEnergy": 40,
+      "normalAttackID": "SK_Normal_Amber",
+      "heavyAttackID": "SK_Heavy_Amber",
+      "skillID": "SK_Skill_Amber",
+      "burstID": "SK_Burst_Amber"
+    }
+  ],
+  "monsters": [
+    {
+      "monsterID": 20001,
+      "name": "丘丘人",
+      "threat": 1,
+      "actsGiven": 1,
+      "baseHP": 73,
+      "baseATK": 25,
+      "physicalRes": 0.1,
+      "pyroRes": 0.1
+    }
+  ],
+  "skills": [
+    {
+      "skillID": "SK_Normal_Amber",
+      "skillName": "普通射击",
+      "apCost": 20,
+      "cooldown": 0,
+      "energyGain": 0,
+      "element": "Physical",
+      "damageMultiplier": 0.593,
+      "targetCount": 1,
+      "description": "对单体造成物理伤害"
+    },
+    {
+      "skillID": "SK_Heavy_Amber",
+      "skillName": "蓄力射击",
+      "apCost": 30,
+      "cooldown": 0,
+      "energyGain": 0,
+      "element": "Pyro",
+      "damageMultiplier": 1.24,
+      "targetCount": 1,
+      "description": "蓄力射击，造成火元素伤害"
+    },
+    {
+      "skillID": "SK_Skill_Amber",
+      "skillName": "兔兔伯爵",
+      "apCost": 30,
+      "cooldown": 4,
+      "energyGain": 0,
+      "element": "Pyro",
+      "damageMultiplier": 1.23,
+      "targetCount": -1,
+      "description": "对全体敌人造成火元素伤害"
+    },
+    {
+      "skillID": "SK_Burst_Amber",
+      "skillName": "箭雨",
+      "apCost": 0,
+      "cooldown": 3,
+      "energyGain": 0,
+      "element": "Pyro",
+      "damageMultiplier": 0.281,
+      "targetCount": 3,
+      "description": "对三个相邻敌人造成多段火元素伤害"
+    }
+  ]
+}
