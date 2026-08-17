@@ -1,0 +1,58 @@
+{
+    "StageName": "测试关卡1",
+    "Allies": [
+        {
+            "CharacterID": 1009,
+            "Level": 60,
+            "Constellation": 6,
+            "IsAscended": true,
+            "SkillLevels": [
+                1,
+                1,
+                1,
+                1
+            ]
+        },
+        {
+            "CharacterID": 1010,
+            "Level": 60,
+            "Constellation": 0,
+            "IsAscended": false,
+            "SkillLevels": [
+                1,
+                1,
+                1,
+                1
+            ]
+        }
+    ],
+    "Enemies": [
+        {
+            "EnemyID": 20001,
+            "Level": 40,
+            "Slot": 1
+        },
+        {
+            "EnemyID": 20001,
+            "Level": 40,
+            "Slot": 2
+        },
+        {
+            "EnemyID": 20000,
+            "Level": 10,
+            "Slot": 3
+        },
+        {
+            "EnemyID": 20001,
+            "Level": 40,
+            "Slot": 4
+        },
+        {
+            "EnemyID": 20001,
+            "Level": 40,
+            "Slot": 5
+        }
+    ],
+    "InitialEnergyMode": "Percent",
+    "InitialEnergyValue": 100.0
+}
