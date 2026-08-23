@@ -43,8 +43,7 @@ public static class SheetColumns
         public const int TargetNumber      = 14;
         public const int TargetConsecutive = 15;
         public const int TargetOverride    = 16;
-        public const int EnergyGainMode    = 17;
-        public const int ScriptHook        = 18;
+        public const int ScriptHook        = 17;
     }
 
     // ---------------- StatusData_Main 表 ----------------
@@ -63,9 +62,10 @@ public static class SheetColumns
         public const int ApplyReactionType = 11;
         public const int ApplyElementType  = 12;
         public const int ApplyString       = 13;
-        public const int MaxCount          = 14;
-        public const int MaxStack          = 15;
-        public const int WhenMax           = 16;
+        public const int ScriptHook        = 14;
+        public const int MaxCount          = 15;
+        public const int MaxStack          = 16;
+        public const int WhenMax           = 17;
     }
 
     // ---------------- Status_Effect 表 ----------------
@@ -87,8 +87,7 @@ public static class SheetColumns
         public const int TargetSelect       = 14;
         public const int TargetConsecutive  = 15;
         public const int TargetOverride     = 16;
-        public const int EnergyGainMode     = 17;
-        public const int ScriptHook         = 18;
+        public const int ScriptHook         = 17;
     }
 
     // ---------------- Enemy_Main 表 ----------------
@@ -152,7 +151,6 @@ public static class SheetColumns
         public const int TargetNumber      = 14;
         public const int TargetConsecutive = 15;
         public const int TargetOverride    = 16;
-        public const int EnergyGainMode    = 17;
-        public const int ScriptHook        = 18;
+        public const int ScriptHook        = 17;
     }
 }

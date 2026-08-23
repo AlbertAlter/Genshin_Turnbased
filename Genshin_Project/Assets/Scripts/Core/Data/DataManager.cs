@@ -4,7 +4,7 @@ using System.IO;
 using OfficeOpenXml;
 using UnityEngine;
 
-public class DataManager : Singleton<DataManager>
+public partial class DataManager : Singleton<DataManager>
 {
     // ========== Characters ==========
     public List<CharacterOverviewData> CharacterOverviewList = new List<CharacterOverviewData>();
@@ -53,49 +53,7 @@ public class DataManager : Singleton<DataManager>
 
     protected override void Init()
     {
-        LoadAllData();
-    }
-
-    private readonly List<string> _loadErrors = new List<string>();
-
-    /// <summary>执行一次配表校验并收集错误（不中断，加载结束时统一报告）。</summary>
-    void TryValidate(string tag, System.Action validate)
-    {
-        try { validate(); }
-        catch (TableValidationException e) { _loadErrors.Add(e.Message); }
-        catch (System.Exception e) { _loadErrors.Add($"[{tag}] {e.Message}"); }
-    }
-
-    void LoadAllData()
-    {
-        try
-        {
-            LoadCharacterOverview();
-            LoadCharacterSheets();
-            LoadGrowthCurve();
-            LoadStatusData();
-            LoadEnemyStatusData();
-            LoadEnemyAttributes();
-            LoadEnemyCurves();
-            LoadEnemySkill();
-            LoadReactionLevelCoefficient();
-            LoadStageConfig();
-
-            //配表校验错误统一报告（2026-08-14）：一次性列出所有错误，不逐次中断
-            if (_loadErrors.Count > 0)
-            {
-                Debug.LogError($"===== 配表校验失败，共 {_loadErrors.Count} 处 =====");
-                foreach (var err in _loadErrors) Debug.LogError(err);
-                _loadErrors.Clear();
-                throw new System.Exception("配表校验失败（详见上方完整错误列表）");
-            }
-
-            Debug.Log($"DataManager: load complete. {CharacterOverviewList.Count} chars, {EnemyMainDict.Count} enemies, {StatusMainDict.Count} statuses");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"DataManager load failed: {e.Message}\n{e.StackTrace}");
-        }
+        ReloadAllData();
     }
 
     // ================================================================
@@ -163,6 +121,10 @@ public class DataManager : Singleton<DataManager>
                 var sheets = pkg.Workbook.Worksheets;
                 if (sheets.Count == 0) continue;
 
+                // 每个角色工作簿只描述一个角色。Ascension 表本身没有 CharacterID 列，
+                // 因此角色 ID 必须从同一工作簿的 Attributes 表取得。
+                int workbookCharacterId = 0;
+
                 var attrSheet = sheets["Attributes"];
                 if (attrSheet != null)
                 {
@@ -213,6 +175,9 @@ public class DataManager : Singleton<DataManager>
                             PhysicalDmgBonus = SafeGetFloat(attrSheet.Cells[row, 37].Value)
                         };
                         if (data.CharacterID == 0) continue;
+                        if (workbookCharacterId != 0 && workbookCharacterId != data.CharacterID)
+                            throw new InvalidDataException($"角色表 {fileName} 的 Attributes 中出现了多个 CharacterID");
+                        workbookCharacterId = data.CharacterID;
                         CharacterAttributesDict[data.CharacterID] = data;
                     }
                 }
@@ -220,39 +185,40 @@ public class DataManager : Singleton<DataManager>
                 var ascSheet = sheets["Ascension"];
                 if (ascSheet != null)
                 {
+                    if (workbookCharacterId == 0)
+                        throw new InvalidDataException($"角色表 {fileName} 无法从 Attributes 取得 CharacterID");
+
                     int startRow = GetDataStartRow(ascSheet);
                     int maxRow = GetSheetMaxRow(ascSheet);
-                    int charId = 0;
                     for (int row = startRow; row <= maxRow; row++)
                     {
                         string cell = ascSheet.Cells[row, 1].Text;
-                        if (!string.IsNullOrEmpty(cell)) charId = SafeGetInt(ascSheet.Cells[row, 1].Value);
-                        if (charId == 0) continue;
                         if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(ascSheet.Cells[row, 2].Text)) continue;
                         var data = new CharacterAscensionData
                         {
-                            AscensionLevel = SafeGetInt(ascSheet.Cells[row, 2].Value),
-                            BaseHPFlat = SafeGetFloat(ascSheet.Cells[row, 3].Value),
-                            BaseATKFlat = SafeGetFloat(ascSheet.Cells[row, 4].Value),
-                            BaseDEFFlat = SafeGetFloat(ascSheet.Cells[row, 5].Value),
-                            HPBonus = SafeGetFloat(ascSheet.Cells[row, 6].Value),
-                            ATKBonus = SafeGetFloat(ascSheet.Cells[row, 7].Value),
-                            DEFBonus = SafeGetFloat(ascSheet.Cells[row, 8].Value),
-                            CritRate = SafeGetFloat(ascSheet.Cells[row, 9].Value),
-                            CritDMG = SafeGetFloat(ascSheet.Cells[row, 10].Value),
-                            EM = SafeGetFloat(ascSheet.Cells[row, 11].Value),
-                            EnergyRechargeRate = SafeGetFloat(ascSheet.Cells[row, 12].Value),
-                            PyroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 13].Value),
-                            HydroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 14].Value),
-                            ElectroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 15].Value),
-                            CryoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 16].Value),
-                            AnemoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 17].Value),
-                            GeoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 18].Value),
-                            DendroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 19].Value),
-                            PhysicalDmgBonus = SafeGetFloat(ascSheet.Cells[row, 20].Value)
+                            AscensionLevel = SafeGetInt(ascSheet.Cells[row, 1].Value),
+                            BaseHPFlat = SafeGetFloat(ascSheet.Cells[row, 2].Value),
+                            BaseATKFlat = SafeGetFloat(ascSheet.Cells[row, 3].Value),
+                            BaseDEFFlat = SafeGetFloat(ascSheet.Cells[row, 4].Value),
+                            HPBonus = SafeGetFloat(ascSheet.Cells[row, 5].Value),
+                            ATKBonus = SafeGetFloat(ascSheet.Cells[row, 6].Value),
+                            DEFBonus = SafeGetFloat(ascSheet.Cells[row, 7].Value),
+                            CritRate = SafeGetFloat(ascSheet.Cells[row, 8].Value),
+                            CritDMG = SafeGetFloat(ascSheet.Cells[row, 9].Value),
+                            EM = SafeGetFloat(ascSheet.Cells[row, 10].Value),
+                            EnergyRechargeRate = SafeGetFloat(ascSheet.Cells[row, 11].Value),
+                            PyroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 12].Value),
+                            HydroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 13].Value),
+                            ElectroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 14].Value),
+                            CryoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 15].Value),
+                            AnemoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 16].Value),
+                            GeoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 17].Value),
+                            DendroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 18].Value),
+                            PhysicalDmgBonus = SafeGetFloat(ascSheet.Cells[row, 19].Value)
                         };
-                        if (!CharacterAscensionDict.ContainsKey(charId)) CharacterAscensionDict[charId] = new List<CharacterAscensionData>();
-                        CharacterAscensionDict[charId].Add(data);
+                        if (!CharacterAscensionDict.ContainsKey(workbookCharacterId))
+                            CharacterAscensionDict[workbookCharacterId] = new List<CharacterAscensionData>();
+                        CharacterAscensionDict[workbookCharacterId].Add(data);
                     }
                 }
 
@@ -317,11 +283,10 @@ public class DataManager : Singleton<DataManager>
                             TargetConsecutive = SafeGetInt(seSheet.Cells[row, 15].Value),
                             TargetConsecutiveSet = !string.IsNullOrEmpty(seSheet.Cells[row, 15].Text),
                             TargetOverride = seSheet.Cells[row, 16].Text,
-                            EnergyGainMode = seSheet.Cells[row, 17].Text,
-                            ScriptHook = seSheet.Cells[row, 18].Text
+                            ScriptHook = seSheet.Cells[row, 17].Text
                         };
                         TryValidate("SkillsEffect", () => TableValidator.ValidateEffectRow("SkillsEffect", row,
-                            data.EffectType, data.Element, data.Duration,
+                            data.EffectType, data.Element, data.Duration, data.Param2,
                             data.TargetType, data.TargetNumber, data.TargetConsecutive,
                             data.TargetOverride, isEnemy: false));
                         // ChangeControl 专属校验（2026-08-11）：技能效果表允许，填了Duration定时结束，没填=永久
@@ -439,7 +404,7 @@ public class DataManager : Singleton<DataManager>
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to load character sheet {f}: {e.Message}");
+                _loadErrors.Add($"[Characters/{Path.GetFileName(f)}] {e.Message}");
             }
         }
     }
@@ -554,11 +519,10 @@ public class DataManager : Singleton<DataManager>
                     TargetSelect = effSheet.Cells[row, 14].Text.Contains(",") ? effSheet.Cells[row, 14].Text : "",
                     TargetConsecutive = SafeGetInt(effSheet.Cells[row, 15].Value),
                     TargetOverride = effSheet.Cells[row, 16].Text,
-                    EnergyGainMode = effSheet.Cells[row, 17].Text,
-                    ScriptHook = effSheet.Cells[row, 18].Text
+                    ScriptHook = effSheet.Cells[row, 17].Text
                 };
                 TryValidate("Status_Effect", () => TableValidator.ValidateEffectRow("Status_Effect", row,
-                    data.EffectType, data.Element, data.Duration,
+                    data.EffectType, data.Element, data.Duration, data.Param2,
                     data.TargetType, 0, data.TargetConsecutive,
                     data.TargetOverride, isEnemy: false, checkTargetNumber: false));
                 // ChangeControl 专属校验（2026-08-11）：状态效果表挂载，跟状态 duration 走（效果行不填 Duration）
@@ -715,11 +679,10 @@ public class DataManager : Singleton<DataManager>
                     TargetSelect = effSheet.Cells[row, 14].Text.Contains(",") ? effSheet.Cells[row, 14].Text : "",
                     TargetConsecutive = SafeGetInt(effSheet.Cells[row, 15].Value),
                     TargetOverride = effSheet.Cells[row, 16].Text,
-                    EnergyGainMode = effSheet.Cells[row, 17].Text,
-                    ScriptHook = effSheet.Cells[row, 18].Text
+                    ScriptHook = effSheet.Cells[row, 17].Text
                 };
                 TryValidate("Status_Effect(Enemy)", () => TableValidator.ValidateEffectRow("Status_Effect(Enemy)", row,
-                    data.EffectType, data.Element, data.Duration,
+                    data.EffectType, data.Element, data.Duration, data.Param2,
                     data.TargetType, 0, data.TargetConsecutive,
                     data.TargetOverride, isEnemy: true, checkTargetNumber: false));
                 if (data.EffectType == "ChangeControl")
@@ -800,6 +763,92 @@ public class DataManager : Singleton<DataManager>
             }
         }
         LogManager.Log(LogCategory.Data, $"EnemyStatusData loaded, {StatusMainDict.Count} statuses");
+    }
+
+    // ================================================================
+    //  StatusData_Overall.xlsx：由通用战斗脚本施加的显示状态（倒地、冻结、激化等）。
+    //  当前倒地使用 Main 显示信息及 Character 的 ChangeControl 效果；生命周期由脚本控制。
+    // ================================================================
+    void LoadOverallStatusData()
+    {
+        string path = Path.Combine(ChartsPath, "StatusData_Overall.xlsx");
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning("StatusData_Overall.xlsx not found; scripted statuses will use runtime fallback metadata");
+            return;
+        }
+
+        using var pkg = new ExcelPackage(new FileInfo(path));
+        var mainSheet = pkg.Workbook.Worksheets["StatusData_Overall_Main"];
+        if (mainSheet != null)
+        {
+            int startRow = GetDataStartRow(mainSheet);
+            int maxRow = GetSheetMaxRow(mainSheet);
+            for (int row = startRow; row <= maxRow; row++)
+            {
+                string id2 = mainSheet.Cells[row, 2].Text;
+                if (string.IsNullOrEmpty(id2)) continue;
+                StatusMainDict[id2] = new StatusMainData
+                {
+                    StatusID = SafeGetInt(mainSheet.Cells[row, 1].Value),
+                    StatusID2 = id2,
+                    StatusName = mainSheet.Cells[row, 3].Text,
+                    StatusType = mainSheet.Cells[row, 4].Text,
+                    Display = SafeGetInt(mainSheet.Cells[row, 5].Value),
+                    Description = mainSheet.Cells[row, 6].Text,
+                    MultiplierPart1 = mainSheet.Cells[row, 7].Text,
+                    MultiplierPart2 = mainSheet.Cells[row, 8].Text,
+                    MultiplierPart3 = mainSheet.Cells[row, 9].Text,
+                    ApplyDamageType = mainSheet.Cells[row, 10].Text,
+                    ApplyReactionType = mainSheet.Cells[row, 11].Text,
+                    ApplyElementType = mainSheet.Cells[row, 12].Text,
+                    ApplyString = mainSheet.Cells[row, 13].Text,
+                    ScriptHook = mainSheet.Cells[row, 14].Text,
+                    MaxCount = SafeGetInt(mainSheet.Cells[row, 15].Value),
+                    MaxStack = SafeGetInt(mainSheet.Cells[row, 16].Value),
+                    WhenMax = mainSheet.Cells[row, 17].Text
+                };
+            }
+        }
+
+        var effectSheet = pkg.Workbook.Worksheets["StatusEffect_Overall"];
+        if (effectSheet != null)
+        {
+            int startRow = GetDataStartRow(effectSheet);
+            int maxRow = GetSheetMaxRow(effectSheet);
+            for (int row = startRow; row <= maxRow; row++)
+            {
+                string id2 = effectSheet.Cells[row, 2].Text;
+                if (string.IsNullOrEmpty(id2)) continue;
+                var data = new StatusEffectData
+                {
+                    StatusEffectID = SafeGetInt(effectSheet.Cells[row, 1].Value),
+                    StatusEffectID2 = id2,
+                    EffectIndex = SafeGetInt(effectSheet.Cells[row, 3].Value),
+                    EffectType = effectSheet.Cells[row, 4].Text,
+                    Element = effectSheet.Cells[row, 5].Text,
+                    DamageType = effectSheet.Cells[row, 6].Text,
+                    Duration = SafeGetInt(effectSheet.Cells[row, 7].Value),
+                    AddInPhase = SafeGetInt(effectSheet.Cells[row, 8].Value),
+                    TriggerPhase = SafeGetInt(effectSheet.Cells[row, 9].Value),
+                    Param1 = effectSheet.Cells[row, 10].Text,
+                    Param2 = effectSheet.Cells[row, 11].Text,
+                    Param3 = effectSheet.Cells[row, 12].Text,
+                    TargetType = effectSheet.Cells[row, 13].Text,
+                    TargetSelect = effectSheet.Cells[row, 14].Text.Contains(",") ? effectSheet.Cells[row, 14].Text : "",
+                    TargetConsecutive = SafeGetInt(effectSheet.Cells[row, 15].Value),
+                    TargetOverride = effectSheet.Cells[row, 16].Text,
+                    ScriptHook = effectSheet.Cells[row, 17].Text
+                };
+                if (data.EffectType == "ChangeControl")
+                    TryValidate("StatusEffect_Overall", () => TableValidator.ValidateChangeControl(
+                        "StatusEffect_Overall", row, data.Param1, data.Param2, data.Param3,
+                        data.Duration, isStatusEffectTable: true, isEnemy: false));
+                StatusEffectDict[id2] = data;
+            }
+        }
+
+        LogManager.Log(LogCategory.Data, $"OverallStatusData loaded, {StatusMainDict.Count} statuses");
     }
 
     // ================================================================
@@ -977,11 +1026,10 @@ public class DataManager : Singleton<DataManager>
                     TargetNumber = SafeGetInt(effSheet.Cells[row, 14].Value),
                     TargetConsecutive = SafeGetInt(effSheet.Cells[row, 15].Value),
                     TargetOverride = effSheet.Cells[row, 16].Text,
-                    EnergyGainMode = effSheet.Cells[row, 17].Text,
-                    ScriptHook = effSheet.Cells[row, 18].Text
+                    ScriptHook = effSheet.Cells[row, 17].Text
                 };
                 TryValidate("EnemySkill_Effect", () => TableValidator.ValidateEffectRow("EnemySkill_Effect", row,
-                    data.EffectType, data.Element, data.Duration,
+                    data.EffectType, data.Element, data.Duration, data.Param2,
                     data.TargetType, data.TargetNumber, data.TargetConsecutive,
                     data.TargetOverride, isEnemy: true));
                 // ChangeControl 专属校验（2026-08-11）：敌人没有按键绑定，禁止使用

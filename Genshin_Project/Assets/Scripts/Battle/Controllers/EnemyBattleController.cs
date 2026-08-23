@@ -8,7 +8,7 @@ using UnityEngine;
 ///  - 每回合行动（TakeEnemyTurn）：按 EnemyAI_Rule 权重挑选可用技能并释放
 ///  - 技能效果执行（Damage 基础版；ApplyStatus 等扩展后续轮实现）
 /// </summary>
-public class EnemyBattleController : MonoBehaviour
+public partial class EnemyBattleController : MonoBehaviour
 {
     public BattleEntity Entity { get; private set; }
 
@@ -19,6 +19,7 @@ public class EnemyBattleController : MonoBehaviour
     private List<EnemyAIRuleData> _currentRules = new List<EnemyAIRuleData>();
     private Dictionary<int, int> _skillCooldownLeft = new Dictionary<int, int>(); // 技能ID -> 剩余冷却回合
     private Dictionary<int, int> _skillUsedThisTurn = new Dictionary<int, int>(); // 技能ID -> 本回合已用次数
+    private string _currentSkillID2 = string.Empty; // 当前执行技能ID2（伤害来源声明用，2026-08-19）
 
     // ================================================================
     //  初始化
@@ -100,10 +101,22 @@ public class EnemyBattleController : MonoBehaviour
     public void TakeEnemyTurn()
     {
         if (Entity == null || Entity.IsDead) return;
+        if (FrozenReactionHandler.IsFrozen(Entity))
+        {
+            LogManager.Log(LogCategory.Enemy, $"{Entity.EntityID} 处于冻结状态，无法行动");
+            return;
+        }
 
         int acts = 1; // 简化：暂时固定每次行动1次，ActsGiven 扩展后续轮
+        bool skipFirstAction = PoiseSystem.ConsumeEnemyFirstAction(Entity);
         for (int i = 0; i < acts; i++)
         {
+            if (skipFirstAction)
+            {
+                skipFirstAction = false;
+                continue;
+            }
+
             var rule = PickSkillByWeight();
             if (rule == null) break;
 
@@ -186,6 +199,8 @@ public class EnemyBattleController : MonoBehaviour
 
         effects.Sort((a, b) => a.EffectIndex.CompareTo(b.EffectIndex));
 
+        _currentSkillID2 = skill.EnemySkillID2;
+        _lastEnemyTargetResult = null;
         foreach (var eff in effects)
         {
             ExecuteEnemyEffect(eff);
@@ -212,8 +227,7 @@ public class EnemyBattleController : MonoBehaviour
     }
 
     /// <summary>
-    /// 敌人施加状态：与角色共用 BattleEntity.AddStatus（同一套状态系统）。
-    /// 目标：TargetType=Self → 自己；Enemy → 敌方（我方角色）；EnemyField → 我方场地（简化=全部我方角色）。
+    /// 敌人施加状态：与角色共用统一目标解析和状态系统。
     /// </summary>
     private void ExecuteEnemyApplyStatus(EnemySkillEffectData eff)
     {
@@ -226,40 +240,48 @@ public class EnemyBattleController : MonoBehaviour
             return;
         }
 
-        List<BattleEntity> targets = new List<BattleEntity>();
-        switch (eff.TargetType)
+        int addPhase = eff.AddInPhase > 0 ? eff.AddInPhase : 5; // 敌方行动阶段=5
+        if (!string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", System.StringComparison.Ordinal))
         {
-            case "Self":
-            case null:
-            case "":
-                if (Entity != null) targets.Add(Entity);
-                break;
-            case "Enemy":
-            case "EnemyField":
-                foreach (var a in BattleManager.Instance.Allies)
-                    if (a.Entity != null && a.Entity.IsAlive)
-                        targets.Add(a.Entity);
-                break;
-            default:
-                if (Entity != null) targets.Add(Entity);
-                break;
+            foreach (var field in ResolveEnemyTargetFields(eff))
+            {
+                var inst = new StatusInstance
+                {
+                    StatusID2 = statusID2,
+                    Caster = Entity,
+                    RemainingPhaseCount = eff.Duration,
+                    AddInPhase = addPhase,
+                    TriggerPhase = eff.TriggerPhase,
+                    MainData = statusMain,
+                    ApplyOrder = ++BattleEntity._applyOrderCounter
+                };
+                field.StatusList.Add(inst);
+                StatusBindingSystem.ApplyBindings(inst, field);
+                if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
+                    inst.Caster.CharacterCtrl.OnStatusApplied(inst, field);
+                BattleManager.Instance.RegisterStatusTick(inst, null, field);
+                PreDamageHookSystem.RegisterPreDamageHook(inst);
+                // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
+                KillHookSystem.Register(inst, field);
+                LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {field} (dur={eff.Duration}, phase={addPhase})");
+            }
+            return;
         }
 
-        foreach (var t in targets)
+        foreach (var target in ResolveEnemyTargets(eff))
         {
-            // Duration/AddInPhase/TriggerPhase 从效果行取（配表术语：AddInPhase 为空默认放施放技能阶段）
-            int addPhase = eff.AddInPhase > 0 ? eff.AddInPhase : 5; // 敌方行动阶段=5
-            t.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain);
-            LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {t.EntityID} (dur={eff.Duration}, phase={addPhase})");
+            target.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain);
+            LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {target.EntityID} (dur={eff.Duration}, phase={addPhase})");
         }
     }
 
     /// <summary>
     /// 敌人伤害：倍率×TotalATK×抗性承伤（敌人公式无暴击/无增伤状态遍历）。
-    /// 目标：当前简化为我方第一个存活角色。
+    /// 目标由 EnemySkill_Effect 的 TargetType/TargetNumber/TargetConsecutive/TargetOverride 统一解析。
     /// </summary>
     private void ExecuteEnemyDamage(EnemySkillEffectData eff)
     {
+        long effectExecutionID = ReactionResolver.BeginEffectExecution();
         if (!dm.EnemySkillParamDict.TryGetValue(eff.SkillEffectID2, out var param))
         {
             LogManager.LogWarning(LogCategory.Enemy, $"no param for effect {eff.SkillEffectID2}");
@@ -275,9 +297,8 @@ public class EnemyBattleController : MonoBehaviour
             return;
         }
 
-        // 找目标：我方第一个存活角色
-        CharacterBattleController target = FindTarget();
-        if (target == null || target.Entity == null) return;
+        var targets = ResolveEnemyTargets(eff);
+        if (targets.Count == 0) return;
 
         // 状态 ATKBonus（敌人无 ApplyString/类型限制的上下文，传空=全部生效）
         float baseDmg = Entity.TotalATK * hit.Multiplier * (1f + Entity.GetStatusATKBonus("", "", 0, ""));
@@ -294,25 +315,53 @@ public class EnemyBattleController : MonoBehaviour
         float dmgBonusFactor = 1f + dmgBonus;
         if (dmgBonusFactor < 0f) dmgBonusFactor = 0f;
 
-        // 抗性承伤（配表术语 1.7）：目标对应元素抗性
-        float res = GetTargetResistance(target.Entity, eff.Element);
-        float resFactor = res < 0 ? 1f - res / 2f : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
-
-        // 对角色防御承伤（配表术语 1.12）：1 - DEF/(DEF + 5×攻击方等级 + 500)
-        float defRes = 1f - target.Entity.TotalDEF / (target.Entity.TotalDEF + 5f * Entity.Level + 500f);
-        if (defRes < 0f) defRes = 0f;
-
-        float dmg = baseDmg * dmgBonusFactor * resFactor * defRes;
-        target.Entity.TakeDamage(dmg);
-        target.Entity.Poise -= hit.Poise;
-
-        // 元素附着
-        if (!string.IsNullOrEmpty(eff.Element) && eff.Element != "None" && hit.ElementAura > 0)
+        foreach (var target in targets)
         {
-            target.Entity.ApplyAura(eff.Element, hit.ElementAura, Entity.EntityID);
-        }
+            // 抗性承伤（配表术语 1.7）：目标对应元素抗性
+            float res = GetTargetResistance(target, eff.Element);
+            float resFactor = res < 0 ? 1f - res / 2f : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
 
-        LogManager.Log(LogCategory.Enemy, $"{eff.SkillEffectID2} deals {dmg:F1} dmg to {target.gameObject.name} (hp left {target.Entity.CurrentHP:F1})");
+            // 对角色防御承伤（配表术语 1.12）：1 - DEF/(DEF + 5×攻击方等级 + 500)
+            float defRes = 1f - target.TotalDEF / (target.TotalDEF + 5f * Entity.Level + 500f);
+            if (defRes < 0f) defRes = 0f;
+
+            float dmg = baseDmg * dmgBonusFactor * resFactor * defRes;
+            var damageComponents = new ReactionDamageComponents
+            {
+                SkillBaseDamage = baseDmg,
+                CriticalMultiplier = 1f,
+                DamageBonusMultiplier = dmgBonusFactor,
+                DefenseMultiplier = defRes,
+                ResistanceMultiplier = resFactor
+            };
+            ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
+            {
+                SourceEntity = Entity,
+                Target = target,
+                SourceKind = ReactionSourceKind.EnemySkill,
+                SourceEffectID = eff.SkillEffectID2,
+                EffectExecutionID = effectExecutionID,
+                AttackElement = eff.Element,
+                AttackAmount = hit.ElementAura,
+                PreReactionDamage = dmg,
+                DamageComponents = damageComponents,
+                DamageType = eff.DamageType,
+                PoiseDamage = hit.Poise
+            });
+            float finalDamage = target.AbsorbDamageWithShield(reaction.FinalDamage, eff.Element);
+            // 带来源扣血（2026-08-19）：敌人技能伤害统一入口
+            target.TakeDamage(finalDamage, DamageSourceInfo.Create(
+                Entity,
+                ReactionSourceKind.EnemySkill,
+                _currentSkillID2,
+                eff.SkillEffectID2,
+                reaction != null && reaction.HasReaction ? reaction.TriggeredReactions[0].Type : ReactionType.None));
+            ReactionEffectExecutor.FinalizePrimaryHit(reaction, finalDamage);
+            PoiseSystem.ApplyPoiseDamage(target, hit.Poise, finalDamage, Entity);
+            ReactionEffectExecutor.ExecuteDerivedHits(reaction);
+
+            LogManager.Log(LogCategory.Enemy, $"{eff.SkillEffectID2} deals {finalDamage:F1} dmg to {target.gameObject.name} (hp left {target.CurrentHP:F1})");
+        }
     }
 
     /// <summary>
@@ -346,32 +395,18 @@ public class EnemyBattleController : MonoBehaviour
     /// </summary>
     private float GetTargetResistance(BattleEntity target, string element)
     {
+        float bonus = target.ResBonus + target.GetStatusResBonus(element);
         switch (element)
         {
-            case "Pyro": return target.PyroRes;
-            case "Hydro": return target.HydroRes;
-            case "Electro": return target.ElectroRes;
-            case "Cryo": return target.CryoRes;
-            case "Anemo": return target.AnemoRes;
-            case "Dendro": return target.DendroRes;
-            case "Geo": return target.GeoRes;
-            default: return target.PhysicalRes;
+            case "Pyro": return target.PyroRes + bonus;
+            case "Hydro": return target.HydroRes + bonus;
+            case "Electro": return target.ElectroRes + bonus;
+            case "Cryo": return target.CryoRes + bonus;
+            case "Anemo": return target.AnemoRes + bonus;
+            case "Dendro": return target.DendroRes + bonus;
+            case "Geo": return target.GeoRes + bonus;
+            default: return target.PhysicalRes + bonus;
         }
-    }
-
-    /// <summary>
-    /// 查找目标：我方第一个存活角色（简化版，目标选择系统后续轮完善）。
-    /// </summary>
-    private CharacterBattleController FindTarget()
-    {
-        var bm = BattleManager.Instance;
-        if (bm == null) return null;
-        foreach (var ally in bm.Allies)
-        {
-            if (ally != null && ally.Entity != null && ally.Entity.IsAlive)
-                return ally;
-        }
-        return null;
     }
 
     // ================================================================

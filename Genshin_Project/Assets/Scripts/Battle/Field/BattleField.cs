@@ -12,8 +12,8 @@ public class BattleField
 
     public BattleField()
     {
-        for (int i = 1; i <= ALLY_SLOTS; i++) AllySlots.Add(new FieldPosition(BattleSide.Ally, i));
-        for (int i = 1; i <= ENEMY_SLOTS; i++) EnemySlots.Add(new FieldPosition(BattleSide.Enemy, i));
+        for (int i = 1; i <= ALLY_SLOTS; i++) AllySlots.Add(new FieldPosition(this, BattleSide.Ally, i));
+        for (int i = 1; i <= ENEMY_SLOTS; i++) EnemySlots.Add(new FieldPosition(this, BattleSide.Enemy, i));
     }
 
     public FieldPosition GetSlot(BattleSide side, int slotIndex)
