@@ -320,7 +320,7 @@ public class UIBattleController : MonoBehaviour
         SetButtonState(btnHeavy, ally.CanUseHeavyAttack());
         SetButtonState(btnSkill, ally.CanUseSkill());
         SetButtonState(btnBurst, ally.CanUseBurst());
-        SetButtonState(btnSwitch, ally.CanSwitch());
+        SetButtonState(btnSwitch, bm.CanSwitchActiveAlly());
         if (btnSkillNames != null)
         {
             for (int i = 0; i < btnSkillNames.Length && i < 4; i++)

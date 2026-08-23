@@ -458,10 +458,13 @@ public class BattleInputController : MonoBehaviour
     {
         var bm = BattleManager.Instance;
         if (bm == null || bm.Allies == null || slot < 0 || slot >= bm.Allies.Count) return;
-        if (_selecting) ExitSelecting();
-        for (int i = 0; i < bm.Allies.Count; i++)
-            if (bm.Allies[i] != null) bm.Allies[i].IsActive = (i == slot);
-        LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");
+        if (bm.TrySwitchActiveAlly(slot))
+        {
+            if (_selecting) ExitSelecting();
+            LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");
+        }
+        else
+            LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {slot}");
     }
 
     /// <summary>是否处于目标选择阶段（UI遮罩/特效用）。</summary>

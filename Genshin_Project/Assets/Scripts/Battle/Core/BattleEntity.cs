@@ -174,9 +174,6 @@ public class BattleEntity : MonoBehaviour
     public bool IsAlive => CurrentHP > 0;
 
     // ========== 初始化（子类覆写） ==========
-    public virtual void InitCharacter(int characterID, int level) { }
-    public virtual void InitEnemy(int enemyID, int level) { }
-
     // ========== 护盾操作 ==========
     public void AddShield(
         float value,
@@ -275,7 +272,7 @@ public class BattleEntity : MonoBehaviour
     /// <summary>治疗：恢复HP（不超过上限，2026-08-14）。</summary>
     public void Heal(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0 || IsDead || float.IsNaN(amount) || float.IsInfinity(amount)) return;
         CurrentHP = Mathf.Min(TotalHP, CurrentHP + amount);
     }
 
@@ -772,6 +769,11 @@ public class BattleEntity : MonoBehaviour
     /// </summary>
     public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source, bool hitLanded = true)
     {
+        if (float.IsNaN(damage) || float.IsInfinity(damage) || damage < 0f)
+            damage = 0f;
+        if (IsDead)
+            hitLanded = false;
+
         float hpBefore = CurrentHP;
         CurrentHP -= damage;
         if (CurrentHP < 0f) CurrentHP = 0f;
@@ -802,14 +804,4 @@ public class BattleEntity : MonoBehaviour
     }
 
     /// <summary>无来源扣血接口（兼容旧调用）：内部使用 DamageSourceInfo.CreateUnknown()，与带来源版共用同一套扣血逻辑。</summary>
-    public void TakeDamage(float damage)
-    {
-        TakeDamage(damage, DamageSourceInfo.CreateUnknown(), true);
-    }
-
-    public void TakeHeal(float heal)
-    {
-        CurrentHP += heal;
-        if (CurrentHP > TotalHP) CurrentHP = TotalHP;
-    }
 }

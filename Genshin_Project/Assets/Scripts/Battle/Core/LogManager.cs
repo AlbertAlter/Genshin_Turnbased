@@ -54,6 +54,18 @@ public enum LogCategory{
 /// 用法：LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击...");
 /// </summary>
 public static class LogManager{
+    private static readonly HashSet<LogCategory> VerboseCategories = new HashSet<LogCategory>
+    {
+        LogCategory.AI,
+        LogCategory.DmgBonus,
+        LogCategory.GetHitData
+    };
+
+    private static readonly HashSet<LogCategory> DisabledCategories = new HashSet<LogCategory>();
+
+    public static bool EnableInfoLogs { get; set; } = true;
+    public static bool EnableVerboseLogs { get; set; } = false;
+
     static readonly Dictionary<LogCategory, string> Tags = new Dictionary<LogCategory, string>{
         { LogCategory.Turn,          "[Turn] " },
         { LogCategory.AP,            "[AP] " },
@@ -89,8 +101,22 @@ public static class LogManager{
         { LogCategory.Data,          "[DataManager] " },
     };
 
+    public static bool IsEnabled(LogCategory category)
+    {
+        return EnableInfoLogs
+            && !DisabledCategories.Contains(category)
+            && (EnableVerboseLogs || !VerboseCategories.Contains(category));
+    }
+
+    public static void SetCategoryEnabled(LogCategory category, bool enabled)
+    {
+        if (enabled) DisabledCategories.Remove(category);
+        else DisabledCategories.Add(category);
+    }
+
     public static void Log(LogCategory category, string msg)
     {
+        if (!IsEnabled(category)) return;
         Debug.Log(Tags[category] + msg);
     }
 

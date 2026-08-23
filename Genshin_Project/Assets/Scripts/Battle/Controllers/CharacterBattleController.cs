@@ -412,63 +412,66 @@ public List<int> ForcedTargetPositions = new List<int>();
     // ================================================================
     public bool CanUseNormalAttack()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
         if (PoiseSystem.IsKnockedDown(Entity)) return false;
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(0)) return false;
         string nid0 = _boundSkills[0];
         if (string.IsNullOrEmpty(nid0)) return false;
-        var sk = _skillById2[nid0];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[nid0] > 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(nid0, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(nid0, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanUseHeavyAttack()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
         if (PoiseSystem.IsKnockedDown(Entity)) return false;
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(1)) return false;
         string hid1 = _boundSkills[1];
         if (string.IsNullOrEmpty(hid1)) return false;
-        var sk = _skillById2[hid1];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[hid1] > 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(hid1, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(hid1, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanUseSkill()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
         if (PoiseSystem.IsKnockedDown(Entity)) return false;
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(2)) return false;
         string sid2 = _boundSkills[2];
         if (string.IsNullOrEmpty(sid2)) return false;
-        var sk = _skillById2[sid2];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[sid2] > 0) return false;
-        if (sk.MaxCharge > 0 && _currentCharges[sid2] <= 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(sid2, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(sid2, out int cd) && cd > 0) return false;
+        if (sk.MaxCharge > 0 && (_currentCharges == null || !_currentCharges.TryGetValue(sid2, out int charges) || charges <= 0)) return false;
         return true;
     }
 
     public bool CanUseBurst()
     {
+        if (Entity == null || Entity.IsDead) return false;
         if (PoiseSystem.IsKnockedDown(Entity)) return false;
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(3)) return false;
         string bid3 = _boundSkills[3];
         if (string.IsNullOrEmpty(bid3)) return false;
-        var sk = _skillById2[bid3];
+        if (_skillById2 == null || !_skillById2.TryGetValue(bid3, out var sk)) return false;
         if (Entity.CurrentEnergy < Entity.MaxEnergy) return false;
-        if (_cooldownRemaining[bid3] > 0) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(bid3, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanSwitch()
     {
         return IsActive
+            && Entity != null
+            && Entity.IsAlive
             && !PoiseSystem.IsKnockedDown(Entity)
             && !FrozenReactionHandler.IsFrozen(Entity)
             && !IsAnyButtonFrozen();
@@ -481,6 +484,10 @@ public List<int> ForcedTargetPositions = new List<int>();
     // ================================================================
     public string GetBlockReason(int skillType)
     {
+        if (Entity == null)
+            return "角色实体不存在";
+        if (Entity.IsDead)
+            return "角色已经死亡";
         if (PoiseSystem.IsKnockedDown(Entity))
             return "角色处于倒地状态，需要先花费10 AP起身";
         if (FrozenReactionHandler.IsFrozen(Entity))
@@ -522,6 +529,8 @@ public List<int> ForcedTargetPositions = new List<int>();
         // AP 不足（爆发不消耗AP，改消耗能量）
         if (skillType != 3)
         {
+            if (APManager == null)
+                return "战斗行动点系统未初始化";
             if (!APManager.CanAfford(sk.APCost))
                 return $"AP不足（需要{sk.APCost}，当前{APManager.CurrentAP}）";
         }

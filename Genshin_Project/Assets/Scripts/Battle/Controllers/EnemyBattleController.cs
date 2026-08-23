@@ -20,6 +20,9 @@ public partial class EnemyBattleController : MonoBehaviour
     private Dictionary<int, int> _skillCooldownLeft = new Dictionary<int, int>(); // 技能ID -> 剩余冷却回合
     private Dictionary<int, int> _skillUsedThisTurn = new Dictionary<int, int>(); // 技能ID -> 本回合已用次数
     private string _currentSkillID2 = string.Empty; // 当前执行技能ID2（伤害来源声明用，2026-08-19）
+    private readonly List<EnemyAIRuleData> _weightedCandidates = new List<EnemyAIRuleData>();
+    private readonly List<EnemySkillEffectData> _effectBuffer = new List<EnemySkillEffectData>();
+    private readonly List<int> _cooldownKeyBuffer = new List<int>();
 
     // ================================================================
     //  初始化
@@ -33,6 +36,7 @@ public partial class EnemyBattleController : MonoBehaviour
     /// </summary>
     public void InitEnemy(int enemyID, int level)
     {
+        ResetRuntimeState();
         EnemyID = enemyID;
 
         var entity = GetComponent<BattleEntity>();
@@ -43,6 +47,12 @@ public partial class EnemyBattleController : MonoBehaviour
         entity.Type = BattleEntity.EntityType.Enemy;
         entity.EntityID = enemyID;
         entity.Level = level;
+
+        if (dm == null)
+        {
+            LogManager.LogWarning(LogCategory.Enemy, $"DataManager missing while initializing enemyID={enemyID}");
+            return;
+        }
 
         if (dm.EnemyMainDict.TryGetValue(enemyID, out var main))
         {
@@ -101,6 +111,7 @@ public partial class EnemyBattleController : MonoBehaviour
     public void TakeEnemyTurn()
     {
         if (Entity == null || Entity.IsDead) return;
+        if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) return;
         if (FrozenReactionHandler.IsFrozen(Entity))
         {
             LogManager.Log(LogCategory.Enemy, $"{Entity.EntityID} 处于冻结状态，无法行动");
@@ -124,6 +135,7 @@ public partial class EnemyBattleController : MonoBehaviour
             {
                 ExecuteEnemySkill(skill);
             }
+            if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) break;
         }
 
         // 回合结束：重置本回合使用次数（冷却递减移至 BattleManager 全局跨回合处理）
@@ -138,38 +150,41 @@ public partial class EnemyBattleController : MonoBehaviour
     /// </summary>
     private EnemyAIRuleData PickSkillByWeight()
     {
-        var candidates = new List<EnemyAIRuleData>();
+        _weightedCandidates.Clear();
         int totalWeight = 0;
         foreach (var rule in _currentRules)
         {
+            if (rule == null || rule.Weight <= 0) continue;
             if (_skillCooldownLeft.TryGetValue(rule.SkillID, out int cd) && cd > 0) continue;
 
-            if (dm.EnemySkillMainDict.TryGetValue(rule.SkillID, out var skill))
-            {
-                int used = _skillUsedThisTurn.TryGetValue(rule.SkillID, out int u) ? u : 0;
-                if (skill.UsePerTurn > 0 && used >= skill.UsePerTurn) continue;
-            }
+            if (dm == null || dm.EnemySkillMainDict == null ||
+                !dm.EnemySkillMainDict.TryGetValue(rule.SkillID, out var skill)) continue;
 
-            candidates.Add(rule);
+            int used = _skillUsedThisTurn.TryGetValue(rule.SkillID, out int u) ? u : 0;
+            if (skill.UsePerTurn > 0 && used >= skill.UsePerTurn) continue;
+
+            _weightedCandidates.Add(rule);
             totalWeight += rule.Weight;
         }
 
-        if (candidates.Count == 0 || totalWeight <= 0)
+        if (_weightedCandidates.Count == 0 || totalWeight <= 0)
         {
-            LogManager.Log(LogCategory.AI, $"无可用候选技能。冷却={string.Join(",", _skillCooldownLeft)}");
+            if (LogManager.IsEnabled(LogCategory.AI))
+                LogManager.Log(LogCategory.AI, $"无可用候选技能。冷却={string.Join(",", _skillCooldownLeft)}");
             return null;
         }
 
         int roll = Random.Range(0, totalWeight);
         int acc = 0;
         // [AI调试] 打印候选与随机数，确认跳舞是否进入候选
-        LogManager.Log(LogCategory.AI, $"候选技能: {string.Join(",", candidates.ConvertAll(c => c.SkillID))} (总权重{totalWeight}) roll={roll}");
-        foreach (var rule in candidates)
+        if (LogManager.IsEnabled(LogCategory.AI))
+            LogManager.Log(LogCategory.AI, $"候选技能: {string.Join(",", _weightedCandidates.ConvertAll(c => c.SkillID))} (总权重{totalWeight}) roll={roll}");
+        foreach (var rule in _weightedCandidates)
         {
             acc += rule.Weight;
             if (roll < acc) return rule;
         }
-        return candidates[candidates.Count - 1];
+        return _weightedCandidates[_weightedCandidates.Count - 1];
     }
 
     /// <summary>
@@ -189,20 +204,21 @@ public partial class EnemyBattleController : MonoBehaviour
 
         // 按 EffectIndex 排序执行效果
         // EnemySkill_Effect 的 SkillEffectID 规则：技能ID*100 + 序号（如 2000101 -> 效果1:200010101）
-        var effects = new List<EnemySkillEffectData>();
+        _effectBuffer.Clear();
         foreach (var kv in dm.EnemySkillEffectDict)
         {
             // SkillEffectID / 100 == 技能ID（200010101/100 = 2000101）
             if (kv.Value.SkillEffectID / 100 == skill.EnemySkillID)
-                effects.Add(kv.Value);
+                _effectBuffer.Add(kv.Value);
         }
 
-        effects.Sort((a, b) => a.EffectIndex.CompareTo(b.EffectIndex));
+        _effectBuffer.Sort((a, b) => a.EffectIndex.CompareTo(b.EffectIndex));
 
         _currentSkillID2 = skill.EnemySkillID2;
         _lastEnemyTargetResult = null;
-        foreach (var eff in effects)
+        foreach (var eff in _effectBuffer)
         {
+            if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) break;
             ExecuteEnemyEffect(eff);
         }
     }
@@ -307,7 +323,8 @@ public partial class EnemyBattleController : MonoBehaviour
         // DMGBonus = 敌人自身所有状态中 MultiplierPart=DMGBonus 的效果数值累加（如 ST_Bunny_debuff=-0.1 → ×0.9）
         float dmgBonus = 0f;
         var allStatuses = Entity.GetEffectiveStatusList();
-        LogManager.Log(LogCategory.DmgBonus, $"{Entity.EntityID} 行动前身上状态数={allStatuses.Count}");
+        if (LogManager.IsEnabled(LogCategory.DmgBonus))
+            LogManager.Log(LogCategory.DmgBonus, $"{Entity.EntityID} 行动前身上状态数={allStatuses.Count}");
         foreach (var inst in allStatuses)
         {
             dmgBonus += GetStatusDMGBonus(inst);
@@ -371,7 +388,8 @@ public partial class EnemyBattleController : MonoBehaviour
     private float GetStatusDMGBonus(StatusInstance inst)
     {
         if (inst == null || inst.MainData == null) return 0f;
-        LogManager.Log(LogCategory.DmgBonus, $"状态{inst.StatusID2} MultiplierPart={inst.MainData?.GetMultiplierPart() ?? "<null>"}");
+        if (LogManager.IsEnabled(LogCategory.DmgBonus))
+            LogManager.Log(LogCategory.DmgBonus, $"状态{inst.StatusID2} MultiplierPart={inst.MainData?.GetMultiplierPart() ?? "<null>"}");
         if (inst.MainData.GetMultiplierPart() != "DMGBonus") return 0f;
 
         var dm = DataManager.Instance;
@@ -415,14 +433,13 @@ public partial class EnemyBattleController : MonoBehaviour
     private void LoadPatternRules(int patternID)
     {
         _currentRules.Clear();
-        foreach (var kv in dm.EnemyAIRuleDict)
+        if (dm == null || dm.EnemyAIRuleDict == null ||
+            !dm.EnemyAIRuleDict.TryGetValue(EnemyID, out var rules) || rules == null)
+            return;
+
+        foreach (var rule in rules)
         {
-            // 规则归属校验：Rule 行的 EnemyID（空值继承后）必须等于当前敌人ID
-            if (kv.Key != EnemyID) continue;
-            foreach (var rule in kv.Value)
-            {
-                if (rule.PatternID == patternID) _currentRules.Add(rule);
-            }
+            if (rule != null && rule.PatternID == patternID) _currentRules.Add(rule);
         }
         if (_currentRules.Count > 0)
         {
@@ -436,11 +453,25 @@ public partial class EnemyBattleController : MonoBehaviour
     /// </summary>
     public void TickSkillCooldowns()
     {
-        var keys = new List<int>(_skillCooldownLeft.Keys);
-        foreach (var k in keys)
+        _cooldownKeyBuffer.Clear();
+        _cooldownKeyBuffer.AddRange(_skillCooldownLeft.Keys);
+        foreach (var k in _cooldownKeyBuffer)
         {
             _skillCooldownLeft[k]--;
             if (_skillCooldownLeft[k] <= 0) _skillCooldownLeft.Remove(k);
         }
+    }
+
+    private void ResetRuntimeState()
+    {
+        _currentPatternID = 0;
+        _currentRules.Clear();
+        _skillCooldownLeft.Clear();
+        _skillUsedThisTurn.Clear();
+        _weightedCandidates.Clear();
+        _effectBuffer.Clear();
+        _cooldownKeyBuffer.Clear();
+        _currentSkillID2 = string.Empty;
+        _lastEnemyTargetResult = null;
     }
 }
