@@ -100,22 +100,22 @@ function Save-Work {
     & git diff --cached --quiet
     $diffExitCode = $LASTEXITCODE
 
-    if ($diffExitCode -eq 0) {
-        Write-Host "[提示] 没有需要提交的修改。" -ForegroundColor Yellow
-        return
-    }
-
-    if ($diffExitCode -ne 1) {
+    if ($diffExitCode -ne 0 -and $diffExitCode -ne 1) {
         throw "无法检查暂存内容。"
     }
 
-    $commitMessage = "自动同步 {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-    Write-Host "[2/3] 自动提交：$commitMessage" -ForegroundColor Cyan
+    if ($diffExitCode -eq 1) {
+        $commitMessage = "自动同步 {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+        Write-Host "[2/3] 自动提交：$commitMessage" -ForegroundColor Cyan
 
-    & git commit -m $commitMessage
+        & git commit -m $commitMessage
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "提交没有完成，请查看上方错误。"
+        if ($LASTEXITCODE -ne 0) {
+            throw "提交没有完成，请查看上方错误。"
+        }
+    }
+    else {
+        Write-Host "[2/3] 没有新的本地修改，继续检查待上传提交..." -ForegroundColor Cyan
     }
 
     Write-Host "[3/3] 自动上传到 GitHub..." -ForegroundColor Cyan
