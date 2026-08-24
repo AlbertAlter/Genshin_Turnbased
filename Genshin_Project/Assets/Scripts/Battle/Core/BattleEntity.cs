@@ -11,19 +11,31 @@ public class ElementalAura
     public string Element;          // Pyro / Hydro / Electro / Cryo / Anemo / Dendro / Geo
     public float AuraAmount;        // 剩余附着量
     public int SourceEntityID;      // 附着来源实体ID（用于扩散感电/结晶追踪）
+    public string SourceSkillID;    // 附着来源技能
+    public string SourceEffectID;   // 附着来源效果
     public int OriginPhase = -1;    // 施加时的阶段（2026-08-14）：元素量每回合-0.5，按施加阶段定原点
+    public bool SkipNextOriginDecay; // 在阶段结算内部刚施加时，跳过紧随其后的同阶段衰减
 }
 
 /// <summary>
 /// 护盾。
 /// </summary>
 [Serializable]
+public enum ShieldKind
+{
+    Skill,
+    Crystallize
+}
+
+[Serializable]
 public class Shield
 {
     public float Value;             // 当前盾值
     public string Element;          // 护盾元素类型（影响吸收效率：同元素250%，其他元素150%）
     public float Duration;          // 剩余持续回合
-    public float Strength;          // 护盾强效系数（累加）
+    public float Strength;          // 单盾强度倍率
+    public ShieldKind Kind;         // 技能盾 / 结晶盾
+    public int OriginPhase = -1;    // 生命周期计时原点；仅结晶盾按该阶段递减
 }
 
 /// <summary>
@@ -162,71 +174,208 @@ public class BattleEntity : MonoBehaviour
     public bool IsAlive => CurrentHP > 0;
 
     // ========== 初始化（子类覆写） ==========
-    public virtual void InitCharacter(int characterID, int level) { }
-    public virtual void InitEnemy(int enemyID, int level) { }
-
     // ========== 护盾操作 ==========
-    public void AddShield(float value, string element, float duration, float strength = 1f)
+    public void AddShield(
+        float value,
+        string element,
+        float duration,
+        float strength = 1f,
+        ShieldKind kind = ShieldKind.Skill,
+        int originPhase = -1)
     {
-        Shields.Add(new Shield { Value = value, Element = element, Duration = duration, Strength = strength });
+        int resolvedOriginPhase = originPhase > 0
+            ? originPhase
+            : (BattleManager.Instance != null ? (int)BattleManager.Instance.CurrentPhase : -1);
+        Shields.Add(new Shield
+        {
+            Value = value,
+            Element = element,
+            Duration = duration,
+            Strength = strength,
+            Kind = kind,
+            OriginPhase = resolvedOriginPhase
+        });
     }
 
+    public Shield AddOrReplaceCrystallizeShield(
+        float value,
+        string element,
+        int duration,
+        int originPhase)
+    {
+        if (value <= 0f || duration <= 0) return null;
+
+        int resolvedOriginPhase = originPhase > 0
+            ? originPhase
+            : (BattleManager.Instance != null ? (int)BattleManager.Instance.CurrentPhase : -1);
+        Shield shield = null;
+        for (int i = Shields.Count - 1; i >= 0; i--)
+        {
+            Shield candidate = Shields[i];
+            if (candidate == null)
+            {
+                Shields.RemoveAt(i);
+                continue;
+            }
+            if (candidate.Kind != ShieldKind.Crystallize) continue;
+            if (shield == null) shield = candidate;
+            else Shields.RemoveAt(i);
+        }
+        if (shield == null)
+        {
+            shield = new Shield();
+            Shields.Add(shield);
+        }
+
+        shield.Value = value;
+        shield.Element = element;
+        shield.Duration = duration;
+        shield.Strength = 1f;
+        shield.Kind = ShieldKind.Crystallize;
+        shield.OriginPhase = resolvedOriginPhase;
+        return shield;
+    }
+
+    public void RemoveShields(ShieldKind kind)
+    {
+        Shields.RemoveAll(shield => shield == null || shield.Kind == kind);
+    }
+
+    public void TickShields(int currentPhase)
+    {
+        if (currentPhase <= 0) return;
+
+        for (int i = Shields.Count - 1; i >= 0; i--)
+        {
+            Shield shield = Shields[i];
+            if (shield == null)
+            {
+                Shields.RemoveAt(i);
+                continue;
+            }
+            if (shield.Kind != ShieldKind.Crystallize || shield.OriginPhase != currentPhase)
+                continue;
+
+            shield.Duration -= 1f;
+            if (shield.Duration <= 0f)
+                Shields.RemoveAt(i);
+        }
+    }
+
+    /// <summary>
+    /// 多个护盾同时承伤而非串联叠加，因此返回当前最强单盾的有效基础盾值。
+    /// 不含元素吸收倍率；需要查询某种伤害的实际最大吸收量时使用带元素参数的重载。
+    /// </summary>
     public float GetTotalShieldHP()
     {
-        float total = 0;
-        foreach (var s in Shields) total += s.Value * (1f + ShieldStrength);
-        return total;
+        return GetMaximumShieldCapacity(null, false);
+    }
+
+    /// <summary>返回面对指定伤害元素时，当前所有护盾中最大的实际吸收量。</summary>
+    public float GetTotalShieldHP(string damageElement)
+    {
+        return GetMaximumShieldCapacity(damageElement, true);
+    }
+
+    private float GetMaximumShieldCapacity(string damageElement, bool includeAbsorptionMultiplier)
+    {
+        float maximum = 0f;
+        foreach (Shield shield in Shields)
+        {
+            if (shield == null || shield.Value <= 0f) continue;
+
+            float factor = (1f + ShieldStrength) * shield.Strength;
+            if (includeAbsorptionMultiplier)
+                factor *= GetShieldAbsorptionMultiplier(shield.Element, damageElement);
+            if (factor <= 0f || float.IsNaN(factor) || float.IsInfinity(factor)) continue;
+
+            float capacity = shield.Value * factor;
+            if (!float.IsNaN(capacity) && capacity > maximum)
+                maximum = capacity;
+        }
+        return maximum;
     }
 
     /// <summary>治疗：恢复HP（不超过上限，2026-08-14）。</summary>
     public void Heal(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0 || IsDead || float.IsNaN(amount) || float.IsInfinity(amount)) return;
         CurrentHP = Mathf.Min(TotalHP, CurrentHP + amount);
     }
 
     public float AbsorbDamageWithShield(float incomingDamage, string damageElement)
     {
-        float remaining = incomingDamage;
+        if (incomingDamage <= 0f || Shields.Count == 0)
+            return Mathf.Max(0f, incomingDamage);
+
+        float maxBlocked = 0f;
         for (int i = Shields.Count - 1; i >= 0; i--)
         {
-            var s = Shields[i];
-            float absorbMultiplier = 1f;
-            // 同元素护盾 250% 吸收效率
-            if (!string.IsNullOrEmpty(s.Element) && s.Element == damageElement)
-                absorbMultiplier = 2.5f;
-            float shieldHP = s.Value * (1f + ShieldStrength) * absorbMultiplier;
-            if (shieldHP >= remaining)
+            Shield shield = Shields[i];
+            if (shield == null || shield.Value <= 0f)
             {
-                s.Value -= remaining / ((1f + ShieldStrength) * absorbMultiplier);
-                remaining = 0;
-                break;
-            }
-            else
-            {
-                remaining -= shieldHP;
                 Shields.RemoveAt(i);
+                continue;
             }
+
+            float absorbMultiplier = GetShieldAbsorptionMultiplier(shield.Element, damageElement);
+            float factor = absorbMultiplier * (1f + ShieldStrength) * shield.Strength;
+            if (factor <= 0f || float.IsNaN(factor) || float.IsInfinity(factor))
+                continue;
+
+            float capacity = shield.Value * factor;
+            if (capacity <= 0f || float.IsNaN(capacity))
+                continue;
+
+            float blocked = Mathf.Min(incomingDamage, capacity);
+            if (blocked > 0f)
+            {
+                shield.Value = Mathf.Max(0f, shield.Value - blocked / factor);
+                maxBlocked = Mathf.Max(maxBlocked, blocked);
+            }
+            if (shield.Value <= 0f)
+                Shields.RemoveAt(i);
         }
-        return remaining;
+
+        return Mathf.Max(0f, incomingDamage - maxBlocked);
+    }
+
+    private static float GetShieldAbsorptionMultiplier(string shieldElement, string damageElement)
+    {
+        if (string.IsNullOrEmpty(shieldElement) || shieldElement == "None") return 1f;
+        if (shieldElement == "Geo") return 2.5f;
+        return shieldElement == damageElement ? 2.5f : 1.5f;
     }
 
     // ========== 元素附着操作 ==========
-    public void ApplyAura(string element, float amount, int sourceEntityID)
+    public void ApplyAura(string element, float amount, int sourceEntityID, string sourceEffectID = "", string sourceSkillID = "")
     {
-        // 同元素叠加：取最大
+        if (string.IsNullOrEmpty(element) || element == "None" || amount <= 0f)
+            return;
+
+        // 同元素再次附着时，无论新元素量高低，均由新附着完整覆盖。
         var existing = ElementalAuras.Find(a => a.Element == element);
-        // 原点阶段（2026-08-14）：施加/刷新时记录当前阶段——元素量每回合在该阶段-0.5
         int originPhase = BattleManager.Instance != null ? (int)BattleManager.Instance.CurrentPhase : -1;
         if (existing != null)
         {
-            existing.AuraAmount = Mathf.Max(existing.AuraAmount, amount);
+            existing.AuraAmount = amount;
             existing.SourceEntityID = sourceEntityID;
-            existing.OriginPhase = originPhase; // 刷新附着：重新计时
+            existing.SourceSkillID = sourceSkillID;
+            existing.SourceEffectID = sourceEffectID;
+            existing.OriginPhase = originPhase;
+            existing.SkipNextOriginDecay = false;
         }
         else
         {
-            ElementalAuras.Add(new ElementalAura { Element = element, AuraAmount = amount, SourceEntityID = sourceEntityID, OriginPhase = originPhase });
+            ElementalAuras.Add(new ElementalAura
+            {
+                Element = element,
+                AuraAmount = amount,
+                SourceEntityID = sourceEntityID,
+                SourceSkillID = sourceSkillID,
+                SourceEffectID = sourceEffectID,
+                OriginPhase = originPhase
+            });
         }
     }
 
@@ -265,6 +414,11 @@ public class BattleEntity : MonoBehaviour
             var aura = ElementalAuras[i];
             if (curPhase >= 0 && aura.OriginPhase >= 0 && aura.OriginPhase != curPhase)
                 continue;
+            if (aura.SkipNextOriginDecay)
+            {
+                aura.SkipNextOriginDecay = false;
+                continue;
+            }
             aura.AuraAmount -= 0.5f;
             if (aura.AuraAmount <= 0f)
                 ElementalAuras.RemoveAt(i);
@@ -322,11 +476,14 @@ public class BattleEntity : MonoBehaviour
                 else
                 {
                     // 移除最早施加的该状态，重新施加
+                    StatusBindingSystem.RemoveBindings(existing);
                     // ChangeControl 解除（2026-08-11）：状态消失时返回原技能/解冻
                     CharacterCtrl?.OnStatusChangeControlRemoved(existing);
                     // 状态结算登记注销 + PreAlliesDamage 钩子注销（2026-08-14，逻辑见 PreDamageHookSystem.cs）
                     BattleManager.Instance?.UnregisterStatusTick(existing);
                     PreDamageHookSystem.UnregisterPreDamageHook(existing.StatusID2);
+                    // Kill 钩子注销（2026-08-19）：覆盖重建时旧实例不再参与死亡触发
+                    KillHookSystem.Unregister(existing);
                     StatusDict.Remove(statusID2);
                     existing = null;
                 }
@@ -360,7 +517,7 @@ public class BattleEntity : MonoBehaviour
         // ========== BindStatus 自动绑定（2026-08-06） ==========
         // 术语表原文："只要该效果来源的状态存在，其所定义的目标或场地位置就一直存在其 Param1 所填写的子状态"
         // 所以状态施加成功后，立即扫描该状态的所有 StatusEffect，对 BindStatus 类型执行绑定。
-        AutoBindStatus(inst);
+        StatusBindingSystem.ApplyBindings(inst, this);
 
         // ========== ChangeControl 按键绑定（2026-08-11） ==========
         // 术语：ChangeControl 修改该角色按键绑定，状态效果表挂载时跟状态 duration 走——
@@ -381,80 +538,11 @@ public class BattleEntity : MonoBehaviour
         // 状态带 OnTrigger+ScriptHook=PreAlliesDamage 时登记，我方主动行为造成伤害前触发。
         PreDamageHookSystem.RegisterPreDamageHook(inst);
 
+        // ========== Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs） ==========
+        // 状态带 OnTrigger+ScriptHook=Kill(...) 时登记，死亡声明时按 ApplyOrder 触发。
+        KillHookSystem.Register(inst, this);
+
         return inst;
-    }
-
-    /// <summary>
-    /// 状态施加成功后自动执行 BindStatus 绑定（被动生效，不需要 Action 表调用）。
-    /// 扫描该状态的 StatusEffect 表，对 EffectType==BindStatus 的效果：
-    ///   将 Param1 子状态挂到相邻目标（TargetSelect "X,X" 由位置系统展开）身上，并记录绑定关系。
-    /// </summary>
-    private void AutoBindStatus(StatusInstance parent)
-    {
-        if (parent.MainData == null) { LogManager.Log(LogCategory.Bind, $"状态{parent.StatusID2} 无MainData，跳过"); return; }
-        var dm = DataManager.Instance;
-        if (dm == null || dm.StatusEffectDict == null) { LogManager.Log(LogCategory.Bind, "DataManager或StatusEffectDict为空"); return; }
-
-        // 状态效果以父状态数字ID为前缀：StatusEffectID = StatusID * 100 + 序号（如 ST_Bunny=4100903 -> STE_Bunny1=410090301）
-        // 所以用 StatusEffectID / 100 == StatusID 精确关联（不能按ID2字符串前缀，因为 STE_ 和 ST_ 前缀不同）
-        int parentStatusID = parent.MainData.StatusID;
-        LogManager.Log(LogCategory.Bind, $"状态{parent.StatusID2}(ID={parentStatusID}) 开始扫描状态效果");
-        foreach (var kv in dm.StatusEffectDict)
-        {
-            var eff = kv.Value;
-            if (eff.StatusEffectID / 100 != parentStatusID) continue;
-            if (eff.EffectType != "BindStatus")
-            {
-                LogManager.Log(LogCategory.Bind, $"效果{eff.StatusEffectID2}({eff.EffectType}) 匹配父ID但非BindStatus");
-                continue;
-            }
-
-            // Param1 = 子状态ID2
-            string childStatusID = eff.Param1;
-            if (string.IsNullOrEmpty(childStatusID)) { LogManager.Log(LogCategory.Bind, $"{eff.StatusEffectID2} Param1为空"); continue; }
-            LogManager.Log(LogCategory.Bind, $"匹配到BindStatus效果 {eff.StatusEffectID2} -> 子状态{childStatusID}");
-
-            // 子状态主数据（用于 AddStatus 完整版重载的 MainData/MaxStack 等）
-            StatusMainData childMain = null;
-            if (dm.StatusMainDict.TryGetValue(childStatusID, out childMain) == false) { LogManager.Log(LogCategory.Bind, $"子状态{childStatusID} 不在StatusMainDict"); continue; }
-
-            // 计算绑定目标：TargetSelect "X,X"（原点为状态所在实体），用位置系统展开相邻位置
-            int range = ParseTargetSelectRange(eff.TargetSelect);
-            List<int> positions = BattlePositionSystem.GetAdjacentPositions(Side, SlotPosition, range);
-            LogManager.Log(LogCategory.Bind, $"Side={Side} Slot={SlotPosition} range={range} 相邻位置=[{string.Join(",", positions)}]");
-
-            foreach (int pos in positions)
-            {
-                var target = FindEntityByPosition(pos);
-                if (target == null || !target.IsAlive) { LogManager.Log(LogCategory.Bind, $"位置{pos} 无存活实体"); continue; }
-                // 挂子状态：时长跟随父状态；AddInPhase/TriggerPhase 取 BindStatus 效果行自身的值（配表定义）
-                var child = target.AddStatus(childStatusID, parent.Caster, parent.RemainingPhaseCount,
-                    eff.AddInPhase, eff.TriggerPhase, childMain);
-                parent.BoundStatuses.Add(child);
-                LogManager.Log(LogCategory.Bind, $"子状态{childStatusID} 挂到 {target.EntityID} (pos={pos}) 成功, Stack={child.StackCount}");
-            }
-        }
-    }
-
-    /// <summary>
-    /// 解析 TargetSelect "X,X" 的左右扩展范围（取左侧值即可，右侧按对称处理）。
-    /// </summary>
-    internal static int ParseTargetSelectRange(string targetSelect)
-    {
-        if (string.IsNullOrEmpty(targetSelect)) return 0;
-        var parts = targetSelect.Split(',');
-        if (parts.Length >= 1 && int.TryParse(parts[0].Trim(), out int left)) return left;
-        return 0;
-    }
-
-    /// <summary>
-    /// 按位置查找同阵营存活实体（由 BattleManager 注册，这里通过静态注册表查找）。
-    /// </summary>
-    private BattleEntity FindEntityByPosition(int position)
-    {
-        return BattleManager.Instance != null
-            ? BattleManager.Instance.GetEntityByPosition(Side, position)
-            : null;
     }
 
     /// <summary>
@@ -467,21 +555,16 @@ public class BattleEntity : MonoBehaviour
         if (!StatusDict.TryGetValue(statusID2, out var existing)) return false;
         if (stackCount < 0 || existing.StackCount <= stackCount)
         {
-            // 连带移除绑定子状态
-            foreach (var child in existing.BoundStatuses)
-            {
-                if (child != null && child.Caster != null && child.Caster.StatusDict.ContainsKey(child.StatusID2))
-                {
-                    child.Caster.RemoveStatus(child.StatusID2, -1);
-                }
-            }
-            existing.BoundStatuses.Clear();
+            // 连带移除绑定子状态（按子状态真实宿主查找，不再误用 Caster）。
+            StatusBindingSystem.RemoveBindings(existing);
             // ChangeControl 解除（2026-08-11）：状态消失（移除/到期统一走这里）时返回原技能/解冻
             CharacterCtrl?.OnStatusChangeControlRemoved(existing);
             // 状态结算登记注销（2026-08-12）
             BattleManager.Instance?.UnregisterStatusTick(existing);
             // PreAlliesDamage 钩子注销（2026-08-14，逻辑见 PreDamageHookSystem.cs）
             PreDamageHookSystem.UnregisterPreDamageHook(existing.StatusID2);
+            // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
+            KillHookSystem.Unregister(existing);
             StatusDict.Remove(statusID2);
             return true;
         }
@@ -527,6 +610,43 @@ public class BattleEntity : MonoBehaviour
         return list;
     }
 
+    /// <summary>累加目标身上适用于当前元素的 ResBonus 状态效果。</summary>
+    public float GetStatusResBonus(string element)
+    {
+        DataManager dataManager = DataManager.Instance;
+        if (dataManager == null || dataManager.StatusEffectDict == null) return 0f;
+
+        string configuredElement = string.IsNullOrEmpty(element) || element == "None"
+            ? "Physical"
+            : element;
+
+        float total = 0f;
+        foreach (StatusInstance instance in GetEffectiveStatusList())
+        {
+            StatusMainData mainData = instance != null ? instance.MainData : null;
+            if (mainData == null || !instance.IsActive) continue;
+            if (mainData.GetMultiplierPart() != "ResBonus") continue;
+            if (!StatusAppliesTo(
+                    mainData,
+                    string.Empty,
+                    string.Empty,
+                    0,
+                    configuredElement)) continue;
+
+            int count = Mathf.Max(1, instance.StackCount);
+            if (mainData.MaxCount > 0) count = Mathf.Min(count, mainData.MaxCount);
+            foreach (StatusEffectData effect in dataManager.StatusEffectDict.Values)
+            {
+                if (effect == null || effect.StatusEffectID == 0) continue;
+                if (effect.StatusEffectID / 100 != mainData.StatusID) continue;
+                if (effect.EffectType != "Buff" && effect.EffectType != "Debuff") continue;
+                if (float.TryParse(effect.Param1, out float value))
+                    total += value * count;
+            }
+        }
+        return total;
+    }
+
     /// <summary>
     /// 累加生效状态中的 ATKBonus（百分比攻击力加成，如跳舞+10%）。
     /// 按状态生效范围过滤：ApplyString（只对该效果生效）/ ApplyDamageType（适用伤害类型）/ ApplyElementType（适用元素）。
@@ -556,8 +676,18 @@ public class BattleEntity : MonoBehaviour
     /// <summary>
     /// 累加生效状态中的 CritRate（百分比暴击率加成，如安柏天赋1 +10%）。
     /// 按状态生效范围过滤：ApplyString（只对该效果生效）/ ApplyDamageType（适用伤害类型）/ ApplyElementType（适用元素）。
+    /// 旧重载（无攻击目标）：目标相关钩子（如 Kaeya_C1）视为不触发，仅供无目标上下文兼容调用。
     /// </summary>
     public float GetStatusCritRate(string effectID2, string skillID2, int skillType, string element)
+    {
+        return GetStatusCritRate(effectID2, skillID2, skillType, element, null);
+    }
+
+    /// <summary>
+    /// 累加生效状态中的 CritRate（带攻击目标版，2026-08-19）：Kaeya_C1 等目标相关钩子在聚合时求值。
+    /// 每个目标独立判断（不同目标分别决定是否计入）。
+    /// </summary>
+    public float GetStatusCritRate(string effectID2, string skillID2, int skillType, string element, BattleEntity target)
     {
         float total = 0f;
         foreach (var inst in GetEffectiveStatusList())
@@ -565,7 +695,7 @@ public class BattleEntity : MonoBehaviour
             if (inst.MainData == null) continue;
             string part = inst.MainData.GetMultiplierPart();
             if (part != "CritRate") continue;
-            if (!StatusAppliesTo(inst.MainData, effectID2, skillID2, skillType, element)) continue;
+            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
             foreach (var kv in DataManager.Instance.StatusEffectDict)
             {
                 var eff = kv.Value;
@@ -584,6 +714,30 @@ public class BattleEntity : MonoBehaviour
     /// ApplyDamageType：适用伤害类型 普攻/重击/战技/爆发（空=全部）；
     /// ApplyElementType：适用元素（空=全部）。
     /// </summary>
+    /// <summary>
+    /// 状态生效范围判定（带实际状态实例与攻击目标版，2026-08-19，状态钩子任务）：
+    /// 在 ApplyString / ApplyDamageType / ApplyElementType 检查之后，追加 StatusMainData.ScriptHook 判定
+    /// （如 Kaeya_C1：目标攻击前已有冰附着/冻结才计入暴击率；返回假时该状态的加成不得加入）。
+    /// </summary>
+    static bool StatusAppliesTo(StatusInstance status, string effectID2, string skillID2, int skillType, string element, BattleEntity target)
+    {
+        if (status == null || status.MainData == null) return false;
+        if (!StatusAppliesTo(status.MainData, effectID2, skillID2, skillType, element)) return false;
+        if (!string.IsNullOrEmpty(status.MainData.ScriptHook))
+        {
+            var context = new ScriptHookContext
+            {
+                Caster = status.Caster,
+                Target = target,
+                Status = status,
+                HitEffectID = effectID2
+            };
+            if (!ScriptHookEvaluator.Evaluate(status.MainData.ScriptHook, context))
+                return false;
+        }
+        return true;
+    }
+
     static bool StatusAppliesTo(StatusMainData md, string effectID2, string skillID2, int skillType, string element)
     {
         if (!string.IsNullOrEmpty(md.ApplyString))
@@ -633,19 +787,48 @@ public class BattleEntity : MonoBehaviour
     }
 
     // ========== 伤害/治疗 ==========
-    public void TakeDamage(float damage)
+    /// <summary>
+    /// 带来源的扣血接口（2026-08-19，状态钩子任务）。固定顺序：
+    ///  1. 记录 HPBefore；2. 扣除并限制血量不低于0；3. 生成 DamageResolvedEvent；
+    ///  4. HitLanded 时触发目标的统一 OnHit（StatusOnHitHookSystem）；
+    ///  5. CausedDeath 时广播死亡声明（KillHookSystem，先于战斗结束通知，确保击杀最后敌人仍能收到）；
+    ///  6. 最后调用 BattleManager.CheckBattleEnd()；7. 返回事件对象。
+    /// </summary>
+    public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source, bool hitLanded = true)
     {
+        if (float.IsNaN(damage) || float.IsInfinity(damage) || damage < 0f)
+            damage = 0f;
+        if (IsDead)
+            hitLanded = false;
+
+        float hpBefore = CurrentHP;
         CurrentHP -= damage;
-        if (CurrentHP < 0) CurrentHP = 0;
+        if (CurrentHP < 0f) CurrentHP = 0f;
+
+        var damageEvent = new DamageResolvedEvent
+        {
+            Target = this,
+            Source = source ?? DamageSourceInfo.CreateUnknown(),
+            HPBefore = hpBefore,
+            HPAfter = CurrentHP,
+            RequestedHPDamage = damage,
+            ActualHPDamage = Mathf.Max(0f, hpBefore - CurrentHP),
+            HitLanded = hitLanded,
+            CausedDeath = hpBefore > 0f && CurrentHP <= 0f
+        };
+
+        // 统一 OnHit：所有伤害路径（角色/敌人/状态/反应/燃烧）都走这里，防止同一 hit 重复触发
+        if (hitLanded)
+            StatusOnHitHookSystem.NotifyHit(damageEvent);
+        // 死亡声明：目标从存活变死亡只广播一次（已死亡目标再次受击 CausedDeath=false）
+        if (damageEvent.CausedDeath)
+            KillHookSystem.NotifyDeath(damageEvent);
 
         // 战斗结束判定：敌方全灭=胜利，我方全灭=失败（2026-08-13）
         if (IsDead)
             BattleManager.Instance?.CheckBattleEnd();
+        return damageEvent;
     }
 
-    public void TakeHeal(float heal)
-    {
-        CurrentHP += heal;
-        if (CurrentHP > TotalHP) CurrentHP = TotalHP;
-    }
+    /// <summary>无来源扣血接口（兼容旧调用）：内部使用 DamageSourceInfo.CreateUnknown()，与带来源版共用同一套扣血逻辑。</summary>
 }

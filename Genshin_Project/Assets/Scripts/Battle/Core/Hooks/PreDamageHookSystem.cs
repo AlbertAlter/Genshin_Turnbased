@@ -93,4 +93,12 @@ public static class PreDamageHookSystem
     {
         return !string.IsNullOrEmpty(statusID2) && _preDamageHooks.ContainsKey(statusID2);
     }
+
+    /// <summary>新战斗开始前清空上一场的全部钩子登记。</summary>
+    public static void ClearAll()
+    {
+        if (_preDamageHooks.Count == 0) return;
+        _preDamageHooks.Clear();
+        LogManager.Log(LogCategory.PreDamageHook, "清空上一场全部钩子登记");
+    }
 }

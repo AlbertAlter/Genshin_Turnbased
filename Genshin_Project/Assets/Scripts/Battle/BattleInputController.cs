@@ -23,6 +23,11 @@ public class BattleInputController : MonoBehaviour
     private bool _oneByOneMode = false;
     private int _oneByOneRemaining = 0;
     private List<int> _oneByOnePicked = new List<int>();
+    private List<int> _oneByOneExcluded = new List<int>();
+    private bool _selectionAllowsEmpty;
+    private bool _selectionPrefersLowerScore;
+    private Func<int, float> _selectionScore;
+    private Func<int, bool> _selectionAlive;
 
     /// <summary>当前施放者（UI高亮/溅射命中计算用；1234爆发可为非出战角色，2026-08-14）。</summary>
     public CharacterBattleController PendingAlly => _pendingAlly;
@@ -149,6 +154,7 @@ public class BattleInputController : MonoBehaviour
     void InitSelectorForEffect(BattleManager bm, CharacterBattleController ally, int skill, SkillEffectData eff)
     {
         _oneByOneMode = false;
+        _oneByOneExcluded.Clear();
         ally.ForcedTargetPositions.Clear(); // 每次新选择阶段开始：清空残留（逐个模式用 AddRange 累积）
         ally.MarkPendingSelectEffect(eff); // 挂载当前待选效果（UI 高亮/溅射预览判定用，2026-08-15）
         if (eff.TargetType == "Self")
@@ -160,13 +166,33 @@ public class BattleInputController : MonoBehaviour
             return;
         }
         bool allySide = eff.TargetType == "Allies" || eff.TargetType == "AlliesOnly" || eff.TargetType == "AllyField";
+        bool fieldTarget = !string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", StringComparison.Ordinal);
         var side = allySide ? BattleSide.Ally : BattleSide.Enemy;
         Func<int, float> hp = allySide ? (Func<int, float>)bm.GetAllyHpAt : bm.GetEnemyHpAt;
         Func<int, bool> alive = allySide ? (Func<int, bool>)bm.IsAllyAliveAt : bm.IsEnemyAliveAt;
+        bool preferLower = allySide && (eff.EffectType == "Heal" || eff.EffectType == "Shield");
+        // 友方增益的正式评分依赖“本场伤害统计”；该系统未建立前保持中性并列随机，不能拿血量冒充伤害。
+        Func<int, float> score = allySide ? (Func<int, float>)(_ => 0f) : hp;
+        if (preferLower)
+        {
+            score = position =>
+            {
+                var entity = bm.GetEntityByPosition(side, position);
+                return entity != null && entity.TotalHP > 0f ? entity.CurrentHP / entity.TotalHP : 0f;
+            };
+        }
+
+        if (eff.TargetType == "AlliesOnly" && ally.Entity != null)
+            _oneByOneExcluded.Add(ally.Entity.SlotPosition);
+
+        _selectionAllowsEmpty = fieldTarget;
+        _selectionPrefersLowerScore = preferLower;
+        _selectionScore = score;
+        _selectionAlive = alive;
         if (eff.TargetConsecutive >= 2 && eff.TargetConsecutive <= 4)
         {
             // 2/3/4 随机：全体存活目标特效，走个流程，空格直接施放（2026-08-15）
-            _selector.InitAll(side, hp, alive);
+            _selector.InitAll(side, score, alive, fieldTarget);
         }
         else if (eff.TargetConsecutive == 0 && eff.TargetNumber > 1)
         {
@@ -174,11 +200,11 @@ public class BattleInputController : MonoBehaviour
             _oneByOneMode = true;
             _oneByOneRemaining = eff.TargetNumber;
             _oneByOnePicked = new List<int>();
-            _selector.Init(side, 1, 0, hp, alive);
+            _selector.Init(side, 1, 0, score, alive, _oneByOneExcluded, fieldTarget, preferLower);
         }
         else
         {
-            _selector.Init(side, eff.TargetNumber, eff.TargetConsecutive, hp, alive);
+            _selector.Init(side, eff.TargetNumber, eff.TargetConsecutive, score, alive, _oneByOneExcluded, fieldTarget, preferLower);
         }
     }
 
@@ -202,6 +228,18 @@ public class BattleInputController : MonoBehaviour
         _oneByOneMode = false;
         _oneByOneRemaining = 0;
         _oneByOnePicked = new List<int>();
+        _oneByOneExcluded = new List<int>();
+        _selectionScore = null;
+        _selectionAlive = null;
+        _selectionAllowsEmpty = false;
+        _selectionPrefersLowerScore = false;
+    }
+
+    /// <summary>测试战斗重建前退出目标选择，并丢弃上一场的选择缓存。</summary>
+    public void ResetForBattle()
+    {
+        ExitSelecting();
+        _selector.Reset();
     }
 
     // 选择中按技能键：同一按钮 = 多段推进（SkillPhase），不同按钮 = 切换技能
@@ -266,9 +304,17 @@ public class BattleInputController : MonoBehaviour
             if (_oneByOneRemaining > 0)
             {
                 var side = _selector.Side;
-                Func<int, float> hp = side == BattleSide.Ally ? (Func<int, float>)bm.GetAllyHpAt : bm.GetEnemyHpAt;
-                Func<int, bool> alive = side == BattleSide.Ally ? (Func<int, bool>)bm.IsAllyAliveAt : bm.IsEnemyAliveAt;
-                _selector.Init(side, 1, 0, hp, alive, _oneByOnePicked); // 排除已选，不可重复
+                var excluded = new List<int>(_oneByOneExcluded);
+                excluded.AddRange(_oneByOnePicked);
+                _selector.Init(
+                    side,
+                    1,
+                    0,
+                    _selectionScore,
+                    _selectionAlive,
+                    excluded,
+                    _selectionAllowsEmpty,
+                    _selectionPrefersLowerScore); // 排除施放者和已选位置，不可重复
                 if (!_selector.IsSelectionValid())
                 {
                     LogManager.Log(LogCategory.Select, "无可选剩余目标，取消");
@@ -393,15 +439,32 @@ public class BattleInputController : MonoBehaviour
         if (bm.CurrentPhase == TurnPhase.AllyAction) bm.EndAllyTurn();
     }
 
+    /// <summary>UI：让当前出战的倒地角色花费10 AP起身。</summary>
+    public bool UIStandUp()
+    {
+        var bm = BattleManager.Instance;
+        return bm != null && !_selecting && bm.TryStandUpActiveAlly();
+    }
+
+    /// <summary>UI：让当前出战的冻结角色花费10 AP解冻。</summary>
+    public bool UIThaw()
+    {
+        var bm = BattleManager.Instance;
+        return bm != null && !_selecting && bm.TryThawActiveAlly();
+    }
+
     /// <summary>UI：切换出战角色（slot=0~3）。</summary>
     public void UISwitchCharacter(int slot)
     {
         var bm = BattleManager.Instance;
         if (bm == null || bm.Allies == null || slot < 0 || slot >= bm.Allies.Count) return;
-        if (_selecting) ExitSelecting();
-        for (int i = 0; i < bm.Allies.Count; i++)
-            if (bm.Allies[i] != null) bm.Allies[i].IsActive = (i == slot);
-        LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");
+        if (bm.TrySwitchActiveAlly(slot))
+        {
+            if (_selecting) ExitSelecting();
+            LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");
+        }
+        else
+            LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {slot}");
     }
 
     /// <summary>是否处于目标选择阶段（UI遮罩/特效用）。</summary>

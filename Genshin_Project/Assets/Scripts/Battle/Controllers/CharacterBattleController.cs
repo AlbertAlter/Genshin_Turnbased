@@ -12,7 +12,7 @@ using UnityEngine;
 ///  - 目标选择（TargetType/TargetNumber/TargetConsecutive/TargetOverride）
 /// 按键接口由 BattleTester 或其他输入层调用：ExecuteNormalAttack / ExecuteHeavyAttack / ExecuteSkill / ExecuteBurst
 /// </summary>
-public class CharacterBattleController : MonoBehaviour
+public partial class CharacterBattleController : MonoBehaviour
 {
     public BattleEntity Entity;
 
@@ -23,10 +23,6 @@ public class CharacterBattleController : MonoBehaviour
     /// <summary>强制目标位置组合（目标选择阶段确认后由 BattleTester 设置；-1 为空=未设置）。技能序列结束后清空</summary>
 public List<int> ForcedTargetPositions = new List<int>();
 
-    /// <summary>
-    /// 上一个效果选中的目标列表（供 TargetOverride="0,0" 沿用）。技能序列执行前清空。
-    /// </summary>
-    List<BattleEntity> _lastSkillTargets = new List<BattleEntity>();
     // 状态行动延迟快照（2026-08-13）：Display==1 的行动在延迟前先解析目标并缓存，
     // 延迟期间计算照常进行（如标记照常移除），延迟结束后执行时直接用快照目标，顺序不受影响
     private readonly Dictionary<string, List<BattleEntity>> _statusTargetSnapshot = new Dictionary<string, List<BattleEntity>>();
@@ -365,6 +361,7 @@ public List<int> ForcedTargetPositions = new List<int>();
     public void OnTurnStart()
     {
         //AP重置移到 BattleManager 全局（我方每回合共用100，2026-08-14）
+        PoiseSystem.RestoreAtTurnStart(Entity);
 
         // 技能效果表挂载的 ChangeControl（填了Duration）：每回合递减，到0时结束（返回原技能/解冻）
         // 状态效果表挂载的由状态计时（状态消失时解除），永久型（IsPermanent）不递减
@@ -415,55 +412,69 @@ public List<int> ForcedTargetPositions = new List<int>();
     // ================================================================
     public bool CanUseNormalAttack()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
+        if (PoiseSystem.IsKnockedDown(Entity)) return false;
+        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(0)) return false;
         string nid0 = _boundSkills[0];
         if (string.IsNullOrEmpty(nid0)) return false;
-        var sk = _skillById2[nid0];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[nid0] > 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(nid0, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(nid0, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanUseHeavyAttack()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
+        if (PoiseSystem.IsKnockedDown(Entity)) return false;
+        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(1)) return false;
         string hid1 = _boundSkills[1];
         if (string.IsNullOrEmpty(hid1)) return false;
-        var sk = _skillById2[hid1];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[hid1] > 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(hid1, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(hid1, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanUseSkill()
     {
-        if (!IsActive) return false;
+        if (!IsActive || Entity == null || Entity.IsDead) return false;
+        if (PoiseSystem.IsKnockedDown(Entity)) return false;
+        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(2)) return false;
         string sid2 = _boundSkills[2];
         if (string.IsNullOrEmpty(sid2)) return false;
-        var sk = _skillById2[sid2];
-        if (!APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining[sid2] > 0) return false;
-        if (sk.MaxCharge > 0 && _currentCharges[sid2] <= 0) return false;
+        if (_skillById2 == null || !_skillById2.TryGetValue(sid2, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(sid2, out int cd) && cd > 0) return false;
+        if (sk.MaxCharge > 0 && (_currentCharges == null || !_currentCharges.TryGetValue(sid2, out int charges) || charges <= 0)) return false;
         return true;
     }
 
     public bool CanUseBurst()
     {
+        if (Entity == null || Entity.IsDead) return false;
+        if (PoiseSystem.IsKnockedDown(Entity)) return false;
+        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(3)) return false;
         string bid3 = _boundSkills[3];
         if (string.IsNullOrEmpty(bid3)) return false;
-        var sk = _skillById2[bid3];
+        if (_skillById2 == null || !_skillById2.TryGetValue(bid3, out var sk)) return false;
         if (Entity.CurrentEnergy < Entity.MaxEnergy) return false;
-        if (_cooldownRemaining[bid3] > 0) return false;
+        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(bid3, out int cd) && cd > 0) return false;
         return true;
     }
 
     public bool CanSwitch()
     {
-        return IsActive && !IsAnyButtonFrozen();
+        return IsActive
+            && Entity != null
+            && Entity.IsAlive
+            && !PoiseSystem.IsKnockedDown(Entity)
+            && !FrozenReactionHandler.IsFrozen(Entity)
+            && !IsAnyButtonFrozen();
     }
 
     // ================================================================
@@ -473,6 +484,15 @@ public List<int> ForcedTargetPositions = new List<int>();
     // ================================================================
     public string GetBlockReason(int skillType)
     {
+        if (Entity == null)
+            return "角色实体不存在";
+        if (Entity.IsDead)
+            return "角色已经死亡";
+        if (PoiseSystem.IsKnockedDown(Entity))
+            return "角色处于倒地状态，需要先花费10 AP起身";
+        if (FrozenReactionHandler.IsFrozen(Entity))
+            return "角色处于冻结状态，无法行动";
+
         // 通用前置（2026-08-15：爆发例外——文档“该角色无需出战”，未出战角色仍可施放爆发；死亡由调用方另行拦截）
         if (!IsActive && skillType != 3)
             return "角色未出战";
@@ -509,6 +529,8 @@ public List<int> ForcedTargetPositions = new List<int>();
         // AP 不足（爆发不消耗AP，改消耗能量）
         if (skillType != 3)
         {
+            if (APManager == null)
+                return "战斗行动点系统未初始化";
             if (!APManager.CanAfford(sk.APCost))
                 return $"AP不足（需要{sk.APCost}，当前{APManager.CurrentAP}）";
         }
@@ -879,7 +901,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         effects = _skillEffects.TryGetValue(skillID2, out var list) ? list : null;
         if (effects == null) return true;
 
-        _lastSkillTargets.Clear(); // 每个技能序列开始时清空"上一条目标"
+        _lastSkillTargetResult = null; // 每个技能序列开始时清空"上一条目标"
         _lastTargetPositions.Clear(); // 同时清空位置继承（TargetOverride="0,0" 只继承本技能序列内的上一条目标）
 
         // PreAlliesDamage 钩子（2026-08-14）：
@@ -892,16 +914,18 @@ public List<int> ForcedTargetPositions = new List<int>();
             foreach (var eff in effects)
             {
                 if (eff == null || eff.EffectType != "Damage") continue;
-                var targets = ResolveTargets(eff);
-                if (targets == null) continue;
-                foreach (var t in targets)
-                {
-                    if (t != null && t.Position != null && !bm.PendingActionTargetPositions.Contains(t.Position.SlotIndex))
-                        bm.PendingActionTargetPositions.Add(t.Position.SlotIndex);
-                }
+                var targetResult = ResolveSkillTargetResult(eff);
+                if (!targetResult.IsValid) continue;
+                foreach (int position in targetResult.Positions)
+                    if (!bm.PendingActionTargetPositions.Contains(position))
+                        bm.PendingActionTargetPositions.Add(position);
             }
             if (bm.PendingActionTargetPositions.Count > 0)
                 PreDamageHookSystem.TriggerPreDamageHooks(); // 钩子逻辑见 PreDamageHookSystem.cs（2026-08-15 独立）
+
+            // 上面只是预解析。正式技能序列必须从“没有上一效果”开始，不能继承预览或钩子效果的目标。
+            _lastSkillTargetResult = null;
+            _lastTargetPositions.Clear();
         }
         return true;
     }
@@ -934,7 +958,6 @@ public List<int> ForcedTargetPositions = new List<int>();
             TargetConsecutive = src.TargetConsecutive,
             TargetConsecutiveSet = src.TargetConsecutiveSet,
             TargetOverride = src.TargetOverride,
-            EnergyGainMode = src.EnergyGainMode,
             ScriptHook = src.ScriptHook
         };
     }
@@ -1058,6 +1081,7 @@ public List<int> ForcedTargetPositions = new List<int>();
     // ----------------------------------------------------------------
     void ExecuteDamage(SkillEffectData eff, int skillType)
     {
+        long effectExecutionID = ReactionResolver.BeginEffectExecution();
         // 多段 HitData（Hits1-7，每段独立结算；空段跳过）
         var hits = GetHitDataList(eff, skillType);
         if (hits.Count == 0 || (hits.Count == 1 && hits[0].Multiplier <= 0))
@@ -1076,17 +1100,19 @@ public List<int> ForcedTargetPositions = new List<int>();
             LogManager.Log(LogCategory.Damage, $"{Entity.EntityID} 无目标，攻击落空 ({eff.SkillEffectID2})");
             return;
         }
+        if (eff.Element == "Geo" && targets.Count > 1)
+        {
+            // 同一岩伤害效果按敌方位置稳定结算，最后成功结晶的目标决定最终全队盾。
+            targets = targets
+                .OrderBy(target => target != null ? target.SlotPosition : int.MaxValue)
+                .ToList();
+        }
 
         // 命中记录（Hit()钩子：有目标即算命中，不管是否造成伤害/伤害数值）
         LastHitEffectID2 = eff.SkillEffectID2;
         //记录序列内命中（Hit()钩子：序列内后续效果可判定"该效果命中过"）
         if (!string.IsNullOrEmpty(eff.SkillEffectID2))
             _sequenceHitEffectIDs.Add(eff.SkillEffectID2);
-
-        // 记录本次选中的目标位置（供后续效果 TargetOverride="0,0" 沿用，如爆发伤害→箭雨状态施加到同一批位置）
-        _lastTargetPositions.Clear();
-        foreach (var t in targets)
-            if (t.Position != null) _lastTargetPositions.Add(t.Position.SlotIndex);
 
         foreach (var target in targets)
         {
@@ -1095,24 +1121,47 @@ public List<int> ForcedTargetPositions = new List<int>();
             {
                 if (!target.IsAlive) break;
 
-                float damage = CalculateDamage(baseValue, hit, eff, target, skillType);
+                float damage = CalculateDamage(
+                    baseValue,
+                    hit,
+                    eff,
+                    target,
+                    skillType,
+                    out ReactionDamageComponents damageComponents);
 
                 // 元素反应（2026-08-14）：增幅反应（融化等）在伤害计算后、护盾吸收前结算；
                 // 2026-08-15：按元素量模型消耗双方元素，攻击元素残留量决定是否上附着（冰攻融化火后不残留冰）
-                float reactedDamage = ElementReactionManager.TryReaction(target, eff.Element, hit.ElementAura, damage, out string reactionName, out float attackRemain);
-                if (reactionName.Length > 0)
-                    LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击 {target.EntityID} 触发{reactionName}");
+                ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
+                {
+                    SourceEntity = Entity,
+                    Target = target,
+                    SourceKind = ReactionSourceKind.CharacterSkill,
+                    SourceSkillID = _boundSkills[skillType],
+                    SourceEffectID = eff.SkillEffectID2,
+                    EffectExecutionID = effectExecutionID,
+                    AttackElement = eff.Element,
+                    AttackAmount = hit.ElementAura,
+                    PreReactionDamage = damage,
+                    DamageComponents = damageComponents,
+                    DamageType = eff.DamageType,
+                    PoiseDamage = hit.Poise
+                });
+                if (reaction.HasReaction)
+                    LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击 {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
 
                 // 护盾吸收
-                float finalDamage = target.AbsorbDamageWithShield(reactedDamage, eff.Element);
-                target.TakeDamage(finalDamage);
-
-                // 元素附着（2026-08-15：使用反应后的残留量，残留0不上附着）
-                if (!string.IsNullOrEmpty(eff.Element) && eff.Element != "None" && attackRemain > 0f)
-                    target.ApplyAura(eff.Element, attackRemain, Entity.EntityID);
+                float finalDamage = target.AbsorbDamageWithShield(reaction.FinalDamage, eff.Element);
+                // 带来源扣血（2026-08-19）：角色直伤统一入口；反应主命中（蒸发/融化/激化等）标注对应反应类型
+                ReactionType mainReactionType = reaction != null && reaction.HasReaction
+                    ? reaction.TriggeredReactions[0].Type
+                    : ReactionType.None;
+                target.TakeDamage(finalDamage, DamageSourceInfo.Create(
+                    Entity, ReactionSourceKind.CharacterSkill, _boundSkills[skillType], eff.SkillEffectID2, mainReactionType));
+                ReactionEffectExecutor.FinalizePrimaryHit(reaction, finalDamage);
 
                 // 削韧
-                target.Poise -= hit.Poise;
+                PoiseSystem.ApplyPoiseDamage(target, hit.Poise, finalDamage, Entity);
+                ReactionEffectExecutor.ExecuteDerivedHits(reaction);
 
                 // 溅射（Splash(n; L,R)）：以该 hit 主目标为原点，左右各扩展 L/R 位，
                 // 溅射目标受到主目标实际伤害 × n（继承暴击/加成结果，不独立判定）；
@@ -1134,19 +1183,17 @@ public List<int> ForcedTargetPositions = new List<int>();
                             // 溅射伤害 = 主目标该hit实际伤害 × 倍率（乘倍率）
                             float splashDmg = finalDamage * splashRate;
                             // 溅射目标【独立暴击判定】：每个敌人每次伤害单独 roll，不能三个目标共用一次暴击
-                            float splashCritRate = Mathf.Clamp(splashTarget.CritRate + splashTarget.GetStatusCritRate("", "", 0, ""), 0f, 1f);
+                            float splashCritRate = Mathf.Clamp(splashTarget.CritRate + splashTarget.GetStatusCritRate("", "", 0, "", splashTarget), 0f, 1f);
                             float splashCritMult = 1f;
                             if (UnityEngine.Random.value < splashCritRate)
                                 splashCritMult = 1f + splashTarget.CritDMG;
                             float splashFinal = splashTarget.AbsorbDamageWithShield(splashDmg * splashCritMult, eff.Element);
-                            splashTarget.TakeDamage(splashFinal);
+                            splashTarget.TakeDamage(splashFinal, DamageSourceInfo.Create(
+                                Entity, ReactionSourceKind.CharacterSkill, _boundSkills[skillType], eff.SkillEffectID2, mainReactionType));
                             LogManager.Log(LogCategory.Splash, $"{target.EntityID} -> {splashTarget.EntityID} : {splashFinal:F1} (基础{splashDmg:F1}={finalDamage:F1}×{splashRate}, {(splashCritMult > 1f ? $"暴击x{splashCritMult:F2}" : "未暴击")})");
                         }
                     }
                 }
-
-                // OnHit：目标受击 → 目标身上及所在位置的场地状态触发 OnHit 行动（HitSource 匹配 + ScriptHook）
-                TriggerOnHit(target, eff);
 
                 LogManager.Log(LogCategory.Damage, $"{Entity.EntityID} 攻击 {target.EntityID} : {finalDamage:F1} ({damage:F1} raw, {hit.Multiplier}×{baseValue:F1}) | {eff.Element} | 削韧 {hit.Poise}");
             }
@@ -1168,8 +1215,8 @@ public List<int> ForcedTargetPositions = new List<int>();
             return;
         }
 
-        // EnemyField 目标：状态挂到场地位置（含空位），不依赖单位
-        if (eff.TargetType == "EnemyField")
+        // Field 目标：状态挂到场地位置（含空位），不依赖单位
+        if (!string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", StringComparison.Ordinal))
         {
             ApplyStatusToField(eff, statusID2, statusMain);
             return;
@@ -1192,29 +1239,9 @@ public List<int> ForcedTargetPositions = new List<int>();
         var bm = BattleManager.Instance;
         if (bm == null || bm.Field == null) return;
 
-        // 选择要施加的位置：强制位置组合优先（爆发选中[2,3,4]），否则按 TargetOverride="0,0" 沿用上一条目标位置
-        List<int> positions = new List<int>();
-        if (ForcedTargetPositions.Count > 0)
+        var fields = ResolveTargetFields(eff);
+        foreach (var slot in fields)
         {
-            positions.AddRange(ForcedTargetPositions);
-        }
-        else if (!string.IsNullOrEmpty(eff.TargetOverride))
-        {
-            // "0,0"：沿用上一条效果（SE_Burst_Amber1 爆发伤害）选中的目标位置
-            positions.AddRange(_lastTargetPositions);
-        }
-
-        if (positions.Count == 0)
-        {
-            // 都没有 → 默认全部敌方位置
-            foreach (var s in bm.Field.EnemySlots) positions.Add(s.SlotIndex);
-        }
-
-        foreach (int pos in positions)
-        {
-            var slot = bm.Field.GetSlot(BattleSide.Enemy, pos);
-            if (slot == null) continue;
-
             var inst = new StatusInstance
             {
                 StatusID2 = statusID2,
@@ -1227,129 +1254,40 @@ public List<int> ForcedTargetPositions = new List<int>();
             };
             slot.StatusList.Add(inst);
             LogManager.Log(LogCategory.ApplyStatus, $"{statusID2} -> {slot} (dur={eff.Duration}, phase={eff.AddInPhase}, trig={eff.TriggerPhase})");
-            AutoBindStatusToSlot(slot, inst);
+            StatusBindingSystem.ApplyBindings(inst, slot);
             // OnApply：位置状态施加时立刻生效（由状态施放者控制器执行）
             if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
                 inst.Caster.CharacterCtrl.OnStatusApplied(inst, slot);
             // 状态结算登记（2026-08-12）：位置状态按 AddInPhase/TriggerPhase 登记阶段桶
             BattleManager.Instance?.RegisterStatusTick(inst, null, slot);
-        }
-    }
-
-    /// <summary>
-    /// 位置状态绑定（BindStatus）：状态挂到场地位置后，扫描该状态的 BindStatus 效果，
-    /// 把 Param1 子状态挂到"状态所在位置 ± range"的相邻位置（TargetSelect "X,X"）。
-    /// 位置状态不随单位死亡消失（2026-08-06）。
-    /// </summary>
-    /// <summary>
-    /// 解析 TargetSelect "X,X" 的左右扩展范围（取左侧值即可，右侧按对称处理）。
-    /// </summary>
-    private static int ParseTargetSelectRange(string targetSelect)
-    {
-        if (string.IsNullOrEmpty(targetSelect)) return 0;
-        var parts = targetSelect.Split(',');
-        if (parts.Length >= 1 && int.TryParse(parts[0].Trim(), out int left)) return left;
-        return 0;
-    }
-
-    /// <summary>
-    /// 位置状态绑定（BindStatus）：状态挂到场地位置后，扫描该状态的 BindStatus 效果，
-    /// 把 Param1 子状态挂到"状态所在位置 ± range"的相邻位置（TargetSelect "X,X"）。
-    /// 位置状态不随单位死亡消失（2026-08-06）。
-    /// </summary>
-    void AutoBindStatusToSlot(FieldPosition slot, StatusInstance parent)
-    {
-        if (parent == null || parent.MainData == null) return;
-        var dm = DataManager.Instance;
-        if (dm == null || dm.StatusEffectDict == null) return;
-
-        int parentStatusID = parent.MainData.StatusID;
-        foreach (var kv in dm.StatusEffectDict)
-        {
-            var eff = kv.Value;
-            if (eff.StatusEffectID / 100 != parentStatusID) continue;
-            if (eff.EffectType != "BindStatus") continue;
-
-            string childStatusID = eff.Param1;
-            if (string.IsNullOrEmpty(childStatusID)) continue;
-            if (!dm.StatusMainDict.TryGetValue(childStatusID, out var childMain)) continue;
-
-            // TargetSelect "X,X"：原点=状态所在位置，左右各扩展 range
-            int range = ParseTargetSelectRange(eff.TargetSelect);
-            List<int> positions = BattlePositionSystem.GetAdjacentPositions(BattleSide.Enemy, slot.SlotIndex, range);
-            LogManager.Log(LogCategory.Bind, $"状态{parent.StatusID2} 在位置{slot.SlotIndex} 绑定子状态{childStatusID} 到相邻位置[{string.Join(",", positions)}]");
-
-            var bm = BattleManager.Instance;
-            if (bm == null || bm.Field == null) continue;
-
-            foreach (int pos in positions)
-            {
-                var targetSlot = bm.Field.GetSlot(BattleSide.Enemy, pos);
-                if (targetSlot == null) continue;
-                if (targetSlot.StatusList.Exists(s => s.StatusID2 == childStatusID)) continue; // 去重
-
-                var childInst = new StatusInstance
-                {
-                    StatusID2 = childStatusID,
-                    Caster = parent.Caster,
-                    RemainingPhaseCount = parent.RemainingPhaseCount,
-                    AddInPhase = eff.AddInPhase,
-                    TriggerPhase = eff.TriggerPhase,
-                    MainData = childMain,
-                    ApplyOrder = ++BattleEntity._applyOrderCounter
-                };
-                targetSlot.StatusList.Add(childInst);
-                // 状态结算登记（2026-08-12）：子状态同样登记（随父状态移除时注销）
-                BattleManager.Instance?.RegisterStatusTick(childInst, null, targetSlot);
-                parent.BoundStatuses.Add(childInst);
-                LogManager.Log(LogCategory.Bind, $"子状态{childStatusID} 挂到位置{pos} 成功");
-            }
+            PreDamageHookSystem.RegisterPreDamageHook(inst);
+            // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
+            KillHookSystem.Register(inst, slot);
         }
     }
 
     // ----------------------------------------------------------------
     //  RemoveStatus
     // ----------------------------------------------------------------
-    /// <summary>从某侧所有位置移除指定状态（含子状态/ChangeControl/计时清理）。</summary>
-    void RemoveStatusFromField(string statusID2, BattleSide side)
+    /// <summary>只从一个已解析出的场地位置移除状态。</summary>
+    void RemoveStatusFromFieldSlot(string statusID2, FieldPosition slot)
     {
         var bm = BattleManager.Instance;
-        if (bm == null || bm.Field == null) return;
-        var slots = side == BattleSide.Enemy ? bm.Field.EnemySlots : bm.Field.AllySlots;
-        foreach (var slot in slots)
+        if (bm == null || bm.Field == null || slot == null) return;
+        for (int i = slot.StatusList.Count - 1; i >= 0; i--)
         {
-            if (slot == null) continue;
-            for (int i = slot.StatusList.Count - 1; i >= 0; i--)
-            {
-                var inst = slot.StatusList[i];
-                if (inst == null || inst.StatusID2 != statusID2) continue;
-                //连带移除位置子状态（BindStatus子状态跟随父状态）
-                if (inst.BoundStatuses != null && inst.BoundStatuses.Count > 0)
-                {
-                    foreach (var child in inst.BoundStatuses)
-                    {
-                        if (child == null) continue;
-                        foreach (var cs in slots)
-                        {
-                            if (cs == null) continue;
-                            int ci = cs.StatusList.FindIndex(s => s == child);
-                            if (ci >= 0)
-                            {
-                                bm.UnregisterStatusTick(child);
-                                cs.StatusList.RemoveAt(ci);
-                                break;
-                            }
-                        }
-                    }
-                    inst.BoundStatuses.Clear();
-                }
-                //解除 ChangeControl记录 + 计时注销
-                if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
-                    inst.Caster.CharacterCtrl.OnStatusChangeControlRemoved(inst);
-                bm.UnregisterStatusTick(inst);
-                slot.StatusList.RemoveAt(i);
-                LogManager.Log(LogCategory.RemoveStatus, $"{statusID2} removed from {slot}");
-            }
+            var inst = slot.StatusList[i];
+            if (inst == null || inst.StatusID2 != statusID2) continue;
+            StatusBindingSystem.RemoveBindings(inst);
+            //解除 ChangeControl记录 + 计时注销
+            if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
+                inst.Caster.CharacterCtrl.OnStatusChangeControlRemoved(inst);
+            bm.UnregisterStatusTick(inst);
+            PreDamageHookSystem.UnregisterPreDamageHook(inst.StatusID2);
+            // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
+            KillHookSystem.Unregister(inst);
+            slot.StatusList.RemoveAt(i);
+            LogManager.Log(LogCategory.RemoveStatus, $"{statusID2} removed from {slot}");
         }
     }
 
@@ -1359,10 +1297,10 @@ public List<int> ForcedTargetPositions = new List<int>();
         if (string.IsNullOrEmpty(statusID2)) return;
 
         //位置状态移除（EnemyField/AllyField目标）：从目标侧的位置状态列表移除（兔兔伯爵爆炸后移除兔子）
-        if (eff.TargetType == "EnemyField" || eff.TargetType == "AllyField")
+        if (!string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", StringComparison.Ordinal))
         {
-            var side = eff.TargetType == "EnemyField" ? BattleSide.Enemy : BattleSide.Ally;
-            RemoveStatusFromField(statusID2, side);
+            foreach (var field in ResolveTargetFields(eff))
+                RemoveStatusFromFieldSlot(statusID2, field);
             return;
         }
 
@@ -1425,7 +1363,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         foreach (var target in targets)
         {
             float total = gained;
-            if (eff.EnergyGainMode == "Based")
+            if (eff.Param2 == "Based")
             {
                 // 元素匹配：同元素1.5，不同0.5
                 float elementStatus = string.IsNullOrEmpty(eff.Element)
@@ -1442,10 +1380,10 @@ public List<int> ForcedTargetPositions = new List<int>();
 
                 total = gained * onstage * elementStatus * recharge;
             }
-            // Direct/Flat：固定值
+            // Flat：固定值
 
             target.CurrentEnergy = Mathf.Min(target.CurrentEnergy + Mathf.RoundToInt(total), target.MaxEnergy);
-            LogManager.Log(LogCategory.GainEnergy, $"{target.EntityID} +{total:F1} energy (mode={eff.EnergyGainMode})");
+            LogManager.Log(LogCategory.GainEnergy, $"{target.EntityID} +{total:F1} energy (mode={eff.Param2})");
         }
     }
 
@@ -1682,233 +1620,6 @@ public List<int> ForcedTargetPositions = new List<int>();
     }
 
     // ================================================================
-    //  目标选择
-    //  TargetType: Self / Enemy / EnemyField / Allies / AlliesOnly
-    //  TargetNumber: 数量，-1=全部
-    //  TargetConsecutive: 0非连续 1连续 2连续随机 3非连续随机可重复 4非连续随机不可重复
-    //  TargetOverride: X,X 偏移 或 状态ID筛选
-    // ================================================================
-    List<BattleEntity> ResolveTargets(SkillEffectData eff)
-    {
-        // 诊断（2026-08-14）：蓄力箭打全体定位——打印每次目标解析的关键字段
-        LogManager.Log(LogCategory.Damage, $"[目标解析] {eff.SkillEffectID2} Type={eff.TargetType} Override='{eff.TargetOverride}' Num={eff.TargetNumber} Forced={ForcedTargetPositions.Count}");
-        var bm = BattleManager.Instance;
-        var result = new List<BattleEntity>();
-
-        switch (eff.TargetType)
-        {
-            case "Self":
-                result.Add(Entity);
-                break;
-
-            case "Enemy":
-            {
-                // 强制目标位置组合（2026-08-07 目标选择）：
-                //   由 TargetSelector 确认后传入（如爆发选中[2,3,4]），逐位置取该位置的存活敌人，空位自然跳过。
-                if (ForcedTargetPositions.Count > 0 && eff.TargetNumber > 0)
-                {
-                    foreach (int pos in ForcedTargetPositions)
-                    {
-                        var e = bm.GetEntityByPosition(BattleSide.Enemy, pos);
-                        if (e != null && e.IsAlive) result.Add(e);
-                    }
-                    break;
-                }
-                foreach (var e in bm.Enemies)
-                    if (e.Entity != null && e.Entity.IsAlive)
-                        result.Add(e.Entity);
-                break;
-            }
-
-            case "EnemyField":
-            {
-                // 敌方场地目标：以位置为目标，该位置上有没有单位都不影响目标选择（术语表131行）
-                if (bm.Field == null) break;
-                List<int> positions = ForcedTargetPositions.Count > 0
-                    ? new List<int>(ForcedTargetPositions)
-                    : new List<int>(bm.Field.EnemySlots.Select(s => s.SlotIndex));
-                var slots = bm.Field.GetSlots(BattleSide.Enemy, positions);
-                foreach (var slot in slots)
-                    if (slot.IsOccupied) result.Add(slot.Occupant);
-                break;
-            }
-
-            case "Allies":
-            {
-                // 单选/多选我方（2026-08-14）：目标选择阶段选中了特定我方位置（ForcedTargetPositions=我方位置1~4）时按位置取；
-                // 否则默认全部我方
-                if (ForcedTargetPositions.Count > 0 && eff.TargetNumber > 0)
-                {
-                    foreach (var pos in ForcedTargetPositions)
-                    {
-                        if (pos >= 1 && pos <= bm.Allies.Count)
-                        {
-                            var a = bm.Allies[pos - 1];
-                            if (a != null && a.Entity != null && a.Entity.IsAlive && !result.Contains(a.Entity))
-                                result.Add(a.Entity);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var a in bm.Allies)
-                        if (a.Entity != null && a.Entity.IsAlive)
-                            result.Add(a.Entity);
-                }
-                break;
-            }
-
-            case "AlliesOnly":
-            {
-                if (ForcedTargetPositions.Count > 0 && eff.TargetNumber > 0)
-                {
-                    foreach (var pos in ForcedTargetPositions)
-                    {
-                        if (pos >= 1 && pos <= bm.Allies.Count)
-                        {
-                            var a = bm.Allies[pos - 1];
-                            if (a != null && a.Entity != null && a.Entity != Entity && a.Entity.IsAlive && !result.Contains(a.Entity))
-                                result.Add(a.Entity);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var a in bm.Allies)
-                        if (a.Entity != null && a.Entity.IsAlive && a.Entity != Entity)
-                            result.Add(a.Entity);
-                }
-                break;
-            }
-
-            default:
-                result.Add(Entity);
-                break;
-        }
-
-        // TargetOverride（配表术语139行）：
-        //   "0,0" = 直接沿用上一条效果选中的目标（此时不能填 TargetNumber/TargetConsecutive）
-        //   状态ID2 = 目标 = 所有带有该状态的敌方单位（蓄力箭只打蓄力标记的位置）
-        //   其他 "X,X" 数值偏移 = 基于上一条目标左右扩展（当前无场地系统，先按沿用处理）
-        if (!string.IsNullOrEmpty(eff.TargetOverride))
-        {
-            string ov = eff.TargetOverride.Trim();
-
-            // 状态ID2筛选（2026-08-14）：目标=所有带有该状态的敌方单位（实体+位置，蓄力箭只打标记目标）
-            if (!ov.Contains(",") && ov != "0,0" && !ov.StartsWith("PreAlliesDamage("))
-            {
-                var filtered2 = new List<BattleEntity>();
-                foreach (var e in bm.Enemies)
-                    if (e.Entity != null && e.Entity.IsAlive && e.Entity.GetStatus(ov) != null)
-                        filtered2.Add(e.Entity);
-                int entityHit2 = filtered2.Count;
-                if (bm.Field != null)
-                {
-                    foreach (var slot in bm.Field.EnemySlots)
-                    {
-                        if (slot == null) continue;
-                        bool has2 = false;
-                        foreach (var inst in slot.StatusList)
-                            if (inst != null && inst.StatusID2 == ov) { has2 = true; break; }
-                        if (has2 && slot.IsOccupied && slot.Occupant != null && slot.Occupant.IsAlive && !filtered2.Contains(slot.Occupant))
-                            filtered2.Add(slot.Occupant);
-                    }
-                }
-                result = filtered2;
-                LogManager.Log(LogCategory.Damage, $"[筛选] ov={ov} 实体命中={entityHit2} 位置命中={filtered2.Count - entityHit2} 总计={filtered2.Count}");
-            }
-            else if (ov == "0,0")
-            {
-                // 沿用上一条效果的目标；若没有上一条（例如第一条效果），则 override 不执行，
-                // 保持当前 result（按 TargetType/TargetNumber 正常解析）
-                if (_lastSkillTargets.Count > 0)
-                    result = new List<BattleEntity>(_lastSkillTargets);
-            }
-            else if (ov.StartsWith("PreAlliesDamage("))
-            {
-                // PreAlliesDamage 钩子目标（2026-08-14）：
-                // 读主动行为预解析的总伤害目标位置（PendingActionTargetPositions = 位置编号并集），
-                // 映射为有敌人的位置（空位跳过）；TargetNumber/TargetConsecutive 在下方"数量限制"中于该范围内选择。
-                // 括号内状态ID必须已登记钩子（未触发/已消失则返回空，无目标）。
-                string hookStatusID2 = "";
-                int lp = ov.IndexOf('(');
-                int rp = ov.IndexOf(')');
-                if (lp >= 0 && rp > lp)
-                    hookStatusID2 = ov.Substring(lp + 1, rp - lp - 1).Trim();
-                var pending = new List<BattleEntity>();
-                if (PreDamageHookSystem.HasPreDamageHook(hookStatusID2))
-                {
-                    foreach (var pos in bm.PendingActionTargetPositions)
-                    {
-                        if (bm.Field == null) break;
-                        var slot = bm.Field.GetSlot(BattleSide.Enemy, pos);
-                        if (slot != null && slot.IsOccupied && slot.Occupant != null && slot.Occupant.IsAlive)
-                            pending.Add(slot.Occupant);
-                }
-                result = pending;
-            }
-            else if (ov.Contains(","))
-            {
-                // "X,X" 偏移：当前无场地系统，按"沿用上一条目标"处理（偏移逻辑待场地系统）
-                if (_lastSkillTargets.Count > 0)
-                    result = new List<BattleEntity>(_lastSkillTargets);
-            }
-            else
-            {
-                // 状态ID2 筛选：目标 = 所有带有该状态的敌方单位
-                //（蓄力标记 ST_Amber_ChargeTarget 是【位置状态】，挂在敌方位置上——除了实体状态，
-                //  还要查位置状态：带该状态的位置上的敌人也算目标；空位不算）
-                var filtered = new List<BattleEntity>();
-                foreach (var e in bm.Enemies)
-                {
-                    if (e.Entity == null || !e.Entity.IsAlive) continue;
-                    if (e.Entity.GetStatus(ov) != null)
-                        filtered.Add(e.Entity);
-                }
-                int entityHit = filtered.Count;
-                if (bm.Field != null)
-                {
-                    foreach (var slot in bm.Field.EnemySlots)
-                    {
-                        if (slot == null) continue;
-                        bool hasStatus = false;
-                        foreach (var inst in slot.StatusList)
-                            if (inst != null && inst.StatusID2 == ov) { hasStatus = true; break; }
-                        if (!hasStatus) continue;
-                        if (slot.IsOccupied && slot.Occupant != null && slot.Occupant.IsAlive && !filtered.Contains(slot.Occupant))
-                            filtered.Add(slot.Occupant);
-                    }
-                }
-                LogManager.Log(LogCategory.Damage, $"[筛选] ov={ov} 实体命中={entityHit} 位置命中={filtered.Count - entityHit} 总计={filtered.Count} (enemySlots={(bm.Field != null ? bm.Field.EnemySlots.Count : -1)})");
-                result = filtered;
-            }
-        }
-
-        // 数量限制（TargetNumber 空=0 时忽略，由 TargetOverride 或默认规则决定）
-        if (eff.TargetNumber > 0 && result.Count > eff.TargetNumber)
-        {
-            if (eff.TargetConsecutive == 1)
-                result = result.GetRange(0, eff.TargetNumber);      // 连续（从前往后）
-            else if (eff.TargetConsecutive == 2)
-            {
-                // 连续随机：从随机起点取N个（简化：随机起点）
-                int start = UnityEngine.Random.Range(0, result.Count - eff.TargetNumber + 1);
-                result = result.GetRange(start, eff.TargetNumber);
-            }
-            else
-            {
-                // 随机取N个不重复
-                result = result.OrderBy(x => UnityEngine.Random.value).Take(eff.TargetNumber).ToList();
-            }
-        }
-        }
-
-        // 记录本次效果选中的目标（供下一条效果的 TargetOverride 沿用）
-        _lastSkillTargets = new List<BattleEntity>(result);
-        return result;
-    }
-
-    // ================================================================
     //  等级数据查询
     // ================================================================
     // 查 SkillLevel 表里 ParamID==效果ID 的行，返回其 SkillType（找不到回退 fallback）
@@ -2065,14 +1776,31 @@ public List<int> ForcedTargetPositions = new List<int>();
             return ResolveReferenceBaseValue(param1, effectID2, skillType, element);
         }
 
-        // 匹配属性后缀
-        if (param1.Contains("*ATK")) return GetFinalATK(effectID2, skillType, element);
-        if (param1.Contains("*DEF")) return Entity.TotalDEF;
-        if (param1.Contains("*MaxHP") || param1.Contains("*TotalHP")) return Entity.TotalHP;
-        if (param1.Contains("*TotalATK")) return GetFinalATK(effectID2, skillType, element);
-        if (param1.Contains("*TotalDEF")) return Entity.TotalDEF;
+        // 纯乘法形式 "M*属性"：系数 M 生效（如 0.3*TotalHP → 0.3×TotalHP；修复前系数被丢弃，2026-08-19）
+        // 含 + 等复杂形式保持旧行为（返回属性值本身，不解析后续表达式）
+        if (param1.Contains("*ATK")) return GetFinalATK(effectID2, skillType, element) * ExtractParamMultiplier(param1);
+        if (param1.Contains("*DEF")) return Entity.TotalDEF * ExtractParamMultiplier(param1);
+        if (param1.Contains("*MaxHP") || param1.Contains("*TotalHP")) return Entity.TotalHP * ExtractParamMultiplier(param1);
+        if (param1.Contains("*TotalATK")) return GetFinalATK(effectID2, skillType, element) * ExtractParamMultiplier(param1);
+        if (param1.Contains("*TotalDEF")) return Entity.TotalDEF * ExtractParamMultiplier(param1);
 
         return GetFinalATK(effectID2, skillType, element);
+    }
+
+    /// <summary>提取 Param1 开头的数字系数（"0.3*TotalHP" → 0.3）；非纯乘法形式或解析失败返回 1。</summary>
+    static float ExtractParamMultiplier(string param1)
+    {
+        if (string.IsNullOrEmpty(param1)) return 1f;
+        int star = param1.IndexOf('*');
+        if (star <= 0) return 1f;
+        string head = param1.Substring(0, star).Trim();
+        if (float.TryParse(
+                head,
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out float multiplier))
+            return multiplier;
+        return 1f;
     }
 
     /// <summary>
@@ -2141,7 +1869,13 @@ public List<int> ForcedTargetPositions = new List<int>();
     //  伤害公式（非反应版）
     //  配表术语 1.1: BaseDMG × (1+CritDMG) × (1+DMGBonus) × DEFRes × Res
     // ================================================================
-    float CalculateDamage(float baseValue, HitData hit, SkillEffectData eff, BattleEntity target, int skillType)
+    float CalculateDamage(
+        float baseValue,
+        HitData hit,
+        SkillEffectData eff,
+        BattleEntity target,
+        int skillType,
+        out ReactionDamageComponents components)
     {
         // 基础伤害
         float baseDMG = baseValue * hit.Multiplier;
@@ -2149,13 +1883,13 @@ public List<int> ForcedTargetPositions = new List<int>();
         // 暴击判定（配表术语：暴击时取 (1+CritDMG)，不暴击取 1）
         // 每个敌人每个 hit 单独判定；CritRate 含状态加成（按 ApplyString/ApplyDamageType/ApplyElementType 过滤）
         float critMult = 1f;
-        float critRate = Mathf.Clamp(Entity.CritRate + Entity.GetStatusCritRate(eff.SkillEffectID2, _boundSkills[skillType], skillType, eff.Element), 0f, 1f);
+        float critRate = Mathf.Clamp(Entity.CritRate + Entity.GetStatusCritRate(eff.SkillEffectID2, _boundSkills[skillType], skillType, eff.Element, target), 0f, 1f);
         float critRoll = UnityEngine.Random.value;
         if (critRoll < critRate)
         {
             critMult = 1f + Entity.CritDMG;
         }
-        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.SkillEffectID2, _boundSkills[skillType], skillType, eff.Element):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
+        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.SkillEffectID2, _boundSkills[skillType], skillType, eff.Element, target):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
 
         // 增伤区（配表术语 1.8）
         float dmgBonus = 1f + Entity.DMGBonus + GetElementBonus(eff.Element);
@@ -2188,6 +1922,14 @@ public List<int> ForcedTargetPositions = new List<int>();
         else
             resMultiplier = 1f / (1f + 4f * res);
 
+        components = new ReactionDamageComponents
+        {
+            SkillBaseDamage = baseDMG,
+            CriticalMultiplier = critMult,
+            DamageBonusMultiplier = dmgBonus,
+            DefenseMultiplier = defRes,
+            ResistanceMultiplier = resMultiplier
+        };
         return baseDMG * critMult * dmgBonus * defRes * resMultiplier;
     }
 
@@ -2210,14 +1952,14 @@ public List<int> ForcedTargetPositions = new List<int>();
     {
         switch (element)
         {
-            case "Pyro": return target.PyroRes + target.ResBonus;
-            case "Hydro": return target.HydroRes + target.ResBonus;
-            case "Electro": return target.ElectroRes + target.ResBonus;
-            case "Cryo": return target.CryoRes + target.ResBonus;
-            case "Anemo": return target.AnemoRes + target.ResBonus;
-            case "Dendro": return target.DendroRes + target.ResBonus;
-            case "Geo": return target.GeoRes + target.ResBonus;
-            default: return target.PhysicalRes + target.ResBonus;
+            case "Pyro": return target.PyroRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Hydro": return target.HydroRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Electro": return target.ElectroRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Cryo": return target.CryoRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Anemo": return target.AnemoRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Dendro": return target.DendroRes + target.ResBonus + target.GetStatusResBonus(element);
+            case "Geo": return target.GeoRes + target.ResBonus + target.GetStatusResBonus(element);
+            default: return target.PhysicalRes + target.ResBonus + target.GetStatusResBonus(element);
         }
     }
 
@@ -2255,7 +1997,6 @@ public List<int> ForcedTargetPositions = new List<int>();
     void CountStatusActionTrigger(StatusInstance inst, StatusActionData act)
     {
         if (inst == null || act == null) return;
-        if (act.MaxTimePerTurn <= 0 && act.MaxTimePerLife <= 0 && act.Cooldown <= 0) return;
         var bm = BattleManager.Instance;
         int turn = bm != null ? bm.TurnCount : 0;
         if (inst.LastActionTurn != turn)
@@ -2263,8 +2004,11 @@ public List<int> ForcedTargetPositions = new List<int>();
             inst.LastActionTurn = turn;
             inst.TurnTriggerCount = 0;
         }
-        if (act.MaxTimePerTurn > 0) inst.TurnTriggerCount++;
-        if (act.MaxTimePerLife > 0) inst.LifeTriggerCount++;
+        // 两个字段记录实际触发次数；MaxTimePerTurn / MaxTimePerLife 只决定
+        // 是否设上限，不能决定是否记账。无上限或仅配置 Cooldown 的行动
+        // 在真正执行后同样必须留下计数。
+        inst.TurnTriggerCount++;
+        inst.LifeTriggerCount++;
         if (act.Cooldown > 0) inst.LastTriggerTurn = turn;
     }
 
@@ -2273,14 +2017,14 @@ public List<int> ForcedTargetPositions = new List<int>();
         foreach (var act in actions)
         {
             if (act.ActionType != actionType) continue;
-            // 钩子驱动行（ScriptHook=PreAlliesDamage）：不参与普通触发（阶段/回合等），由钩子机制单独触发（2026-08-14）
-            if (act.ScriptHook == "PreAlliesDamage") continue;
+            // 事件驱动钩子行（ScriptHook=PreAlliesDamage / Kill(...)）：不参与普通触发（阶段/回合等），由各自钩子机制单独触发（2026-08-19）
+            if (ScriptHookEvaluator.IsEventDriven(act.ScriptHook)) continue;
             // ScriptHook：只有该特殊处理器返回真值时才触发该行行动（统一求值入口 ScriptHookEvaluator）
             if (!ScriptHookEvaluator.Evaluate(act.ScriptHook, inst != null ? inst.Caster : null)) continue;
             // 触发限制：每回合/全场次数上限、行动冷却（2026-08-14）
             if (StatusActionLimitReached(inst, act)) continue;
             CountStatusActionTrigger(inst, act);
-            ExecuteStatusActionEffects(act, host);
+            ExecuteStatusActionEffects(inst, act, host);
         }
     }
 
@@ -2295,8 +2039,8 @@ public List<int> ForcedTargetPositions = new List<int>();
         foreach (var act in actions)
         {
             if (act.ActionType != actionType) continue;
-            // 钩子驱动行（ScriptHook=PreAlliesDamage）：不参与普通触发，由钩子机制单独触发（2026-08-14）
-            if (act.ScriptHook == "PreAlliesDamage") continue;
+            // 事件驱动钩子行（ScriptHook=PreAlliesDamage / Kill(...)）：不参与普通触发，由各自钩子机制单独触发（2026-08-19）
+            if (ScriptHookEvaluator.IsEventDriven(act.ScriptHook)) continue;
             if (!ScriptHookEvaluator.Evaluate(act.ScriptHook, inst != null ? inst.Caster : null)) continue;
             // 触发限制：每回合/全场次数上限、行动冷却（2026-08-14）
             if (StatusActionLimitReached(inst, act)) continue;
@@ -2306,7 +2050,7 @@ public List<int> ForcedTargetPositions = new List<int>();
                 // OnEnd延迟=流程暂停（expired循环协程等待），标记不会被提前移除，无需预解析快照（2026-08-14）
                 yield return new WaitForSeconds(0.5f);
             }
-            ExecuteStatusActionEffects(act, host);
+            ExecuteStatusActionEffects(inst, act, host);
         }
     }
 
@@ -2365,42 +2109,27 @@ public List<int> ForcedTargetPositions = new List<int>();
     }
 
     /// <summary>
-    /// OnHit：拥有该状态的敌方目标或场地位置受击后生效（术语）。
-    /// 命中实体时检查实体身上的状态 + 实体所在位置的场地状态（如兔兔伯爵）。
-    /// HitSource：只有被指定效果或技能命中后才触发；ScriptHook 判定通过才执行。
+    /// 事件类状态行动统一执行入口（2026-08-19，状态钩子任务）：
+    /// StatusOnHitHookSystem（OnHit）与 KillHookSystem（Kill）共用，触发限制代码不复制。
+    /// 固定顺序：
+    ///   1. 检查状态和行动是否有效；
+    ///   2. 调用 ScriptHookEvaluator.Evaluate（OnHit/Kill 走带上下文接口）；
+    ///   3. 检查 MaxTimePerTurn；4. 检查 MaxTimePerLife；5. 检查 Cooldown；
+    ///   6. 计数；7. 执行 Param1 中的效果；8. 返回是否真正执行。
     /// </summary>
-    void TriggerOnHit(BattleEntity target, SkillEffectData eff)
+    public bool TryExecuteEventStatusAction(
+        StatusInstance status,
+        StatusActionData action,
+        object host,
+        ScriptHookContext context)
     {
-        var dm = DataManager.Instance;
-        if (dm == null) return;
-
-        foreach (var inst in target.GetStatusList())
-            CheckOnHitStatus(inst, eff, target, target);
-        if (target.Position != null)
-        {
-            //位置状态：行动上下文传【位置】（兔兔伯爵爆炸以兔子所在位置为中心计算范围）
-            //复制列表再遍历：爆炸链会移除位置状态（STE_Bunny5），枚举中修改会抛异常
-            foreach (var inst in new List<StatusInstance>(target.Position.StatusList))
-                CheckOnHitStatus(inst, eff, target, target.Position);
-        }
-    }
-
-    void CheckOnHitStatus(StatusInstance inst, SkillEffectData eff, BattleEntity target, object host)
-    {
-        var dm = DataManager.Instance;
-        if (dm == null || !dm.StatusActionDict.TryGetValue(inst.StatusID2, out var actions)) return;
-        foreach (var act in actions)
-        {
-            if (act.ActionType != "OnHit") continue;
-            // HitSource：只有被指定效果或技能命中后才触发此次OnHit对应行动
-            if (!string.IsNullOrEmpty(act.HitSource) && act.HitSource != eff.SkillEffectID2) continue;
-            if (!ScriptHookEvaluator.Evaluate(act.ScriptHook, inst.Caster)) continue;
-            // 触发限制：每回合/全场次数上限、行动冷却（2026-08-14，凯亚C4护盾 Cooldown=15）
-            if (StatusActionLimitReached(inst, act)) continue;
-            CountStatusActionTrigger(inst, act);
-            ExecuteStatusActionEffects(act, host);
-            LogManager.Log(LogCategory.Status, $"OnHit {inst.StatusID2} by {eff.SkillEffectID2} on {target.EntityID}");
-        }
+        if (status == null || action == null) return false;
+        if (!ScriptHookEvaluator.Evaluate(action.ScriptHook, context)) return false;
+        if (StatusActionLimitReached(status, action)) return false;
+        CountStatusActionTrigger(status, action);
+        ExecuteStatusActionEffects(status, action, host);
+        LogManager.Log(LogCategory.StatusAction, $"事件状态行动执行 {status.StatusID2} {action.ActionType} (hook={action.ScriptHook})");
+        return true;
     }
 
     /// <summary>
@@ -2414,13 +2143,14 @@ public List<int> ForcedTargetPositions = new List<int>();
         var inst = caster != null ? caster.GetStatus(act.StatusID2) : null;
         if (StatusActionLimitReached(inst, act)) return;
         CountStatusActionTrigger(inst, act);
-        ExecuteStatusActionEffects(act, caster);
+        ExecuteStatusActionEffects(inst, act, caster);
     }
 
-    void ExecuteStatusActionEffects(StatusActionData act, object host)
+    void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData act, object host)
     {
         if (string.IsNullOrEmpty(act.Param1)) return;
         var dm = DataManager.Instance;
+        BeginStatusTargetSequence();
 
         // Param1 是效果ID2列表（逗号分隔），如 "STE_Bunny2,STE_Bunny4"
         // 特殊：以 SK_ 开头的是技能ID（如蓄力箭 SK_HeavyAttack_Amber），执行技能效果序列
@@ -2461,40 +2191,73 @@ public List<int> ForcedTargetPositions = new List<int>();
                 }
                 continue;
             }
-            ExecuteStatusEffect(statusEff, host);
+            ExecuteStatusEffect(statusEff, sourceStatus, host);
         }
     }
 
-    void ExecuteStatusEffect(StatusEffectData statusEff, object host)
+    void ExecuteStatusEffect(StatusEffectData statusEff, StatusInstance sourceStatus, object host)
     {
         switch (statusEff.EffectType)
         {
             case "Damage":
             {
+                long effectExecutionID = ReactionResolver.BeginEffectExecution();
                 // 状态伤害（兔兔伯爵爆炸 STE_Bunny2 等）：从 SkillType=2 查等级，多段 Hits1-7 逐段结算
                 var hits = GetHitDataFromStatusEffectList(statusEff);
                 if (hits.Count == 0 || (hits.Count == 1 && hits[0].Multiplier <= 0)) return;
                 int stSkillType = GetEffectSkillType(statusEff.StatusEffectID2, 2);
                 float baseValue = ResolveBaseValue(statusEff.Param1, statusEff.StatusEffectID2, stSkillType, statusEff.Element);
-                var targets = ResolveStatusTargets(statusEff, host);
+                var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 if (targets == null) return;
+                if (statusEff.Element == "Geo" && targets.Count > 1)
+                {
+                    targets = targets
+                        .OrderBy(target => target != null ? target.SlotPosition : int.MaxValue)
+                        .ToList();
+                }
 
                 foreach (var target in targets)
                 {
                     foreach (var hit in hits)
                     {
                         if (!target.IsAlive) break;
-                        float damage = CalculateStatusDamage(baseValue, hit, statusEff, target, stSkillType);
+                        float damage = CalculateStatusDamage(
+                            baseValue,
+                            hit,
+                            statusEff,
+                            target,
+                            stSkillType,
+                            out ReactionDamageComponents damageComponents);
                         // 元素反应（2026-08-14）：状态伤害同样参与反应判定；
                         // 2026-08-15：按元素量模型消耗，攻击元素残留量决定是否上附着
-                        float reactedDamage = ElementReactionManager.TryReaction(target, statusEff.Element, hit.ElementAura, damage, out string reactionName, out float attackRemain);
-                        if (reactionName.Length > 0)
-                            LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} 触发{reactionName}");
-                        float final = target.AbsorbDamageWithShield(reactedDamage, statusEff.Element);
-                        target.TakeDamage(final);
-                        if (!string.IsNullOrEmpty(statusEff.Element) && statusEff.Element != "None" && attackRemain > 0f)
-                            target.ApplyAura(statusEff.Element, attackRemain, Entity.EntityID);
-                        target.Poise -= hit.Poise;
+                        ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
+                        {
+                            SourceEntity = sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity,
+                            Target = target,
+                            SourceKind = ReactionSourceKind.StatusEffect,
+                            SourceEffectID = statusEff.StatusEffectID2,
+                            EffectExecutionID = effectExecutionID,
+                            AttackElement = statusEff.Element,
+                            AttackAmount = hit.ElementAura,
+                            PreReactionDamage = damage,
+                            DamageComponents = damageComponents,
+                            DamageType = statusEff.DamageType,
+                            PoiseDamage = hit.Poise
+                        });
+                        if (reaction.HasReaction)
+                            LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
+                        float final = target.AbsorbDamageWithShield(reaction.FinalDamage, statusEff.Element);
+                        // 带来源扣血（2026-08-19）：状态伤害统一入口（来源=状态施放者）
+                        target.TakeDamage(final, DamageSourceInfo.Create(
+                            sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity,
+                            ReactionSourceKind.StatusEffect,
+                            string.Empty,
+                            statusEff.StatusEffectID2,
+                            reaction != null && reaction.HasReaction ? reaction.TriggeredReactions[0].Type : ReactionType.None));
+                        ReactionEffectExecutor.FinalizePrimaryHit(reaction, final);
+                        PoiseSystem.ApplyPoiseDamage(target, hit.Poise, final,
+                            sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity);
+                        ReactionEffectExecutor.ExecuteDerivedHits(reaction);
                         LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} : {final:F1}");
                     }
                 }
@@ -2504,12 +2267,12 @@ public List<int> ForcedTargetPositions = new List<int>();
             case "GainEnergy":
             {
                 if (!float.TryParse(statusEff.Param1, out float gained)) return;
-                var targets = ResolveStatusTargets(statusEff, host);
+                var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 if (targets == null) return;
                 foreach (var target in targets)
                 {
                     float total = gained;
-                    if (statusEff.EnergyGainMode == "Based")
+                    if (statusEff.Param2 == "Based")
                     {
                         float elementStatus = (target.Type == BattleEntity.EntityType.Character
                             && target.CharacterCtrl != null && target.CharacterCtrl._attrData != null
@@ -2525,13 +2288,14 @@ public List<int> ForcedTargetPositions = new List<int>();
 
             case "RemoveStatus":
             {
-                //位置状态移除（兔兔伯爵爆炸 STE_Bunny5：从状态所在位置移除）
-                if (host is FieldPosition slot)
+                if (!string.IsNullOrEmpty(statusEff.TargetType)
+                    && statusEff.TargetType.EndsWith("Field", StringComparison.Ordinal))
                 {
-                    RemoveStatusFromField(statusEff.Param1, slot.Side);
+                    foreach (var field in ResolveStatusTargetFields(statusEff, sourceStatus, host))
+                        RemoveStatusFromFieldSlot(statusEff.Param1, field);
                     break;
                 }
-                var targets = ResolveStatusTargets(statusEff, host);
+                var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 if (targets == null) return;
                 foreach (var target in targets)
                     target.RemoveStatus(statusEff.Param1, -1);
@@ -2551,11 +2315,16 @@ public List<int> ForcedTargetPositions = new List<int>();
                     LogManager.LogWarning(LogCategory.StatusEffect, $"{statusEff.StatusEffectID2} ExecuteEffect 找不到技能效果 {statusEff.Param1}");
                     break;
                 }
-                // 目标：以状态所在位置为基准（箭雨状态挂在爆发选中的 EnemyField 位置上）
+                // 先按状态效果自己的 TargetSelect/TargetOverride 解析位置，再把该位置交给被调用技能效果。
+                var statusTargets = ResolveStatusTargetResult(statusEff, sourceStatus, host);
+                if (!statusTargets.IsValid) break;
                 List<int> savedForced = new List<int>(ForcedTargetPositions);
+                var savedPreviousSkillTarget = _lastSkillTargetResult;
+                var savedPreviousPositions = new List<int>(_lastTargetPositions);
                 ForcedTargetPositions.Clear();
-                int statusHostPos = GetHostSlotPosition(host);
-                if (statusHostPos >= 1) ForcedTargetPositions.Add(statusHostPos);
+                ForcedTargetPositions.AddRange(statusTargets.Positions);
+                _lastSkillTargetResult = null;
+                _lastTargetPositions.Clear();
 
                 if (targetEff != null)
                 {
@@ -2564,7 +2333,10 @@ public List<int> ForcedTargetPositions = new List<int>();
 
                 ForcedTargetPositions.Clear();
                 ForcedTargetPositions.AddRange(savedForced); // 恢复外层强制位置
-                LogManager.Log(LogCategory.StatusAction, $"ExecuteEffect {statusEff.Param1} via status (pos={statusHostPos})");
+                _lastSkillTargetResult = savedPreviousSkillTarget;
+                _lastTargetPositions.Clear();
+                _lastTargetPositions.AddRange(savedPreviousPositions);
+                LogManager.Log(LogCategory.StatusAction, $"ExecuteEffect {statusEff.Param1} via status (positions={string.Join(",", statusTargets.Positions)})");
                 break;
             }
 
@@ -2572,7 +2344,7 @@ public List<int> ForcedTargetPositions = new List<int>();
             {
                 // BindStatus 是被动效果（2026-08-06）：
                 // 术语表原文"只要该效果来源的状态存在，其目标就一直存在子状态"，
-                // 绑定动作在 BattleEntity.AutoBindStatus（状态施加成功时）已按位置系统完成，
+                // 绑定动作在 StatusBindingSystem（状态施加成功时）已按统一目标解析完成，
                 // 这里只做确认日志，避免走到 default 报"未支持类型"。
                 LogManager.Log(LogCategory.StatusEffect, $"{statusEff.StatusEffectID2} BindStatus -> {statusEff.Param1} (已由施加时自动绑定)");
                 break;
@@ -2588,7 +2360,7 @@ public List<int> ForcedTargetPositions = new List<int>();
             case "Heal":
             {
                 // 治疗（2026-08-14）：Param1=治疗量公式，目标=TargetType解析
-                var healTargets = ResolveStatusTargets(statusEff, host);
+                var healTargets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 if (healTargets == null) return;
                 float healAmt = ResolveBaseValue(statusEff.Param1, statusEff.StatusEffectID2, GetEffectSkillType(statusEff.StatusEffectID2, 2), statusEff.Element);
                 foreach (var t in healTargets)
@@ -2603,7 +2375,8 @@ public List<int> ForcedTargetPositions = new List<int>();
             case "Shield":
             {
                 // 护盾（2026-08-14）：Param1=护盾量公式（如 0.3*TotalHP），Element=护盾元素，Duration=持续回合
-                var shieldTargets = ResolveStatusTargets(statusEff, host);
+                var shieldTargets = ResolveStatusTargets(statusEff, sourceStatus, host);
+                LogManager.Log(LogCategory.Effect, $"[Shield诊断] {statusEff.StatusEffectID2}: 目标数={(shieldTargets != null ? shieldTargets.Count : -1)} host={host} 来源状态={sourceStatus?.StatusID2}");
                 if (shieldTargets == null) return;
                 float shieldAmt = ResolveBaseValue(statusEff.Param1, statusEff.StatusEffectID2, GetEffectSkillType(statusEff.StatusEffectID2, 2), statusEff.Element);
                 float shieldDur = statusEff.Duration > 0 ? statusEff.Duration : 999;
@@ -2674,130 +2447,6 @@ public List<int> ForcedTargetPositions = new List<int>();
         return -1;
     }
 
-    // 状态效果目标：默认以状态所在实体/位置为原点（host 可能是 BattleEntity 或 FieldPosition）
-    // 位置状态：目标 = 该位置上的单位（按 TargetOverride 扩展，重叠伤害叠加）
-    List<BattleEntity> ResolveStatusTargets(StatusEffectData statusEff, object host)
-    {
-        var bm = BattleManager.Instance;
-        var result = new List<BattleEntity>();
-
-        if (host is FieldPosition slot)
-        {
-            // ===== 状态挂在位置上 =====
-            // TargetOverride：以状态所在位置为原点扩展
-            //  "0,0" = 状态所在位置
-            //  "X,X" = 左右各扩展X位
-            if (!string.IsNullOrEmpty(statusEff.TargetOverride))
-            {
-                var positions = ExpandPositions(slot.SlotIndex, statusEff.TargetOverride, slot.Side);
-                foreach (var pos in positions)
-                {
-                    var e = bm.GetEntityByPosition(slot.Side, pos);
-                    if (e != null && e.IsAlive) result.Add(e);
-                }
-                return result;
-            }
-
-            // TargetSelect "X,X"：以状态所在位置为中心左右扩展（兔兔伯爵爆炸打相邻位置）
-            if (!string.IsNullOrEmpty(statusEff.TargetSelect))
-            {
-                var positions = ExpandPositions(slot.SlotIndex, statusEff.TargetSelect, slot.Side);
-                foreach (var pos in positions)
-                {
-                    var e = bm.GetEntityByPosition(slot.Side, pos);
-                    if (e != null && e.IsAlive) result.Add(e);
-                }
-                return result;
-            }
-
-            // 无 override/TargetSelect：按 TargetType 解析（群体类型走全体，位置类型默认=所在位置单位）
-            switch (statusEff.TargetType)
-            {
-                case "Allies":
-                case "AlliesOnly":
-                    foreach (var a in bm.Allies)
-                        if (a.Entity != null && a.Entity.IsAlive)
-                            result.Add(a.Entity);
-                    return result;
-                case "Enemy":
-                    foreach (var e in bm.Enemies)
-                        if (e.Entity != null && e.Entity.IsAlive)
-                            result.Add(e.Entity);
-                    return result;
-                default:
-                    var oe = bm.GetEntityByPosition(slot.Side, slot.SlotIndex);
-                    if (oe != null && oe.IsAlive) result.Add(oe);
-                    return result;
-            }
-        }
-
-        if (host is BattleEntity entity)
-        {
-            // ===== 状态挂在实体上 =====
-            if (!string.IsNullOrEmpty(statusEff.TargetOverride))
-            {
-                if (entity != null)
-                {
-                    var e = bm.GetEntityByPosition(BattleSide.Enemy, entity.SlotPosition);
-                    if (e != null && e.IsAlive) result.Add(e);
-                }
-                if (result.Count == 0 && entity != null) result.Add(entity);
-                return result;
-            }
-
-            switch (statusEff.TargetType)
-            {
-                case "Enemy":
-                    foreach (var e in bm.Enemies)
-                        if (e.Entity != null && e.Entity.IsAlive)
-                            result.Add(e.Entity);
-                    break;
-                case "Allies":
-                case "AlliesOnly":
-                    foreach (var a in bm.Allies)
-                        if (a.Entity != null && a.Entity.IsAlive)
-                            result.Add(a.Entity);
-                    break;
-                default:
-                    if (entity != null && entity.IsAlive)
-                        result.Add(entity);
-                    break;
-            }
-            if (result.Count == 0 && entity != null) result.Add(entity);
-            return result;
-        }
-
-        return result;
-    }
-
-    // 解析 TargetOverride "X,X"：以原点为中心左右扩展，返回位置列表（含原点）
-    // "0,0" = 只取原点位置
-    List<int> ExpandPositions(int origin, string overrideStr, BattleSide side)
-    {
-        var result = new List<int> { origin };
-        if (string.IsNullOrEmpty(overrideStr)) return result;
-
-        var parts = overrideStr.Split(',');
-        if (parts.Length < 2) return result;
-        int left = int.Parse(parts[0].Trim());
-        int right = int.Parse(parts[1].Trim());
-        if (left == 0 && right == 0) return result;
-
-        int max = side == BattleSide.Ally ? BattleField.ALLY_SLOTS : BattleField.ENEMY_SLOTS;
-        for (int i = 1; i <= left; i++)
-        {
-            int pos = origin - i;
-            if (pos >= 1) result.Add(pos);
-        }
-        for (int i = 1; i <= right; i++)
-        {
-            int pos = origin + i;
-            if (pos <= max) result.Add(pos);
-        }
-        result.Sort();
-        return result;
-    }
-
     /// <summary>
     /// 状态伤害多段 HitData 解析（2026-08-14）：Hits1-7 逐段，空段跳过；%引用单段。
     /// </summary>
@@ -2858,16 +2507,22 @@ public List<int> ForcedTargetPositions = new List<int>();
         return list.Count > 0 ? list[0] : new HitData(0, 0, 0);
     }
 
-    float CalculateStatusDamage(float baseValue, HitData hit, StatusEffectData eff, BattleEntity target, int skillType)
+    float CalculateStatusDamage(
+        float baseValue,
+        HitData hit,
+        StatusEffectData eff,
+        BattleEntity target,
+        int skillType,
+        out ReactionDamageComponents components)
     {
         float baseDMG = baseValue * hit.Multiplier;
 
         float critMult = 1f;
-        float critRate = Mathf.Clamp(Entity.CritRate + Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element), 0f, 1f);
+        float critRate = Mathf.Clamp(Entity.CritRate + Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element, target), 0f, 1f);
         float critRoll = UnityEngine.Random.value;
         if (critRoll < critRate)
             critMult = 1f + Entity.CritDMG;
-        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
+        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element, target):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
 
         float dmgBonus = 1f + Entity.DMGBonus + GetElementBonus(eff.Element);
 
@@ -2895,6 +2550,14 @@ public List<int> ForcedTargetPositions = new List<int>();
         else
             resMultiplier = 1f / (1f + 4f * res);
 
+        components = new ReactionDamageComponents
+        {
+            SkillBaseDamage = baseDMG,
+            CriticalMultiplier = critMult,
+            DamageBonusMultiplier = dmgBonus,
+            DefenseMultiplier = defRes,
+            ResistanceMultiplier = resMultiplier
+        };
         return baseDMG * critMult * dmgBonus * defRes * resMultiplier;
     }
 }
@@ -2922,4 +2585,3 @@ public class ControlChangeRecord
     public bool IsPermanent;            // 技能效果版且未填 Duration：永久（不解除）
     public int RemainingTurns;          // 技能效果版：剩余回合（由效果 Duration 决定）
 }
-

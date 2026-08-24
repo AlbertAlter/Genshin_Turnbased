@@ -42,7 +42,15 @@ public class TargetSelector
     /// <param name="hpProvider">敌方位置→当前绝对血量（空位返回0）</param>
     /// <param name="aliveProvider">敌方位置是否有存活单位</param>
     /// <param name="excludePositions">排除的位置（Consecutive=0 逐个选时已选过的位置不可重复选，2026-08-15）</param>
-    public void Init(BattleSide side, int targetCount, int consecutive, Func<int, float> hpProvider, Func<int, bool> aliveProvider, List<int> excludePositions = null)
+    public void Init(
+        BattleSide side,
+        int targetCount,
+        int consecutive,
+        Func<int, float> hpProvider,
+        Func<int, bool> aliveProvider,
+        List<int> excludePositions = null,
+        bool allowEmptyWindows = false,
+        bool preferLowerScore = false)
     {
         Side = side;
         MaxPosition = side == BattleSide.Enemy ? 5 : BattleField.ALLY_SLOTS;
@@ -58,11 +66,16 @@ public class TargetSelector
 
         for (int start = MinPosition; start <= maxStart; start++)
         {
-            if (excludePositions != null && excludePositions.Contains(start)) continue; // 逐个模式：已选位置不可重复
             var win = new List<int>();
             for (int i = 0; i < count; i++) win.Add(start + i);
-            // 敌方类型目标：全空组合不参与切换
-            if (!IsAllEmpty(win)) _validWindows.Add(win);
+            bool containsExcluded = false;
+            if (excludePositions != null)
+                foreach (int position in win)
+                    if (excludePositions.Contains(position)) { containsExcluded = true; break; }
+            if (containsExcluded) continue;
+
+            // 单位目标：全空组合不参与切换；场地目标允许选择空位置。
+            if (allowEmptyWindows || !IsAllEmpty(win)) _validWindows.Add(win);
         }
 
         // 全部全空（无目标可选）→ 留空，由调用方判断 IsSelectionValid()==false
@@ -74,14 +87,17 @@ public class TargetSelector
         }
 
         // 自动选中最优组合：绝对血量最高；并列随机
-        float bestHp = float.MinValue;
+        float bestHp = preferLowerScore ? float.MaxValue : float.MinValue;
         List<int> bestCandidates = new List<int>();
         string windowLog = "";
         for (int i = 0; i < _validWindows.Count; i++)
         {
             float hp = SumHp(_validWindows[i]);
             windowLog += $"[{string.Join("", _validWindows[i])}={hp:F0}] ";
-            if (hp > bestHp + 0.0001f)
+            bool isBetter = preferLowerScore
+                ? hp < bestHp - 0.0001f
+                : hp > bestHp + 0.0001f;
+            if (isBetter)
             {
                 bestHp = hp;
                 bestCandidates.Clear();
@@ -105,10 +121,27 @@ public class TargetSelector
         return _validWindows.Count > 0;
     }
 
+    /// <summary>新战斗开始前清空上一场的选择窗口和查询委托。</summary>
+    public void Reset()
+    {
+        CurrentSelection.Clear();
+        _validWindows.Clear();
+        _windowIndex = -1;
+        _hpProvider = null;
+        _aliveProvider = null;
+        Side = BattleSide.Enemy;
+        MinPosition = 1;
+        MaxPosition = BattleField.ENEMY_SLOTS;
+    }
+
     /// <summary>
     /// 全体模式（2026-08-15，Consecutive=2/3/4 随机）：目标方向所有存活位置全选，走个流程，A/D 无切换，空格直接施放。
     /// </summary>
-    public void InitAll(BattleSide side, Func<int, float> hpProvider, Func<int, bool> aliveProvider)
+    public void InitAll(
+        BattleSide side,
+        Func<int, float> hpProvider,
+        Func<int, bool> aliveProvider,
+        bool includeEmptyPositions = false)
     {
         Side = side;
         MaxPosition = side == BattleSide.Enemy ? 5 : BattleField.ALLY_SLOTS;
@@ -117,7 +150,7 @@ public class TargetSelector
 
         var all = new List<int>();
         for (int p = MinPosition; p <= MaxPosition; p++)
-            if (_aliveProvider != null && _aliveProvider(p)) all.Add(p);
+            if (includeEmptyPositions || (_aliveProvider != null && _aliveProvider(p))) all.Add(p);
 
         _validWindows.Clear();
         if (all.Count == 0)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -33,6 +34,9 @@ public class BattleManager : MonoBehaviour
     //全局AP（我方全体共用的行动点池，2026-08-14）
     public ActionPointManager APManager { get; private set; }
     public bool IsBattleRunning { get; private set; }
+    public bool IsCurrentPhaseReady { get; private set; }
+
+    private IBattleFlowScheduler _flowScheduler;
 
     // 战斗结束判定（2026-08-13）：敌方全灭=胜利，我方全灭=失败
     public bool IsBattleOver { get; private set; }
@@ -45,6 +49,8 @@ public class BattleManager : MonoBehaviour
 
     // 我方行动阶段等待结束回合标志
     private bool _allyTurnEnded;
+    // 第一次进入阶段1是战斗开场，不属于“敌方回合结束→下一回合”的跨回合点。
+    private bool _isInitialAllyPreTurn = true;
 
     // ========== 状态结算登记表（2026-08-12） ==========
     // 以状态为中心：状态施加时按 AddInPhase/TriggerPhase 登记到对应阶段桶，
@@ -68,6 +74,31 @@ public class BattleManager : MonoBehaviour
             return;
         }
         Instance = this;
+        EnsureFlowScheduler();
+        ReactionStateSystem.SetDisplayAdapter(new StatusDataReactionStateDisplayAdapter());
+    }
+
+    private void OnDestroy()
+    {
+        _flowScheduler?.Stop();
+        IsCurrentPhaseReady = false;
+        if (Instance == this) Instance = null;
+    }
+
+    private void EnsureFlowScheduler()
+    {
+        if (_flowScheduler == null)
+            _flowScheduler = new UnityBattleFlowScheduler(this);
+    }
+
+    public void SetFlowScheduler(IBattleFlowScheduler scheduler)
+    {
+        if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
+        if (IsBattleRunning)
+            throw new InvalidOperationException("Cannot replace the battle flow scheduler while battle is running.");
+
+        _flowScheduler?.Stop();
+        _flowScheduler = scheduler;
     }
 
     // ================================================================
@@ -127,7 +158,8 @@ public class BattleManager : MonoBehaviour
             tickList = new List<(StatusInstance, BattleEntity, FieldPosition)>();
             _statusByPhase[inst.AddInPhase] = tickList;
         }
-        tickList.Add(item);
+        if (!tickList.Exists(entry => entry.inst == inst))
+            tickList.Add(item);
 
         if (inst.TriggerPhase > 0)
         {
@@ -145,7 +177,8 @@ public class BattleManager : MonoBehaviour
                     trigList = new List<(StatusInstance, BattleEntity, FieldPosition)>();
                     _triggerByPhase[inst.TriggerPhase] = trigList;
                 }
-                trigList.Add(item);
+                if (!trigList.Exists(entry => entry.inst == inst))
+                    trigList.Add(item);
             }
         }
     }
@@ -155,15 +188,9 @@ public class BattleManager : MonoBehaviour
     {
         if (inst == null) return;
         if (_statusByPhase.TryGetValue(inst.AddInPhase, out var tickList))
-        {
-            int idx = tickList.FindIndex(t => t.inst == inst);
-            if (idx >= 0) tickList.RemoveAt(idx);
-        }
+            tickList.RemoveAll(entry => entry.inst == inst);
         if (inst.TriggerPhase > 0 && _triggerByPhase.TryGetValue(inst.TriggerPhase, out var trigList))
-        {
-            int idx2 = trigList.FindIndex(t => t.inst == inst);
-            if (idx2 >= 0) trigList.RemoveAt(idx2);
-        }
+            trigList.RemoveAll(entry => entry.inst == inst);
     }
 
     public IReadOnlyList<CharacterBattleController> Allies => _allies;
@@ -223,69 +250,6 @@ public class BattleManager : MonoBehaviour
         return e != null && e.IsAlive;
     }
 
-    /// <summary>
-    /// 以指定敌方位置为起点，按数量+连续规则展开目标（爆发选3个相邻等）。
-    /// consecutive: 1=连续（从起点往后），其他=从起点向后随机（简化）
-    /// </summary>
-    public List<BattleEntity> GetEnemiesFromPosition(BattleSide side, int position, int count, int consecutive)
-    {
-        var result = new List<BattleEntity>();
-        if (side != BattleSide.Enemy || count <= 0) return result;
-
-        // 按位置升序收集存活敌人
-        var alive = new List<KeyValuePair<int, BattleEntity>>();
-        foreach (var enemy in _enemies)
-        {
-            if (enemy != null && enemy.Entity != null && enemy.Entity.IsAlive)
-                alive.Add(new KeyValuePair<int, BattleEntity>(enemy.Entity.SlotPosition, enemy.Entity));
-        }
-        alive.Sort((a, b) => a.Key.CompareTo(b.Key));
-
-        if (consecutive == 1)
-        {
-            // 从起点位置开始往后取 count 个（连续）
-            int startIdx = -1;
-            for (int i = 0; i < alive.Count; i++)
-                if (alive[i].Key == position) { startIdx = i; break; }
-            if (startIdx < 0) return result;
-            for (int i = startIdx; i < alive.Count && result.Count < count; i++)
-                result.Add(alive[i].Value);
-        }
-        else
-        {
-            // 简化：从起点起随机向后取
-            var pool = new List<BattleEntity>();
-            int s = -1;
-            for (int i = 0; i < alive.Count; i++)
-                if (alive[i].Key == position) { s = i; break; }
-            if (s < 0) return result;
-            for (int i = s; i < alive.Count; i++) pool.Add(alive[i].Value);
-            while (pool.Count > 0 && result.Count < count)
-            {
-                int idx = UnityEngine.Random.Range(0, pool.Count);
-                result.Add(pool[idx]);
-                pool.RemoveAt(idx);
-            }
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 获取某实体在己方阵营的存活相邻单位（不含自身，供 BindStatus 的 TargetSelect 展开）。
-    /// </summary>
-    public List<BattleEntity> GetAdjacentTargets(BattleSide side, int position, int range)
-    {
-        var result = new List<BattleEntity>();
-        var positions = BattlePositionSystem.GetAdjacentPositions(side, position, range);
-        foreach (int pos in positions)
-        {
-            if (pos == position) continue; // 相邻不含原点自身
-            var e = GetEntityByPosition(side, pos);
-            if (e != null && e.IsAlive) result.Add(e);
-        }
-        return result;
-    }
-
     // ================================================================
     //  战斗控制
     // ================================================================
@@ -295,12 +259,23 @@ public class BattleManager : MonoBehaviour
     public void StartBattle()
     {
         if (IsBattleRunning) return;
+        EnsureFlowScheduler();
         IsBattleRunning = true;
+        IsCurrentPhaseReady = false;
         _allyTurnEnded = false;
         if (Field == null) Field = new BattleField();
         CurrentPhase = TurnPhase.AllyPreTurn;
         LogManager.Log(LogCategory.Turn, "Battle started. Phase = AllyPreTurn(1)");
-        StartCoroutine(PhaseLoop());
+        try
+        {
+            _flowScheduler.Start(PhaseLoop());
+        }
+        catch
+        {
+            IsBattleRunning = false;
+            IsCurrentPhaseReady = false;
+            throw;
+        }
     }
 
     /// <summary>
@@ -309,9 +284,49 @@ public class BattleManager : MonoBehaviour
     public void ResetBattle()
     {
         IsBattleRunning = false;
+        IsCurrentPhaseReady = false;
         _allyTurnEnded = false;
-        StopAllCoroutines();
+        EnsureFlowScheduler();
+        _flowScheduler.Stop();
+
+        IsBattleOver = false;
+        Victory = false;
+        TurnCount = 1;
+        _isInitialAllyPreTurn = true;
         CurrentPhase = TurnPhase.AllyPreTurn;
+
+        // EditMode 测试或特殊工具链可能在 Awake 尚未执行时调用重置；重置入口自行保证 AP 池存在。
+        if (APManager == null) APManager = new ActionPointManager();
+        APManager.ResetAP();
+        _statusByPhase.Clear();
+        _triggerByPhase.Clear();
+        PendingActionTargetPositions.Clear();
+        PreDamageHookSystem.ClearAll();
+        // Kill 钩子清空（2026-08-19）：不能让上一场战斗的登记残留到下一场
+        KillHookSystem.ClearAll();
+        BattleEntity._applyOrderCounter = 0;
+        ReactionResolver.ResetSession();
+
+        ClearRegisteredEntityRuntimeState();
+        UnregisterAll();
+        Field = new BattleField();
+    }
+
+    private void ClearRegisteredEntityRuntimeState()
+    {
+        foreach (CharacterBattleController ally in _allies)
+            ClearEntityRuntimeState(ally != null ? ally.Entity : null);
+        foreach (EnemyBattleController enemy in _enemies)
+            ClearEntityRuntimeState(enemy != null ? enemy.Entity : null);
+    }
+
+    private static void ClearEntityRuntimeState(BattleEntity entity)
+    {
+        if (entity == null) return;
+        entity.ElementalAuras.Clear();
+        entity.Shields.Clear();
+        entity.StatusDict.Clear();
+        entity.Position = null;
     }
 
     /// <summary>
@@ -320,7 +335,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void EndAllyTurn()
     {
-        if (CurrentPhase == TurnPhase.AllyAction)
+        if (IsBattleRunning && !IsBattleOver && CurrentPhase == TurnPhase.AllyAction)
         {
             _allyTurnEnded = true;
         }
@@ -336,7 +351,42 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var a in _allies)
             if (a != null && a.IsActive) return a;
-        return _allies.Count > 0 ? _allies[0] : null;
+        return null;
+    }
+
+    /// <summary>
+    /// Switches the active ally after validating phase, source restrictions and target life state.
+    /// A dead active ally may always be replaced by a living ally so the battle cannot soft-lock.
+    /// </summary>
+    public bool TrySwitchActiveAlly(int slotIndex)
+    {
+        if (!IsBattleRunning || IsBattleOver || CurrentPhase != TurnPhase.AllyAction) return false;
+        CharacterBattleController target = GetAllyBySlot(slotIndex);
+        if (target == null || target.Entity == null || target.Entity.IsDead) return false;
+
+        CharacterBattleController current = GetActiveAlly();
+        if (current == target) return false;
+        if (current != null && current.Entity != null && current.Entity.IsAlive && !current.CanSwitch())
+            return false;
+
+        foreach (CharacterBattleController ally in _allies)
+            if (ally != null) ally.IsActive = ally == target;
+        return true;
+    }
+
+    public bool CanSwitchActiveAlly()
+    {
+        if (!IsBattleRunning || IsBattleOver || CurrentPhase != TurnPhase.AllyAction) return false;
+        CharacterBattleController current = GetActiveAlly();
+        if (current != null && current.Entity != null && current.Entity.IsAlive && !current.CanSwitch())
+            return false;
+
+        foreach (CharacterBattleController ally in _allies)
+        {
+            if (ally != null && ally != current && ally.Entity != null && ally.Entity.IsAlive)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>我方位置（1~4）血量查询（目标选择器用，2026-08-14）。</summary>
@@ -363,8 +413,25 @@ public class BattleManager : MonoBehaviour
 
     public int AllyCount => _allies != null ? _allies.Count : 0;
 
+    /// <summary>当前出战角色的起身入口；后续 UI 起身按钮直接调用本方法。</summary>
+    public bool TryStandUpActiveAlly()
+    {
+        if (!IsBattleRunning || IsBattleOver || CurrentPhase != TurnPhase.AllyAction) return false;
+        CharacterBattleController ally = GetActiveAlly();
+        return ally != null && PoiseSystem.TryStandUp(ally.Entity, APManager);
+    }
+
+    /// <summary>当前出战的冻结角色消耗10 AP主动解冻。</summary>
+    public bool TryThawActiveAlly()
+    {
+        if (!IsBattleRunning || IsBattleOver || CurrentPhase != TurnPhase.AllyAction) return false;
+        CharacterBattleController ally = GetActiveAlly();
+        return ally != null && FrozenReactionHandler.TryThaw(ally.Entity, APManager);
+    }
+
     public bool UseNormalAttackBySlot(int slotIndex)
     {
+        if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "普攻失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"普攻失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
         if (c == null) { LogManager.Log(LogCategory.Action, $"普攻失败：槽位{slotIndex}无角色"); return false; }
@@ -376,6 +443,7 @@ public class BattleManager : MonoBehaviour
 
     public bool UseHeavyAttackBySlot(int slotIndex)
     {
+        if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "重击失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"重击失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
         if (c == null) { LogManager.Log(LogCategory.Action, $"重击失败：槽位{slotIndex}无角色"); return false; }
@@ -387,6 +455,7 @@ public class BattleManager : MonoBehaviour
 
     public bool UseSkillBySlot(int slotIndex)
     {
+        if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "战技失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"战技失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
         if (c == null) { LogManager.Log(LogCategory.Action, $"战技失败：槽位{slotIndex}无角色"); return false; }
@@ -398,6 +467,7 @@ public class BattleManager : MonoBehaviour
 
     public bool UseBurstBySlot(int slotIndex)
     {
+        if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "爆发失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"爆发失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
         if (c == null) { LogManager.Log(LogCategory.Action, $"爆发失败：槽位{slotIndex}无角色"); return false; }
@@ -413,8 +483,10 @@ public class BattleManager : MonoBehaviour
     public void StopBattle()
     {
         IsBattleRunning = false;
+        IsCurrentPhaseReady = false;
         _allyTurnEnded = true;
-        StopAllCoroutines();
+        EnsureFlowScheduler();
+        _flowScheduler.Stop();
     }
 
     // ================================================================
@@ -456,36 +528,52 @@ public class BattleManager : MonoBehaviour
         while (IsBattleRunning)
         {
             // 战斗结束（胜利/失败）：停止阶段推进（2026-08-13）
-            if (IsBattleOver) yield break;
+            if (IsBattleOver)
+            {
+                IsCurrentPhaseReady = false;
+                yield break;
+            }
 
             // 1. 进入当前阶段：先触发集合，后计时集合（协程链：Display==1 状态行动会让流程暂停 0.5s 演出）
-            yield return StartCoroutine(EnterPhase(CurrentPhase));
+            IsCurrentPhaseReady = false;
+            yield return EnterPhase(CurrentPhase);
 
             // 2. 我方行动阶段：先重置所有我方角色的 AP/冷却（每回合开始时 AP 全回复）
             if (CurrentPhase == TurnPhase.AllyAction)
             {
                 APManager.ResetAP(); //全局AP：我方每回合共用100（2026-08-14）
                 foreach (var ally in _allies)
-                    ally.OnTurnStart();
+                    if (ally != null && ally.Entity != null && ally.Entity.IsAlive)
+                        ally.OnTurnStart();
 
                 _allyTurnEnded = false;
-                while (!_allyTurnEnded && IsBattleRunning)
+                IsCurrentPhaseReady = true;
+                while (!_allyTurnEnded && IsBattleRunning && !IsBattleOver)
                     yield return null;
             }
             else
             {
+                IsCurrentPhaseReady = true;
                 yield return new WaitForSeconds(PhaseInterval);
             }
 
-            if (!IsBattleRunning) break;
+            if (!IsBattleRunning || IsBattleOver)
+            {
+                IsCurrentPhaseReady = false;
+                break;
+            }
 
             // 2.5 敌方行动阶段：驱动所有存活敌人行动
             if (CurrentPhase == TurnPhase.EnemyAction)
             {
+                // 每个敌方回合只恢复一次；后续同一敌人多动时不重复恢复。
+                foreach (var enemy in _enemies)
+                    if (enemy != null) PoiseSystem.RestoreAtTurnStart(enemy.Entity);
                 ExecuteEnemyTurn();
             }
 
             // 3. 推进到下一阶段
+            IsCurrentPhaseReady = false;
             CurrentPhase = TurnPhaseUtil.Next(CurrentPhase);
             LogManager.Log(LogCategory.Turn, $"Phase -> {CurrentPhase}");
         }
@@ -505,26 +593,51 @@ public class BattleManager : MonoBehaviour
     {
         LogManager.Log(LogCategory.Turn, $"Enter Phase {(int)phase} ({phase})");
 
+        // 结晶盾以生成阶段为计时原点，并在本阶段任何伤害/状态触发前到期移除。
+        foreach (CharacterBattleController ally in _allies)
+            if (ally != null && ally.Entity != null) ally.Entity.TickShields((int)phase);
+        foreach (EnemyBattleController enemy in _enemies)
+            if (enemy != null && enemy.Entity != null) enemy.Entity.TickShields((int)phase);
+
+        // 草原核以创建阶段为一回合原点，到期时先完成位置爆炸。
+        BloomCoreSystem.TickPhase((int)phase);
+
+        // 感电在双方回合结束阶段先消耗水雷并结算伤害，随后才进入通用状态与元素衰减流程。
+        ElectroChargedReactionHandler.TickTurnEnd(phase);
+        BurningReactionHandler.TickTurnEnd(phase);
+
+        // 反应状态先结算旧实例；本阶段后续触发中新建的状态从下一次同阶段开始计时。
+        ReactionStateSystem.TickPhase((int)phase);
+
         // ① 触发集合：遍历所有单位身上 TriggerPhase == 当前阶段的 OnTrigger 状态
-        yield return StartCoroutine(ExecuteTriggerSet(phase));
+        yield return ExecuteTriggerSet(phase);
 
         // ②③ 计时器集合：先全部 -1 回合，再统一触发到期状态的 OnEnd
-        yield return StartCoroutine(ExecuteTimerSet(phase));
+        yield return ExecuteTimerSet(phase);
 
         // ④ 元素量回合递减
         foreach (var ally in _allies)
-            if (ally.Entity != null) ally.Entity.TickAuras();
+            if (ally != null && ally.Entity != null) ally.Entity.TickAuras();
         foreach (var enemy in _enemies)
-            if (enemy.Entity != null) enemy.Entity.TickAuras();
+            if (enemy != null && enemy.Entity != null) enemy.Entity.TickAuras();
+        ElectroChargedReactionHandler.CleanupInvalidStates();
 
-        // ⑤ 全局跨回合（阶段6 → 阶段1）：进入阶段1时，全局技能冷却-1（角色+敌人）+ 回合计数+1
+        // ⑤ 全局跨回合（阶段6 → 阶段1）：进入阶段1时，全局技能冷却-1（角色+敌人）+ 回合计数+1。
+        // 战斗开场首次进入阶段1不属于跨回合：保持第1回合，也不递减冷却。
         if (phase == TurnPhase.AllyPreTurn)
         {
-            TurnCount++;
-            foreach (var ally in _allies)
-                ally.TickSkillCooldowns();
-            foreach (var enemy in _enemies)
-                enemy.TickSkillCooldowns();
+            if (_isInitialAllyPreTurn)
+            {
+                _isInitialAllyPreTurn = false;
+            }
+            else
+            {
+                TurnCount++;
+                foreach (var ally in _allies)
+                    if (ally != null) ally.TickSkillCooldowns();
+                foreach (var enemy in _enemies)
+                    if (enemy != null) enemy.TickSkillCooldowns();
+            }
         }
     }
 
@@ -537,15 +650,17 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ExecuteTriggerSet(TurnPhase phase)
     {
         if (!_triggerByPhase.TryGetValue((int)phase, out var list) || list.Count == 0) yield break;
-        foreach (var item in list)
+        var scheduled = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>(list);
+        foreach (var item in scheduled)
         {
+            if (!IsStatusStillAttached(item.inst, item.entity, item.slot)) continue;
             var actions = GetStatusActions(item.inst.StatusID2);
             if (actions == null) continue;
             if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
             {
                 object host = item.entity != null ? (object)item.entity : item.slot;
                 LogManager.Log(LogCategory.Status, $"OnTrigger {item.inst.StatusID2} on {(item.entity != null ? item.entity.name : "slot")} at phase {(int)phase}");
-                yield return StartCoroutine(item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, host, "OnTrigger"));
+                yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, host, "OnTrigger");
             }
         }
     }
@@ -595,8 +710,10 @@ public class BattleManager : MonoBehaviour
 
         // 本阶段统一 -1 回合 + OnItsTurn（严格按大顺序），收集到期
         var expired = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>();
-        foreach (var item in list)
+        var scheduled = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>(list);
+        foreach (var item in scheduled)
         {
+            if (!IsStatusStillAttached(item.inst, item.entity, item.slot)) continue;
             item.inst.RemainingPhaseCount--;
             // OnItsTurn：轮到该状态回合（AddInPhase==当前阶段）时生效
             if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
@@ -605,7 +722,7 @@ public class BattleManager : MonoBehaviour
                 if (acts != null)
                 {
                     object host = item.entity != null ? (object)item.entity : item.slot;
-                    yield return StartCoroutine(item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, acts, host, "OnItsTurn"));
+                    yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, acts, host, "OnItsTurn");
                 }
             }
             if (item.inst.RemainingPhaseCount <= 0)
@@ -621,7 +738,7 @@ public class BattleManager : MonoBehaviour
                 LogManager.Log(LogCategory.Status, $"{item.inst.StatusID2} on {item.entity.name} expired at phase {(int)phase}");
                 var actions = GetStatusActions(item.inst.StatusID2);
                 if (actions != null && item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
-                    yield return StartCoroutine(item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.entity, "OnEnd"));
+                    yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.entity, "OnEnd");
                 item.entity.RemoveStatus(item.inst.StatusID2); // RemoveStatus 内部会注销
                 removedNames.Add(item.inst.StatusID2);
             }
@@ -630,26 +747,10 @@ public class BattleManager : MonoBehaviour
                 LogManager.Log(LogCategory.Status, $"{item.inst.StatusID2} on slot {item.slot} expired at phase {(int)phase}");
                 var actions = GetStatusActions(item.inst.StatusID2);
                 if (actions != null && item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
-                    yield return StartCoroutine(item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.slot, "OnEnd"));
+                    yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.slot, "OnEnd");
 
-                // 父状态移除 → 连带移除绑定的位置子状态（BindStatus 生命周期跟随父状态）
-                if (item.inst.BoundStatuses != null && item.inst.BoundStatuses.Count > 0)
-                {
-                    foreach (var childInst in item.inst.BoundStatuses)
-                    {
-                        if (Field == null) break;
-                        foreach (var eslot in Field.EnemySlots)
-                        {
-                            if (eslot != null && eslot.StatusList.Remove(childInst))
-                            {
-                                UnregisterStatusTick(childInst);
-                                removedNames.Add(childInst.StatusID2);
-                                break;
-                            }
-                        }
-                    }
-                    item.inst.BoundStatuses.Clear();
-                }
+                // 父状态移除 → 按子状态真实宿主连带移除 BindStatus 子状态。
+                StatusBindingSystem.RemoveBindings(item.inst);
 
                 // 位置状态到期：解除其 ChangeControl 记录（2026-08-12 补）
                 if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
@@ -657,11 +758,21 @@ public class BattleManager : MonoBehaviour
 
                 item.slot.StatusList.Remove(item.inst);
                 removedNames.Add(item.inst.StatusID2);
+                PreDamageHookSystem.UnregisterPreDamageHook(item.inst.StatusID2);
+                // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
+                KillHookSystem.Unregister(item.inst);
             }
             UnregisterStatusTick(item.inst); // 幂等：实体走 RemoveStatus 已注销，位置手动注销
         }
         if (removedNames.Count > 0)
             LogManager.Log(LogCategory.Status, $"消失状态清单 (phase {(int)phase}): {string.Join(", ", removedNames)}");
+    }
+
+    private static bool IsStatusStillAttached(StatusInstance inst, BattleEntity entity, FieldPosition slot)
+    {
+        if (inst == null) return false;
+        if (entity != null) return entity.GetStatus(inst.StatusID2) == inst;
+        return slot != null && slot.StatusList != null && slot.StatusList.Contains(inst);
     }
 
     /// <summary>
@@ -671,6 +782,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var enemy in _enemies)
         {
+            if (IsBattleOver) break;
             if (enemy != null && enemy.Entity != null && enemy.Entity.IsAlive)
             {
                 enemy.TakeEnemyTurn();

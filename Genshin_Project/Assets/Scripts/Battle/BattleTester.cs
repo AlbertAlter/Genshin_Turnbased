@@ -34,9 +34,9 @@ public class BattleTester : MonoBehaviour
         }
 
         var dm = DataManager.Instance;
-        if (dm == null)
+        if (dm == null || !dm.IsLoaded)
         {
-            Debug.LogError("DataManager.Instance is null after AddComponent. Check DataManager.Awake/Init.");
+            Debug.LogError("DataManager 初始化失败或配表未完整加载，已停止启动战斗。请先处理上方配表错误。");
             return;
         }
 
@@ -72,18 +72,23 @@ public class BattleTester : MonoBehaviour
         var bm = BattleManager.Instance;
         if (bm == null) return;
 
+        // 先保留旧对象引用，再彻底结束上一场。ResetBattle 会清空注册表和场地。
+        var oldAllies = new List<CharacterBattleController>(bm.Allies);
+        var oldEnemies = new List<EnemyBattleController>(bm.Enemies);
+        GetComponent<BattleInputController>()?.ResetForBattle();
+        bm.ResetBattle();
+
         // 销毁旧实体
-        foreach (var ally in new List<CharacterBattleController>(bm.Allies))
+        foreach (var ally in oldAllies)
         {
             if (ally != null && ally.gameObject != null)
                 Destroy(ally.gameObject);
         }
-        foreach (var enemy in new List<EnemyBattleController>(bm.Enemies))
+        foreach (var enemy in oldEnemies)
         {
             if (enemy != null && enemy.gameObject != null)
                 Destroy(enemy.gameObject);
         }
-        bm.UnregisterAll();
 
         // ---- 创建我方角色 ----
         for (int i = 0; i < cfg.Allies.Count && i < 4; i++)
@@ -120,8 +125,7 @@ public class BattleTester : MonoBehaviour
         // ---- 初始能量 ----
         ApplyInitialEnergy(cfg);
 
-        // 重置战斗并启动（热加载时旧协程可能还在跑）
-        bm.ResetBattle();
+        // 启动全新的测试战斗
         bm.StartBattle();
     }
 

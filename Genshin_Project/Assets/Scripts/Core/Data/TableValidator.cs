@@ -4,7 +4,7 @@ using UnityEngine;
 // ============================================================
 // 配表数据校验器
 // 按《表格术语解释（新）》规则校验关键列，失败直接抛异常
-// （DataManager 的 LoadAllData 无 try-catch，异常会中断加载，
+// （DataManager.ReloadAllData 不会吞掉异常，校验失败会回滚整套数据并中断加载，
 //   确保配表错误在加载阶段暴露而不是运行期静默出错）。
 //
 // 程序层面空值=0，所以"空"与"0"不做区分；
@@ -23,7 +23,7 @@ public static class TableValidator
     /// tableName 用于日志标识；isEnemy 控制 TargetConsecutive 规则；
     /// checkTargetNumber=false 时跳过 TargetNumber 检查（状态效果用 TargetSelect 不用数量）。</summary>
     public static void ValidateEffectRow(string tableName, int row,
-        string effectType, string element, int duration, string targetType,
+        string effectType, string element, int duration, string param2, string targetType,
         int targetNumber, int targetConsecutive, string targetOverride,
         bool isEnemy, bool checkTargetNumber = true)
     {
@@ -51,6 +51,12 @@ public static class TableValidator
         if (needsDuration && duration == 0)
         {
             throw new TableValidationException($"{tag}: Duration不能为0（{effectType}施加状态需至少持续1回合）");
+        }
+
+        // GainEnergy 的模式统一写在 Param2：Based=走能量系数，Flat=直接加减固定值。
+        if (effectType == "GainEnergy" && param2 != "Based" && param2 != "Flat")
+        {
+            throw new TableValidationException($"{tag}: GainEnergy 的 Param2 必须为 Based 或 Flat，当前=[{param2}]");
         }
 
         if (noTarget)

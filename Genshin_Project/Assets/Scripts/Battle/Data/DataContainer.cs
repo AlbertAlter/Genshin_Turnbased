@@ -22,7 +22,7 @@ public class CharacterAttributesData
     public string Name;                  // 角色显示名
     public int Star;                     // 稀有度（4/5）
     public int GrowthCurveID;            // 成长GrowthCurve的曲线编号
-    public int WeaponType;               // 武器类型（用枚举：0单手剑 1双手剑 2长枪 3弓 4法器）
+    public int WeaponType;               // 武器类型（用枚举：0单手剑 1双手剑 2弓 3长柄 4法器）
     public string Element;               // 元素属性（Pyro/Hydro/Electro/Cryo/Anemo/Dendro/Geo/None）
     public float BaseHP;                 // Lv1 基础生命值
     public float BaseATK;                // Lv1 基础攻击力
@@ -118,14 +118,13 @@ public class SkillEffectData
     public int AddInPhase;               // 状态加入的回合制状态机的阶段（1-6）
     public int TriggerPhase;             // 状态触发阶段（1-6）
     public string Param1;                // 效果参数1
-    public string Param2;
+    public string Param2;                // GainEnergy：Based=走系数，Flat=固定值
     public string Param3;
     public string TargetType;            // Self / Enemy / EnemyField / Allies / AlliesOnly
     public int TargetNumber;             // 目标数量（-1=全部）
     public int TargetConsecutive;        // 0非连续 1连续 2连续随机 3非连续随机可重复 4非连续随机不可重复
     public bool TargetConsecutiveSet;    // 是否显式填写 TargetConsecutive（2026-08-15：Self 效果"填了"才启动"仅高亮自身"）
     public string TargetOverride;        // X,X偏移 或 状态ID筛选
-    public string EnergyGainMode;        // Based=按系数 / Flat=固定值
     public string ScriptHook;            // 条件执行钩子（Hit() 等写法 / Check(角色ID_T1) 天赋判断等）
 }
 
@@ -249,13 +248,12 @@ public class StatusEffectData
     public int AddInPhase;               // 状态加入的回合制状态机的阶段
     public int TriggerPhase;             // 状态触发阶段
     public string Param1;                // 参数1（Damage=HitData，支持%引用 P E token / ApplyStatus=目标状态ID2 / BindStatus=绑定的子状态ID2）
-    public string Param2;                // 参数2（Damage=伤害值）
+    public string Param2;                // 参数2（GainEnergy：Based=走系数，Flat=固定值）
     public string Param3;                // 参数3（Damage=元素量）
     public string TargetType;            // Self / Allies / AlliesOnly / Enemy / EnemyField
     public string TargetSelect;          // X,X格式（原点为状态所在实体）
     public int TargetConsecutive;        // 同技能定义
     public string TargetOverride;        // X,X偏移 或 状态ID
-    public string EnergyGainMode;        // Based / Direct
     public string ScriptHook;            // 脚本钩子（Hit() / Check(角色ID_T1) 等）
 }
 
@@ -372,13 +370,12 @@ public class EnemySkillEffectData
     public int AddInPhase;               // 添加阶段
     public int TriggerPhase;             // 触发阶段
     public string Param1;                // 参数1
-    public string Param2;                // 参数2
+    public string Param2;                // GainEnergy：Based=走系数，Flat=固定值
     public string Param3;                // 参数3
     public string TargetType;            // 目标类型
     public int TargetNumber;             // 目标数量
     public int TargetConsecutive;        // 连续选取模式
     public string TargetOverride;        // 目标覆盖
-    public string EnergyGainMode;        // 能量获取模式
     public string ScriptHook;            // 脚本钩子
 }
 

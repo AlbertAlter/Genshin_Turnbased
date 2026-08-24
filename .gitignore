@@ -5,10 +5,11 @@
 !/.gitignore
 !/.gitattributes
 
-# 只同步以下三个目录
+# 只同步以下四个目录
 !/Genshin_Project/
 !/Docs/
 !/Charts/
+!/art_assets/
 
 # Unity 自动生成内容
 Genshin_Project/[Ll]ibrary/
@@ -34,3 +35,6 @@ Genshin_Project/*.userprefs
 
 .DS_Store
 Thumbs.db
+
+# Office 打开文档时生成的临时锁文件
+~$*
