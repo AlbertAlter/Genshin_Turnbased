@@ -1,6 +1,6 @@
 ﻿param(
     [ValidateSet("Menu", "Start", "Save", "Status", "Setup")]
-    [string]$Action = "Menu",
+    [string]$Action = "Save",
 
     [string]$ScriptDirectory = $PSScriptRoot,
 
@@ -22,7 +22,7 @@ $configPaths = @(".gitignore", ".gitattributes")
 $commitPaths = @($managedPaths + $configPaths + $scriptPaths)
 
 function Invoke-Git {
-    & git @args
+    & git --no-pager @args
     if ($LASTEXITCODE -ne 0) {
         throw "Git 命令执行失败：git $($args -join ' ')"
     }
@@ -143,6 +143,31 @@ function Start-Work {
     Write-Host "[完成] 本地已经与 GitHub 同步。" -ForegroundColor Green
 }
 
+function Push-LocalAsSourceOfTruth {
+    $maximumAttempts = 3
+
+    for ($attempt = 1; $attempt -le $maximumAttempts; $attempt++) {
+        Write-Host "[上传 $attempt/$maximumAttempts] 正在读取 GitHub 最新状态（不会合并远端内容）..." -ForegroundColor Cyan
+        & git fetch origin main
+        if ($LASTEXITCODE -ne 0) {
+            throw "无法读取 GitHub 状态，请检查网络后重新运行。"
+        }
+
+        Write-Host "[上传 $attempt/$maximumAttempts] 正在用本地 main 覆盖 GitHub main..." -ForegroundColor Cyan
+        & git push --force-with-lease=refs/heads/main -u origin main
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "[上传完成] GitHub 已与本地 main 一致。" -ForegroundColor Green
+            return
+        }
+
+        if ($attempt -lt $maximumAttempts) {
+            Write-Host "上传期间远端再次变化，重新读取状态后自动重试..." -ForegroundColor Yellow
+        }
+    }
+
+    throw "连续 $maximumAttempts 次上传均被远端变化抢先，请稍后重新运行脚本。"
+}
+
 function Save-Work {
     Set-RepositoryConfiguration
     Assert-MainBranch
@@ -160,7 +185,8 @@ function Save-Work {
     & git diff --cached --quiet -- @commitPaths
     $diffExitCode = $LASTEXITCODE
     if ($diffExitCode -eq 0) {
-        Write-Host "[提示] 指定路径中没有需要提交的修改。" -ForegroundColor Yellow
+        Write-Host "[提示] 指定路径中没有新的修改，继续同步之前未上传的提交。" -ForegroundColor Yellow
+        Push-LocalAsSourceOfTruth
         return
     }
     if ($diffExitCode -ne 1) {
@@ -180,7 +206,7 @@ function Save-Work {
     # --only 确保仓库中其他已暂存内容不会被这次提交带上。
     Write-Host "自动提交：$effectiveCommitMessage" -ForegroundColor Cyan
     Invoke-Git commit --only -m $effectiveCommitMessage -- @commitPaths
-    Invoke-Git push -u origin main
+    Push-LocalAsSourceOfTruth
     Write-Host "[完成] 指定路径已提交并上传。" -ForegroundColor Green
 }
 

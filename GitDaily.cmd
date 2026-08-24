@@ -5,5 +5,9 @@ if "%~1"=="" (
 ) else (
     powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$code = Get-Content -LiteralPath '%~dp0GitDaily.ps1' -Raw -Encoding UTF8; & ([ScriptBlock]::Create($code)) -ScriptDirectory '%~dp0' %*"
 )
-if errorlevel 1 pause
+if errorlevel 1 (
+    echo.
+    echo Git automatic upload failed. Review the error above.
+    pause
+)
 endlocal
