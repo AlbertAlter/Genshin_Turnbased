@@ -130,14 +130,16 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 StatusID = 9900000,
                 StatusID2 = statusID2,
-                ActionType = actionType,
+                // 测试辅助保留旧的 OnHit 调用写法，但注入当前 Status_Action 结构：
+                // 命中事件统一是 OnTrigger，过滤条件写入 OnHit，不再使用废弃的 HitSource。
+                ActionType = actionType == "OnHit" ? "OnTrigger" : actionType,
                 Param1 = param1,
                 Param2 = string.Empty,
                 Param3 = string.Empty,
                 MaxTimePerTurn = maxTimePerTurn,
                 MaxTimePerLife = maxTimePerLife,
                 Cooldown = cooldown,
-                HitSource = hitSource,
+                OnHit = actionType == "OnHit" ? hitSource : string.Empty,
                 ScriptHook = scriptHook
             };
             if (!dm.StatusActionDict.TryGetValue(statusID2, out var list))

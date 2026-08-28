@@ -169,8 +169,9 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             return new[]
             {
-                "StatusID", "StatusID2", "ActionType", "Param1", "Param2", "Param3", "MaxTimePerTurn",
-                "MaxTimePerLife", "Cooldown", "HitSource", "ScriptHook"
+                "StatusID", "StatusID2", "ActionType", "Param1", "Param2", "Param3", "ScriptHook",
+                "OnAction", "OutgoingHit", "OutgoingDamage", "OnHit", "OnDamage", "OnHealFrom",
+                "WhenHealing", "APUsed", "ReactionTriggered", "MaxTimePerTurn", "MaxTimePerLife", "Cooldown"
             };
         }
 

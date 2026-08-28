@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 /// <summary>统一执行反应生成的派生命中；派生 Hit 的元素量由 handler 明确填写。</summary>
 public static class ReactionEffectExecutor
 {
@@ -33,7 +35,8 @@ public static class ReactionEffectExecutor
             DisplayName = "碎冰",
             SourceEntity = pending.Source,
             Target = pending.Target,
-            SourceEffectID = pending.SourceEffectID
+            SourceEffectID = pending.SourceEffectID,
+            InvolvedElements = new List<string> { "Cryo" }
         });
         LogManager.Log(LogCategory.Reaction, $"碎冰：{pending.Target.EntityID} 受到 {pending.Damage:F1} 物理剧变伤害");
     }

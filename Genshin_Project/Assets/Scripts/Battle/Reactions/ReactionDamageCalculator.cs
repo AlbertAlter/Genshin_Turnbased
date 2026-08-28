@@ -271,7 +271,6 @@ public static class ReactionDamageCalculator
     {
         if (statuses == null || statusEffects == null) return 0f;
 
-        string configuredReaction = GetConfiguredReactionName(reactionType);
         float total = 0f;
         var effects = new List<StatusEffectData>(statusEffects);
         foreach (StatusInstance instance in statuses)
@@ -279,7 +278,8 @@ public static class ReactionDamageCalculator
             StatusMainData mainData = instance != null ? instance.MainData : null;
             if (mainData == null || !instance.IsActive) continue;
             if (string.IsNullOrEmpty(mainData.ApplyReactionType)
-                || mainData.ApplyReactionType != configuredReaction)
+                || !ReactionFilterMatcher.Matches(
+                    mainData.ApplyReactionType, reactionType, null, damageElement))
                 continue;
             if (!string.IsNullOrEmpty(mainData.ApplyElementType)
                 && mainData.ApplyElementType != damageElement)
@@ -314,7 +314,8 @@ public static class ReactionDamageCalculator
         if (mainData == null) return false;
 
         if (!string.IsNullOrEmpty(mainData.ApplyReactionType)
-            && mainData.ApplyReactionType != GetConfiguredReactionName(reactionType))
+            && !ReactionFilterMatcher.Matches(
+                mainData.ApplyReactionType, reactionType, null, damageElement))
             return false;
 
         if (!string.IsNullOrEmpty(mainData.ApplyElementType)
@@ -326,25 +327,6 @@ public static class ReactionDamageCalculator
 
     public static string GetConfiguredReactionName(ReactionType reactionType)
     {
-        switch (reactionType)
-        {
-            case ReactionType.Vaporize: return "蒸发";
-            case ReactionType.Melt: return "融化";
-            case ReactionType.Overloaded: return "超载";
-            case ReactionType.Superconduct: return "超导";
-            case ReactionType.ElectroCharged: return "感电";
-            case ReactionType.Frozen: return "冻结";
-            case ReactionType.Shatter: return "碎冰";
-            case ReactionType.Swirl: return "扩散";
-            case ReactionType.Crystallize: return "结晶";
-            case ReactionType.Burning: return "燃烧";
-            case ReactionType.Bloom: return "绽放";
-            case ReactionType.Quicken: return "原激化";
-            case ReactionType.Hyperbloom: return "超绽放";
-            case ReactionType.Burgeon: return "烈绽放";
-            case ReactionType.Spread: return "蔓激化";
-            case ReactionType.Aggravate: return "超激化";
-            default: return string.Empty;
-        }
+        return ReactionFilterMatcher.GetConfiguredReactionName(reactionType);
     }
 }

@@ -1,104 +1,161 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// PreAlliesDamage 事件钩子系统（2026-08-15，从 BattleManager 独立）：
-/// 我方主动行为（按钮触发技能）造成伤害前，先执行登记的钩子触发行效果（如凯亚凛冽轮舞冰棱）。
-/// 登记/注销/触发/查询全部收敛在本类，主程序（BattleManager/CharacterBattleController）只负责调用，不承载钩子逻辑。
-/// 登记：状态施加时扫描 StatusAction 行（OnTrigger + ScriptHook=PreAlliesDamage）；
-/// 注销：状态消失（到期/移除/重建）时移除；实例数归零才移除条目；
-/// 触发：主动行为技能执行开头预解析所有 Damage 目标位置并集（BattleManager.PendingActionTargetPositions，
-///      至少一名实体=不会落空）→ 遍历记录表触发触发行。
+/// PreAlliesDamage / PreSelfDamage 事件钩子登记与触发。
+/// 是否属于主动行为统一查询 ActiveActionQuery；本类只处理钩子范围和执行顺序。
 /// </summary>
 public static class PreDamageHookSystem
 {
-    /// <summary>钩子条目：状态ID2 →（施放者、触发行、实例数）</summary>
-    private class PreDamageHookEntry
+    private sealed class PreDamageHookEntry
     {
         public string StatusID2;
         public BattleEntity Caster;
+        public object Host;
+        public string EventHookName;
         public StatusActionData TriggerLine;
-        public int InstanceCount;
+        public readonly List<StatusInstance> Instances = new List<StatusInstance>();
     }
 
-    private static readonly Dictionary<string, PreDamageHookEntry> _preDamageHooks = new Dictionary<string, PreDamageHookEntry>();
+    private static readonly List<PreDamageHookEntry> Entries = new List<PreDamageHookEntry>();
 
-    /// <summary>登记钩子状态（AddStatus 成功时调用）：按状态ID2去重，实例数+1。</summary>
-    public static void RegisterPreDamageHook(StatusInstance inst)
+    /// <summary>
+    /// 登记带 PreAlliesDamage / PreSelfDamage 的 OnTrigger 行。
+    /// Allies 按状态ID、施放者和行动行去重；Self 额外按宿主区分。
+    /// </summary>
+    public static void RegisterPreDamageHook(StatusInstance instance, object host)
     {
-        if (inst == null || inst.MainData == null) return;
-        if (inst.Caster == null || inst.Caster.CharacterCtrl == null) return;
-        var dm = DataManager.Instance;
-        if (dm == null || !dm.StatusActionDict.TryGetValue(inst.StatusID2, out var actions)) return;
+        if (instance == null || instance.MainData == null) return;
+        if (instance.Caster == null || instance.Caster.CharacterCtrl == null) return;
+        DataManager dm = DataManager.Instance;
+        if (dm == null || !dm.StatusActionDict.TryGetValue(instance.StatusID2, out List<StatusActionData> actions))
+            return;
 
-        StatusActionData triggerLine = null;
-        foreach (var act in actions)
+        foreach (StatusActionData action in actions)
         {
-            if (act.ActionType == "OnTrigger" && act.ScriptHook == "PreAlliesDamage")
+            if (action.ActionType != "OnTrigger") continue;
+            string eventHookName;
+            if (ScriptHookParser.TryFind(action.ScriptHook, "PreAlliesDamage", out _))
+                eventHookName = "PreAlliesDamage";
+            else if (ScriptHookParser.TryFind(action.ScriptHook, "PreSelfDamage", out _))
+                eventHookName = "PreSelfDamage";
+            else
+                continue;
+
+            PreDamageHookEntry entry = FindEntry(instance, host, action, eventHookName);
+            if (entry == null)
             {
-                triggerLine = act;
-                break;
+                entry = new PreDamageHookEntry
+                {
+                    StatusID2 = instance.StatusID2,
+                    Caster = instance.Caster,
+                    Host = host,
+                    EventHookName = eventHookName,
+                    TriggerLine = action
+                };
+                Entries.Add(entry);
             }
-        }
-        if (triggerLine == null) return;
-
-        if (_preDamageHooks.TryGetValue(inst.StatusID2, out var entry))
-        {
-            entry.InstanceCount++;
-        }
-        else
-        {
-            _preDamageHooks[inst.StatusID2] = new PreDamageHookEntry
-            {
-                StatusID2 = inst.StatusID2,
-                Caster = inst.Caster,
-                TriggerLine = triggerLine,
-                InstanceCount = 1
-            };
-            LogManager.Log(LogCategory.PreDamageHook, $"登记 {inst.StatusID2}（施放者 {inst.Caster.EntityID}）");
+            if (!entry.Instances.Contains(instance)) entry.Instances.Add(instance);
         }
     }
 
-    /// <summary>注销钩子状态（状态消失时调用）：实例数-1，归零移除条目。</summary>
-    public static void UnregisterPreDamageHook(string statusID2)
+    public static void UnregisterPreDamageHook(StatusInstance instance)
     {
-        if (string.IsNullOrEmpty(statusID2) || _preDamageHooks.Count == 0) return;
-        if (!_preDamageHooks.TryGetValue(statusID2, out var entry)) return;
-        entry.InstanceCount--;
-        if (entry.InstanceCount <= 0)
+        if (instance == null) return;
+        for (int index = Entries.Count - 1; index >= 0; index--)
         {
-            _preDamageHooks.Remove(statusID2);
-            LogManager.Log(LogCategory.PreDamageHook, $"注销 {statusID2}");
+            PreDamageHookEntry entry = Entries[index];
+            entry.Instances.Remove(instance);
+            if (entry.Instances.Count == 0) Entries.RemoveAt(index);
         }
     }
 
     /// <summary>
-    /// 触发所有登记的 PreAlliesDamage 钩子（主动行为技能执行开头、预解析完成后调用）。
-    /// 先于该次主动行为实行；次数限制（MaxTimePerTurn 等）由施放者控制器执行时检查。
+    /// 主动行为目标预解析完成后触发。Allies 响应任意我方行动者；Self 只响应状态实体宿主或场地占用者自身。
     /// </summary>
-    public static void TriggerPreDamageHooks()
+    public static void TriggerPreDamageHooks(BattleEntity activeActor)
     {
-        if (_preDamageHooks.Count == 0) return;
-        foreach (var kv in _preDamageHooks)
+        if (activeActor == null || Entries.Count == 0) return;
+        var snapshot = new List<PreDamageHookEntry>(Entries);
+        snapshot.Sort((left, right) => GetApplyOrder(left).CompareTo(GetApplyOrder(right)));
+
+        foreach (PreDamageHookEntry entry in snapshot)
         {
-            var entry = kv.Value;
-            if (entry.Caster == null || entry.Caster.CharacterCtrl == null) continue;
-            var ctrl = entry.Caster.CharacterCtrl;
-            LogManager.Log(LogCategory.PreDamageHook, $"触发 {entry.StatusID2}（先于主动行为）");
-            ctrl.ExecutePreDamageHookLine(entry.TriggerLine, entry.Caster);
+            if (entry.EventHookName == "PreSelfDamage" && !IsHostedByActor(entry.Host, activeActor))
+                continue;
+
+            StatusInstance status = GetActiveInstance(entry);
+            if (status == null || status.Caster == null || status.Caster.CharacterCtrl == null) continue;
+            ScriptHookParser.TryFind(entry.TriggerLine.ScriptHook, entry.EventHookName, out string argument);
+            object executionHost = entry.EventHookName == "PreSelfDamage" ? entry.Host : status.Caster;
+            status.Caster.CharacterCtrl.TryExecuteEventStatusAction(
+                status,
+                entry.TriggerLine,
+                executionHost,
+                new ScriptHookContext
+                {
+                    Caster = status.Caster,
+                    Target = activeActor,
+                    Status = status,
+                    StatusHost = executionHost,
+                    EventHookName = entry.EventHookName,
+                    EventHookArgument = argument,
+                    ActionTargetPositions = BattleManager.Instance != null
+                        ? BattleManager.Instance.PendingActionTargetPositions
+                        : null
+                });
         }
     }
 
-    /// <summary>查询某状态是否已登记 PreAlliesDamage 钩子（TargetOverride 解析时校验用）。</summary>
     public static bool HasPreDamageHook(string statusID2)
     {
-        return !string.IsNullOrEmpty(statusID2) && _preDamageHooks.ContainsKey(statusID2);
+        if (string.IsNullOrEmpty(statusID2)) return false;
+        foreach (PreDamageHookEntry entry in Entries)
+            if (entry.StatusID2 == statusID2 && GetActiveInstance(entry) != null) return true;
+        return false;
     }
 
-    /// <summary>新战斗开始前清空上一场的全部钩子登记。</summary>
     public static void ClearAll()
     {
-        if (_preDamageHooks.Count == 0) return;
-        _preDamageHooks.Clear();
-        LogManager.Log(LogCategory.PreDamageHook, "清空上一场全部钩子登记");
+        Entries.Clear();
+    }
+
+    private static PreDamageHookEntry FindEntry(
+        StatusInstance instance,
+        object host,
+        StatusActionData action,
+        string eventHookName)
+    {
+        foreach (PreDamageHookEntry entry in Entries)
+        {
+            if (entry.StatusID2 != instance.StatusID2
+                || entry.Caster != instance.Caster
+                || entry.TriggerLine != action
+                || entry.EventHookName != eventHookName)
+                continue;
+            if (eventHookName == "PreSelfDamage" && !ReferenceEquals(entry.Host, host)) continue;
+            return entry;
+        }
+        return null;
+    }
+
+    private static StatusInstance GetActiveInstance(PreDamageHookEntry entry)
+    {
+        if (entry == null) return null;
+        foreach (StatusInstance instance in entry.Instances)
+            if (instance != null && instance.IsActive) return instance;
+        return null;
+    }
+
+    private static long GetApplyOrder(PreDamageHookEntry entry)
+    {
+        StatusInstance instance = GetActiveInstance(entry);
+        return instance != null ? instance.ApplyOrder : long.MaxValue;
+    }
+
+    private static bool IsHostedByActor(object host, BattleEntity actor)
+    {
+        if (host is BattleEntity entity) return entity == actor;
+        if (host is FieldPosition field) return field.Occupant == actor;
+        return false;
     }
 }

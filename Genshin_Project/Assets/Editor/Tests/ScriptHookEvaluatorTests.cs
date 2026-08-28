@@ -209,7 +209,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 HitLanded = true,
                 CausedDeath = true
             };
-            var context = new ScriptHookContext { Caster = _caster, DamageEvent = evt };
+            var context = new ScriptHookContext { Caster = _caster, DamageEvent = evt, EventHookName = "Kill" };
             Assert.That(ScriptHookEvaluator.Evaluate("Kill(1010)", context), Is.True);
         }
 

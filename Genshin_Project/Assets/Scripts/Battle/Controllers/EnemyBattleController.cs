@@ -269,6 +269,7 @@ public partial class EnemyBattleController : MonoBehaviour
                     AddInPhase = addPhase,
                     TriggerPhase = eff.TriggerPhase,
                     MainData = statusMain,
+                    IsActive = true,
                     ApplyOrder = ++BattleEntity._applyOrderCounter
                 };
                 field.StatusList.Add(inst);
@@ -276,7 +277,7 @@ public partial class EnemyBattleController : MonoBehaviour
                 if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
                     inst.Caster.CharacterCtrl.OnStatusApplied(inst, field);
                 BattleManager.Instance.RegisterStatusTick(inst, null, field);
-                PreDamageHookSystem.RegisterPreDamageHook(inst);
+                PreDamageHookSystem.RegisterPreDamageHook(inst, field);
                 // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
                 KillHookSystem.Register(inst, field);
                 LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {field} (dur={eff.Duration}, phase={addPhase})");
@@ -331,6 +332,11 @@ public partial class EnemyBattleController : MonoBehaviour
         }
         float dmgBonusFactor = 1f + dmgBonus;
         if (dmgBonusFactor < 0f) dmgBonusFactor = 0f;
+        if (eff.Element == "Anemo")
+        {
+            ExecuteEnemyAnemoDamage(eff, hit, targets, baseDmg, dmgBonusFactor, effectExecutionID);
+            return;
+        }
 
         foreach (var target in targets)
         {
@@ -365,6 +371,7 @@ public partial class EnemyBattleController : MonoBehaviour
                 DamageType = eff.DamageType,
                 PoiseDamage = hit.Poise
             });
+            StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
             float finalDamage = target.AbsorbDamageWithShield(reaction.FinalDamage, eff.Element);
             // 带来源扣血（2026-08-19）：敌人技能伤害统一入口
             target.TakeDamage(finalDamage, DamageSourceInfo.Create(
@@ -385,6 +392,56 @@ public partial class EnemyBattleController : MonoBehaviour
     /// 累加单个状态提供的 DMGBonus（配表 MultiplierPart 任一列==DMGBonus 的效果数值）。
     /// 效果数值在状态的 StatusEffect 里（如 ST_Bunny_debuff -> STE_Bunny_debuff Param1=-0.1）。
     /// </summary>
+    private void ExecuteEnemyAnemoDamage(EnemySkillEffectData eff, HitData hit,
+        List<BattleEntity> targets, float baseDmg, float dmgBonusFactor, long effectExecutionID)
+    {
+        var contexts = new List<ReactionContext>();
+        foreach (BattleEntity target in targets)
+        {
+            if (target == null || !target.IsAlive) continue;
+            float res = GetTargetResistance(target, "Anemo");
+            float resFactor = res < 0f ? 1f - res / 2f
+                : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
+            float defRes = 1f - target.TotalDEF / (target.TotalDEF + 5f * Entity.Level + 500f);
+            if (defRes < 0f) defRes = 0f;
+            float damage = baseDmg * dmgBonusFactor * resFactor * defRes;
+            contexts.Add(new ReactionContext
+            {
+                SourceEntity = Entity, Target = target, SourceKind = ReactionSourceKind.EnemySkill,
+                SourceSkillID = _currentSkillID2, SourceEffectID = eff.SkillEffectID2,
+                EffectExecutionID = effectExecutionID, AttackElement = "Anemo",
+                AttackAmount = hit.ElementAura, PreReactionDamage = damage,
+                DamageComponents = new ReactionDamageComponents
+                { SkillBaseDamage = baseDmg, CriticalMultiplier = 1f,
+                  DamageBonusMultiplier = dmgBonusFactor, DefenseMultiplier = defRes,
+                  ResistanceMultiplier = resFactor },
+                DamageType = eff.DamageType, PoiseDamage = hit.Poise
+            });
+        }
+        var primaryReactions = new List<ReactionResult>(contexts.Count);
+        foreach (ReactionContext context in contexts)
+        {
+            ReactionResult primaryReaction = ReactionResolver.Resolve(context);
+            StatusOnHitHookSystem.NotifyReactions(primaryReaction.TriggeredReactions);
+            primaryReactions.Add(primaryReaction);
+        }
+
+        SwirlPreparedBatch prepared = SwirlReactionHandler.PrepareBatch(contexts);
+        for (int index = 0; index < contexts.Count; index++)
+        {
+            ReactionContext context = contexts[index];
+            ReactionResult primaryReaction = primaryReactions[index];
+            float finalDamage = context.Target.AbsorbDamageWithShield(context.PreReactionDamage, "Anemo");
+            context.Target.TakeDamage(finalDamage, DamageSourceInfo.Create(Entity,
+                ReactionSourceKind.EnemySkill, _currentSkillID2, eff.SkillEffectID2, ReactionType.None));
+            ReactionEffectExecutor.FinalizePrimaryHit(primaryReaction, finalDamage);
+            PoiseSystem.ApplyPoiseDamage(context.Target, hit.Poise, finalDamage, Entity);
+            ReactionEffectExecutor.ExecuteDerivedHits(primaryReaction);
+        }
+        SwirlBatchResult swirl = SwirlReactionHandler.ResolvePreparedBatch(prepared);
+        StatusOnHitHookSystem.NotifyReactions(swirl.Reaction.TriggeredReactions);
+        ReactionEffectExecutor.ExecuteDerivedHits(swirl.Reaction);
+    }
     private float GetStatusDMGBonus(StatusInstance inst)
     {
         if (inst == null || inst.MainData == null) return 0f;

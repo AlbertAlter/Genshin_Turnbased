@@ -9,6 +9,8 @@ public sealed class ReactionOccurrence
     public BattleEntity SourceEntity;
     public BattleEntity Target;
     public string SourceEffectID;
+    /// <summary>本次反应实际参与的元素；扩散、结晶等可变反应必须由 handler 写入真实元素。</summary>
+    public List<string> InvolvedElements = new List<string>();
 }
 
 [Serializable]

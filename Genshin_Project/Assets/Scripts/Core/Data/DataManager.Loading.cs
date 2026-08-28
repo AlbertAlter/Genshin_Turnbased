@@ -85,9 +85,11 @@ public partial class DataManager
         LoadCharacterOverview();
         LoadCharacterSheets();
         LoadGrowthCurve();
+        LoadWeaponAttributes();
         LoadStatusData();
         LoadEnemyStatusData();
         LoadOverallStatusData();
+        LoadWeaponStatusData();
         LoadEnemyAttributes();
         LoadEnemyCurves();
         LoadEnemySkill();

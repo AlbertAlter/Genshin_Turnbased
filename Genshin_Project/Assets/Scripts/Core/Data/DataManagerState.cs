@@ -15,6 +15,13 @@ internal sealed class DataManagerState
     internal Dictionary<int, List<ConstellationData>> ConstellationDict = new Dictionary<int, List<ConstellationData>>();
     internal Dictionary<int, List<TalentData>> TalentDict = new Dictionary<int, List<TalentData>>();
     internal Dictionary<int, Dictionary<int, float>> GrowthCurveDict = new Dictionary<int, Dictionary<int, float>>();
+    internal Dictionary<int, WeaponAttributesData> WeaponAttributesDict = new Dictionary<int, WeaponAttributesData>();
+    internal Dictionary<int, WeaponLevelBonusData> WeaponLevelBonusDict = new Dictionary<int, WeaponLevelBonusData>();
+    internal Dictionary<int, Dictionary<int, WeaponParamData>> WeaponParamDict = new Dictionary<int, Dictionary<int, WeaponParamData>>();
+    internal Dictionary<int, List<string>> WeaponInitiateStatusDict = new Dictionary<int, List<string>>();
+    internal Dictionary<int, float> WeaponAscensionCurve3 = new Dictionary<int, float>();
+    internal Dictionary<int, float> WeaponAscensionCurve4 = new Dictionary<int, float>();
+    internal Dictionary<int, float> WeaponAscensionCurve5 = new Dictionary<int, float>();
 
     internal Dictionary<string, StatusMainData> StatusMainDict = new Dictionary<string, StatusMainData>();
     internal Dictionary<string, StatusEffectData> StatusEffectDict = new Dictionary<string, StatusEffectData>();
@@ -48,6 +55,13 @@ internal sealed class DataManagerState
             ConstellationDict = manager.ConstellationDict,
             TalentDict = manager.TalentDict,
             GrowthCurveDict = manager.GrowthCurveDict,
+            WeaponAttributesDict = manager.WeaponAttributesDict,
+            WeaponLevelBonusDict = manager.WeaponLevelBonusDict,
+            WeaponParamDict = manager.WeaponParamDict,
+            WeaponInitiateStatusDict = manager.WeaponInitiateStatusDict,
+            WeaponAscensionCurve3 = manager.WeaponAscensionCurve3,
+            WeaponAscensionCurve4 = manager.WeaponAscensionCurve4,
+            WeaponAscensionCurve5 = manager.WeaponAscensionCurve5,
             StatusMainDict = manager.StatusMainDict,
             StatusEffectDict = manager.StatusEffectDict,
             StatusActionDict = manager.StatusActionDict,
@@ -78,6 +92,13 @@ internal sealed class DataManagerState
         manager.ConstellationDict = ConstellationDict;
         manager.TalentDict = TalentDict;
         manager.GrowthCurveDict = GrowthCurveDict;
+        manager.WeaponAttributesDict = WeaponAttributesDict;
+        manager.WeaponLevelBonusDict = WeaponLevelBonusDict;
+        manager.WeaponParamDict = WeaponParamDict;
+        manager.WeaponInitiateStatusDict = WeaponInitiateStatusDict;
+        manager.WeaponAscensionCurve3 = WeaponAscensionCurve3;
+        manager.WeaponAscensionCurve4 = WeaponAscensionCurve4;
+        manager.WeaponAscensionCurve5 = WeaponAscensionCurve5;
         manager.StatusMainDict = StatusMainDict;
         manager.StatusEffectDict = StatusEffectDict;
         manager.StatusActionDict = StatusActionDict;

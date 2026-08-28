@@ -82,6 +82,21 @@ public static class BattleTargetResolver
                     ? new List<int>(battle.PendingActionTargetPositions)
                     : new List<int>();
             }
+            else if (value.StartsWith("PreSelfDamage(", StringComparison.Ordinal))
+            {
+                string hookStatusID2 = ExtractHookStatusID(value);
+                request.OverridePositions = PreDamageHookSystem.HasPreDamageHook(hookStatusID2)
+                    ? new List<int>(battle.PendingActionTargetPositions)
+                    : new List<int>();
+            }
+            else if (value.StartsWith("PostAlliesDamage(", StringComparison.Ordinal))
+            {
+                request.OverridePositions = PostDamageHookSystem.GetPositions(ExtractHookStatusID(value));
+            }
+            else if (value.StartsWith("PostSelfDamage(", StringComparison.Ordinal))
+            {
+                request.OverridePositions = PostDamageHookSystem.GetPositions(ExtractHookStatusID(value));
+            }
             else
                 request.OverridePositions = FindStatusPositions(battle, targetSide, domain, value);
         }

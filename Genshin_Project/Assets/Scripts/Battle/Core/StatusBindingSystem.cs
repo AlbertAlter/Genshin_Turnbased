@@ -158,7 +158,7 @@ public static class StatusBindingSystem
             if (child.Caster != null && child.Caster.CharacterCtrl != null)
                 child.Caster.CharacterCtrl.OnStatusApplied(child, field);
             BattleManager.Instance.RegisterStatusTick(child, null, field);
-            PreDamageHookSystem.RegisterPreDamageHook(child);
+            PreDamageHookSystem.RegisterPreDamageHook(child, field);
             // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
             KillHookSystem.Register(child, field);
         }
@@ -190,7 +190,7 @@ public static class StatusBindingSystem
                 if (field == null || !field.StatusList.Remove(child)) continue;
                 RemoveBindings(child);
                 battle.UnregisterStatusTick(child);
-                PreDamageHookSystem.UnregisterPreDamageHook(child.StatusID2);
+                PreDamageHookSystem.UnregisterPreDamageHook(child);
                 // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
                 KillHookSystem.Unregister(child);
                 return true;

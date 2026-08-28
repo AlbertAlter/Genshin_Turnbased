@@ -31,4 +31,10 @@ public sealed class ScriptHookContext
 
     /// <summary>本次主动行为的目标位置集合（Kaeya_T2 判定用）。</summary>
     public IReadOnlyList<int> ActionTargetPositions;
+
+    /// <summary>当前由哪个事件钩子入口驱动（Pre/Post Allies/Self Damage / Kill）。</summary>
+    public string EventHookName;
+
+    /// <summary>当前事件钩子入口的参数；用于并列钩子列表中确认对应事件项。</summary>
+    public string EventHookArgument;
 }

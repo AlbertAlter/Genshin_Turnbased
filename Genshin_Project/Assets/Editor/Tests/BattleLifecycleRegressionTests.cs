@@ -60,6 +60,107 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        [Timeout(5000)]
+        public void DeathAtAllyTurnStart_RequiresFreeSwitch_ThenNormalSwitchCostsAP()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.CreateMinimalBattle();
+                CharacterBattleController reserve = env.CreateAlly(2, false);
+                env.Ally.Entity.CurrentHP = 0f;
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+
+                int apBeforeForcedSwitch = env.Manager.APManager.CurrentAP;
+                Assert.That(env.Manager.IsFreeDeathSwitchPending, Is.True);
+                env.Manager.EndAllyTurn();
+                env.Scheduler.Step();
+                Assert.That(env.Manager.CurrentPhase, Is.EqualTo(TurnPhase.AllyAction),
+                    "The forced replacement cannot be bypassed by ending the turn.");
+                Assert.That(env.Manager.TrySwitchActiveAllyWithAPCost(1), Is.True);
+                Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(apBeforeForcedSwitch));
+                Assert.That(env.Manager.IsFreeDeathSwitchPending, Is.False);
+                Assert.That(reserve.IsActive, Is.True);
+
+                env.Ally.Entity.CurrentHP = env.Ally.Entity.TotalHP;
+                Assert.That(env.Manager.TrySwitchActiveAllyWithAPCost(0), Is.True);
+                Assert.That(env.Manager.APManager.CurrentAP,
+                    Is.EqualTo(apBeforeForcedSwitch - BattleManager.SwitchAPCost));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
+        public void SwitchSelection_SkipsDeadAndEmptyFormationSlots()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.CreateMinimalBattle();
+                CharacterBattleController deadSecond = env.CreateAlly(2, false);
+                CharacterBattleController livingFourth = env.CreateAlly(4, false);
+                deadSecond.Entity.CurrentHP = 0f;
+
+                Assert.That(env.Manager.GetAllyBySlot(2), Is.Null,
+                    "Formation position 3 is an empty slot, not list index 3.");
+                Assert.That(env.Manager.FindNextLivingAllySlot(0, 1), Is.EqualTo(3),
+                    "Moving right skips the dead position 2 and empty position 3.");
+                Assert.That(env.Manager.FindNextLivingAllySlot(3, -1), Is.EqualTo(0),
+                    "Moving left skips the empty and dead positions.");
+                Assert.That(env.Manager.GetAllyBySlot(3), Is.SameAs(livingFourth));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
+        public void Switch_AllowsFrozenOrKnockedDownActiveAlly()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.CreateMinimalBattle();
+                CharacterBattleController reserve = env.CreateAlly(2, false);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+
+                ReactionStateSystem.SetEntityState(
+                    env.Ally.Entity,
+                    ReactionType.Frozen,
+                    1,
+                    null,
+                    (int)TurnPhase.AllyAction);
+
+                Assert.That(env.Manager.TrySwitchActiveAlly(1), Is.True,
+                    "Frozen characters are still allowed to switch out.");
+
+                PoiseSystem.BreakPoise(reserve.Entity);
+                Assert.That(env.Manager.TrySwitchActiveAlly(0), Is.True,
+                    "Knocked-down characters are still allowed to switch out.");
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
+        public void SelfEffect_IgnoresSelectedEnemyOrAllyPosition()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_SelfTarget_Regression";
+                env.ConfigureStatus(statusID);
+                env.ConfigureAllyAction(2, "SK_SelfTarget_Regression", "SE_SelfTarget_Regression",
+                    "None", null, 10, effectType: "ApplyStatus", param1: statusID,
+                    duration: 1, addInPhase: (int)TurnPhase.AllyAction, targetType: "Self");
+                env.CreateMinimalBattle();
+                CharacterBattleController reserve = env.CreateAlly(2, false);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Ally.ForcedTargetPositions.Add(2);
+
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+                Assert.That(env.Ally.Entity.HasStatus(statusID), Is.True);
+                Assert.That(reserve.Entity.HasStatus(statusID), Is.False);
+            }
+        }
+
+        [Test]
         [Timeout(6000)]
         public void EnemyBatch_StopsImmediatelyAfterBattleEnds()
         {

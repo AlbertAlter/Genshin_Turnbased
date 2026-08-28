@@ -37,9 +37,8 @@ namespace GenshinTurnBased.Tests.EditMode
                 Assert.That(enemy.CurrentHP, Is.LessThan(startHP));
                 Assert.That(enemy.GetAura("Cryo"), Is.Not.Null);
 
-                // 当前生产代码尚无公开换人入口；仅为冒烟连接第二名真实配表角色。
-                kaeya.IsActive = false;
-                amber.IsActive = true;
+                Assert.That(manager.TrySwitchActiveAlly(1), Is.True,
+                    "真实配表流程应通过 BattleManager 公开入口切换到安柏");
                 amber.Entity.CurrentEnergy = amber.Entity.MaxEnergy;
                 Assert.That(manager.UseBurstBySlot(1), Is.True);
                 Assert.That(enemy.GetAura("Cryo"), Is.Null,

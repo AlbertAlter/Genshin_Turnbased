@@ -31,7 +31,7 @@ public static class KillHookSystem
         foreach (var act in actions)
         {
             if (act.ActionType != "OnTrigger") continue;
-            if (!ScriptHookParser.TryParse(act.ScriptHook, out string fn, out _) || fn != "Kill") continue;
+            if (!ScriptHookParser.TryFind(act.ScriptHook, "Kill", out _)) continue;
             _entries.Add(new KillHookEntry { Status = status, Host = host, TriggerLine = act });
             registered = true;
         }
@@ -71,6 +71,7 @@ public static class KillHookSystem
                 StatusHost = entry.Host,
                 HitEffectID = damageEvent.Source != null ? damageEvent.Source.SourceEffectID : null,
                 DamageEvent = damageEvent,
+                EventHookName = "Kill",
                 ActionTargetPositions = BattleManager.Instance != null
                     ? BattleManager.Instance.PendingActionTargetPositions
                     : null

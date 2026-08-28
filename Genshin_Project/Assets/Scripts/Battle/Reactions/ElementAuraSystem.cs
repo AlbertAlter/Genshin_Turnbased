@@ -39,7 +39,8 @@ public static class ElementAuraSystem
             && context.AttackAmount > 0f
             && !string.IsNullOrEmpty(context.AttackElement)
             && context.AttackElement != "None"
-            // Geo attacks can react, but their remaining amount is never written as a normal aura.
-            && context.AttackElement != "Geo";
+            // Geo and Anemo attacks can react, but neither is written as a normal aura.
+            && context.AttackElement != "Geo"
+            && context.AttackElement != "Anemo";
     }
 }

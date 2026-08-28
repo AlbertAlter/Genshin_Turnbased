@@ -78,6 +78,16 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_target.GetAura("Hydro").AuraAmount, Is.EqualTo(2f));
         }
 
+        [TestCase("Geo")]
+        [TestCase("Anemo")]
+        public void Resolve_NonAuraElements_AreNeverWrittenAsNormalAura(string element)
+        {
+            ReactionResult result = ReactionResolver.Resolve(NewContext(element, 2f));
+
+            Assert.That(result.HasReaction, Is.False);
+            Assert.That(_target.GetAura(element), Is.Null);
+        }
+
         [Test]
         public void TickAuras_ElementsDecayIndependently()
         {

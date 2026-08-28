@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 角色技能、角色状态伤害和敌人技能共用的唯一反应入口。
@@ -30,6 +31,7 @@ public static class ReactionResolver
         if (context.Target == null)
             return result;
 
+
         if (context.ApplicationPhase <= 0 && BattleManager.Instance != null)
             context.ApplicationPhase = (int)BattleManager.Instance.CurrentPhase;
 
@@ -43,6 +45,11 @@ public static class ReactionResolver
                 levelCoefficient);
             context.IgnoreFrozenAura = true;
         }
+
+        // 风元素由 SwirlReactionHandler 以同一 Hit 的全部目标为一个批次结算；
+        // 这里仍保留上面的通用主命中预处理（例如碎冰），风本身不形成普通附着。
+        if (context.AttackElement == "Anemo")
+            return result;
 
         if (context.AttackAmount <= 0f
             || string.IsNullOrEmpty(context.AttackElement)
@@ -67,7 +74,8 @@ public static class ReactionResolver
                     DisplayName = quickenDamage.DisplayName,
                     SourceEntity = context.SourceEntity,
                     Target = context.Target,
-                    SourceEffectID = context.SourceEffectID
+                    SourceEffectID = context.SourceEffectID,
+                    InvolvedElements = BuildElements(context.AttackElement)
                 });
             }
         }
@@ -78,6 +86,7 @@ public static class ReactionResolver
 
         string reactionName = null;
         ReactionType reactionType = ReactionType.None;
+        string reactedElement = null;
         if (context.CanTriggerReaction)
         {
             if (AmplifyingReactionHandler.TryResolve(context, out AmplifyingReactionResolution amplifying))
@@ -96,6 +105,7 @@ public static class ReactionResolver
                 {
                     reactionName = crystallize.DisplayName;
                     reactionType = ReactionType.Crystallize;
+                    reactedElement = crystallize.ReactedElement;
                 }
             }
             else if (TransformativeReactionHandler.TryResolve(
@@ -137,7 +147,8 @@ public static class ReactionResolver
                 DisplayName = bloomSecondary.DisplayName,
                 SourceEntity = context.SourceEntity,
                 Target = context.Target,
-                SourceEffectID = context.SourceEffectID
+                SourceEffectID = context.SourceEffectID,
+                InvolvedElements = BuildElements(context.AttackElement)
             });
         }
 
@@ -152,10 +163,20 @@ public static class ReactionResolver
                 DisplayName = reactionName,
                 SourceEntity = context.SourceEntity,
                 Target = context.Target,
-                SourceEffectID = context.SourceEffectID
+                SourceEffectID = context.SourceEffectID,
+                InvolvedElements = BuildElements(context.AttackElement, reactedElement)
             });
         }
 
+        return result;
+    }
+
+    private static List<string> BuildElements(params string[] elements)
+    {
+        var result = new List<string>();
+        if (elements == null) return result;
+        foreach (string element in elements)
+            if (!string.IsNullOrWhiteSpace(element) && !result.Contains(element)) result.Add(element);
         return result;
     }
 

@@ -222,8 +222,10 @@ namespace GenshinTurnBased.Tests.EditMode
             _kaeya.Entity.TakeDamage(90f, DamageSourceInfo.Create(_enemy, ReactionSourceKind.EnemySkill, "SK_Test", "SE_Test"));
             Assert.That(_kaeya.Entity.Shields.Count, Is.EqualTo(1));
 
-            // 模拟冷却结束（LastTriggerTurn 被推到 20 回合前；当前回合 turn=1，1-(-20)=21≥15）
-            _kaeyaC4.LastTriggerTurn = -20;
+            // 冷却按每条状态行动独立保存；把 C4 行动的运行态推到20回合前。
+            Assert.That(_kaeyaC4.ActionRuntime, Has.Count.EqualTo(1));
+            foreach (StatusActionRuntimeState runtime in _kaeyaC4.ActionRuntime.Values)
+                runtime.LastTriggerTurn = -20;
             _kaeya.Entity.Heal(100f);
             _kaeya.Entity.TakeDamage(90f, DamageSourceInfo.Create(_enemy, ReactionSourceKind.EnemySkill, "SK_Test", "SE_Test"));
 

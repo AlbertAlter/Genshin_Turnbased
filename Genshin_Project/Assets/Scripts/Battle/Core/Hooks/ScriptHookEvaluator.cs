@@ -3,10 +3,11 @@ using System.Text.RegularExpressions;
 /// <summary>
 /// ScriptHook 统一求值入口（术语：只有该特殊处理器返回真值时才触发该行行动）。
 ///  - 解析统一走 ScriptHookParser（函数名(参数)，ID大小写严格匹配）
+///  - 同一字段可用英文分号并列多个钩子，按填写顺序短路求值，全部为真才返回真
 ///  - 旧接口 Evaluate(hook, caster) / Evaluate(hook, caster, hitContext) 保留兼容
 ///  - 新接口 Evaluate(hook, ScriptHookContext) 供事件类钩子（Kill 等）使用
-///  - 事件驱动钩子（PreAlliesDamage / Kill(...)）不得在普通六阶段触发集合中执行：
-///    阶段循环用 IsEventDriven() 跳过；Kill 由 KillHookSystem 在死亡声明时单独驱动。
+///  - 事件驱动钩子（Pre/Post Damage / Kill(...)）不得在普通六阶段触发集合中执行；
+///    各事件系统在对应声明产生时单独驱动。
 /// 当前支持的钩子类型：
 ///   Check(角色ID_Cn/Tn)、HitLanded(效果ID2)、Kaeya_T2、Kaeya_C1、Kaeya_C4、Kill(角色/技能/效果)
 /// 后续新钩子类型在 EvaluateParsed 或对应角色钩子脚本中扩展。
@@ -23,17 +24,6 @@ public static class ScriptHookEvaluator
     public static bool Evaluate(string hook, BattleEntity caster, string hitContext)
     {
         if (string.IsNullOrEmpty(hook)) return true;
-        if (!ScriptHookParser.TryParse(hook, out string funcName, out string argStr))
-        {
-            LogManager.LogWarning(LogCategory.ScriptHook, $"无法解析的钩子格式: {hook}，视为不触发");
-            return false;
-        }
-        // 事件驱动钩子（PreAlliesDamage / Kill）不参与普通求值路径，由各自钩子机制单独触发
-        if (IsEventDrivenName(funcName))
-        {
-            LogManager.Log(LogCategory.ScriptHook, $"{funcName} 为事件驱动钩子，普通求值路径视为不触发");
-            return false;
-        }
         var context = new ScriptHookContext
         {
             Caster = caster,
@@ -42,7 +32,7 @@ public static class ScriptHookEvaluator
                 ? BattleManager.Instance.PendingActionTargetPositions
                 : null
         };
-        return EvaluateParsed(funcName, argStr, context);
+        return EvaluateAll(hook, context, false);
     }
 
     /// <summary>
@@ -52,38 +42,80 @@ public static class ScriptHookEvaluator
     public static bool Evaluate(string hook, ScriptHookContext context)
     {
         if (string.IsNullOrEmpty(hook)) return true;
-        if (!ScriptHookParser.TryParse(hook, out string funcName, out string argStr))
-        {
-            LogManager.LogWarning(LogCategory.ScriptHook, $"无法解析的钩子格式: {hook}，视为不触发");
-            return false;
-        }
-        if (IsEventDrivenName(funcName))
-        {
-            if (funcName == "Kill")
-            {
-                bool ok = context != null
-                    && context.DamageEvent != null
-                    && context.DamageEvent.CausedDeath
-                    && KillHookSystem.MatchesKillArgument(argStr, context.DamageEvent.Source);
-                LogManager.Log(LogCategory.ScriptHook, $"Kill({argStr}) → {ok}");
-                return ok;
-            }
-            return false;
-        }
-        return EvaluateParsed(funcName, argStr, context);
+        return EvaluateAll(hook, context, true);
     }
 
-    /// <summary>事件驱动钩子识别：PreAlliesDamage / Kill(...) 不得在普通阶段循环中执行。</summary>
+    static bool EvaluateAll(string hooks, ScriptHookContext context, bool allowEventContext)
+    {
+        if (!ScriptHookParser.TryParseAll(hooks, out var calls))
+        {
+            LogManager.LogWarning(LogCategory.ScriptHook, $"无法解析的钩子格式: {hooks}，视为不触发");
+            return false;
+        }
+        foreach (ScriptHookParser.HookCall call in calls)
+        {
+            bool ok;
+            if (IsEventDrivenName(call.FunctionName))
+            {
+                if (!allowEventContext)
+                {
+                    LogManager.Log(LogCategory.ScriptHook,
+                        $"{call.FunctionName} 为事件驱动钩子，普通求值路径视为不触发");
+                    return false;
+                }
+                ok = EvaluateEventHook(call.FunctionName, call.Argument, context);
+            }
+            else
+                ok = EvaluateParsed(call.FunctionName, call.Argument, context);
+
+            if (!ok)
+            {
+                LogManager.Log(LogCategory.ScriptHook,
+                    $"并列钩子未全部通过：{call.Text} 返回假，整组不触发");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>事件驱动钩子识别：Pre/Post Damage 与 Kill(...) 不得在普通阶段循环中执行。</summary>
     public static bool IsEventDriven(string hook)
     {
         if (string.IsNullOrEmpty(hook)) return false;
-        if (!ScriptHookParser.TryParse(hook, out string funcName, out _)) return false;
-        return IsEventDrivenName(funcName);
+        if (!ScriptHookParser.TryParseAll(hook, out var calls)) return false;
+        foreach (ScriptHookParser.HookCall call in calls)
+            if (IsEventDrivenName(call.FunctionName)) return true;
+        return false;
     }
 
     private static bool IsEventDrivenName(string funcName)
     {
-        return funcName == "PreAlliesDamage" || funcName == "Kill";
+        return funcName == "PreAlliesDamage"
+            || funcName == "PreSelfDamage"
+            || funcName == "PostAlliesDamage"
+            || funcName == "PostSelfDamage"
+            || funcName == "Kill";
+    }
+
+    static bool EvaluateEventHook(string funcName, string argStr, ScriptHookContext context)
+    {
+        bool eventMatches = context != null && context.EventHookName == funcName;
+        if (!eventMatches) return false;
+
+        if (funcName == "Kill")
+        {
+            bool ok = context.DamageEvent != null
+                && context.DamageEvent.CausedDeath
+                && KillHookSystem.MatchesKillArgument(argStr, context.DamageEvent.Source);
+            LogManager.Log(LogCategory.ScriptHook, $"Kill({argStr}) → {ok}");
+            return ok;
+        }
+
+        bool argumentMatches = string.IsNullOrEmpty(argStr)
+            || argStr == context.EventHookArgument;
+        LogManager.Log(LogCategory.ScriptHook,
+            $"{funcName}({argStr}) 事件上下文参数=[{context.EventHookArgument}] → {argumentMatches}");
+        return argumentMatches;
     }
 
     /// <summary>按函数名分发：通用钩子直接处理，角色专属钩子分派到对应角色钩子脚本。</summary>
@@ -95,6 +127,8 @@ public static class ScriptHookEvaluator
                 return EvalCheck(argStr, context != null ? context.Caster : null);
             case "HitLanded":
                 return EvalHit(argStr, context);
+            case "Hook":
+                return EvalWeaponHook(argStr, context);
             case "Kaeya_T2":
             case "Kaeya_C1":
             case "Kaeya_C4":
@@ -102,6 +136,29 @@ public static class ScriptHookEvaluator
             default:
                 // 未实现的钩子类型：返回非真值（不触发）是钩子接口的正常行为
                 LogManager.Log(LogCategory.ScriptHook, $"未实现的钩子类型: {funcName}（{funcName}({argStr})），视为不触发");
+                return false;
+        }
+    }
+
+    static bool EvalWeaponHook(string argStr, ScriptHookContext context)
+    {
+        BattleEntity owner = context?.Status?.WeaponContext?.Equipper ?? context?.Caster;
+        switch (argStr)
+        {
+            case "4300201":
+            {
+                BattleEntity target = context?.Target;
+                return target != null
+                    && (target.GetAura("Hydro") != null
+                        || target.GetAura("Cryo") != null
+                        || FrozenReactionHandler.IsFrozen(target));
+            }
+            case "4300301":
+                return owner != null && owner.TotalHP > 0f && owner.CurrentHP / owner.TotalHP > 0.9f;
+            case "4300501":
+                return UnityEngine.Random.value < 0.5f;
+            default:
+                LogManager.Log(LogCategory.ScriptHook, $"未实现的武器 Hook: Hook({argStr})，视为不触发");
                 return false;
         }
     }

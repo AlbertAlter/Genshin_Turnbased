@@ -336,9 +336,46 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void Swirl_IsNotClaimedAsFlowCoverageUntilHandlerExists()
+        [Timeout(5000)]
+        public void Swirl_UsesRealSkillEntryDealsDamageAndSpreadsAuraToAdjacentSlot()
         {
-            Assert.Ignore("ReactionType 已声明，但当前没有扩散 Handler；实现后必须改为真实技能入口测试。");
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.ConfigureAllyAction(
+                    0,
+                    "SK_Normal_Flow",
+                    "SE_Normal_Flow",
+                    "Pyro",
+                    "1*TotalATK,0,1",
+                    10);
+                env.ConfigureAllyAction(
+                    2,
+                    "SK_Skill_Flow",
+                    "SE_Skill_Flow",
+                    "Anemo",
+                    "1*TotalATK,0,1",
+                    10);
+                env.CreateMinimalBattle();
+                EnemyBattleController adjacent = env.CreateEnemy(2);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+
+                Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(879.36f).Within(0.01f));
+                Assert.That(env.Enemy.Entity.GetAura("Pyro"), Is.Null);
+                Assert.That(env.Enemy.Entity.GetAura("Anemo"), Is.Null);
+                ElementalAura propagated = adjacent.Entity.GetAura("Pyro");
+                Assert.That(propagated, Is.Not.Null);
+                Assert.That(propagated.AuraAmount, Is.EqualTo(1f).Within(0.0001f));
+                Assert.That(propagated.SourceEffectID, Is.EqualTo("SE_Skill_Flow"));
+                Assert.That(adjacent.Entity.CurrentHP, Is.EqualTo(1000f));
+            }
         }
 
         private static Shield GetCrystallizeShield(BattleEntity entity)

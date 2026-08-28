@@ -269,11 +269,22 @@ public class StatusActionData
     public string Param1;                // 执行的状态效果ID2列表（逗号分隔，如 STE_Bunny2,STE_Bunny4）
     public string Param2;                // 附加参数
     public string Param3;                // 附加参数
+    public string ScriptHook;            // 布尔条件钩子；事件字段匹配后再求值
+    public string OnAction;              // 主动行为类型过滤：Normal/Heavy/Skill/Burst/All
+    public string OutgoingHit;            // 状态拥有者主动命中过滤
+    public string OutgoingDamage;         // 状态拥有者实际造成伤害过滤
+    public string OnHit;                  // 状态拥有者被命中过滤
+    public string OnDamage;               // 状态拥有者实际损失生命过滤
+    public string OnHealFrom;             // 状态拥有者获得治疗来源过滤
+    public string WhenHealing;            // 状态拥有者实施治疗过滤
+    public string APUsed;                 // 行动点消耗过滤
+    public string ReactionTriggered;      // 反应类型过滤
+    [Obsolete("Use OutgoingHit/OutgoingDamage/OnHit/OnDamage filters")]
+    public string HitSource;              // 旧运行时构造兼容；工作簿不再读取此列
     public int MaxTimePerTurn;           // 每回合最大触发次数（0=不限）
     public int MaxTimePerLife;           // 全场最大触发次数（0=不限）
     public int Cooldown;                 // 行动冷却（回合，0=无）
-    public string HitSource;             // ActionType=OnHit时限定伤害来源效果ID2
-    public string ScriptHook;            // 条件钩子（如 Check(1009_C2)），返回假则不执行
+    public string ActionKey;              // 运行时稳定键（工作簿/Sheet/数据行），用于逐行计数和冷却
 }
 
 // ============================================================

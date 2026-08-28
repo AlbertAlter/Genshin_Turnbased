@@ -370,8 +370,8 @@ public class BattleInputController : MonoBehaviour
     //1234=四槽角色爆发（接口文档：能量符合要求时进入对应爆发目标选择，该角色无需出战，2026-08-14）
     private bool TryEnterBurstBySlot(BattleManager bm, int slot)
     {
-        if (bm == null || bm.Allies == null || slot <0 || slot >= bm.Allies.Count) return false;
-        var ally = bm.Allies[slot];
+        if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return false;
+        var ally = bm.GetAllyBySlot(slot);
         if (ally == null || ally.Entity == null || !ally.Entity.IsAlive) return false;
         string reason = ally.GetBlockReason(3);
         if (reason != null)
@@ -457,7 +457,7 @@ public class BattleInputController : MonoBehaviour
     public void UISwitchCharacter(int slot)
     {
         var bm = BattleManager.Instance;
-        if (bm == null || bm.Allies == null || slot < 0 || slot >= bm.Allies.Count) return;
+        if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return;
         if (bm.TrySwitchActiveAlly(slot))
         {
             if (_selecting) ExitSelecting();
