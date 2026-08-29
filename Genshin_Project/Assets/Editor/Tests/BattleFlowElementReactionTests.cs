@@ -37,6 +37,35 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
+        public void AmplifyingReaction_CompletesBeforeEachHitFinalCritRoll()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.ConfigureAllyAction(
+                    0, "SK_Normal_CritOrder", "SE_Normal_CritOrder",
+                    "Hydro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(
+                    2, "SK_Skill_CritOrder", "SE_Skill_CritOrder",
+                    "Pyro", "1*TotalATK,0,1", 10);
+                env.CreateMinimalBattle();
+                env.Ally.Entity.CritRate = 0.5f;
+                env.Ally.Entity.CritDMG = 1f;
+                var random = new SequenceBattleRandomSource(new[] { 0.9f, 0.1f });
+                BattleRandom.SetSource(random);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+
+                Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                // 第一 hit 未暴击50；第二 hit 先蒸发为75，再在最终阶段独立暴击为150。
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(800f).Within(0.01f));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
         public void Overloaded_DealsDerivedDamageToMainAndAdjacentAndConsumesBothAuras()
         {
             using (var env = new BattleFlowTestEnv())

@@ -33,7 +33,6 @@ public enum ReactionType
 public sealed class ReactionDamageComponents
 {
     public float SkillBaseDamage;
-    public float CriticalMultiplier = 1f;
     public float DamageBonusMultiplier = 1f;
     public float DefenseMultiplier = 1f;
     public float ResistanceMultiplier = 1f;

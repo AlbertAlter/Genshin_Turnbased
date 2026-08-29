@@ -405,7 +405,7 @@ public static class TargetResolver
     private static int ChooseIndex(TargetResolutionRequest request, int count)
     {
         if (count <= 1) return 0;
-        if (request.RandomIndex == null) return UnityEngine.Random.Range(0, count);
+        if (request.RandomIndex == null) return BattleRandom.NextInt(0, count);
         int index = request.RandomIndex(count);
         if (index < 0) index = 0;
         if (index >= count) index = count - 1;

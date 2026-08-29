@@ -107,7 +107,6 @@ public static class ReactionDamageCalculator
         float levelCoefficient,
         ReactionType reactionType,
         float totalEM,
-        float criticalMultiplier,
         float damageBonusMultiplier,
         float defenseMultiplier,
         float resistanceMultiplier)
@@ -122,7 +121,6 @@ public static class ReactionDamageCalculator
 
         float quickenBaseDamage = quickenMultiplier * levelCoefficient;
         return (skillBaseDamage + quickenBaseDamage * (1f + QuickenEMCoefficient(totalEM)))
-            * criticalMultiplier
             * damageBonusMultiplier
             * defenseMultiplier
             * resistanceMultiplier;
@@ -132,7 +130,6 @@ public static class ReactionDamageCalculator
         float skillBaseDamage,
         float levelCoefficient,
         ReactionType reactionType,
-        float criticalMultiplier,
         float damageBonusMultiplier,
         float defenseMultiplier,
         float resistanceMultiplier)
@@ -146,7 +143,6 @@ public static class ReactionDamageCalculator
             return 0f;
 
         return (skillBaseDamage + quickenMultiplier * levelCoefficient)
-            * criticalMultiplier
             * damageBonusMultiplier
             * defenseMultiplier
             * resistanceMultiplier;

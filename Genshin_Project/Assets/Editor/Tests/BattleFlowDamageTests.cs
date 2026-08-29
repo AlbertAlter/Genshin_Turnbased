@@ -50,6 +50,68 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
+        public void MultiHitMultiTarget_EachTargetHitUsesOneFinalIndependentCritRoll()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string effectID = "SE_Skill_CritSequence";
+                env.ConfigureAllyAction(2, "SK_Skill_CritSequence", effectID, "None", "1*TotalATK,0,0");
+                env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_2"][1].Hits2 =
+                    "1*TotalATK,0,0";
+                env.CreateMinimalBattle();
+                EnemyBattleController second = env.CreateEnemy(2);
+                env.Ally.Entity.CritRate = 0.5f;
+                env.Ally.Entity.CritDMG = 1f;
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+                env.Ally.ForcedTargetPositions.Add(2);
+                var random = new SequenceBattleRandomSource(
+                    new[] { 0.1f, 0.9f, 0.9f, 0.1f });
+                BattleRandom.SetSource(random);
+
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                // 每个单位分别承受一次暴击100和一次未暴击50；共四次独立抽取。
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(850f).Within(0.01f));
+                Assert.That(second.Entity.CurrentHP, Is.EqualTo(850f).Within(0.01f));
+                Assert.That(random.FloatCallCount, Is.EqualTo(4));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
+        public void Splash_UsesAttackerStatsAndRollsIndependentlyFromPrimaryTarget()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string effectID = "SE_Skill_SplashCrit";
+                env.ConfigureAllyAction(2, "SK_Skill_SplashCrit", effectID, "None", "1*TotalATK,0,0");
+                env.DataManager.SkillEffectDict[effectID].Param2 = "Splash(1; 0,1)";
+                env.CreateMinimalBattle();
+                EnemyBattleController adjacent = env.CreateEnemy(2);
+                env.Ally.Entity.CritRate = 0.5f;
+                env.Ally.Entity.CritDMG = 1f;
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+                env.Enemy.Entity.AddShield(1000f, string.Empty, 2f);
+                var random = new SequenceBattleRandomSource(new[] { 0.8f, 0.2f });
+                BattleRandom.SetSource(random);
+
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                // 主目标未暴击50且被护盾完全吸收；溅射仍发生，并用攻击者属性独立暴击为100。
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(1000f).Within(0.01f));
+                Assert.That(adjacent.Entity.CurrentHP, Is.EqualTo(900f).Within(0.01f));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
         public void Shield_ReportsAbsorptionSeparatelyFromActualHPDamage()
         {
             using (var env = new BattleFlowTestEnv())

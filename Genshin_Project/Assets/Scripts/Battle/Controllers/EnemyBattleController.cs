@@ -174,7 +174,7 @@ public partial class EnemyBattleController : MonoBehaviour
             return null;
         }
 
-        int roll = Random.Range(0, totalWeight);
+        int roll = BattleRandom.NextInt(0, totalWeight);
         int acc = 0;
         // [AI调试] 打印候选与随机数，确认跳舞是否进入候选
         if (LogManager.IsEnabled(LogCategory.AI))
@@ -352,7 +352,6 @@ public partial class EnemyBattleController : MonoBehaviour
             var damageComponents = new ReactionDamageComponents
             {
                 SkillBaseDamage = baseDmg,
-                CriticalMultiplier = 1f,
                 DamageBonusMultiplier = dmgBonusFactor,
                 DefenseMultiplier = defRes,
                 ResistanceMultiplier = resFactor
@@ -412,7 +411,7 @@ public partial class EnemyBattleController : MonoBehaviour
                 EffectExecutionID = effectExecutionID, AttackElement = "Anemo",
                 AttackAmount = hit.ElementAura, PreReactionDamage = damage,
                 DamageComponents = new ReactionDamageComponents
-                { SkillBaseDamage = baseDmg, CriticalMultiplier = 1f,
+                { SkillBaseDamage = baseDmg,
                   DamageBonusMultiplier = dmgBonusFactor, DefenseMultiplier = defRes,
                   ResistanceMultiplier = resFactor },
                 DamageType = eff.DamageType, PoiseDamage = hit.Poise

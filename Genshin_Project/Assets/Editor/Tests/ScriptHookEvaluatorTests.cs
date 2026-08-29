@@ -33,6 +33,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [SetUp]
         public void SetUp()
         {
+            BattleRandom.ResetSource();
             _casterObject = new GameObject("HookEval_Caster");
             _caster = _casterObject.AddComponent<BattleEntity>();
             _caster.EntityID = 1010;
@@ -43,6 +44,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [TearDown]
         public void TearDown()
         {
+            BattleRandom.ResetSource();
             Object.DestroyImmediate(_casterObject);
         }
 
@@ -66,6 +68,17 @@ namespace GenshinTurnBased.Tests.EditMode
         public void InvalidFormat_MissingRightParen_ReturnsFalse()
         {
             Assert.That(ScriptHookEvaluator.Evaluate("Check(1009_C2", _caster), Is.False);
+        }
+
+        [Test]
+        public void RandomWeaponHook_EachEvaluationUsesOneIndependentBattleRoll()
+        {
+            var random = new SequenceBattleRandomSource(new[] { 0.49f, 0.51f });
+            BattleRandom.SetSource(random);
+
+            Assert.That(ScriptHookEvaluator.Evaluate("Hook(4300501)", _caster), Is.True);
+            Assert.That(ScriptHookEvaluator.Evaluate("Hook(4300501)", _caster), Is.False);
+            Assert.That(random.FloatCallCount, Is.EqualTo(2));
         }
 
         // ---------- Check ----------

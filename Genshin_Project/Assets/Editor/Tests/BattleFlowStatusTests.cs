@@ -137,5 +137,61 @@ namespace GenshinTurnBased.Tests.EditMode
                 Assert.That(env.Enemy.Entity.GetStatus(statusID), Is.Null);
             }
         }
+
+        [Test]
+        [Timeout(9000)]
+        public void StatusDamage_EachTickUsesOneFinalIndependentCritRoll()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_BattleFlow_CritDot";
+                const string statusEffectID = "STE_BattleFlow_CritDot";
+                env.ConfigureStatus(statusID, actionType: "OnTrigger", actionEffectID2: statusEffectID);
+                env.ConfigureAllyAction(2, "SK_Skill_CritDot", "SE_Skill_CritDot", "None", null,
+                    apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
+                    addInPhase: (int)TurnPhase.AllyPostTurn,
+                    triggerPhase: (int)TurnPhase.AllyPostTurn);
+                env.DataManager.StatusEffectDict[statusEffectID] = new StatusEffectData
+                {
+                    StatusEffectID = 99000201,
+                    StatusEffectID2 = statusEffectID,
+                    EffectType = "Damage",
+                    Element = "None",
+                    DamageType = "Skill",
+                    TargetType = "Enemy",
+                    TargetSelect = "1,1"
+                };
+                env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_2"] =
+                    new System.Collections.Generic.Dictionary<int, SkillLevelData>
+                    {
+                        [1] = new SkillLevelData
+                        {
+                            CharacterID = BattleFlowTestEnv.AllyID,
+                            SkillType = 2,
+                            SkillLevel = 1,
+                            ParamID = statusEffectID,
+                            Hits1 = "1*TotalATK,0,0"
+                        }
+                    };
+                env.CreateMinimalBattle();
+                env.Ally.Entity.CritRate = 0.5f;
+                env.Ally.Entity.CritDMG = 1f;
+                var random = new SequenceBattleRandomSource(new[] { 0.2f, 0.8f });
+                BattleRandom.SetSource(random);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(900f).Within(0.01f));
+
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(850f).Within(0.01f));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2));
+            }
+        }
     }
 }

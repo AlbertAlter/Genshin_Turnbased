@@ -312,6 +312,7 @@ public class BattleManager : MonoBehaviour
         KillHookSystem.ClearAll();
         BattleEntity._applyOrderCounter = 0;
         ReactionResolver.ResetSession();
+        BattleRandom.ResetSource();
 
         ClearRegisteredEntityRuntimeState();
         UnregisterAll();

@@ -111,8 +111,9 @@ public partial class CharacterBattleController
         foreach (var target in targets)
         {
             // 多段：每个 hit 完整结算（伤害/暴击/护盾/附着/削韧/OnHit）后才进入下一 hit；目标死亡后后续 hit 不再结算
-            foreach (var hit in hits)
+            for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
             {
+                HitData hit = hits[hitIndex];
                 if (!target.IsAlive) break;
 
                 float damage = CalculateDamage(
@@ -144,8 +145,20 @@ public partial class CharacterBattleController
                 if (reaction.HasReaction)
                     LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击 {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
 
-                // 护盾吸收
-                float finalDamage = target.AbsorbDamageWithShield(reaction.FinalDamage, eff.Element);
+                // 最终暴击：基础伤害、增伤、防御、抗性和反应全部结算后，
+                // 每个 hit、每个实际目标独立抽取一次；随后才进入护盾与扣血。
+                CriticalHitResult primaryCritical = ResolveFinalCriticalDamage(
+                    reaction.FinalDamage,
+                    target,
+                    eff.SkillEffectID2,
+                    GetExecutingSkillID2(skillType),
+                    skillType,
+                    eff.Element,
+                    hitIndex + 1,
+                    "技能直伤");
+                float finalDamage = target.AbsorbDamageWithShield(
+                    primaryCritical.DamageAfterCritical,
+                    eff.Element);
                 // 带来源扣血（2026-08-19）：角色直伤统一入口；反应主命中（蒸发/融化/激化等）标注对应反应类型
                 ReactionType mainReactionType = reaction != null && reaction.HasReaction
                     ? reaction.TriggeredReactions[0].Type
@@ -158,10 +171,12 @@ public partial class CharacterBattleController
                 PoiseSystem.ApplyPoiseDamage(target, hit.Poise, finalDamage, Entity);
                 ReactionEffectExecutor.ExecuteDerivedHits(reaction);
 
-                // 溅射（Splash(n; L,R)）：以该 hit 主目标为原点，左右各扩展 L/R 位，
-                // 溅射目标受到主目标实际伤害 × n（继承暴击/加成结果，不独立判定）；
+                // 溅射（Splash(n; L,R)）：以该 hit 主目标为原点，左右各扩展 L/R 位。
+                // 是否发生只由 Param2 中是否存在有效 Splash 配置决定，不受主目标暴击、护盾或实际掉血影响。
+                // 溅射以主目标本次反应结算后的未暴击伤害为基准；每个溅射单位独立判定暴击，
+                // 不继承主目标的暴击结果，也不读取受击者自身的暴击属性。
                 // 每 1 hit 的主目标结算完（含溅射）才进入下一 hit
-                if (finalDamage > 0f && TryParseSplash(eff.Param2, out float splashRate, out int splashL, out int splashR))
+                if (TryParseSplash(eff.Param2, out float splashRate, out int splashL, out int splashR))
                 {
                     int origin = target.Position != null ? target.Position.SlotIndex : -1;
                     if (origin >= 0)
@@ -175,17 +190,25 @@ public partial class CharacterBattleController
                             var slot = bm != null && bm.Field != null ? bm.Field.GetSlot(BattleSide.Enemy, pos) : null;
                             if (slot == null || !slot.IsOccupied || slot.Occupant == null || !slot.Occupant.IsAlive) continue;
                             var splashTarget = slot.Occupant;
-                            // 溅射伤害 = 主目标该hit实际伤害 × 倍率（乘倍率）
-                            float splashDmg = finalDamage * splashRate;
-                            // 溅射目标【独立暴击判定】：每个敌人每次伤害单独 roll，不能三个目标共用一次暴击
-                            float splashCritRate = Mathf.Clamp(splashTarget.CritRate + splashTarget.GetStatusCritRate("", "", 0, "", splashTarget), 0f, 1f);
-                            float splashCritMult = 1f;
-                            if (UnityEngine.Random.value < splashCritRate)
-                                splashCritMult = 1f + splashTarget.CritDMG;
-                            float splashFinal = splashTarget.AbsorbDamageWithShield(splashDmg * splashCritMult, eff.Element);
+                            float splashDmgBeforeCritical = reaction.FinalDamage * splashRate;
+                            CriticalHitResult splashCritical = ResolveFinalCriticalDamage(
+                                splashDmgBeforeCritical,
+                                splashTarget,
+                                eff.SkillEffectID2,
+                                GetExecutingSkillID2(skillType),
+                                skillType,
+                                eff.Element,
+                                hitIndex + 1,
+                                "技能溅射");
+                            float splashFinal = splashTarget.AbsorbDamageWithShield(
+                                splashCritical.DamageAfterCritical,
+                                eff.Element);
                             splashTarget.TakeDamage(splashFinal, DamageSourceInfo.Create(
                                 Entity, ReactionSourceKind.CharacterSkill, GetExecutingSkillID2(skillType), eff.SkillEffectID2, mainReactionType));
-                            LogManager.Log(LogCategory.Splash, $"{target.EntityID} -> {splashTarget.EntityID} : {splashFinal:F1} (基础{splashDmg:F1}={finalDamage:F1}×{splashRate}, {(splashCritMult > 1f ? $"暴击x{splashCritMult:F2}" : "未暴击")})");
+                            LogManager.Log(LogCategory.Splash,
+                                $"hit#{hitIndex + 1} {target.EntityID} -> {splashTarget.EntityID} : {splashFinal:F1} " +
+                                $"(暴击前{splashDmgBeforeCritical:F1}={reaction.FinalDamage:F1}×{splashRate}, " +
+                                $"{(splashCritical.IsCritical ? $"暴击x{splashCritical.Multiplier:F2}" : "未暴击")})");
                         }
                     }
                 }
@@ -199,8 +222,9 @@ public partial class CharacterBattleController
     private void ExecuteAnemoDamage(SkillEffectData eff, int skillType, List<HitData> hits,
         float baseValue, List<BattleEntity> targets, long effectExecutionID)
     {
-        foreach (HitData hit in hits)
+        for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
         {
+            HitData hit = hits[hitIndex];
             var contexts = new List<ReactionContext>();
             foreach (BattleEntity target in targets)
             {
@@ -231,7 +255,18 @@ public partial class CharacterBattleController
                 ReactionContext context = contexts[index];
                 ReactionResult primaryReaction = primaryReactions[index];
                 BattleEntity target = context.Target;
-                float finalDamage = target.AbsorbDamageWithShield(context.PreReactionDamage, "Anemo");
+                CriticalHitResult critical = ResolveFinalCriticalDamage(
+                    primaryReaction.FinalDamage,
+                    target,
+                    eff.SkillEffectID2,
+                    GetExecutingSkillID2(skillType),
+                    skillType,
+                    "Anemo",
+                    hitIndex + 1,
+                    "风元素直伤");
+                float finalDamage = target.AbsorbDamageWithShield(
+                    critical.DamageAfterCritical,
+                    "Anemo");
                 target.TakeDamage(finalDamage, DamageSourceInfo.Create(Entity,
                     ReactionSourceKind.CharacterSkill, GetExecutingSkillID2(skillType), eff.SkillEffectID2,
                     ReactionType.None));
@@ -239,7 +274,7 @@ public partial class CharacterBattleController
                 PoiseSystem.ApplyPoiseDamage(target, hit.Poise, finalDamage, Entity);
                 ReactionEffectExecutor.ExecuteDerivedHits(primaryReaction);
                 LogManager.Log(LogCategory.Damage,
-                    $"{Entity.EntityID} 攻击 {target.EntityID} : {finalDamage:F1} | Anemo | 削韧 {hit.Poise}");
+                    $"hit#{hitIndex + 1} {Entity.EntityID} 攻击 {target.EntityID} : {finalDamage:F1} | Anemo | 削韧 {hit.Poise}");
             }
             SwirlBatchResult swirl = SwirlReactionHandler.ResolvePreparedBatch(prepared);
             StatusOnHitHookSystem.NotifyReactions(swirl.Reaction.TriggeredReactions);
@@ -740,7 +775,8 @@ public partial class CharacterBattleController
 
     /// <summary>
     /// 解析 Param2 的 Splash 参数（格式：Splash(倍率; 左扩展, 右扩展)，如 Splash(0.5; 1,1)）。
-    /// 溅射伤害 = 主目标实际伤害 × 倍率，向目标位置左右各扩展指定位数。
+    /// 溅射暴击前伤害 = 主目标本 hit 反应结算后的未暴击伤害 × 倍率；
+    /// 每个溅射目标随后使用攻击者属性独立进行最终暴击判定。
     /// </summary>
     static bool TryParseSplash(string param2, out float rate, out int left, out int right)
     {
@@ -909,8 +945,8 @@ public partial class CharacterBattleController
     }
 
     // ================================================================
-    //  伤害公式（非反应版）
-    //  配表术语 1.1: BaseDMG × (1+CritDMG) × (1+DMGBonus) × DEFRes × Res
+    //  暴击前直伤公式（反应系统会在此结果上继续结算）
+    //  最终暴击统一由 ResolveFinalCriticalDamage 在每 hit、每目标的护盾结算前执行。
     // ================================================================
     float CalculateDamage(
         float baseValue,
@@ -922,17 +958,6 @@ public partial class CharacterBattleController
     {
         // 基础伤害
         float baseDMG = baseValue * hit.Multiplier;
-
-        // 暴击判定（配表术语：暴击时取 (1+CritDMG)，不暴击取 1）
-        // 每个敌人每个 hit 单独判定；CritRate 含状态加成（按 ApplyString/ApplyDamageType/ApplyElementType 过滤）
-        float critMult = 1f;
-        float critRate = Mathf.Clamp(Entity.CritRate + Entity.WeaponCritRate + Entity.GetStatusCritRate(eff.SkillEffectID2, GetExecutingSkillID2(skillType), skillType, eff.Element, target), 0f, 1f);
-        float critRoll = UnityEngine.Random.value;
-        if (critRoll < critRate)
-        {
-            critMult = 1f + Entity.CritDMG + Entity.WeaponCritDMG;
-        }
-        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.SkillEffectID2, GetExecutingSkillID2(skillType), skillType, eff.Element, target):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
 
         // 增伤区（配表术语 1.8）
         float dmgBonus = 1f + Entity.DMGBonus + GetElementBonus(eff.Element)
@@ -969,12 +994,50 @@ public partial class CharacterBattleController
         components = new ReactionDamageComponents
         {
             SkillBaseDamage = baseDMG,
-            CriticalMultiplier = critMult,
             DamageBonusMultiplier = dmgBonus,
             DefenseMultiplier = defRes,
             ResistanceMultiplier = resMultiplier
         };
-        return baseDMG * critMult * dmgBonus * defRes * resMultiplier;
+        return baseDMG * dmgBonus * defRes * resMultiplier;
+    }
+
+    /// <summary>
+    /// 每个 hit、每个实际受击单位的最终暴击入口。状态暴击率只求值一次，
+    /// 结算与日志复用同一个结果，概率型 ScriptHook 不会因日志再次抽取。
+    /// </summary>
+    CriticalHitResult ResolveFinalCriticalDamage(
+        float damageBeforeCritical,
+        BattleEntity target,
+        string effectID2,
+        string skillID2,
+        int skillType,
+        string element,
+        int hitNumber,
+        string damageChannel)
+    {
+        float statusCritRate = Entity.GetStatusCritRate(
+            effectID2,
+            skillID2,
+            skillType,
+            element,
+            target);
+        float critRate = Mathf.Clamp(
+            Entity.CritRate + Entity.WeaponCritRate + statusCritRate,
+            0f,
+            1f);
+        CriticalHitResult result = CriticalHitResolver.Resolve(
+            damageBeforeCritical,
+            critRate,
+            Entity.CritDMG + Entity.WeaponCritDMG);
+
+        LogManager.Log(
+            LogCategory.Crit,
+            $"{damageChannel} 最终暴击 | hit#{hitNumber} | 目标={target?.EntityID} | " +
+            $"暴击前={result.DamageBeforeCritical:F1} | 率={result.CriticalRate:P1}" +
+            $"(角色{Entity.CritRate:P1}+武器{Entity.WeaponCritRate:P1}+状态{statusCritRate:P1}) | " +
+            $"随机={result.Roll:F4} → {(result.IsCritical ? $"暴击 x{result.Multiplier:F2}" : "未暴击")} | " +
+            $"暴击后={result.DamageAfterCritical:F1}");
+        return result;
     }
 
     float GetElementBonus(string element)

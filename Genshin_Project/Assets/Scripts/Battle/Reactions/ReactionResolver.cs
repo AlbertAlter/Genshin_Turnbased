@@ -20,7 +20,6 @@ public static class ReactionResolver
         _effectExecutionCounter = 0;
         ReactionStateSystem.ClearAll();
         BloomCoreSystem.ClearAll();
-        BloomSecondaryReactionHandler.ResetRandomIndexProvider();
     }
 
     public static ReactionResult Resolve(ReactionContext context)

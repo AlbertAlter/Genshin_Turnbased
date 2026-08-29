@@ -272,8 +272,9 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
 
                 foreach (var target in targets)
                 {
-                    foreach (var hit in hits)
+                    for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
                     {
+                        HitData hit = hits[hitIndex];
                         if (!target.IsAlive) break;
                         float damage = CalculateStatusDamage(
                             baseValue,
@@ -301,7 +302,18 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
                         StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
                         if (reaction.HasReaction)
                             LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
-                        float final = target.AbsorbDamageWithShield(reaction.FinalDamage, statusEff.Element);
+                        CriticalHitResult critical = ResolveFinalCriticalDamage(
+                            reaction.FinalDamage,
+                            target,
+                            statusEff.StatusEffectID2,
+                            string.Empty,
+                            stSkillType,
+                            statusEff.Element,
+                            hitIndex + 1,
+                            "状态直伤");
+                        float final = target.AbsorbDamageWithShield(
+                            critical.DamageAfterCritical,
+                            statusEff.Element);
                         // 带来源扣血（2026-08-19）：状态伤害统一入口（来源=状态施放者）
                         target.TakeDamage(final, DamageSourceInfo.Create(
                             sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity,
@@ -313,7 +325,8 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
                         PoiseSystem.ApplyPoiseDamage(target, hit.Poise, final,
                             sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity);
                         ReactionEffectExecutor.ExecuteDerivedHits(reaction);
-                        LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} : {final:F1}");
+                        LogManager.Log(LogCategory.StatusDamage,
+                            $"hit#{hitIndex + 1} {statusEff.StatusEffectID2} -> {target.EntityID} : {final:F1}");
                     }
                 }
                 break;
@@ -581,8 +594,9 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
     {
         BattleEntity source = sourceStatus != null && sourceStatus.Caster != null
             ? sourceStatus.Caster : Entity;
-        foreach (HitData hit in hits)
+        for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
         {
+            HitData hit = hits[hitIndex];
             var contexts = new List<ReactionContext>();
             foreach (BattleEntity target in targets)
             {
@@ -611,7 +625,18 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
             {
                 ReactionContext context = contexts[index];
                 ReactionResult primaryReaction = primaryReactions[index];
-                float finalDamage = context.Target.AbsorbDamageWithShield(context.PreReactionDamage, "Anemo");
+                CriticalHitResult critical = ResolveFinalCriticalDamage(
+                    primaryReaction.FinalDamage,
+                    context.Target,
+                    statusEff.StatusEffectID2,
+                    string.Empty,
+                    skillType,
+                    "Anemo",
+                    hitIndex + 1,
+                    "风元素状态直伤");
+                float finalDamage = context.Target.AbsorbDamageWithShield(
+                    critical.DamageAfterCritical,
+                    "Anemo");
                 context.Target.TakeDamage(finalDamage, DamageSourceInfo.Create(source,
                     ReactionSourceKind.StatusEffect, string.Empty, statusEff.StatusEffectID2,
                     ReactionType.None));
@@ -633,13 +658,6 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
         out ReactionDamageComponents components)
     {
         float baseDMG = baseValue * hit.Multiplier;
-
-        float critMult = 1f;
-        float critRate = Mathf.Clamp(Entity.CritRate + Entity.WeaponCritRate + Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element, target), 0f, 1f);
-        float critRoll = UnityEngine.Random.value;
-        if (critRoll < critRate)
-            critMult = 1f + Entity.CritDMG + Entity.WeaponCritDMG;
-        LogManager.Log(LogCategory.Crit, $"率={critRate:P0}(基础{Entity.CritRate:P0}+状态{Entity.GetStatusCritRate(eff.StatusEffectID2, "", skillType, eff.Element, target):P0}) 随机={critRoll:F4} → {(critRoll < critRate ? $"暴击 x{critMult:F2}" : "未暴击")}");
 
         float dmgBonus = 1f + Entity.DMGBonus + GetElementBonus(eff.Element)
             + Entity.GetStatusDMGBonus(eff.StatusEffectID2, "", skillType, eff.Element, target);
@@ -671,11 +689,10 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
         components = new ReactionDamageComponents
         {
             SkillBaseDamage = baseDMG,
-            CriticalMultiplier = critMult,
             DamageBonusMultiplier = dmgBonus,
             DefenseMultiplier = defRes,
             ResistanceMultiplier = resMultiplier
         };
-        return baseDMG * critMult * dmgBonus * defRes * resMultiplier;
+        return baseDMG * dmgBonus * defRes * resMultiplier;
     }
 }

@@ -349,7 +349,7 @@ namespace GenshinTurnBased.Tests.EditMode
             ReactionStateSystem.SetDisplayAdapter(null);
             BloomCoreSystem.ClearAll();
             ReactionResolver.ResetSession();
-            BloomSecondaryReactionHandler.ResetRandomIndexProvider();
+            BattleRandom.ResetSource();
             BattleEntity._applyOrderCounter = 0;
         }
     }

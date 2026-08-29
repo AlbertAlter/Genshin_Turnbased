@@ -156,7 +156,13 @@ public static class ScriptHookEvaluator
             case "4300301":
                 return owner != null && owner.TotalHP > 0f && owner.CurrentHP / owner.TotalHP > 0.9f;
             case "4300501":
-                return UnityEngine.Random.value < 0.5f;
+            {
+                float roll = BattleRandom.NextFloat01();
+                bool triggered = roll < 0.5f;
+                LogManager.Log(LogCategory.ScriptHook,
+                    $"Hook(4300501) 独立概率判定：率=50.0% 随机={roll:F4} → {(triggered ? "触发" : "不触发")}");
+                return triggered;
+            }
             default:
                 LogManager.Log(LogCategory.ScriptHook, $"未实现的武器 Hook: Hook({argStr})，视为不触发");
                 return false;

@@ -18,6 +18,7 @@ namespace GenshinTurnBased.Tests.EditMode
         public void SetUp()
         {
             ReactionResolver.ResetSession();
+            BattleRandom.ResetSource();
             _battle = NewObject("BloomSecondary_BattleManager").AddComponent<BattleManager>();
             _coreCreator = NewEntity("BloomSecondary_Creator", BattleSide.Ally, 1);
             _coreCreator.Type = BattleEntity.EntityType.Character;
@@ -38,6 +39,7 @@ namespace GenshinTurnBased.Tests.EditMode
         public void TearDown()
         {
             ReactionResolver.ResetSession();
+            BattleRandom.ResetSource();
             foreach (GameObject gameObject in _objects)
                 Object.DestroyImmediate(gameObject);
             _objects.Clear();
@@ -48,9 +50,8 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             CreateCore(101);
             CreateCore(102);
-            int nextTarget = 0;
-            BloomSecondaryReactionHandler.SetRandomIndexProvider(
-                count => nextTarget++ % count);
+            BattleRandom.SetSource(new SequenceBattleRandomSource(
+                intValues: new[] { 0, 1, 2, 0, 1, 2, 0, 1, 2, 0 }));
 
             bool triggered = BloomSecondaryReactionHandler.TryResolve(
                 TriggerContext("Electro", 200),
