@@ -4,12 +4,13 @@ using UnityEngine;
 
 public sealed class RoguelikeSavePaths
 {
+    public const string ProjectSaveDirectoryName = "SaveData";
     public const string SaveDirectoryName = "RoguelikeSaves";
     public string RootDirectory { get; private set; }
     public string ActiveRunPath { get { return Path.Combine(RootDirectory, "active_run.json"); } }
 
     public RoguelikeSavePaths()
-        : this(Path.Combine(Application.persistentDataPath, SaveDirectoryName))
+        : this(Path.Combine(Application.dataPath, ProjectSaveDirectoryName, SaveDirectoryName))
     {
     }
 

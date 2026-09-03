@@ -135,6 +135,11 @@ public sealed class RoguelikeSaveService
 
         var snapshot = RoguelikeSaveJson.DeepClone(entryResult.Data.Snapshot);
         snapshot.CurrentChapterId = entryChapterId;
+        for (int i = 0; i < snapshot.CharacterVitals.Count; i++)
+        {
+            snapshot.CharacterVitals[i].CurrentHealth = snapshot.CharacterVitals[i].MaxHealth;
+            snapshot.CharacterVitals[i].CurrentEnergy = snapshot.CharacterVitals[i].MaxEnergy;
+        }
 
         var activeRun = new ActiveRunSaveData
         {

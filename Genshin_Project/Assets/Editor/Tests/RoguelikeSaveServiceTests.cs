@@ -95,6 +95,10 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(permanent.Data.Snapshot.CurrentChapterId, Is.EqualTo(1));
             Assert.That(permanent.Data.Snapshot.Characters[0].Level, Is.EqualTo(21));
             Assert.That(permanent.Data.Snapshot.Characters[0].SkillLevels[0], Is.EqualTo(2));
+            Assert.That(active.Data.Snapshot.CharacterVitals[0].CurrentHealth, Is.EqualTo(1000f));
+            Assert.That(active.Data.Snapshot.CharacterVitals[0].CurrentEnergy, Is.EqualTo(80f));
+            Assert.That(permanent.Data.Snapshot.CharacterVitals[0].CurrentHealth, Is.EqualTo(799f));
+            Assert.That(permanent.Data.Snapshot.CharacterVitals[0].CurrentEnergy, Is.EqualTo(31f));
         }
 
         [Test]

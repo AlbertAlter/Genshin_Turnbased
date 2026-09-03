@@ -25,7 +25,7 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void CharacterProfile_AllFieldsRoundTrip()
+        public void ChapterRuntimeData_AllFieldsRoundTrip()
         {
             var save = RoguelikeSaveTestFactory.ChapterEntry(2, 1, 2);
 
@@ -36,9 +36,17 @@ namespace GenshinTurnBased.Tests.EditMode
             var character = loaded.Data.Snapshot.Characters[0];
             Assert.That(character.CharacterID, Is.EqualTo(1009));
             Assert.That(character.Level, Is.EqualTo(22));
+            Assert.That(character.Experience, Is.EqualTo(102));
+            Assert.That(character.Ascension, Is.EqualTo(2));
             Assert.That(character.ConstellationLevel, Is.EqualTo(2));
-            Assert.That(character.IsAscended, Is.False);
             Assert.That(character.SkillLevels, Is.EqualTo(new[] { 3, 4, 5, 6 }));
+            Assert.That(character.EquippedWeaponInstanceId, Is.EqualTo("weapon-1"));
+            Assert.That(character.EquippedArtifacts[0].ArtifactInstanceId, Is.EqualTo("artifact-1"));
+            Assert.That(loaded.Data.Snapshot.CharacterVitals[0].CurrentHealth, Is.EqualTo(798f));
+            Assert.That(loaded.Data.Snapshot.PartyCharacterIds, Is.EqualTo(new[] { 1009 }));
+            Assert.That(loaded.Data.Snapshot.Inventory.Items[0].Quantity, Is.EqualTo(1002));
+            Assert.That(loaded.Data.Snapshot.Inventory.Weapons[0].Weapon.WeaponID, Is.EqualTo(15001));
+            Assert.That(loaded.Data.Snapshot.Inventory.Artifacts[0].Artifact.Slot, Is.EqualTo(ArtifactSlot.Flower));
         }
 
         [Test]
