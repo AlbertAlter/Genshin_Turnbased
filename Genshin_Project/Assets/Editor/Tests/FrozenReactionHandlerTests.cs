@@ -117,6 +117,19 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void CanShatter_RejectsElementalHitsOtherThanGeo()
+        {
+            ReactionStateSystem.SetEntityState(
+                _target, ReactionType.Frozen, 1,
+                ReactionSourceSnapshot.Capture(NewContext("Hydro", 1f, 100f)), -1, true, 1f);
+
+            Assert.That(FrozenReactionHandler.CanShatter(
+                NewContext("Pyro", 1f, 100f)), Is.False);
+            Assert.That(FrozenReactionHandler.CanShatter(
+                NewContext("Geo", 1f, 100f)), Is.True);
+        }
+
+        [Test]
         public void LowerPoiseHit_UsesNormalPoiseCalculationWithoutRemovingFreeze()
         {
             ReactionStateSystem.SetEntityState(

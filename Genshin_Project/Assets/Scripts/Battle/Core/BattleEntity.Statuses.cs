@@ -46,6 +46,21 @@ public partial class BattleEntity
 
     public StatusInstance AddStatus(string statusID2, BattleEntity caster, int duration, int addInPhase, int triggerPhase, StatusMainData mainData, WeaponRuntimeContext weaponContext)
     {
+        // 敌方 Shield 状态采用“后施加者覆盖前者”，包括同 ID 重放。
+        // 统一走 RemoveStatus，确保旧状态的绑定、钩子和元素盾一并清理。
+        if (IsEnemyShieldStatus(mainData))
+        {
+            var oldShieldStatuses = new List<StatusInstance>();
+            foreach (StatusInstance status in StatusDict.Values)
+            {
+                if (status != null && IsEnemyShieldStatus(status.MainData))
+                    oldShieldStatuses.Add(status);
+            }
+            oldShieldStatuses.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
+            foreach (StatusInstance status in oldShieldStatuses)
+                RemoveStatus(status.StatusID2, -1);
+        }
+
         if (StatusDict.TryGetValue(statusID2, out var existing))
         {
             // 已存在：按 MaxStack / WhenMax 规则处理
@@ -68,6 +83,7 @@ public partial class BattleEntity
                     PreDamageHookSystem.UnregisterPreDamageHook(existing);
                     // Kill 钩子注销（2026-08-19）：覆盖重建时旧实例不再参与死亡触发
                     KillHookSystem.Unregister(existing);
+                    RemoveShieldOwnedByStatus(existing);
                     StatusDict.Remove(statusID2);
                     existing = null;
                 }
@@ -80,6 +96,7 @@ public partial class BattleEntity
                 existing.TriggerPhase = triggerPhase;
                 existing.MainData = mainData;
                 if (weaponContext != null) existing.WeaponContext = weaponContext;
+                RefreshShieldOwnedByStatus(existing);
                 return existing;
             }
         }
@@ -151,6 +168,7 @@ public partial class BattleEntity
             PreDamageHookSystem.UnregisterPreDamageHook(existing);
             // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
             KillHookSystem.Unregister(existing);
+            RemoveShieldOwnedByStatus(existing);
             StatusDict.Remove(statusID2);
             return true;
         }
@@ -399,5 +417,12 @@ public partial class BattleEntity
     {
         StatusDict.TryGetValue(statusID2, out var inst);
         return inst;
+    }
+
+    private bool IsEnemyShieldStatus(StatusMainData mainData)
+    {
+        return Type == EntityType.Enemy
+            && mainData != null
+            && string.Equals(mainData.StatusType, "Shield", StringComparison.OrdinalIgnoreCase);
     }
 }

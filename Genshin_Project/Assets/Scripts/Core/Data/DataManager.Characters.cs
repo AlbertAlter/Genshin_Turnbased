@@ -32,6 +32,17 @@ public partial class DataManager
         }
     }
 
+    static int FindColumnByHeader(ExcelWorksheet sheet, string header, int fallback)
+    {
+        if (sheet?.Dimension == null) return fallback;
+        for (int column = 1; column <= sheet.Dimension.End.Column; column++)
+        {
+            if (string.Equals(sheet.Cells[1, column].Text.Trim(), header, StringComparison.OrdinalIgnoreCase))
+                return column;
+        }
+        return fallback;
+    }
+
     // ================================================================
     //  Characters/{id}_{name}.xlsx 全部 sheets
     //  跳过 0_ 开头的模板文件；跳过 CharacterID 为 0 的空行
@@ -44,7 +55,10 @@ public partial class DataManager
         foreach (string f in files)
         {
             string fileName = Path.GetFileNameWithoutExtension(f);
-            if (fileName.StartsWith("0_")) continue; // 跳过模板
+            if (fileName.StartsWith("#", StringComparison.Ordinal) ||
+                fileName.StartsWith("~$", StringComparison.Ordinal) ||
+                fileName.StartsWith("0_", StringComparison.Ordinal))
+                continue;
             try
             {
                 using var pkg = new ExcelPackage(new FileInfo(f));
@@ -155,6 +169,8 @@ public partial class DataManager
                 var skillSheet = sheets["Skills"];
                 if (skillSheet != null)
                 {
+                    int iconColumn = FindColumnByHeader(skillSheet, "Icon", -1);
+                    int descriptionColumn = FindColumnByHeader(skillSheet, "Description", 11);
                     int startRow = GetDataStartRow(skillSheet);
                     int maxRow = GetSheetMaxRow(skillSheet);
                     int charId = 0;
@@ -174,7 +190,8 @@ public partial class DataManager
                             InitialCharge = SafeGetInt(skillSheet.Cells[row, 8].Value),
                             SkillPhase = SafeGetInt(skillSheet.Cells[row, 9].Value),
                             ActionType = skillSheet.Cells[row, 10].Text,
-                            Description = skillSheet.Cells[row, 11].Text
+                            Icon = iconColumn > 0 ? skillSheet.Cells[row, iconColumn].Text.Trim() : string.Empty,
+                            Description = skillSheet.Cells[row, descriptionColumn].Text
                         };
                         // 角色ID = SkillID / 100（SkillID规则：角色ID + 从01开始的两位序号，如 1009 -> 100901）
                         if (charId == 0 && data.SkillID != 0) charId = data.SkillID / 100;

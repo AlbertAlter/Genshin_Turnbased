@@ -51,6 +51,9 @@ public partial class DataManager : Singleton<DataManager>
     // ========== Reaction ==========
     public Dictionary<int, float> ReactionLevelCoefficientDict = new Dictionary<int, float>();
 
+    // ========== Enemy elemental shield ==========
+    public EnemyShieldRuleTable EnemyShieldRules = new EnemyShieldRuleTable();
+
     // ========== Stage ==========
     public Dictionary<int, StageConfigData> StageConfigDict = new Dictionary<int, StageConfigData>();
 

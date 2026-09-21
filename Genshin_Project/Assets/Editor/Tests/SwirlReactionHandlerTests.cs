@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -184,6 +185,28 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(result.Reaction.HasReaction, Is.False);
             Assert.That(target.CurrentHP, Is.EqualTo(10000f));
             Assert.That(target.GetAura("Anemo"), Is.Null);
+        }
+
+        [Test]
+        public void ResolveStageThree_SplitsElectroBetweenSuperconductAndQuickenSimultaneously()
+        {
+            BattleEntity target = NewEntity("Swirl_StageThree", BattleSide.Enemy, 2);
+            target.ApplyAura("Cryo", 2f, 1);
+            target.ApplyAura("Dendro", 2f, 1);
+            target.ApplyAura("Electro", 2f, 1);
+            ReactionContext source = NewContext(target, 1f, 100);
+            var aggregate = new ReactionResult();
+
+            typeof(SwirlReactionHandler)
+                .GetMethod("ResolveStageThree", BindingFlags.Static | BindingFlags.NonPublic)
+                .Invoke(null, new object[] { target, source, aggregate });
+
+            Assert.That(target.GetAura("Electro"), Is.Null);
+            Assert.That(target.GetAura("Cryo").AuraAmount, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(target.GetAura("Dendro").AuraAmount, Is.EqualTo(1f).Within(0.001f));
+            Assert.That(aggregate.TriggeredReactions.Exists(x => x.Type == ReactionType.Superconduct), Is.True);
+            Assert.That(aggregate.TriggeredReactions.Exists(x => x.Type == ReactionType.Quicken), Is.True);
+            Assert.That(target.CurrentHP, Is.EqualTo(10000f));
         }
 
         private ReactionContext NewContext(BattleEntity target, float amount, long effectID)

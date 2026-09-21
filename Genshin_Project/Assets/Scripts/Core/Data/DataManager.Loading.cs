@@ -94,6 +94,7 @@ public partial class DataManager
         LoadEnemyCurves();
         LoadEnemySkill();
         LoadReactionLevelCoefficient();
+        LoadEnemyShieldRules();
 
         // 旧 StageConfig.xlsx 为可选兼容数据；当前战斗使用 Resources/StageConfig.json。
         LoadStageConfig();

@@ -61,6 +61,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(triggered, Is.True);
             Assert.That(resolution.Type, Is.EqualTo(ReactionType.Hyperbloom));
+            Assert.That(resolution.DisplayName, Is.EqualTo("超绽放"));
             Assert.That(resolution.ConsumedCoreCount, Is.EqualTo(2));
             Assert.That(resolution.DerivedHits, Has.Count.EqualTo(10));
             Assert.That(BloomCoreSystem.ActiveCores, Is.Empty);

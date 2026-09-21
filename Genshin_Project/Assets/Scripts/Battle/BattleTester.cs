@@ -9,7 +9,7 @@ using UnityEngine;
 /// 已迁移至 BattleInputController（正式组件，最终保留）。
 /// 用法：场景中新建一个空物体，挂上本脚本（自动附带 BattleInputController），点 Play。
 ///  - 自动创建我方角色（安柏 1009，1级）
-///  - 敌方：木桩(20000)在位置3，丘丘人(20001)在位置2和4，全1级
+///  - 敌方：由关卡编辑器 Stage JSON 的 EnemyID、Level、Slot 决定
 ///  - 自动调用 BattleManager.StartBattle() 启动六阶段循环
 /// </summary>
 public class BattleTester : MonoBehaviour

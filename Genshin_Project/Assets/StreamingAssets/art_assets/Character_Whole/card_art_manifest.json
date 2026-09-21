@@ -1,0 +1,17 @@
+{
+    "framePath": "",
+    "characters": [
+        {
+            "characterId": 1009,
+            "cardPath": "art_assets/Character_Whole/1009_01.png"
+        },
+        {
+            "characterId": 1010,
+            "cardPath": "art_assets/Character_Whole/1010_01.png"
+        },
+        {
+            "characterId": 1011,
+            "cardPath": "art_assets/Character_Whole/1011_01.png"
+        }
+    ]
+}

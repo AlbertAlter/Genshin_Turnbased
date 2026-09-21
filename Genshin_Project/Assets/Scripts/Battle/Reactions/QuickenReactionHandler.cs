@@ -65,6 +65,7 @@ public static class QuickenReactionHandler
         else return null;
 
         ElementalAura aura = context.Target.GetAura(auraElement);
-        return aura != null && aura.AuraAmount > 0f ? aura : null;
+        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
+            && aura != null && aura.AuraAmount > 0f ? aura : null;
     }
 }

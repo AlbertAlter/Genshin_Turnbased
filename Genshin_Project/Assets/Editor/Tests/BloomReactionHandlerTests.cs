@@ -131,11 +131,36 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_battle.Field.GetSlot(BattleSide.Enemy, 2).StatusList.FindAll(
                 status => status.StatusID2 == BloomCoreSystem.StatusID), Has.Count.EqualTo(5));
             Assert.That(overflowHits, Has.Count.EqualTo(3));
+            foreach (ReactionDerivedHit hit in overflowHits)
+            {
+                Assert.That(hit.Source, Is.Not.Null);
+                Assert.That(hit.Source.SourceEffectID, Is.EqualTo("SE_Bloom_Test"));
+                Assert.That(hit.Source.ReactionType, Is.EqualTo(ReactionType.Bloom));
+                Assert.That(hit.ReactionType, Is.EqualTo(ReactionType.Bloom));
+            }
             Assert.That(_main.CurrentHP, Is.EqualTo(10000f));
             var result = new ReactionResult();
             result.DerivedHits.AddRange(overflowHits);
             ReactionEffectExecutor.ExecuteDerivedHits(result);
             Assert.That(_main.CurrentHP, Is.LessThan(10000f));
+        }
+
+        [Test]
+        public void NaturalDetonation_CarriesBloomSourceAndReactionType()
+        {
+            BloomCoreInstance core = CreateCoreAtMain(100f);
+
+            List<ReactionDerivedHit> hits = BloomCoreSystem.Detonate(core);
+
+            Assert.That(hits, Is.Not.Empty);
+            foreach (ReactionDerivedHit hit in hits)
+            {
+                Assert.That(hit.Source, Is.Not.Null);
+                Assert.That(hit.Source.SourceEntityID, Is.EqualTo(_source.EntityID));
+                Assert.That(hit.Source.SourceEffectID, Is.EqualTo("SE_Bloom_Test"));
+                Assert.That(hit.Source.ReactionType, Is.EqualTo(ReactionType.Bloom));
+                Assert.That(hit.ReactionType, Is.EqualTo(ReactionType.Bloom));
+            }
         }
 
         [Test]

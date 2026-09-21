@@ -188,7 +188,9 @@ public static class BloomCoreSystem
             Damage = damage,
             DamageElement = "Dendro",
             PoiseDamage = 0f,
-            ElementAmount = 0f
+            ElementAmount = 0f,
+            Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Bloom),
+            ReactionType = ReactionType.Bloom
         };
     }
 

@@ -44,6 +44,14 @@ public partial class CharacterBattleController
         return "";
     }
 
+    /// <summary>查询当前按钮绑定技能在 Skills/Icon 列填写的图标。</summary>
+    public string GetBoundSkillIcon(int skillType)
+    {
+        if (skillType < 0 || skillType > 3) return "";
+        if (_skillById2.TryGetValue(_boundSkills[skillType], out var skill)) return skill.Icon ?? "";
+        return "";
+    }
+
     /// <summary>查询当前按钮绑定技能的 AP 消耗（目标选择阶段提示用）。</summary>
     public int GetBoundSkillAPCost(int skillType)
     {

@@ -20,7 +20,8 @@ public class ElementalAura
 public enum ShieldKind
 {
     Skill,
-    Crystallize
+    Crystallize,
+    EnemyElemental
 }
 
 [Serializable]
@@ -32,6 +33,9 @@ public class Shield
     public float Strength;          // 单盾强度倍率
     public ShieldKind Kind;         // 技能盾 / 结晶盾
     public int OriginPhase = -1;    // 生命周期计时原点；仅结晶盾按该阶段递减
+    public string SourceStatusID2;  // 敌方元素盾来源状态；普通护盾为空
+    public long SourceStatusApplyOrder;
+    [NonSerialized] public StatusInstance SourceStatus;
 }
 
 /// <summary>

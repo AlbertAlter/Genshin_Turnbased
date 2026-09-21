@@ -1,0 +1,8 @@
+{
+    "enemies": [
+        {
+            "enemyId": 2001,
+            "artPath": "art_assets/Enemy/2001_01.png"
+        }
+    ]
+}

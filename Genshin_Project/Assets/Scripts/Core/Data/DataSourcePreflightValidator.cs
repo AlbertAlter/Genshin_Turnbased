@@ -37,6 +37,7 @@ public static class DataSourcePreflightValidator
         ValidateWorkbook(dataRoot, "EnemySkill.xlsx", errors,
             "EnemySkill_Main", "EnemySkill_Effect", "EnemySkill_Param", "EnemyAI", "EnemyAI_Rule");
         ValidateWorkbook(dataRoot, "ReactionLevelCoefficient.xlsx", errors, "Sheet1");
+        ValidateWorkbook(dataRoot, "EnemyShield.xlsx", errors, "Type1");
         ValidateCharacterWorkbooks(dataRoot, errors);
 
         return errors;
@@ -53,6 +54,7 @@ public static class DataSourcePreflightValidator
 
         string[] workbooks = Directory.GetFiles(characterRoot, "*.xlsx")
             .Where(path => !Path.GetFileName(path).StartsWith("~$", StringComparison.Ordinal))
+            .Where(path => !Path.GetFileNameWithoutExtension(path).StartsWith("#", StringComparison.Ordinal))
             .Where(path => !Path.GetFileNameWithoutExtension(path).StartsWith("0_", StringComparison.Ordinal))
             .ToArray();
 

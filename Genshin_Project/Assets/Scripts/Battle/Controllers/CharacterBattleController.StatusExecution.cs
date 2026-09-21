@@ -301,7 +301,7 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
                         });
                         StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
                         if (reaction.HasReaction)
-                            LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
+                            LogManager.Log(LogCategory.StatusDamage, $"{statusEff.StatusEffectID2} -> {target.EntityID} 触发{reaction.DisplayNameSummary}");
                         CriticalHitResult critical = ResolveFinalCriticalDamage(
                             reaction.FinalDamage,
                             target,
@@ -320,7 +320,7 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
                             ReactionSourceKind.StatusEffect,
                             string.Empty,
                             statusEff.StatusEffectID2,
-                            reaction != null && reaction.HasReaction ? reaction.TriggeredReactions[0].Type : ReactionType.None));
+                            reaction != null ? reaction.PrimaryDamageReactionType : ReactionType.None));
                         ReactionEffectExecutor.FinalizePrimaryHit(reaction, final);
                         PoiseSystem.ApplyPoiseDamage(target, hit.Poise, final,
                             sourceStatus != null && sourceStatus.Caster != null ? sourceStatus.Caster : Entity);
@@ -452,17 +452,35 @@ void ExecuteStatusActionEffects(StatusInstance sourceStatus, StatusActionData ac
 
             case "Shield":
             {
-                // 护盾（2026-08-14）：Param1=护盾量公式（如 0.3*TotalHP），Element=护盾元素，Duration=持续回合
+                // 我方目标：Param1=护盾量公式；敌方目标：Param1=元素盾量（如 12U）。
                 var shieldTargets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 LogManager.Log(LogCategory.Effect, $"[Shield诊断] {statusEff.StatusEffectID2}: 目标数={(shieldTargets != null ? shieldTargets.Count : -1)} host={host} 来源状态={sourceStatus?.StatusID2}");
                 if (shieldTargets == null) return;
-                float shieldAmt = ResolveBaseValue(statusEff.Param1, statusEff.StatusEffectID2, GetEffectSkillType(statusEff.StatusEffectID2, 2), statusEff.Element);
+                float ordinaryShieldAmount = 0f;
+                bool ordinaryShieldAmountResolved = false;
                 float shieldDur = statusEff.Duration > 0 ? statusEff.Duration : 999;
                 foreach (var t in shieldTargets)
                 {
                     if (t == null || !t.IsAlive) continue;
-                    t.AddShield(shieldAmt, statusEff.Element, shieldDur);
-                    LogManager.Log(LogCategory.Effect, $"护盾 {t.EntityID} +{shieldAmt:F1} (元素 {statusEff.Element})");
+                    if (t.Type == BattleEntity.EntityType.Enemy)
+                    {
+                        EnemyShieldEffectSystem.Apply(t, statusEff, sourceStatus);
+                    }
+                    else
+                    {
+                        if (!ordinaryShieldAmountResolved)
+                        {
+                            ordinaryShieldAmount = ResolveBaseValue(
+                                statusEff.Param1,
+                                statusEff.StatusEffectID2,
+                                GetEffectSkillType(statusEff.StatusEffectID2, 2),
+                                statusEff.Element);
+                            ordinaryShieldAmountResolved = true;
+                        }
+                        t.AddShield(ordinaryShieldAmount, statusEff.Element, shieldDur, sourceStatus: sourceStatus);
+                        LogManager.Log(LogCategory.Effect,
+                            $"护盾 {t.EntityID} +{ordinaryShieldAmount:F1} (元素 {statusEff.Element})");
+                    }
                 }
                 break;
             }

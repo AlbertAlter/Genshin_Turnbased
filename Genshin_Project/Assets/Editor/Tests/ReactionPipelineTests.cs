@@ -64,6 +64,79 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void Resolve_ThirdElementAgainstElectroCharged_SplitsAmountAndReturnsBothReactions()
+        {
+            _target.ApplyAura("Hydro", 2f, 1010);
+            _target.ApplyAura("Electro", 2f, 1010);
+            ReactionStateSystem.SetEntityState(
+                _target,
+                ReactionType.ElectroCharged,
+                1,
+                new ReactionSourceSnapshot(),
+                -1,
+                false,
+                2f);
+
+            ReactionResult result = ReactionResolver.Resolve(
+                NewContext(ReactionSourceKind.CharacterSkill, 2f));
+
+            Assert.That(result.TriggeredReactions.Exists(x => x.Type == ReactionType.Vaporize), Is.True);
+            Assert.That(result.TriggeredReactions.Exists(x => x.Type == ReactionType.Overloaded), Is.True);
+            Assert.That(result.PrimaryDamageReactionType, Is.EqualTo(ReactionType.Vaporize));
+            Assert.That(result.RemainingAttackAmount, Is.Zero);
+            Assert.That(_target.GetAura("Hydro").AuraAmount, Is.EqualTo(1.5f).Within(0.001f));
+            Assert.That(_target.GetAura("Electro").AuraAmount, Is.EqualTo(1f).Within(0.001f));
+        }
+
+        [Test]
+        public void Resolve_BurningTarget_ConsumesExcessDendroBeforeBurningElement()
+        {
+            _target.ApplyAura("Dendro", 0.5f, 1010);
+            ReactionStateSystem.SetEntityState(
+                _target,
+                ReactionType.Burning,
+                1,
+                new ReactionSourceSnapshot(),
+                -1,
+                true,
+                1f);
+            ReactionContext context = NewContext(ReactionSourceKind.CharacterSkill, 2f);
+            context.AttackElement = "Hydro";
+
+            ReactionResult result = ReactionResolver.Resolve(context);
+
+            Assert.That(result.TriggeredReactions[0].Type, Is.EqualTo(ReactionType.Bloom));
+            Assert.That(result.TriggeredReactions[1].Type, Is.EqualTo(ReactionType.Vaporize));
+            Assert.That(result.PrimaryDamageReactionType, Is.EqualTo(ReactionType.Vaporize));
+            Assert.That(_target.GetAura("Dendro"), Is.Null);
+            Assert.That(BurningReactionHandler.IsBurning(_target), Is.False);
+            Assert.That(result.RemainingAttackAmount, Is.EqualTo(0.5f).Within(0.001f));
+        }
+
+        [Test]
+        public void Resolve_FrozenTarget_ConsumesNormalCryoBeforeFrozenElement()
+        {
+            _target.ApplyAura("Cryo", 0.5f, 1010);
+            ReactionStateSystem.SetEntityState(
+                _target,
+                ReactionType.Frozen,
+                1,
+                new ReactionSourceSnapshot(),
+                -1,
+                true,
+                0.5f);
+
+            ReactionResult result = ReactionResolver.Resolve(
+                NewContext(ReactionSourceKind.CharacterSkill, 1f));
+
+            Assert.That(result.TriggeredReactions.FindAll(x => x.Type == ReactionType.Melt), Has.Count.EqualTo(2));
+            Assert.That(result.PrimaryDamageReactionType, Is.EqualTo(ReactionType.Melt));
+            Assert.That(_target.GetAura("Cryo"), Is.Null);
+            Assert.That(FrozenReactionHandler.IsFrozen(_target), Is.False);
+            Assert.That(result.RemainingAttackAmount, Is.EqualTo(0.5f).Within(0.001f));
+        }
+
+        [Test]
         public void SetEntityState_SameType_ReplacesStateAndSnapshot()
         {
             var first = ReactionSourceSnapshot.Capture(NewContext(ReactionSourceKind.CharacterSkill, 1f));

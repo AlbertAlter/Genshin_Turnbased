@@ -453,12 +453,12 @@ public class BattleInputController : MonoBehaviour
         return bm != null && !_selecting && bm.TryThawActiveAlly();
     }
 
-    /// <summary>UI：切换出战角色（slot=0~3）。</summary>
+    /// <summary>UI：直接切换到指定槽位（slot=0~3），仍遵守普通换人 AP/阵亡免费规则。</summary>
     public void UISwitchCharacter(int slot)
     {
         var bm = BattleManager.Instance;
         if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return;
-        if (bm.TrySwitchActiveAlly(slot))
+        if (bm.TrySwitchActiveAllyWithAPCost(slot))
         {
             if (_selecting) ExitSelecting();
             LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");

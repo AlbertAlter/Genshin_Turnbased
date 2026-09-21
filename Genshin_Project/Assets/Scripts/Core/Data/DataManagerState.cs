@@ -39,6 +39,7 @@ internal sealed class DataManagerState
     internal Dictionary<int, float> BaseATK1Dict = new Dictionary<int, float>();
     internal Dictionary<int, float> BaseATK2Dict = new Dictionary<int, float>();
     internal Dictionary<int, float> ReactionLevelCoefficientDict = new Dictionary<int, float>();
+    internal EnemyShieldRuleTable EnemyShieldRules = new EnemyShieldRuleTable();
     internal Dictionary<int, StageConfigData> StageConfigDict = new Dictionary<int, StageConfigData>();
     internal Dictionary<string, int> SkillStringToInt = new Dictionary<string, int>();
 
@@ -76,6 +77,7 @@ internal sealed class DataManagerState
             BaseATK1Dict = manager.BaseATK1Dict,
             BaseATK2Dict = manager.BaseATK2Dict,
             ReactionLevelCoefficientDict = manager.ReactionLevelCoefficientDict,
+            EnemyShieldRules = manager.EnemyShieldRules,
             StageConfigDict = manager.StageConfigDict,
             SkillStringToInt = manager.SkillStringToInt
         };
@@ -113,6 +115,7 @@ internal sealed class DataManagerState
         manager.BaseATK1Dict = BaseATK1Dict;
         manager.BaseATK2Dict = BaseATK2Dict;
         manager.ReactionLevelCoefficientDict = ReactionLevelCoefficientDict;
+        manager.EnemyShieldRules = EnemyShieldRules;
         manager.StageConfigDict = StageConfigDict;
         manager.SkillStringToInt = SkillStringToInt;
     }

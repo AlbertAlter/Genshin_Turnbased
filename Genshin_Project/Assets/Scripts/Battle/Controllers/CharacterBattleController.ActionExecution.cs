@@ -529,6 +529,7 @@ public partial class CharacterBattleController
             InitialCharge = src.InitialCharge,
             SkillPhase = src.SkillPhase,
             ActionType = src.ActionType,
+            Icon = src.Icon,
             Description = src.Description
         };
     }

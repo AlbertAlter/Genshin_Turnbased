@@ -29,6 +29,14 @@ public enum ReactionType
     Swirl
 }
 
+public enum ReactionPoolKind
+{
+    Any,
+    NormalAura,
+    Frozen,
+    Burning
+}
+
 [Serializable]
 public sealed class ReactionDamageComponents
 {
@@ -65,6 +73,68 @@ public sealed class ReactionContext
     /// <summary>持续反应派生命中沿用创建时来源快照，不重新读取来源当前属性。</summary>
     public ReactionSourceSnapshot SourceSnapshotOverride;
     public bool SkipImmediateAuraDecay;
+    /// <summary>残留清算把场上已有附着作为“攻击侧”时，不先执行同元素新附着覆盖。</summary>
+    public bool PreserveIncomingAuraBeforeReaction;
     /// <summary>本次命中已满足碎冰条件时，后续反应只读取普通冰附着，不读取冻结虚拟冰。</summary>
     public bool IgnoreFrozenAura;
+
+    /// <summary>多元素规划阶段用于锁定本次分份只能与哪个元素池反应。</summary>
+    public string RestrictedAuraElement;
+    public ReactionPoolKind RestrictedAuraKind;
+
+    public bool AllowsReactionPool(string element, ReactionPoolKind kind)
+    {
+        if (string.IsNullOrEmpty(RestrictedAuraElement)) return true;
+        return string.Equals(RestrictedAuraElement, element, StringComparison.Ordinal)
+            && (RestrictedAuraKind == ReactionPoolKind.Any || RestrictedAuraKind == kind);
+    }
+}
+
+public static class ReactionPairRules
+{
+    public static ReactionType GetReaction(string attack, string aura)
+    {
+        if ((attack == "Electro" && aura == "Cryo") || (attack == "Cryo" && aura == "Electro")) return ReactionType.Superconduct;
+        if ((attack == "Electro" && aura == "Dendro") || (attack == "Dendro" && aura == "Electro")) return ReactionType.Quicken;
+        if ((attack == "Pyro" && aura == "Electro") || (attack == "Electro" && aura == "Pyro")) return ReactionType.Overloaded;
+        if ((attack == "Hydro" && aura == "Dendro") || (attack == "Dendro" && aura == "Hydro")) return ReactionType.Bloom;
+        if ((attack == "Hydro" && aura == "Pyro") || (attack == "Pyro" && aura == "Hydro")) return ReactionType.Vaporize;
+        if ((attack == "Pyro" && aura == "Cryo") || (attack == "Cryo" && aura == "Pyro")) return ReactionType.Melt;
+        if ((attack == "Hydro" && aura == "Cryo") || (attack == "Cryo" && aura == "Hydro")) return ReactionType.Frozen;
+        if ((attack == "Pyro" && aura == "Dendro") || (attack == "Dendro" && aura == "Pyro")) return ReactionType.Burning;
+        if ((attack == "Hydro" && aura == "Electro") || (attack == "Electro" && aura == "Hydro")) return ReactionType.ElectroCharged;
+        return ReactionType.None;
+    }
+
+    public static void GetConsumption(
+        ReactionType type,
+        string attackElement,
+        float attackQuota,
+        float auraQuota,
+        out float attackConsumed,
+        out float auraConsumed)
+    {
+        float attackPerUnit = 1f;
+        float auraPerUnit = 1f;
+        if (type == ReactionType.Vaporize)
+        {
+            attackPerUnit = attackElement == "Pyro" ? 2f : 1f;
+            auraPerUnit = attackElement == "Pyro" ? 1f : 2f;
+        }
+        else if (type == ReactionType.Melt)
+        {
+            attackPerUnit = attackElement == "Cryo" ? 2f : 1f;
+            auraPerUnit = attackElement == "Cryo" ? 1f : 2f;
+        }
+        else if (type == ReactionType.Bloom)
+        {
+            attackPerUnit = attackElement == "Hydro" ? 2f : 1f;
+            auraPerUnit = attackElement == "Hydro" ? 1f : 2f;
+        }
+
+        float units = Math.Min(attackQuota / attackPerUnit, auraQuota / auraPerUnit);
+        if (type == ReactionType.ElectroCharged) units = Math.Min(1f, units);
+        attackConsumed = Math.Max(0f, units * attackPerUnit);
+        auraConsumed = Math.Max(0f, units * auraPerUnit);
+    }
 }

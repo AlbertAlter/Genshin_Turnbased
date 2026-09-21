@@ -391,6 +391,7 @@ public static class UIBuilder
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
         go.transform.SetParent(parent, false);
         var txt = go.GetComponent<TextMeshProUGUI>();
+        txt.font = ProjectUiFont.LoadOrCreate();
         txt.text = content;
         txt.fontSize = size;
         txt.color = TextColor;

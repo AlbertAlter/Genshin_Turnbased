@@ -44,11 +44,29 @@ public sealed class ReactionResult
 {
     public float FinalDamage;
     public float RemainingAttackAmount;
+    /// <summary>真正改变主命中伤害的增幅或激化反应；不得用反应列表顺序推断。</summary>
+    public ReactionType PrimaryDamageReactionType;
     public readonly List<ReactionOccurrence> TriggeredReactions = new List<ReactionOccurrence>();
     public readonly List<ReactionDerivedHit> DerivedHits = new List<ReactionDerivedHit>();
     public PendingShatterEffect PendingShatter;
 
     public bool HasReaction => TriggeredReactions.Count > 0;
+
+    public string DisplayNameSummary
+    {
+        get
+        {
+            var names = new List<string>();
+            foreach (ReactionOccurrence occurrence in TriggeredReactions)
+            {
+                if (occurrence == null || string.IsNullOrWhiteSpace(occurrence.DisplayName)
+                    || names.Contains(occurrence.DisplayName))
+                    continue;
+                names.Add(occurrence.DisplayName);
+            }
+            return string.Join("、", names);
+        }
+    }
 
     public static ReactionResult Unchanged(ReactionContext context)
     {

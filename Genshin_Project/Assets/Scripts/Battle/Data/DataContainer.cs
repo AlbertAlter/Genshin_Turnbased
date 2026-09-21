@@ -99,6 +99,7 @@ public class SkillMainData
     public int InitialCharge;            // 战斗开始时初始技能次数
     public int SkillPhase;               // 多段技能阶段（0=非多段；同Phase值的技能按SkillID顺序连段）
     public string ActionType;            // Normal/Skill/Burst/Heavy 用于监听
+    public string Icon;                  // UI 图标ID或相对路径（不含扩展名时默认PNG）
     public string Description;           // 技能描述（长按按钮显示）
 }
 

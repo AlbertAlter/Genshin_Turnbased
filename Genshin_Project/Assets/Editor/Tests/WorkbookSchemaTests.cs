@@ -97,6 +97,9 @@ namespace GenshinTurnBased.Tests.EditMode
                 "EnemyID", "PatternID", "PatternType", "SkillID", "SkillIndex", "Weight");
 
             ValidateHeaders("ReactionLevelCoefficient.xlsx", "Sheet1", errors, "lv", "coefficient");
+            ValidateHeaders("EnemyShield.xlsx", "Type1", errors,
+                "", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Dendro", "Geo", "Physical",
+                "Overloaded", "Elemental_Hit", "Hit");
 
             AssertNoErrors(errors);
         }
@@ -135,7 +138,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     "DendroDmgBonus", "PhysicalDmgBonus");
                 ValidateHeaders(package, workbookName, "Skills", errors,
                     "SkillID", "SkillID2", "SkillName", "APCost", "Cooldown", "EnergyUsed", "MaxCharge",
-                    "InitialCharge", "SkillPhase", "ActionType", "Description");
+                    "InitialCharge", "SkillPhase", "ActionType", "Icon", "Description");
                 ValidateHeaders(package, workbookName, "SkillsEffect", errors,
                     EffectHeaders("SkillEffectID", "SkillEffectID2", "TargetNumber"));
                 ValidateHeaders(package, workbookName, "SkillLevel", errors,
@@ -218,6 +221,7 @@ namespace GenshinTurnBased.Tests.EditMode
             foreach (ExcelWorksheet worksheet in package.Workbook.Worksheets)
                 ValidateHeaders(package, workbookName, worksheet.Name, errors, expectedHeaders);
         }
+
 
         private static void ValidateHeaders(
             ExcelPackage package,

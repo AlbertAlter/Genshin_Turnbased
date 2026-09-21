@@ -6,7 +6,7 @@ public static class ElementAuraSystem
 {
     public static void PrepareIncomingAura(ReactionContext context)
     {
-        if (!CanApply(context)) return;
+        if (!CanApply(context) || context.PreserveIncomingAuraBeforeReaction) return;
 
         // 设计规则：同元素先由本次新附着替换，再与其他共存元素反应。
         // 此处先清除旧值；反应后的新元素残留由 CommitIncomingAura 写回。
@@ -15,7 +15,13 @@ public static class ElementAuraSystem
 
     public static void CommitIncomingAura(ReactionContext context, float remainingAmount)
     {
-        if (!CanApply(context) || remainingAmount <= 0f) return;
+        if (!CanApply(context)) return;
+        if (context.PreserveIncomingAuraBeforeReaction && remainingAmount <= 0f)
+        {
+            context.Target.RemoveAura(context.AttackElement);
+            return;
+        }
+        if (remainingAmount <= 0f) return;
 
         int sourceEntityID = context.SourceEntity != null ? context.SourceEntity.EntityID : 0;
         context.Target.ApplyAura(

@@ -44,9 +44,11 @@ public static class FrozenReactionHandler
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f) return false;
         if (context.AttackElement == "Hydro")
-            return context.Target.GetAura("Cryo")?.AuraAmount > 0f;
+            return context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura)
+                && context.Target.GetAura("Cryo")?.AuraAmount > 0f;
         if (context.AttackElement == "Cryo")
-            return context.Target.GetAura("Hydro")?.AuraAmount > 0f;
+            return context.AllowsReactionPool("Hydro", ReactionPoolKind.NormalAura)
+                && context.Target.GetAura("Hydro")?.AuraAmount > 0f;
         return false;
     }
 
@@ -96,7 +98,9 @@ public static class FrozenReactionHandler
         return context != null
             && context.Target != null
             && context.SourceEntity != null
-            && context.PoiseDamage > 0f
+            && (context.AttackElement == "Geo"
+                || context.AttackElement == "Physical"
+                || context.AttackElement == "None")
             && context.Target.MaxPoise >= 0f
             && IsFrozen(context.Target)
             && context.PoiseDamage >= 100f;

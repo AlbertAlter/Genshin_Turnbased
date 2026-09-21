@@ -143,7 +143,7 @@ public partial class CharacterBattleController
                 });
                 StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
                 if (reaction.HasReaction)
-                    LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击 {target.EntityID} 触发{reaction.TriggeredReactions[0].DisplayName}");
+                    LogManager.Log(LogCategory.Damage, $"{Entity.EntityID}攻击 {target.EntityID} 触发{reaction.DisplayNameSummary}");
 
                 // 最终暴击：基础伤害、增伤、防御、抗性和反应全部结算后，
                 // 每个 hit、每个实际目标独立抽取一次；随后才进入护盾与扣血。
@@ -160,8 +160,8 @@ public partial class CharacterBattleController
                     primaryCritical.DamageAfterCritical,
                     eff.Element);
                 // 带来源扣血（2026-08-19）：角色直伤统一入口；反应主命中（蒸发/融化/激化等）标注对应反应类型
-                ReactionType mainReactionType = reaction != null && reaction.HasReaction
-                    ? reaction.TriggeredReactions[0].Type
+                ReactionType mainReactionType = reaction != null
+                    ? reaction.PrimaryDamageReactionType
                     : ReactionType.None;
                 target.TakeDamage(finalDamage, DamageSourceInfo.Create(
                     Entity, ReactionSourceKind.CharacterSkill, GetExecutingSkillID2(skillType), eff.SkillEffectID2, mainReactionType));

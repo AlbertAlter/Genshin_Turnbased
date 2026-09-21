@@ -378,7 +378,7 @@ public partial class EnemyBattleController : MonoBehaviour
                 ReactionSourceKind.EnemySkill,
                 _currentSkillID2,
                 eff.SkillEffectID2,
-                reaction != null && reaction.HasReaction ? reaction.TriggeredReactions[0].Type : ReactionType.None));
+                reaction != null ? reaction.PrimaryDamageReactionType : ReactionType.None));
             ReactionEffectExecutor.FinalizePrimaryHit(reaction, finalDamage);
             PoiseSystem.ApplyPoiseDamage(target, hit.Poise, finalDamage, Entity);
             ReactionEffectExecutor.ExecuteDerivedHits(reaction);

@@ -78,7 +78,6 @@ public static class SwirlReactionHandler
                 if (atom.SpreadAmount <= Epsilon) continue;
                 triggered = true;
                 if (!involvedElements.Contains(atom.Element)) involvedElements.Add(atom.Element);
-                ConsumeAtom(source.Target, atom, atom.SpreadAmount);
                 stageOne.DerivedHits.Add(BuildTransformativeHit(
                     source.Context, source.Target, atom.Element, ReactionType.Swirl,
                     SwirlMultiplier, 0f));
@@ -100,6 +99,13 @@ public static class SwirlReactionHandler
 
         // 第一阶段伤害必须先落地，死亡的直接目标在第二阶段只继续传播。
         ReactionEffectExecutor.ExecuteDerivedHits(stageOne);
+        foreach (SwirlTargetSnapshot source in batch.Targets)
+        {
+            if (source == null || source.Target == null) continue;
+            foreach (SwirlAuraAtom atom in source.SpreadAtoms)
+                if (atom.SpreadAmount > Epsilon)
+                    ConsumeAtom(source.Target, atom, atom.SpreadAmount);
+        }
 
         var transaction = new ReactionTransaction();
         var effects = new List<Action>();
@@ -107,7 +113,7 @@ public static class SwirlReactionHandler
         {
             FieldPosition position = entry.Key;
             Dictionary<string, ExternalAmount> external = entry.Value;
-            TriggerCoresAtPosition(position, external, output.Reaction);
+            effects.Add(() => TriggerCoresAtPosition(position, external, output.Reaction));
             BattleEntity target = position != null && position.IsOccupied ? position.Occupant : null;
             if (target == null || !target.IsAlive || IsStageOneDeadDirectTarget(batch, target))
                 continue;
@@ -203,15 +209,15 @@ public static class SwirlReactionHandler
         {
             var compatible = new List<ExternalAmount>();
             foreach (ExternalAmount ext in external.Values)
-                if (GetReaction(ext.Element, atom.Element) != ReactionType.None) compatible.Add(ext);
+                if (ReactionPairRules.GetReaction(ext.Element, atom.Element) != ReactionType.None) compatible.Add(ext);
             foreach (ExternalAmount ext in compatible)
             {
                 int ownCount = compatible.Count;
                 int extCount = CountCompatibleOwn(ext, own);
                 float ownQuota = atom.Amount / ownCount;
                 float extQuota = ext.Amount / extCount;
-                ReactionType type = GetReaction(ext.Element, atom.Element);
-                GetConsumption(type, ext.Element, extQuota, ownQuota,
+                ReactionType type = ReactionPairRules.GetReaction(ext.Element, atom.Element);
+                ReactionPairRules.GetConsumption(type, ext.Element, extQuota, ownQuota,
                     out float externalConsumed, out float ownConsumed);
                 if (externalConsumed > Epsilon && ownConsumed > Epsilon)
                     pairs.Add(new PairPlan { Own = atom, External = ext, Type = type,
@@ -268,47 +274,8 @@ public static class SwirlReactionHandler
     {
         int count = 0;
         foreach (SwirlAuraAtom atom in own)
-            if (GetReaction(ext.Element, atom.Element) != ReactionType.None) count++;
+            if (ReactionPairRules.GetReaction(ext.Element, atom.Element) != ReactionType.None) count++;
         return Mathf.Max(1, count);
-    }
-
-    private static ReactionType GetReaction(string attack, string aura)
-    {
-        if ((attack == "Electro" && aura == "Cryo") || (attack == "Cryo" && aura == "Electro")) return ReactionType.Superconduct;
-        if ((attack == "Electro" && aura == "Dendro") || (attack == "Dendro" && aura == "Electro")) return ReactionType.Quicken;
-        if ((attack == "Pyro" && aura == "Electro") || (attack == "Electro" && aura == "Pyro")) return ReactionType.Overloaded;
-        if ((attack == "Hydro" && aura == "Dendro") || (attack == "Dendro" && aura == "Hydro")) return ReactionType.Bloom;
-        if ((attack == "Hydro" && aura == "Pyro") || (attack == "Pyro" && aura == "Hydro")) return ReactionType.Vaporize;
-        if ((attack == "Pyro" && aura == "Cryo") || (attack == "Cryo" && aura == "Pyro")) return ReactionType.Melt;
-        if ((attack == "Hydro" && aura == "Cryo") || (attack == "Cryo" && aura == "Hydro")) return ReactionType.Frozen;
-        if ((attack == "Pyro" && aura == "Dendro") || (attack == "Dendro" && aura == "Pyro")) return ReactionType.Burning;
-        if ((attack == "Hydro" && aura == "Electro") || (attack == "Electro" && aura == "Hydro")) return ReactionType.ElectroCharged;
-        return ReactionType.None;
-    }
-
-    private static void GetConsumption(ReactionType type, string externalElement, float ext, float own,
-        out float externalConsumed, out float ownConsumed)
-    {
-        float extPerUnit = 1f, ownPerUnit = 1f;
-        if (type == ReactionType.Vaporize)
-        {
-            extPerUnit = externalElement == "Pyro" ? 2f : 1f;
-            ownPerUnit = externalElement == "Pyro" ? 1f : 2f;
-        }
-        else if (type == ReactionType.Melt)
-        {
-            extPerUnit = externalElement == "Cryo" ? 2f : 1f;
-            ownPerUnit = externalElement == "Cryo" ? 1f : 2f;
-        }
-        else if (type == ReactionType.Bloom)
-        {
-            extPerUnit = externalElement == "Hydro" ? 2f : 1f;
-            ownPerUnit = externalElement == "Hydro" ? 1f : 2f;
-        }
-        float units = Mathf.Min(ext / extPerUnit, own / ownPerUnit);
-        if (type == ReactionType.ElectroCharged) units = Mathf.Min(1f, units);
-        externalConsumed = units * extPerUnit;
-        ownConsumed = units * ownPerUnit;
     }
 
     private static void ApplyPairEffect(BattleEntity target, PairPlan pair, ReactionResult result)
@@ -419,9 +386,18 @@ public static class SwirlReactionHandler
         if (source == null) return;
         for (int guard = 0; guard < 16; guard++)
         {
-            if (!TryFindStageThreePair(target, out string attackElement, out float amount)) break;
+            if (TryResolveSimultaneousSuperconductAndQuicken(target, source, aggregate))
+                continue;
+            if (!TryFindStageThreePair(
+                    target,
+                    out string attackElement,
+                    out string auraElement,
+                    out float amount)) break;
             ReactionContext context = CloneFor(source, target, attackElement, amount);
             context.PreReactionDamage = 0f;
+            context.PreserveIncomingAuraBeforeReaction = true;
+            context.RestrictedAuraElement = auraElement;
+            context.RestrictedAuraKind = ReactionPoolKind.Any;
             ReactionResult resolved = ReactionResolver.Resolve(context);
             if (!resolved.HasReaction) break;
             foreach (ReactionOccurrence occurrence in resolved.TriggeredReactions)
@@ -430,7 +406,77 @@ public static class SwirlReactionHandler
         }
     }
 
-    private static bool TryFindStageThreePair(BattleEntity target, out string attack, out float amount)
+    private static bool TryResolveSimultaneousSuperconductAndQuicken(
+        BattleEntity target,
+        ReactionContext source,
+        ReactionResult aggregate)
+    {
+        ElementalAura electroAura = target.GetAura("Electro");
+        float electro = electroAura != null ? electroAura.AuraAmount : 0f;
+        float cryo = GetElementAmount(target, "Cryo");
+        float dendro = target.GetAura("Dendro")?.AuraAmount ?? 0f;
+        if (electro <= Epsilon || cryo <= Epsilon || dendro <= Epsilon)
+            return false;
+
+        float quota = electro * 0.5f;
+        var superconductContext = CloneFor(source, target, "Electro", quota);
+        superconductContext.CanApplyAura = false;
+        superconductContext.RestrictedAuraElement = "Cryo";
+        superconductContext.RestrictedAuraKind = ReactionPoolKind.Any;
+        float level = ReactionDamageCalculator.GetLevelCoefficient(
+            superconductContext.SourceEntity != null ? superconductContext.SourceEntity.Level : 1);
+        bool superconduct = SuperconductReactionHandler.TryResolve(
+            superconductContext,
+            level,
+            out SuperconductReactionResolution superconductResult);
+
+        var quickenContext = CloneFor(source, target, "Electro", quota);
+        quickenContext.CanApplyAura = false;
+        quickenContext.RestrictedAuraElement = "Dendro";
+        quickenContext.RestrictedAuraKind = ReactionPoolKind.NormalAura;
+        bool quicken = QuickenReactionHandler.TryResolve(
+            quickenContext,
+            out QuickenReactionResolution quickenResult);
+
+        float electroConsumed = 0f;
+        if (superconduct)
+        {
+            electroConsumed += Mathf.Max(0f, quota - superconductResult.RemainingAttackAmount);
+            AddStageThreeOccurrence(aggregate, superconductContext, ReactionType.Superconduct, "超导", "Cryo");
+        }
+        if (quicken)
+        {
+            electroConsumed += Mathf.Max(0f, quota - quickenResult.RemainingAttackAmount);
+            AddStageThreeOccurrence(aggregate, quickenContext, ReactionType.Quicken, "原激化", "Dendro");
+        }
+        if (electroConsumed > Epsilon)
+            target.ConsumeAura("Electro", Mathf.Min(electro, electroConsumed));
+        return superconduct || quicken;
+    }
+
+    private static void AddStageThreeOccurrence(
+        ReactionResult aggregate,
+        ReactionContext context,
+        ReactionType type,
+        string displayName,
+        string auraElement)
+    {
+        aggregate.TriggeredReactions.Add(new ReactionOccurrence
+        {
+            Type = type,
+            DisplayName = displayName,
+            SourceEntity = context.SourceEntity,
+            Target = context.Target,
+            SourceEffectID = context.SourceEffectID,
+            InvolvedElements = new List<string> { context.AttackElement, auraElement }
+        });
+    }
+
+    private static bool TryFindStageThreePair(
+        BattleEntity target,
+        out string attack,
+        out string aura,
+        out float amount)
     {
         string[,] ordered = {
             {"Electro","Cryo"},{"Cryo","Electro"},{"Electro","Dendro"},{"Dendro","Electro"},
@@ -444,9 +490,17 @@ public static class SwirlReactionHandler
             ElementalAura incoming = target.GetAura(ordered[i,0]);
             float opposing = GetElementAmount(target, ordered[i,1]);
             if (incoming != null && incoming.AuraAmount > Epsilon && opposing > Epsilon)
-            { attack = ordered[i,0]; amount = incoming.AuraAmount; return true; }
+            {
+                attack = ordered[i,0];
+                aura = ordered[i,1];
+                amount = incoming.AuraAmount;
+                return true;
+            }
         }
-        attack = null; amount = 0f; return false;
+        attack = null;
+        aura = null;
+        amount = 0f;
+        return false;
     }
 
     private static float GetElementAmount(BattleEntity target, string element)

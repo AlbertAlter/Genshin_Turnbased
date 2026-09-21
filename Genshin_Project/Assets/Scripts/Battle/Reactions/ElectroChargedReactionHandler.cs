@@ -14,6 +14,10 @@ public static class ElectroChargedReactionHandler
     private const float ReactionMultiplier = 9.6f;
     private const float PoiseDamage = 50f;
 
+    public static bool IsElectroCharged(BattleEntity target)
+        => target != null
+            && ReactionStateSystem.TryGetEntityState(target, ReactionType.ElectroCharged, out _);
+
     public static bool CanResolve(ReactionContext context)
         => GetOpposingAura(context) != null;
 
@@ -219,7 +223,8 @@ public static class ElectroChargedReactionHandler
         else return null;
 
         ElementalAura aura = context.Target.GetAura(auraElement);
-        return aura != null && aura.AuraAmount > 0f ? aura : null;
+        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
+            && aura != null && aura.AuraAmount > 0f ? aura : null;
     }
 
     private static bool WillKeepBothAuras(

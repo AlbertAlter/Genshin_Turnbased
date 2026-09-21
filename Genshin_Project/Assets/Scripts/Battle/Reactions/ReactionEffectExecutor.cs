@@ -29,7 +29,7 @@ public static class ReactionEffectExecutor
                 ReactionType.Shatter),
             ReactionType = ReactionType.Shatter
         });
-        result.TriggeredReactions.Insert(0, new ReactionOccurrence
+        ReactionOccurrence occurrence = new ReactionOccurrence
         {
             Type = ReactionType.Shatter,
             DisplayName = "碎冰",
@@ -37,7 +37,9 @@ public static class ReactionEffectExecutor
             Target = pending.Target,
             SourceEffectID = pending.SourceEffectID,
             InvolvedElements = new List<string> { "Cryo" }
-        });
+        };
+        result.TriggeredReactions.Insert(0, occurrence);
+        StatusOnHitHookSystem.NotifyReactions(new[] { occurrence });
         LogManager.Log(LogCategory.Reaction, $"碎冰：{pending.Target.EntityID} 受到 {pending.Damage:F1} 物理剧变伤害");
     }
 

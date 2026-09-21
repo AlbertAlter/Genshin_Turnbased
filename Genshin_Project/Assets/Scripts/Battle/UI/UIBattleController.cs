@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ using TMPro;
 /// 职责：
 ///  1. 数据刷新：从 BattleManager/CharacterBattleController 拉取血量/能量/AP/状态栏/按钮绑定，刷到 UI 组件
 ///  2. 按钮操作：普攻/重击/战技/爆发/换人按钮 → BattleTester 公开操作接口（与键盘同一套战斗逻辑）
-/// 图片素材未就位，全部用纯色 Image 占位；图标后续按 SkillID2 命名接入。
+/// 普攻/重击按钮图标读取当前绑定技能的 Skills/Icon，并从 StreamingAssets 加载。
 /// 场景搭建：按字段把组件拖进 Inspector 对应槽位即可（详见搭建说明）。
 /// </summary>
 public class UIBattleController : MonoBehaviour
@@ -34,6 +35,8 @@ public class UIBattleController : MonoBehaviour
     public Button btnBurst;      // 爆发
     public Button btnSwitch;     // 换人
     public Button btnEndTurn;    // 结束回合（可选）
+    public Image btnAttackIcon;  // 普攻图标：StreamingAssets/art_assets/Skill_Icon/#Normal
+    public Image btnHeavyIcon;   // 重击图标：StreamingAssets/art_assets/Skill_Icon/#Normal
     public TMP_Text[] btnSkillNames = new TMP_Text[4]; // 按钮上显示的技能名（0普攻/1重击/2战技/3爆发）
     public TMP_Text[] btnCooldowns = new TMP_Text[4];       // 技能按钮上的冷却数字（0普攻/1重击/2战技/3=能量球）
     public TMP_Text[] allyBurstCooldowns = new TMP_Text[4]; // 各角色能量球上的爆发冷却数字（与 allySlots 对应）
@@ -61,6 +64,7 @@ public class UIBattleController : MonoBehaviour
     [System.Serializable]
     public class AllyUISlot
     {
+        public CharacterCardView cardView; // Runtime card art with a separate frame layer.
         public GameObject root;          // 整个槽位的根物体（隐藏空位用）
         public TMP_Text nameText;        // 角色名（暂显示 CharacterID）
         public Image hpBar;              // 血条（Filled Horizontal）
@@ -75,6 +79,7 @@ public class UIBattleController : MonoBehaviour
     [System.Serializable]
     public class EnemyUISlot
     {
+        public EnemyArtView artView; // Missing configured art remains empty.
         public GameObject root;
         public TMP_Text lvText;   // 等级（独立字段，Lv.XX）
         public TMP_Text nameText;
@@ -86,6 +91,8 @@ public class UIBattleController : MonoBehaviour
     private bool _switching = false;
     private bool _forcedDeathSwitch = false;
     private int _switchIndex = 0;
+    private string _skillIconBindingKey = string.Empty;
+    private Coroutine _skillIconLoadRoutine;
     /// <summary>是否处于换人界面（BattleInputController 空格过回合的禁用判断用，2026-08-14）。</summary>
 
 
@@ -226,10 +233,12 @@ public class UIBattleController : MonoBehaviour
             var ally = bm.GetAllyBySlot(i);
             if (ally == null || ally.Entity == null)
             {
+                if (slot.cardView != null) slot.cardView.ClearCharacter();
                 if (slot.root != null) slot.root.SetActive(false);
                 continue;
             }
             if (slot.root != null) slot.root.SetActive(true);
+            if (slot.cardView != null) slot.cardView.SetCharacter(ally.CharacterID);
             var ent = ally.Entity;
             if (slot.nameText != null) slot.nameText.text = $"角色{ent.EntityID}";
             float maxHp = ent.TotalHP;
@@ -283,10 +292,12 @@ public class UIBattleController : MonoBehaviour
             }
             if (enemy == null || enemy.Entity == null)
             {
+                if (slot.artView != null) slot.artView.ClearEnemy();
                 if (slot.root != null) slot.root.SetActive(false);
                 continue;
             }
             if (slot.root != null) slot.root.SetActive(true);
+            if (slot.artView != null) slot.artView.SetEnemy(enemy.Entity.EntityID);
             var ent = enemy.Entity;
             if (slot.nameText != null) slot.nameText.text = $"敌{ent.EntityID}";
             if (slot.lvText != null) slot.lvText.text = $"Lv.{ent.Level}";
@@ -327,6 +338,7 @@ public class UIBattleController : MonoBehaviour
         SetButtonState(btnSkill, ally.CanUseSkill());
         SetButtonState(btnBurst, ally.CanUseBurst());
         SetButtonState(btnSwitch, bm.CanSwitchActiveAlly());
+        RefreshAttackIcons(ally);
         if (btnSkillNames != null)
         {
             for (int i = 0; i < btnSkillNames.Length && i < 4; i++)
@@ -390,6 +402,47 @@ public class UIBattleController : MonoBehaviour
                     container.GetChild(d).gameObject.SetActive(false);
             }
         }
+    }
+
+    private void RefreshAttackIcons(CharacterBattleController ally)
+    {
+        if (ally == null) return;
+        string normalIcon = ally.GetBoundSkillIcon(0);
+        string heavyIcon = ally.GetBoundSkillIcon(1);
+        string bindingKey = ally.CharacterID + "|" + normalIcon + "|" + heavyIcon;
+        if (bindingKey == _skillIconBindingKey) return;
+        _skillIconBindingKey = bindingKey;
+        if (_skillIconLoadRoutine != null) StopCoroutine(_skillIconLoadRoutine);
+        if (btnAttackIcon != null) btnAttackIcon.sprite = null;
+        if (btnHeavyIcon != null) btnHeavyIcon.sprite = null;
+        _skillIconLoadRoutine = StartCoroutine(
+            LoadAttackIcons(bindingKey, normalIcon, heavyIcon));
+    }
+
+    private IEnumerator LoadAttackIcons(string bindingKey, string normalIcon, string heavyIcon)
+    {
+        if (btnAttackIcon != null)
+        {
+            yield return CharacterSkillIconResolver.LoadSprite(
+                normalIcon,
+                sprite =>
+                {
+                    if (_skillIconBindingKey == bindingKey) btnAttackIcon.sprite = sprite;
+                },
+                message => Debug.LogWarning(message, this));
+        }
+
+        if (btnHeavyIcon != null)
+        {
+            yield return CharacterSkillIconResolver.LoadSprite(
+                heavyIcon,
+                sprite =>
+                {
+                    if (_skillIconBindingKey == bindingKey) btnHeavyIcon.sprite = sprite;
+                },
+                message => Debug.LogWarning(message, this));
+        }
+        _skillIconLoadRoutine = null;
     }
 
     void RefreshOverlay(BattleManager bm)
