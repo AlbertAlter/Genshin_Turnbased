@@ -17,6 +17,9 @@ public sealed class DamageSourceInfo
     /// <summary>来源阵营。</summary>
     public BattleSide SourceSide;
 
+    /// <summary>是否有可归属的来源实体；不要把无来源时 SourceSide 的默认值视为我方。</summary>
+    public bool HasSourceEntity;
+
     /// <summary>来源种类：角色技能 / 状态效果 / 敌人技能 / 派生反应。</summary>
     public ReactionSourceKind SourceKind;
 
@@ -29,6 +32,18 @@ public sealed class DamageSourceInfo
     /// <summary>该次伤害对应的反应类型（不是反应伤害时为 None）。</summary>
     public ReactionType ReactionType;
 
+    /// <summary>直接产生本次伤害的角色状态；技能和全局反应伤害为空。</summary>
+    [NonSerialized] public StatusInstance SourceStatus;
+
+    /// <summary>来源状态身份快照；状态移除后仍可用于日志与筛选。</summary>
+    public string SourceStatusID;
+    public long SourceStatusApplyOrder;
+
+    /// <summary>本次伤害是否同时构成一次“攻击命中”。反应派生伤害只产生 OnDamage，不产生 OnHit。</summary>
+    public bool CountsAsHit;
+
+    public DamageSourceInfo Snapshot() => (DamageSourceInfo)MemberwiseClone();
+
     /// <summary>无来源占位：所有旧接口兜底使用，共用同一套扣血逻辑。</summary>
     public static DamageSourceInfo CreateUnknown()
     {
@@ -37,10 +52,13 @@ public sealed class DamageSourceInfo
             SourceEntity = null,
             SourceEntityID = 0,
             SourceSide = BattleSide.Ally,
+            HasSourceEntity = false,
             SourceKind = ReactionSourceKind.DerivedReaction,
             SourceSkillID = string.Empty,
             SourceEffectID = string.Empty,
-            ReactionType = ReactionType.None
+            ReactionType = ReactionType.None,
+            SourceStatusID = string.Empty,
+            CountsAsHit = false
         };
     }
 
@@ -50,17 +68,51 @@ public sealed class DamageSourceInfo
         ReactionSourceKind sourceKind,
         string sourceSkillID,
         string sourceEffectID,
-        ReactionType reactionType = ReactionType.None)
+        ReactionType reactionType = ReactionType.None,
+        bool? countsAsHit = null)
     {
         return new DamageSourceInfo
         {
             SourceEntity = sourceEntity,
             SourceEntityID = sourceEntity != null ? sourceEntity.EntityID : 0,
             SourceSide = sourceEntity != null ? sourceEntity.Side : BattleSide.Ally,
+            HasSourceEntity = sourceEntity != null,
             SourceKind = sourceKind,
             SourceSkillID = sourceSkillID ?? string.Empty,
             SourceEffectID = sourceEffectID ?? string.Empty,
-            ReactionType = reactionType
+            ReactionType = reactionType,
+            SourceStatusID = string.Empty,
+            CountsAsHit = countsAsHit
+                ?? (sourceEntity != null && sourceKind != ReactionSourceKind.DerivedReaction)
+        };
+    }
+
+    /// <summary>从角色所属状态构造；状态本身是直接来源，归属实体负责阵营和角色身份。</summary>
+    public static DamageSourceInfo FromStatus(
+        StatusInstance status,
+        string sourceEffectID,
+        ReactionType reactionType = ReactionType.None)
+    {
+        BattleEntity owner = status != null ? status.Caster : null;
+        bool hasOwner = status != null && (status.HasSourceEntity || owner != null);
+        return new DamageSourceInfo
+        {
+            SourceEntity = owner,
+            SourceEntityID = status != null && status.HasSourceEntity
+                ? status.SourceEntityID
+                : owner != null ? owner.EntityID : 0,
+            SourceSide = status != null && status.HasSourceEntity
+                ? status.SourceSide
+                : owner != null ? owner.Side : BattleSide.Ally,
+            HasSourceEntity = hasOwner,
+            SourceKind = ReactionSourceKind.StatusEffect,
+            SourceSkillID = string.Empty,
+            SourceEffectID = sourceEffectID ?? string.Empty,
+            ReactionType = reactionType,
+            SourceStatus = status,
+            SourceStatusID = status != null ? status.StatusID2 ?? string.Empty : string.Empty,
+            SourceStatusApplyOrder = status != null ? status.ApplyOrder : 0,
+            CountsAsHit = hasOwner
         };
     }
 
@@ -75,10 +127,15 @@ public sealed class DamageSourceInfo
             SourceEntity = source,
             SourceEntityID = source != null ? source.EntityID : 0,
             SourceSide = source != null ? source.Side : BattleSide.Ally,
+            HasSourceEntity = source != null,
             SourceKind = context != null ? context.SourceKind : ReactionSourceKind.DerivedReaction,
             SourceSkillID = context != null ? context.SourceSkillID : string.Empty,
             SourceEffectID = context != null ? context.SourceEffectID : string.Empty,
-            ReactionType = reactionType
+            ReactionType = reactionType,
+            SourceStatusID = string.Empty,
+            CountsAsHit = source != null
+                && context != null
+                && context.SourceKind != ReactionSourceKind.DerivedReaction
         };
     }
 
@@ -93,10 +150,14 @@ public sealed class DamageSourceInfo
             SourceEntity = source,
             SourceEntityID = snapshot != null ? snapshot.SourceEntityID : 0,
             SourceSide = snapshot != null ? snapshot.SourceSide : BattleSide.Ally,
+            HasSourceEntity = snapshot != null
+                && (snapshot.SourceEntity != null || snapshot.SourceEntityID != 0),
             SourceKind = snapshot != null ? snapshot.SourceKind : ReactionSourceKind.DerivedReaction,
             SourceSkillID = snapshot != null ? snapshot.SourceSkillID : string.Empty,
             SourceEffectID = snapshot != null ? snapshot.SourceEffectID : string.Empty,
-            ReactionType = reactionType
+            ReactionType = reactionType,
+            SourceStatusID = string.Empty,
+            CountsAsHit = false
         };
     }
 }

@@ -43,7 +43,6 @@ public static class BloomCoreSystem
             StackCount = 1,
             RemainingPhaseCount = 1,
             AddInPhase = context != null ? context.ApplicationPhase : -1,
-            Caster = snapshot.SourceEntity,
             MainData = mainData,
             IsActive = true,
             ApplyOrder = applyOrder
@@ -89,11 +88,17 @@ public static class BloomCoreSystem
         }
         expired.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
         foreach (BloomCoreInstance core in expired)
-            Detonate(core);
+            BattleExecution.Enqueue(() => BattleExecution.PlayEffect(new BattlePresentationRequest(
+                BattlePresentationKind.Reaction, core.SourceSnapshot?.SourceEntity,
+                core.SourceSnapshot?.SourceEffectID, reaction: ReactionType.Bloom), () =>
+            {
+                if (Cores.Contains(core)) Detonate(core);
+            }));
     }
 
     public static List<ReactionDerivedHit> Detonate(BloomCoreInstance core)
     {
+        using var resolutionEffect = BattleResolutionContext.BeginEffect();
         List<ReactionDerivedHit> hits = RemoveCoreAndBuildHits(core);
         var result = new ReactionResult();
         result.DerivedHits.AddRange(hits);
@@ -188,7 +193,9 @@ public static class BloomCoreSystem
             Damage = damage,
             DamageElement = "Dendro",
             PoiseDamage = 0f,
-            ElementAmount = 0f
+            ElementAmount = 0f,
+            Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Bloom),
+            ReactionType = ReactionType.Bloom
         };
     }
 

@@ -36,7 +36,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using (var env = new BattleFlowTestEnv())
             {
                 env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None",
-                    "1*TotalATK,0,0", 30, 2);
+                    "1*TotalATK,0", 30, 2);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -84,8 +84,8 @@ namespace GenshinTurnBased.Tests.EditMode
             using (var env = new BattleFlowTestEnv())
             {
                 env.ConfigureEnemyDamageSkill();
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,0,2", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,2", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);

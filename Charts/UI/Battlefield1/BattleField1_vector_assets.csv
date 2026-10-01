@@ -1,0 +1,6 @@
+﻿StreamingAssetPath,RenderMode,Reason,SourceOffsetX,SourceOffsetY,SourceWidth,SourceHeight
+art_assets/UI/BattleField1/UI_components/DeepBrownCircle.png,VectorCircle,Approved shared solid circle,0,0,0,0
+art_assets/UI/BattleField1/UI_components/LightBrownCircle.png,VectorCircle,Approved shared solid circle,0,0,0,0
+art_assets/UI/BattleField1/UI_components/HP/EnemyHealth_Layers/HealthBar/03_BaseShape.png,VectorCapsule,PSD capsule silhouette,0.8500194549560547,-0.7253284454345703,167.96298027038574,10.737323760986328
+art_assets/UI/BattleField1/UI_components/HP/CharacterHealth_Layers/03_BaseShape.png,VectorCapsule,PSD capsule silhouette,0.5058631896972656,-0.4999656677246094,219.0000057220459,13.99998664855957
+art_assets/UI/BattleField1/UI_components/HP/BossHealth_Layers/03_BaseShape.png,PNG,Unsupported vector geometry; retain PNG,0.031368255615234375,-0.0074100494384765625,834.971284866333,12.02082633972168

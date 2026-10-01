@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 public struct BloomSecondaryReactionResolution
@@ -15,19 +14,6 @@ public static class BloomSecondaryReactionHandler
     private const float HyperbloomMultiplier = 3f;
     private const float BurgeonMultiplier = 4f;
     private const int MissileCountPerCore = 5;
-
-    private static Func<int, int> _randomIndex = count => UnityEngine.Random.Range(0, count);
-
-    /// <summary>供 EditMode 测试注入确定的随机目标选择。</summary>
-    public static void SetRandomIndexProvider(Func<int, int> provider)
-    {
-        _randomIndex = provider ?? (count => UnityEngine.Random.Range(0, count));
-    }
-
-    public static void ResetRandomIndexProvider()
-    {
-        _randomIndex = count => UnityEngine.Random.Range(0, count);
-    }
 
     public static bool TryResolve(
         ReactionContext context,
@@ -127,7 +113,7 @@ public static class BloomSecondaryReactionHandler
 
         for (int count = 0; count < MissileCountPerCore; count++)
         {
-            int index = _randomIndex(targets.Count);
+            int index = BattleRandom.NextInt(0, targets.Count);
             if (index < 0) index = 0;
             if (index >= targets.Count) index = targets.Count - 1;
             hits.Add(BuildHit(targets[index], snapshot, levelCoefficient, HyperbloomMultiplier, ReactionType.Hyperbloom));

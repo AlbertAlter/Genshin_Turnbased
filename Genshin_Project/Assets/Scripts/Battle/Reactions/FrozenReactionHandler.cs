@@ -44,9 +44,11 @@ public static class FrozenReactionHandler
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f) return false;
         if (context.AttackElement == "Hydro")
-            return context.Target.GetAura("Cryo")?.AuraAmount > 0f;
+            return context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura)
+                && context.Target.GetAura("Cryo")?.AuraAmount > 0f;
         if (context.AttackElement == "Cryo")
-            return context.Target.GetAura("Hydro")?.AuraAmount > 0f;
+            return context.AllowsReactionPool("Hydro", ReactionPoolKind.NormalAura)
+                && context.Target.GetAura("Hydro")?.AuraAmount > 0f;
         return false;
     }
 
@@ -93,13 +95,17 @@ public static class FrozenReactionHandler
 
     public static bool CanShatter(ReactionContext context)
     {
-        return context != null
-            && context.Target != null
-            && context.SourceEntity != null
-            && context.PoiseDamage > 0f
-            && context.Target.MaxPoise >= 0f
-            && IsFrozen(context.Target)
-            && context.PoiseDamage >= 100f;
+        if (context == null || context.Target == null || context.SourceEntity == null
+            || context.SourceKind == ReactionSourceKind.DerivedReaction || !IsFrozen(context.Target))
+            return false;
+
+        // 任意岩元素攻击，或双手剑角色的物理普攻/重击；不要求元素量或实际扣血。
+        if (context.AttackElement == "Geo") return true;
+        bool physical = context.AttackElement == "Physical" || context.AttackElement == "None";
+        return physical
+            && context.SourceEntity.Type == BattleEntity.EntityType.Character
+            && context.SourceEntity.WeaponType == 1
+            && (context.DamageType == "Normal" || context.DamageType == "Heavy");
     }
 
     /// <summary>当前出战的我方角色消耗10 AP主动解除冻结。</summary>

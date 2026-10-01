@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
@@ -13,9 +14,9 @@ namespace GenshinTurnBased.Tests.EditMode
         internal static string CreateTemporaryRoot()
         {
             return Path.Combine(
-                Path.GetTempPath(),
-                "GenshinTurnBased",
-                "RoguelikeSaveTests",
+                Application.dataPath,
+                RoguelikeSavePaths.ProjectSaveDirectoryName,
+                "TestTemp",
                 Guid.NewGuid().ToString("N"));
         }
 
@@ -39,15 +40,85 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             return new RoguelikeProgressSnapshot
             {
-                Characters = new List<CharacterProfile>
+                Characters = new List<RoguelikeCharacterProgressData>
                 {
-                    new CharacterProfile
+                    new RoguelikeCharacterProgressData
                     {
                         CharacterID = 1009,
                         Level = 20 + marker,
+                        Experience = 100 + marker,
+                        Ascension = marker % 7,
                         ConstellationLevel = marker % 7,
-                        IsAscended = marker % 2 == 1,
                         SkillLevels = new[] { 1 + marker, 2 + marker, 3 + marker, 4 + marker },
+                        EquippedWeaponInstanceId = "weapon-1",
+                        EquippedArtifacts = new List<RoguelikeArtifactEquipmentData>
+                        {
+                            new RoguelikeArtifactEquipmentData
+                            {
+                                Slot = ArtifactSlot.Flower,
+                                ArtifactInstanceId = "artifact-1",
+                            },
+                        },
+                    },
+                },
+                CharacterVitals = new List<RoguelikeCharacterVitalData>
+                {
+                    new RoguelikeCharacterVitalData
+                    {
+                        CharacterID = 1009,
+                        CurrentHealth = 800f - marker,
+                        MaxHealth = 1000f,
+                        CurrentEnergy = 30f + marker,
+                        MaxEnergy = 80f,
+                    },
+                },
+                PartyCharacterIds = new List<int> { 1009 },
+                Inventory = new RoguelikeInventoryData
+                {
+                    Items = new List<RoguelikeItemStackData>
+                    {
+                        new RoguelikeItemStackData { ItemId = "mora", Quantity = 1000 + marker },
+                    },
+                    Weapons = new List<RoguelikeWeaponInstanceData>
+                    {
+                        new RoguelikeWeaponInstanceData
+                        {
+                            InstanceId = "weapon-1",
+                            Experience = marker,
+                            Weapon = new WeaponLoadout
+                            {
+                                WeaponID = 15001,
+                                Level = 20,
+                                Ascension = 1,
+                                Refinement = 1,
+                            },
+                        },
+                    },
+                    Artifacts = new List<RoguelikeArtifactInstanceData>
+                    {
+                        new RoguelikeArtifactInstanceData
+                        {
+                            InstanceId = "artifact-1",
+                            Experience = marker,
+                            Artifact = new GeneratedArtifact
+                            {
+                                Star = 5,
+                                Slot = ArtifactSlot.Flower,
+                                Level = 4,
+                                MaxLevel = 20,
+                                MainAttributeType = "HP",
+                                MainAttributeValue = 1000f,
+                                SecondaryAttributes = new List<ArtifactSecondaryAttribute>
+                                {
+                                    new ArtifactSecondaryAttribute
+                                    {
+                                        AttributeType = "ATK",
+                                        Value = 20f,
+                                        RollCount = 1,
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
                 CurrentChapterId = chapterId,

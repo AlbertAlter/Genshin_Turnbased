@@ -1,0 +1,12 @@
+Key,Value
+TextColor,#DDD2C1
+LossColor,#FF6969
+GainColor,#6FDA32
+OutlineColor,#716758
+OutlinePixels,3
+CountDuration,0.3
+FloatDuration,0.8
+FloatDistance,24
+PulsePeriod,1.2
+PulseMinAlpha,0.65
+PreviewByAffordability,False

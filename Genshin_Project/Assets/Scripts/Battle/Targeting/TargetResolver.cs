@@ -106,10 +106,13 @@ public static class TargetResolver
             }
 
             var overridePool = Sanitize(request.OverridePositions, request.MaxPosition, false);
-            if (targetOverride.StartsWith("PreAlliesDamage(", StringComparison.Ordinal))
+            if (targetOverride.StartsWith("PreAlliesDamage(", StringComparison.Ordinal)
+                || targetOverride.StartsWith("PreSelfDamage(", StringComparison.Ordinal)
+                || targetOverride.StartsWith("PostAlliesDamage(", StringComparison.Ordinal)
+                || targetOverride.StartsWith("PostSelfDamage(", StringComparison.Ordinal))
             {
                 result.Positions = SelectByMode(request, overridePool);
-                return ValidateNonEmpty(request, result, "PreAlliesDamage 没有返回有效目标");
+                return ValidateNonEmpty(request, result, $"{targetOverride} 没有返回有效目标");
             }
 
             result.Positions = overridePool;
@@ -402,7 +405,7 @@ public static class TargetResolver
     private static int ChooseIndex(TargetResolutionRequest request, int count)
     {
         if (count <= 1) return 0;
-        if (request.RandomIndex == null) return UnityEngine.Random.Range(0, count);
+        if (request.RandomIndex == null) return BattleRandom.NextInt(0, count);
         int index = request.RandomIndex(count);
         if (index < 0) index = 0;
         if (index >= count) index = count - 1;

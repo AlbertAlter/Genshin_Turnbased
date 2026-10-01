@@ -111,7 +111,7 @@ public class TargetSelector
         Log($"自动选择 各组合血量: {windowLog}");
 
         // 并列：随机选一个
-        _windowIndex = bestCandidates[UnityEngine.Random.Range(0, bestCandidates.Count)];
+        _windowIndex = bestCandidates[BattleRandom.NextInt(0, bestCandidates.Count)];
         ApplySelection("自动");
     }
 

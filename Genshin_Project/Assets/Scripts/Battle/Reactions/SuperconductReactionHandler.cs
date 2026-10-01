@@ -100,14 +100,17 @@ public static class SuperconductReactionHandler
             return 0f;
 
         if (context.AttackElement == "Cryo")
-            return context.Target.GetAura("Electro")?.AuraAmount ?? 0f;
+            return context.AllowsReactionPool("Electro", ReactionPoolKind.NormalAura)
+                ? context.Target.GetAura("Electro")?.AuraAmount ?? 0f
+                : 0f;
         if (context.AttackElement != "Electro")
             return 0f;
 
-        float normalCryo = context.Target.GetAura("Cryo")?.AuraAmount ?? 0f;
+        float normalCryo = context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura)
+            ? context.Target.GetAura("Cryo")?.AuraAmount ?? 0f : 0f;
         float frozenCryo = context.IgnoreFrozenAura
-            ? 0f
-            : FrozenReactionHandler.GetFrozenAuraAsCryo(context.Target);
+            || !context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen)
+            ? 0f : FrozenReactionHandler.GetFrozenAuraAsCryo(context.Target);
         return normalCryo + frozenCryo;
     }
 
@@ -121,13 +124,13 @@ public static class SuperconductReactionHandler
 
         float remaining = amount;
         ElementalAura normalCryo = context.Target.GetAura("Cryo");
-        if (normalCryo != null)
+        if (context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && normalCryo != null)
         {
             float normalConsumed = Mathf.Min(normalCryo.AuraAmount, remaining);
             context.Target.ConsumeAura("Cryo", normalConsumed);
             remaining -= normalConsumed;
         }
-        if (remaining > 0f)
+        if (remaining > 0f && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen))
             FrozenReactionHandler.ConsumeFrozenAura(context.Target, remaining);
     }
 

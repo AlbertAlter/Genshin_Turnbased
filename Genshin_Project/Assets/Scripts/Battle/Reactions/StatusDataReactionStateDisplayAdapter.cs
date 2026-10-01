@@ -21,7 +21,11 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
             existing.RemainingPhaseCount = state.RemainingRounds;
             existing.MainData = mainData;
             existing.AddInPhase = state.OriginPhase;
-            existing.Caster = state.SourceSnapshot != null ? state.SourceSnapshot.SourceEntity : null;
+            // 反应来源由 ReactionStateInstance.SourceSnapshot 保存；UI 镜像不属于任何角色。
+            existing.Caster = null;
+            existing.HasSourceEntity = false;
+            existing.SourceEntityID = 0;
+            existing.SourceSide = default;
             existing.ApplyOrder = state.ApplyOrder;
             return;
         }
@@ -32,7 +36,6 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
             StackCount = 1,
             RemainingPhaseCount = state.RemainingRounds,
             AddInPhase = state.OriginPhase,
-            Caster = state.SourceSnapshot != null ? state.SourceSnapshot.SourceEntity : null,
             MainData = mainData,
             IsActive = true,
             ApplyOrder = state.ApplyOrder

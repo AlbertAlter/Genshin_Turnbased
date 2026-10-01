@@ -1,3 +1,4 @@
+#if GTB_POISE_SYSTEM
 using UnityEngine;
 
 /// <summary>
@@ -123,3 +124,4 @@ public static class PoiseSystem
         return true;
     }
 }
+#endif

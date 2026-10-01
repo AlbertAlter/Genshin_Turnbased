@@ -1,14 +1,15 @@
 using System;
+using System.Globalization;
 
 /// <summary>
-/// Ò»¶Î Hit µÄÔËĞĞÊ±Êı¾İ£¨±¶ÂÊ¡¢Ï÷ÈÍ¡¢¸½×ÅÁ¿£©
+/// ä¸€æ®µ Hit çš„è¿è¡Œæ—¶æ•°æ®ï¼›é…è¡¨åŠæ—¥å¿—ç»Ÿä¸€ä½¿ç”¨å€ç‡ã€é™„ç€é‡ä¸¤é¡¹ï¼ˆM,Eï¼‰ã€‚
 /// </summary>
 [Serializable]
 public struct HitData
 {
-    public float Multiplier;    // M: ±¶ÂÊ²¿·Ö
-    public float Poise;         // P: Ï÷ÈÍÖµ
-    public float ElementAura;   // E: ÔªËØ¸½×ÅÁ¿
+    public float Multiplier;    // M: å€ç‡éƒ¨åˆ†
+    public float Poise;         // ä»…ä¾›å¾…ç§»é™¤çš„æ—§è¿è¡Œæ—¶æ¥å£ä¿ç•™ï¼ŒHitDataParser ä¸å†èµ‹å€¼ã€‚
+    public float ElementAura;   // E: å…ƒç´ é™„ç€é‡
 
     public HitData(float multiplier, float poise, float aura)
     {
@@ -18,11 +19,11 @@ public struct HitData
     }
 
     /// <summary>
-    /// ´Ó "1.24*ATK;100;2" ¸ñÊ½½âÎö
-    /// Èç¹û¸ñÊ½²»¶ÔÔò·µ»ØÄ¬ÈÏÖµ£¨½âÎö¹¤×÷ÔÚ HitDataParser ÖĞÍê³É£©
+    /// è¾“å‡º M,E æ ¼å¼ï¼Œä¸å†è¾“å‡ºå·²åºŸå¼ƒçš„å‰ŠéŸ§é¡¹ã€‚
     /// </summary>
     public override string ToString()
     {
-        return $"{Multiplier}*ATK;{Poise};{ElementAura}";
+        return Multiplier.ToString(CultureInfo.InvariantCulture) + "*ATK,"
+            + ElementAura.ToString(CultureInfo.InvariantCulture);
     }
 }

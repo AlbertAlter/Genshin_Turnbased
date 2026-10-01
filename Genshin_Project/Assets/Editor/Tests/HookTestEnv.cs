@@ -104,11 +104,11 @@ namespace GenshinTurnBased.Tests.EditMode
                 StatusID2 = statusID2,
                 StackCount = 1,
                 RemainingPhaseCount = duration,
-                Caster = caster,
                 MainData = mainData,
                 IsActive = true,
                 ApplyOrder = ++BattleEntity._applyOrderCounter
             };
+            inst.RecordSource(caster);
             entity.StatusDict[statusID2] = inst;
             return inst;
         }
@@ -124,20 +124,30 @@ namespace GenshinTurnBased.Tests.EditMode
             string hitSource = "",
             int maxTimePerTurn = 0,
             int maxTimePerLife = 5,
-            int cooldown = 0)
+            int cooldown = 0,
+            string damageSource = "",
+            string outgoingHitSource = "",
+            string outgoingDamageSource = "")
         {
             var act = new StatusActionData
             {
                 StatusID = 9900000,
                 StatusID2 = statusID2,
-                ActionType = actionType,
+                // 测试辅助保留旧的 OnHit 调用写法，但注入当前 Status_Action 结构：
+                // 命中事件统一是 OnTrigger，过滤条件写入 OnHit，不再使用废弃的 HitSource。
+                ActionType = actionType == "OnHit" || actionType == "OnDamage"
+                    ? "OnTrigger"
+                    : actionType,
                 Param1 = param1,
                 Param2 = string.Empty,
                 Param3 = string.Empty,
                 MaxTimePerTurn = maxTimePerTurn,
                 MaxTimePerLife = maxTimePerLife,
                 Cooldown = cooldown,
-                HitSource = hitSource,
+                OnHit = actionType == "OnHit" ? hitSource : string.Empty,
+                OnDamage = actionType == "OnDamage" ? damageSource : string.Empty,
+                OutgoingHit = outgoingHitSource,
+                OutgoingDamage = outgoingDamageSource,
                 ScriptHook = scriptHook
             };
             if (!dm.StatusActionDict.TryGetValue(statusID2, out var list))
@@ -191,6 +201,8 @@ namespace GenshinTurnBased.Tests.EditMode
             ReactionStateSystem.ClearAll();
             BattleEntity._applyOrderCounter = 0;
             ReactionResolver.ResetSession();
+            HitBatch.ResetSession();
+            BattleEntity.ResetDamageResolutionSession();
         }
     }
 

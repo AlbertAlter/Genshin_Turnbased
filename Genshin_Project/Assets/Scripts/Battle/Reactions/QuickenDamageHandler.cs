@@ -62,7 +62,6 @@ public static class QuickenDamageHandler
                 components.SkillBaseDamage,
                 levelCoefficient,
                 type,
-                components.CriticalMultiplier,
                 damageBonusMultiplier,
                 components.DefenseMultiplier,
                 components.ResistanceMultiplier)
@@ -71,7 +70,6 @@ public static class QuickenDamageHandler
                 levelCoefficient,
                 type,
                 context.SourceEntity != null ? context.SourceEntity.TotalEM : 0f,
-                components.CriticalMultiplier,
                 damageBonusMultiplier,
                 components.DefenseMultiplier,
                 components.ResistanceMultiplier);

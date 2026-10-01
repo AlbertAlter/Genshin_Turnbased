@@ -223,7 +223,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 SkillEffectID = skillID * 100 + 1,
                 SkillEffectID2 = effectID2,
                 EffectType = "Damage",
-                Hits1 = $"{multiplier},0,{elementAmount}"
+                Hits1 = $"{multiplier},{elementAmount}"
             };
             DataManager.EnemyAIDict[EnemyID] = new List<EnemyAIData>
             {
@@ -349,7 +349,7 @@ namespace GenshinTurnBased.Tests.EditMode
             ReactionStateSystem.SetDisplayAdapter(null);
             BloomCoreSystem.ClearAll();
             ReactionResolver.ResetSession();
-            BloomSecondaryReactionHandler.ResetRandomIndexProvider();
+            BattleRandom.ResetSource();
             BattleEntity._applyOrderCounter = 0;
         }
     }

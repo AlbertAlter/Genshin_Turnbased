@@ -24,7 +24,14 @@ public static class OverloadedReactionHandler
 
         float consumed = Mathf.Min(context.AttackAmount, auraAmount);
         if (auraElement == "Pyro")
-            BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, consumed);
+        {
+            if (context.RestrictedAuraKind == ReactionPoolKind.Burning)
+                BurningReactionHandler.ConsumeBurningAura(context.Target, consumed);
+            else if (context.RestrictedAuraKind == ReactionPoolKind.NormalAura)
+                context.Target.ConsumeAura("Pyro", consumed);
+            else
+                BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, consumed);
+        }
         else
             context.Target.ConsumeAura(auraElement, consumed);
 
@@ -90,9 +97,15 @@ public static class OverloadedReactionHandler
         else return false;
 
         if (auraElement == "Pyro")
-            auraAmount = BurningReactionHandler.GetPyroAmountIncludingBurning(context.Target);
+        {
+            if (context.AllowsReactionPool("Pyro", ReactionPoolKind.NormalAura))
+                auraAmount += context.Target.GetAura("Pyro")?.AuraAmount ?? 0f;
+            if (context.AllowsReactionPool("Pyro", ReactionPoolKind.Burning))
+                auraAmount += BurningReactionHandler.GetBurningAuraAsPyro(context.Target);
+        }
         else
-            auraAmount = context.Target.GetAura(auraElement)?.AuraAmount ?? 0f;
+            auraAmount = context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
+                ? context.Target.GetAura(auraElement)?.AuraAmount ?? 0f : 0f;
         return auraAmount > 0f;
     }
 

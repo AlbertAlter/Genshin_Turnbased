@@ -70,6 +70,52 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void EveryOwnedCharacter_RequiresVitals()
+        {
+            var snapshot = RoguelikeSaveTestFactory.Snapshot(1);
+            snapshot.CharacterVitals.Clear();
+
+            Assert.That(validator.Validate(snapshot).Succeeded, Is.False);
+        }
+
+        [Test]
+        public void PartyMember_MustBeOwned()
+        {
+            var snapshot = RoguelikeSaveTestFactory.Snapshot(1);
+            snapshot.PartyCharacterIds.Add(9999);
+
+            Assert.That(validator.Validate(snapshot).Succeeded, Is.False);
+        }
+
+        [Test]
+        public void WeaponInstance_CannotBeEquippedByTwoCharacters()
+        {
+            var snapshot = RoguelikeSaveTestFactory.Snapshot(1);
+            var second = RoguelikeSaveJson.DeepClone(snapshot.Characters[0]);
+            second.CharacterID = 1010;
+            snapshot.Characters.Add(second);
+            snapshot.CharacterVitals.Add(new RoguelikeCharacterVitalData
+            {
+                CharacterID = 1010,
+                CurrentHealth = 500f,
+                MaxHealth = 500f,
+                CurrentEnergy = 60f,
+                MaxEnergy = 60f,
+            });
+
+            Assert.That(validator.Validate(snapshot).Succeeded, Is.False);
+        }
+
+        [Test]
+        public void ArtifactEquipmentSlot_MustMatchInstanceSlot()
+        {
+            var snapshot = RoguelikeSaveTestFactory.Snapshot(1);
+            snapshot.Characters[0].EquippedArtifacts[0].Slot = ArtifactSlot.Plume;
+
+            Assert.That(validator.Validate(snapshot).Succeeded, Is.False);
+        }
+
+        [Test]
         public void NewerSchema_IsRejectedExplicitly()
         {
             var save = RoguelikeSaveTestFactory.ChapterEntry(2, 1);
@@ -79,6 +125,15 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(result.Succeeded, Is.False);
             Assert.That(result.ErrorCode, Is.EqualTo(RoguelikeSaveErrorCode.UnsupportedSchema));
+        }
+
+        [Test]
+        public void SchemaOne_IsRejectedAfterChapterDataUpgrade()
+        {
+            var save = RoguelikeSaveTestFactory.ChapterEntry(2, 1);
+            save.Metadata.SchemaVersion = 1;
+
+            Assert.That(validator.Validate(save).Succeeded, Is.False);
         }
 
         [Test]

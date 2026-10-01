@@ -20,9 +20,9 @@ namespace GenshinTurnBased.Tests.EditMode
                 using (var env = new BattleFlowTestEnv())
                 {
                     env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", (string)data[0],
-                        $"1*TotalATK,0,{data[1]}", 10);
+                        $"1*TotalATK,{data[1]}", 10);
                     env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", (string)data[2],
-                        $"1*TotalATK,0,{data[3]}", 10);
+                        $"1*TotalATK,{data[3]}", 10);
                     env.CreateMinimalBattle();
                     env.Manager.StartBattle();
                     env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -37,12 +37,41 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
+        public void AmplifyingReaction_CompletesBeforeEachHitFinalCritRoll()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.ConfigureAllyAction(
+                    0, "SK_Normal_CritOrder", "SE_Normal_CritOrder",
+                    "Hydro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(
+                    2, "SK_Skill_CritOrder", "SE_Skill_CritOrder",
+                    "Pyro", "1*TotalATK,1", 10);
+                env.CreateMinimalBattle();
+                env.Ally.Entity.CritRate = 0.5f;
+                env.Ally.Entity.CritDMG = 1f;
+                var random = new SequenceBattleRandomSource(new[] { 0.9f, 0.1f });
+                BattleRandom.SetSource(random);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+
+                Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                // 第一 hit 未暴击50；第二 hit 先蒸发为75，再在最终阶段独立暴击为150。
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(800f).Within(0.01f));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        [Timeout(5000)]
         public void Overloaded_DealsDerivedDamageToMainAndAdjacentAndConsumesBothAuras()
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Electro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Pyro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Electro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Pyro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 env.Enemy.Entity.TotalHP = env.Enemy.Entity.CurrentHP = 1100f;
                 EnemyBattleController adjacent = env.CreateEnemy(2);
@@ -61,13 +90,14 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
-        public void FreezeThenShatter_UsesRealElementSkillsAndPoiseCondition()
+        public void FreezeThenShatter_UsesClaymorePhysicalHeavyWithoutPoise()
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "None", "1*TotalATK,100,0", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "None", "1*TotalATK,0", 10);
+                env.DataManager.CharacterAttributesDict[BattleFlowTestEnv.AllyID].WeaponType = 1;
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -79,7 +109,8 @@ namespace GenshinTurnBased.Tests.EditMode
 
                 env.Manager.UseHeavyAttackBySlot(0);
                 Assert.That(FrozenReactionHandler.IsFrozen(env.Enemy.Entity), Is.False);
-                Assert.That(env.Enemy.Entity.Poise, Is.Zero.Within(0.01f));
+                Assert.That(env.Enemy.Entity.Poise, Is.EqualTo(env.Enemy.Entity.MaxPoise).Within(0.01f));
+                Assert.That(env.Enemy.Entity.HasStatus("ST_Fall_Enemy"), Is.False);
                 // 碎冰：17.2*3=51.6；三次直伤各50。
                 Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(798.4f).Within(0.01f));
             }
@@ -91,9 +122,9 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,0,2", 10);
-                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Electro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,2", 10);
+                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Electro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -120,8 +151,8 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Hydro", "1*TotalATK,0,2", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,0,2", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Hydro", "1*TotalATK,2", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,2", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -141,8 +172,8 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -163,8 +194,8 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Pyro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Pyro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -187,9 +218,9 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Electro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Electro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Electro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -211,9 +242,9 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,0,1", 10);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,0,2", 10);
-                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Pyro", "1*TotalATK,0,1", 10);
+                env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Dendro", "1*TotalATK,1", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,2", 10);
+                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Pyro", "1*TotalATK,1", 10);
                 env.CreateMinimalBattle();
                 EnemyBattleController adjacent = env.CreateEnemy(2);
                 env.Enemy.Entity.TotalHP = env.Enemy.Entity.CurrentHP = 1300f;
@@ -240,14 +271,14 @@ namespace GenshinTurnBased.Tests.EditMode
                     "SK_Normal_Flow",
                     "SE_Normal_Flow",
                     "Hydro",
-                    "1*TotalATK,0,1",
+                    "1*TotalATK,1",
                     10);
                 env.ConfigureAllyAction(
                     2,
                     "SK_Skill_Flow",
                     "SE_Skill_Flow",
                     "Geo",
-                    "1*TotalATK,0,2",
+                    "1*TotalATK,2",
                     10);
                 env.CreateMinimalBattle();
                 CharacterBattleController background = env.CreateAlly(2);
@@ -293,7 +324,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     "SK_Skill_Flow",
                     "SE_Skill_Flow",
                     "Geo",
-                    "1*TotalATK,0,2",
+                    "1*TotalATK,2",
                     10);
                 env.CreateMinimalBattle();
                 EnemyBattleController second = env.CreateEnemy(2);
@@ -336,9 +367,46 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void Swirl_IsNotClaimedAsFlowCoverageUntilHandlerExists()
+        [Timeout(5000)]
+        public void Swirl_UsesRealSkillEntryDealsDamageAndSpreadsAuraToAdjacentSlot()
         {
-            Assert.Ignore("ReactionType 已声明，但当前没有扩散 Handler；实现后必须改为真实技能入口测试。");
+            using (var env = new BattleFlowTestEnv())
+            {
+                env.ConfigureAllyAction(
+                    0,
+                    "SK_Normal_Flow",
+                    "SE_Normal_Flow",
+                    "Pyro",
+                    "1*TotalATK,1",
+                    10);
+                env.ConfigureAllyAction(
+                    2,
+                    "SK_Skill_Flow",
+                    "SE_Skill_Flow",
+                    "Anemo",
+                    "1*TotalATK,1",
+                    10);
+                env.CreateMinimalBattle();
+                EnemyBattleController adjacent = env.CreateEnemy(2);
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+
+                Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
+                env.Ally.ForcedTargetPositions.Clear();
+                env.Ally.ForcedTargetPositions.Add(1);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+
+                Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(879.36f).Within(0.01f));
+                Assert.That(env.Enemy.Entity.GetAura("Pyro"), Is.Null);
+                Assert.That(env.Enemy.Entity.GetAura("Anemo"), Is.Null);
+                ElementalAura propagated = adjacent.Entity.GetAura("Pyro");
+                Assert.That(propagated, Is.Not.Null);
+                Assert.That(propagated.AuraAmount, Is.EqualTo(1f).Within(0.0001f));
+                Assert.That(propagated.SourceEffectID, Is.EqualTo("SE_Skill_Flow"));
+                Assert.That(adjacent.Entity.CurrentHP, Is.EqualTo(1000f));
+            }
         }
 
         private static Shield GetCrystallizeShield(BattleEntity entity)

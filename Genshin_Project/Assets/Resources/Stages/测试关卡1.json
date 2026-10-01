@@ -1,5 +1,6 @@
 {
     "StageName": "测试关卡1",
+    "BattleID": 1,
     "Allies": [
         {
             "CharacterID": 1009,
@@ -28,27 +29,27 @@
     ],
     "Enemies": [
         {
-            "EnemyID": 20001,
+            "EnemyID": 2001,
             "Level": 40,
             "Slot": 1
         },
         {
-            "EnemyID": 20001,
+            "EnemyID": 2001,
             "Level": 40,
             "Slot": 2
         },
         {
-            "EnemyID": 20000,
+            "EnemyID": 2000,
             "Level": 10,
             "Slot": 3
         },
         {
-            "EnemyID": 20001,
+            "EnemyID": 2001,
             "Level": 40,
             "Slot": 4
         },
         {
-            "EnemyID": 20001,
+            "EnemyID": 2001,
             "Level": 40,
             "Slot": 5
         }

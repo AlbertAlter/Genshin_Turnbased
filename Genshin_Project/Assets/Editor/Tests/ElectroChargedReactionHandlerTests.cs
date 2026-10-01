@@ -124,7 +124,11 @@ namespace GenshinTurnBased.Tests.EditMode
             ElectroChargedReactionHandler.TickTurnEnd(TurnPhase.AllyPostTurn);
 
             Assert.That(_main.CurrentHP, Is.LessThan(hpBeforeTick));
+#if GTB_POISE_SYSTEM
             Assert.That(_main.Poise, Is.EqualTo(450f));
+#else
+            Assert.That(_main.Poise, Is.EqualTo(500f));
+#endif
             Assert.That(_main.GetAura("Hydro"), Is.Null);
             Assert.That(_main.GetAura("Electro"), Is.Null);
             Assert.That(ReactionStateSystem.TryGetEntityState(

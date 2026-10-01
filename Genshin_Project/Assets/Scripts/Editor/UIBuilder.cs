@@ -29,7 +29,6 @@ public static class UIBuilder
     const int FontSize = 26;
     const int SmallFont = 18;
 
-    [MenuItem("Tools/战斗界面/一键生成战斗UI")]
     public static void Build()
     {
         if (TMP_Settings.instance == null)
@@ -391,6 +390,7 @@ public static class UIBuilder
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI));
         go.transform.SetParent(parent, false);
         var txt = go.GetComponent<TextMeshProUGUI>();
+        txt.font = ProjectUiFont.LoadOrCreate();
         txt.text = content;
         txt.fontSize = size;
         txt.color = TextColor;

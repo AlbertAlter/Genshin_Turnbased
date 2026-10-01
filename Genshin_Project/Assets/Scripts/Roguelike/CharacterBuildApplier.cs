@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 
@@ -25,10 +26,15 @@ public static class CharacterBuildApplier
         if (dm == null) return;
 
         // 1. 技能等级（关卡配置直接指定，1-15）
-        for (int i = 0; i < 4 && i < profile.SkillLevels.Length; i++)
+        if (ctrl.SkillLevels == null || ctrl.SkillLevels.Length < 4)
+            ctrl.SkillLevels = new[] { 1, 1, 1, 1 };
+        if (profile.SkillLevels != null)
         {
-            if (profile.SkillLevels[i] > 0)
-                ctrl.SkillLevels[i] = Mathf.Clamp(profile.SkillLevels[i], 1, 15);
+            for (int i = 0; i < 4 && i < profile.SkillLevels.Length; i++)
+            {
+                if (profile.SkillLevels[i] > 0)
+                    ctrl.SkillLevels[i] = Mathf.Clamp(profile.SkillLevels[i], 1, 15);
+            }
         }
 
         // 2. 天赋（等级 >= UnlockAfter 自动激活）
@@ -53,6 +59,10 @@ public static class CharacterBuildApplier
                 LogManager.Log(LogCategory.Build, $"命座{c.ConstellationIndex} 生效: {c.Description}");
             }
         }
+
+        // 4. 武器：面板与 Weapon_Initiate 状态统一走装备生命周期。
+        if (profile.Weapon != null && profile.Weapon.WeaponID > 0)
+            ctrl.EquipWeapon(profile.Weapon);
     }
 
     // ================= Modifiers 解析 =================
@@ -115,15 +125,18 @@ public static class CharacterBuildApplier
         var parts = SplitArgs(args);
         if (parts.Count < 2) { LogManager.LogWarning(LogCategory.Build, $"ModifyEffect 参数不足: {args}"); return; }
         string effectID2 = parts[0].Trim();
-        var dm = DataManager.Instance;
-        if (dm == null || !dm.SkillEffectDict.TryGetValue(effectID2, out var src))
+        if (!TryFindEffect(ctrl, effectID2, out string skillID2,
+                out List<SkillEffectData> effects, out int effectIndex))
         {
-            LogManager.LogWarning(LogCategory.Build, $"ModifyEffect 效果不存在: {effectID2}");
+            LogManager.LogWarning(LogCategory.Build, $"ModifyEffect 未在角色技能中找到: {effectID2}");
             return;
         }
-        var eff = ctrl.CloneEffect(src);
+
+        // 必须基于控制器当前副本继续修改，保证多条天赋/命座修改可以叠加。
+        SkillEffectData eff = ctrl.CloneEffect(effects[effectIndex]);
         ApplyFieldAssignments(eff, parts, 1);
-        ReplaceEffectInSkills(ctrl, effectID2, eff);
+        effects[effectIndex] = eff;
+        ctrl.SetSkillEffects(skillID2, effects);
         LogManager.Log(LogCategory.Build, $"ModifyEffect: {effectID2} 已修改");
     }
 
@@ -134,13 +147,14 @@ public static class CharacterBuildApplier
         var parts = SplitArgs(args);
         if (parts.Count < 3) { LogManager.LogWarning(LogCategory.Build, $"InsertEffect 参数不足: {args}"); return; }
         string afterEffectID2 = parts[1].Trim();
-        var dm = DataManager.Instance;
-        if (dm == null || !dm.SkillEffectDict.TryGetValue(afterEffectID2, out var anchor))
+        if (!TryFindEffect(ctrl, afterEffectID2, out string skillID2,
+                out List<SkillEffectData> effects, out int anchorIndex))
         {
-            LogManager.LogWarning(LogCategory.Build, $"InsertEffect 目标效果不存在: {afterEffectID2}");
+            LogManager.LogWarning(LogCategory.Build, $"InsertEffect 未在角色技能中找到目标效果: {afterEffectID2}");
             return;
         }
-        var eff = ctrl.CloneEffect(anchor);          // 以目标效果为模板（继承 EffectType 等）
+        // 基于控制器当前锚点副本克隆，保留此前已应用的构筑修改。
+        var eff = ctrl.CloneEffect(effects[anchorIndex]);
         eff.SkillEffectID = 0;                        // 新效果无唯一ID（不被 _effectById 覆盖）
         eff.SkillEffectID2 = "";                      // 等级查询走 %引用路径，不匹配 SkillLevel 行
         eff.TargetOverride = "";                      // 新效果不继承模板的目标覆盖（C6 曾继承 "0,0" 把全队加攻施加到上一条目标=敌人）
@@ -162,21 +176,17 @@ public static class CharacterBuildApplier
         {
             ApplyFieldAssignments(eff, parts, 2);
         }
-        InsertAfterEffect(ctrl, afterEffectID2, eff);
+        effects.Insert(anchorIndex + 1, eff);
+        ctrl.SetSkillEffects(skillID2, effects);
         LogManager.Log(LogCategory.Build, $"InsertEffect: 新效果({eff.EffectType}) 已插入 {afterEffectID2} 之后");
-        //诊断（2026-08-14）：打印目标技能插入后的效果列表内容
-        var diagSkill = FindSkillOfEffect(ctrl, afterEffectID2);
-        if (diagSkill != null)
+
+        var sb = new System.Text.StringBuilder();
+        for (int index = 0; index < effects.Count; index++)
         {
-            var diagList = ctrl.GetSkillEffects(diagSkill);
-            var sb = new System.Text.StringBuilder();
-            for (int di = 0; di < diagList.Count; di++)
-            {
-                if (di > 0) sb.Append(" | ");
-                sb.Append(diagList[di].SkillEffectID2 + ":" + diagList[di].EffectType);
-            }
-            LogManager.Log(LogCategory.Build, $"[诊断] {diagSkill} 效果列表 = {sb}");
+            if (index > 0) sb.Append(" | ");
+            sb.Append(effects[index].SkillEffectID2 + ":" + effects[index].EffectType);
         }
+        LogManager.Log(LogCategory.Build, $"[诊断] {skillID2} 效果列表 = {sb}");
     }
 
     /// <summary>ModifySkill(技能ID2;字段=值...)：克隆改技能字段（C4 兔兔伯爵次数/冷却）。参数统一分号分隔。</summary>
@@ -185,6 +195,11 @@ public static class CharacterBuildApplier
         var parts = SplitArgs(args);
         if (parts.Count < 2) { LogManager.LogWarning(LogCategory.Build, $"ModifySkill 参数不足: {args}"); return; }
         string skillID2 = parts[0].Trim();
+        if (!ctrl.GetSkillID2List().Contains(skillID2))
+        {
+            LogManager.LogWarning(LogCategory.Build, $"ModifySkill 技能不存在: {skillID2}");
+            return;
+        }
         ctrl.ModifySkillData(skillID2, sk => ApplyFieldAssignments(sk, parts, 1));
         LogManager.Log(LogCategory.Build, $"ModifySkill: {skillID2} 已修改");
     }
@@ -194,10 +209,18 @@ public static class CharacterBuildApplier
     {
         var parts = args.Split(',');
         if (parts.Length < 2) { LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 参数不足: {args}"); return; }
-        if (!int.TryParse(parts[0].Trim(), out int skillType)) return;
-        if (!int.TryParse(parts[1].Trim(), out int add)) return;
-        if (skillType >= 0 && skillType < ctrl.SkillLevels.Length)
-            ctrl.SkillLevels[skillType] = Mathf.Clamp(ctrl.SkillLevels[skillType] + add, 1, 15);
+        if (!int.TryParse(parts[0].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int skillType)
+            || !int.TryParse(parts[1].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int add))
+        {
+            LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 参数不是整数: {args}");
+            return;
+        }
+        if (ctrl.SkillLevels == null || skillType < 0 || skillType >= ctrl.SkillLevels.Length)
+        {
+            LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 技能类型越界: {skillType}");
+            return;
+        }
+        ctrl.SkillLevels[skillType] = Mathf.Clamp(ctrl.SkillLevels[skillType] + add, 1, 15);
         LogManager.Log(LogCategory.Build, $"SkillLevelUp: 技能{skillType} +{add}级 → {ctrl.SkillLevels[skillType]}");
     }
 
@@ -228,59 +251,80 @@ public static class CharacterBuildApplier
         }
     }
 
-    /// <summary>按字段名反射赋值（SkillEffectData/SkillMainData 的 int/float/string 字段）。</summary>
+    /// <summary>按字段名反射赋值（SkillEffectData/SkillMainData 的 int/float/bool/string 字段）。</summary>
     static void SetField(object obj, string fieldName, string value)
     {
+        if (obj == null)
+        {
+            LogManager.LogWarning(LogCategory.Build, $"字段赋值目标为空: {fieldName}={value}");
+            return;
+        }
+
         var fi = obj.GetType().GetField(fieldName);
         if (fi == null) { LogManager.LogWarning(LogCategory.Build, $"字段不存在: {fieldName}"); return; }
         try
         {
-            if (fi.FieldType == typeof(int)) fi.SetValue(obj, int.Parse(value));
-            else if (fi.FieldType == typeof(float)) fi.SetValue(obj, float.Parse(value));
+            if (fi.FieldType == typeof(int))
+            {
+                if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsed))
+                {
+                    LogManager.LogWarning(LogCategory.Build, $"字段赋值失败 {fieldName}={value}: 不是有效整数");
+                    return;
+                }
+                fi.SetValue(obj, parsed);
+            }
+            else if (fi.FieldType == typeof(float))
+            {
+                if (!float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsed))
+                {
+                    LogManager.LogWarning(LogCategory.Build, $"字段赋值失败 {fieldName}={value}: 不是有效小数");
+                    return;
+                }
+                fi.SetValue(obj, parsed);
+            }
+            else if (fi.FieldType == typeof(bool))
+            {
+                if (!bool.TryParse(value, out bool parsed))
+                {
+                    LogManager.LogWarning(LogCategory.Build, $"字段赋值失败 {fieldName}={value}: 不是有效布尔值");
+                    return;
+                }
+                fi.SetValue(obj, parsed);
+            }
             else if (fi.FieldType == typeof(string)) fi.SetValue(obj, value);
             else LogManager.LogWarning(LogCategory.Build, $"不支持的字段类型: {fieldName} ({fi.FieldType})");
         }
-        catch (System.Exception e) { LogManager.LogWarning(LogCategory.Build, $"字段赋值失败 {fieldName}={value}: {e.Message}"); }
-    }
-
-    /// <summary>定位效果ID2所属技能，把修改后的效果替换回效果列表。</summary>
-    static void ReplaceEffectInSkills(CharacterBattleController ctrl, string effectID2, SkillEffectData newEff)
-    {
-        string skillID2 = FindSkillOfEffect(ctrl, effectID2);
-        if (skillID2 == null) { LogManager.LogWarning(LogCategory.Build, $"未找到 {effectID2} 所属技能"); return; }
-        var list = ctrl.GetSkillEffects(skillID2);
-        for (int i = 0; i < list.Count; i++)
+        catch (System.Exception exception)
         {
-            if (list[i].SkillEffectID2 == effectID2)
-            {
-                list[i] = newEff;
-                ctrl.SetSkillEffects(skillID2, list);
-                return;
-            }
+            LogManager.LogWarning(LogCategory.Build, $"字段赋值失败 {fieldName}={value}: {exception.Message}");
         }
-        LogManager.LogWarning(LogCategory.Build, $"ModifyEffect 未在技能列表中找到: {effectID2}");
     }
 
-    /// <summary>把新效果插入目标效果之后（列表顺序即执行顺序）。</summary>
-    static void InsertAfterEffect(CharacterBattleController ctrl, string afterEffectID2, SkillEffectData newEff)
+    /// <summary>在控制器自己的克隆效果表中精确定位效果，避免回写或重读 DataManager 全局行。</summary>
+    static bool TryFindEffect(
+        CharacterBattleController ctrl,
+        string effectID2,
+        out string skillID2,
+        out List<SkillEffectData> effects,
+        out int effectIndex)
     {
-        string skillID2 = FindSkillOfEffect(ctrl, afterEffectID2);
-        if (skillID2 == null) { LogManager.LogWarning(LogCategory.Build, $"未找到 {afterEffectID2} 所属技能"); return; }
-        var list = ctrl.GetSkillEffects(skillID2);
-        int idx = list.FindIndex(e => e.SkillEffectID2 == afterEffectID2);
-        if (idx < 0) { LogManager.LogWarning(LogCategory.Build, $"InsertEffect 未找到目标效果位置: {afterEffectID2}"); return; }
-        list.Insert(idx + 1, newEff);
-        ctrl.SetSkillEffects(skillID2, list);
-    }
+        skillID2 = null;
+        effects = null;
+        effectIndex = -1;
+        if (ctrl == null || string.IsNullOrEmpty(effectID2)) return false;
 
-    /// <summary>遍历角色技能列表，精确匹配效果ID2，返回所属技能ID2。</summary>
-    static string FindSkillOfEffect(CharacterBattleController ctrl, string effectID2)
-    {
-        foreach (var sid in ctrl.GetSkillID2List())
+        foreach (string candidateSkillID in ctrl.GetSkillID2List())
         {
-            foreach (var e in ctrl.GetSkillEffects(sid))
-                if (e.SkillEffectID2 == effectID2) return sid;
+            List<SkillEffectData> candidateEffects = ctrl.GetSkillEffects(candidateSkillID);
+            int candidateIndex = candidateEffects.FindIndex(
+                effect => effect != null && effect.SkillEffectID2 == effectID2);
+            if (candidateIndex < 0) continue;
+
+            skillID2 = candidateSkillID;
+            effects = candidateEffects;
+            effectIndex = candidateIndex;
+            return true;
         }
-        return null;
+        return false;
     }
 }

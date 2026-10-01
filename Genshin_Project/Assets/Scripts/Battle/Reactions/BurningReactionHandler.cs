@@ -120,28 +120,29 @@ public static class BurningReactionHandler
         }
         states.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
 
-        _isTickingTurnEnd = true;
-        try
-        {
-            foreach (ReactionStateInstance state in states)
+        foreach (ReactionStateInstance state in states)
+            BattleExecution.Enqueue(async () =>
             {
-                if (!ReactionStateSystem.TryGetEntityState(
-                        state.Target,
-                        ReactionType.Burning,
-                        out ReactionStateInstance current)
-                    || !object.ReferenceEquals(current, state))
-                    continue;
-                ExecuteTick(state, phase);
-            }
-        }
-        finally
-        {
-            _isTickingTurnEnd = false;
-        }
+                bool previous = _isTickingTurnEnd;
+                _isTickingTurnEnd = true;
+                try
+                {
+                    await BattleExecution.PlayEffect(new BattlePresentationRequest(
+                        BattlePresentationKind.Reaction, state.SourceSnapshot?.SourceEntity,
+                        state.SourceSnapshot?.SourceEffectID, targets: new[] { state.Target }, reaction: ReactionType.Burning), () =>
+                    {
+                        if (ReactionStateSystem.TryGetEntityState(state.Target, ReactionType.Burning, out var current)
+                            && object.ReferenceEquals(current, state)) ExecuteTick(state, phase);
+                    });
+                }
+                finally { _isTickingTurnEnd = previous; }
+            });
     }
 
     private static void ExecuteTick(ReactionStateInstance state, TurnPhase phase)
     {
+        using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        using var hitResponses = BattleResolutionContext.BeginCollection();
         BattleEntity target = state.Target;
         if (target == null || !target.IsAlive)
         {
@@ -190,10 +191,27 @@ public static class BurningReactionHandler
             SkipImmediateAuraDecay = true
         });
 
-        float finalDamage = target.AbsorbDamageWithShield(result.FinalDamage, "Pyro");
-        // 带来源扣血（2026-08-19）：燃烧持续伤害使用创建燃烧状态时保存的来源快照
-        target.TakeDamage(finalDamage, DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Burning));
-        ReactionEffectExecutor.FinalizePrimaryHit(result, finalDamage);
+        HitResolution resolution;
+        using (var batch = new HitBatch())
+        {
+            resolution = batch.Resolve(new HitRequest
+            {
+                Target = target,
+                DamageBeforeShield = result.FinalDamage,
+                Element = "Pyro",
+                PoiseDamage = 0f,
+                // 燃烧保留触发者/阵营，但它是反应伤害，只产生 OnDamage。
+                Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Burning),
+                HitIndex = 0,
+                TargetIndex = 0
+            });
+            batch.Flush();
+        }
+        ReactionEffectExecutor.FinalizePrimaryHit(
+            result,
+            resolution != null && resolution.DamageEvent != null
+                ? resolution.DamageEvent.ActualHPDamage
+                : 0f);
         ReactionEffectExecutor.ExecuteDerivedHits(result);
     }
 
@@ -208,6 +226,7 @@ public static class BurningReactionHandler
         else return null;
 
         ElementalAura aura = context.Target.GetAura(auraElement);
-        return aura != null && aura.AuraAmount > 0f ? aura : null;
+        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
+            && aura != null && aura.AuraAmount > 0f ? aura : null;
     }
 }

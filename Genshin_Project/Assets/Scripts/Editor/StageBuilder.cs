@@ -18,6 +18,7 @@ public class StageBuilder : EditorWindow
     private List<StageEnemySetup> _enemies = new List<StageEnemySetup>();
     private string _energyMode = "Percent";   // Percent / Fixed
     private float _energyValue = 0f;
+    private int _battleId = 1;
 
     // 下拉数据源（编辑器内直读 StreamingAssets/Data 的 xlsx）
     private List<CharOption> _charOptions = new List<CharOption>();
@@ -171,6 +172,7 @@ public class StageBuilder : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("关卡名称", EditorStyles.boldLabel);
         _stageName = EditorGUILayout.TextField(_stageName);
+        _battleId = Mathf.Clamp(EditorGUILayout.IntField("战斗背景编号", _battleId), 1, 7);
 
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
@@ -305,6 +307,7 @@ public class StageBuilder : EditorWindow
         var cfg = new StageSetupData
         {
             StageName = _stageName,
+            BattleID = _battleId,
             Allies = allies,
             Enemies = enemies,
             InitialEnergyMode = _energyMode,
@@ -379,6 +382,7 @@ public class StageBuilder : EditorWindow
             var cfg = JsonUtility.FromJson<StageSetupData>(File.ReadAllText(path));
             if (cfg == null) { LogManager.LogError(LogCategory.Build, "关卡解析失败"); return; }
             _stageName = cfg.StageName ?? Path.GetFileNameWithoutExtension(path);
+            _battleId = Mathf.Clamp(cfg.BattleID, 1, 7);
             _allies = cfg.Allies ?? new List<StageAllySetup>();
             _enemies = cfg.Enemies ?? new List<StageEnemySetup>();
             _energyMode = cfg.InitialEnergyMode;

@@ -392,7 +392,17 @@ public static class WorkbookIntegrityValidator
         }
         else if (characterWorkbook && row.Sheet == "SkillLevel")
         {
-            ValidateTextReference(row, "ParamID", characterEffectNames, issues);
+            // 等级参数也可属于状态效果（STE_）或状态本身（ST_，如丽莎引雷）。
+            // 仍按实际定义检查引用，不能只凭前缀放行任意字符串。
+            string paramId = row.Get("ParamID");
+            if (!string.IsNullOrWhiteSpace(paramId) &&
+                !characterEffectNames.Contains(paramId) &&
+                !statusEffectNames.Contains(paramId) &&
+                !statusNames.Contains(paramId))
+            {
+                AddIssue(issues, "INVALID_REFERENCE", row,
+                    $"ParamID references missing character effect, status effect or status [{paramId}].");
+            }
         }
 
         if (IsStatusEffectSheet(row.Sheet) && TryInt(row.Get("StatusEffectID"), out int statusEffectId))

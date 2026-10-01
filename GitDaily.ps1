@@ -44,6 +44,38 @@ function Show-GitStatus {
 }
 
 
+function Assert-PsdSyncConfiguration {
+    $psdRoot = Join-Path $repoRoot "PSDfiles"
+
+    & git lfs version *> $null
+    if ($LASTEXITCODE -ne 0) {
+        throw "未检测到 Git LFS，无法安全同步 PSDfiles。请先安装 Git LFS 并执行 git lfs install。"
+    }
+
+    if (-not (Test-Path -LiteralPath $psdRoot -PathType Container)) {
+        throw "找不到 PSDfiles 目录：$psdRoot"
+    }
+
+    $psdFiles = @(Get-ChildItem -LiteralPath $psdRoot -Recurse -File -Filter "*.psd")
+    foreach ($file in $psdFiles) {
+        $relativePath = (Resolve-Path -LiteralPath $file.FullName -Relative) -replace '^\.\\', ''
+        $attribute = & git check-attr filter -- $relativePath
+
+        if ($LASTEXITCODE -ne 0 -or $attribute -notmatch ': filter: lfs$') {
+            throw "PSD 文件未配置 Git LFS：$relativePath。请确认 .gitattributes 包含 *.psd filter=lfs diff=lfs merge=lfs -text。"
+        }
+    }
+
+    $trackedArtAssets = @(& git ls-files -- art_assets)
+    if ($LASTEXITCODE -ne 0) {
+        throw "无法检查 art_assets 的 Git 跟踪状态。"
+    }
+    if ($trackedArtAssets.Count -gt 0) {
+        throw "art_assets 仍有 $($trackedArtAssets.Count) 个文件被 Git 跟踪，请先执行 git rm -r --cached -- art_assets。"
+    }
+}
+
+
 function Start-Work {
     Write-Host "[1/2] 检查当前修改..." -ForegroundColor Cyan
 
@@ -77,9 +109,13 @@ function Start-Work {
 
 
 function Save-Work {
-    Write-Host "[1/3] 自动暂存全部项目修改..." -ForegroundColor Cyan
+    Write-Host "[1/4] 检查 PSDfiles 与 Git LFS 配置..." -ForegroundColor Cyan
 
-    # .gitignore 会排除本地缓存；其余修改、新文件和删除全部暂存。
+    Assert-PsdSyncConfiguration
+
+    Write-Host "[2/4] 自动暂存项目修改（包含 PSDfiles 的完整子目录结构）..." -ForegroundColor Cyan
+
+    # .gitignore 会排除 art_assets 和本地缓存；PSDfiles 及其内部相对路径会递归暂存。
     & git add -A -- .
 
     if ($LASTEXITCODE -ne 0) {
@@ -106,7 +142,7 @@ function Save-Work {
 
     if ($diffExitCode -eq 1) {
         $commitMessage = "自动同步 {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-        Write-Host "[2/3] 自动提交：$commitMessage" -ForegroundColor Cyan
+        Write-Host "[3/4] 自动提交：$commitMessage" -ForegroundColor Cyan
 
         & git commit -m $commitMessage
 
@@ -115,10 +151,10 @@ function Save-Work {
         }
     }
     else {
-        Write-Host "[2/3] 没有新的本地修改，继续检查待上传提交..." -ForegroundColor Cyan
+        Write-Host "[3/4] 没有新的本地修改，继续检查待上传提交..." -ForegroundColor Cyan
     }
 
-    Write-Host "[3/3] 自动上传到 GitHub..." -ForegroundColor Cyan
+    Write-Host "[4/4] 自动上传到 GitHub（PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
 
     & git push
 

@@ -1,16 +1,17 @@
+using System.Collections.Generic;
+
 /// <summary>统一执行反应生成的派生命中；派生 Hit 的元素量由 handler 明确填写。</summary>
 public static class ReactionEffectExecutor
 {
-    /// <summary>主伤害完成护盾结算并实际扣血后，落地依赖扣血结果的碎冰。</summary>
+    /// <summary>主命中结算后落地碎冰；护盾吸收、实际扣血为零也不阻止碎冰。</summary>
     public static void FinalizePrimaryHit(ReactionResult result, float actualHPDamage)
     {
         if (result == null || result.PendingShatter == null) return;
         PendingShatterEffect pending = result.PendingShatter;
         result.PendingShatter = null;
-        if (actualHPDamage <= 0f || pending.Target == null) return;
+        if (pending.Target == null) return;
 
         ReactionStateSystem.RemoveEntityState(pending.Target, ReactionType.Frozen);
-        PoiseSystem.BreakPoise(pending.Target, pending.Source);
         result.DerivedHits.Insert(0, new ReactionDerivedHit
         {
             Target = pending.Target,
@@ -24,32 +25,53 @@ public static class ReactionEffectExecutor
                 pending.SourceKind,
                 pending.SourceSkillID,
                 pending.SourceEffectID,
-                ReactionType.Shatter),
+                ReactionType.Shatter,
+                countsAsHit: false),
             ReactionType = ReactionType.Shatter
         });
-        result.TriggeredReactions.Insert(0, new ReactionOccurrence
+        ReactionOccurrence occurrence = new ReactionOccurrence
         {
             Type = ReactionType.Shatter,
             DisplayName = "碎冰",
             SourceEntity = pending.Source,
             Target = pending.Target,
-            SourceEffectID = pending.SourceEffectID
-        });
+            SourceEffectID = pending.SourceEffectID,
+            InvolvedElements = new List<string> { "Cryo" }
+        };
+        result.TriggeredReactions.Insert(0, occurrence);
+        StatusOnHitHookSystem.NotifyReactions(new[] { occurrence });
         LogManager.Log(LogCategory.Reaction, $"碎冰：{pending.Target.EntityID} 受到 {pending.Damage:F1} 物理剧变伤害");
     }
 
     public static void ExecuteDerivedHits(ReactionResult result)
     {
+        using var resolutionEffect = BattleResolutionContext.BeginEffect();
         if (result == null) return;
+        using var responses = BattleResolutionContext.BeginCollection();
+        StatusOnHitHookSystem.NotifyReactions(result.TriggeredReactions);
 
-        foreach (ReactionDerivedHit hit in result.DerivedHits)
+        using (var batch = new HitBatch())
         {
-            if (hit == null || hit.Target == null) continue;
+            int targetIndex = 0;
+            foreach (ReactionDerivedHit hit in result.DerivedHits)
+            {
+                if (hit == null || hit.Target == null) continue;
 
-            float finalDamage = hit.Target.AbsorbDamageWithShield(hit.Damage, hit.DamageElement);
-            // 带来源扣血（2026-08-19）：反应派生伤害统一入口（来源快照保留原始归属）
-            hit.Target.TakeDamage(finalDamage, hit.Source ?? DamageSourceInfo.CreateUnknown());
-            PoiseSystem.ApplyPoiseDamage(hit.Target, hit.PoiseDamage, finalDamage);
+                DamageSourceInfo source = hit.Source ?? DamageSourceInfo.CreateUnknown();
+                source.CountsAsHit = false;
+                batch.Resolve(new HitRequest
+                {
+                    Target = hit.Target,
+                    DamageBeforeShield = hit.Damage,
+                    Element = hit.DamageElement,
+                    // 派生反应是否削韧由 handler 产生的数值决定，与 CountsAsHit 无关。
+                    PoiseDamage = hit.PoiseDamage,
+                    Source = source,
+                    HitIndex = 0,
+                    TargetIndex = targetIndex++
+                });
+            }
+            batch.Flush();
         }
     }
 }

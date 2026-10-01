@@ -23,7 +23,7 @@ public static class AmplifyingReactionHandler
         float attackAmount = context.AttackAmount;
         float reactionMultiplier;
 
-        if (context.AttackElement == "Pyro" && HasAura(target, "Hydro"))
+        if (context.AttackElement == "Pyro" && HasAura(context, "Hydro"))
         {
             // 蒸发固定水:火=1:2。此处火为攻击元素，水为目标附着。
             float hydroAmount = target.GetAura("Hydro").AuraAmount;
@@ -38,16 +38,16 @@ public static class AmplifyingReactionHandler
             reactionMultiplier = 1.5f;
         }
         else if (context.AttackElement == "Hydro"
-                 && !HasBurningWithExcessDendro(target)
-                 && BurningReactionHandler.GetPyroAmountIncludingBurning(target) > 0f)
+                 && !HasBurningWithExcessDendro(context)
+                 && GetPyroAmount(context) > 0f)
         {
             // 蒸发固定水:火=1:2。此处水为攻击元素，火为目标附着。
-            float pyroAmount = BurningReactionHandler.GetPyroAmountIncludingBurning(target);
+            float pyroAmount = GetPyroAmount(context);
             float consumedHydro = Mathf.Min(attackAmount, pyroAmount / 2f);
             float consumedPyro = consumedHydro * 2f;
             if (consumedHydro <= 0f) return false;
 
-            BurningReactionHandler.ConsumePyroIncludingBurning(target, consumedPyro);
+            ConsumePyro(context, consumedPyro);
             resolution.Type = ReactionType.Vaporize;
             resolution.DisplayName = "蒸发（水×火）";
             resolution.RemainingAttackAmount = Mathf.Max(0f, attackAmount - consumedHydro);
@@ -68,15 +68,15 @@ public static class AmplifyingReactionHandler
             reactionMultiplier = 2f;
         }
         else if (context.AttackElement == "Cryo"
-                 && BurningReactionHandler.GetPyroAmountIncludingBurning(target) > 0f)
+                 && GetPyroAmount(context) > 0f)
         {
             // 融化固定火:冰=1:2。此处冰为攻击元素，火为目标附着。
-            float pyroAmount = BurningReactionHandler.GetPyroAmountIncludingBurning(target);
+            float pyroAmount = GetPyroAmount(context);
             float consumedPyro = Mathf.Min(pyroAmount, attackAmount / 2f);
             float consumedCryo = consumedPyro * 2f;
             if (consumedPyro <= 0f) return false;
 
-            BurningReactionHandler.ConsumePyroIncludingBurning(target, consumedPyro);
+            ConsumePyro(context, consumedPyro);
             resolution.Type = ReactionType.Melt;
             resolution.DisplayName = "融化（冰×火）";
             resolution.RemainingAttackAmount = Mathf.Max(0f, attackAmount - consumedCryo);
@@ -107,26 +107,53 @@ public static class AmplifyingReactionHandler
         return true;
     }
 
-    private static bool HasAura(BattleEntity target, string element)
+    private static bool HasAura(ReactionContext context, string element)
     {
-        ElementalAura aura = target.GetAura(element);
+        if (!context.AllowsReactionPool(element, ReactionPoolKind.NormalAura)) return false;
+        ElementalAura aura = context.Target.GetAura(element);
         return aura != null && aura.AuraAmount > 0f;
     }
 
-    private static bool HasBurningWithExcessDendro(BattleEntity target)
+    private static bool HasBurningWithExcessDendro(ReactionContext context)
     {
+        BattleEntity target = context.Target;
         ElementalAura dendro = target != null ? target.GetAura("Dendro") : null;
-        return BurningReactionHandler.IsBurning(target)
+        return string.IsNullOrEmpty(context.RestrictedAuraElement)
+            && BurningReactionHandler.IsBurning(target)
             && dendro != null
             && dendro.AuraAmount > 0f;
+    }
+
+    private static float GetPyroAmount(ReactionContext context)
+    {
+        float amount = 0f;
+        if (context.AllowsReactionPool("Pyro", ReactionPoolKind.NormalAura))
+            amount += context.Target.GetAura("Pyro")?.AuraAmount ?? 0f;
+        if (context.AllowsReactionPool("Pyro", ReactionPoolKind.Burning))
+            amount += BurningReactionHandler.GetBurningAuraAsPyro(context.Target);
+        return amount;
+    }
+
+    private static void ConsumePyro(ReactionContext context, float amount)
+    {
+        if (context.RestrictedAuraKind == ReactionPoolKind.Burning)
+            BurningReactionHandler.ConsumeBurningAura(context.Target, amount);
+        else if (context.RestrictedAuraKind == ReactionPoolKind.NormalAura)
+            context.Target.ConsumeAura("Pyro", amount);
+        else
+            BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, amount);
     }
 
     private static float GetCryoAmount(ReactionContext context)
     {
         BattleEntity target = context.Target;
         ElementalAura aura = target.GetAura("Cryo");
-        float normalCryo = aura != null ? aura.AuraAmount : 0f;
-        return normalCryo + (context.IgnoreFrozenAura ? 0f : FrozenReactionHandler.GetFrozenAuraAsCryo(target));
+        float normalCryo = context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && aura != null
+            ? aura.AuraAmount : 0f;
+        float frozenCryo = !context.IgnoreFrozenAura
+            && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen)
+            ? FrozenReactionHandler.GetFrozenAuraAsCryo(target) : 0f;
+        return normalCryo + frozenCryo;
     }
 
     private static void ConsumeCryo(ReactionContext context, float amount)
@@ -134,14 +161,15 @@ public static class AmplifyingReactionHandler
         BattleEntity target = context.Target;
         float remaining = amount;
         ElementalAura aura = target.GetAura("Cryo");
-        if (aura != null)
+        if (context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && aura != null)
         {
             float consumed = Mathf.Min(aura.AuraAmount, remaining);
             target.ConsumeAura("Cryo", consumed);
             remaining -= consumed;
         }
 
-        if (remaining > 0f && !context.IgnoreFrozenAura)
+        if (remaining > 0f && !context.IgnoreFrozenAura
+            && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen))
             FrozenReactionHandler.ConsumeFrozenAura(target, remaining);
     }
 }

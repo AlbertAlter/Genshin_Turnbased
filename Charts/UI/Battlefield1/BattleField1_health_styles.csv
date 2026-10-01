@@ -1,0 +1,8 @@
+Key,Value
+AllyFillColor,#69D82C
+EnemyFillColor,#DE4E32
+InsetLeft,5
+InsetRight,5
+InsetTop,4
+InsetBottom,4
+TransitionSeconds,0.2

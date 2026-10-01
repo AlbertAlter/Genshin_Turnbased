@@ -1,0 +1,4 @@
+State,IconOpacity,SkillBackgroundOpacity,BurstBackgroundOpacity,ShowDisabledOverlay,ShowCooldownTurns
+Normal,255,255,255,False,False
+Freeze,64,255,0,True,False
+Cooldown,64,255,128,False,True

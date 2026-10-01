@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ using TMPro;
 /// 职责：
 ///  1. 数据刷新：从 BattleManager/CharacterBattleController 拉取血量/能量/AP/状态栏/按钮绑定，刷到 UI 组件
 ///  2. 按钮操作：普攻/重击/战技/爆发/换人按钮 → BattleTester 公开操作接口（与键盘同一套战斗逻辑）
-/// 图片素材未就位，全部用纯色 Image 占位；图标后续按 SkillID2 命名接入。
+/// 普攻/重击按钮图标读取当前绑定技能的 Skills/Icon，并从 StreamingAssets 加载。
 /// 场景搭建：按字段把组件拖进 Inspector 对应槽位即可（详见搭建说明）。
 /// </summary>
 public class UIBattleController : MonoBehaviour
@@ -34,6 +35,8 @@ public class UIBattleController : MonoBehaviour
     public Button btnBurst;      // 爆发
     public Button btnSwitch;     // 换人
     public Button btnEndTurn;    // 结束回合（可选）
+    public Image btnAttackIcon;  // 普攻图标：StreamingAssets/art_assets/Skill_Icon/#Normal
+    public Image btnHeavyIcon;   // 重击图标：StreamingAssets/art_assets/Skill_Icon/#Normal
     public TMP_Text[] btnSkillNames = new TMP_Text[4]; // 按钮上显示的技能名（0普攻/1重击/2战技/3爆发）
     public TMP_Text[] btnCooldowns = new TMP_Text[4];       // 技能按钮上的冷却数字（0普攻/1重击/2战技/3=能量球）
     public TMP_Text[] allyBurstCooldowns = new TMP_Text[4]; // 各角色能量球上的爆发冷却数字（与 allySlots 对应）
@@ -61,6 +64,7 @@ public class UIBattleController : MonoBehaviour
     [System.Serializable]
     public class AllyUISlot
     {
+        public CharacterCardView cardView; // Runtime card art with a separate frame layer.
         public GameObject root;          // 整个槽位的根物体（隐藏空位用）
         public TMP_Text nameText;        // 角色名（暂显示 CharacterID）
         public Image hpBar;              // 血条（Filled Horizontal）
@@ -75,6 +79,7 @@ public class UIBattleController : MonoBehaviour
     [System.Serializable]
     public class EnemyUISlot
     {
+        public EnemyArtView artView; // Missing configured art remains empty.
         public GameObject root;
         public TMP_Text lvText;   // 等级（独立字段，Lv.XX）
         public TMP_Text nameText;
@@ -84,7 +89,10 @@ public class UIBattleController : MonoBehaviour
     }
 
     private bool _switching = false;
+    private bool _forcedDeathSwitch = false;
     private int _switchIndex = 0;
+    private string _skillIconBindingKey = string.Empty;
+    private Coroutine _skillIconLoadRoutine;
     /// <summary>是否处于换人界面（BattleInputController 空格过回合的禁用判断用，2026-08-14）。</summary>
 
 
@@ -144,6 +152,10 @@ public class UIBattleController : MonoBehaviour
         RefreshOverlay(bm);
         RefreshFieldArea(bm); // 目标选择命中数显示 + 位置色块淡色（2026-08-14）
 
+        // 出战角色若在我方回合开始时已经阵亡，自动进入不可取消的免费换人界面。
+        if (!_switching && bm.IsFreeDeathSwitchPending)
+            BeginSwitch(true);
+
         // 按F进入换人（选择阶段内外均可，2026-08-14）；换人界面内F=确认
         if (!_switching && Input.GetKeyDown(KeyCode.F))
         {
@@ -189,9 +201,10 @@ public class UIBattleController : MonoBehaviour
     void RefreshAllies(BattleManager bm)
     {
         //当前出战角色槽索引（目标选择时高亮施放角色用，2026-08-14）
-        int activeIdx = 0;
-        for (int k = 0; k < bm.Allies.Count; k++)
-            if (bm.Allies[k] != null && bm.Allies[k].IsActive) { activeIdx = k; break; }
+        CharacterBattleController activeAlly = bm.GetActiveAlly();
+        int activeIdx = activeAlly != null && activeAlly.Entity != null
+            ? activeAlly.Entity.SlotPosition - 1
+            : -1;
 
         //技能目标方向（2026-08-14）：我方目标技能（治疗/增益单选）时，选中的我方槽位用第一种高亮（黄）
         //2026-08-15 效果级：按"当前待选效果"判定——Self→仅高亮施放者自己；Allies→选中我方槽位也黄；
@@ -217,13 +230,15 @@ public class UIBattleController : MonoBehaviour
         {
             var slot = allySlots[i];
             if (slot == null) continue;
-            var ally = i < bm.Allies.Count ? bm.Allies[i] : null;
+            var ally = bm.GetAllyBySlot(i);
             if (ally == null || ally.Entity == null)
             {
+                if (slot.cardView != null) slot.cardView.ClearCharacter();
                 if (slot.root != null) slot.root.SetActive(false);
                 continue;
             }
             if (slot.root != null) slot.root.SetActive(true);
+            if (slot.cardView != null) slot.cardView.SetCharacter(ally.CharacterID);
             var ent = ally.Entity;
             if (slot.nameText != null) slot.nameText.text = $"角色{ent.EntityID}";
             float maxHp = ent.TotalHP;
@@ -277,10 +292,12 @@ public class UIBattleController : MonoBehaviour
             }
             if (enemy == null || enemy.Entity == null)
             {
+                if (slot.artView != null) slot.artView.ClearEnemy();
                 if (slot.root != null) slot.root.SetActive(false);
                 continue;
             }
             if (slot.root != null) slot.root.SetActive(true);
+            if (slot.artView != null) slot.artView.SetEnemy(enemy.Entity.EntityID);
             var ent = enemy.Entity;
             if (slot.nameText != null) slot.nameText.text = $"敌{ent.EntityID}";
             if (slot.lvText != null) slot.lvText.text = $"Lv.{ent.Level}";
@@ -321,6 +338,7 @@ public class UIBattleController : MonoBehaviour
         SetButtonState(btnSkill, ally.CanUseSkill());
         SetButtonState(btnBurst, ally.CanUseBurst());
         SetButtonState(btnSwitch, bm.CanSwitchActiveAlly());
+        RefreshAttackIcons(ally);
         if (btnSkillNames != null)
         {
             for (int i = 0; i < btnSkillNames.Length && i < 4; i++)
@@ -342,9 +360,7 @@ public class UIBattleController : MonoBehaviour
         // 爆发冷却：当前出战角色的能量球上显示
         if (allyBurstCooldowns != null)
         {
-            int activeIdx = 0;
-            for (int i = 0; i < bm.Allies.Count; i++)
-                if (bm.Allies[i] != null && bm.Allies[i].IsActive) { activeIdx = i; break; }
+            int activeIdx = ally.Entity != null ? ally.Entity.SlotPosition - 1 : -1;
             for (int i = 0; i < allyBurstCooldowns.Length; i++)
             {
                 if (allyBurstCooldowns[i] == null) continue;
@@ -386,6 +402,47 @@ public class UIBattleController : MonoBehaviour
                     container.GetChild(d).gameObject.SetActive(false);
             }
         }
+    }
+
+    private void RefreshAttackIcons(CharacterBattleController ally)
+    {
+        if (ally == null) return;
+        string normalIcon = ally.GetBoundSkillIcon(0);
+        string heavyIcon = ally.GetBoundSkillIcon(1);
+        string bindingKey = ally.CharacterID + "|" + normalIcon + "|" + heavyIcon;
+        if (bindingKey == _skillIconBindingKey) return;
+        _skillIconBindingKey = bindingKey;
+        if (_skillIconLoadRoutine != null) StopCoroutine(_skillIconLoadRoutine);
+        if (btnAttackIcon != null) btnAttackIcon.sprite = null;
+        if (btnHeavyIcon != null) btnHeavyIcon.sprite = null;
+        _skillIconLoadRoutine = StartCoroutine(
+            LoadAttackIcons(bindingKey, normalIcon, heavyIcon));
+    }
+
+    private IEnumerator LoadAttackIcons(string bindingKey, string normalIcon, string heavyIcon)
+    {
+        if (btnAttackIcon != null)
+        {
+            yield return CharacterSkillIconResolver.LoadSprite(
+                normalIcon,
+                sprite =>
+                {
+                    if (_skillIconBindingKey == bindingKey) btnAttackIcon.sprite = sprite;
+                },
+                message => Debug.LogWarning(message, this));
+        }
+
+        if (btnHeavyIcon != null)
+        {
+            yield return CharacterSkillIconResolver.LoadSprite(
+                heavyIcon,
+                sprite =>
+                {
+                    if (_skillIconBindingKey == bindingKey) btnHeavyIcon.sprite = sprite;
+                },
+                message => Debug.LogWarning(message, this));
+        }
+        _skillIconLoadRoutine = null;
     }
 
     void RefreshOverlay(BattleManager bm)
@@ -475,7 +532,7 @@ public class UIBattleController : MonoBehaviour
                 var inst = sorted[i];
                 icons[i].gameObject.SetActive(true);
                 var c = statusColor;
-                if (inst.RemainingPhaseCount <= 1)
+                if (!inst.IsPermanent && inst.RemainingPhaseCount <= 1)
                     c.a = 0.35f + 0.65f * Mathf.Abs(Mathf.Sin(Time.time * 6f)); // 剩1回合淡入淡出闪烁
                 icons[i].color = c;
             }
@@ -504,49 +561,78 @@ public class UIBattleController : MonoBehaviour
 
     void OnSwitchButton()
     {
-        var bm = BattleManager.Instance;
-        if (bm == null) return;
         //选择阶段内也允许进入换人（确认时 UISwitchCharacter 会退出目标选择，2026-08-14）
         if (_switching) { ConfirmSwitch(); return; }
+        BeginSwitch(false);
+    }
+
+    void BeginSwitch(bool forcedDeathSwitch)
+    {
+        var bm = BattleManager.Instance;
+        if (bm == null) return;
         //换人界面为模态界面：停用战斗输入组件（BattleInputController 的 Update 停止执行，2026-08-14）
         if (input != null) input.enabled = false;
         _switching = true;
-        _switchIndex = 0;
-        for (int i = 0; i < bm.Allies.Count; i++)
-            if (bm.Allies[i] != null && bm.Allies[i].IsActive) { _switchIndex = i; break; }
-        LogManager.Log(LogCategory.UI, $"进入换人界面，当前选中 {_switchIndex}");
+        _forcedDeathSwitch = forcedDeathSwitch;
+        CharacterBattleController active = bm.GetActiveAlly();
+        _switchIndex = active != null && active.Entity != null
+            ? Mathf.Clamp(active.Entity.SlotPosition - 1, 0, bm.AllySlotCount - 1)
+            : 0;
+
+        // 强制换人从编队编号1开始，选择第一个存活角色；前面的角色阵亡或为空就继续向后找。
+        if (_forcedDeathSwitch)
+        {
+            for (int i = 0; i < bm.AllySlotCount; i++)
+            {
+                if (!bm.CanSwitchActiveAllyTo(i)) continue;
+                _switchIndex = i;
+                break;
+            }
+        }
+        LogManager.Log(LogCategory.UI,
+            $"进入{(_forcedDeathSwitch ? "免费强制" : string.Empty)}换人界面，当前选中 {_switchIndex}");
     }
 
     void MoveSwitchHighlight(int dir)
     {
         var bm = BattleManager.Instance;
         if (bm == null) return;
-        int n = 0;
-        for (int i = 0; i < bm.Allies.Count; i++) if (bm.Allies[i] != null) n++;
-        if (n <= 1) return;
-        _switchIndex = (_switchIndex + dir + n) % n;
+        _switchIndex = bm.FindNextLivingAllySlot(_switchIndex, dir);
     }
 
     void ConfirmSwitch()
     {
         var bm = BattleManager.Instance;
-        if (bm == null) return;
-        //切换角色消耗5AP（Main Doc：我方回合内切换角色消耗5AP；不足则无法切换，2026-08-14）
-        var active = bm.GetActiveAlly();
-        if (active != null && active.APManager != null && !active.APManager.CanAfford(5))
+        if (bm == null || input == null) return;
+        if (!bm.CanSwitchActiveAllyTo(_switchIndex))
         {
-            LogManager.Log(LogCategory.Action, "切换角色失败：AP不足（需要5AP）");
+            LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {_switchIndex}");
             return;
         }
-        if (active != null && active.APManager != null) active.APManager.ConsumeAP(5);
-        input?.UISwitchCharacter(_switchIndex);
-        if (input != null) input.enabled = true; //退出换人界面：恢复战斗输入（2026-08-14）
+
+        bool freeDeathSwitch = bm.IsFreeDeathSwitchPending;
+        if (!bm.TrySwitchActiveAllyWithAPCost(_switchIndex))
+        {
+            if (!freeDeathSwitch && (bm.APManager == null || !bm.APManager.CanAfford(BattleManager.SwitchAPCost)))
+                LogManager.Log(LogCategory.Action, $"切换角色失败：AP不足（需要{BattleManager.SwitchAPCost}AP）");
+            else
+                LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {_switchIndex}");
+            return;
+        }
+
+        input.UICancelSelection();
+        LogManager.Log(LogCategory.UI, $"切换出战角色 -> {_switchIndex}{(freeDeathSwitch ? "（阵亡免费换人）" : string.Empty)}");
+        input.enabled = true; //退出换人界面：恢复战斗输入（2026-08-14）
         _switching = false;
+        _forcedDeathSwitch = false;
     }
 
     void CancelSwitch()
     {
+        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeDeathSwitchPending))
+            return;
         if (input != null) input.enabled = true; //退出换人界面：恢复战斗输入（2026-08-14）
         _switching = false;
+        _forcedDeathSwitch = false;
     }
 }

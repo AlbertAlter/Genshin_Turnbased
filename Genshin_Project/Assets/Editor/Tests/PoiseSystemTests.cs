@@ -1,3 +1,4 @@
+#if GTB_POISE_SYSTEM
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
@@ -125,3 +126,4 @@ namespace GenshinTurnBased.Tests.EditMode
         }
     }
 }
+#endif

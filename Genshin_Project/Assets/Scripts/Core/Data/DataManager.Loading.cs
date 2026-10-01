@@ -85,13 +85,16 @@ public partial class DataManager
         LoadCharacterOverview();
         LoadCharacterSheets();
         LoadGrowthCurve();
+        LoadWeaponAttributes();
         LoadStatusData();
         LoadEnemyStatusData();
         LoadOverallStatusData();
+        LoadWeaponStatusData();
         LoadEnemyAttributes();
         LoadEnemyCurves();
         LoadEnemySkill();
         LoadReactionLevelCoefficient();
+        LoadEnemyShieldRules();
 
         // 旧 StageConfig.xlsx 为可选兼容数据；当前战斗使用 Resources/StageConfig.json。
         LoadStageConfig();

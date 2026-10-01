@@ -31,7 +31,7 @@ public static class KillHookSystem
         foreach (var act in actions)
         {
             if (act.ActionType != "OnTrigger") continue;
-            if (!ScriptHookParser.TryParse(act.ScriptHook, out string fn, out _) || fn != "Kill") continue;
+            if (!ScriptHookParser.TryFind(act.ScriptHook, "Kill", out _)) continue;
             _entries.Add(new KillHookEntry { Status = status, Host = host, TriggerLine = act });
             registered = true;
         }
@@ -53,6 +53,7 @@ public static class KillHookSystem
     /// </summary>
     public static void NotifyDeath(DamageResolvedEvent damageEvent)
     {
+        using var collection = BattleResolutionContext.BeginCollection();
         if (damageEvent == null || !damageEvent.CausedDeath) return;
         if (_entries.Count == 0) return;
 
@@ -71,13 +72,15 @@ public static class KillHookSystem
                 StatusHost = entry.Host,
                 HitEffectID = damageEvent.Source != null ? damageEvent.Source.SourceEffectID : null,
                 DamageEvent = damageEvent,
+                EventHookName = "Kill",
                 ActionTargetPositions = BattleManager.Instance != null
                     ? BattleManager.Instance.PendingActionTargetPositions
                     : null
             };
             // Kill 参数匹配 + 次数限制 + 执行统一走施放者控制器入口
             entry.Status.Caster.CharacterCtrl.TryExecuteEventStatusAction(
-                entry.Status, entry.TriggerLine, entry.Host, context);
+                entry.Status, entry.TriggerLine, entry.Host, context,
+                () => _entries.Contains(entry));
         }
     }
 

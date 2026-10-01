@@ -15,6 +15,7 @@ public enum LogCategory{
     // 技能/伤害
     Skill,       // [Skill] 技能施放
     Damage,      // [Damage] 技能伤害
+    HitBatch,    // [HitBatch] 单个逻辑Hit的批次/目标/来源追踪
     StatusDamage,// [StatusDamage] 状态伤害
     Crit,        // [暴击] 暴击判定
     Reaction,    // [反应] 元素反应
@@ -58,7 +59,8 @@ public static class LogManager{
     {
         LogCategory.AI,
         LogCategory.DmgBonus,
-        LogCategory.GetHitData
+        LogCategory.GetHitData,
+        LogCategory.HitBatch
     };
 
     private static readonly HashSet<LogCategory> DisabledCategories = new HashSet<LogCategory>();
@@ -73,6 +75,7 @@ public static class LogManager{
         { LogCategory.Ally,          "[Ally] " },
         { LogCategory.Skill,         "[Skill] " },
         { LogCategory.Damage,        "[Damage] " },
+        { LogCategory.HitBatch,      "[HitBatch] " },
         { LogCategory.StatusDamage,  "[StatusDamage] " },
         { LogCategory.Crit,          "[暴击] " },
         { LogCategory.Reaction,      "[反应] " },

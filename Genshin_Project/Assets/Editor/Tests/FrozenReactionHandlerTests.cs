@@ -104,59 +104,80 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_target.HasStatus("ST_Freeze"), Is.False);
         }
 
-        [Test]
-        public void CanShatter_OneHundredPoiseDamageTriggersRegardlessOfCurrentPoise()
+        [TestCase(1, "Physical", "Normal", true)]
+        [TestCase(1, "None", "Heavy", true)]
+        [TestCase(1, "Physical", "Heavy", true)]
+        [TestCase(0, "Physical", "Normal", false)]
+        [TestCase(2, "None", "Heavy", false)]
+        [TestCase(3, "Physical", "Normal", false)]
+        [TestCase(4, "Physical", "Heavy", false)]
+        [TestCase(1, "Physical", "Skill", false)]
+        [TestCase(1, "Physical", "Burst", false)]
+        [TestCase(1, "Physical", "", false)]
+        [TestCase(1, "Pyro", "Normal", false)]
+        [TestCase(1, "Cryo", "Heavy", false)]
+        [TestCase(0, "Geo", "Normal", true)]
+        [TestCase(4, "Geo", "Skill", true)]
+        [TestCase(-1, "Geo", "", true)]
+        public void CanShatter_UsesWeaponElementAndDamageType(
+            int weaponType, string element, string damageType, bool expected)
         {
-            ReactionStateSystem.SetEntityState(
-                _target, ReactionType.Frozen, 1,
-                ReactionSourceSnapshot.Capture(NewContext("Hydro", 1f, 100f)), -1, true, 1f);
-            _target.Poise = 500f;
-
-            Assert.That(FrozenReactionHandler.CanShatter(
-                NewContext("None", 0f, 100f)), Is.True);
+            ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
+                new ReactionSourceSnapshot(), -1, true, 3f);
+            _source.WeaponType = weaponType;
+            _target.MaxPoise = -1f;
+            ReactionContext context = NewContext(element, 0f, 0f);
+            context.DamageType = damageType;
+            Assert.That(FrozenReactionHandler.CanShatter(context), Is.EqualTo(expected));
         }
 
         [Test]
-        public void LowerPoiseHit_UsesNormalPoiseCalculationWithoutRemovingFreeze()
+        public void CanShatter_EnemyGeoAndOwnedStatusWorkButDerivedDamageDoesNot()
         {
-            ReactionStateSystem.SetEntityState(
-                _target, ReactionType.Frozen, 1,
-                ReactionSourceSnapshot.Capture(NewContext("Hydro", 1f, 20f)), -1, true, 1f);
+            ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
+                new ReactionSourceSnapshot(), -1, true, 3f);
+            ReactionContext context = NewContext("Geo", 0f, 0f);
+            _source.Type = BattleEntity.EntityType.Enemy;
+            context.SourceKind = ReactionSourceKind.EnemySkill;
+            Assert.That(FrozenReactionHandler.CanShatter(context), Is.True);
 
-            PoiseSystem.ApplyPoiseDamage(_target, 20f, 1f, _source);
+            context.AttackElement = "Physical";
+            context.DamageType = "Normal";
+            _source.WeaponType = 1;
+            Assert.That(FrozenReactionHandler.CanShatter(context), Is.False);
 
-            Assert.That(_target.Poise, Is.EqualTo(80f));
-            Assert.That(FrozenReactionHandler.IsFrozen(_target), Is.True);
+            _source.Type = BattleEntity.EntityType.Character;
+            context.SourceKind = ReactionSourceKind.StatusEffect;
+            Assert.That(FrozenReactionHandler.CanShatter(context), Is.True);
+            context.AttackElement = "Geo";
+            context.SourceKind = ReactionSourceKind.DerivedReaction;
+            Assert.That(FrozenReactionHandler.CanShatter(context), Is.False);
         }
 
         [Test]
-        public void FinalizePrimaryHit_NoHpDamageKeepsFreezeAndPoise()
+        public void CanShatter_RequiresFrozenTarget()
         {
-            ReactionStateSystem.SetEntityState(
-                _target, ReactionType.Frozen, 1,
-                ReactionSourceSnapshot.Capture(NewContext("Hydro", 1f, 100f)), -1, true, 1f);
+            Assert.That(FrozenReactionHandler.CanShatter(NewContext("Geo", 1f, 0f)), Is.False);
+        }
+
+        [TestCase(0f)]
+        [TestCase(1f)]
+        public void FinalizePrimaryHit_ClearsAllFrozenAuraWithoutBreakingPoise(float actualHPDamage)
+        {
+            ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
+                new ReactionSourceSnapshot(), -1, true, 3f);
+            _target.ApplyAura("Cryo", 2f, 1);
             ReactionResult result = NewPendingShatterResult(300f);
 
-            ReactionEffectExecutor.FinalizePrimaryHit(result, 0f);
-
-            Assert.That(FrozenReactionHandler.IsFrozen(_target), Is.True);
-            Assert.That(_target.Poise, Is.EqualTo(100f));
-            Assert.That(result.DerivedHits, Is.Empty);
-        }
-
-        [Test]
-        public void FinalizePrimaryHit_RemovesFreezeDealsPhysicalAndBreaksPoise()
-        {
-            ReactionStateSystem.SetEntityState(
-                _target, ReactionType.Frozen, 1,
-                ReactionSourceSnapshot.Capture(NewContext("Hydro", 1f, 100f)), -1, true, 1f);
-            ReactionResult result = NewPendingShatterResult(300f);
-
-            ReactionEffectExecutor.FinalizePrimaryHit(result, 1f);
+            ReactionEffectExecutor.FinalizePrimaryHit(result, actualHPDamage);
+            ReactionEffectExecutor.FinalizePrimaryHit(result, actualHPDamage);
 
             Assert.That(FrozenReactionHandler.IsFrozen(_target), Is.False);
-            Assert.That(_target.Poise, Is.Zero);
-            Assert.That(_target.HasStatus(PoiseSystem.EnemyKnockdownStatusID), Is.True);
+            Assert.That(FrozenReactionHandler.GetFrozenAuraAsCryo(_target), Is.Zero);
+            Assert.That(_target.HasStatus("ST_Freeze"), Is.False);
+            Assert.That(_target.GetAura("Cryo").AuraAmount, Is.EqualTo(2f));
+            Assert.That(_target.Poise, Is.EqualTo(100f));
+            Assert.That(_target.HasStatus("ST_Fall_Enemy"), Is.False);
             Assert.That(result.DerivedHits, Has.Count.EqualTo(1));
             Assert.That(result.DerivedHits[0].DamageElement, Is.EqualTo("Physical"));
             Assert.That(result.DerivedHits[0].ElementAmount, Is.Zero);

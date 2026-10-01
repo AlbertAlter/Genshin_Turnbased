@@ -26,17 +26,21 @@ namespace GenshinTurnBased.Tests.EditMode
         public void SuccessfulReload_CommitsNewCollections()
         {
             var oldCollection = dataManager.CharacterOverviewList;
+            EnemyShieldRuleTable oldShieldRules = dataManager.EnemyShieldRules;
             oldCollection.Add(new CharacterOverviewData { CharacterID = 1009, Name = "旧数据" });
 
             dataManager.RunAtomicForTest(() =>
             {
                 dataManager.CharacterOverviewList.Add(new CharacterOverviewData { CharacterID = 1010, Name = "新数据" });
+                dataManager.EnemyShieldRules.Add(CreateShieldRule("Hydro"));
             });
 
             Assert.That(dataManager.IsLoaded, Is.True);
             Assert.That(dataManager.CharacterOverviewList, Is.Not.SameAs(oldCollection));
             Assert.That(dataManager.CharacterOverviewList.Count, Is.EqualTo(1));
             Assert.That(dataManager.CharacterOverviewList[0].CharacterID, Is.EqualTo(1010));
+            Assert.That(dataManager.EnemyShieldRules, Is.Not.SameAs(oldShieldRules));
+            Assert.That(dataManager.EnemyShieldRules.TryGet("Pyro", "Hydro", out _), Is.True);
         }
 
         [Test]
@@ -47,10 +51,12 @@ namespace GenshinTurnBased.Tests.EditMode
                 dataManager.CharacterOverviewList.Add(new CharacterOverviewData { CharacterID = 1009, Name = "已提交数据" });
             });
             var committedCollection = dataManager.CharacterOverviewList;
+            EnemyShieldRuleTable committedShieldRules = dataManager.EnemyShieldRules;
 
             Assert.Throws<DataLoadException>(() => dataManager.RunAtomicForTest(() =>
             {
                 dataManager.CharacterOverviewList.Add(new CharacterOverviewData { CharacterID = 1010, Name = "未完成数据" });
+                dataManager.EnemyShieldRules.Add(CreateShieldRule("Cryo"));
                 throw new InvalidOperationException("模拟中途加载失败");
             }));
 
@@ -58,6 +64,8 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(dataManager.CharacterOverviewList, Is.SameAs(committedCollection));
             Assert.That(dataManager.CharacterOverviewList.Count, Is.EqualTo(1));
             Assert.That(dataManager.CharacterOverviewList[0].CharacterID, Is.EqualTo(1009));
+            Assert.That(dataManager.EnemyShieldRules, Is.SameAs(committedShieldRules));
+            Assert.That(dataManager.EnemyShieldRules.TryGet("Pyro", "Cryo", out _), Is.False);
         }
 
         [Test]
@@ -70,6 +78,12 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(dataManager.EnemyMainDict, Is.Not.Empty, "敌人主表没有加载出数据");
             Assert.That(dataManager.StatusMainDict, Is.Not.Empty, "状态主表没有加载出数据");
             Assert.That(dataManager.ReactionLevelCoefficientDict, Is.Not.Empty, "反应等级系数没有加载出数据");
+            Assert.That(dataManager.EnemyShieldRules.Count, Is.GreaterThan(0), "敌方元素盾规则没有加载出数据");
+        }
+
+        private static EnemyShieldRule CreateShieldRule(string hitKind)
+        {
+            return EnemyShieldRuleParser.Parse("1U", "Pyro", hitKind);
         }
     }
 

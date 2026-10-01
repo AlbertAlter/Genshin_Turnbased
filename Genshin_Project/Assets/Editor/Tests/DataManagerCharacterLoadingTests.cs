@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -20,6 +21,29 @@ namespace GenshinTurnBased.Tests.EditMode
         public void TearDown()
         {
             Object.DestroyImmediate(testObject);
+        }
+
+        [Test]
+        public void KaeyaSkillLevel_InheritsGroupColumnsAndKeepsBothBurstParamGroups()
+        {
+            dataManager.LoadCharacterSheetsForTest();
+
+            var rows = dataManager.SkillLevelDict.Values
+                .SelectMany(levels => levels.Values)
+                .Where(row => row.CharacterID == 1010)
+                .ToList();
+
+            var normal = rows.Where(row => row.ParamID == "SE_Normal_Kaeya").ToList();
+            var burst = rows.Where(row => row.ParamID == "SE_Kaeya_BurstTrigger").ToList();
+            var burstC6 = rows.Where(row => row.ParamID == "SE_Kaeya_BurstTrigger_C6").ToList();
+
+            Assert.That(normal.Count, Is.EqualTo(15));
+            Assert.That(normal.All(row => row.SkillType == 0), Is.True);
+            Assert.That(normal.Single(row => row.SkillLevel == 2).Hits1, Is.EqualTo("0.954"));
+            Assert.That(burst.Count, Is.EqualTo(15));
+            Assert.That(burst.All(row => row.SkillType == 3), Is.True);
+            Assert.That(burstC6.Count, Is.EqualTo(15));
+            Assert.That(burstC6.All(row => row.SkillType == 3), Is.True);
         }
 
         [Test]

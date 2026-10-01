@@ -24,15 +24,20 @@ public static class DataSourcePreflightValidator
 
         ValidateWorkbook(dataRoot, "Characters.xlsx", errors, "Sheet1");
         ValidateWorkbook(dataRoot, "Character_Growth_Curve.xlsx", errors, "GrowthCurve_1", "GrowthCurve_2");
+        ValidateWorkbook(dataRoot, "WeaponAttributes.xlsx", errors,
+            "Attributes", "LevelBonus", "WeaponParam", "AscensionCurve_3", "AscensionCurve_4", "AscensionCurve_5");
         ValidateWorkbook(dataRoot, "StatusData.xlsx", errors,
             "StatusData_Main", "Status_Effect", "Status_Action", "Status_Attributes");
         ValidateWorkbook(dataRoot, "StatusData_Enemy.xlsx", errors,
             "StatusData_Main_Enemy", "Status_Effect", "Status_Action_Enemy", "Status_Attributes");
+        ValidateWorkbook(dataRoot, "StatusData_Weapon.xlsx", errors,
+            "StatusWeapon_Main", "StatusWeapon_Action", "StatusWeapon_Effect", "Weapon_Initiate", "SpecialParam_Desc");
         ValidateWorkbook(dataRoot, "EnemyAttributes.xlsx", errors,
             "Enemy_Main", "Base_HP", "Base_ATK1", "Base_ATK2");
         ValidateWorkbook(dataRoot, "EnemySkill.xlsx", errors,
             "EnemySkill_Main", "EnemySkill_Effect", "EnemySkill_Param", "EnemyAI", "EnemyAI_Rule");
         ValidateWorkbook(dataRoot, "ReactionLevelCoefficient.xlsx", errors, "Sheet1");
+        ValidateWorkbook(dataRoot, "EnemyShield.xlsx", errors, "Type1");
         ValidateCharacterWorkbooks(dataRoot, errors);
 
         return errors;
@@ -49,6 +54,7 @@ public static class DataSourcePreflightValidator
 
         string[] workbooks = Directory.GetFiles(characterRoot, "*.xlsx")
             .Where(path => !Path.GetFileName(path).StartsWith("~$", StringComparison.Ordinal))
+            .Where(path => !Path.GetFileNameWithoutExtension(path).StartsWith("#", StringComparison.Ordinal))
             .Where(path => !Path.GetFileNameWithoutExtension(path).StartsWith("0_", StringComparison.Ordinal))
             .ToArray();
 

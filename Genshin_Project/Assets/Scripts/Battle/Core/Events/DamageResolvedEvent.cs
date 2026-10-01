@@ -9,6 +9,15 @@ using System;
 [Serializable]
 public sealed class DamageResolvedEvent
 {
+    /// <summary>所属 HitBatch 的运行时序号；直接调用 TakeDamage 时为0。</summary>
+    public long HitBatchID;
+
+    /// <summary>效果内第几个 hit（从1开始）；未知时为0。</summary>
+    public int HitIndex;
+
+    /// <summary>同一 hit 内的目标结算序号（从1开始）；未知时为0。</summary>
+    public int TargetIndex;
+
     /// <summary>受击目标。</summary>
     public BattleEntity Target;
 
@@ -32,4 +41,11 @@ public sealed class DamageResolvedEvent
 
     /// <summary>本次伤害是否导致目标从存活变为死亡。</summary>
     public bool CausedDeath;
+
+    public DamageResolvedEvent Snapshot()
+    {
+        var copy = (DamageResolvedEvent)MemberwiseClone();
+        copy.Source = Source?.Snapshot();
+        return copy;
+    }
 }

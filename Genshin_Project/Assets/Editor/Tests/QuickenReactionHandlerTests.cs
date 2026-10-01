@@ -106,7 +106,7 @@ namespace GenshinTurnBased.Tests.EditMode
             float expected = (200f
                               + quickenMultiplier * 100f
                               * (1f + 5f * 200f / 1400f))
-                             * 1.5f * 1.2f * 0.5f * 0.8f;
+                             * 1.2f * 0.5f * 0.8f;
             Assert.That(triggered, Is.True);
             Assert.That(resolution.Type, Is.EqualTo(expectedType));
             Assert.That(resolution.FinalDamage, Is.EqualTo(expected).Within(0.001f));
@@ -124,7 +124,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 100f,
                 out QuickenDamageResolution resolution);
 
-            float expected = (200f + 1.15f * 100f) * 1.5f * 1.2f * 0.5f * 0.8f;
+            float expected = (200f + 1.15f * 100f) * 1.2f * 0.5f * 0.8f;
             Assert.That(resolution.FinalDamage, Is.EqualTo(expected).Within(0.001f));
         }
 
@@ -210,7 +210,6 @@ namespace GenshinTurnBased.Tests.EditMode
             context.DamageComponents = new ReactionDamageComponents
             {
                 SkillBaseDamage = 200f,
-                CriticalMultiplier = 1.5f,
                 DamageBonusMultiplier = 1.2f,
                 DefenseMultiplier = 0.5f,
                 ResistanceMultiplier = 0.8f

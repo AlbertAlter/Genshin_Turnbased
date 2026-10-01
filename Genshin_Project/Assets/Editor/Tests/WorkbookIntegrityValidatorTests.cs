@@ -83,6 +83,57 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(issues.Any(issue => issue.Code == "DUPLICATE_ID" && issue.Location.EndsWith("row 2")), Is.False);
         }
 
+        [TestCase("StatusData_Main", "Status_Effect")]
+        [TestCase("StatusData_Main_Enemy", "Status_Effect")]
+        [TestCase("StatusData_Overall_Main", "StatusEffect_Overall")]
+        [TestCase("StatusWeapon_Main", "StatusWeapon_Effect")]
+        public void Validate_SkillLevelAcceptsExistingEffectsAndStatuses(string mainSheet, string effectSheet)
+        {
+            CreateWorkbook("Characters/1011_Test.xlsx", package =>
+            {
+                AddSheet(package, "Skills",
+                    new[] { "SkillID", "SkillID2" },
+                    new[] { "101101", "SK_Normal_Lisa" });
+                AddSheet(package, "SkillsEffect",
+                    new[] { "SkillEffectID", "SkillEffectID2" },
+                    new[] { "10110101", "SE_Normal_Lisa" });
+                AddSheet(package, "SkillLevel",
+                    new[] { "CharacterID", "SkillType", "SkillLevel", "ParamID", "Hits1" },
+                    new[] { "1011", "Normal", "1", "SE_Normal_Lisa", "0.5496*TotalATK,1" },
+                    new[] { "", "Skill", "1", "ST_Lisa_Conductive", "0.48" },
+                    new[] { "", "", "2", "", "0.516" },
+                    new[] { "", "Burst", "1", "STE_Lisa_Burst", "0.3656*TotalATK,1" });
+            });
+            CreateWorkbook("StatusData.xlsx", package =>
+            {
+                AddSheet(package, mainSheet,
+                    new[] { "StatusID", "StatusID2" },
+                    new[] { "4101101", "ST_Lisa_Conductive" });
+                AddSheet(package, effectSheet,
+                    new[] { "StatusEffectID", "StatusEffectID2" },
+                    new[] { "410110101", "STE_Lisa_Burst" });
+            });
+
+            var issues = WorkbookIntegrityValidator.Validate(_root);
+            Assert.That(issues.Any(issue => issue.Code == "INVALID_REFERENCE" &&
+                issue.Location.Contains("/SkillLevel row ")), Is.False);
+        }
+
+        [TestCase("SE_Missing")]
+        [TestCase("STE_Missing")]
+        [TestCase("ST_Lisa_Conductiv")]
+        public void Validate_SkillLevelStillRejectsUndefinedReferences(string paramId)
+        {
+            CreateWorkbook("Characters/1011_Test.xlsx", package =>
+                AddSheet(package, "SkillLevel",
+                    new[] { "CharacterID", "SkillType", "SkillLevel", "ParamID", "Hits1" },
+                    new[] { "1011", "Skill", "1", paramId, "0.48" }));
+
+            var issues = WorkbookIntegrityValidator.Validate(_root);
+            Assert.That(issues.Any(issue => issue.Code == "INVALID_REFERENCE" &&
+                issue.Location.Contains("/SkillLevel row 2") && issue.Message.Contains(paramId)), Is.True);
+        }
+
         private void CreateWorkbook(string relativePath, Action<ExcelPackage> populate)
         {
             string path = Path.Combine(_root, relativePath);

@@ -15,6 +15,7 @@ public class BattleInputController : MonoBehaviour
 {
     private TargetSelector _selector = new TargetSelector();
     private bool _selecting = false;
+    private bool _waitingForResolution;
     private int _pendingSkill = -1;      // 0=普攻 1=重击 2=战技 3=爆发
     private string _pendingOriginalSkillID2; // 目标选择开始时的按钮原绑定（多段推进恢复用）
     private CharacterBattleController _pendingAlly; // 当前施放者（1234爆发可为任意角色，无需出战，2026-08-14）
@@ -41,7 +42,20 @@ public class BattleInputController : MonoBehaviour
 
         // 战斗结束（胜利/失败）：战斗输入全部屏蔽（结果界面预留，2026-08-14）
         // 换人界面为模态界面：进入时由 UIBattleController 停用本组件（input.enabled=false），此处无需再判断（2026-08-14）
-        if (bm.IsBattleOver) return;
+        if (_waitingForResolution)
+        {
+            if (BattleExecution.IsBusy) return;
+            _waitingForResolution = false;
+            if (bm.IsBattleOver || _pendingAlly == null || !_pendingAlly.HasPendingEffectSequence)
+                ExitSelecting();
+            else if (_pendingAlly.PendingSelectEffect != null)
+            {
+                InitSelectorForEffect(bm, _pendingAlly, _pendingSkill, _pendingAlly.PendingSelectEffect);
+                if (!_selector.IsSelectionValid()) ExitSelecting();
+            }
+            return;
+        }
+        if (bm.IsBattleOver || BattleExecution.IsBusy) return;
 
         if (_selecting)
         {
@@ -98,6 +112,7 @@ public class BattleInputController : MonoBehaviour
     // 检查技能是否可用：不可用直接打原因日志并返回false（不进目标选择）
     private bool TryEnterSelecting(BattleManager bm, int skill, bool switchFromSelecting, CharacterBattleController specifiedAlly = null)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return false;
         //施放者：默认当前出战；1234爆发可指定任意角色（无需出战，2026-08-14）
         var ally = specifiedAlly != null ? specifiedAlly : bm.GetActiveAlly();
         if (ally == null) return false;
@@ -222,6 +237,7 @@ public class BattleInputController : MonoBehaviour
             if (ally != null) ally.RevertSkillPhase(_pendingSkill, _pendingOriginalSkillID2);
         }
         _selecting = false;
+        _waitingForResolution = false;
         _pendingSkill = -1;
         _pendingAlly = null;
         _pendingOriginalSkillID2 = null;
@@ -238,6 +254,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>测试战斗重建前退出目标选择，并丢弃上一场的选择缓存。</summary>
     public void ResetForBattle()
     {
+        _waitingForResolution = false;
         ExitSelecting();
         _selector.Reset();
     }
@@ -264,7 +281,7 @@ public class BattleInputController : MonoBehaviour
                 // 下一段无需选目标：直接施放
                 LogManager.Log(LogCategory.Select, $"多段推进至 {ally.GetBoundSkillID(skill)}（{SkillNames[skill]}：无需选目标，直接施放）");
                 ConfirmAndExecute(bm);
-                ExitSelecting();
+                if (!BattleExecution.IsBusy) ExitSelecting();
                 return;
             }
             InitSelectorForEffect(bm, ally, skill, first);
@@ -325,13 +342,13 @@ public class BattleInputController : MonoBehaviour
             }
             LogManager.Log(LogCategory.Select, $"逐个选择完成：{string.Join(",", _oneByOnePicked)}，执行技能");
             ExecutePendingSkill(bm, ally);
-            return ally.PendingSelectEffect == null;
+            return !_waitingForResolution && ally.PendingSelectEffect == null;
         }
 
         ally.ForcedTargetPositions = new List<int>(sel);
         LogManager.Log(LogCategory.Select, $"确认目标 {string.Join("", sel)}，执行技能");
         ExecutePendingSkill(bm, ally);
-        return ally.PendingSelectEffect == null;
+        return !_waitingForResolution && ally.PendingSelectEffect == null;
     }
 
     private void ExecutePendingSkill(BattleManager bm, CharacterBattleController ally)
@@ -351,6 +368,12 @@ public class BattleInputController : MonoBehaviour
         bool done = ally.HasPendingEffectSequence
             ? ally.AdvanceEffectSequence()
             : ally.BeginSkillSelectionSequence(_pendingSkill);
+        if (BattleExecution.IsBusy)
+        {
+            _waitingForResolution = true;
+            _pendingAlly = ally;
+            return;
+        }
         if (!done && ally.PendingSelectEffect != null)
         {
             // 停在下一个需选效果：重新初始化选择器，继续选择
@@ -370,8 +393,8 @@ public class BattleInputController : MonoBehaviour
     //1234=四槽角色爆发（接口文档：能量符合要求时进入对应爆发目标选择，该角色无需出战，2026-08-14）
     private bool TryEnterBurstBySlot(BattleManager bm, int slot)
     {
-        if (bm == null || bm.Allies == null || slot <0 || slot >= bm.Allies.Count) return false;
-        var ally = bm.Allies[slot];
+        if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return false;
+        var ally = bm.GetAllyBySlot(slot);
         if (ally == null || ally.Entity == null || !ally.Entity.IsAlive) return false;
         string reason = ally.GetBlockReason(3);
         if (reason != null)
@@ -387,6 +410,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：进入目标选择（0普攻/1重击/2战技/3爆发）。</summary>
     public void UIEnterSelectSkill(int skill)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
         if (bm == null || _selecting) return;
         TryEnterSelecting(bm, skill, false);
@@ -395,6 +419,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：点击槽位能量球/爆发按钮 → 该槽位角色爆发（文档：能量符合要求时进入对应爆发目标选择，该角色无需出战，2026-08-15）。</summary>
     public void UIEnterBurstBySlot(int slot)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
         if (bm == null || _selecting) return;
         TryEnterBurstBySlot(bm, slot);
@@ -403,6 +428,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：选择中按技能键（同一按钮=多段推进，不同按钮=切换技能）。</summary>
     public void UISelectSkillKey(int skill)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
         if (bm == null || !_selecting) return;
         HandleSelectSkillKey(bm, skill);
@@ -411,6 +437,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：确认当前目标选择并施放（2026-08-15 效果级：一个技能可多次确认）。</summary>
     public void UIConfirmSelection()
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
         if (bm == null || !_selecting) return;
         bool done = ConfirmAndExecute(bm);
@@ -420,6 +447,7 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：目标选择左右移动（dir=1右 / -1左）。</summary>
     public void UIMoveSelection(int dir)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         if (!_selecting) return;
         if (dir > 0) _selector.MoveRight();
         else _selector.MoveLeft();
@@ -428,23 +456,27 @@ public class BattleInputController : MonoBehaviour
     /// <summary>UI：取消目标选择。</summary>
     public void UICancelSelection()
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         if (_selecting) ExitSelecting();
     }
 
     /// <summary>UI：结束回合。</summary>
     public void UIEndTurn()
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
         if (bm == null || _selecting) return;
         if (bm.CurrentPhase == TurnPhase.AllyAction) bm.EndAllyTurn();
     }
 
+#if GTB_POISE_SYSTEM
     /// <summary>UI：让当前出战的倒地角色花费10 AP起身。</summary>
     public bool UIStandUp()
     {
         var bm = BattleManager.Instance;
         return bm != null && !_selecting && bm.TryStandUpActiveAlly();
     }
+#endif
 
     /// <summary>UI：让当前出战的冻结角色花费10 AP解冻。</summary>
     public bool UIThaw()
@@ -453,12 +485,13 @@ public class BattleInputController : MonoBehaviour
         return bm != null && !_selecting && bm.TryThawActiveAlly();
     }
 
-    /// <summary>UI：切换出战角色（slot=0~3）。</summary>
+    /// <summary>UI：直接切换到指定槽位（slot=0~3），仍遵守普通换人 AP/阵亡免费规则。</summary>
     public void UISwitchCharacter(int slot)
     {
+        if (BattleExecution.IsBusy || _waitingForResolution) return;
         var bm = BattleManager.Instance;
-        if (bm == null || bm.Allies == null || slot < 0 || slot >= bm.Allies.Count) return;
-        if (bm.TrySwitchActiveAlly(slot))
+        if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return;
+        if (bm.TrySwitchActiveAllyWithAPCost(slot))
         {
             if (_selecting) ExitSelecting();
             LogManager.Log(LogCategory.UI, $"切换出战角色 -> {slot}");

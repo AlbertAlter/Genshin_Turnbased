@@ -66,8 +66,8 @@ namespace GenshinTurnBased.Tests.EditMode
         public void CalculateEnemyQuicken_HasNoElementalMasteryInput()
         {
             float damage = ReactionDamageCalculator.CalculateEnemyQuicken(
-                100f, 200f, ReactionType.Aggravate, 1.5f, 1.2f, 0.5f, 0.9f);
-            float expected = (100f + 1.15f * 200f) * 1.5f * 1.2f * 0.5f * 0.9f;
+                100f, 200f, ReactionType.Aggravate, 1.2f, 0.5f, 0.9f);
+            float expected = (100f + 1.15f * 200f) * 1.2f * 0.5f * 0.9f;
 
             Assert.That(damage, Is.EqualTo(expected).Within(0.001f));
         }

@@ -30,6 +30,7 @@ public class StageEnemySetup
 public class StageSetupData
 {
     public string StageName = "测试关卡";                 // 关卡名
+    public int BattleID = 1;                              // 战斗背景编号，对应 BattleBG/{BattleID}_BG.png
     public List<StageAllySetup> Allies = new List<StageAllySetup>();      // 我方队伍（最多4）
     public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();   // 敌方阵容（最多5）
     public string InitialEnergyMode = "Percent";   // Percent=百分比 / Fixed=固定数值
@@ -39,9 +40,9 @@ public class StageSetupData
     {
         var cfg = new StageSetupData();
         cfg.Allies.Add(new StageAllySetup { CharacterID = 1009, Level = 1, Constellation = 0, IsAscended = false });
-        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 20000, Level = 1, Slot = 3 });  // 木桩
-        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 20001, Level = 1, Slot = 2 });  // 丘丘人
-        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 20001, Level = 1, Slot = 4 });  // 丘丘人
+        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 2000, Level = 1, Slot = 3 });  // 木桩
+        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 2001, Level = 1, Slot = 2 });  // 丘丘人
+        cfg.Enemies.Add(new StageEnemySetup { EnemyID = 2001, Level = 1, Slot = 4 });  // 丘丘人
         return cfg;
     }
 }

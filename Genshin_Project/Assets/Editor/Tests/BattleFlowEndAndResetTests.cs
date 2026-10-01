@@ -10,7 +10,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", "1*TotalATK,0,0", 10);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", "1*TotalATK,0", 10);
                 env.CreateMinimalBattle();
                 env.Enemy.Entity.TotalHP = env.Enemy.Entity.CurrentHP = 40f;
                 int count = 0;

@@ -14,6 +14,10 @@ public static class ElectroChargedReactionHandler
     private const float ReactionMultiplier = 9.6f;
     private const float PoiseDamage = 50f;
 
+    public static bool IsElectroCharged(BattleEntity target)
+        => target != null
+            && ReactionStateSystem.TryGetEntityState(target, ReactionType.ElectroCharged, out _);
+
     public static bool CanResolve(ReactionContext context)
         => GetOpposingAura(context) != null;
 
@@ -82,7 +86,13 @@ public static class ElectroChargedReactionHandler
         states.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
 
         foreach (ReactionStateInstance state in states)
-            TickState(state);
+            BattleExecution.Enqueue(() => BattleExecution.PlayEffect(new BattlePresentationRequest(
+                BattlePresentationKind.Reaction, state.SourceSnapshot?.SourceEntity,
+                state.SourceSnapshot?.SourceEffectID, targets: new[] { state.Target }, reaction: ReactionType.ElectroCharged), () =>
+            {
+                if (ReactionStateSystem.TryGetEntityState(state.Target, ReactionType.ElectroCharged, out var current)
+                    && object.ReferenceEquals(current, state)) TickState(state);
+            }));
     }
 
     /// <summary>元素反应或自然衰减移除水雷共存后，立即清理失效的感电状态。</summary>
@@ -105,6 +115,7 @@ public static class ElectroChargedReactionHandler
 
     private static void TickState(ReactionStateInstance state)
     {
+        using var resolutionEffect = BattleResolutionContext.BeginEffect();
         BattleEntity target = state.Target;
         ElementalAura hydro = target != null ? target.GetAura("Hydro") : null;
         ElementalAura electro = target != null ? target.GetAura("Electro") : null;
@@ -219,7 +230,8 @@ public static class ElectroChargedReactionHandler
         else return null;
 
         ElementalAura aura = context.Target.GetAura(auraElement);
-        return aura != null && aura.AuraAmount > 0f ? aura : null;
+        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
+            && aura != null && aura.AuraAmount > 0f ? aura : null;
     }
 
     private static bool WillKeepBothAuras(

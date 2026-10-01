@@ -74,9 +74,15 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_left.CurrentHP, Is.EqualTo(10000f - normalDamage).Within(0.001f));
             Assert.That(_main.CurrentHP, Is.EqualTo(10000f - normalDamage).Within(0.001f));
             Assert.That(_right.CurrentHP, Is.EqualTo(10000f - normalDamage * 0.5f).Within(0.001f));
+#if GTB_POISE_SYSTEM
             Assert.That(_left.Poise, Is.EqualTo(400f));
             Assert.That(_main.Poise, Is.EqualTo(400f));
             Assert.That(_right.Poise, Is.EqualTo(400f));
+#else
+            Assert.That(_left.Poise, Is.EqualTo(500f));
+            Assert.That(_main.Poise, Is.EqualTo(500f));
+            Assert.That(_right.Poise, Is.EqualTo(500f));
+#endif
         }
 
         [Test]
