@@ -317,10 +317,12 @@ public class UIBattleController : MonoBehaviour
         if (apBar != null) apBar.fillAmount = ap.MaxAP > 0 ? Mathf.Clamp01((float)ap.CurrentAP / ap.MaxAP) : 0;
         if (apCostHint != null)
         {
-            bool selecting = input != null && input.IsSelecting && input.PendingSkill >= 0;
+            bool selecting = _switching || (input != null && input.IsSelecting && input.PendingSkill >= 0);
             if (selecting)
             {
-                int cost = ally.GetBoundSkillAPCost(input.PendingSkill);
+                var caster = input != null && input.PendingAlly != null ? input.PendingAlly : ally;
+                int cost = _switching ? bm.GetSwitchAPCost(_switchIndex)
+                    : caster.GetBoundSkillAPCost(input.PendingSkill);
                 apCostHint.gameObject.SetActive(true);
                 apCostHint.text = $"-{cost}";
                 apCostHint.color = ap.CanAfford(cost) ? Color.green : Color.red;
@@ -521,7 +523,8 @@ public class UIBattleController : MonoBehaviour
     void RefreshStatusBar(Transform container, List<StatusInstance> statuses, List<Image> icons)
     {
         if (container == null) return;
-        var sorted = new List<StatusInstance>(statuses);
+        var sorted = statuses.FindAll(item => item != null && item.IsActive
+            && item.MainData != null && item.MainData.Display == 1);
         sorted.Sort((a, b) => b.ApplyOrder.CompareTo(a.ApplyOrder));
         int show = Mathf.Min(sorted.Count, 10);
         while (icons.Count < show) icons.Add(CreateStatusIcon(container));
@@ -611,10 +614,11 @@ public class UIBattleController : MonoBehaviour
         }
 
         bool freeDeathSwitch = bm.IsFreeDeathSwitchPending;
+        int cost = bm.GetSwitchAPCost(_switchIndex);
         if (!bm.TrySwitchActiveAllyWithAPCost(_switchIndex))
         {
-            if (!freeDeathSwitch && (bm.APManager == null || !bm.APManager.CanAfford(BattleManager.SwitchAPCost)))
-                LogManager.Log(LogCategory.Action, $"切换角色失败：AP不足（需要{BattleManager.SwitchAPCost}AP）");
+            if (!freeDeathSwitch && (bm.APManager == null || !bm.APManager.CanAfford(cost)))
+                LogManager.Log(LogCategory.Action, $"切换角色失败：AP不足（需要{cost}AP）");
             else
                 LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {_switchIndex}");
             return;

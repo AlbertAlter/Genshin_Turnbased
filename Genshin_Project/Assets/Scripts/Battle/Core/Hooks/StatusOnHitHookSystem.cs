@@ -86,6 +86,61 @@ public static class StatusOnHitHookSystem
             NotifyPlayerActionForStatus(status, actor.Position, actor, skill, dm);
     }
 
+    /// <summary>换人正式提交后，收集双方进出场声明；响应仍按全局 ApplyOrder 执行。</summary>
+    public static void NotifySwitch(BattleEntity outgoing, BattleEntity incoming)
+    {
+        if (outgoing == incoming || incoming == null) return;
+        using var collection = BattleResolutionContext.BeginCollection();
+        DataManager dm = DataManager.Instance;
+        BattleManager battle = BattleManager.Instance;
+        if (dm == null || battle == null) return;
+        foreach (CharacterBattleController ally in battle.Allies)
+            if (ally != null && ally.Entity != null)
+                NotifySwitchForHost(ally.Entity.GetStatusList(), ally.Entity, outgoing, incoming, dm);
+        foreach (EnemyBattleController enemy in battle.Enemies)
+            if (enemy != null && enemy.Entity != null)
+                NotifySwitchForHost(enemy.Entity.GetStatusList(), enemy.Entity, outgoing, incoming, dm);
+        if (battle.Field != null)
+        {
+            foreach (FieldPosition field in battle.Field.AllySlots)
+                if (field != null) NotifySwitchForHost(field.StatusList, field, outgoing, incoming, dm);
+            foreach (FieldPosition field in battle.Field.EnemySlots)
+                if (field != null) NotifySwitchForHost(field.StatusList, field, outgoing, incoming, dm);
+        }
+    }
+
+    static void NotifySwitchForHost(IEnumerable<StatusInstance> statuses, object host,
+        BattleEntity outgoing, BattleEntity incoming, DataManager dm)
+    {
+        foreach (StatusInstance status in new List<StatusInstance>(statuses))
+        {
+            if (!CanExecute(status) || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) continue;
+            foreach (StatusActionData action in actions)
+            {
+                if (action.ActionType != "OnTrigger") continue;
+                NotifySwitchAction(status, action, host, "SwitchOut", outgoing);
+                NotifySwitchAction(status, action, host, "SwitchIn", incoming);
+            }
+        }
+    }
+
+    static void NotifySwitchAction(StatusInstance status, StatusActionData action, object host,
+        string eventName, BattleEntity actor)
+    {
+        if (actor == null || !ScriptHookParser.TryFind(action.ScriptHook, eventName, out string argument)
+            || !ScriptHookEvaluator.MatchesSwitchActor(argument, status, actor)) return;
+        ExecuteEvent(status, action, host, new ScriptHookContext
+        {
+            Caster = status.Caster,
+            Target = actor,
+            Status = status,
+            StatusHost = host,
+            SwitchedEntity = actor,
+            EventHookName = eventName,
+            EventHookArgument = argument
+        });
+    }
+
     /// <summary>兼容旧调用；新伤害入口统一使用 NotifyDamageBatch。</summary>
     public static void NotifyHit(DamageResolvedEvent damageEvent)
     {
@@ -110,6 +165,8 @@ public static class StatusOnHitHookSystem
             if (damageEvent == null || damageEvent.Target == null) continue;
             if (!damageEvent.HitLanded && damageEvent.ActualHPDamage <= 0f) continue;
             RecordDamageEffectHit(damageEvent);
+            if (damageEvent.ActualHPDamage > 0f)
+                CollectHPDecrease(new HPDecreaseEvent(damageEvent.Target, damageEvent.HPBefore, damageEvent.HPAfter), dm, damageEvent);
 
             BattleEntity source = damageEvent.Source != null ? damageEvent.Source.SourceEntity : null;
             if (source != null)
@@ -168,6 +225,42 @@ public static class StatusOnHitHookSystem
                     Action = action,
                     DamageEvent = damageEvent,
                     Sequence = sequence++
+                });
+            }
+        }
+    }
+
+    /// <summary>
+    /// 非伤害生命消耗在正式扣血后提交一次此通知。伤害路径已在NotifyDamageBatch接入，不得重复通知。
+    /// 复用原候选收集与ApplyOrder，不直接修改Count，不增加结算阶段。
+    /// </summary>
+    public static void NotifyHPDecrease(HPDecreaseEvent change)
+    {
+        if (change == null) return;
+        using var collection = BattleResolutionContext.BeginCollection();
+        DataManager dm = DataManager.Instance;
+        if (dm != null) CollectHPDecrease(change, dm, null);
+    }
+
+    static void CollectHPDecrease(HPDecreaseEvent change, DataManager dm, DamageResolvedEvent damage)
+    {
+        // 保存变化发生时已存在的状态候选；不能让同层响应新建的潜光追溯获得本次计数。
+        foreach (StatusInstance status in change.Target.GetEffectiveStatusList())
+        {
+            if (!CanExecute(status) || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) continue;
+            object host = change.Target.StatusDict.TryGetValue(status.StatusID2, out var current)
+                && ReferenceEquals(current, status) ? (object)change.Target : change.Target.Position;
+            foreach (StatusActionData action in actions)
+            {
+                if (action.ActionType != "OnTrigger"
+                    || !ScriptHookParser.TryFind(action.ScriptHook, "HPDecreased", out string argument)
+                    || !ScriptHookEvaluator.MatchesSwitchActor(argument, status, change.Target)) continue;
+                ExecuteEvent(status, action, host, new ScriptHookContext
+                {
+                    Caster = status.Caster, Target = change.Target, Status = status, StatusHost = host,
+                    HPDecreaseEvent = change, DamageEvent = damage,
+                    HitEffectID = damage?.Source?.SourceEffectID,
+                    EventHookName = "HPDecreased", EventHookArgument = argument
                 });
             }
         }

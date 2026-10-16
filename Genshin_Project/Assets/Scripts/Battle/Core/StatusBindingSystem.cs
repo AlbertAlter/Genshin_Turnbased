@@ -5,6 +5,17 @@ using System.Collections.Generic;
 /// </summary>
 public static class StatusBindingSystem
 {
+    public static void ExtendDuration(StatusInstance parent, int delta)
+    {
+        ExtendDuration(parent, delta, new HashSet<StatusInstance>());
+    }
+
+    private static void ExtendDuration(StatusInstance state, int delta, HashSet<StatusInstance> visited)
+    {
+        if (state == null || !visited.Add(state)) return;
+        if (!state.IsPermanent) state.RemainingPhaseCount += delta;
+        foreach (var child in state.BoundStatuses) ExtendDuration(child, delta, visited);
+    }
     public static void ApplyBindings(StatusInstance parent, object host)
     {
         ApplyBindings(parent, host, new HashSet<string>());
@@ -59,6 +70,14 @@ public static class StatusBindingSystem
         foreach (var effect in effects)
         {
             if (string.IsNullOrEmpty(effect.Param1)) continue;
+            if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
+            {
+                Caster = parent.Caster,
+                Status = parent,
+                StatusHost = host,
+                Target = host as BattleEntity,
+                HitEffectID = parent.Caster?.CharacterCtrl?.LastHitEffectID2
+            })) continue;
             if (effect.Param1 == parent.StatusID2)
             {
                 LogManager.LogWarning(LogCategory.Bind, $"{effect.StatusEffectID2} 不能把父状态绑定为自己的子状态");
@@ -144,6 +163,7 @@ public static class StatusBindingSystem
                 StatusID2 = effect.Param1,
                 StackCount = 1,
                 RemainingPhaseCount = parent.RemainingPhaseCount,
+                IsPermanent = parent.IsPermanent,
                 AddInPhase = effect.AddInPhase,
                 TriggerPhase = effect.TriggerPhase,
                 MainData = childMain,
@@ -151,6 +171,7 @@ public static class StatusBindingSystem
                 ApplyOrder = ++BattleEntity._applyOrderCounter
             };
             child.RecordSource(parent.Caster);
+            CountStatusSystem.OnCreated(child, field);
             field.StatusList.Add(child);
             parent.BoundStatuses.Add(child);
 
@@ -188,6 +209,7 @@ public static class StatusBindingSystem
             foreach (var field in fields)
             {
                 if (field == null || !field.StatusList.Remove(child)) continue;
+                CountStatusSystem.OnRemoved(child, field);
                 RemoveBindings(child);
                 battle.UnregisterStatusTick(child);
                 PreDamageHookSystem.UnregisterPreDamageHook(child);

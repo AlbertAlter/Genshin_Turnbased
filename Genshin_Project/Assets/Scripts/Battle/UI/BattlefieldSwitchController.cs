@@ -101,12 +101,13 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         }
 
         bool freeDeathSwitch = battle.IsFreeDeathSwitchPending;
+        int cost = battle.GetSwitchAPCost(_selectedSlot);
         if (!battle.TrySwitchActiveAllyWithAPCost(_selectedSlot))
         {
             if (!freeDeathSwitch &&
-                (battle.APManager == null || !battle.APManager.CanAfford(BattleManager.SwitchAPCost)))
+                (battle.APManager == null || !battle.APManager.CanAfford(cost)))
                 LogManager.Log(LogCategory.Action,
-                    $"切换角色失败：AP不足（需要{BattleManager.SwitchAPCost}AP）");
+                    $"切换角色失败：AP不足（需要{cost}AP）");
             else
                 LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {_selectedSlot}");
             return false;

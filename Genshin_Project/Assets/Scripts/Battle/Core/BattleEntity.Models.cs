@@ -55,6 +55,54 @@ public class StatusInstance
     public BattleSide SourceSide;                   // 状态来源阵营
     public bool HasSourceEntity;                    // 全局反应状态等无角色来源时为 false
     public Dictionary<string, float> Snapshot;      // 快照属性（状态生成时读取施法者面板）
+    /// <summary>
+    /// 钩子可读写的实例级元素记录；空字符串表示尚未记录，不等同于物理元素 None。
+    /// 使用 Pyro/Hydro/Electro/Cryo/Anemo/Dendro/Geo 等既有元素标识。
+    /// 同一实例叠层/刷新时保留，新建实例为空；不自动继承给绑定子状态，也不自动改变伤害元素。
+    /// 何时写入、锁定或清除由使用该字段的钩子决定，不修改共享配表。
+    /// </summary>
+    public string RuntimeElement = string.Empty;
+    /// <summary>
+    /// 特殊代码管理的状态运行时数值，不是层数或配表常量。
+    /// 生命之契保存剩余绝对值；Count 由各自的专用处理器管理，可存小数且不自动归零移除。
+    /// </summary>
+    [UnityEngine.Serialization.FormerlySerializedAs("RuntimeValue")]
+    [SerializeField] private float _runtimeValue;
+    [SerializeField] private int _runtimeIntValue;
+    [SerializeField] private bool _hasIntegerRuntimeValue;
+
+    /// <summary>原有浮点Count仍原样读写；整数Count只提供浮点只读视图供Buff公式使用。</summary>
+    public float RuntimeValue
+    {
+        get { return _hasIntegerRuntimeValue ? _runtimeIntValue : _runtimeValue; }
+        set
+        {
+            if (_hasIntegerRuntimeValue)
+                throw new InvalidOperationException("整数Count必须通过整数入口修改，不能写入float。");
+            _runtimeValue = value;
+        }
+    }
+
+    public bool HasIntegerRuntimeValue { get { return _hasIntegerRuntimeValue; } }
+
+    /// <summary>整数余额的唯一存储；不经float中转，保证超过2^24后仍能逐点增减。</summary>
+    public int RuntimeIntValue
+    {
+        get
+        {
+            if (!_hasIntegerRuntimeValue)
+                throw new InvalidOperationException("此状态没有整数Count数值。");
+            return _runtimeIntValue;
+        }
+        internal set
+        {
+            _hasIntegerRuntimeValue = true;
+            _runtimeIntValue = value;
+            _runtimeValue = 0f;
+        }
+    }
+    /// <summary>专用 Count 自己拥有的附加记录；公共系统不解释这些规则。</summary>
+    public object CountRuntimeState;
     public bool IsActive;                           // 是否已执行过 OnApply
     public StatusMainData MainData;                 // 配表状态主数据（MaxStack/WhenMax 等规则）
     public WeaponRuntimeContext WeaponContext;      // 武器来源上下文；非武器状态为空

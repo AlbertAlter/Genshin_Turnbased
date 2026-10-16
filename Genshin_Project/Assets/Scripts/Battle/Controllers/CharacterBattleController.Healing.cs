@@ -24,12 +24,23 @@ public partial class CharacterBattleController
                 using (var batch = new HealBatch())
                 {
                     foreach (BattleEntity target in targets.Distinct())
-                        batch.Add(target, amount, source, effectID, index + 1);
+                    {
+                        if (target == null || !target.IsAlive) continue;
+                        var healer = source ?? Entity;
+                        string skillID = GetExecutingSkillID2(skillType);
+                        float outgoing = healer.HealBonus + healer.GetStatusHealingBonus(
+                            "HealBonus", effectID, skillID, skillType, element, target);
+                        float incoming = target.BeHealedBonus + target.GetStatusHealingBonus(
+                            "BeHealedBonus", effectID, skillID, skillType, element, target);
+                        // 术语1.20：加成在同一个加法区，每段、每个目标只求值一次。
+                        batch.Add(target, amount * Mathf.Max(0f, 1f + outgoing + incoming), source, effectID, index + 1);
+                    }
                     batch.Flush();
                     foreach (HealResolvedEvent heal in batch.Results)
                         LogManager.Log(LogCategory.Effect,
                             $"治疗 {heal.Target.EntityID} 段#{heal.SegmentIndex} 实际+{heal.ActualAmount:F1} " +
-                            $"溢出{heal.OverhealAmount:F1} (HP {heal.HPBefore:F1}→{heal.HPAfter:F1})");
+                            $"抵扣生命之契{heal.BondOfLifeAbsorbedAmount:F1} 溢出{heal.OverhealAmount:F1} " +
+                            $"(HP {heal.HPBefore:F1}→{heal.HPAfter:F1})");
                 }
             });
         }
@@ -90,7 +101,7 @@ public partial class CharacterBattleController
                     switch (factor)
                     {
                         case "ATK": case "TotalATK": value *= GetFinalATK(effectID, skillType, element); break;
-                        case "DEF": case "TotalDEF": value *= Entity.TotalDEF; break;
+                        case "DEF": case "TotalDEF": value *= Entity.GetFinalDEF(effectID, GetExecutingSkillID2(skillType), skillType, element); break;
                         case "MaxHP": case "TotalHP": value *= Entity.TotalHP; break;
                         default:
                             LogManager.LogWarning(LogCategory.Effect, $"无法解析治疗公式 {effectID}: {formula}");

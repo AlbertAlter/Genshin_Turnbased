@@ -12,6 +12,23 @@ using UnityEngine;
 /// </summary>
 public static class BattleExecution
 {
+    /// <summary>重复内容仍属于一次效果；共享反应编号和每效果触发额度。</summary>
+    public static async Task RepeatEffect(int count, string damageHook, Func<long, Task> execute)
+    {
+        if (count < 1) throw new ArgumentOutOfRangeException(nameof(count));
+        // DamageHook 与布尔 ScriptHook 不同，未实现的处理器不能静默忽略。
+        if (!string.IsNullOrWhiteSpace(damageHook))
+            throw new NotSupportedException($"DamageHook 尚未实现处理器：{damageHook}");
+        using var effect = BattleResolutionContext.BeginEffect();
+        long executionID = ReactionResolver.BeginEffectExecution();
+        for (int i = 0; i < count; i++)
+        {
+            ThrowIfCancelled();
+            await execute(executionID);
+            await Flush();
+        }
+    }
+
     private sealed class Pending
     {
         public Func<Task> Execute;

@@ -103,6 +103,83 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void TargetSelect_AllSelectsEligibleUnitsWithoutDrawingOrChangingRequest()
+        {
+            var request = UnitRequest(0, 0, new[] { 1, 3, 5 }, _ =>
+            {
+                Assert.Fail("Selecting all must not draw randomness.");
+                return 0;
+            });
+            request.TargetSelect = "-1";
+            request.OriginPosition = 2;
+
+            var result = TargetResolver.Resolve(request);
+
+            Assert.That(result.IsValid, Is.True, result.Error);
+            Assert.That(result.Positions, Is.EqualTo(new[] { 1, 3, 5 }));
+            Assert.That(request.TargetNumber, Is.Zero);
+            Assert.That(request.TargetSelect, Is.EqualTo("-1"));
+        }
+
+        [TestCase(2, 1, new[] { 1, 2, 3 })]
+        [TestCase(3, 3, new[] { 1, 1, 1 })]
+        [TestCase(4, 3, new[] { 1, 2, 3 })]
+        public void TargetSelect_CountUsesSelectionMode(int mode, int expectedDraws, int[] expected)
+        {
+            int draws = 0;
+            var request = UnitRequest(0, mode, new[] { 1, 2, 3, 4, 5 }, _ =>
+            {
+                draws++;
+                return 0;
+            });
+            request.TargetSelect = "3";
+
+            var result = TargetResolver.Resolve(request);
+
+            Assert.That(result.IsValid, Is.True, result.Error);
+            Assert.That(result.Positions, Is.EqualTo(expected));
+            Assert.That(draws, Is.EqualTo(expectedDraws));
+        }
+
+        [TestCase("0", 3)]
+        [TestCase("-2", 3)]
+        [TestCase("2", 0)]
+        [TestCase("2", 1)]
+        [TestCase("2", 5)]
+        public void TargetSelect_RejectsInvalidCountOrMissingRandomMode(string select, int mode)
+        {
+            var request = UnitRequest(0, mode, new[] { 1, 2, 3 }, _ => 0);
+            request.TargetSelect = select;
+            Assert.That(TargetResolver.Resolve(request).IsValid, Is.False);
+        }
+
+        [TestCase("-1", 0, new[] { 2, 4 })]
+        [TestCase("2", 3, new[] { 2, 2 })]
+        public void TargetSelect_RespectsExternalOverridePool(string select, int mode, int[] expected)
+        {
+            var request = UnitRequest(0, mode, new[] { 1, 2, 3, 4, 5 }, _ => 0);
+            request.TargetSelect = select;
+            request.TargetOverride = "TestStatus";
+            request.OverridePositions = new List<int> { 2, 4 };
+
+            var result = TargetResolver.Resolve(request);
+
+            Assert.That(result.IsValid, Is.True, result.Error);
+            Assert.That(result.Positions, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void TargetSelect_AllFieldPositionsIncludesEmptySlots()
+        {
+            var request = UnitRequest(0, 0, new int[0], _ => 0);
+            request.Domain = BattleTargetDomain.Field;
+            request.TargetSelect = "-1";
+            var result = TargetResolver.Resolve(request);
+            Assert.That(result.IsValid, Is.True, result.Error);
+            Assert.That(result.Positions, Is.EqualTo(new[] { 1, 2, 3, 4, 5 }));
+        }
+
+        [Test]
         public void TargetOverride_ExpandsAndShrinksPreviousRange()
         {
             Assert.That(

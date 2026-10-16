@@ -165,28 +165,35 @@ public partial class DataManager
                 if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(effSheet.Cells[row, 1].Text)) continue;
                 var data = new EnemySkillEffectData
                 {
-                    SkillEffectID = SafeGetInt(effSheet.Cells[row, 1].Value),
+                    SkillEffectID = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "SkillEffectID", 1)].Value),
                     SkillEffectID2 = cell,
-                    EffectIndex = SafeGetInt(effSheet.Cells[row, 3].Value),
-                    EffectType = effSheet.Cells[row, 4].Text,
-                    Element = effSheet.Cells[row, 5].Text,
-                    DamageType = effSheet.Cells[row, 6].Text,
-                    Duration = SafeGetInt(effSheet.Cells[row, 7].Value),
-                    AddInPhase = SafeGetInt(effSheet.Cells[row, 8].Value),
-                    TriggerPhase = SafeGetInt(effSheet.Cells[row, 9].Value),
-                    Param1 = effSheet.Cells[row, 10].Text,
-                    Param2 = effSheet.Cells[row, 11].Text,
-                    Param3 = effSheet.Cells[row, 12].Text,
-                    TargetType = effSheet.Cells[row, 13].Text,
-                    TargetNumber = SafeGetInt(effSheet.Cells[row, 14].Value),
-                    TargetConsecutive = SafeGetInt(effSheet.Cells[row, 15].Value),
-                    TargetOverride = effSheet.Cells[row, 16].Text,
-                    ScriptHook = effSheet.Cells[row, 17].Text
+                    EffectIndex = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "EffectIndex", 3)].Value),
+                    EffectType = effSheet.Cells[row, FindColumnByHeader(effSheet, "EffectType", 4)].Text,
+                    Element = effSheet.Cells[row, FindColumnByHeader(effSheet, "Element", 5)].Text,
+                    DamageType = effSheet.Cells[row, FindColumnByHeader(effSheet, "DamageType", 6)].Text,
+                    Duration = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "Duration", 7)].Value),
+                    AddInPhase = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "AddInPhase", 8)].Value),
+                    TriggerPhase = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "TriggerPhase", 9)].Value),
+                    Param1 = effSheet.Cells[row, FindColumnByHeader(effSheet, "Param1", 10)].Text,
+                    Param2 = ReadEffectParam2(effSheet, row, effSheet.Cells[row, FindColumnByHeader(effSheet, "EffectType", 4)].Text, 11),
+                    Param3 = effSheet.Cells[row, FindColumnByHeader(effSheet, "Param3", 12)].Text,
+                    TargetType = effSheet.Cells[row, FindColumnByHeader(effSheet, "TargetType", 13)].Text,
+                    TargetNumber = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "TargetNumber", 14)].Value),
+                    TargetConsecutive = SafeGetInt(effSheet.Cells[row, FindColumnByHeader(effSheet, "TargetConsecutive", 15)].Value),
+                    TargetOverride = effSheet.Cells[row, FindColumnByHeader(effSheet, "TargetOverride", 16)].Text,
+                    ScriptHook = effSheet.Cells[row, FindColumnByHeader(effSheet, "ScriptHook", 17)].Text,
+                    DamageHook = ReadOptionalEffectText(effSheet, row, "DamageHook"),
+                    ExecuteCount = ReadExecuteCount(effSheet, row),
+                    ExecuteCountHandler = ReadExecuteCountHandler(effSheet, row)
                 };
                 TryValidate("EnemySkill_Effect", () => TableValidator.ValidateEffectRow("EnemySkill_Effect", row,
                     data.EffectType, data.Element, data.Duration, data.Param2,
                     data.TargetType, data.TargetNumber, data.TargetConsecutive,
                     data.TargetOverride, isEnemy: true));
+                if (data.EffectType == "BondOfLife")
+                    TryValidate("EnemySkill_Effect", () => TableValidator.ValidateBondOfLife("EnemySkill_Effect", row, data.Param1));
+                TryValidate("EnemySkill_Effect", () => TableValidator.ValidatePublicCountEffect(
+                    "EnemySkill_Effect", row, data.EffectType, data.Param1, data.Param2, data.TargetType));
                 // ChangeControl 专属校验（2026-08-11）：敌人没有按键绑定，禁止使用
                 if (data.EffectType == "ChangeControl")
                     TryValidate("EnemySkill_Effect", () => TableValidator.ValidateChangeControl("EnemySkill_Effect", row,

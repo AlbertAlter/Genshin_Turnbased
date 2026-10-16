@@ -28,14 +28,7 @@ public List<int> ForcedTargetPositions = new List<int>();
     private readonly Dictionary<string, List<BattleEntity>> _statusTargetSnapshot = new Dictionary<string, List<BattleEntity>>();
     // 上一次效果选中的目标位置（供后续效果 TargetOverride="0,0" 沿用，如爆发伤害→箭雨状态施加到位置）
     private List<int> _lastTargetPositions = new List<int>();
-    // ================= 效果级目标选择（2026-08-15，按《战斗界面》文档） =================
-    // 按钮主动释放技能时：每个需选目标的效果在执行完上个效果后单独停一次选择；确认后继续推进。
-    private List<SkillEffectData> _effectQueue;       // 当前技能剩余待执行效果
-    private int _effectQueueIndex;                    // 下一个待执行效果下标
-    private int _effectSkillType;                     // 当前技能类型（0普攻/1重击/2战技/3爆发）
     private StatusInstance _currentEffectSourceStatus; // 状态触发技能/效果时保留直接来源状态
-    private bool _effectSequenceActive;               // 效果序列进行中（已确认过首个效果、资源已扣）
-    private SkillEffectData _pendingSelectEffect;     // 当前等待玩家选择的效果（null=无）
     public int CharacterID { get; private set; }
     public int Level { get; private set; }
     // 技能等级（1-15，顺序：0=普攻 1=重击 2=战技 3=爆发）

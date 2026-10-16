@@ -25,6 +25,10 @@ public partial class DataManager : Singleton<DataManager>
     public Dictionary<int, float> WeaponAscensionCurve4 = new Dictionary<int, float>();
     public Dictionary<int, float> WeaponAscensionCurve5 = new Dictionary<int, float>();
 
+    // 圣遗物套装ID -> 套装件数（2/4）-> 初始化状态运行时键。
+    public Dictionary<int, Dictionary<int, List<string>>> ArtifactInitiateStatusDict =
+        new Dictionary<int, Dictionary<int, List<string>>>();
+
     // ========== Growth Curve ==========
     // 曲线ID -> (等级 -> 倍率)，曲线ID对应角色Attributes.GrowthCurveID
     public Dictionary<int, Dictionary<int, float>> GrowthCurveDict = new Dictionary<int, Dictionary<int, float>>();

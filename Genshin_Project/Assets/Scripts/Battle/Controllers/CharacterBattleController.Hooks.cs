@@ -66,7 +66,7 @@ public partial class CharacterBattleController
                         && context.ActionTargetPositions != null)
                         PostDamageHookSystem.SetPositions(context.EventHookArgument,
                             new List<int>(context.ActionTargetPositions));
-                    ExecuteStatusActionEffects(status, action, host);
+                    ExecuteStatusActionEffects(status, action, host, context);
                 });
                 LogManager.Log(LogCategory.StatusAction,
                     $"事件状态行动执行 {status.StatusID2} {action.ActionType} (hook={action.ScriptHook})");

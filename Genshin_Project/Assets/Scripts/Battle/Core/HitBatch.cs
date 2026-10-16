@@ -16,6 +16,8 @@ public sealed class HitRequest
     public DamageSourceInfo Source;
     public int HitIndex;
     public int TargetIndex;
+    /// <summary>本次目标请求预备的 Count 贡献；伤害已包含在 DamageBeforeShield 内。</summary>
+    public CountDamagePlan CountPlan;
 }
 
 [Serializable]
@@ -67,6 +69,7 @@ public sealed class HitBatch : IDisposable
         damageEvent.HitBatchID = BatchID;
         damageEvent.HitIndex = request.HitIndex + 1;
         damageEvent.TargetIndex = request.TargetIndex + 1;
+        request.CountPlan?.Resolve(damageEvent);
 
         var resolution = new HitResolution
         {

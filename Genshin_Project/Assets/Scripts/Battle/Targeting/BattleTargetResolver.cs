@@ -75,7 +75,11 @@ public static class BattleTargetResolver
         if (!string.IsNullOrWhiteSpace(targetOverride) && !targetOverride.Contains(","))
         {
             string value = targetOverride.Trim();
-            if (value.StartsWith("PreAlliesDamage(", StringComparison.Ordinal))
+            if (BattleSpecialRules.TryResolveTargets(value, battle, source, out var specialPositions))
+            {
+                request.OverridePositions = specialPositions;
+            }
+            else if (value.StartsWith("PreAlliesDamage(", StringComparison.Ordinal))
             {
                 string hookStatusID2 = ExtractHookStatusID(value);
                 request.OverridePositions = PreDamageHookSystem.HasPreDamageHook(hookStatusID2)

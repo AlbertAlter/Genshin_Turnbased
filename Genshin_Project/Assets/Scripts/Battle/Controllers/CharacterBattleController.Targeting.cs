@@ -65,7 +65,8 @@ public partial class CharacterBattleController
     private TargetResolutionResult ResolveStatusTargetResult(
         StatusEffectData effect,
         StatusInstance sourceStatus,
-        object host)
+        object host,
+        int? inheritedTargetNumber = null)
     {
         var battle = BattleManager.Instance;
         if (effect == null || battle == null)
@@ -85,9 +86,10 @@ public partial class CharacterBattleController
         {
             int hookTargetNumber = -1;
             if (!string.IsNullOrWhiteSpace(effect.TargetSelect)
-                && (!int.TryParse(effect.TargetSelect.Trim(), out hookTargetNumber) || hookTargetNumber <= 0))
+                && (!int.TryParse(effect.TargetSelect.Trim(), out hookTargetNumber)
+                    || (hookTargetNumber != -1 && hookTargetNumber <= 0)))
             {
-                return InvalidTargetResult($"{overrideHook} 的 TargetSelect 必须是正整数: {effect.TargetSelect}");
+                return InvalidTargetResult($"{overrideHook} 的 TargetSelect 必须是正整数或 -1: {effect.TargetSelect}");
             }
 
             var hookResult = BattleTargetResolver.Resolve(
@@ -123,10 +125,10 @@ public partial class CharacterBattleController
         }
 
         // 状态表用 TargetSelect 代替手动 TargetNumber；无 TargetSelect 时取该 TargetType 的全部范围。
-        int targetNumber = string.IsNullOrWhiteSpace(effect.TargetSelect)
+        int targetNumber = inheritedTargetNumber ?? (string.IsNullOrWhiteSpace(effect.TargetSelect)
             && effect.TargetType != "Self"
             ? -1
-            : 0;
+            : 0);
 
         var result = BattleTargetResolver.Resolve(
             battle,

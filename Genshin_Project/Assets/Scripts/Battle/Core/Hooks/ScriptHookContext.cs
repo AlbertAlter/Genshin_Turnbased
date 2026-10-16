@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 
 /// <summary>
 /// 钩子判断上下文（2026-08-19）：统一携带钩子判断所需的全部信息。
@@ -11,6 +13,23 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class ScriptHookContext
 {
+    private static readonly AsyncLocal<ScriptHookContext> Execution = new AsyncLocal<ScriptHookContext>();
+    public static ScriptHookContext Current => Execution.Value;
+
+    // 每个状态响应保留自己的事件；嵌套响应结束后恢复父事件，不依赖全局“最后命中”。
+    public static IDisposable EnterExecution(ScriptHookContext context) => new ExecutionScope(context);
+
+    private sealed class ExecutionScope : IDisposable
+    {
+        private readonly ScriptHookContext previous;
+        public ExecutionScope(ScriptHookContext context)
+        {
+            previous = Execution.Value;
+            Execution.Value = context;
+        }
+        public void Dispose() => Execution.Value = previous;
+    }
+
     /// <summary>钩子所属状态/效果的施放者。</summary>
     public BattleEntity Caster;
 
@@ -28,12 +47,17 @@ public sealed class ScriptHookContext
 
     /// <summary>本次伤害结算事件（Kaeya_C4 / Kill 判定用）。</summary>
     public DamageResolvedEvent DamageEvent;
+    /// <summary>已经提交的生命降低事实；不可由属性查询或预计伤害伪造。</summary>
+    public HPDecreaseEvent HPDecreaseEvent;
 
     /// <summary>本次治疗的前后生命、实际治疗及溢出量；条件确认时必须已经正式提交。</summary>
     public HealResolvedEvent HealEvent;
 
     /// <summary>引出本次响应的反应事实；后续反应不能覆盖类型、来源效果和元素列表。</summary>
     public ReactionOccurrence ReactionEvent;
+
+    /// <summary>本次 SwitchIn / SwitchOut 声明对应的角色；不同于状态施放者。</summary>
+    public BattleEntity SwitchedEntity;
 
     /// <summary>只复制事件事实与目标列表；Caster/Target/Status 保持实时实体引用。</summary>
     public ScriptHookContext Snapshot()

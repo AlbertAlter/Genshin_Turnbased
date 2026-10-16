@@ -43,6 +43,41 @@ public partial class DataManager
         return fallback;
     }
 
+    static string ReadOptionalEffectText(ExcelWorksheet sheet, int row, string header)
+    {
+        int column = FindColumnByHeader(sheet, header, -1);
+        return column > 0 ? sheet.Cells[row, column].Text.Trim() : string.Empty;
+    }
+
+    static int ReadExecuteCount(ExcelWorksheet sheet, int row)
+    {
+        try { return TableValidator.ParseExecuteCount(ReadOptionalEffectText(sheet, row, "ExecuteCount")); }
+        catch (TableValidationException error)
+        {
+            throw new TableValidationException($"{sheet.Name} 第{row}行: {error.Message}");
+        }
+    }
+
+    static string ReadExecuteCountHandler(ExcelWorksheet sheet, int row)
+    {
+        try { return TableValidator.ParseExecuteCountHandler(ReadOptionalEffectText(sheet, row, "ExecuteCount")); }
+        catch (TableValidationException error)
+        {
+            throw new TableValidationException($"{sheet.Name} 第{row}行: {error.Message}");
+        }
+    }
+
+    static string ReadEffectParam2(ExcelWorksheet sheet, int row, string effectType, int fallback)
+    {
+        string param = sheet.Cells[row, FindColumnByHeader(sheet, "Param2", fallback)].Text;
+        if (effectType != "GainEnergy") return param;
+        string mode = ReadOptionalEffectText(sheet, row, "EnergyGainMode");
+        if (!string.IsNullOrWhiteSpace(mode) && !string.IsNullOrWhiteSpace(param)
+            && TableValidator.NormalizeEnergyMode(mode) != TableValidator.NormalizeEnergyMode(param))
+            throw new TableValidationException($"{sheet.Name} 第{row}行: EnergyGainMode 与 Param2 的充能模式冲突");
+        return TableValidator.NormalizeEnergyMode(string.IsNullOrWhiteSpace(mode) ? param : mode);
+    }
+
     // ================================================================
     //  Characters/{id}_{name}.xlsx 全部 sheets
     //  跳过 0_ 开头的模板文件；跳过 CharacterID 为 0 的空行
@@ -213,30 +248,40 @@ public partial class DataManager
                         if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(seSheet.Cells[row, 1].Text)) continue;
                         var data = new SkillEffectData
                         {
-                            SkillEffectID = SafeGetInt(seSheet.Cells[row, 1].Value),
-                            SkillEffectID2 = seSheet.Cells[row, 2].Text,
-                            EffectIndex = SafeGetInt(seSheet.Cells[row, 3].Value),
-                            EffectType = seSheet.Cells[row, 4].Text,
-                            Element = seSheet.Cells[row, 5].Text,
-                            DamageType = seSheet.Cells[row, 6].Text,
-                            Duration = SafeGetInt(seSheet.Cells[row, 7].Value),
-                            AddInPhase = SafeGetInt(seSheet.Cells[row, 8].Value),
-                            TriggerPhase = SafeGetInt(seSheet.Cells[row, 9].Value),
-                            Param1 = seSheet.Cells[row, 10].Text,
-                            Param2 = seSheet.Cells[row, 11].Text,
-                            Param3 = seSheet.Cells[row, 12].Text,
-                            TargetType = seSheet.Cells[row, 13].Text,
-                            TargetNumber = SafeGetInt(seSheet.Cells[row, 14].Value),
-                            TargetConsecutive = SafeGetInt(seSheet.Cells[row, 15].Value),
-                            TargetConsecutiveSet = !string.IsNullOrEmpty(seSheet.Cells[row, 15].Text),
-                            TargetOverride = seSheet.Cells[row, 16].Text,
-                            ScriptHook = seSheet.Cells[row, 17].Text
+                            AuthoredFields = ReadAuthoredEffectFields(seSheet, row),
+                            SkillEffectID = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID", 1)].Value),
+                            SkillEffectID2 = seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID2", 2)].Text,
+                            EffectIndex = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectIndex", 3)].Value),
+                            EffectType = seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType", 4)].Text,
+                            Element = seSheet.Cells[row, FindColumnByHeader(seSheet, "Element", 5)].Text,
+                            DamageType = seSheet.Cells[row, FindColumnByHeader(seSheet, "DamageType", 6)].Text,
+                            Duration = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "Duration", 7)].Value),
+                            AddInPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "AddInPhase", 8)].Value),
+                            TriggerPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TriggerPhase", 9)].Value),
+                            Param1 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param1", 10)].Text,
+                            Param2 = ReadEffectParam2(seSheet, row, seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType", 4)].Text, 11),
+                            Param3 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param3", 12)].Text,
+                            TargetType = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetType", 13)].Text,
+                            TargetNumber = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetNumber", 14)].Value),
+                            TargetConsecutive = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive", 15)].Value),
+                            TargetConsecutiveSet = !string.IsNullOrEmpty(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive", 15)].Text),
+                            TargetOverride = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetOverride", 16)].Text,
+                            ScriptHook = seSheet.Cells[row, FindColumnByHeader(seSheet, "ScriptHook", 17)].Text,
+                            DamageHook = ReadOptionalEffectText(seSheet, row, "DamageHook"),
+                            ExecuteCount = ReadExecuteCount(seSheet, row),
+                            ExecuteCountHandler = ReadExecuteCountHandler(seSheet, row)
                         };
                         TryValidate("SkillsEffect", () => TableValidator.ValidateEffectRow("SkillsEffect", row,
                             data.EffectType, data.Element, data.Duration, data.Param2,
                             data.TargetType, data.TargetNumber, data.TargetConsecutive,
                             data.TargetOverride, isEnemy: false));
                         // ChangeControl 专属校验（2026-08-11）：技能效果表允许，填了Duration定时结束，没填=永久
+                        if (data.EffectType == "ResetCooldown")
+                            TryValidate("SkillsEffect", () => TableValidator.ValidateResetCooldown("SkillsEffect", row, data.Param1));
+                        if (data.EffectType == "BondOfLife")
+                            TryValidate("SkillsEffect", () => TableValidator.ValidateBondOfLife("SkillsEffect", row, data.Param1));
+                        TryValidate("SkillsEffect", () => TableValidator.ValidatePublicCountEffect(
+                            "SkillsEffect", row, data.EffectType, data.Param1, data.Param2, data.TargetType));
                         if (data.EffectType == "ChangeControl")
                             TryValidate("SkillsEffect", () => TableValidator.ValidateChangeControl("SkillsEffect", row,
                                 data.Param1, data.Param2, data.Param3, data.Duration,
@@ -252,7 +297,7 @@ public partial class DataManager
                     int startRow = GetDataStartRow(slSheet);
                     int maxRow = GetSheetMaxRow(slSheet);
                     // SkillLevel 是分组子表：CharacterID、SkillType、ParamID 留空时继承上方最近的非空值。
-                    // Hits1~Hits7 不继承；它们仍由战斗层按当前等级/1级倍率的既有规则合并。
+                    // Hits fields inherit within the same ParamID group, never across effects.
                     int charId = 0;
                     int skillType = 0;
                     string paramID = string.Empty;
@@ -305,6 +350,20 @@ public partial class DataManager
                             Hits7 = slSheet.Cells[row, 11].Text
                         };
                         if (!SkillLevelDict.ContainsKey(key)) SkillLevelDict[key] = new Dictionary<int, SkillLevelData>();
+                        SkillLevelData previous = null;
+                        foreach (var entry in SkillLevelDict[key])
+                            if (entry.Key < skillLevel && (previous == null || entry.Key > previous.SkillLevel))
+                                previous = entry.Value;
+                        if (previous != null)
+                        {
+                            data.Hits1 = HitDataParser.InheritLevelFields(data.Hits1, previous.Hits1);
+                            data.Hits2 = HitDataParser.InheritLevelFields(data.Hits2, previous.Hits2);
+                            data.Hits3 = HitDataParser.InheritLevelFields(data.Hits3, previous.Hits3);
+                            data.Hits4 = HitDataParser.InheritLevelFields(data.Hits4, previous.Hits4);
+                            data.Hits5 = HitDataParser.InheritLevelFields(data.Hits5, previous.Hits5);
+                            data.Hits6 = HitDataParser.InheritLevelFields(data.Hits6, previous.Hits6);
+                            data.Hits7 = HitDataParser.InheritLevelFields(data.Hits7, previous.Hits7);
+                        }
                         SkillLevelDict[key][skillLevel] = data;
                     }
                 }

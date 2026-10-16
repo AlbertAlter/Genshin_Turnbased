@@ -24,6 +24,7 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [TestCase("")]
+        [TestCase("Unknown")]
         [TestCase("Direct")]
         [TestCase("based")]
         public void GainEnergy_RejectsInvalidModeInParam2(string mode)

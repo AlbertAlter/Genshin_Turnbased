@@ -19,6 +19,30 @@ public class TableValidationException : System.Exception
 
 public static class TableValidator
 {
+    public static int ParseExecuteCount(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return 1;
+        if (int.TryParse(value.Trim(), out int count) && count > 0) return count;
+        if (ExecuteCountEvaluator.IsSupportedHandler(value)) return 1;
+        throw new TableValidationException($"ExecuteCount 必须为空、正整数或已支持的特殊处理器，当前=[{value}]");
+    }
+
+    public static string ParseExecuteCountHandler(string value)
+    {
+        ParseExecuteCount(value);
+        if (string.IsNullOrWhiteSpace(value) || int.TryParse(value.Trim(), out _))
+            return string.Empty;
+        return value.Trim();
+    }
+
+    // 充能模式只接受项目约定的 Based / Flat。
+    public static string NormalizeEnergyMode(string value)
+    {
+        string mode = value?.Trim() ?? string.Empty;
+        if (mode == "Based" || mode == "Flat") return mode;
+        throw new TableValidationException($"GainEnergy 模式必须为 Based 或 Flat，当前=[{value}]");
+    }
+
     /// <summary>效果行（SkillsEffect / Status_Effect / EnemySkill_Effect 共用）校验。
     /// tableName 用于日志标识；isEnemy 控制 TargetConsecutive 规则；
     /// checkTargetNumber=false 时跳过 TargetNumber 检查（状态效果用 TargetSelect 不用数量）。</summary>
@@ -36,27 +60,20 @@ public static class TableValidator
         //   ChangeControl —— 只改按键绑定，参数只有param1(param2)（L369）
         bool noTarget = effectType == "ExecuteSkill" || effectType == "ExecuteEffect"
                      || effectType == "BindStatus" || effectType == "Buff" || effectType == "Debuff"
-                     || effectType == "ChangeControl";
-        // 需要 Element 的效果：Damage/GainEnergy（L119 "记录伤害的元素类型，none为物理，不能填0"）
-        bool needsElement = effectType == "Damage" || effectType == "GainEnergy";
-        // 需要 Duration 的效果：只有 ApplyStatus（L123 "将要施加的状态持续多少回合"）
-        // （BindStatus不填Duration——跟随父状态生命周期；ChangeControl不填Duration——只改按键绑定）
-        bool needsDuration = effectType == "ApplyStatus";
+                     || effectType == "ChangeControl" || effectType == "APCost"
+                     || effectType == "ResetCooldown";
+        if (effectType == "ResetCooldown" && isEnemy)
+            throw new TableValidationException($"{tag}: ResetCooldown 当前作用于角色技能；敌人没有对应的技能按钮绑定");
+        // GainEnergy 的模式仍须合法；只有 Based 读取元素系数。
+        // Flat 忽略 Element，允许留空或填 None/none。
+        string energyMode = effectType == "GainEnergy" ? NormalizeEnergyMode(param2) : null;
+        bool needsElement = effectType == "Damage" || energyMode == "Based";
+        // ApplyStatus 的 Duration 留空/0 表示永久；角色、状态和敌人效果共用此规则。
+        // 生命周期由 StatusInstance.IsPermanent 控制，不能在读表时拒绝永久状态。
 
         if (needsElement && string.IsNullOrEmpty(element))
         {
             throw new TableValidationException($"{tag}: Element不能为空/0（{effectType}需要填元素；None=物理也要写None）");
-        }
-
-        if (needsDuration && duration == 0)
-        {
-            throw new TableValidationException($"{tag}: Duration不能为0（{effectType}施加状态需至少持续1回合）");
-        }
-
-        // GainEnergy 的模式统一写在 Param2：Based=走能量系数，Flat=直接加减固定值。
-        if (effectType == "GainEnergy" && param2 != "Based" && param2 != "Flat")
-        {
-            throw new TableValidationException($"{tag}: GainEnergy 的 Param2 必须为 Based 或 Flat，当前=[{param2}]");
         }
 
         if (noTarget)
@@ -87,6 +104,49 @@ public static class TableValidator
         {
             throw new TableValidationException($"{tag}: 敌人技能TargetConsecutive只能填2,3,4（当前{targetConsecutive}）");
         }
+    }
+
+    public static void ValidateResetCooldown(string tableName, int row, string param1)
+    {
+        if (!ResetCooldownTarget.IsValid(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ResetCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
+    }
+
+    public static void ValidateBondOfLife(string tableName, int row, string param1)
+    {
+        if (!BondOfLifeEffect.IsValidExpression(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (BondOfLife): Param1 必须为有限正负数或系数*变量。系数可用武器Index(n)；变量支持TotalHP/CurrentHP/TotalATK/TotalDEF/TotalEM/CurrentEnergy/MaxEnergy/BondOfLife，可加Target.前缀，当前=[{param1}]");
+    }
+
+    public static void ValidatePublicCountEffect(string tableName, int row, string effectType,
+        string param1, string param2, string targetType)
+    {
+        bool appliesNightSoul = effectType == "ApplyStatus" && NightSoulStatusHandler.IsStatusReference(param1);
+        if (effectType == "NightSoul" && !NightSoulEffect.IsValidAmount(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (NightSoul): Param1必须为有符号int增减量，当前=[{param1}]");
+        if ((effectType == "NightSoul" || appliesNightSoul) && !string.IsNullOrEmpty(targetType)
+            && targetType.EndsWith("Field", System.StringComparison.Ordinal))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行: 公共夜魂只允许实体目标，不能施加到场地。");
+        if (appliesNightSoul)
+        {
+            try { NightSoulStatusHandler.ParseMaximum(param2); }
+            catch (System.FormatException exception)
+            {
+                throw new TableValidationException($"[配表校验] {tableName} 第{row}行: {exception.Message}");
+            }
+        }
+    }
+
+    public static void ValidateAPCost(string param1, string param2)
+    {
+        if (!int.TryParse(param1, System.Globalization.NumberStyles.Integer,
+                System.Globalization.CultureInfo.InvariantCulture, out _) && !APCostResolver.IsFreeValue(param1))
+            throw new TableValidationException("APCost 的 Param1 必须为整数增减量或Free（强制免除该操作AP费用）");
+        if (string.IsNullOrWhiteSpace(param2))
+            throw new TableValidationException("APCost 的 Param2 必须填写适用操作");
+        foreach (string operation in param2.Split(';'))
+            if (!APCostResolver.IsOperation(operation.Trim()))
+                throw new TableValidationException($"APCost 操作无效：[{operation}]；支持 Normal/Heavy/Skill/Burst/SwitchIn/SwitchOut，多个用分号分隔");
     }
 
     /// <summary>Enemy_Main 行校验。Poise 不能填0（-1=无法被削韧，正数=韧性值）。</summary>

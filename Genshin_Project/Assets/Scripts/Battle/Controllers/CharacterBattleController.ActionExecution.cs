@@ -6,7 +6,6 @@ using UnityEngine;
 
 public partial class CharacterBattleController
 {
-    private BattleResolutionContext.CounterScope _resolutionAction;
     // ================================================================
     //  执行（按键接口）
     // ================================================================
@@ -106,152 +105,13 @@ public partial class CharacterBattleController
     public bool EffectNeedsSelection(SkillEffectData eff)
     {
         if (eff == null) return false;
+        if (!string.IsNullOrWhiteSpace(eff.TargetOverride)) return false;
         if (eff.TargetType == "Self")
             return eff.TargetConsecutiveSet && eff.TargetConsecutive <= 1;
         if (eff.TargetNumber > 0) return true;
         return eff.TargetConsecutive >= 2 && eff.TargetConsecutive <= 4;
     }
 
-    /// <summary>当前按钮技能的第一个需选效果（进入目标选择用），无则 null。</summary>
-    public SkillEffectData GetFirstSelectEffect(int skillType)
-    {
-        string skillID2 = skillType switch
-        {
-            0 => _boundSkills[0],
-            1 => _boundSkills[1],
-            2 => _boundSkills[2],
-            3 => _boundSkills[3],
-            _ => null
-        };
-        if (string.IsNullOrEmpty(skillID2)) return null;
-        if (_skillEffects.TryGetValue(skillID2, out var effects))
-        {
-            foreach (var eff in effects)
-                if (EffectNeedsSelection(eff)) return eff;
-        }
-        return null;
-    }
-
-    /// <summary>效果级序列是否进行中（已确认过首个效果、资源已扣）。</summary>
-    public bool HasPendingEffectSequence => _effectSequenceActive;
-
-    /// <summary>当前等待玩家选择的效果（UI 高亮/Splash 读参数用），无=null。</summary>
-    public SkillEffectData PendingSelectEffect => _pendingSelectEffect;
-
-    /// <summary>挂载当前待选效果（2026-08-15：进入选择阶段时由 BattleInputController 调用，UI 高亮/溅射预览用）。</summary>
-    public void MarkPendingSelectEffect(SkillEffectData eff)
-    {
-        _pendingSelectEffect = eff;
-    }
-
-    /// <summary>
-    /// 按钮路径：开始效果级执行（首次确认后调用）——扣资源+预解析钩子，然后推进到下一个待选效果。
-    /// 返回是否全部完成（true=无待选效果，false=停在需选效果等待确认）。
-    /// </summary>
-    public bool BeginSkillSelectionSequence(int skillType)
-    {
-        if (BattleExecution.IsBusy) return false;
-        bool complete = false;
-        Task task = BattleExecution.Run(async () =>
-        {
-            try { complete = await BeginSkillSelectionSequenceAsync(skillType); }
-            catch { AbortEffectSequence(); throw; }
-        });
-        BattleExecution.Observe(task);
-        return task.IsCompleted && complete;
-    }
-
-    private async Task<bool> BeginSkillSelectionSequenceAsync(int skillType)
-    {
-        string skillID2 = GetBoundSkillID(skillType);
-        if (string.IsNullOrEmpty(skillID2) || !_skillById2.TryGetValue(skillID2, out var sk)) return true;
-        _resolutionAction = ActiveActionQuery.IsActiveAction(Entity, sk)
-            ? new BattleResolutionContext.CounterScope() : null;
-        using var resolutionAction = BattleResolutionContext.EnterAction(_resolutionAction);
-        _currentExecutingSkillID2 = skillID2;
-        if (!PrepareSkillExecution(skillID2, skillType, sk, true, out var effects, out _))
-        {
-            _currentExecutingSkillID2 = null;
-            _resolutionAction = null;
-            return true; // AP/能量不足等：视为完成，避免卡在选择态
-        }
-
-        await BattleExecution.Flush();
-        _effectQueue = effects != null ? new List<SkillEffectData>(effects) : new List<SkillEffectData>();
-        _effectQueueIndex = 0;
-        _effectSkillType = skillType;
-        _effectSequenceActive = true;
-        _pendingSelectEffect = null;
-        // 首个需选效果（目标已确认，在 ForcedTargetPositions）
-        for (int i = 0; i < _effectQueue.Count; i++)
-        {
-            if (EffectNeedsSelection(_effectQueue[i])) { _pendingSelectEffect = _effectQueue[i]; break; }
-        }
-        LogManager.Log(LogCategory.Skill, $"{sk.SkillName} 效果序列开始（效果级选择）");
-        return await AdvanceEffectSequenceAsync();
-    }
-
-    /// <summary>
-    /// 推进效果序列：执行非需选效果与已确认的需选效果，停在下一个未确认的需选效果。
-    /// 返回是否全部完成（true=序列结束，false=停在需选效果等待确认）。
-    /// </summary>
-    public bool AdvanceEffectSequence()
-    {
-        if (BattleExecution.IsBusy) return false;
-        bool complete = false;
-        Task task = BattleExecution.Run(async () =>
-        {
-            try { complete = await AdvanceEffectSequenceAsync(); }
-            catch { AbortEffectSequence(); throw; }
-        });
-        BattleExecution.Observe(task);
-        return task.IsCompleted && complete;
-    }
-
-    private async Task<bool> AdvanceEffectSequenceAsync()
-    {
-        using var resolutionAction = BattleResolutionContext.EnterAction(_resolutionAction);
-        if (!_effectSequenceActive) return true;
-        while (_effectQueueIndex < _effectQueue.Count)
-        {
-            var eff = _effectQueue[_effectQueueIndex];
-            if (EffectNeedsSelection(eff))
-            {
-                if (_pendingSelectEffect == eff)
-                {
-                    // 已确认（目标在 ForcedTargetPositions）→ 执行
-                    await ExecuteEffectAsync(eff, _effectSkillType);
-                    ForcedTargetPositions.Clear(); // 每效果独立，防后续非需选效果误用
-                    _effectQueueIndex++;
-                    continue;
-                }
-                // 未确认的需选效果 → 停下，等待玩家选择
-                _pendingSelectEffect = eff;
-                LogManager.Log(LogCategory.Select, $"效果 {eff.SkillEffectID2} 需选目标，等待确认");
-                return false;
-            }
-            await ExecuteEffectAsync(eff, _effectSkillType);
-            _effectQueueIndex++;
-        }
-        _effectSequenceActive = false;
-        _resolutionAction = null;
-        _pendingSelectEffect = null;
-        _currentExecutingSkillID2 = null;
-        ForcedTargetPositions.Clear();
-        return true;
-    }
-
-    /// <summary>终止效果序列（选择中途取消/异常收尾，2026-08-15）。</summary>
-    public void AbortEffectSequence()
-    {
-        _effectSequenceActive = false;
-        _resolutionAction = null;
-        _pendingSelectEffect = null;
-        _effectQueue = null;
-        _effectQueueIndex = 0;
-        _currentExecutingSkillID2 = null;
-        ForcedTargetPositions.Clear();
-    }
 
     /// <summary>Splash（溅射）参数（2026-08-14）：倍率 + 左右扩展位。</summary>
     public struct SplashInfo
@@ -347,13 +207,17 @@ public partial class CharacterBattleController
         BattleExecution.Observe(BattleExecution.Run(() => ExecuteSkillByIDAsync(skillID2, skillType, isPlayerInitiated)));
     }
 
-    void QueueSkillByID(string skillID2, int skillType, bool isPlayerInitiated = false)
-        => BattleExecution.Enqueue(() => ExecuteSkillByIDAsync(skillID2, skillType, isPlayerInitiated));
+    void QueueSkillByID(string skillID2, int skillType, bool isPlayerInitiated = false, SkillSelectionPlan plan = null)
+        => BattleExecution.Enqueue(() => ExecuteSkillByIDAsync(skillID2, skillType, isPlayerInitiated, plan));
 
-    public async Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated = false)
+    public Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated = false)
+        => ExecuteSkillByIDAsync(skillID2, skillType, isPlayerInitiated, null);
+
+    private async Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated, SkillSelectionPlan plan)
     {
         if (string.IsNullOrEmpty(skillID2)) return;
         if (!_skillById2.TryGetValue(skillID2, out var sk)) return;
+        using var specialSkillScope = BattleSpecialRules.BeginSkill(Entity);
         using var resolutionAction = BattleResolutionContext.EnterAction(
             ActiveActionQuery.IsActiveAction(Entity, sk)
                 ? new BattleResolutionContext.CounterScope() : null);
@@ -383,10 +247,15 @@ public partial class CharacterBattleController
         {
             // Skill 容器调用始终服从自身资源、冷却和次数规则；是否主动统一查询 ActiveActionQuery。
             if (!PrepareSkillExecution(skillID2, skillType, sk, isPlayerInitiated,
-                    out var effects, out var forcedPositions)) return;
+                    out var effects, out var forcedPositions, plan)) return;
 
             await BattleExecution.Flush();
-            if (effects != null)
+            if (plan != null)
+            {
+                foreach (var step in plan.Effects)
+                    await ExecuteEffectAsync(step.Effect, GetEffectSkillType(step.Effect.SkillEffectID2, skillType), step);
+            }
+            else if (effects != null)
             {
                 foreach (var eff in effects)
                     await ExecuteEffectAsync(eff, GetEffectSkillType(eff.SkillEffectID2, skillType));
@@ -440,7 +309,7 @@ public partial class CharacterBattleController
     /// 返回 false = AP 不足等，不应执行效果。
     /// </summary>
     bool PrepareSkillExecution(string skillID2, int skillType, SkillMainData sk, bool isPlayerInitiated,
-        out List<SkillEffectData> effects, out List<int> forcedPositions)
+        out List<SkillEffectData> effects, out List<int> forcedPositions, SkillSelectionPlan plan = null)
     {
         // 技能序列开始：清空"本序列命中集合"（Hit()钩子的序列内判定基准）
         _sequenceHitEffectIDs.Clear();
@@ -450,13 +319,7 @@ public partial class CharacterBattleController
         forcedPositions = new List<int>(ForcedTargetPositions);
 
         // Skill 容器可用性：系统调用同样服从容器自身的冷却、次数与资源约束。
-        if (_cooldownRemaining.TryGetValue(skillID2, out int cooldown) && cooldown > 0)
-        {
-            effects = null;
-            return false;
-        }
-        if (sk.MaxCharge > 0
-            && (!_currentCharges.TryGetValue(skillID2, out int charges) || charges <= 0))
+        if (!HasSkillUseAvailable(skillID2, sk))
         {
             effects = null;
             return false;
@@ -468,28 +331,27 @@ public partial class CharacterBattleController
             effects = null;
             return false;
         }
-        if (sk.APCost > 0 && (APManager == null || !APManager.CanAfford(sk.APCost)))
+        int apCost = APCostResolver.ForSkill(Entity, sk);
+        if (apCost > 0 && (APManager == null || !APManager.CanAfford(apCost)))
         {
             effects = null;
             return false;
         }
-        if (sk.APCost > 0 && !APManager.ConsumeAP(sk.APCost))
+        if (apCost > 0 && !APManager.ConsumeAP(apCost))
         {
             effects = null;
             return false;
         }
-        if (sk.APCost > 0)
-            StatusOnHitHookSystem.NotifyAPUsed(Entity, sk.APCost);
+        if (apCost > 0)
+            StatusOnHitHookSystem.NotifyAPUsed(Entity, apCost);
         if (sk.EnergyUsed > 0)
             Entity.CurrentEnergy = Mathf.Max(0, Entity.CurrentEnergy - sk.EnergyUsed);
 
-        // 冷却 & 次数
-        if (sk.Cooldown > 0)
-            _cooldownRemaining[skillID2] = Mathf.CeilToInt(sk.Cooldown);
-        if (sk.MaxCharge > 0 && _currentCharges.ContainsKey(skillID2))
-            _currentCharges[skillID2]--;
+        // 冷却 & 次数：已在充能时，使用剩余次数不重置当前这一轮的计时。
+        ConsumeSkillUse(skillID2, sk);
 
-        effects = _skillEffects.TryGetValue(skillID2, out var list) ? list : null;
+        effects = plan != null ? plan.Effects.Select(step => step.Effect).ToList()
+            : _skillEffects.TryGetValue(skillID2, out var list) ? list : null;
         if (effects == null) return true;
         bool isActiveAction = ActiveActionQuery.IsActiveAction(Entity, sk);
         _currentExecutingSkillIsActiveAction = isActiveAction;
@@ -504,15 +366,18 @@ public partial class CharacterBattleController
         if (isActiveAction && bm != null && bm.PendingActionTargetPositions != null)
         {
             bm.PendingActionTargetPositions.Clear();
-            foreach (var eff in effects)
+            for (int effectIndex = 0; effectIndex < effects.Count; effectIndex++)
             {
+                var eff = effects[effectIndex];
                 if (eff == null || eff.EffectType != "Damage") continue;
+                if (plan != null) UsePlannedTargets(plan.Effects[effectIndex]);
                 var targetResult = ResolveSkillTargetResult(eff);
                 if (!targetResult.IsValid) continue;
                 foreach (int position in targetResult.Positions)
                     if (!bm.PendingActionTargetPositions.Contains(position))
                         bm.PendingActionTargetPositions.Add(position);
             }
+            if (plan != null) ForcedTargetPositions.Clear();
         }
 
         // 主动行为定义统一由 ActiveActionQuery 提供；本执行器不读取按钮返回值或自行推断。
@@ -542,6 +407,7 @@ public partial class CharacterBattleController
         return new SkillEffectData
         {
             SkillEffectID = src.SkillEffectID,
+            AuthoredFields = src.AuthoredFields != null ? new HashSet<string>(src.AuthoredFields) : null,
             SkillEffectID2 = src.SkillEffectID2,
             EffectIndex = src.EffectIndex,
             EffectType = src.EffectType,
@@ -558,7 +424,10 @@ public partial class CharacterBattleController
             TargetConsecutive = src.TargetConsecutive,
             TargetConsecutiveSet = src.TargetConsecutiveSet,
             TargetOverride = src.TargetOverride,
-            ScriptHook = src.ScriptHook
+            ScriptHook = src.ScriptHook,
+            DamageHook = src.DamageHook,
+            ExecuteCount = src.ExecuteCount,
+            ExecuteCountHandler = src.ExecuteCountHandler
         };
     }
 

@@ -51,7 +51,7 @@ public partial class CharacterBattleController
         if (target == null) return 0f;
 
         float totalEnergy = gainedEnergy;
-        if (gainMode == "Based")
+        if (TableValidator.NormalizeEnergyMode(gainMode) == "Based")
         {
             float onstageStatus = GetEnergyOnstageStatus(target);
             float elementStatus = GetEnergyElementStatus(target, energyElement);

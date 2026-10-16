@@ -26,6 +26,7 @@ public sealed class BattlefieldApView : MonoBehaviour
     private TMP_Text value, loss, gain;
     private Vector2 lossOrigin, gainOrigin;
     private BattleInputController input;
+    private BattlefieldSwitchController switcher;
     private ActionPointManager manager;
     private Style style;
     private int lastAP;
@@ -90,6 +91,8 @@ public sealed class BattlefieldApView : MonoBehaviour
         }
         if (input == null) input = FindObjectsOfType<BattleInputController>()
             .FirstOrDefault(item => item.gameObject.scene == gameObject.scene);
+        if (switcher == null) switcher = FindObjectsOfType<BattlefieldSwitchController>()
+            .FirstOrDefault(item => item.gameObject.scene == gameObject.scene);
         float now = Time.unscaledTime;
         int actual = currentManager.CurrentAP;
         if (!initialized || manager != currentManager)
@@ -116,26 +119,21 @@ public sealed class BattlefieldApView : MonoBehaviour
             value.color = style.Text;
         }
 
-        if (input != null && input.IsSelecting && input.PendingSkill >= 0)
+        int? previewCost = GetPreviewCost(battle, input, switcher);
+        if (previewCost.HasValue)
         {
-            // Burst selection may belong to a reserve ally, not the active ally.
-            var caster = input.PendingAlly != null ? input.PendingAlly : battle.GetActiveAlly();
-            bool unpaid = caster != null && !caster.HasPendingEffectSequence && !battle.IsResolving;
-            int cost = unpaid ? Mathf.Max(0, caster.GetBoundSkillAPCost(input.PendingSkill)) : 0;
-            if (unpaid)
+            int cost = previewCost.Value;
+            if (cost > 0)
             {
-                if (cost > 0)
-                {
-                    Color color = style.PreviewByAffordability && manager.CanAfford(cost) ? style.Gain : style.Loss;
-                    float pulse = .5f + .5f * Mathf.Cos(now * Mathf.PI * 2f/style.PulsePeriod);
-                    color.a *= Mathf.Lerp(style.PulseMinAlpha, 1f, pulse);
-                    ShowHint(loss, -cost, color, lossOrigin);
-                }
-                else HideHints();
-                // A previous delta must not reappear after a later cancelled selection.
-                floatingDelta = 0;
-                return;
+                Color color = style.PreviewByAffordability && manager.CanAfford(cost) ? style.Gain : style.Loss;
+                float pulse = .5f + .5f * Mathf.Cos(now * Mathf.PI * 2f/style.PulsePeriod);
+                color.a *= Mathf.Lerp(style.PulseMinAlpha, 1f, pulse);
+                ShowHint(loss, -cost, color, lossOrigin);
             }
+            else HideHints();
+            // A previous delta must not reappear after a later cancelled selection.
+            floatingDelta = 0;
+            return;
         }
         float floatT = Mathf.Clamp01((now-floatStart)/style.FloatDuration);
         if (floatingDelta == 0 || floatT >= 1f) { HideHints(); return; }
@@ -145,6 +143,20 @@ public sealed class BattlefieldApView : MonoBehaviour
         Vector2 origin = isGain ? gainOrigin : lossOrigin;
         ShowHint(isGain ? gain : loss, floatingDelta, floatingColor,
             origin + Vector2.up * (style.FloatDistance*floatT));
+    }
+
+    /// <summary>只读费用预览；换人模态优先于其下保留的技能目标选择。</summary>
+    public static int? GetPreviewCost(BattleManager battle, BattleInputController input,
+        BattlefieldSwitchController switcher)
+    {
+        if (battle == null) return null;
+        if (switcher != null && switcher.IsSwitching)
+            return battle.CanSwitchActiveAllyTo(switcher.SelectedSlot)
+                ? battle.GetSwitchAPCost(switcher.SelectedSlot) : 0;
+        if (input == null || !input.IsSelecting || input.PendingSkill < 0) return null;
+        var caster = input.PendingAlly != null ? input.PendingAlly : battle.GetActiveAlly();
+        if (caster == null || caster.HasPendingEffectSequence || battle.IsResolving) return null;
+        return caster.GetBoundSkillAPCost(input.PendingSkill);
     }
 
     private void ShowHint(TMP_Text label, int delta, Color color, Vector2 position)

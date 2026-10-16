@@ -15,6 +15,16 @@ public partial class EnemyBattleController : MonoBehaviour
 
     public int EnemyID { get; private set; }
 
+    public const string AirborneStatusID = AirborneStatusHandler.EnemyStatusID;
+
+    /// <summary>击飞独立于已停用的韧性系统；状态失效/移除前禁止所有行动。</summary>
+    public bool CanAct => Entity != null && Entity.IsAlive
+        && !BattleSpecialRules.BlocksEnemyAction(Entity) && !FrozenReactionHandler.IsFrozen(Entity);
+
+    /// <summary>提供给全队的次数，不是该敌人自己的行动配额。</summary>
+    public int ActionContribution => dm != null && dm.EnemyMainDict.TryGetValue(EnemyID, out var main)
+        ? Mathf.Max(0, main.ActsGiven) : 0;
+
     // ========== AI 运行时状态 ==========
     private int _currentPatternID = 0;
     private List<EnemyAIRuleData> _currentRules = new List<EnemyAIRuleData>();
@@ -108,8 +118,8 @@ public partial class EnemyBattleController : MonoBehaviour
     //  AI 行动
     // ================================================================
     /// <summary>
-    /// 敌人回合行动入口：按权重选技能并执行。
-    /// 每回合至少行动一次；可用行动次数由 Enemy_Main.ActsGiven 决定（当前简化：先按1次）。
+    /// 单独驱动一个敌人时的兼容入口：初始化回合并执行一次行动。
+    /// 正式全队回合由 BattleManager 汇总 ActsGiven，逐次调用 TakeEnemyActionAsync。
     /// </summary>
     public void TakeEnemyTurn()
     {
@@ -119,40 +129,27 @@ public partial class EnemyBattleController : MonoBehaviour
 
     public async Task TakeEnemyTurnAsync()
     {
-        if (Entity == null || Entity.IsDead) return;
-        if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) return;
-        if (FrozenReactionHandler.IsFrozen(Entity))
-        {
-            LogManager.Log(LogCategory.Enemy, $"{Entity.EntityID} 处于冻结状态，无法行动");
-            return;
-        }
+        BeginEnemyTurn();
+        await TakeEnemyActionAsync();
+    }
 
-        int acts = 1; // 简化：暂时固定每次行动1次，ActsGiven 扩展后续轮
-#if GTB_POISE_SYSTEM
-        bool skipFirstAction = PoiseSystem.ConsumeEnemyFirstAction(Entity);
-#endif
-        for (int i = 0; i < acts; i++)
-        {
-#if GTB_POISE_SYSTEM
-            if (skipFirstAction)
-            {
-                skipFirstAction = false;
-                continue;
-            }
-#endif
-
-            var rule = PickSkillByWeight();
-            if (rule == null) break;
-
-            if (dm.EnemySkillMainDict.TryGetValue(rule.SkillID, out var skill))
-            {
-                await ExecuteEnemySkillAsync(skill);
-            }
-            if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) break;
-        }
-
-        // 回合结束：重置本回合使用次数（冷却递减移至 BattleManager 全局跨回合处理）
+    /// <summary>每个敌方回合仅调用一次，不能在每次获分配行动时重置技能上限。</summary>
+    public void BeginEnemyTurn()
+    {
         _skillUsedThisTurn.Clear();
+        if (Entity != null && Entity.IsAlive && !CanAct)
+            LogManager.Log(LogCategory.Enemy, $"{Entity.EntityID} 受行动限制，不行动且不贡献行动次数");
+    }
+
+    public async Task TakeEnemyActionAsync()
+    {
+        if (!CanAct) return;
+        if (BattleManager.Instance != null && BattleManager.Instance.IsBattleOver) return;
+
+        // 无可用技能时本次机会空过；不把机会无限转移，也不清空本回合使用记录。
+        var rule = PickSkillByWeight();
+        if (rule != null && dm.EnemySkillMainDict.TryGetValue(rule.SkillID, out var skill))
+            await ExecuteEnemySkillAsync(skill);
     }
 
     private DataManager dm => DataManager.Instance;
@@ -206,6 +203,8 @@ public partial class EnemyBattleController : MonoBehaviour
     /// </summary>
     private async Task ExecuteEnemySkillAsync(EnemySkillMainData skill)
     {
+        // 同一敌方行动的全部效果、hit及响应共享额度，不把每个hit误当一次行动。
+        using var resolutionAction = BattleResolutionContext.EnterAction(new BattleResolutionContext.CounterScope());
         LogManager.Log(LogCategory.Enemy, $"{EnemyID} uses skill {skill.EnemySkillID2} ({skill.EnemySkillName})");
 
         // 标记本回合使用次数
@@ -239,17 +238,36 @@ public partial class EnemyBattleController : MonoBehaviour
     /// <summary>
     /// 执行单个敌人效果。当前实现 Damage；其他类型打印日志占位。
     /// </summary>
-    private async Task ExecuteEnemyEffectAsync(EnemySkillEffectData eff)
+    private Task ExecuteEnemyEffectAsync(EnemySkillEffectData eff)
+    {
+        int count = ExecuteCountEvaluator.Evaluate(eff.ExecuteCount, eff.ExecuteCountHandler, Entity);
+        return count == 0 ? Task.CompletedTask : BattleExecution.RepeatEffect(count, eff.DamageHook,
+            executionID => ExecuteEnemyEffectOnceAsync(eff, executionID));
+    }
+
+    private async Task ExecuteEnemyEffectOnceAsync(EnemySkillEffectData eff, long executionID)
     {
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        BattleExecution.ThrowIfCancelled();
+        if (!ScriptHookEvaluator.Evaluate(eff.ScriptHook, Entity)) return;
         switch (eff.EffectType)
         {
             case "Damage":
-                await ExecuteEnemyDamageAsync(eff);
+                await ExecuteEnemyDamageAsync(eff, executionID);
                 break;
             case "ApplyStatus":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
                     Entity, eff.SkillEffectID2), () => ExecuteEnemyApplyStatus(eff));
+                break;
+            case "BondOfLife":
+                await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
+                    Entity, eff.SkillEffectID2), () => BondOfLifeEffect.Execute(eff.Param1,
+                        Entity, ResolveEnemyTargets(eff), null, eff.SkillEffectID2, 0, eff.Element));
+                break;
+            case "NightSoul":
+                await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
+                    Entity, eff.SkillEffectID2), () => NightSoulEffect.Execute(eff.Param1,
+                        ResolveEnemyTargets(eff), eff.SkillEffectID2));
                 break;
             default:
                 LogManager.Log(LogCategory.Enemy, $"effect {eff.SkillEffectID2} type {eff.EffectType} not implemented yet");
@@ -262,7 +280,7 @@ public partial class EnemyBattleController : MonoBehaviour
     /// </summary>
     private void ExecuteEnemyApplyStatus(EnemySkillEffectData eff)
     {
-        string statusID2 = eff.Param1;
+        string statusID2 = CountStatusSystem.ResolvePublicStatusReference(eff.Param1);
         if (string.IsNullOrEmpty(statusID2)) return;
 
         if (!dm.StatusMainDict.TryGetValue(statusID2, out var statusMain))
@@ -288,6 +306,7 @@ public partial class EnemyBattleController : MonoBehaviour
                     ApplyOrder = ++BattleEntity._applyOrderCounter
                 };
                 inst.RecordSource(Entity);
+                CountStatusSystem.OnCreated(inst, field);
                 field.StatusList.Add(inst);
                 StatusBindingSystem.ApplyBindings(inst, field);
                 if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
@@ -303,7 +322,7 @@ public partial class EnemyBattleController : MonoBehaviour
 
         foreach (var target in ResolveEnemyTargets(eff))
         {
-            target.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain);
+            target.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain, null, eff.Param2);
             LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {target.EntityID} (dur={eff.Duration}, phase={addPhase})");
         }
     }
@@ -312,9 +331,8 @@ public partial class EnemyBattleController : MonoBehaviour
     /// 敌人伤害：倍率×TotalATK×抗性承伤（敌人公式无暴击/无增伤状态遍历）。
     /// 目标由 EnemySkill_Effect 的 TargetType/TargetNumber/TargetConsecutive/TargetOverride 统一解析。
     /// </summary>
-    private async Task ExecuteEnemyDamageAsync(EnemySkillEffectData eff)
+    private async Task ExecuteEnemyDamageAsync(EnemySkillEffectData eff, long effectExecutionID)
     {
-        long effectExecutionID = ReactionResolver.BeginEffectExecution();
         if (!dm.EnemySkillParamDict.TryGetValue(eff.SkillEffectID2, out var param))
         {
             LogManager.LogWarning(LogCategory.Enemy, $"no param for effect {eff.SkillEffectID2}");
@@ -369,7 +387,8 @@ public partial class EnemyBattleController : MonoBehaviour
                         float res = GetTargetResistance(target, eff.Element);
                         float resFactor = res < 0f ? 1f - res / 2f
                             : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
-                        float defRes = 1f - target.TotalDEF / (target.TotalDEF + 5f * Entity.Level + 500f);
+                        float targetDEF = target.GetFinalDEF();
+                        float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
                         if (defRes < 0f) defRes = 0f;
                         float damage = baseDmg * dmgBonusFactor * resFactor * defRes;
                         ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
@@ -461,7 +480,8 @@ public partial class EnemyBattleController : MonoBehaviour
             float res = GetTargetResistance(target, "Anemo");
             float resFactor = res < 0f ? 1f - res / 2f
                 : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
-            float defRes = 1f - target.TotalDEF / (target.TotalDEF + 5f * Entity.Level + 500f);
+            float targetDEF = target.GetFinalDEF();
+            float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
             if (defRes < 0f) defRes = 0f;
             float damage = baseDmg * dmgBonusFactor * resFactor * defRes;
             contexts.Add(new ReactionContext
@@ -536,7 +556,7 @@ public partial class EnemyBattleController : MonoBehaviour
             var eff = kv.Value;
             if (eff.StatusEffectID / 100 != statusID) continue;
             if (eff.EffectType != "Debuff" && eff.EffectType != "Buff") continue;
-            if (float.TryParse(eff.Param1, out float val))
+            if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float val))
                 total += val;
         }
         return total;

@@ -67,11 +67,18 @@ public static class CharacterBuildApplier
 
     // ================= Modifiers 解析 =================
 
-    /// <summary>解析并应用一行 Modifiers 文本（多指令按换行分隔）。</summary>
+    /// <summary>多指令支持括号外的分号或换行，括号内分号保留为参数。</summary>
     static void ApplyModifiers(CharacterBattleController ctrl, string modifiers)
     {
         if (string.IsNullOrWhiteSpace(modifiers)) return;
-        foreach (var line in modifiers.Split('\n'))
+        List<string> commands;
+        try { commands = SplitModifierCommands(modifiers); }
+        catch (System.FormatException error)
+        {
+            LogManager.LogWarning(LogCategory.Build, error.Message);
+            return;
+        }
+        foreach (var line in commands)
         {
             var cmd = line.Trim();
             if (cmd.Length == 0) continue;
@@ -90,9 +97,6 @@ public static class CharacterBuildApplier
     static void ApplyCommand(CharacterBattleController ctrl, string name, string args)
     {
         // 配表一致性：除 SkillLevelUp（参数用逗号是既定格式）外，指令参数统一分号分隔（值内部允许逗号）
-        if (name != "SkillLevelUp" && !string.IsNullOrEmpty(args) && !args.Contains(';') && args.Contains(','))
-            LogManager.LogWarning(LogCategory.Build, $"指令 {name} 的参数使用了逗号分隔，请统一改为分号（值内部的逗号除外）: {args}");
-
         switch (name)
         {
             case "InitiateStatus": ApplyInitiateStatus(ctrl, args); break;
@@ -230,12 +234,43 @@ public static class CharacterBuildApplier
     static List<string> SplitArgs(string args)
     {
         var list = new List<string>();
-        foreach (var p in args.Split(';'))
+        int start = 0, depth = 0;
+        for (int i = 0; i < args.Length; i++)
         {
-            var t = p.Trim();
-            if (t.Length > 0) list.Add(t);
+            if (args[i] == '(') depth++;
+            else if (args[i] == ')') depth--;
+            if (depth != 0 || (args[i] != ';' && args[i] != ',')) continue;
+            bool nextAssignment = System.Text.RegularExpressions.Regex.IsMatch(args.Substring(i + 1), @"^\s*[A-Za-z_]\w*\s*=");
+            bool positional = args[i] == ';' && !args.Substring(start, i - start).Contains("=");
+            if (!nextAssignment && !positional) continue;
+            string part = args.Substring(start, i - start).Trim();
+            if (part.Length > 0) list.Add(part);
+            start = i + 1;
         }
+        string last = args.Substring(start).Trim();
+        if (last.Length > 0) list.Add(last);
         return list;
+    }
+
+    public static List<string> SplitModifierCommands(string text)
+    {
+        var result = new List<string>();
+        if (string.IsNullOrWhiteSpace(text)) return result;
+        int depth = 0, start = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == '(') depth++;
+            else if (text[i] == ')' && --depth < 0)
+                throw new System.FormatException("Modifiers 括号不匹配: " + text);
+            if (depth != 0 || (text[i] != ';' && text[i] != '\n' && text[i] != '\r')) continue;
+            string command = text.Substring(start, i - start).Trim();
+            if (command.Length > 0) result.Add(command);
+            start = i + 1;
+        }
+        if (depth != 0) throw new System.FormatException("Modifiers 括号不匹配: " + text);
+        string last = text.Substring(start).Trim();
+        if (last.Length > 0) result.Add(last);
+        return result;
     }
 
     /// <summary>从 startIndex 开始应用 "字段=值" 赋值（int/float/string 字段通用，反射）。</summary>
@@ -293,6 +328,7 @@ public static class CharacterBuildApplier
             }
             else if (fi.FieldType == typeof(string)) fi.SetValue(obj, value);
             else LogManager.LogWarning(LogCategory.Build, $"不支持的字段类型: {fieldName} ({fi.FieldType})");
+            if (obj is SkillEffectData effect) effect.AuthoredFields?.Add(fieldName);
         }
         catch (System.Exception exception)
         {

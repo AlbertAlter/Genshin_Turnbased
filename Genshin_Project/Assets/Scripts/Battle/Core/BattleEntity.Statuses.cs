@@ -14,10 +14,15 @@ public partial class BattleEntity
     {
         if (StatusDict.TryGetValue(statusID2, out var existing))
         {
+            if (CountStatusSystem.IsCount(existing.MainData))
+                return AddStatus(statusID2, caster, initialPhaseCount, existing.AddInPhase,
+                    existing.TriggerPhase, existing.MainData, existing.WeaponContext);
             existing.StackCount++;
             RefreshStatusSource(existing, caster, this);
             return existing;
         }
+        if (CountStatusSystem.IsRegistered(statusID2))
+            throw new InvalidOperationException("新建 Count 状态必须使用携带主数据和来源上下文的完整 ApplyStatus 入口。");
         var inst = new StatusInstance
         {
             StatusID2 = statusID2,
@@ -46,8 +51,17 @@ public partial class BattleEntity
         return AddStatus(statusID2, caster, duration, addInPhase, triggerPhase, mainData, null);
     }
 
-    public StatusInstance AddStatus(string statusID2, BattleEntity caster, int duration, int addInPhase, int triggerPhase, StatusMainData mainData, WeaponRuntimeContext weaponContext)
+    public StatusInstance AddStatus(string statusID2, BattleEntity caster, int duration, int addInPhase, int triggerPhase, StatusMainData mainData, WeaponRuntimeContext weaponContext, string param2 = null)
     {
+        CountStatusSystem.Validate(mainData);
+        var application = new CountStatusApplication
+        {
+            Caster = caster, Duration = duration, AddInPhase = addInPhase, TriggerPhase = triggerPhase,
+            MainData = mainData, WeaponContext = weaponContext, Param2 = param2
+        };
+        StatusInstance currentCount;
+        if (CountStatusSystem.IsCount(mainData) && StatusDict.TryGetValue(statusID2, out currentCount))
+            return CountStatusSystem.OnReapplied(currentCount, this, application);
         // 敌方 Shield 状态采用“后施加者覆盖前者”，包括同 ID 重放。
         // 统一走 RemoveStatus，确保旧状态的绑定、钩子和元素盾一并清理。
         if (IsEnemyShieldStatus(mainData))
@@ -87,6 +101,7 @@ public partial class BattleEntity
                     KillHookSystem.Unregister(existing);
                     RemoveShieldOwnedByStatus(existing);
                     StatusDict.Remove(statusID2);
+                    CountStatusSystem.OnRemoved(existing, this);
                     existing = null;
                 }
             }
@@ -128,6 +143,7 @@ public partial class BattleEntity
             ApplyOrder = ++_applyOrderCounter
         };
         inst.RecordSource(caster);
+        CountStatusSystem.OnCreated(inst, this, application);
         StatusDict[statusID2] = inst;
 
         // ========== BindStatus 自动绑定（2026-08-06） ==========
@@ -206,6 +222,8 @@ public partial class BattleEntity
             KillHookSystem.Unregister(existing);
             RemoveShieldOwnedByStatus(existing);
             StatusDict.Remove(statusID2);
+            CountStatusSystem.OnRemoved(existing, this);
+            if (CountStatusSystem.IsCount(existing.MainData)) existing.IsActive = false;
             return true;
         }
         else
@@ -280,7 +298,7 @@ public partial class BattleEntity
                 if (effect == null || effect.StatusEffectID == 0) continue;
                 if (effect.StatusEffectID / 100 != mainData.StatusID) continue;
                 if (effect.EffectType != "Buff" && effect.EffectType != "Debuff") continue;
-                if (float.TryParse(effect.Param1, out float value))
+                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, instance, out float value))
                     total += value * count;
             }
         }
@@ -306,7 +324,7 @@ public partial class BattleEntity
                 var eff = kv.Value;
                 if (eff.StatusEffectID == 0) continue;
                 if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
-                if (WeaponExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
+                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
                     total += v;
             }
         }
@@ -341,7 +359,7 @@ public partial class BattleEntity
                 var eff = kv.Value;
                 if (eff.StatusEffectID == 0) continue;
                 if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
-                if (WeaponExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
+                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
                     total += v;
             }
         }
@@ -362,7 +380,32 @@ public partial class BattleEntity
             {
                 if (eff == null || eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
                 if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
-                if (WeaponExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float value)) total += value;
+                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float value)) total += value;
+            }
+        }
+        return total;
+    }
+
+    public float GetStatusHealingBonus(string part, string effectID2, string skillID2,
+        int skillType, string element, BattleEntity target)
+    {
+        var dm = DataManager.Instance;
+        if (dm == null) return 0f;
+        float total = 0f;
+        foreach (var inst in GetEffectiveStatusList())
+        {
+            if (inst?.MainData == null || !inst.IsActive || inst.MainData.GetMultiplierPart() != part) continue;
+            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
+            int count = Mathf.Max(1, inst.StackCount);
+            if (inst.MainData.MaxCount > 0) count = Mathf.Min(count, inst.MainData.MaxCount);
+            foreach (var effect in dm.StatusEffectDict.Values)
+            {
+                if (effect == null || effect.StatusEffectID / 100 != inst.MainData.StatusID
+                    || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
+                if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
+                { Caster = inst.Caster, Target = target, Status = inst, HitEffectID = effectID2 })) continue;
+                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, inst, out float value))
+                    total += value * count;
             }
         }
         return total;

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -10,7 +11,8 @@ using System.Text.RegularExpressions;
 ///    各事件系统在对应声明产生时单独驱动。
 /// 当前支持的钩子类型：
 ///   Check(角色ID_Cn/Tn)、HitLanded(效果ID2)、Kaeya_T2、Kaeya_C1、Kaeya_C4、Kill(角色/技能/效果)
-/// 后续新钩子类型在 EvaluateParsed 或对应角色钩子脚本中扩展。
+///   Chance(概率)、OnField(角色ID)、OffField(角色ID)、SwitchIn(角色ID)、SwitchOut(角色ID)
+/// 通用钩子在 EvaluateParsed 扩展；角色特例通过 BattleSpecialRules 登记。
 /// </summary>
 public static class ScriptHookEvaluator
 {
@@ -24,14 +26,11 @@ public static class ScriptHookEvaluator
     public static bool Evaluate(string hook, BattleEntity caster, string hitContext)
     {
         if (string.IsNullOrEmpty(hook)) return true;
-        var context = new ScriptHookContext
-        {
-            Caster = caster,
-            HitEffectID = hitContext,
-            ActionTargetPositions = BattleManager.Instance != null
-                ? BattleManager.Instance.PendingActionTargetPositions
-                : null
-        };
+        var context = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
+        context.Caster = caster;
+        context.HitEffectID = hitContext ?? context.HitEffectID;
+        if (context.ActionTargetPositions == null && BattleManager.Instance != null)
+            context.ActionTargetPositions = BattleManager.Instance.PendingActionTargetPositions;
         return EvaluateAll(hook, context, false);
     }
 
@@ -94,13 +93,23 @@ public static class ScriptHookEvaluator
             || funcName == "PreSelfDamage"
             || funcName == "PostAlliesDamage"
             || funcName == "PostSelfDamage"
-            || funcName == "Kill";
+            || funcName == "Kill"
+            || funcName == "SwitchIn"
+            || funcName == "SwitchOut"
+            || funcName == "HPDecreased";
     }
 
     static bool EvaluateEventHook(string funcName, string argStr, ScriptHookContext context)
     {
         bool eventMatches = context != null && context.EventHookName == funcName;
         if (!eventMatches) return false;
+
+        if (funcName == "SwitchIn" || funcName == "SwitchOut")
+            return MatchesSwitchActor(argStr, context.Status, context.SwitchedEntity);
+
+        if (funcName == "HPDecreased")
+            return context.HPDecreaseEvent != null && context.HPDecreaseEvent.Amount > 0f
+                && MatchesSwitchActor(argStr, context.Status, context.HPDecreaseEvent.Target);
 
         if (funcName == "Kill")
         {
@@ -118,6 +127,15 @@ public static class ScriptHookEvaluator
         return argumentMatches;
     }
 
+    public static bool MatchesSwitchActor(string argument, StatusInstance status, BattleEntity actor)
+    {
+        if (actor == null) return false;
+        if (argument == "Self") return status?.Caster == actor;
+        if (argument == "Equipper")
+            return status?.WeaponContext?.Equipper == actor;
+        return int.TryParse(argument, out int characterID) && characterID > 0 && actor.EntityID == characterID;
+    }
+
     /// <summary>按函数名分发：通用钩子直接处理，角色专属钩子分派到对应角色钩子脚本。</summary>
     private static bool EvaluateParsed(string funcName, string argStr, ScriptHookContext context)
     {
@@ -129,15 +147,48 @@ public static class ScriptHookEvaluator
                 return EvalHit(argStr, context);
             case "Hook":
                 return EvalWeaponHook(argStr, context);
-            case "Kaeya_T2":
-            case "Kaeya_C1":
-            case "Kaeya_C4":
-                return KaeyaScriptHooks.Evaluate(funcName, context);
+            case "Chance":
+                return EvalChance(argStr, context);
+            case "OnField":
+                return EvalFieldPresence(argStr, true);
+            case "OffField":
+                return EvalFieldPresence(argStr, false);
             default:
+                if (BattleSpecialRules.TryEvaluateCondition(funcName, argStr, context, out bool result))
+                    return result;
                 // 未实现的钩子类型：返回非真值（不触发）是钩子接口的正常行为
                 LogManager.Log(LogCategory.ScriptHook, $"未实现的钩子类型: {funcName}（{funcName}({argStr})），视为不触发");
                 return false;
         }
+    }
+
+    static bool EvalChance(string argument, ScriptHookContext context)
+    {
+        if (!double.TryParse(argument, NumberStyles.Float, CultureInfo.InvariantCulture, out double chance)
+            || double.IsNaN(chance) || double.IsInfinity(chance) || chance < 0d || chance > 1d)
+        {
+            LogManager.LogWarning(LogCategory.ScriptHook, $"Chance 参数须在 0~1 内：[{argument}]，视为不触发");
+            return false;
+        }
+        // 每次实际判断只取一次随机数，包括 0/1 边界；日志复用同一次结果。
+        float roll = BattleRandom.NextFloat01();
+        bool triggered = roll < chance;
+        LogManager.Log(LogCategory.ScriptHook,
+            $"Chance({argument}) 概率={chance:P1} 随机={roll:F4} hit={context?.DamageEvent?.HitIndex ?? 0} "
+            + $"目标={context?.Target?.EntityID} 位置={context?.Target?.SlotPosition} → {triggered}");
+        return triggered;
+    }
+
+    static bool EvalFieldPresence(string argument, bool onField)
+    {
+        if (!int.TryParse(argument, out int characterID) || characterID <= 0) return false;
+        BattleManager battle = BattleManager.Instance;
+        if (battle == null) return false;
+        foreach (CharacterBattleController ally in battle.Allies)
+            if (ally != null && ally.Entity != null && ally.Entity.EntityID == characterID)
+                return ally.IsActive == onField;
+        // 不在本场队伍中的 ID 不等于“已在后台”。
+        return false;
     }
 
     static bool EvalWeaponHook(string argStr, ScriptHookContext context)

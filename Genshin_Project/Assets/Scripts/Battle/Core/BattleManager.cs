@@ -8,7 +8,7 @@ using UnityEngine;
 /// 回合状态机单例。
 /// 职责：
 ///  - 六阶段循环推进（1->2->...->6->1）
-///  - 每进入一个阶段：先执行该阶段的触发集合（OnTrigger），再执行计时器集合（状态剩余回合-1，归零触发 OnEnd 并移除）
+///  - 每进入一个阶段：先执行 TriggerPhase 指定的 OnItsTurn，再执行计时器集合（状态剩余回合-1，归零触发 OnEnd 并移除）
 ///  - 我方行动阶段（AllyAction）不会自动推进，必须等待"结束回合"接口 EndAllyTurn()（对应 UI 的结束回合按键）
 ///  - 其余阶段按 PhaseInterval 秒自动推进
 ///
@@ -85,6 +85,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (Instance != this) return;
         BattleExecution.Cancel();
         _flowScheduler?.Stop();
         IsCurrentPhaseReady = false;
@@ -151,7 +152,7 @@ public class BattleManager : MonoBehaviour
     // ================================================================
 
     /// <summary>
-    /// 状态施加登记：按 AddInPhase 放进计时桶；若该状态有 OnTrigger 行动行且 TriggerPhase>0，
+    /// 状态施加登记：按 AddInPhase 放进计时桶；若该状态有 OnItsTurn 行动行且 TriggerPhase>0，
     /// 再按 TriggerPhase 放进触发桶。桶内追加顺序 = 施加顺序 = 大顺序。
     /// </summary>
     public void RegisterStatusTick(StatusInstance inst, BattleEntity entity, FieldPosition slot)
@@ -172,13 +173,13 @@ public class BattleManager : MonoBehaviour
         if (inst.TriggerPhase > 0)
         {
             var actions = GetStatusActions(inst.StatusID2);
-            bool hasOnTrigger = false;
+            bool hasOnItsTurn = false;
             if (actions != null)
             {
                 foreach (var act in actions)
-                    if (act.ActionType == "OnTrigger") { hasOnTrigger = true; break; }
+                    if (act.ActionType == "OnItsTurn") { hasOnItsTurn = true; break; }
             }
-            if (hasOnTrigger)
+            if (hasOnItsTurn)
             {
                 if (!_triggerByPhase.TryGetValue(inst.TriggerPhase, out var trigList))
                 {
@@ -187,6 +188,11 @@ public class BattleManager : MonoBehaviour
                 }
                 if (!trigList.Exists(entry => entry.inst == inst))
                     trigList.Add(item);
+            }
+            else
+            {
+                LogManager.LogWarning(LogCategory.Status,
+                    $"{inst.StatusID2} 配置了 TriggerPhase={inst.TriggerPhase}，但没有 OnItsTurn 行动；阶段不会调用 OnTrigger。");
             }
         }
     }
@@ -393,14 +399,34 @@ public class BattleManager : MonoBehaviour
     public bool TrySwitchActiveAlly(int slotIndex)
     {
         if (!CanSwitchActiveAllyTo(slotIndex)) return false;
-        CharacterBattleController target = GetAllyBySlot(slotIndex);
-        foreach (CharacterBattleController ally in _allies)
-            if (ally != null) ally.IsActive = ally == target;
-        _freeDeathSwitchPending = false;
+        CommitActiveAllySwitch(GetAllyBySlot(slotIndex), 0);
         return true;
     }
 
+    private void CommitActiveAllySwitch(CharacterBattleController target, int paidAP)
+    {
+        CharacterBattleController previous = GetActiveAlly();
+        foreach (CharacterBattleController ally in _allies)
+            if (ally != null) ally.IsActive = ally == target;
+        _freeDeathSwitchPending = false;
+        // 先提交出战角色与 AP，再统一收集事件，避免上场效果先执行而换人尚未扣费。
+        using var collection = BattleResolutionContext.BeginCollection();
+        if (paidAP > 0)
+            StatusOnHitHookSystem.NotifyAPUsed(previous != null ? previous.Entity : null, paidAP);
+        StatusOnHitHookSystem.NotifySwitch(previous != null ? previous.Entity : null, target.Entity);
+    }
+
     public const int SwitchAPCost = 5;
+
+    /// <summary>查询指定换人目标的最终费用，不扣 AP，不产生上下场事件。</summary>
+    public int GetSwitchAPCost(int slotIndex)
+    {
+        var outgoing = GetActiveAlly();
+        var incoming = GetAllyBySlot(slotIndex);
+        if (incoming == null || incoming == outgoing) return 0;
+        return APCostResolver.ForSwitch(outgoing != null ? outgoing.Entity : null,
+            incoming.Entity, SwitchAPCost, _freeDeathSwitchPending);
+    }
 
     /// <summary>
     /// 玩家换人入口：普通换人消耗5 AP；我方回合开始时的阵亡强制换人免费。
@@ -409,14 +435,11 @@ public class BattleManager : MonoBehaviour
     {
         if (!CanSwitchActiveAllyTo(slotIndex)) return false;
 
-        CharacterBattleController active = GetActiveAlly();
-        bool isFree = _freeDeathSwitchPending;
-        if (!isFree && (APManager == null || !APManager.CanAfford(SwitchAPCost)))
+        int cost = GetSwitchAPCost(slotIndex);
+        if (cost > 0 && (APManager == null || !APManager.ConsumeAP(cost)))
             return false;
 
-        if (!TrySwitchActiveAlly(slotIndex)) return false;
-        if (!isFree && APManager.ConsumeAP(SwitchAPCost))
-            StatusOnHitHookSystem.NotifyAPUsed(active != null ? active.Entity : null, SwitchAPCost);
+        CommitActiveAllySwitch(GetAllyBySlot(slotIndex), cost);
         return true;
     }
 
@@ -675,7 +698,7 @@ public class BattleManager : MonoBehaviour
     // ================================================================
     //  阶段结算（设计文档时间线）
     //  每个阶段按固定顺序：
-    //    ① 触发集合：按施加顺序触发 OnTrigger
+    //    ① 触发集合：按施加顺序执行指定 TriggerPhase 的 OnItsTurn
     //    ② 全部状态 -1 回合（计时器集合统一减）
     //    ③ 所有该 End 的状态触发对应 End 效果
     //    ④ 元素量回合递减
@@ -734,7 +757,7 @@ public class BattleManager : MonoBehaviour
         // 反应状态先结算旧实例；本阶段后续触发中新建的状态从下一次同阶段开始计时。
         ReactionStateSystem.TickPhase((int)phase);
 
-        // ① 触发集合：遍历所有单位身上 TriggerPhase == 当前阶段的 OnTrigger 状态
+        // ① 触发集合：执行 TriggerPhase == 当前阶段的 OnItsTurn 行动
         yield return ExecuteTriggerSet(phase);
 
         // ②③ 计时器集合：先全部 -1 回合，再统一触发到期状态的 OnEnd
@@ -752,8 +775,8 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 触发集合（2026-08-12 以状态为中心）：
     /// 状态施加时已按 TriggerPhase 登记到触发桶，这里直接取本阶段桶，
-    /// 按施加顺序（大顺序）逐个触发 OnTrigger。
-    /// 结算顺序：触发集合整体在计时器集合（OnItsTurn）之前。
+    /// 按施加顺序（大顺序）逐个执行 OnItsTurn，不调用事件行动 OnTrigger。
+    /// 结算顺序：触发集合整体在计时器集合之前。
     /// </summary>
     private IEnumerator ExecuteTriggerSet(TurnPhase phase)
     {
@@ -767,8 +790,8 @@ public class BattleManager : MonoBehaviour
             if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
             {
                 object host = item.entity != null ? (object)item.entity : item.slot;
-                LogManager.Log(LogCategory.Status, $"OnTrigger {item.inst.StatusID2} on {(item.entity != null ? item.entity.name : "slot")} at phase {(int)phase}");
-                yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, host, "OnTrigger");
+                LogManager.Log(LogCategory.Status, $"OnItsTurn {item.inst.StatusID2} on {(item.entity != null ? item.entity.name : "slot")} at phase {(int)phase}");
+                yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, host, "OnItsTurn");
             }
         }
     }
@@ -808,7 +831,7 @@ public class BattleManager : MonoBehaviour
     /// 计时器集合：状态 AddInPhase 等于当前阶段时，剩余回合-1；
     /// 归零后触发 OnEnd 并移除该状态。
     /// 2026-08-12 改造：以状态为中心——不管施加给敌方/我方/位置，只要是本阶段要结算的状态，
-    /// 全部收进一个大顺序（ApplyOrder 全局施加顺序），严格按大顺序逐个结算（OnItsTurn），
+    /// 全部收进一个大顺序（ApplyOrder 全局施加顺序）；未指定 TriggerPhase 的状态在此执行 OnItsTurn，
     /// 到期状态按同样顺序统一执行 OnEnd 并移除。
     /// </summary>
     private IEnumerator ExecuteTimerSet(TurnPhase phase)
@@ -824,8 +847,9 @@ public class BattleManager : MonoBehaviour
             if (!IsStatusStillAttached(item.inst, item.entity, item.slot)) continue;
             if (!item.inst.IsPermanent)
                 item.inst.RemainingPhaseCount--;
-            // OnItsTurn：轮到该状态回合（AddInPhase==当前阶段）时生效
-            if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
+            // 显式 TriggerPhase 已在触发集合执行 OnItsTurn，不能在计时阶段再执行一次。
+            // 未配置触发阶段的旧状态仍在 AddInPhase 执行自己的回合行动。
+            if (item.inst.TriggerPhase <= 0 && item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
             {
                 var acts = GetStatusActions(item.inst.StatusID2);
                 if (acts != null)
@@ -842,12 +866,16 @@ public class BattleManager : MonoBehaviour
         var removedNames = new List<string>();
         foreach (var item in expired)
         {
+            if (!IsStatusStillAttached(item.inst, item.entity, item.slot)
+                || item.inst.IsPermanent || item.inst.RemainingPhaseCount > 0) continue;
             if (item.entity != null)
             {
                 LogManager.Log(LogCategory.Status, $"{item.inst.StatusID2} on {item.entity.name} expired at phase {(int)phase}");
                 var actions = GetStatusActions(item.inst.StatusID2);
                 if (actions != null && item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
                     yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.entity, "OnEnd");
+                if (!IsStatusStillAttached(item.inst, item.entity, item.slot)
+                    || item.inst.IsPermanent || item.inst.RemainingPhaseCount > 0) continue;
                 item.entity.RemoveStatus(item.inst.StatusID2); // RemoveStatus 内部会注销
                 removedNames.Add(item.inst.StatusID2);
             }
@@ -858,6 +886,9 @@ public class BattleManager : MonoBehaviour
                 if (actions != null && item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
                     yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.slot, "OnEnd");
 
+                if (!IsStatusStillAttached(item.inst, item.entity, item.slot)
+                    || item.inst.IsPermanent || item.inst.RemainingPhaseCount > 0) continue;
+
                 // 父状态移除 → 按子状态真实宿主连带移除 BindStatus 子状态。
                 StatusBindingSystem.RemoveBindings(item.inst);
 
@@ -866,6 +897,7 @@ public class BattleManager : MonoBehaviour
                     item.inst.Caster.CharacterCtrl.OnStatusChangeControlRemoved(item.inst);
 
                 item.slot.StatusList.Remove(item.inst);
+                CountStatusSystem.OnRemoved(item.inst, item.slot);
                 removedNames.Add(item.inst.StatusID2);
                 PreDamageHookSystem.UnregisterPreDamageHook(item.inst);
                 // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
@@ -885,17 +917,20 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 敌方行动阶段：驱动所有存活敌人依次行动。
+    /// 敌方行动阶段：只汇总可行动敌人的贡献，逐轮按威胁度分配。
     /// </summary>
     private async Task ExecuteEnemyTurnAsync()
     {
         foreach (var enemy in _enemies)
+            if (enemy != null) enemy.BeginEnemyTurn();
+
+        var pool = new EnemyTurnActionPool(_enemies);
+        LogManager.Log(LogCategory.Enemy, $"敌方本回合可分配行动次数={pool.RemainingActions}");
+        while (!IsBattleOver && pool.TryTakeNext(out var actor))
         {
-            if (IsBattleOver) break;
-            if (enemy != null && enemy.Entity != null && enemy.Entity.IsAlive)
-            {
-                await enemy.TakeEnemyTurnAsync();
-            }
+            LogManager.Log(LogCategory.Enemy,
+                $"敌方行动分配：{actor.EnemyID} 位置={actor.Entity.SlotPosition}，剩余次数={pool.RemainingActions}");
+            await actor.TakeEnemyActionAsync();
         }
     }
 

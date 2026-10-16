@@ -109,6 +109,11 @@ public class SkillMainData
 [Serializable]
 public class SkillEffectData
 {
+    public HashSet<string> AuthoredFields; // 非空源单元格，区分空白与显式0。
+    public string DamageHook;
+    public int ExecuteCount = 1; // Empty table cell means one execution.
+    public string ExecuteCountHandler; // Optional runtime integer-returning handler.
+
     public int SkillEffectID;            // 效果唯一数字ID
     public string SkillEffectID2;        // 效果字符串ID（SE_xxx）
     public int EffectIndex;              // 效果执行顺序（0起）
@@ -117,9 +122,9 @@ public class SkillEffectData
     public string DamageType;            // Normal/Heavy/Skill/Burst（伤害标签）
     public int Duration;                 // ApplyStatus持续回合数；留空或0=永久
     public int AddInPhase;               // 状态加入的回合制状态机的阶段（1-6）
-    public int TriggerPhase;             // 状态触发阶段（1-6）
+    public int TriggerPhase;             // OnItsTurn 触发阶段（1-6）；不调用事件行动 OnTrigger
     public string Param1;                // 效果参数1
-    public string Param2;                // GainEnergy：Based=走系数，Flat=固定值
+    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
     public string Param3;
     public string TargetType;            // Self / Enemy / EnemyField / Allies / AlliesOnly
     public int TargetNumber;             // 目标数量（-1=全部）
@@ -138,7 +143,7 @@ public class SkillLevelData
     public int CharacterID;              // 所属角色ID（空=继承上一行）
     public int SkillType;                // 0=普攻 1=重击 2=元素战技 3=元素爆发（空值继承）
     public int SkillLevel;               // 技能等级（1-15）
-    public string ParamID;               // 对应SkillsEffect的EffectID2（或Status_Effect对应效果）
+    public string ParamID;               // Extensible parameter key; not restricted to effect IDs.
     public string Hits1;                 // HitData格式（倍率*属性;削韧;元素量），支持多Hit
     public string Hits2;
     public string Hits3;
@@ -206,7 +211,7 @@ public class StatusMainData
     public string StatusID2;             // 状态字符串ID（ST_xxx）
     public string StatusName;            // 状态名称
     public string StatusType;            // Buff / Debuff / Shield 等
-    public int Display;                  // 局内显示（0不显示 1显示图标 2显示数值）
+    public int Display;                  // 局内是否显示（0不显示，1显示）；不控制层数或数值的展示方式
     public string Description;           // 状态描述
     public string MultiplierPart1;       // Buff/Debuff加成公式（属性分类之一）
     public string MultiplierPart2;
@@ -239,6 +244,11 @@ public class StatusMainData
 [Serializable]
 public class StatusEffectData
 {
+    public HashSet<string> AuthoredFields;
+    public string DamageHook;
+    public int ExecuteCount = 1; // Empty table cell means one execution.
+    public string ExecuteCountHandler;
+
     public int StatusEffectID;           // 状态效果唯一数字ID
     public string StatusEffectID2;       // 状态效果字符串ID（STE_xxx）
     public int EffectIndex;              // 该状态效果执行顺序
@@ -247,9 +257,9 @@ public class StatusEffectData
     public string DamageType;            // Normal/Heavy/Skill/Burst（伤害标签）
     public int Duration;                 // ApplyStatus持续回合数；留空或0=永久
     public int AddInPhase;               // 状态加入的回合制状态机的阶段
-    public int TriggerPhase;             // 状态触发阶段
+    public int TriggerPhase;             // OnItsTurn 触发阶段；不调用事件行动 OnTrigger
     public string Param1;                // 参数1（Damage=HitData，支持%引用 P E token / ApplyStatus=目标状态ID2 / BindStatus=绑定的子状态ID2）
-    public string Param2;                // 参数2（GainEnergy：Based=走系数，Flat=固定值）
+    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
     public string Param3;                // 参数3（Damage=元素量）
     public string TargetType;            // Self / Allies / AlliesOnly / Enemy / EnemyField
     public string TargetSelect;          // X,X格式（原点为状态所在实体）
@@ -267,7 +277,7 @@ public class StatusActionData
     public int StatusID;                 // 所属状态数字ID
     public string StatusID2;             // 所属状态字符串ID（ST_xxx）
     public string ActionType;            // OnApply / OnItsTurn / OnTrigger / OnEnd / OnHit 等（触发时机）
-    public string Param1;                // 执行的状态效果ID2列表（逗号分隔，如 STE_Bunny2,STE_Bunny4）
+    public string Param1;                // 执行的状态效果ID2列表（分号分隔，如 STE_Bunny2;STE_Bunny4）
     public string Param2;                // 附加参数
     public string Param3;                // 附加参数
     public string ScriptHook;            // 布尔条件钩子；事件字段匹配后再求值
@@ -280,6 +290,8 @@ public class StatusActionData
     public string WhenHealing;            // 状态拥有者实施治疗过滤
     public string APUsed;                 // 行动点消耗过滤
     public string ReactionTriggered;      // 反应类型过滤
+    public int ExecuteCount = 1;          // 每次触发执行 Param1 内容的轮数
+    public string ExecuteCountHandler;
     [Obsolete("Use OutgoingHit/OutgoingDamage/OnHit/OnDamage filters")]
     public string HitSource;              // 旧运行时构造兼容；工作簿不再读取此列
     public int MaxTimePerTurn;           // 每回合最大触发次数（0=不限）
@@ -374,6 +386,10 @@ public class EnemySkillMainData
 [Serializable]
 public class EnemySkillEffectData
 {
+    public string DamageHook;
+    public int ExecuteCount = 1; // Empty table cell means one execution.
+    public string ExecuteCountHandler;
+
     public int SkillEffectID;            // 效果数字ID
     public string SkillEffectID2;        // 效果字符串ID（SE_Hilichurl_Dance 等）
     public int EffectIndex;              // 执行顺序
@@ -384,7 +400,7 @@ public class EnemySkillEffectData
     public int AddInPhase;               // 添加阶段
     public int TriggerPhase;             // 触发阶段
     public string Param1;                // 参数1
-    public string Param2;                // GainEnergy：Based=走系数，Flat=固定值
+    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
     public string Param3;                // 参数3
     public string TargetType;            // 目标类型
     public int TargetNumber;             // 目标数量

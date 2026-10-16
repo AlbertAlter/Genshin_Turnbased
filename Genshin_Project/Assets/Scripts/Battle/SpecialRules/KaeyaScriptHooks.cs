@@ -3,10 +3,17 @@ using System.Collections.Generic;
 /// <summary>
 /// 凯亚专属钩子（2026-08-19，状态钩子任务）：Kaeya_T2 / Kaeya_C1 / Kaeya_C4。
 /// 每个角色最多一个钩子脚本；后续新角色钩子按同模式新增独立脚本，
-/// 由 ScriptHookEvaluator 统一分发到对应角色的钩子脚本。
+/// 通过 BattleSpecialRules 集中登记，ScriptHookEvaluator 无需知道具体角色。
 /// </summary>
 public static class KaeyaScriptHooks
 {
+    internal static void Register()
+    {
+        BattleSpecialRules.RegisterCondition("Kaeya_T2", (argument, context) => EvalKaeyaT2(context));
+        BattleSpecialRules.RegisterCondition("Kaeya_C1", (argument, context) => EvalKaeyaC1(context));
+        BattleSpecialRules.RegisterCondition("Kaeya_C4", (argument, context) => EvalKaeyaC4(context));
+    }
+
     /// <summary>凯亚全部钩子的统一入口（函数名严格匹配，大小写敏感）。</summary>
     public static bool Evaluate(string functionName, ScriptHookContext context)
     {

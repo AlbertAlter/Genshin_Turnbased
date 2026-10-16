@@ -124,7 +124,7 @@ public partial class CharacterBattleController
         return value;
     }
 
-    float GetDEFBeforePercentBonuses()
+    internal float GetDEFBeforePercentBonuses()
     {
         if (_attrData == null || DataManager.Instance == null) return 0f;
         float value = _attrData.BaseDEF * DataManager.Instance.GetGrowthCurve(_attrData.GrowthCurveID, Level);

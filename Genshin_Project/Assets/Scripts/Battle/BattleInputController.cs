@@ -72,7 +72,7 @@ public class BattleInputController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                // 确认：把选中组合交给角色，执行技能（2026-08-15 效果级：一个技能可多次确认）
+                // 确认本处目标；最后一处确认后才提交整条技能链。
                 bool done = ConfirmAndExecute(bm);
                 if (done) ExitSelecting();
                 // 还有待选效果：保持选择状态（InitSelectorForEffect 已在 ConfirmAndExecute 内完成）
@@ -117,12 +117,8 @@ public class BattleInputController : MonoBehaviour
         var ally = specifiedAlly != null ? specifiedAlly : bm.GetActiveAlly();
         if (ally == null) return false;
 
-        // 选择中切换技能：先恢复上一技能多段推进的临时绑定
-        if (_selecting && _pendingOriginalSkillID2 != null)
-        {
-            ally.RevertSkillPhase(_pendingSkill, _pendingOriginalSkillID2);
-            _pendingOriginalSkillID2 = null;
-        }
+        // 切换技能/施放者时丢弃全部预选，并恢复原施放者的临时绑定。
+        if (_selecting) ExitSelecting();
 
         string reason = ally.GetBlockReason(skill);
         if (reason != null)
@@ -132,7 +128,7 @@ public class BattleInputController : MonoBehaviour
         }
 
         // 效果级（2026-08-15，按《战斗界面》文档）：找该技能第一个需选目标的效果
-        var first = ally.GetFirstSelectEffect(skill);
+        if (!ally.TryGetFirstSelectEffect(skill, out var first)) return false;
         if (first == null)
         {
             // 无任何需选效果：直接执行（配表现状：按钮技能均有需选效果，此分支为通用兜底）
@@ -151,6 +147,7 @@ public class BattleInputController : MonoBehaviour
         if (!_selector.IsSelectionValid())
         {
             LogManager.Log(LogCategory.Action, $"{SkillNames[skill]}失败：目标区域没有可选目标");
+            ally.AbortEffectSequence();
             return false;
         }
 
@@ -225,7 +222,7 @@ public class BattleInputController : MonoBehaviour
 
     private void ExitSelecting()
     {
-        // 2026-08-15：取消/结束时终止未完成的效果序列（已扣资源/已执行部分效果时清状态，防止污染下一次技能）
+        // 准备中取消只清除预选；结算开始后输入被锁定，不允许撤销已提交技能。
         if (_selecting && _pendingAlly != null)
             _pendingAlly.AbortEffectSequence();
         // 恢复多段推进的临时绑定（取消/施放后按钮回到原技能）
@@ -262,7 +259,7 @@ public class BattleInputController : MonoBehaviour
     // 选择中按技能键：同一按钮 = 多段推进（SkillPhase），不同按钮 = 切换技能
     private void HandleSelectSkillKey(BattleManager bm, int skill)
     {
-        var ally = bm.GetActiveAlly();
+        var ally = _pendingAlly != null ? _pendingAlly : bm.GetActiveAlly();
         if (ally == null) return;
 
         if (skill == _pendingSkill)
@@ -274,13 +271,14 @@ public class BattleInputController : MonoBehaviour
                 LogManager.Log(LogCategory.Select, $"{SkillNames[skill]}已是最后一段或非多段技能");
                 return;
             }
-            // 2026-08-15 效果级：找下一段技能的第一个需选效果
-            var first = ally.GetFirstSelectEffect(skill);
+            // 多段升级是改选整次技能，不保留上一段已收集的目标。
+            ally.AbortEffectSequence();
+            if (!ally.TryGetFirstSelectEffect(skill, out var first)) { ExitSelecting(); return; }
             if (first == null)
             {
                 // 下一段无需选目标：直接施放
                 LogManager.Log(LogCategory.Select, $"多段推进至 {ally.GetBoundSkillID(skill)}（{SkillNames[skill]}：无需选目标，直接施放）");
-                ConfirmAndExecute(bm);
+                ExecutePendingSkill(bm, ally);
                 if (!BattleExecution.IsBusy) ExitSelecting();
                 return;
             }
@@ -288,6 +286,7 @@ public class BattleInputController : MonoBehaviour
             if (!_selector.IsSelectionValid())
             {
                 LogManager.Log(LogCategory.Action, $"{SkillNames[skill]}多段推进失败：目标区域没有可选目标");
+                ExitSelecting();
                 return;
             }
             LogManager.Log(LogCategory.Select, $"多段推进至 {ally.GetBoundSkillID(skill)}（{SkillNames[skill]}：{first.SkillEffectID2}）");
@@ -298,7 +297,7 @@ public class BattleInputController : MonoBehaviour
         TryEnterSelecting(bm, skill, true);
     }
 
-    /// <summary>确认当前选择并推进技能执行。返回 true=全部完成（可结束选择），false=还有待选效果（保持选择继续）。</summary>
+    /// <summary>保存当前选择；全部选择完成才施放。返回 true=可退出选择，false=继续选择或等待结算。</summary>
     private bool ConfirmAndExecute(BattleManager bm)
     {
         //施放者：1234爆发等指定角色优先（2026-08-14）
@@ -340,13 +339,13 @@ public class BattleInputController : MonoBehaviour
                 LogManager.Log(LogCategory.Select, $"逐个选择剩 {_oneByOneRemaining} 次（已选 {string.Join(",", _oneByOnePicked)}），继续选下一个");
                 return false;
             }
-            LogManager.Log(LogCategory.Select, $"逐个选择完成：{string.Join(",", _oneByOnePicked)}，执行技能");
+            LogManager.Log(LogCategory.Select, $"本处逐个选择完成：{string.Join(",", _oneByOnePicked)}");
             ExecutePendingSkill(bm, ally);
             return !_waitingForResolution && ally.PendingSelectEffect == null;
         }
 
         ally.ForcedTargetPositions = new List<int>(sel);
-        LogManager.Log(LogCategory.Select, $"确认目标 {string.Join("", sel)}，执行技能");
+        LogManager.Log(LogCategory.Select, $"确认本处目标 {string.Join(",", sel)}");
         ExecutePendingSkill(bm, ally);
         return !_waitingForResolution && ally.PendingSelectEffect == null;
     }
@@ -354,17 +353,15 @@ public class BattleInputController : MonoBehaviour
     private void ExecutePendingSkill(BattleManager bm, CharacterBattleController ally)
     {
         //可用性检查（原走 UseXxxBySlot 自带检查，直接调用 controller 时需自行检查，2026-08-14）
-        //2026-08-15：仅首次确认时检查——效果序列进行中资源已扣，二次检查 AP 会误拦
-        if (!ally.HasPendingEffectSequence)
+        // 所有选择完成前尚未扣费，每次确认都可安全检查，最终执行入口还会复核。
+        string reason = ally.GetBlockReason(_pendingSkill);
+        if (reason != null)
         {
-            string reason = ally.GetBlockReason(_pendingSkill);
-            if (reason != null)
-            {
-                LogManager.Log(LogCategory.Action, $"{SkillNames[_pendingSkill]}失败：{reason}");
-                return;
-            }
+            LogManager.Log(LogCategory.Action, $"{SkillNames[_pendingSkill]}失败：{reason}");
+            ally.AbortEffectSequence();
+            return;
         }
-        //2026-08-15：按钮主动释放 = 效果级分段执行（每个需选效果单独停一次选择）
+        // 逐处收集，全部确认后一次提交整条技能链。
         bool done = ally.HasPendingEffectSequence
             ? ally.AdvanceEffectSequence()
             : ally.BeginSkillSelectionSequence(_pendingSkill);
@@ -434,7 +431,7 @@ public class BattleInputController : MonoBehaviour
         HandleSelectSkillKey(bm, skill);
     }
 
-    /// <summary>UI：确认当前目标选择并施放（2026-08-15 效果级：一个技能可多次确认）。</summary>
+    /// <summary>UI：确认当前目标；有多处选择时依次收集，最后一次确认后才整体施放。</summary>
     public void UIConfirmSelection()
     {
         if (BattleExecution.IsBusy || _waitingForResolution) return;

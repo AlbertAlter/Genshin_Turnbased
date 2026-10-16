@@ -56,7 +56,7 @@ public partial class CharacterBattleController
     public int GetBoundSkillAPCost(int skillType)
     {
         if (skillType < 0 || skillType > 3) return 0;
-        if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return sk.APCost;
+        if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return APCostResolver.ForSkill(Entity, sk);
         return 0;
     }
 
@@ -160,18 +160,10 @@ public partial class CharacterBattleController
 
         foreach (var k in bound)
         {
-            if (!_cooldownRemaining.TryGetValue(k, out int cd) || cd <= 0) continue;
-            _cooldownRemaining[k]--;
-            if (_cooldownRemaining[k] == 0)
-            {
-                // 冷却完成：若有次数限制且未满，恢复1次
-                if (_currentCharges.TryGetValue(k, out int cur))
-                {
-                    var sk = _skillById2.TryGetValue(k, out var s) ? s : null;
-                    if (sk != null && sk.MaxCharge > 0 && cur < sk.MaxCharge)
-                        _currentCharges[k] = cur + 1;
-                }
-            }
+            int cd;
+            if (!_cooldownRemaining.TryGetValue(k, out cd) || cd <= 0) continue;
+            if (cd == 1) CompleteSkillCooldown(k);
+            else _cooldownRemaining[k] = cd - 1;
         }
     }
 
@@ -189,9 +181,8 @@ public partial class CharacterBattleController
         string nid0 = _boundSkills[0];
         if (string.IsNullOrEmpty(nid0)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(nid0, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(nid0, out int cd) && cd > 0) return false;
-        return true;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        return HasSkillUseAvailable(nid0, sk);
     }
 
     public bool CanUseHeavyAttack()
@@ -205,9 +196,8 @@ public partial class CharacterBattleController
         string hid1 = _boundSkills[1];
         if (string.IsNullOrEmpty(hid1)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(hid1, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(hid1, out int cd) && cd > 0) return false;
-        return true;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        return HasSkillUseAvailable(hid1, sk);
     }
 
     public bool CanUseSkill()
@@ -221,10 +211,8 @@ public partial class CharacterBattleController
         string sid2 = _boundSkills[2];
         if (string.IsNullOrEmpty(sid2)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(sid2, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(sk.APCost)) return false;
-        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(sid2, out int cd) && cd > 0) return false;
-        if (sk.MaxCharge > 0 && (_currentCharges == null || !_currentCharges.TryGetValue(sid2, out int charges) || charges <= 0)) return false;
-        return true;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        return HasSkillUseAvailable(sid2, sk);
     }
 
     public bool CanUseBurst()
@@ -238,9 +226,9 @@ public partial class CharacterBattleController
         string bid3 = _boundSkills[3];
         if (string.IsNullOrEmpty(bid3)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(bid3, out var sk)) return false;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
         if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed) return false;
-        if (_cooldownRemaining != null && _cooldownRemaining.TryGetValue(bid3, out int cd) && cd > 0) return false;
-        return true;
+        return HasSkillUseAvailable(bid3, sk);
     }
 
     public bool CanSwitch()
@@ -301,26 +289,20 @@ public partial class CharacterBattleController
         if (!_skillById2.TryGetValue(skillID2, out var sk))
             return $"技能数据缺失({skillID2})";
 
-        // AP 不足（爆发不消耗AP，改消耗能量）
-        if (skillType != 3)
-        {
-            if (APManager == null)
-                return "战斗行动点系统未初始化";
-            if (!APManager.CanAfford(sk.APCost))
-                return $"AP不足（需要{sk.APCost}，当前{APManager.CurrentAP}）";
-        }
-        else
-        {
-            if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed)
-                return $"能量不足（需要{sk.EnergyUsed}，当前{Entity.CurrentEnergy}）";
-        }
+        int apCost = APCostResolver.ForSkill(Entity, sk);
+        if (APManager == null) return "战斗行动点系统未初始化";
+        if (!APManager.CanAfford(apCost))
+            return $"AP不足（需要{apCost}，当前{APManager.CurrentAP}）";
+        if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed)
+            return $"能量不足（需要{sk.EnergyUsed}，当前{Entity.CurrentEnergy}）";
 
-        // 冷却中（含技能次数用完：次数用完 = 正在等冷却恢复）
+        // 仍有次数时允许继续释放；充能计时可以与剩余可用次数并存。
+        if (HasSkillUseAvailable(skillID2, sk)) return null;
         if (_cooldownRemaining.TryGetValue(skillID2, out int cd) && cd > 0)
             return $"冷却中（剩余{cd}回合）";
 
-        // 战技次数：冷却已归零但次数仍为0（不应出现，防御性兜底）
-        if (skillType == 2 && sk.MaxCharge > 0)
+        // 所有带次数的技能都遵守同一规则，而不只检查战技按钮。
+        if (sk.MaxCharge > 0)
         {
             int cur = _currentCharges.TryGetValue(skillID2, out int c) ? c : 0;
             if (cur <= 0)

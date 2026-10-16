@@ -19,6 +19,8 @@ internal sealed class DataManagerState
     internal Dictionary<int, WeaponLevelBonusData> WeaponLevelBonusDict = new Dictionary<int, WeaponLevelBonusData>();
     internal Dictionary<int, Dictionary<int, WeaponParamData>> WeaponParamDict = new Dictionary<int, Dictionary<int, WeaponParamData>>();
     internal Dictionary<int, List<string>> WeaponInitiateStatusDict = new Dictionary<int, List<string>>();
+    internal Dictionary<int, Dictionary<int, List<string>>> ArtifactInitiateStatusDict =
+        new Dictionary<int, Dictionary<int, List<string>>>();
     internal Dictionary<int, float> WeaponAscensionCurve3 = new Dictionary<int, float>();
     internal Dictionary<int, float> WeaponAscensionCurve4 = new Dictionary<int, float>();
     internal Dictionary<int, float> WeaponAscensionCurve5 = new Dictionary<int, float>();
@@ -60,6 +62,7 @@ internal sealed class DataManagerState
             WeaponLevelBonusDict = manager.WeaponLevelBonusDict,
             WeaponParamDict = manager.WeaponParamDict,
             WeaponInitiateStatusDict = manager.WeaponInitiateStatusDict,
+            ArtifactInitiateStatusDict = manager.ArtifactInitiateStatusDict,
             WeaponAscensionCurve3 = manager.WeaponAscensionCurve3,
             WeaponAscensionCurve4 = manager.WeaponAscensionCurve4,
             WeaponAscensionCurve5 = manager.WeaponAscensionCurve5,
@@ -98,6 +101,7 @@ internal sealed class DataManagerState
         manager.WeaponLevelBonusDict = WeaponLevelBonusDict;
         manager.WeaponParamDict = WeaponParamDict;
         manager.WeaponInitiateStatusDict = WeaponInitiateStatusDict;
+        manager.ArtifactInitiateStatusDict = ArtifactInitiateStatusDict;
         manager.WeaponAscensionCurve3 = WeaponAscensionCurve3;
         manager.WeaponAscensionCurve4 = WeaponAscensionCurve4;
         manager.WeaponAscensionCurve5 = WeaponAscensionCurve5;

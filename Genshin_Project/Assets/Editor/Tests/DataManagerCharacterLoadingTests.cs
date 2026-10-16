@@ -39,7 +39,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(normal.Count, Is.EqualTo(15));
             Assert.That(normal.All(row => row.SkillType == 0), Is.True);
-            Assert.That(normal.Single(row => row.SkillLevel == 2).Hits1, Is.EqualTo("0.954"));
+            Assert.That(normal.Single(row => row.SkillLevel == 2).Hits1, Is.EqualTo("0.954*TotalATK,1"));
             Assert.That(burst.Count, Is.EqualTo(15));
             Assert.That(burst.All(row => row.SkillType == 3), Is.True);
             Assert.That(burstC6.Count, Is.EqualTo(15));

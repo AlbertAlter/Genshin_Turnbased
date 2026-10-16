@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/fairygui/FairyGUI-unity",
+  "commit": "8cc8f214cca79685532eef13372d0a4f74acdf08",
+  "installedOn": "2026-10-15",
+  "license": "MIT",
+  "sourceDirectories": ["Assets/Scripts", "Assets/Editor", "Assets/Resources"],
+  "excluded": ["Assets/Examples", "UIProject", "LuaSupport", "ProjectSettings"],
+  "modifications": [],
+  "installation": "Vendored source under Assets/FairyGUI; Unity imports it automatically. Requires the existing Unity.TextMeshPro assembly."
+}

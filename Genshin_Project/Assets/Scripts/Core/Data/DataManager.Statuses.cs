@@ -73,14 +73,23 @@ public partial class DataManager
         LogManager.Log(LogCategory.Data, $"{logName} loaded, {StatusMainDict.Count} statuses");
     }
 
-    void LoadStatusMainSheet(ExcelWorksheet sheet)
+    void LoadStatusMainSheet(ExcelWorksheet sheet, Func<int, string> keyForID = null)
     {
         if (sheet == null) return;
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
             string id2 = sheet.Cells[row, 2].Text;
+            if (keyForID != null) id2 = id2.Trim();
             if (string.IsNullOrEmpty(id2) && string.IsNullOrEmpty(sheet.Cells[row, 1].Text)) continue;
+            if (string.IsNullOrWhiteSpace(id2) && keyForID != null)
+            {
+                int id = SafeGetInt(sheet.Cells[row, 1].Value);
+                if (id > 0) id2 = keyForID(id);
+            }
             if (string.IsNullOrEmpty(id2)) continue;
+
+            if (keyForID != null && StatusMainDict.ContainsKey(id2))
+                throw new InvalidDataException($"[{sheet.Name}] row {row}: duplicate runtime key {id2}");
 
             StatusMainDict[id2] = new StatusMainData
             {
@@ -105,36 +114,55 @@ public partial class DataManager
         }
     }
 
-    void LoadStatusEffectSheet(ExcelWorksheet sheet, string sourceKey, bool isEnemy)
+    void LoadStatusEffectSheet(ExcelWorksheet sheet, string sourceKey, bool isEnemy,
+        Func<int, string> keyForID = null, Func<string, string> resolveStatusKey = null)
     {
         if (sheet == null) return;
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
             string id2 = sheet.Cells[row, 2].Text;
+            if (keyForID != null) id2 = id2.Trim();
             if (string.IsNullOrEmpty(id2) && string.IsNullOrEmpty(sheet.Cells[row, 1].Text)) continue;
+            if (string.IsNullOrWhiteSpace(id2) && keyForID != null)
+            {
+                int id = SafeGetInt(sheet.Cells[row, 1].Value);
+                if (id > 0) id2 = keyForID(id);
+            }
             if (string.IsNullOrEmpty(id2)) continue;
+
+            if (keyForID != null && StatusEffectDict.ContainsKey(id2))
+                throw new InvalidDataException($"[{sourceKey}] row {row}: duplicate runtime key {id2}");
 
             var data = new StatusEffectData
             {
-                StatusEffectID = SafeGetInt(sheet.Cells[row, 1].Value),
+                AuthoredFields = ReadAuthoredEffectFields(sheet, row),
+                StatusEffectID = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "StatusEffectID", 1)].Value),
                 StatusEffectID2 = id2,
-                EffectIndex = SafeGetInt(sheet.Cells[row, 3].Value),
-                EffectType = sheet.Cells[row, 4].Text,
-                Element = sheet.Cells[row, 5].Text,
-                DamageType = sheet.Cells[row, 6].Text,
-                Duration = SafeGetInt(sheet.Cells[row, 7].Value),
-                AddInPhase = SafeGetInt(sheet.Cells[row, 8].Value),
-                TriggerPhase = SafeGetInt(sheet.Cells[row, 9].Value),
-                Param1 = sheet.Cells[row, 10].Text,
-                Param2 = sheet.Cells[row, 11].Text,
-                Param3 = sheet.Cells[row, 12].Text,
-                TargetType = sheet.Cells[row, 13].Text,
+                EffectIndex = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "EffectIndex", 3)].Value),
+                EffectType = sheet.Cells[row, FindColumnByHeader(sheet, "EffectType", 4)].Text,
+                Element = sheet.Cells[row, FindColumnByHeader(sheet, "Element", 5)].Text,
+                DamageType = sheet.Cells[row, FindColumnByHeader(sheet, "DamageType", 6)].Text,
+                Duration = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Duration", 7)].Value),
+                AddInPhase = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "AddInPhase", 8)].Value),
+                TriggerPhase = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "TriggerPhase", 9)].Value),
+                Param1 = sheet.Cells[row, FindColumnByHeader(sheet, "Param1", 10)].Text,
+                Param2 = ReadEffectParam2(sheet, row, sheet.Cells[row, FindColumnByHeader(sheet, "EffectType", 4)].Text, 11),
+                Param3 = sheet.Cells[row, FindColumnByHeader(sheet, "Param3", 12)].Text,
+                TargetType = sheet.Cells[row, FindColumnByHeader(sheet, "TargetType", 13)].Text,
                 // 第14列原样保留范围语法与纯数字目标编号，由统一目标解析器解释。
-                TargetSelect = sheet.Cells[row, 14].Text.Trim(),
-                TargetConsecutive = SafeGetInt(sheet.Cells[row, 15].Value),
-                TargetOverride = sheet.Cells[row, 16].Text,
-                ScriptHook = sheet.Cells[row, 17].Text
+                TargetSelect = sheet.Cells[row, FindColumnByHeader(sheet, "TargetSelect", 14)].Text.Trim(),
+                TargetConsecutive = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "TargetConsecutive", 15)].Value),
+                TargetOverride = sheet.Cells[row, FindColumnByHeader(sheet, "TargetOverride", 16)].Text,
+                ScriptHook = sheet.Cells[row, FindColumnByHeader(sheet, "ScriptHook", 17)].Text,
+                DamageHook = ReadOptionalEffectText(sheet, row, "DamageHook"),
+                ExecuteCount = ReadExecuteCount(sheet, row),
+                ExecuteCountHandler = ReadExecuteCountHandler(sheet, row)
             };
+
+            if (resolveStatusKey != null && (data.EffectType == "ApplyStatus"
+                || data.EffectType == "BindStatus" || data.EffectType == "RemoveStatus"
+                || data.EffectType == "AddTurn"))
+                data.Param1 = ResolveArtifactReferenceList(data.Param1, resolveStatusKey);
 
             TryValidate(sourceKey, () => TableValidator.ValidateEffectRow(
                 sourceKey,
@@ -149,6 +177,14 @@ public partial class DataManager
                 data.TargetOverride,
                 isEnemy,
                 checkTargetNumber: false));
+            if (data.EffectType == "APCost")
+                TryValidate(sourceKey, () => TableValidator.ValidateAPCost(data.Param1, data.Param2));
+            if (data.EffectType == "ResetCooldown")
+                TryValidate(sourceKey, () => TableValidator.ValidateResetCooldown(sourceKey, row, data.Param1));
+            if (data.EffectType == "BondOfLife")
+                TryValidate(sourceKey, () => TableValidator.ValidateBondOfLife(sourceKey, row, data.Param1));
+            TryValidate(sourceKey, () => TableValidator.ValidatePublicCountEffect(
+                sourceKey, row, data.EffectType, data.Param1, data.Param2, data.TargetType));
             if (data.EffectType == "ChangeControl")
             {
                 TryValidate(sourceKey, () => TableValidator.ValidateChangeControl(
@@ -249,6 +285,8 @@ public partial class DataManager
             Cooldown = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Cooldown", 18 + offset)].Value),
             MaxTimePerEffect = ReadOptionalStatusLimit(sheet, row, "MaxTimePerEffect"),
             MaxTimePerAction = ReadOptionalStatusLimit(sheet, row, "MaxTimePerAction"),
+            ExecuteCount = ReadExecuteCount(sheet, row),
+            ExecuteCountHandler = ReadExecuteCountHandler(sheet, row),
             ActionKey = $"{sourceKey}:{row}"
         };
     }

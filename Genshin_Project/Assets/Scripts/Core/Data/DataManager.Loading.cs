@@ -4,6 +4,18 @@ using UnityEngine;
 
 public partial class DataManager
 {
+    private static HashSet<string> ReadAuthoredEffectFields(OfficeOpenXml.ExcelWorksheet sheet, int row)
+    {
+        var fields = new HashSet<string>(StringComparer.Ordinal);
+        if (sheet.Dimension == null) return fields;
+        for (int column = 1; column <= sheet.Dimension.End.Column; column++)
+        {
+            string header = sheet.Cells[1, column].Text.Trim();
+            if (header.Length > 0 && !string.IsNullOrWhiteSpace(sheet.Cells[row, column].Text))
+                fields.Add(header);
+        }
+        return fields;
+    }
     private readonly List<string> _loadErrors = new List<string>();
 
     /// <summary>最近一次整套加载是否成功。</summary>
@@ -90,6 +102,7 @@ public partial class DataManager
         LoadEnemyStatusData();
         LoadOverallStatusData();
         LoadWeaponStatusData();
+        LoadArtifactStatusData();
         LoadEnemyAttributes();
         LoadEnemyCurves();
         LoadEnemySkill();
@@ -99,4 +112,5 @@ public partial class DataManager
         // 旧 StageConfig.xlsx 为可选兼容数据；当前战斗使用 Resources/StageConfig.json。
         LoadStageConfig();
     }
+
 }

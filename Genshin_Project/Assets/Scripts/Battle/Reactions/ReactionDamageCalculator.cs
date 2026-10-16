@@ -232,7 +232,7 @@ public static class ReactionDamageCalculator
                 if (effect == null || effect.StatusEffectID == 0) continue;
                 if (effect.StatusEffectID / 100 != mainData.StatusID) continue;
                 if (effect.EffectType != "Buff" && effect.EffectType != "Debuff") continue;
-                if (!float.TryParse(effect.Param1, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                if (!BuffExpressionEvaluator.TryResolveScalar(effect.Param1, instance, out float value))
                     continue;
 
                 if (multiplierPart == "DMGBonus") totals.DMGBonus += value * count;
@@ -289,11 +289,7 @@ public static class ReactionDamageCalculator
                 if (effect == null || effect.StatusEffectID == 0) continue;
                 if (effect.StatusEffectID / 100 != mainData.StatusID) continue;
                 if (effect.EffectType != "Buff" && effect.EffectType != "Debuff") continue;
-                if (float.TryParse(
-                        effect.Param1,
-                        NumberStyles.Float,
-                        CultureInfo.InvariantCulture,
-                        out float value))
+                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, instance, out float value))
                 {
                     total += value * count;
                 }

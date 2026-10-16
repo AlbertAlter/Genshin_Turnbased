@@ -44,7 +44,8 @@ public sealed class TargetResolutionResult
 /// <summary>
 /// 统一目标位置算法：
 /// 0=非连续手选；1=连续手选；2=覆盖率优先的连续随机；3=随机可重复；4=随机不重复。
-/// TargetSelect 以单个状态宿主为原点；TargetOverride 基于上一效果或外部筛选范围。
+/// TargetSelect 的 X,X 以单个状态宿主为原点；正整数按模式选数量，-1 选全体。
+/// TargetOverride 基于上一效果或外部筛选范围。
 /// </summary>
 public static class TargetResolver
 {
@@ -65,20 +66,40 @@ public static class TargetResolver
             return result;
         }
 
+        int targetNumber = request.TargetNumber;
+        bool hasSelectCount = false;
         if (!string.IsNullOrWhiteSpace(request.TargetSelect))
         {
-            if (!TryParseOffsets(request.TargetSelect, 2, out var selectOffsets))
+            if (int.TryParse(request.TargetSelect.Trim(), out int selectCount))
             {
-                result.Error = $"TargetSelect 格式无效: {request.TargetSelect}";
-                return result;
+                if (selectCount != -1 && selectCount <= 0)
+                {
+                    result.Error = $"TargetSelect 数量须为正整数或 -1: {request.TargetSelect}";
+                    return result;
+                }
+                if (selectCount > 0 && (request.TargetConsecutive < 2 || request.TargetConsecutive > 4))
+                {
+                    result.Error = $"TargetSelect 指定数量时，TargetConsecutive 须为 2、3 或 4: {request.TargetConsecutive}";
+                    return result;
+                }
+                targetNumber = selectCount;
+                hasSelectCount = true;
             }
+            else
+            {
+                if (!TryParseOffsets(request.TargetSelect, 2, out var selectOffsets))
+                {
+                    result.Error = $"TargetSelect 格式无效: {request.TargetSelect}";
+                    return result;
+                }
 
-            result.Positions = ExpandOrigin(
-                request.OriginPosition,
-                selectOffsets[0],
-                selectOffsets[1],
-                request.MaxPosition);
-            return ValidateNonEmpty(request, result, "TargetSelect 没有产生有效目标");
+                result.Positions = ExpandOrigin(
+                    request.OriginPosition,
+                    selectOffsets[0],
+                    selectOffsets[1],
+                    request.MaxPosition);
+                return ValidateNonEmpty(request, result, "TargetSelect 没有产生有效目标");
+            }
         }
 
         if (!string.IsNullOrWhiteSpace(request.TargetOverride))
@@ -106,12 +127,12 @@ public static class TargetResolver
             }
 
             var overridePool = Sanitize(request.OverridePositions, request.MaxPosition, false);
-            if (targetOverride.StartsWith("PreAlliesDamage(", StringComparison.Ordinal)
+            if (hasSelectCount || targetOverride.StartsWith("PreAlliesDamage(", StringComparison.Ordinal)
                 || targetOverride.StartsWith("PreSelfDamage(", StringComparison.Ordinal)
                 || targetOverride.StartsWith("PostAlliesDamage(", StringComparison.Ordinal)
                 || targetOverride.StartsWith("PostSelfDamage(", StringComparison.Ordinal))
             {
-                result.Positions = SelectByMode(request, overridePool);
+                result.Positions = SelectByMode(request, overridePool, targetNumber);
                 return ValidateNonEmpty(request, result, $"{targetOverride} 没有返回有效目标");
             }
 
@@ -135,19 +156,19 @@ public static class TargetResolver
         for (int position = 1; position <= request.MaxPosition; position++)
             fullPool.Add(position);
 
-        if (request.TargetNumber < 0)
+        if (targetNumber < 0)
         {
             result.Positions = FilterEligible(request, fullPool);
             return ValidateNonEmpty(request, result, "目标范围内没有有效目标");
         }
 
-        if (request.TargetNumber == 0)
+        if (targetNumber == 0)
         {
             result.Error = "TargetNumber 为0且没有 TargetOverride";
             return result;
         }
 
-        result.Positions = SelectByMode(request, fullPool);
+        result.Positions = SelectByMode(request, fullPool, targetNumber);
         return ValidateNonEmpty(request, result, "目标范围内没有有效目标");
     }
 
@@ -256,9 +277,8 @@ public static class TargetResolver
         return result;
     }
 
-    private static List<int> SelectByMode(TargetResolutionRequest request, List<int> pool)
+    private static List<int> SelectByMode(TargetResolutionRequest request, List<int> pool, int count)
     {
-        int count = request.TargetNumber;
         if (count <= 0) return FilterEligible(request, pool);
 
         switch (request.TargetConsecutive)

@@ -4,6 +4,28 @@ using System.Globalization;
 /// <summary>Damage hit parameters use M,E. Poise is no longer authored in hit strings.</summary>
 public static class HitDataParser
 {
+    /// <summary>等级表空格向上沿用；保留显式零及最近一次明确填写的属性、附着量。</summary>
+    public static string InheritLevelFields(string current, string previous)
+    {
+        if (string.IsNullOrWhiteSpace(current)) return previous ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(previous)) return current;
+        string[] fields = SplitHit(current);
+        string[] inherited = SplitHit(previous);
+        string multiplier = fields[0].Trim();
+        if (multiplier.Length == 0) multiplier = inherited[0];
+        else if (TryNumber(multiplier, out _) && inherited[0].Contains("*"))
+        {
+            // 仅倍率省略属性时沿用；治疗的完整加法公式和引用表达式不拼接。
+            int star = inherited[0].IndexOf('*');
+            string attribute = inherited[0].Substring(star);
+            if (!attribute.Contains("+") && !attribute.Contains("-") && !inherited[0].StartsWith("%"))
+                multiplier += attribute;
+        }
+        string aura = fields.Length == 2 && !string.IsNullOrWhiteSpace(fields[1])
+            ? fields[1] : inherited.Length == 2 ? inherited[1] : string.Empty;
+        return string.IsNullOrWhiteSpace(aura) ? multiplier : multiplier + "," + aura;
+    }
+
     /// <summary>Parse "1.24*TotalATK,2", or a multiplier-only higher-level value.</summary>
     public static HitData Parse(string hitString)
     {

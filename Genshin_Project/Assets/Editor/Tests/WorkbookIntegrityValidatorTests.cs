@@ -87,7 +87,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase("StatusData_Main_Enemy", "Status_Effect")]
         [TestCase("StatusData_Overall_Main", "StatusEffect_Overall")]
         [TestCase("StatusWeapon_Main", "StatusWeapon_Effect")]
-        public void Validate_SkillLevelAcceptsExistingEffectsAndStatuses(string mainSheet, string effectSheet)
+        public void Validate_SkillLevelAcceptsEffectsAndStatusContainers(string mainSheet, string effectSheet)
         {
             CreateWorkbook("Characters/1011_Test.xlsx", package =>
             {
@@ -116,13 +116,17 @@ namespace GenshinTurnBased.Tests.EditMode
 
             var issues = WorkbookIntegrityValidator.Validate(_root);
             Assert.That(issues.Any(issue => issue.Code == "INVALID_REFERENCE" &&
-                issue.Location.Contains("/SkillLevel row ")), Is.False);
+                issue.Message.Contains("ST_Lisa_Conductive")), Is.False);
+            Assert.That(issues.Any(issue => issue.Code == "INVALID_REFERENCE" &&
+                (issue.Message.Contains("SE_Normal_Lisa") || issue.Message.Contains("STE_Lisa_Burst"))), Is.False);
         }
 
         [TestCase("SE_Missing")]
         [TestCase("STE_Missing")]
         [TestCase("ST_Lisa_Conductiv")]
-        public void Validate_SkillLevelStillRejectsUndefinedReferences(string paramId)
+        [TestCase("Custom_Parameter")]
+        [TestCase("1011")]
+        public void Validate_SkillLevelAllowsExtensibleParameterKeys(string paramId)
         {
             CreateWorkbook("Characters/1011_Test.xlsx", package =>
                 AddSheet(package, "SkillLevel",
@@ -131,7 +135,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             var issues = WorkbookIntegrityValidator.Validate(_root);
             Assert.That(issues.Any(issue => issue.Code == "INVALID_REFERENCE" &&
-                issue.Location.Contains("/SkillLevel row 2") && issue.Message.Contains(paramId)), Is.True);
+                issue.Location.Contains("/SkillLevel row 2") && issue.Message.Contains(paramId)), Is.False);
         }
 
         private void CreateWorkbook(string relativePath, Action<ExcelPackage> populate)

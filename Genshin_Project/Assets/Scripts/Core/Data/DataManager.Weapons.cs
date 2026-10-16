@@ -131,19 +131,38 @@ public partial class DataManager
                 string id2 = WeaponEffectKey(id);
                 if (StatusEffectDict.ContainsKey(id2))
                     throw new InvalidDataException($"[StatusWeapon_Effect] row {row}: duplicate runtime key {id2}");
-                string effectType = effects.Cells[row, 3].Text;
+                string effectType = effects.Cells[row, FindColumnByHeader(effects, "EffectType", 3)].Text;
+                if (effectType == "APCost")
+                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateAPCost(
+                        effects.Cells[row, FindColumnByHeader(effects, "Param1", 9)].Text,
+                        effects.Cells[row, FindColumnByHeader(effects, "Param2", 10)].Text));
+                if (effectType == "ResetCooldown")
+                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateResetCooldown(
+                        "StatusWeapon_Effect", row, effects.Cells[row, FindColumnByHeader(effects, "Param1", 9)].Text));
+                if (effectType == "BondOfLife")
+                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateBondOfLife(
+                        "StatusWeapon_Effect", row, effects.Cells[row, FindColumnByHeader(effects, "Param1", 9)].Text));
+                TryValidate("StatusWeapon_Effect", () => TableValidator.ValidatePublicCountEffect(
+                    "StatusWeapon_Effect", row, effectType,
+                    effects.Cells[row, FindColumnByHeader(effects, "Param1", 9)].Text,
+                    effects.Cells[row, FindColumnByHeader(effects, "Param2", 10)].Text,
+                    effects.Cells[row, FindColumnByHeader(effects, "TargetType", 12)].Text));
                 StatusEffectDict[id2] = new StatusEffectData
                 {
+                    AuthoredFields = ReadAuthoredEffectFields(effects, row),
                     StatusEffectID = id, StatusEffectID2 = id2,
-                    EffectIndex = SafeGetInt(effects.Cells[row, 2].Value), EffectType = effectType,
-                    Element = effects.Cells[row, 4].Text, DamageType = effects.Cells[row, 5].Text,
-                    Duration = SafeGetInt(effects.Cells[row, 6].Value), AddInPhase = SafeGetInt(effects.Cells[row, 7].Value),
-                    TriggerPhase = SafeGetInt(effects.Cells[row, 8].Value),
-                    Param1 = NormalizeWeaponEffectParam(effectType, effects.Cells[row, 9].Text),
-                    Param2 = effects.Cells[row, 10].Text, Param3 = effects.Cells[row, 11].Text,
-                    TargetType = effects.Cells[row, 12].Text, TargetSelect = effects.Cells[row, 13].Text,
-                    TargetConsecutive = SafeGetInt(effects.Cells[row, 14].Value),
-                    TargetOverride = effects.Cells[row, 15].Text, ScriptHook = effects.Cells[row, 16].Text
+                    EffectIndex = SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "EffectIndex", 2)].Value), EffectType = effectType,
+                    Element = effects.Cells[row, FindColumnByHeader(effects, "Element", 4)].Text, DamageType = effects.Cells[row, FindColumnByHeader(effects, "DamageType", 5)].Text,
+                    Duration = SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "Duration", 6)].Value), AddInPhase = SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "AddInPhase", 7)].Value),
+                    TriggerPhase = SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "TriggerPhase", 8)].Value),
+                    Param1 = NormalizeWeaponEffectParam(effectType, effects.Cells[row, FindColumnByHeader(effects, "Param1", 9)].Text),
+                    Param2 = ReadEffectParam2(effects, row, effects.Cells[row, FindColumnByHeader(effects, "EffectType", 3)].Text, 10), Param3 = effects.Cells[row, FindColumnByHeader(effects, "Param3", 11)].Text,
+                    TargetType = effects.Cells[row, FindColumnByHeader(effects, "TargetType", 12)].Text, TargetSelect = effects.Cells[row, FindColumnByHeader(effects, "TargetSelect", 13)].Text,
+                    TargetConsecutive = SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "TargetConsecutive", 14)].Value),
+                    TargetOverride = effects.Cells[row, FindColumnByHeader(effects, "TargetOverride", 15)].Text, ScriptHook = effects.Cells[row, FindColumnByHeader(effects, "ScriptHook", 16)].Text,
+                    DamageHook = ReadOptionalEffectText(effects, row, "DamageHook"),
+                    ExecuteCount = ReadExecuteCount(effects, row),
+                    ExecuteCountHandler = ReadExecuteCountHandler(effects, row)
                 };
             }
         }
@@ -190,6 +209,7 @@ public partial class DataManager
     static string NormalizeWeaponEffectParam(string effectType, string value)
     {
         if (effectType != "ApplyStatus" && effectType != "BindStatus" && effectType != "RemoveStatus") return value;
+        value = CountStatusSystem.ResolvePublicStatusReference(value);
         return int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int id)
             ? WeaponStatusKey(id) : value;
     }
@@ -197,14 +217,14 @@ public partial class DataManager
     static string NormalizeWeaponEffectList(string value)
     {
         if (string.IsNullOrWhiteSpace(value)) return value;
-        string[] parts = value.Split(',');
+        string[] parts = value.Split(';');
         for (int index = 0; index < parts.Length; index++)
         {
             string part = parts[index].Trim();
             parts[index] = int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out int id)
                 ? WeaponEffectKey(id) : part;
         }
-        return string.Join(",", parts);
+        return string.Join(";", parts);
     }
 
     public float ResolveWeaponParam(int weaponID, int index, int refinement)

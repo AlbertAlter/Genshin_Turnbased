@@ -14,16 +14,23 @@ public sealed class HealResolvedEvent
     public float HPAfter { get; }
     public float MaxHP { get; }
     public float RequestedAmount { get; }
+    public float BondOfLifeBefore { get; }
+    public float BondOfLifeAfter { get; }
+    public float BondOfLifeAbsorbedAmount => Mathf.Max(0f, BondOfLifeBefore - BondOfLifeAfter);
+    public bool BondOfLifeCleared => BondOfLifeBefore > 0f && BondOfLifeAfter <= 0f;
     public float ActualAmount => Mathf.Max(0f, HPAfter - HPBefore);
-    public float OverhealAmount => Mathf.Max(0f, RequestedAmount - ActualAmount);
+    public float OverhealAmount => Mathf.Max(0f, RequestedAmount - BondOfLifeAbsorbedAmount - ActualAmount);
     public bool IsCommitted { get; private set; }
 
     internal HealResolvedEvent(BattleEntity source, BattleEntity target, float amount,
-        float hpBefore, float hpAfter, float maxHP, string effectID, int segmentIndex, int targetIndex)
+        float hpBefore, float hpAfter, float maxHP, string effectID, int segmentIndex, int targetIndex,
+        float bondOfLifeBefore = 0f, float bondOfLifeAfter = 0f)
     {
         Source = source;
         Target = target;
         RequestedAmount = amount;
+        BondOfLifeBefore = bondOfLifeBefore;
+        BondOfLifeAfter = bondOfLifeAfter;
         HPBefore = hpBefore;
         HPAfter = hpAfter;
         MaxHP = maxHP;
@@ -36,13 +43,14 @@ public sealed class HealResolvedEvent
 }
 
 /// <summary>
-/// 一段治疗的全部目标：预计算并记录候选 → 提交全部 HP → 确认条件并预占次数 → 执行响应。
+/// 一段治疗的全部目标：预计算并记录候选 → 提交全部 HP 和生命之契 → 确认条件并预占次数 → 执行响应。
 /// 提交过程不派发回调，保证群体治疗的条件判断看到本段全部治疗后的真实状态。
 /// </summary>
 public sealed class HealBatch : IDisposable
 {
     private readonly List<HealResolvedEvent> _events = new List<HealResolvedEvent>();
     private readonly Dictionary<BattleEntity, float> _projectedHP = new Dictionary<BattleEntity, float>();
+    private readonly Dictionary<BattleEntity, float> _projectedBondOfLife = new Dictionary<BattleEntity, float>();
     private readonly IDisposable _effect = BattleResolutionContext.BeginEffect();
     private bool _flushed;
     public IReadOnlyList<HealResolvedEvent> Results => _events.AsReadOnly();
@@ -54,10 +62,15 @@ public sealed class HealBatch : IDisposable
         if (target == null || target.IsDead || amount <= 0f
             || float.IsNaN(amount) || float.IsInfinity(amount)) return;
         float before = _projectedHP.TryGetValue(target, out float projected) ? projected : target.CurrentHP;
-        float after = Mathf.Max(before, Mathf.Min(target.TotalHP, before + amount));
+        float bondBefore = _projectedBondOfLife.TryGetValue(target, out float projectedBond)
+            ? projectedBond : BondOfLifeStatusHandler.GetValue(target);
+        float absorbed = Mathf.Min(bondBefore, amount);
+        float bondAfter = bondBefore - absorbed;
+        float after = Mathf.Max(before, Mathf.Min(target.TotalHP, before + (amount - absorbed)));
         _projectedHP[target] = after;
+        _projectedBondOfLife[target] = bondAfter;
         _events.Add(new HealResolvedEvent(source, target, amount, before, after, target.TotalHP,
-            effectID, segmentIndex, _events.Count + 1));
+            effectID, segmentIndex, _events.Count + 1, bondBefore, bondAfter));
     }
 
     public void Flush()
@@ -71,6 +84,8 @@ public sealed class HealBatch : IDisposable
                 StatusOnHitHookSystem.CollectHeal(heal);
             foreach (HealResolvedEvent heal in _events)
             {
+                if (heal.BondOfLifeAbsorbedAmount > 0f)
+                    BondOfLifeStatusHandler.ReduceValue(heal.Target, heal.BondOfLifeAbsorbedAmount);
                 heal.Target.CurrentHP = heal.HPAfter;
                 heal.MarkCommitted();
                 BattleExecution.Record(heal);

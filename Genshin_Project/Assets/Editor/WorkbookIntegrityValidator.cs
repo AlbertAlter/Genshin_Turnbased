@@ -64,7 +64,8 @@ public static class WorkbookIntegrityValidator
     private static readonly HashSet<string> AllowedEffectTypes = new HashSet<string>(StringComparer.Ordinal)
     {
         "AddTurn", "ApplyStatus", "BindStatus", "Buff", "ChangeControl", "Damage", "Debuff",
-        "ExecuteEffect", "ExecuteSkill", "GainEnergy", "Heal", "RemoveStatus", "Shield"
+        "ExecuteEffect", "ExecuteSkill", "GainEnergy", "Heal", "RemoveStatus", "Shield",
+        "BondOfLife", "NightSoul"
     };
 
     private static readonly HashSet<string> AllowedElements = new HashSet<string>(StringComparer.Ordinal)
@@ -390,20 +391,7 @@ public static class WorkbookIntegrityValidator
         {
             ValidateNumericReference(row, "SkillEffectID/100", skillEffectId / 100, characterSkillIds, issues);
         }
-        else if (characterWorkbook && row.Sheet == "SkillLevel")
-        {
-            // 等级参数也可属于状态效果（STE_）或状态本身（ST_，如丽莎引雷）。
-            // 仍按实际定义检查引用，不能只凭前缀放行任意字符串。
-            string paramId = row.Get("ParamID");
-            if (!string.IsNullOrWhiteSpace(paramId) &&
-                !characterEffectNames.Contains(paramId) &&
-                !statusEffectNames.Contains(paramId) &&
-                !statusNames.Contains(paramId))
-            {
-                AddIssue(issues, "INVALID_REFERENCE", row,
-                    $"ParamID references missing character effect, status effect or status [{paramId}].");
-            }
-        }
+        // SkillLevel.ParamID is an extensible parameter key, not a restricted effect reference.
 
         if (IsStatusEffectSheet(row.Sheet) && TryInt(row.Get("StatusEffectID"), out int statusEffectId))
             ValidateNumericReference(row, "StatusEffectID/100", statusEffectId / 100, statusIds, issues);

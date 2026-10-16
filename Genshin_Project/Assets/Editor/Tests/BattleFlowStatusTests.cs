@@ -4,6 +4,74 @@ namespace GenshinTurnBased.Tests.EditMode
 {
     public class BattleFlowStatusTests
     {
+        [TestCase(2, 3)]
+        [TestCase(3, 3)]
+        [TestCase(3, 0)]
+        [Timeout(9000)]
+        public void PhaseAction_ExecutesOnItsTurnOnceAndNeverOnTrigger(int timerPhase, int triggerPhase)
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_PhaseAction";
+                env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: "STE_PhaseEnergy");
+                env.DataManager.StatusActionDict[statusID].Add(new StatusActionData
+                {
+                    StatusID2 = statusID, ActionType = "OnTrigger", Param1 = "STE_EventEnergy"
+                });
+                env.DataManager.StatusEffectDict["STE_PhaseEnergy"] = new StatusEffectData
+                {
+                    StatusEffectID2 = "STE_PhaseEnergy", EffectType = "GainEnergy",
+                    Param1 = "1", Param2 = "Flat", TargetType = "Self", ExecuteCount = 1
+                };
+                env.DataManager.StatusEffectDict["STE_EventEnergy"] = new StatusEffectData
+                {
+                    StatusEffectID2 = "STE_EventEnergy", EffectType = "GainEnergy",
+                    Param1 = "10", Param2 = "Flat", TargetType = "Self", ExecuteCount = 1
+                };
+                env.CreateMinimalBattle();
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Ally.Entity.CurrentEnergy = 0;
+                var status = env.Ally.Entity.AddStatus(statusID, env.Ally.Entity, 3,
+                    timerPhase, triggerPhase, env.DataManager.StatusMainDict[statusID]);
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(1));
+                Assert.That(status.RemainingPhaseCount, Is.EqualTo(timerPhase == 3 ? 2 : 3));
+
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(1), "计时阶段不能重复执行显式触发阶段的行动");
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        [Timeout(9000)]
+        public void TriggerPhaseWithoutOnItsTurn_DoesNotFallBackToOnTrigger()
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_EventOnlyPhase";
+                env.ConfigureStatus(statusID, actionType: "OnTrigger", actionEffectID2: "STE_EventOnlyEnergy");
+                env.DataManager.StatusEffectDict["STE_EventOnlyEnergy"] = new StatusEffectData
+                {
+                    StatusEffectID2 = "STE_EventOnlyEnergy", EffectType = "GainEnergy",
+                    Param1 = "10", Param2 = "Flat", TargetType = "Self", ExecuteCount = 1
+                };
+                env.CreateMinimalBattle();
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                env.Ally.Entity.CurrentEnergy = 0;
+                env.Ally.Entity.AddStatus(statusID, env.Ally.Entity, 3, 3, 3,
+                    env.DataManager.StatusMainDict[statusID]);
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(0));
+            }
+        }
+
         [Test]
         [Timeout(5000)]
         public void SkillApplyStatus_UsesConfiguredHostStackDurationAndTimerPhase()
@@ -92,7 +160,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 const string statusID = "ST_BattleFlow_Dot";
                 const string statusEffectID = "STE_BattleFlow_Dot";
-                env.ConfigureStatus(statusID, actionType: "OnTrigger", actionEffectID2: statusEffectID);
+                env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: statusEffectID);
                 env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", null,
                     apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
                     addInPhase: (int)TurnPhase.AllyPostTurn,
@@ -146,7 +214,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 const string statusID = "ST_BattleFlow_CritDot";
                 const string statusEffectID = "STE_BattleFlow_CritDot";
-                env.ConfigureStatus(statusID, actionType: "OnTrigger", actionEffectID2: statusEffectID);
+                env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: statusEffectID);
                 env.ConfigureAllyAction(2, "SK_Skill_CritDot", "SE_Skill_CritDot", "None", null,
                     apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
                     addInPhase: (int)TurnPhase.AllyPostTurn,
