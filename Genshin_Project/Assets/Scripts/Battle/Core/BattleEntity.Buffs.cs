@@ -8,12 +8,13 @@ public partial class BattleEntity
         var dm = DataManager.Instance;
         if (dm == null) return 0f;
         float total = 0f;
+        var used = new System.Collections.Generic.Dictionary<string, int>();
         foreach (StatusInstance status in GetEffectiveStatusList())
         {
             if (status?.MainData == null || !status.IsActive || status.MainData.GetMultiplierPart() != "DEFBonus"
                 || !StatusAppliesTo(status, effectID, skillID, skillType, element, target)) continue;
-            int stacks = Mathf.Max(1, status.StackCount);
-            if (status.MainData.MaxCount > 0) stacks = Mathf.Min(stacks, status.MainData.MaxCount);
+            int stacks = StatusAggregation.Take(status, used);
+            if (stacks == 0) continue;
             foreach (var effect in dm.StatusEffectDict.Values)
             {
                 if (effect == null || effect.StatusEffectID / 100 != status.MainData.StatusID

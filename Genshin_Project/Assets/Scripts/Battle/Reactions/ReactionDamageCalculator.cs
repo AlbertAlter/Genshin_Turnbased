@@ -215,6 +215,7 @@ public static class ReactionDamageCalculator
         if (statuses == null || statusEffects == null) return totals;
 
         var effects = new List<StatusEffectData>(statusEffects);
+        var used = new Dictionary<string, int>();
         foreach (StatusInstance instance in statuses)
         {
             StatusMainData mainData = instance != null ? instance.MainData : null;
@@ -224,8 +225,8 @@ public static class ReactionDamageCalculator
             string multiplierPart = mainData.GetMultiplierPart();
             if (multiplierPart != "DMGBonus" && multiplierPart != "BaseDMGBonusFlat") continue;
 
-            int count = Mathf.Max(1, instance.StackCount);
-            if (mainData.MaxCount > 0) count = Mathf.Min(count, mainData.MaxCount);
+            int count = StatusAggregation.Take(instance, used);
+            if (count == 0) continue;
 
             foreach (StatusEffectData effect in effects)
             {
@@ -269,6 +270,7 @@ public static class ReactionDamageCalculator
 
         float total = 0f;
         var effects = new List<StatusEffectData>(statusEffects);
+        var used = new Dictionary<string, int>();
         foreach (StatusInstance instance in statuses)
         {
             StatusMainData mainData = instance != null ? instance.MainData : null;
@@ -282,8 +284,8 @@ public static class ReactionDamageCalculator
                 continue;
             if (mainData.GetMultiplierPart() != "DMGBonus") continue;
 
-            int count = Mathf.Max(1, instance.StackCount);
-            if (mainData.MaxCount > 0) count = Mathf.Min(count, mainData.MaxCount);
+            int count = StatusAggregation.Take(instance, used);
+            if (count == 0) continue;
             foreach (StatusEffectData effect in effects)
             {
                 if (effect == null || effect.StatusEffectID == 0) continue;

@@ -39,17 +39,14 @@ public partial class CharacterBattleController
         foreach (string key in new List<string>(_artifactInitiateStatuses.Keys))
         {
             if (seen.Contains(key)) continue;
-            if (Entity.StatusDict.TryGetValue(key, out StatusInstance current)
-                && ReferenceEquals(current, _artifactInitiateStatuses[key]))
-                Entity.RemoveStatus(key, -1);
+            Entity.RemoveStatusInstance(_artifactInitiateStatuses[key]);
             _artifactInitiateStatuses.Remove(key);
         }
 
         foreach (string key in desired)
         {
             if (_artifactInitiateStatuses.TryGetValue(key, out StatusInstance previous)
-                && Entity.StatusDict.TryGetValue(key, out StatusInstance current)
-                && ReferenceEquals(previous, current)) continue;
+                && Entity.HasStatusInstance(previous)) continue;
 
             // 初始状态永久存在于穿戴者本人，效果产生的子状态持续时间仍由配表决定。
             _artifactInitiateStatuses[key] = Entity.AddStatus(key, Entity, 0, 2, 0,

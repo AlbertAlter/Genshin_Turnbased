@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 已完成倍率、反应与暴击计算后的单个目标 Hit 请求。
+/// 已完成倍率、反应与暴击计算，尚未乘受击方 DMGTaken 的单个目标 Hit 请求。
 /// 所有角色技能、角色状态、敌人技能、关卡效果和反应派生伤害最终都应从这里进入护盾与扣血。
 /// </summary>
 [Serializable]
@@ -12,6 +12,10 @@ public sealed class HitRequest
     public BattleEntity Target;
     public float DamageBeforeShield;
     public string Element;
+    /// <summary>实际效果的伤害标签；派生反应填 Reaction，不继承触发技能标签。</summary>
+    public string DamageType;
+    /// <summary>主命中在反应改变状态前准备；未准备的独立派生伤害在结算时读取。</summary>
+    public DMGTakenSnapshot DMGTaken;
     public float PoiseDamage;
     public DamageSourceInfo Source;
     public int HitIndex;
@@ -24,6 +28,8 @@ public sealed class HitRequest
 public sealed class HitResolution
 {
     public HitRequest Request;
+    public float DMGTakenMultiplier;
+    public float DamageBeforeShield;
     public float DamageAfterShield;
     public DamageResolvedEvent DamageEvent;
 }
@@ -58,10 +64,16 @@ public sealed class HitBatch : IDisposable
         if (float.IsNaN(incoming) || float.IsInfinity(incoming) || incoming < 0f)
             incoming = 0f;
 
+        DamageSourceInfo source = request.Source ?? DamageSourceInfo.CreateUnknown();
+        DMGTakenSnapshot taken = request.DMGTaken ?? request.Target.PrepareDMGTaken(
+            source.SourceEffectID, source.SourceSkillID, request.DamageType, request.Element);
+        float takenMultiplier = taken.GetMultiplier(source.ReactionType);
+        incoming *= takenMultiplier;
+        if (float.IsNaN(incoming) || float.IsInfinity(incoming)) incoming = 0f;
+
         float afterShield = request.Target.AbsorbDamageWithShield(
             incoming,
             request.Element ?? string.Empty);
-        DamageSourceInfo source = request.Source ?? DamageSourceInfo.CreateUnknown();
         DamageResolvedEvent damageEvent = request.Target.ApplyDamageCore(
             afterShield,
             source,
@@ -74,6 +86,8 @@ public sealed class HitBatch : IDisposable
         var resolution = new HitResolution
         {
             Request = request,
+            DMGTakenMultiplier = takenMultiplier,
+            DamageBeforeShield = incoming,
             DamageAfterShield = afterShield,
             DamageEvent = damageEvent
         };
@@ -104,7 +118,8 @@ public sealed class HitBatch : IDisposable
                 $"entity={damageEvent.Target?.EntityID ?? 0} " +
                 $"source={source?.SourceKind.ToString() ?? "Unknown"}/" +
                 $"{source?.SourceStatusID ?? string.Empty}/{source?.SourceEffectID ?? string.Empty} " +
-                $"hit={damageEvent.HitLanded} shielded={result.DamageAfterShield:F1} " +
+                $"hit={damageEvent.HitLanded} DMGTaken=x{result.DMGTakenMultiplier:F3} " +
+                $"incoming={result.DamageBeforeShield:F1} shielded={result.DamageAfterShield:F1} " +
                 $"hp={damageEvent.ActualHPDamage:F1}");
         }
 

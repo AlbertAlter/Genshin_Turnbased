@@ -221,8 +221,8 @@ public class StatusMainData
     public string ApplyElementType;      // 限定生效的元素类型（空=全部）
     public string ApplyString;           // 限定生效的效果ID(=SE_xxx)或技能ID列表（分号分隔，如 SK_Normal_Kaeya;SK_Heavy_Kaeya）（空=全部）
     public string ScriptHook;            // 状态级钩子（如 Kaeya_C1：目标检查），返回假则该状态加成不生效
-    public int MaxCount;                 // 同一级加总最多计入几次
-    public int MaxStack;                 // 单一目标上最多叠加层数
+    public int MaxCount;                 // 一次加总中同ID全部实例共用的计入上限，不改变实例数量
+    public int MaxStack;                 // 同一目标/位置上最多共存的普通同ID实例数；Count由专用处理器定义
     public string WhenMax;               // 超出时行为
 
     /// <summary>

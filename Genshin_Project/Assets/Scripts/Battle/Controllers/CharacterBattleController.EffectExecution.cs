@@ -199,6 +199,8 @@ public partial class CharacterBattleController
                             skillType,
                             out ReactionDamageComponents damageComponents,
                             countPlan.BaseDamageBonus);
+                        DMGTakenSnapshot taken = target.PrepareDMGTaken(
+                            eff.SkillEffectID2, GetCurrentDamageSourceSkillID(skillType), eff.DamageType, eff.Element);
                         ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
                         {
                             SourceEntity = CurrentDamageSourceEntity,
@@ -233,6 +235,8 @@ public partial class CharacterBattleController
                             Target = target,
                             DamageBeforeShield = primaryCritical.DamageAfterCritical,
                             Element = eff.Element,
+                            DamageType = eff.DamageType,
+                            DMGTaken = taken,
                             PoiseDamage = hit.Poise,
                             Source = CreateCurrentDamageSource(
                                 eff.SkillEffectID2, skillType, mainReactionType),
@@ -291,6 +295,9 @@ public partial class CharacterBattleController
                                 Target = splashTarget,
                                 DamageBeforeShield = splashCritical.DamageAfterCritical,
                                 Element = eff.Element,
+                                DamageType = eff.DamageType,
+                                DMGTaken = splashTarget.PrepareDMGTaken(eff.SkillEffectID2,
+                                    GetCurrentDamageSourceSkillID(skillType), eff.DamageType, eff.Element),
                                 PoiseDamage = 0f,
                                 Source = CreateCurrentDamageSource(
                                     eff.SkillEffectID2, skillType, mainReactionType),
@@ -337,6 +344,7 @@ public partial class CharacterBattleController
                 HitData hit = hits[hitIndex];
                 var contexts = new List<ReactionContext>();
                 var countPlans = new List<CountDamagePlan>();
+                var takenSnapshots = new List<DMGTakenSnapshot>();
                 foreach (BattleEntity target in targets)
                 {
                     if (target == null || !target.IsAlive) continue;
@@ -349,6 +357,8 @@ public partial class CharacterBattleController
                         EffectExecutionID = effectExecutionID, HitIndex = hitIndex + 1, TargetIndex = contexts.Count + 1
                     });
                     countPlans.Add(countPlan);
+                    takenSnapshots.Add(target.PrepareDMGTaken(eff.SkillEffectID2,
+                        GetCurrentDamageSourceSkillID(skillType), eff.DamageType, "Anemo"));
                     float damage = CalculateDamage(hitBaseValue, hit, eff, target, skillType,
                         out ReactionDamageComponents components, countPlan.BaseDamageBonus);
                     contexts.Add(new ReactionContext
@@ -391,6 +401,8 @@ public partial class CharacterBattleController
                             Target = target,
                             DamageBeforeShield = critical.DamageAfterCritical,
                             Element = "Anemo",
+                            DamageType = eff.DamageType,
+                            DMGTaken = takenSnapshots[index],
                             PoiseDamage = hit.Poise,
                             Source = CreateCurrentDamageSource(
                                 eff.SkillEffectID2, skillType, ReactionType.None),
@@ -463,30 +475,9 @@ public partial class CharacterBattleController
         var fields = ResolveTargetFields(eff);
         foreach (var slot in fields)
         {
-            var inst = new StatusInstance
-            {
-                StatusID2 = statusID2,
-                RemainingPhaseCount = eff.Duration,
-                IsPermanent = eff.Duration <= 0,
-                AddInPhase = eff.AddInPhase,
-                TriggerPhase = eff.TriggerPhase,
-                MainData = statusMain,
-                IsActive = true,
-                ApplyOrder = ++BattleEntity._applyOrderCounter
-            };
-            inst.RecordSource(Entity);
-            CountStatusSystem.OnCreated(inst, slot);
-            slot.StatusList.Add(inst);
+            slot.AddStatus(statusID2, Entity, eff.Duration, eff.AddInPhase, eff.TriggerPhase,
+                statusMain, _currentEffectSourceStatus?.WeaponContext, eff.Param2);
             LogManager.Log(LogCategory.ApplyStatus, $"{statusID2} -> {slot} (dur={eff.Duration}, phase={eff.AddInPhase}, trig={eff.TriggerPhase})");
-            StatusBindingSystem.ApplyBindings(inst, slot);
-            // OnApply：位置状态施加时立刻生效（由状态施放者控制器执行）
-            if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
-                inst.Caster.CharacterCtrl.OnStatusApplied(inst, slot);
-            // 状态结算登记（2026-08-12）：位置状态按 AddInPhase/TriggerPhase 登记阶段桶
-            BattleManager.Instance?.RegisterStatusTick(inst, null, slot);
-            PreDamageHookSystem.RegisterPreDamageHook(inst, slot);
-            // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
-            KillHookSystem.Register(inst, slot);
         }
     }
 
@@ -496,24 +487,7 @@ public partial class CharacterBattleController
     /// <summary>只从一个已解析出的场地位置移除状态。</summary>
     void RemoveStatusFromFieldSlot(string statusID2, FieldPosition slot)
     {
-        var bm = BattleManager.Instance;
-        if (bm == null || bm.Field == null || slot == null) return;
-        for (int i = slot.StatusList.Count - 1; i >= 0; i--)
-        {
-            var inst = slot.StatusList[i];
-            if (inst == null || inst.StatusID2 != statusID2) continue;
-            StatusBindingSystem.RemoveBindings(inst);
-            //解除 ChangeControl记录 + 计时注销
-            if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
-                inst.Caster.CharacterCtrl.OnStatusChangeControlRemoved(inst);
-            bm.UnregisterStatusTick(inst);
-            PreDamageHookSystem.UnregisterPreDamageHook(inst);
-            // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
-            KillHookSystem.Unregister(inst);
-            slot.StatusList.RemoveAt(i);
-            CountStatusSystem.OnRemoved(inst, slot);
-            LogManager.Log(LogCategory.RemoveStatus, $"{statusID2} removed from {slot}");
-        }
+        slot?.RemoveStatus(statusID2);
     }
 
     void ExecuteRemoveStatus(SkillEffectData eff)
@@ -533,7 +507,7 @@ public partial class CharacterBattleController
         if (targets == null) return;
         foreach (var target in targets)
         {
-            bool removed = target.RemoveStatus(statusID2, eff.TargetNumber < 0 ? -1 : 1);
+            bool removed = target.RemoveStatus(statusID2, -1); // 目标数量不是移除层数，按效果定义清除同 ID 全部实例。
             if (removed)
                 LogManager.Log(LogCategory.RemoveStatus, $"{statusID2} removed from {target.EntityID}");
         }
@@ -717,7 +691,7 @@ public partial class CharacterBattleController
         {
             var rec = _ccRecords[i];
             if (rec.IsSkillEffect) continue; // 技能效果版由 OnTurnStart 计时
-            if (rec.SourceStatusID2 != inst.StatusID2) continue;
+            if (!ReferenceEquals(rec.SourceStatus, inst)) continue;
             if (RevertChangeControlRecord(rec))
                 _ccRecords.RemoveAt(i);
             changed = true;
@@ -743,6 +717,7 @@ public partial class CharacterBattleController
                 IsFreeze = true,
                 FrozenSkillTypes = btnTypes,
                 SourceStatusID2 = inst.StatusID2,
+                SourceStatus = inst,
             });
             LogManager.Log(LogCategory.ChangeControl, $"{inst.StatusID2} 冻结按钮 [{string.Join(",", btnTypes)}]");
             OnControlChanged?.Invoke();
@@ -782,6 +757,7 @@ public partial class CharacterBattleController
             OrigChargeSnapshot = origCharge,
             NewSkillID = newSkillID2,
             SourceStatusID2 = inst.StatusID2,
+            SourceStatus = inst,
         });
         LogManager.Log(LogCategory.ChangeControl, $"{inst.StatusID2} 替换: {originalID} -> {newSkillID2} (Param3={eff.Param3})");
         OnControlChanged?.Invoke();

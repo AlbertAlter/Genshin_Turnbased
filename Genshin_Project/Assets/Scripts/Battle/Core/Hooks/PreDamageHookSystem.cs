@@ -134,6 +134,10 @@ public static class PreDamageHookSystem
                 || entry.EventHookName != eventHookName)
                 continue;
             if (eventHookName == "PreSelfDamage" && !ReferenceEquals(entry.Host, host)) continue;
+            // 一次赋予多个宿主的 Allies 钩子仍共享声明；同一宿主上的再次施加是独立实例。
+            if (!entry.Instances.Contains(instance) && entry.Instances.Exists(existing =>
+                host is BattleEntity entity ? entity.HasStatusInstance(existing)
+                    : host is FieldPosition field && field.StatusList.Contains(existing))) continue;
             return entry;
         }
         return null;

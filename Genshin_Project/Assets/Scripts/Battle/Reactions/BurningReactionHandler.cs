@@ -173,6 +173,9 @@ public static class BurningReactionHandler
                 snapshot != null ? snapshot.BaseDMGBonusFlat : 0f,
                 resistance);
 
+        DMGTakenSnapshot taken = target.PrepareDMGTaken(
+            snapshot != null ? snapshot.SourceEffectID : string.Empty,
+            snapshot != null ? snapshot.SourceSkillID : string.Empty, "Reaction", "Pyro");
         ReactionResult result = ReactionResolver.Resolve(new ReactionContext
         {
             SourceEntity = snapshot != null ? snapshot.SourceEntity : null,
@@ -199,6 +202,8 @@ public static class BurningReactionHandler
                 Target = target,
                 DamageBeforeShield = result.FinalDamage,
                 Element = "Pyro",
+                DamageType = "Reaction",
+                DMGTaken = taken,
                 PoiseDamage = 0f,
                 // 燃烧保留触发者/阵营，但它是反应伤害，只产生 OnDamage。
                 Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Burning),

@@ -7,19 +7,16 @@ public partial class BattleEntity
     // ========== 状态操作 ==========
     public bool HasStatus(string statusID2)
     {
-        return StatusDict.ContainsKey(statusID2) && StatusDict[statusID2].IsActive;
+        return StatusDict.GetAll(statusID2).Exists(status => status.IsActive);
     }
 
     public StatusInstance AddStatus(string statusID2, BattleEntity caster, int initialPhaseCount)
     {
         if (StatusDict.TryGetValue(statusID2, out var existing))
         {
-            if (CountStatusSystem.IsCount(existing.MainData))
+            if (existing.MainData != null)
                 return AddStatus(statusID2, caster, initialPhaseCount, existing.AddInPhase,
                     existing.TriggerPhase, existing.MainData, existing.WeaponContext);
-            existing.StackCount++;
-            RefreshStatusSource(existing, caster, this);
-            return existing;
         }
         if (CountStatusSystem.IsRegistered(statusID2))
             throw new InvalidOperationException("新建 Count 状态必须使用携带主数据和来源上下文的完整 ApplyStatus 入口。");
@@ -34,7 +31,7 @@ public partial class BattleEntity
             ApplyOrder = ++_applyOrderCounter
         };
         inst.RecordSource(caster);
-        StatusDict[statusID2] = inst;
+        StatusDict.Add(inst);
         return inst;
     }
 
@@ -42,7 +39,8 @@ public partial class BattleEntity
 
     /// <summary>
     /// 添加状态（完整版）：支持 AddInPhase / TriggerPhase / Duration / MaxStack / WhenMax 规则。
-    ///  - MaxStack&lt;=0：可无限叠加，每次 StackCount+1
+    ///  - 每次普通施加新建实例，各自保留来源、计时、快照和行动次数，StackCount=1
+    ///  - MaxStack&lt;=0：不限同 ID 实例数量
     ///  - MaxStack&gt;0 且已满：WhenMax=="1" 时本次不施加；WhenMax!="1"（默认0）时移除最早施加的该状态再重新施加
     ///  - IsActive 置为 true，表示该状态已完成 OnApply（若有）
     /// </summary>
@@ -77,55 +75,15 @@ public partial class BattleEntity
                 RemoveStatus(status.StatusID2, -1);
         }
 
-        if (StatusDict.TryGetValue(statusID2, out var existing))
+        var existingInstances = StatusDict.GetAll(statusID2);
+        int maxStack = mainData != null ? mainData.MaxStack : 0;
+        if (maxStack > 0 && existingInstances.Count >= maxStack)
         {
-            // 已存在：按 MaxStack / WhenMax 规则处理
-            int maxStack = mainData != null ? mainData.MaxStack : 0;
-            if (maxStack > 0 && existing.StackCount >= maxStack)
-            {
-                if (mainData != null && mainData.WhenMax == "1")
-                {
-                    // 本次不施加
-                    return existing;
-                }
-                else
-                {
-                    // 移除最早施加的该状态，重新施加
-                    StatusBindingSystem.RemoveBindings(existing);
-                    // ChangeControl 解除（2026-08-11）：状态消失时返回原技能/解冻
-                    CharacterCtrl?.OnStatusChangeControlRemoved(existing);
-                    // 状态结算登记注销 + PreAlliesDamage 钩子注销（2026-08-14，逻辑见 PreDamageHookSystem.cs）
-                    BattleManager.Instance?.UnregisterStatusTick(existing);
-                    PreDamageHookSystem.UnregisterPreDamageHook(existing);
-                    // Kill 钩子注销（2026-08-19）：覆盖重建时旧实例不再参与死亡触发
-                    KillHookSystem.Unregister(existing);
-                    RemoveShieldOwnedByStatus(existing);
-                    StatusDict.Remove(statusID2);
-                    CountStatusSystem.OnRemoved(existing, this);
-                    existing = null;
-                }
-            }
-            else
-            {
-                existing.StackCount++;
-                // Duration<=0 只定义本次 ApplyStatus 为永久；同名状态的覆盖方式另行定义。
-                if (duration <= 0)
-                {
-                    existing.IsPermanent = true;
-                    existing.RemainingPhaseCount = 0;
-                }
-                else if (!existing.IsPermanent)
-                {
-                    // 有限状态仍沿用原刷新规则：取较长持续时间。
-                    existing.RemainingPhaseCount = Mathf.Max(existing.RemainingPhaseCount, duration);
-                }
-                existing.TriggerPhase = triggerPhase;
-                existing.MainData = mainData;
-                if (weaponContext != null) existing.WeaponContext = weaponContext;
-                RefreshStatusSource(existing, caster, this);
-                RefreshShieldOwnedByStatus(existing);
-                return existing;
-            }
+            if (mainData.WhenMax == "1") return existingInstances[0];
+            // 满额只替换最早的那一份，不能删掉整个同 ID 分组或刷新其他实例。
+            int removeCount = existingInstances.Count - maxStack + 1;
+            for (int index = 0; index < removeCount; index++)
+                RemoveStatusInstance(existingInstances[index]);
         }
 
         var inst = new StatusInstance
@@ -144,7 +102,7 @@ public partial class BattleEntity
         };
         inst.RecordSource(caster);
         CountStatusSystem.OnCreated(inst, this, application);
-        StatusDict[statusID2] = inst;
+        StatusDict.Add(inst);
 
         // ========== BindStatus 自动绑定（2026-08-06） ==========
         // 术语表原文："只要该效果来源的状态存在，其所定义的目标或场地位置就一直存在其 Param1 所填写的子状态"
@@ -160,6 +118,7 @@ public partial class BattleEntity
         // 术语：OnApply = 状态施加时立刻生效的效果，由状态施放者（角色控制器）执行
         if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
             inst.Caster.CharacterCtrl.OnStatusApplied(inst, this);
+        if (!HasStatusInstance(inst)) return inst;
 
         // ========== 状态结算登记（2026-08-12） ==========
         // 以状态为中心：按 AddInPhase/TriggerPhase 登记到 BattleManager 的阶段桶，
@@ -178,63 +137,59 @@ public partial class BattleEntity
     }
 
     /// <summary>
-    /// 同一状态被新的实体刷新/叠加时，运行时归属转给最后一次施加者。
-    /// 事件钩子登记包含来源实体，因此来源变化前后必须同步重建登记。
-    /// </summary>
-    private static void RefreshStatusSource(StatusInstance status, BattleEntity source, object host)
-    {
-        if (status == null || source == null) return;
-        if (status.HasSourceEntity
-            && status.SourceEntityID == source.EntityID
-            && status.SourceSide == source.Side
-            && status.Caster == source)
-            return;
-
-        PreDamageHookSystem.UnregisterPreDamageHook(status);
-        KillHookSystem.Unregister(status);
-        status.RecordSource(source);
-        if (status.IsActive)
-        {
-            PreDamageHookSystem.RegisterPreDamageHook(status, host);
-            KillHookSystem.Register(status, host);
-        }
-    }
-
-    /// <summary>
     /// 移除指定状态（支持移除指定层数，-1=全部移除）。
     /// 若该状态有 BindStatus 绑定关系，移除时连带移除所有子状态（2026-08-06）。
     /// 返回是否真的发生了移除（false=该状态不存在或未实际移除）。
     /// </summary>
     public bool RemoveStatus(string statusID2, int stackCount = -1)
     {
-        if (!StatusDict.TryGetValue(statusID2, out var existing)) return false;
-        if (stackCount < 0 || existing.StackCount <= stackCount)
+        if (stackCount == 0) return false;
+        bool removed = false;
+        foreach (StatusInstance status in StatusDict.GetAll(statusID2))
         {
-            // 连带移除绑定子状态（按子状态真实宿主查找，不再误用 Caster）。
-            StatusBindingSystem.RemoveBindings(existing);
-            // ChangeControl 解除（2026-08-11）：状态消失（移除/到期统一走这里）时返回原技能/解冻
-            CharacterCtrl?.OnStatusChangeControlRemoved(existing);
-            // 状态结算登记注销（2026-08-12）
-            BattleManager.Instance?.UnregisterStatusTick(existing);
-            // PreAlliesDamage 钩子注销（2026-08-14，逻辑见 PreDamageHookSystem.cs）
-            PreDamageHookSystem.UnregisterPreDamageHook(existing);
-            // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
-            KillHookSystem.Unregister(existing);
-            RemoveShieldOwnedByStatus(existing);
-            StatusDict.Remove(statusID2);
-            CountStatusSystem.OnRemoved(existing, this);
-            if (CountStatusSystem.IsCount(existing.MainData)) existing.IsActive = false;
-            return true;
+            if (stackCount == 0) break;
+            int layers = Math.Max(1, status.StackCount);
+            if (stackCount > 0 && stackCount < layers && !CountStatusSystem.IsCount(status.MainData))
+            {
+                status.StackCount -= stackCount; // 兼容旧脚本构造的聚合层数，不用于新 ApplyStatus。
+                return true;
+            }
+            removed |= RemoveStatusInstance(status);
+            if (stackCount > 0) stackCount = Math.Max(0, stackCount - layers);
         }
-        else
-        {
-            existing.StackCount -= stackCount;
-            return true;
-        }
+        return removed;
+    }
+
+    /// <summary>只移除这一份实例；到期、绑定清理、满层替换必须用此入口。</summary>
+    public bool RemoveStatusInstance(StatusInstance status)
+    {
+        if (!StatusDict.Remove(status)) return false;
+        status.IsActive = false; // 先失效，已收集的旧实例响应不能作用于其他同 ID 实例。
+        StatusBindingSystem.RemoveBindings(status);
+        CharacterCtrl?.OnStatusChangeControlRemoved(status);
+        BattleManager.Instance?.UnregisterStatusTick(status);
+        PreDamageHookSystem.UnregisterPreDamageHook(status);
+        KillHookSystem.Unregister(status);
+        RemoveShieldOwnedByStatus(status);
+        CountStatusSystem.OnRemoved(status, this);
+        return true;
+    }
+
+    public bool HasStatusInstance(StatusInstance status) => StatusDict.Contains(status);
+
+    public List<StatusInstance> GetStatusInstances(string statusID2) => StatusDict.GetAll(statusID2);
+
+    public int GetStatusStackCount(string statusID2)
+    {
+        int total = 0;
+        foreach (StatusInstance status in GetStatusInstances(statusID2))
+            if (status.IsActive) total += Math.Max(1, status.StackCount);
+        return total;
     }
 
     /// <summary>
-    /// 查询指定状态剩余回合数（未施加或永久状态返回 0；永久性读取 StatusInstance.IsPermanent）。
+    /// 查询指定 ID 最早一份的剩余回合数；逐份时间请读 GetStatusInstances。
+    /// 未施加返回0，永久性读取 StatusInstance.IsPermanent。
     /// </summary>
     public int GetStatusRemainingPhase(string statusID2)
     {
@@ -246,7 +201,9 @@ public partial class BattleEntity
     /// </summary>
     public List<StatusInstance> GetStatusList()
     {
-        return new List<StatusInstance>(StatusDict.Values);
+        var list = new List<StatusInstance>(StatusDict.Values);
+        list.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
+        return list;
     }
 
     /// <summary>
@@ -255,16 +212,17 @@ public partial class BattleEntity
     /// </summary>
     public List<StatusInstance> GetEffectiveStatusList()
     {
-        var list = new List<StatusInstance>(StatusDict.Values);
+        var list = GetStatusList();
         if (Position != null && Position.StatusList != null)
         {
             foreach (var s in Position.StatusList)
             {
                 // 避免重复（同一状态同时挂在实体和位置时去重）
-                if (!list.Exists(x => x.StatusID2 == s.StatusID2))
+                if (s != null && !list.Contains(s))
                     list.Add(s);
             }
         }
+        list.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
         return list;
     }
 
@@ -279,6 +237,7 @@ public partial class BattleEntity
             : element;
 
         float total = 0f;
+        var used = new Dictionary<string, int>();
         foreach (StatusInstance instance in GetEffectiveStatusList())
         {
             StatusMainData mainData = instance != null ? instance.MainData : null;
@@ -291,8 +250,8 @@ public partial class BattleEntity
                     0,
                     configuredElement)) continue;
 
-            int count = Mathf.Max(1, instance.StackCount);
-            if (mainData.MaxCount > 0) count = Mathf.Min(count, mainData.MaxCount);
+            int count = StatusAggregation.Take(instance, used);
+            if (count == 0) continue;
             foreach (StatusEffectData effect in dataManager.StatusEffectDict.Values)
             {
                 if (effect == null || effect.StatusEffectID == 0) continue;
@@ -312,20 +271,24 @@ public partial class BattleEntity
     public float GetStatusATKBonus(string effectID2, string skillID2, int skillType, string element)
     {
         float total = 0f;
+        var used = new Dictionary<string, int>();
         foreach (var inst in GetEffectiveStatusList())
         {
             if (inst.MainData == null) continue;
             string part = inst.MainData.GetMultiplierPart();
             if (part != "ATKBonus") continue;
             if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, null)) continue;
+            int count = StatusAggregation.Take(inst, used);
+            if (count == 0) continue;
             foreach (var kv in DataManager.Instance.StatusEffectDict)
             {
                 // 效果ID数值前缀匹配：StatusEffectID / 100 == 父状态 StatusID
                 var eff = kv.Value;
                 if (eff.StatusEffectID == 0) continue;
                 if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
+                if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
                 if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
-                    total += v;
+                    total += v * count;
             }
         }
         return total;
@@ -348,19 +311,23 @@ public partial class BattleEntity
     public float GetStatusCritRate(string effectID2, string skillID2, int skillType, string element, BattleEntity target)
     {
         float total = 0f;
+        var used = new Dictionary<string, int>();
         foreach (var inst in GetEffectiveStatusList())
         {
             if (inst.MainData == null) continue;
             string part = inst.MainData.GetMultiplierPart();
             if (part != "CritRate") continue;
             if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
+            int count = StatusAggregation.Take(inst, used);
+            if (count == 0) continue;
             foreach (var kv in DataManager.Instance.StatusEffectDict)
             {
                 var eff = kv.Value;
                 if (eff.StatusEffectID == 0) continue;
                 if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
+                if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
                 if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
-                    total += v;
+                    total += v * count;
             }
         }
         return total;
@@ -372,15 +339,18 @@ public partial class BattleEntity
         float total = 0f;
         var dm = DataManager.Instance;
         if (dm == null) return total;
+        var used = new Dictionary<string, int>();
         foreach (var inst in GetEffectiveStatusList())
         {
             if (inst?.MainData == null || inst.MainData.GetMultiplierPart() != "DMGBonus") continue;
             if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
+            int count = StatusAggregation.Take(inst, used);
+            if (count == 0) continue;
             foreach (var eff in dm.StatusEffectDict.Values)
             {
                 if (eff == null || eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
                 if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float value)) total += value;
+                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float value)) total += value * count;
             }
         }
         return total;
@@ -392,12 +362,13 @@ public partial class BattleEntity
         var dm = DataManager.Instance;
         if (dm == null) return 0f;
         float total = 0f;
+        var used = new Dictionary<string, int>();
         foreach (var inst in GetEffectiveStatusList())
         {
             if (inst?.MainData == null || !inst.IsActive || inst.MainData.GetMultiplierPart() != part) continue;
             if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
-            int count = Mathf.Max(1, inst.StackCount);
-            if (inst.MainData.MaxCount > 0) count = Mathf.Min(count, inst.MainData.MaxCount);
+            int count = StatusAggregation.Take(inst, used);
+            if (count == 0) continue;
             foreach (var effect in dm.StatusEffectDict.Values)
             {
                 if (effect == null || effect.StatusEffectID / 100 != inst.MainData.StatusID
@@ -424,7 +395,7 @@ public partial class BattleEntity
     /// </summary>
     static bool StatusAppliesTo(StatusInstance status, string effectID2, string skillID2, int skillType, string element, BattleEntity target)
     {
-        if (status == null || status.MainData == null) return false;
+        if (status == null || !status.IsActive || status.MainData == null) return false;
         if (!StatusAppliesTo(status.MainData, effectID2, skillID2, skillType, element)) return false;
         if (!string.IsNullOrEmpty(status.MainData.ScriptHook))
         {
@@ -490,7 +461,7 @@ public partial class BattleEntity
     }
 
     /// <summary>
-    /// 获取指定状态实例（不存在返回 null）。
+    /// 获取指定 ID 最早的一份实例（不存在返回 null）；所有实例用 GetStatusInstances。
     /// </summary>
     public StatusInstance GetStatus(string statusID2)
     {

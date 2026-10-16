@@ -91,9 +91,7 @@ public static class LisaScriptHooks
 
     public static int GetConductiveStacks(BattleEntity target)
     {
-        if (target == null || !target.StatusDict.TryGetValue(ConductiveID, out StatusInstance status)
-            || !status.IsActive) return 0;
-        return Math.Max(0, Math.Min(3, status.StackCount));
+        return target == null ? 0 : Math.Max(0, Math.Min(3, target.GetStatusStackCount(ConductiveID)));
     }
 
     public static int CapC1Count(int hitTargetCount)

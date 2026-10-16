@@ -41,9 +41,10 @@ public static class StatusBindingSystem
         }
     }
 
-    private static void ApplyBindings(StatusInstance parent, object host, HashSet<string> ancestry)
+    internal static void ApplyBindings(StatusInstance parent, object host, HashSet<string> ancestry)
     {
         if (parent == null || parent.MainData == null) return;
+        if (ancestry == null) ancestry = new HashSet<string>();
         if (!ancestry.Add(parent.StatusID2))
         {
             LogManager.LogWarning(LogCategory.Bind, $"BindStatus 检测到循环状态: {parent.StatusID2}");
@@ -132,14 +133,17 @@ public static class StatusBindingSystem
         foreach (var target in BattleTargetResolver.GetEntities(BattleManager.Instance, result))
         {
             if (target == null || !seen.Add(target)) continue;
+            var previous = target.GetStatusInstances(effect.Param1);
             var child = target.AddStatus(
                 effect.Param1,
                 parent.Caster,
-                parent.RemainingPhaseCount,
-                effect.AddInPhase,
+                parent.IsPermanent ? 0 : parent.RemainingPhaseCount,
+                effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
                 effect.TriggerPhase,
-                childMain);
-            if (child != null && !parent.BoundStatuses.Contains(child))
+                childMain, parent.WeaponContext, effect.Param2);
+            // WhenMax=1 拒绝施加时返回旧实例，它不属于本次父状态，不能抢走清理权。
+            if (child != null && !previous.Contains(child) && target.HasStatusInstance(child)
+                && !parent.BoundStatuses.Contains(child))
                 parent.BoundStatuses.Add(child);
         }
     }
@@ -155,33 +159,14 @@ public static class StatusBindingSystem
         foreach (var field in BattleTargetResolver.GetFields(BattleManager.Instance, result))
         {
             if (field == null || !seen.Add(field)) continue;
-            if (field.StatusList.Exists(status => status != null && status.StatusID2 == effect.Param1))
-                continue;
-
-            var child = new StatusInstance
-            {
-                StatusID2 = effect.Param1,
-                StackCount = 1,
-                RemainingPhaseCount = parent.RemainingPhaseCount,
-                IsPermanent = parent.IsPermanent,
-                AddInPhase = effect.AddInPhase,
-                TriggerPhase = effect.TriggerPhase,
-                MainData = childMain,
-                IsActive = true,
-                ApplyOrder = ++BattleEntity._applyOrderCounter
-            };
-            child.RecordSource(parent.Caster);
-            CountStatusSystem.OnCreated(child, field);
-            field.StatusList.Add(child);
-            parent.BoundStatuses.Add(child);
-
-            ApplyBindings(child, field, ancestry);
-            if (child.Caster != null && child.Caster.CharacterCtrl != null)
-                child.Caster.CharacterCtrl.OnStatusApplied(child, field);
-            BattleManager.Instance.RegisterStatusTick(child, null, field);
-            PreDamageHookSystem.RegisterPreDamageHook(child, field);
-            // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
-            KillHookSystem.Register(child, field);
+            var previous = new List<StatusInstance>(field.StatusList);
+            var child = field.AddStatus(effect.Param1, parent.Caster,
+                parent.IsPermanent ? 0 : parent.RemainingPhaseCount,
+                effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
+                effect.TriggerPhase, childMain, parent.WeaponContext,
+                effect.Param2, ancestry);
+            if (child != null && !previous.Contains(child) && field.StatusList.Contains(child))
+                parent.BoundStatuses.Add(child);
         }
     }
 
@@ -189,13 +174,13 @@ public static class StatusBindingSystem
     {
         foreach (var ally in battle.Allies)
         {
-            if (ally != null && ally.Entity != null && ally.Entity.GetStatus(child.StatusID2) == child)
-                return ally.Entity.RemoveStatus(child.StatusID2, -1);
+            if (ally != null && ally.Entity != null && ally.Entity.HasStatusInstance(child))
+                return ally.Entity.RemoveStatusInstance(child);
         }
         foreach (var enemy in battle.Enemies)
         {
-            if (enemy != null && enemy.Entity != null && enemy.Entity.GetStatus(child.StatusID2) == child)
-                return enemy.Entity.RemoveStatus(child.StatusID2, -1);
+            if (enemy != null && enemy.Entity != null && enemy.Entity.HasStatusInstance(child))
+                return enemy.Entity.RemoveStatusInstance(child);
         }
         return false;
     }
@@ -208,14 +193,7 @@ public static class StatusBindingSystem
             var fields = side == BattleSide.Ally ? battle.Field.AllySlots : battle.Field.EnemySlots;
             foreach (var field in fields)
             {
-                if (field == null || !field.StatusList.Remove(child)) continue;
-                CountStatusSystem.OnRemoved(child, field);
-                RemoveBindings(child);
-                battle.UnregisterStatusTick(child);
-                PreDamageHookSystem.UnregisterPreDamageHook(child);
-                // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
-                KillHookSystem.Unregister(child);
-                return true;
+                if (field != null && field.RemoveStatusInstance(child)) return true;
             }
         }
         return false;

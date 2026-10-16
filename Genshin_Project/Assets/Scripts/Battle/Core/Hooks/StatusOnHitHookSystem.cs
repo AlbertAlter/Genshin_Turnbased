@@ -248,8 +248,8 @@ public static class StatusOnHitHookSystem
         foreach (StatusInstance status in change.Target.GetEffectiveStatusList())
         {
             if (!CanExecute(status) || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) continue;
-            object host = change.Target.StatusDict.TryGetValue(status.StatusID2, out var current)
-                && ReferenceEquals(current, status) ? (object)change.Target : change.Target.Position;
+            object host = change.Target.HasStatusInstance(status)
+                ? (object)change.Target : change.Target.Position;
             foreach (StatusActionData action in actions)
             {
                 if (action.ActionType != "OnTrigger"
@@ -308,8 +308,7 @@ public static class StatusOnHitHookSystem
     {
         if (status == null || host == null) return false;
         if (host is BattleEntity entity)
-            return entity.StatusDict.TryGetValue(status.StatusID2, out StatusInstance current)
-                && ReferenceEquals(current, status);
+            return entity.HasStatusInstance(status);
         if (host is FieldPosition field)
             return field.StatusList != null && field.StatusList.Contains(status);
         return true;

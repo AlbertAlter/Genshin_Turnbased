@@ -45,7 +45,7 @@ public class Shield
 public class StatusInstance
 {
     public string StatusID2;                        // 对应 StatusMainData.StatusID2
-    public int StackCount;                          // 当前层数
+    public int StackCount;                          // 普通状态每份实例固定1；兼容旧脚本数据，Count点数不放这里
     public int RemainingPhaseCount;                 // 剩余持续回合数（按 Phase 结算）
     public bool IsPermanent;                        // ApplyStatus 的 Duration 留空或为0时为 true，不自动扣减/到期
     public int AddInPhase;                          // 该状态所在的计时器阶段集合（1-6）

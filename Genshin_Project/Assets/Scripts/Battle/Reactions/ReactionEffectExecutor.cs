@@ -64,6 +64,7 @@ public static class ReactionEffectExecutor
                     Target = hit.Target,
                     DamageBeforeShield = hit.Damage,
                     Element = hit.DamageElement,
+                    DamageType = "Reaction",
                     // 派生反应是否削韧由 handler 产生的数值决定，与 CountsAsHit 无关。
                     PoiseDamage = hit.PoiseDamage,
                     Source = source,

@@ -69,7 +69,16 @@ public partial class BattleEntity : MonoBehaviour
     // ========== 充能（公式 1.12） ==========
     public float TotalRechargeRate;
     public int MaxEnergy;
-    public int CurrentEnergy;
+    [SerializeField, Min(0), UnityEngine.Serialization.FormerlySerializedAs("CurrentEnergy")]
+    private int _currentEnergy;
+
+    /// <summary>能量下限属于实体自身约束，所有赋值、充能和扣能统一最低为0。</summary>
+    public int CurrentEnergy
+    {
+        // 兼容旧场景或存量序列化数据中可能已经存在的负值。
+        get => Math.Max(0, _currentEnergy);
+        set => _currentEnergy = Math.Max(0, value);
+    }
 
     // ========== 伤害加成类（公式 1.8 DMGBonus） ==========
     public float BaseDMGBonusFlat;
@@ -125,7 +134,7 @@ public partial class BattleEntity : MonoBehaviour
     public List<ElementalAura> ElementalAuras = new List<ElementalAura>();
 
     // ========== 状态 ==========
-    public Dictionary<string, StatusInstance> StatusDict = new Dictionary<string, StatusInstance>();
+    public StatusInstanceCollection StatusDict = new StatusInstanceCollection();
 
     // 场地位置引用：该单位当前占据的格子（可能为null=不在场上）
     public FieldPosition Position;

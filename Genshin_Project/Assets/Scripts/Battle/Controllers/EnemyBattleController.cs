@@ -294,27 +294,8 @@ public partial class EnemyBattleController : MonoBehaviour
         {
             foreach (var field in ResolveEnemyTargetFields(eff))
             {
-                var inst = new StatusInstance
-                {
-                    StatusID2 = statusID2,
-                    RemainingPhaseCount = eff.Duration,
-                    IsPermanent = eff.Duration <= 0,
-                    AddInPhase = addPhase,
-                    TriggerPhase = eff.TriggerPhase,
-                    MainData = statusMain,
-                    IsActive = true,
-                    ApplyOrder = ++BattleEntity._applyOrderCounter
-                };
-                inst.RecordSource(Entity);
-                CountStatusSystem.OnCreated(inst, field);
-                field.StatusList.Add(inst);
-                StatusBindingSystem.ApplyBindings(inst, field);
-                if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
-                    inst.Caster.CharacterCtrl.OnStatusApplied(inst, field);
-                BattleManager.Instance.RegisterStatusTick(inst, null, field);
-                PreDamageHookSystem.RegisterPreDamageHook(inst, field);
-                // Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs）
-                KillHookSystem.Register(inst, field);
+                field.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase,
+                    statusMain, null, eff.Param2);
                 LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {field} (dur={eff.Duration}, phase={addPhase})");
             }
             return;
@@ -355,9 +336,12 @@ public partial class EnemyBattleController : MonoBehaviour
         var allStatuses = Entity.GetEffectiveStatusList();
         if (LogManager.IsEnabled(LogCategory.DmgBonus))
             LogManager.Log(LogCategory.DmgBonus, $"{Entity.EntityID} 行动前身上状态数={allStatuses.Count}");
+        var used = new Dictionary<string, int>();
         foreach (var inst in allStatuses)
         {
-            dmgBonus += GetStatusDMGBonus(inst);
+            if (inst?.MainData == null || inst.MainData.GetMultiplierPart() != "DMGBonus") continue;
+            int count = StatusAggregation.Take(inst, used);
+            if (count > 0) dmgBonus += GetStatusDMGBonus(inst) * count;
         }
         float dmgBonusFactor = 1f + dmgBonus;
         if (dmgBonusFactor < 0f) dmgBonusFactor = 0f;
@@ -391,6 +375,8 @@ public partial class EnemyBattleController : MonoBehaviour
                         float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
                         if (defRes < 0f) defRes = 0f;
                         float damage = baseDmg * dmgBonusFactor * resFactor * defRes;
+                        DMGTakenSnapshot taken = target.PrepareDMGTaken(
+                            eff.SkillEffectID2, _currentSkillID2, eff.DamageType, eff.Element);
                         ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
                         {
                             SourceEntity = Entity,
@@ -419,6 +405,8 @@ public partial class EnemyBattleController : MonoBehaviour
                             Target = target,
                             DamageBeforeShield = reaction.FinalDamage,
                             Element = eff.Element,
+                            DamageType = eff.DamageType,
+                            DMGTaken = taken,
                             PoiseDamage = hit.Poise,
                             Source = DamageSourceInfo.Create(
                                 Entity,
@@ -474,6 +462,7 @@ public partial class EnemyBattleController : MonoBehaviour
         List<BattleEntity> targets, float baseDmg, float dmgBonusFactor, long effectExecutionID)
     {
         var contexts = new List<ReactionContext>();
+        var takenSnapshots = new List<DMGTakenSnapshot>();
         foreach (BattleEntity target in targets)
         {
             if (target == null || !target.IsAlive) continue;
@@ -484,6 +473,8 @@ public partial class EnemyBattleController : MonoBehaviour
             float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
             if (defRes < 0f) defRes = 0f;
             float damage = baseDmg * dmgBonusFactor * resFactor * defRes;
+            takenSnapshots.Add(target.PrepareDMGTaken(
+                eff.SkillEffectID2, _currentSkillID2, eff.DamageType, "Anemo"));
             contexts.Add(new ReactionContext
             {
                 SourceEntity = Entity, Target = target, SourceKind = ReactionSourceKind.EnemySkill,
@@ -516,6 +507,8 @@ public partial class EnemyBattleController : MonoBehaviour
                     Target = contexts[index].Target,
                     DamageBeforeShield = primaryReactions[index].FinalDamage,
                     Element = "Anemo",
+                    DamageType = eff.DamageType,
+                    DMGTaken = takenSnapshots[index],
                     PoiseDamage = hit.Poise,
                     Source = DamageSourceInfo.Create(Entity,
                         ReactionSourceKind.EnemySkill, _currentSkillID2,

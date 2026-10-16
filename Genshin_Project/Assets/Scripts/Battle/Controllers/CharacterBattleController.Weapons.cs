@@ -56,7 +56,7 @@ public partial class CharacterBattleController
         {
             if (status?.WeaponContext == null) continue;
             if (status.WeaponContext.SourceInstanceID == sourceInstanceID)
-                Entity.RemoveStatus(status.StatusID2, -1);
+                Entity.RemoveStatusInstance(status);
         }
         WeaponPanel panel = DataManager.Instance?.GetWeaponPanel(
             EquippedWeapon.WeaponID, EquippedWeapon.Level, EquippedWeapon.Ascension);

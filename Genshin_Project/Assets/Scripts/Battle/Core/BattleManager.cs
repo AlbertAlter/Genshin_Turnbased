@@ -782,6 +782,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!_triggerByPhase.TryGetValue((int)phase, out var list) || list.Count == 0) yield break;
         var scheduled = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>(list);
+        scheduled.Sort((left, right) => left.inst.ApplyOrder.CompareTo(right.inst.ApplyOrder));
         foreach (var item in scheduled)
         {
             if (!IsStatusStillAttached(item.inst, item.entity, item.slot)) continue;
@@ -842,6 +843,7 @@ public class BattleManager : MonoBehaviour
         // 本阶段统一 -1 回合 + OnItsTurn（严格按大顺序），收集到期
         var expired = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>();
         var scheduled = new List<(StatusInstance inst, BattleEntity entity, FieldPosition slot)>(list);
+        scheduled.Sort((left, right) => left.inst.ApplyOrder.CompareTo(right.inst.ApplyOrder));
         foreach (var item in scheduled)
         {
             if (!IsStatusStillAttached(item.inst, item.entity, item.slot)) continue;
@@ -876,7 +878,7 @@ public class BattleManager : MonoBehaviour
                     yield return item.inst.Caster.CharacterCtrl.ExecuteStatusActionsAsync(item.inst, actions, item.entity, "OnEnd");
                 if (!IsStatusStillAttached(item.inst, item.entity, item.slot)
                     || item.inst.IsPermanent || item.inst.RemainingPhaseCount > 0) continue;
-                item.entity.RemoveStatus(item.inst.StatusID2); // RemoveStatus 内部会注销
+                item.entity.RemoveStatusInstance(item.inst); // 只移除到期这一份，不能清空同 ID 其他实例。
                 removedNames.Add(item.inst.StatusID2);
             }
             else if (item.slot != null)
@@ -889,19 +891,8 @@ public class BattleManager : MonoBehaviour
                 if (!IsStatusStillAttached(item.inst, item.entity, item.slot)
                     || item.inst.IsPermanent || item.inst.RemainingPhaseCount > 0) continue;
 
-                // 父状态移除 → 按子状态真实宿主连带移除 BindStatus 子状态。
-                StatusBindingSystem.RemoveBindings(item.inst);
-
-                // 位置状态到期：解除其 ChangeControl 记录（2026-08-12 补）
-                if (item.inst.Caster != null && item.inst.Caster.CharacterCtrl != null)
-                    item.inst.Caster.CharacterCtrl.OnStatusChangeControlRemoved(item.inst);
-
-                item.slot.StatusList.Remove(item.inst);
-                CountStatusSystem.OnRemoved(item.inst, item.slot);
+                item.slot.RemoveStatusInstance(item.inst);
                 removedNames.Add(item.inst.StatusID2);
-                PreDamageHookSystem.UnregisterPreDamageHook(item.inst);
-                // Kill 钩子注销（2026-08-19，逻辑见 KillHookSystem.cs）
-                KillHookSystem.Unregister(item.inst);
             }
             UnregisterStatusTick(item.inst); // 幂等：实体走 RemoveStatus 已注销，位置手动注销
         }
@@ -912,7 +903,7 @@ public class BattleManager : MonoBehaviour
     private static bool IsStatusStillAttached(StatusInstance inst, BattleEntity entity, FieldPosition slot)
     {
         if (inst == null) return false;
-        if (entity != null) return entity.GetStatus(inst.StatusID2) == inst;
+        if (entity != null) return entity.HasStatusInstance(inst);
         return slot != null && slot.StatusList != null && slot.StatusList.Contains(inst);
     }
 

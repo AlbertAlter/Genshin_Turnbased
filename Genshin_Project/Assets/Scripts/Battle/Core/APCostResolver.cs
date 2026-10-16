@@ -54,11 +54,12 @@ public static class APCostResolver
         var data = DataManager.Instance;
         if (actor == null || data == null || string.IsNullOrEmpty(operation)) return 0;
         long total = 0;
+        var used = new System.Collections.Generic.Dictionary<string, int>();
         foreach (var status in actor.GetEffectiveStatusList())
         {
             if (status == null || !status.IsActive || status.MainData == null) continue;
-            int count = Math.Max(1, status.StackCount);
-            if (status.MainData.MaxCount > 0) count = Math.Min(count, status.MainData.MaxCount);
+            int count = StatusAggregation.Take(status, used);
+            if (count == 0) continue;
             foreach (var effect in data.StatusEffectDict.Values)
             {
                 if (effect == null || effect.EffectType != "APCost" || effect.StatusEffectID == 0

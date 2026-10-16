@@ -177,10 +177,10 @@ public partial class BattleEntity
         if (shield.Value > 0f) return applied;
 
         broken = true;
-        if (StatusDict.TryGetValue(shield.SourceStatusID2 ?? string.Empty, out StatusInstance owner)
-            && IsShieldOwnedByStatus(shield, owner))
+        StatusInstance owner = shield.SourceStatus;
+        if (HasStatusInstance(owner) && IsShieldOwnedByStatus(shield, owner))
         {
-            RemoveStatus(owner.StatusID2, -1);
+            RemoveStatusInstance(owner);
         }
         else
         {
@@ -201,7 +201,7 @@ public partial class BattleEntity
                     owners.Add(owner);
             }
             foreach (StatusInstance owner in owners)
-                RemoveStatus(owner.StatusID2, -1);
+                RemoveStatusInstance(owner);
         }
         Shields.RemoveAll(shield => shield == null || shield.Kind == kind);
     }

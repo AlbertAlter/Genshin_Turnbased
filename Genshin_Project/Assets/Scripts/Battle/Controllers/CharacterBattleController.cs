@@ -54,7 +54,7 @@ public List<int> ForcedTargetPositions = new List<int>();
     private string _currentExecutingSkillID2;
     private bool _currentExecutingSkillIsActiveAction;
     // ChangeControl 记录：
-    // 状态效果表挂载 = 跟状态走（状态消失时解除，SourceStatusID2 匹配）；
+    // 状态效果表挂载 = 跟状态实例走（状态消失时按 SourceStatus 引用匹配）；
     // 技能效果表挂载 = Duration 计时（填了 Duration 定时解除；没填 = 永久，不记录）
     private List<ControlChangeRecord> _ccRecords = new List<ControlChangeRecord>();
 
@@ -261,7 +261,7 @@ public List<int> ForcedTargetPositions = new List<int>();
 
 /// <summary>
 /// ChangeControl 记录：
-/// 状态效果表挂载（IsSkillEffect=false）：状态施加时创建，状态消失时解除（SourceStatusID2 匹配）。
+/// 状态效果表挂载（IsSkillEffect=false）：状态施加时创建，状态消失时按 SourceStatus 实例解除。
 /// 技能效果表挂载（IsSkillEffect=true）：执行时创建，填了 Duration 由 OnTurnStart 递减计时；
 /// 没填 Duration（IsPermanent=true）视为永久（替换型不记录，冻结型记录但不解除）。
 /// 替换型解除时：按钮返回 OriginalSkillID，冷却/次数写回快照；
@@ -278,6 +278,7 @@ public class ControlChangeRecord
     public int OrigChargeSnapshot;      // 替换型：被换下技能的次数快照
     public string NewSkillID;           // 替换型：换上的技能（=效果行 Param2）
     public string SourceStatusID2;      // 状态驱动：来源状态（状态消失时解除）
+    public StatusInstance SourceStatus; // 同ID独立实例不能共用解除记录；ID仅供日志
     public bool IsSkillEffect;          // true=技能效果表挂载（OnTurnStart 计时）
     public bool IsPermanent;            // 技能效果版且未填 Duration：永久（不解除）
     public int RemainingTurns;          // 技能效果版：剩余回合（由效果 Duration 决定）

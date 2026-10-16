@@ -95,6 +95,7 @@ public partial class CharacterBattleController
         bool countTurnHandled = false;
         foreach (var act in actions)
         {
+            if (inst == null || !inst.IsActive) break;
             if (act.ActionType != actionType) continue;
             // 事件驱动钩子行（ScriptHook=PreAlliesDamage / Kill(...)）：不参与普通触发（阶段/回合等），由各自钩子机制单独触发（2026-08-19）
             if (ScriptHookEvaluator.IsEventDriven(act.ScriptHook)) continue;
@@ -106,6 +107,7 @@ public partial class CharacterBattleController
             await BattleExecution.Play(new BattlePresentationRequest(
                 BattlePresentationKind.Status, inst?.Caster, act.Param1, statusID: inst?.StatusID2), () =>
             {
+                if (!inst.IsActive) return;
                 // Count 在自己的首条有效 OnItsTurn 行动处结算一次，不增加阶段。
                 if (actionType == "OnItsTurn" && !countTurnHandled)
                 {
@@ -349,6 +351,8 @@ public partial class CharacterBattleController
                             stSkillType,
                             out ReactionDamageComponents damageComponents,
                             countPlan.BaseDamageBonus);
+                        DMGTakenSnapshot taken = target.PrepareDMGTaken(
+                            statusEff.StatusEffectID2, string.Empty, statusEff.DamageType, statusEff.Element);
                         ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
                         {
                             SourceEntity = sourceStatus != null && sourceStatus.Caster != null
@@ -384,6 +388,8 @@ public partial class CharacterBattleController
                             Target = target,
                             DamageBeforeShield = critical.DamageAfterCritical,
                             Element = statusEff.Element,
+                            DamageType = statusEff.DamageType,
+                            DMGTaken = taken,
                             PoiseDamage = hit.Poise,
                             Source = CreateStatusDamageSource(
                                 sourceStatus,
@@ -449,6 +455,15 @@ public partial class CharacterBattleController
                 if (dm == null || !dm.StatusMainDict.TryGetValue(appliedStatusID, out var main))
                 {
                     LogManager.LogWarning(LogCategory.ApplyStatus, $"状态不存在: {statusEff.Param1}");
+                    break;
+                }
+                if (!string.IsNullOrEmpty(statusEff.TargetType)
+                    && statusEff.TargetType.EndsWith("Field", StringComparison.Ordinal))
+                {
+                    foreach (var field in ResolveStatusTargetFields(statusEff, sourceStatus, host))
+                        field.AddStatus(appliedStatusID, sourceStatus?.Caster ?? Entity,
+                            statusEff.Duration, statusEff.AddInPhase, statusEff.TriggerPhase,
+                            main, sourceStatus?.WeaponContext, statusEff.Param2);
                     break;
                 }
                 var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
@@ -649,10 +664,11 @@ public partial class CharacterBattleController
 
             if (host is BattleEntity entity)
             {
-                var inst = entity.GetStatus(tid);
-                if (inst == null) continue; // 找不到静默跳过（C6状态下 ST_Burst_Kaeya 不存在）
-                StatusBindingSystem.ExtendDuration(inst, add);
-                LogManager.Log(LogCategory.AddTurn, $"{tid} +{add}t -> {inst.RemainingPhaseCount}");
+                foreach (var inst in entity.GetStatusInstances(tid))
+                {
+                    StatusBindingSystem.ExtendDuration(inst, add);
+                    LogManager.Log(LogCategory.AddTurn, $"{tid} +{add}t -> {inst.RemainingPhaseCount}");
+                }
             }
             else if (host is FieldPosition slot)
             {
@@ -662,7 +678,6 @@ public partial class CharacterBattleController
                     {
                         StatusBindingSystem.ExtendDuration(inst, add);
                         LogManager.Log(LogCategory.AddTurn, $"{tid} +{add}t -> {inst.RemainingPhaseCount} ({slot})");
-                        break;
                     }
                 }
             }
@@ -754,6 +769,7 @@ public partial class CharacterBattleController
                 HitData hit = hits[hitIndex];
                 var contexts = new List<ReactionContext>();
                 var countPlans = new List<CountDamagePlan>();
+                var takenSnapshots = new List<DMGTakenSnapshot>();
                 foreach (BattleEntity target in targets)
                 {
                     if (target == null || !target.IsAlive) continue;
@@ -767,6 +783,8 @@ public partial class CharacterBattleController
                         HitIndex = hitIndex + 1, TargetIndex = contexts.Count + 1
                     });
                     countPlans.Add(countPlan);
+                    takenSnapshots.Add(target.PrepareDMGTaken(
+                        statusEff.StatusEffectID2, string.Empty, statusEff.DamageType, "Anemo"));
                     float damage = CalculateStatusDamage(hitBaseValue, hit, statusEff, target, skillType,
                         out ReactionDamageComponents components, countPlan.BaseDamageBonus);
                     contexts.Add(new ReactionContext
@@ -807,6 +825,8 @@ public partial class CharacterBattleController
                             Target = context.Target,
                             DamageBeforeShield = critical.DamageAfterCritical,
                             Element = "Anemo",
+                            DamageType = statusEff.DamageType,
+                            DMGTaken = takenSnapshots[index],
                             PoiseDamage = hit.Poise,
                             Source = CreateStatusDamageSource(
                                 sourceStatus, statusEff.StatusEffectID2, ReactionType.None),
