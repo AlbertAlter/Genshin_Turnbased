@@ -55,6 +55,8 @@ public static class KillHookSystem
     {
         using var collection = BattleResolutionContext.BeginCollection();
         if (damageEvent == null || !damageEvent.CausedDeath) return;
+        using var cause = BattleEventHub.Enter(damageEvent.Declaration);
+        using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(new DeathEventData(damageEvent)));
         if (_entries.Count == 0) return;
 
         var snapshot = new List<KillHookEntry>(_entries);
@@ -72,6 +74,7 @@ public static class KillHookSystem
                 StatusHost = entry.Host,
                 HitEffectID = damageEvent.Source != null ? damageEvent.Source.SourceEffectID : null,
                 DamageEvent = damageEvent,
+                Declaration = BattleEventHub.Current,
                 EventHookName = "Kill",
                 ActionTargetPositions = BattleManager.Instance != null
                     ? BattleManager.Instance.PendingActionTargetPositions
@@ -89,16 +92,27 @@ public static class KillHookSystem
     ///   Kill(1010)    数字参数   → 匹配来源实体数字ID
     ///   Kill(SK_xxx)  技能参数   → 匹配来源技能ID2
     ///   Kill(SE_xxx) / Kill(STE_xxx) 效果参数 → 匹配来源效果ID2
+    ///   Kill(Self) / Kill(Equipper) → 按本状态来源/武器穿戴者匹配，不等于同队任意击杀
+    ///   Kill(Any) → 任意来源的真实死亡；具体死者仍由并列条件检查
     /// 空参数或无法识别的格式返回假并记录明确警告。
     /// </summary>
-    public static bool MatchesKillArgument(string argument, DamageSourceInfo source)
+    public static bool MatchesKillArgument(string argument, DamageSourceInfo source, StatusInstance status = null)
     {
+        if (argument?.Trim() == "Any") return true;
         if (string.IsNullOrEmpty(argument) || source == null)
         {
             LogManager.LogWarning(LogCategory.ScriptHook, $"Kill 参数为空或来源缺失: Kill({argument})，视为不触发");
             return false;
         }
         string arg = argument.Trim();
+        if (arg == "Self" || arg == "Equipper")
+        {
+            BattleEntity owner = arg == "Equipper" ? status?.WeaponContext?.Equipper : status?.Caster;
+            if (owner == null) return false;
+            // 有实体引用优先使用实例身份；来源实体已离场时用保存的ID与阵营，避免队友串领。
+            return source.SourceEntity != null ? ReferenceEquals(source.SourceEntity, owner)
+                : source.HasSourceEntity && source.SourceEntityID == owner.EntityID && source.SourceSide == owner.Side;
+        }
         if (int.TryParse(arg, out int entityID))
             return source.SourceEntityID == entityID;
         if (arg.StartsWith("SK_"))

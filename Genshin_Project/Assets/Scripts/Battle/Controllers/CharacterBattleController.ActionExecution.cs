@@ -105,7 +105,10 @@ public partial class CharacterBattleController
     public bool EffectNeedsSelection(SkillEffectData eff)
     {
         if (eff == null) return false;
+        if (BattleTargetResolver.IsTeamTarget(eff.TargetType)) return false;
         if (!string.IsNullOrWhiteSpace(eff.TargetOverride)) return false;
+        // 明确的自动后续（如蹦蹦炸弹第二、三跳）保留随机目标规则，但不再次询问玩家。
+        if (BattleSpecialRules.UsesAutomaticSkillTargets(eff)) return false;
         if (eff.TargetType == "Self")
             return eff.TargetConsecutiveSet && eff.TargetConsecutive <= 1;
         if (eff.TargetNumber > 0) return true;
@@ -213,14 +216,20 @@ public partial class CharacterBattleController
     public Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated = false)
         => ExecuteSkillByIDAsync(skillID2, skillType, isPlayerInitiated, null);
 
-    private async Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated, SkillSelectionPlan plan)
+    private Task ExecuteSkillByIDAsync(string skillID2, int skillType, bool isPlayerInitiated, SkillSelectionPlan plan)
+        => BattleDeathResolution.RunAsync(() => ExecuteSkillCoreAsync(skillID2, skillType, isPlayerInitiated, plan));
+
+    private async Task ExecuteSkillCoreAsync(string skillID2, int skillType, bool isPlayerInitiated, SkillSelectionPlan plan)
     {
+        using var snapshotIsolation = StatusFormulaSnapshot.Suspend();
+        if (!EquipmentStatusLifetime.CanExecute(_currentEffectSourceStatus)) return;
         if (string.IsNullOrEmpty(skillID2)) return;
         if (!_skillById2.TryGetValue(skillID2, out var sk)) return;
+        using var actionExecution = BattleEventHub.BeginActionExecution(ActiveActionQuery.IsActiveAction(Entity, sk));
         using var specialSkillScope = BattleSpecialRules.BeginSkill(Entity);
         using var resolutionAction = BattleResolutionContext.EnterAction(
             ActiveActionQuery.IsActiveAction(Entity, sk)
-                ? new BattleResolutionContext.CounterScope() : null);
+                ? new BattleResolutionContext.CounterScope() : BattleResolutionContext.CurrentAction);
 
         string previousSkillID2 = _currentExecutingSkillID2;
         bool previousSkillWasActiveAction = _currentExecutingSkillIsActiveAction;
@@ -249,6 +258,7 @@ public partial class CharacterBattleController
             if (!PrepareSkillExecution(skillID2, skillType, sk, isPlayerInitiated,
                     out var effects, out var forcedPositions, plan)) return;
 
+            using var skillExecution = BattleSpecialRules.BeginSkillExecution(Entity, sk);
             await BattleExecution.Flush();
             if (plan != null)
             {
@@ -263,6 +273,11 @@ public partial class CharacterBattleController
 
             LogManager.Log(LogCategory.Skill,
                 $"{sk.SkillName} used (targetPos={string.Join(",", forcedPositions)}, player={isPlayerInitiated})");
+            if (ActiveActionQuery.IsActiveAction(Entity, sk))
+            {
+                BattleEventHub.Publish(new ActionEventData(Entity, sk.SkillID2, sk.ActionType, true));
+                await BattleExecution.Flush();
+            }
         }
         finally
         {
@@ -331,7 +346,8 @@ public partial class CharacterBattleController
             effects = null;
             return false;
         }
-        int apCost = APCostResolver.ForSkill(Entity, sk);
+        // 玩家发动按真实逻辑槽位匹配减费；状态调用的skillType可能只是倍率归属，不能冒充按钮。
+        int apCost = APCostResolver.ForSkill(Entity, sk, isPlayerInitiated ? skillType : -1);
         if (apCost > 0 && (APManager == null || !APManager.CanAfford(apCost)))
         {
             effects = null;
@@ -343,9 +359,14 @@ public partial class CharacterBattleController
             return false;
         }
         if (apCost > 0)
-            StatusOnHitHookSystem.NotifyAPUsed(Entity, apCost);
+            StatusOnHitHookSystem.NotifyAPUsed(Entity, apCost, APSpendKind.Skill, sk.SkillID2);
         if (sk.EnergyUsed > 0)
-            Entity.CurrentEnergy = Mathf.Max(0, Entity.CurrentEnergy - sk.EnergyUsed);
+        {
+            float energyBefore = Entity.CurrentEnergy;
+            Entity.CurrentEnergy = Mathf.Max(0f, energyBefore - sk.EnergyUsed);
+            BattleEventHub.Publish(new ResourceEventData("Energy", "Energy", Entity, energyBefore,
+                Entity.CurrentEnergy, -sk.EnergyUsed, ResourceChangeReason.Spend, false));
+        }
 
         // 冷却 & 次数：已在充能时，使用剩余次数不重置当前这一轮的计时。
         ConsumeSkillUse(skillID2, sk);

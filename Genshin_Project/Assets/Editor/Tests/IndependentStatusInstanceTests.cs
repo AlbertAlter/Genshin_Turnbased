@@ -136,7 +136,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _main.MaxCount = 2;
             Add(); Add(); Add();
-            Assert.That(_owner.GetStatusATKBonus("", "", 0, "None"), Is.EqualTo(.2f).Within(.0001f));
+            Assert.That(_owner.GetStatusATKBonus("", "", 0, "Physical"), Is.EqualTo(.2f).Within(.0001f));
             Assert.That(_owner.GetStatusInstances(_main.StatusID2), Has.Count.EqualTo(3));
         }
 
@@ -148,7 +148,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var onEntity = Add(5);
             var onField = field.AddStatus(_main.StatusID2, _owner, 1, 2, 0, _main);
             Assert.That(_owner.GetEffectiveStatusList(), Has.Count.EqualTo(2));
-            Assert.That(_owner.GetStatusATKBonus("", "", 0, "None"), Is.EqualTo(.2f).Within(.0001f));
+            Assert.That(_owner.GetStatusATKBonus("", "", 0, "Physical"), Is.EqualTo(.2f).Within(.0001f));
             Tick();
             Assert.That(field.StatusList.Contains(onField), Is.False);
             Assert.That(_owner.HasStatusInstance(onEntity), Is.True);

@@ -52,6 +52,7 @@ public sealed class HealBatch : IDisposable
     private readonly Dictionary<BattleEntity, float> _projectedHP = new Dictionary<BattleEntity, float>();
     private readonly Dictionary<BattleEntity, float> _projectedBondOfLife = new Dictionary<BattleEntity, float>();
     private readonly IDisposable _effect = BattleResolutionContext.BeginEffect();
+    private readonly IDisposable _resolution = BattleEventHub.BeginResolution();
     private bool _flushed;
     public IReadOnlyList<HealResolvedEvent> Results => _events.AsReadOnly();
 
@@ -66,10 +67,11 @@ public sealed class HealBatch : IDisposable
             ? projectedBond : BondOfLifeStatusHandler.GetValue(target);
         float absorbed = Mathf.Min(bondBefore, amount);
         float bondAfter = bondBefore - absorbed;
-        float after = Mathf.Max(before, Mathf.Min(target.TotalHP, before + (amount - absorbed)));
+        float maximum = target.GetFinalHP();
+        float after = Mathf.Max(before, Mathf.Min(maximum, before + (amount - absorbed)));
         _projectedHP[target] = after;
         _projectedBondOfLife[target] = bondAfter;
-        _events.Add(new HealResolvedEvent(source, target, amount, before, after, target.TotalHP,
+        _events.Add(new HealResolvedEvent(source, target, amount, before, after, maximum,
             effectID, segmentIndex, _events.Count + 1, bondBefore, bondAfter));
     }
 
@@ -84,11 +86,20 @@ public sealed class HealBatch : IDisposable
                 StatusOnHitHookSystem.CollectHeal(heal);
             foreach (HealResolvedEvent heal in _events)
             {
+                using var declaration = BattleEventHub.Enter(BattleEventHub.Find(heal));
                 if (heal.BondOfLifeAbsorbedAmount > 0f)
-                    BondOfLifeStatusHandler.ReduceValue(heal.Target, heal.BondOfLifeAbsorbedAmount);
+                    BondOfLifeStatusHandler.ReduceValue(heal.Target, heal.BondOfLifeAbsorbedAmount, ResourceChangeReason.HealingAbsorption);
                 heal.Target.CurrentHP = heal.HPAfter;
                 heal.MarkCommitted();
                 BattleExecution.Record(heal);
+            }
+            foreach (HealResolvedEvent heal in _events)
+            {
+                BattleDeclaration declaration = BattleEventHub.Find(heal);
+                BattleEventHub.Dispatch(declaration);
+                if (heal.ActualAmount > 0f)
+                    using (BattleEventHub.Enter(declaration))
+                        BattleEventHub.Publish(new HPChangedEventData(heal.Target, heal.HPBefore, heal.HPAfter, "Healing"));
             }
             // 常态属性条件按读取时的真实状态求值（StatusAppliesTo），无需暂写预期 HP。
         }
@@ -97,6 +108,6 @@ public sealed class HealBatch : IDisposable
     public void Dispose()
     {
         try { Flush(); }
-        finally { _effect.Dispose(); }
+        finally { _effect.Dispose(); _resolution.Dispose(); }
     }
 }

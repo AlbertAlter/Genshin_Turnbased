@@ -44,6 +44,7 @@ public sealed class BattlePresentationRequest
 /// <summary>
 /// 回调必须在 Unity 主线程调用。Begin 完成前摇，ShowResult 展示已提交结果。
 /// 无对应资源时立即回调；Cancel 只清理表现，禁止借此执行规则或推进新的战斗。
+/// 整段已提交结果的时间调度由可选扩展 IBattleResultPresentationPlayer 接管，不靠逐hit阻塞实现。
 /// </summary>
 public interface IBattlePresentationPlayer
 {

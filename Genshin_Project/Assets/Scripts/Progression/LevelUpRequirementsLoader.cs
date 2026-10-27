@@ -35,7 +35,7 @@ public static class LevelUpRequirementsLoader
     {
         ValidateHeaders(sheet, "NextLevel", "EXPRequired", "TotalEXP");
         for (int row = 2; row <= LastRow(sheet); row++)
-            table.AddCharacter(ReadRequiredInt(sheet, row, 1), ReadRequiredInt(sheet, row, 2));
+            table.AddCharacter(ReadRequiredInt(sheet, row, "NextLevel"), ReadRequiredInt(sheet, row, "EXPRequired"));
     }
 
     private static void LoadWeapon(ExcelWorksheet sheet, LevelUpRequirementsTable table)
@@ -44,10 +44,10 @@ public static class LevelUpRequirementsLoader
             "TotalEXP_4", "EXPRequired_5", "TotalEXP_5");
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            int nextLevel = ReadRequiredInt(sheet, row, 1);
-            table.AddWeapon(3, nextLevel, ReadRequiredInt(sheet, row, 2));
-            table.AddWeapon(4, nextLevel, ReadRequiredInt(sheet, row, 4));
-            table.AddWeapon(5, nextLevel, ReadRequiredInt(sheet, row, 6));
+            int nextLevel = ReadRequiredInt(sheet, row, "NextLevel");
+            table.AddWeapon(3, nextLevel, ReadRequiredInt(sheet, row, "EXPRequired_3"));
+            table.AddWeapon(4, nextLevel, ReadRequiredInt(sheet, row, "EXPRequired_4"));
+            table.AddWeapon(5, nextLevel, ReadRequiredInt(sheet, row, "EXPRequired_5"));
         }
     }
 
@@ -57,10 +57,10 @@ public static class LevelUpRequirementsLoader
             "TotalEXP_4", "EXPRequired_5", "TotalEXP_5");
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            int nextLevel = ReadRequiredInt(sheet, row, 1);
-            AddOptionalArtifact(sheet, table, row, 2, 3, nextLevel);
-            AddOptionalArtifact(sheet, table, row, 4, 4, nextLevel);
-            AddOptionalArtifact(sheet, table, row, 6, 5, nextLevel);
+            int nextLevel = ReadRequiredInt(sheet, row, "NextLevel");
+            AddOptionalArtifact(sheet, table, row, "EXPRequired_3", 3, nextLevel);
+            AddOptionalArtifact(sheet, table, row, "EXPRequired_4", 4, nextLevel);
+            AddOptionalArtifact(sheet, table, row, "EXPRequired_5", 5, nextLevel);
         }
     }
 
@@ -69,22 +69,23 @@ public static class LevelUpRequirementsLoader
         ValidateHeaders(sheet, "NextLevel", "EXPRequired", "EXPType");
         for (int row = 2; row <= LastRow(sheet); row++)
             table.AddSkill(
-                ReadRequiredInt(sheet, row, 1),
-                ReadRequiredInt(sheet, row, 2),
-                ReadRequiredInt(sheet, row, 3));
+                ReadRequiredInt(sheet, row, "NextLevel"),
+                ReadRequiredInt(sheet, row, "EXPRequired"),
+                ReadRequiredInt(sheet, row, "EXPType"));
     }
 
     private static void AddOptionalArtifact(
         ExcelWorksheet sheet,
         LevelUpRequirementsTable table,
         int row,
-        int column,
+        string header,
         int star,
         int nextLevel)
     {
-        if (sheet.Cells[row, column].Value == null || string.IsNullOrWhiteSpace(sheet.Cells[row, column].Text))
+        ExcelRange cell = ExcelTableHeaders.For(sheet).Cell(row, header);
+        if (cell.Value == null || string.IsNullOrWhiteSpace(cell.Text))
             return;
-        table.AddArtifact(star, nextLevel, ReadRequiredInt(sheet, row, column));
+        table.AddArtifact(star, nextLevel, ReadRequiredInt(sheet, row, header));
     }
 
     private static ExcelWorksheet RequireSheet(ExcelPackage package, string sheetName)
@@ -97,26 +98,21 @@ public static class LevelUpRequirementsLoader
 
     private static void ValidateHeaders(ExcelWorksheet sheet, params string[] expected)
     {
-        for (int index = 0; index < expected.Length; index++)
-        {
-            string actual = sheet.Cells[1, index + 1].Text.Trim();
-            if (!string.Equals(actual, expected[index], StringComparison.Ordinal))
-                throw new InvalidDataException(
-                    $"{WorkbookName}/{sheet.Name} 第 {index + 1} 列应为 {expected[index]}，实际为 [{actual}]。");
-        }
+        ExcelTableHeaders.For(sheet).Require(expected);
     }
 
-    private static int ReadRequiredInt(ExcelWorksheet sheet, int row, int column)
+    private static int ReadRequiredInt(ExcelWorksheet sheet, int row, string header)
     {
-        object raw = sheet.Cells[row, column].Value;
+        ExcelRange cell = ExcelTableHeaders.For(sheet).Cell(row, header);
+        object raw = cell.Value;
         double numeric;
         if (raw is int integer) numeric = integer;
         else if (raw is double doubleValue) numeric = doubleValue;
         else if (!double.TryParse(Convert.ToString(raw), out numeric))
-            throw new InvalidDataException($"{WorkbookName}/{sheet.Name}!{sheet.Cells[row, column].Address} 必须为整数。");
+            throw new InvalidDataException($"{WorkbookName}/{sheet.Name}!{cell.Address} ({header}) 必须为整数。");
 
         if (numeric <= 0d || numeric > int.MaxValue || Math.Abs(numeric - Math.Round(numeric)) > 0.000001d)
-            throw new InvalidDataException($"{WorkbookName}/{sheet.Name}!{sheet.Cells[row, column].Address} 必须为正整数。");
+            throw new InvalidDataException($"{WorkbookName}/{sheet.Name}!{cell.Address} ({header}) 必须为正整数。");
         return (int)Math.Round(numeric);
     }
 

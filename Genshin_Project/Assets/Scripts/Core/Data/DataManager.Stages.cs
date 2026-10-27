@@ -20,21 +20,21 @@ public partial class DataManager
         int maxRow = GetSheetMaxRow(sheet);
         for (int row = startRow; row <= maxRow; row++)
         {
-            string cell = sheet.Cells[row, 1].Text;
-            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, 2].Text)) continue;
+            string cell = sheet.Cells[row, FindColumnByHeader(sheet, "StageID")].Text;
+            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, FindColumnByHeader(sheet, "StageName")].Text)) continue;
             var data = new StageConfigData
             {
-                StageID = SafeGetInt(sheet.Cells[row, 1].Value),
-                StageName = sheet.Cells[row, 2].Text,
-                StageDescription = sheet.Cells[row, 3].Text,
-                EnemyIDs = sheet.Cells[row, 4].Text,
-                EnemyCounts = sheet.Cells[row, 5].Text,
-                EnemyLevels = sheet.Cells[row, 6].Text,
-                AllyIDs = sheet.Cells[row, 7].Text,
-                AllyCounts = sheet.Cells[row, 8].Text,
-                AllyLevels = sheet.Cells[row, 9].Text,
-                WinCondition = sheet.Cells[row, 10].Text,
-                LoseCondition = sheet.Cells[row, 11].Text
+                StageID = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "StageID")].Value),
+                StageName = sheet.Cells[row, FindColumnByHeader(sheet, "StageName")].Text,
+                StageDescription = sheet.Cells[row, FindColumnByHeader(sheet, "StageDescription")].Text,
+                EnemyIDs = sheet.Cells[row, FindColumnByHeader(sheet, "EnemyIDs")].Text,
+                EnemyCounts = sheet.Cells[row, FindColumnByHeader(sheet, "EnemyCounts")].Text,
+                EnemyLevels = sheet.Cells[row, FindColumnByHeader(sheet, "EnemyLevels")].Text,
+                AllyIDs = sheet.Cells[row, FindColumnByHeader(sheet, "AllyIDs")].Text,
+                AllyCounts = sheet.Cells[row, FindColumnByHeader(sheet, "AllyCounts")].Text,
+                AllyLevels = sheet.Cells[row, FindColumnByHeader(sheet, "AllyLevels")].Text,
+                WinCondition = sheet.Cells[row, FindColumnByHeader(sheet, "WinCondition")].Text,
+                LoseCondition = sheet.Cells[row, FindColumnByHeader(sheet, "LoseCondition")].Text
             };
             if (data.StageID == 0) continue;
             StageConfigDict[data.StageID] = data;

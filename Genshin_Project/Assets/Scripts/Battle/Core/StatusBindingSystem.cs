@@ -21,6 +21,10 @@ public static class StatusBindingSystem
         ApplyBindings(parent, host, new HashSet<string>());
     }
 
+    /// <summary>仅补建一条已配好的绑定，不重跑父状态的其他绑定或刷新其具体实例。</summary>
+    internal static void ApplyBinding(StatusInstance parent, object host, int effectID)
+        => ApplyBindings(parent, host, new HashSet<string>(), effectID);
+
     public static void RemoveBindings(StatusInstance parent)
     {
         if (parent == null || parent.BoundStatuses == null || parent.BoundStatuses.Count == 0) return;
@@ -36,14 +40,15 @@ public static class StatusBindingSystem
         foreach (var child in children)
         {
             if (child == null) continue;
+            if (child.Host != null && StatusHostAccess.Remove(child.Host, child)) continue;
             if (RemoveFromEntities(battle, child)) continue;
             RemoveFromFields(battle, child);
         }
     }
 
-    internal static void ApplyBindings(StatusInstance parent, object host, HashSet<string> ancestry)
+    internal static void ApplyBindings(StatusInstance parent, object host, HashSet<string> ancestry, int onlyEffectID = 0)
     {
-        if (parent == null || parent.MainData == null) return;
+        if (parent == null || parent.MainData == null || !parent.IsActive) return;
         if (ancestry == null) ancestry = new HashSet<string>();
         if (!ancestry.Add(parent.StatusID2))
         {
@@ -62,6 +67,7 @@ public static class StatusBindingSystem
             var effect = pair.Value;
             if (effect != null
                 && effect.StatusEffectID / 100 == parentStatusID
+                && (onlyEffectID == 0 || effect.StatusEffectID == onlyEffectID)
                 && effect.EffectType == "BindStatus")
                 effects.Add(effect);
         }
@@ -90,6 +96,13 @@ public static class StatusBindingSystem
                 continue;
             }
 
+            // 目标钩子属于正在展开的父状态，不是引出ApplyStatus的旧监听；保留原事件因果。
+            var bindingContext = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
+            bindingContext.Caster = parent.Caster; bindingContext.Status = parent; bindingContext.StatusHost = host;
+            bindingContext.Target = host as BattleEntity; bindingContext.ExecutingStatusEffectID = effect.StatusEffectID;
+            using var bindingExecution = ScriptHookContext.EnterExecution(bindingContext);
+            using var weaponSnapshotBinding = WeaponSnapshotHooks.BeginBinding(parent, effect);
+            using var shieldSnapshotBinding = WeaponShieldCreationHooks.BeginBinding(parent, effect);
             int targetNumber = string.IsNullOrWhiteSpace(effect.TargetSelect)
                 && effect.TargetType != "Self"
                 ? -1
@@ -114,7 +127,20 @@ public static class StatusBindingSystem
             }
             previous = result;
 
-            if (result.Domain == BattleTargetDomain.Field)
+            if (result.Domain == BattleTargetDomain.Team)
+            {
+                foreach (var team in BattleTargetResolver.GetTeams(battle, result))
+                {
+                    var previousInstances = team.GetStatusInstances(effect.Param1);
+                    var child = team.AddStatus(effect.Param1, parent.Caster,
+                        parent.IsPermanent ? 0 : parent.RemainingPhaseCount,
+                        effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
+                        effect.TriggerPhase, childMain, parent.WeaponContext, effect.Param2,
+                        parent.EquipmentSource, ancestry, enchantElement: effect.Element, enchantOverride: effect.Param3);
+                    if (child != null && !previousInstances.Contains(child) && team.Contains(child)) parent.BoundStatuses.Add(child);
+                }
+            }
+            else if (result.Domain == BattleTargetDomain.Field)
                 BindToFields(parent, effect, childMain, result, ancestry);
             else
                 BindToEntities(parent, effect, childMain, result);
@@ -133,6 +159,9 @@ public static class StatusBindingSystem
         foreach (var target in BattleTargetResolver.GetEntities(BattleManager.Instance, result))
         {
             if (target == null || !seen.Add(target)) continue;
+            if (WeaponSnapshotHooks.HasExistingBinding(parent, effect, target)
+                || WeaponShieldCreationHooks.HasExistingBinding(parent, effect, target)
+                || WeaponRosterHooks.HasExistingBinding(parent, effect, target)) continue;
             var previous = target.GetStatusInstances(effect.Param1);
             var child = target.AddStatus(
                 effect.Param1,
@@ -140,7 +169,8 @@ public static class StatusBindingSystem
                 parent.IsPermanent ? 0 : parent.RemainingPhaseCount,
                 effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
                 effect.TriggerPhase,
-                childMain, parent.WeaponContext, effect.Param2);
+                childMain, parent.WeaponContext, effect.Param2, parent.EquipmentSource,
+                enchantElement: effect.Element, enchantOverride: effect.Param3);
             // WhenMax=1 拒绝施加时返回旧实例，它不属于本次父状态，不能抢走清理权。
             if (child != null && !previous.Contains(child) && target.HasStatusInstance(child)
                 && !parent.BoundStatuses.Contains(child))
@@ -164,7 +194,7 @@ public static class StatusBindingSystem
                 parent.IsPermanent ? 0 : parent.RemainingPhaseCount,
                 effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
                 effect.TriggerPhase, childMain, parent.WeaponContext,
-                effect.Param2, ancestry);
+                effect.Param2, ancestry, parent.EquipmentSource, enchantElement: effect.Element, enchantOverride: effect.Param3);
             if (child != null && !previous.Contains(child) && field.StatusList.Contains(child))
                 parent.BoundStatuses.Add(child);
         }

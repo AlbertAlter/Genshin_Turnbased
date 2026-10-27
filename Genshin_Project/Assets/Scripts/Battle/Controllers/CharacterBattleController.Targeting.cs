@@ -29,7 +29,8 @@ public partial class CharacterBattleController
             effect.TargetOverride,
             null,
             forced,
-            _lastSkillTargetResult);
+            _lastSkillTargetResult,
+            deadOnly: effect.EffectType == "Revive");
 
         LogTargetResult(effect.SkillEffectID2, result);
         if (result.IsValid)
@@ -45,7 +46,7 @@ public partial class CharacterBattleController
     {
         var result = ResolveSkillTargetResult(effect);
         return result.IsValid
-            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result)
+            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
     }
 
@@ -103,7 +104,7 @@ public partial class CharacterBattleController
                 null,
                 null,
                 _lastStatusTargetResult,
-                selfUsesOrigin: true);
+                selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive");
 
             LogTargetResult(effect.StatusEffectID2, hookResult);
             if (hookResult.IsValid) _lastStatusTargetResult = hookResult;
@@ -114,6 +115,7 @@ public partial class CharacterBattleController
         if (sourceStatus?.WeaponContext != null
             && host is BattleEntity eventTarget
             && effect.TargetType == "Enemy"
+            && (effect.TargetConsecutive < 2 || effect.TargetConsecutive > 4)
             && effect.TargetSelect?.Trim() == "1")
         {
             return new TargetResolutionResult
@@ -141,7 +143,7 @@ public partial class CharacterBattleController
             effect.TargetSelect,
             null,
             _lastStatusTargetResult,
-            selfUsesOrigin: true);
+            selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive");
 
         LogTargetResult(effect.StatusEffectID2, result);
         if (result.IsValid) _lastStatusTargetResult = result;
@@ -155,7 +157,7 @@ public partial class CharacterBattleController
     {
         var result = ResolveStatusTargetResult(effect, sourceStatus, host);
         return result.IsValid
-            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result)
+            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
     }
 

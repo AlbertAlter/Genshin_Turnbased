@@ -89,10 +89,13 @@ public static class UiConfigurationSyncWindow
             {
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldApView>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldHealthBar>(true))view.ReloadAnimationParameters();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldDamagePopupController>(true))view.ReloadConfiguration();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldPresentationPlayer>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldSelectionPresentation>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldActionStateView>(true))view.ReloadAnimationParameters();
+                foreach(var route in UnityEngine.Object.FindObjectsOfType<Roguelike.Tests.RouteGeneration.RouteTestController>(true))route.ReloadRouteArt();
             }
-            Debug.Log("UI 动画参数已同步。未修改场景位置、尺寸、颜色、字体、层级或资源引用，无需逐项选择。");
+            Debug.Log("UI 动画、伤害/状态跳字与路线美术参数已同步；运行中的界面已刷新。未重建或保存场景。");
         }
         catch(Exception error) { Debug.LogException(error); }
     }

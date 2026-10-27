@@ -37,6 +37,17 @@ public sealed class RoguelikeChapterRuntime
         });
     }
 
+    /// <summary>单角色只读养成查询，返回独立副本；不存在返回false，不伪造1级/零突破。</summary>
+    public bool TryGetCharacterProgress(int characterId, out RoguelikeCharacterProgressData progress)
+    {
+        var character = FindCharacter(characterId);
+        progress = character == null ? null : RoguelikeSaveJson.DeepClone(character);
+        return character != null;
+    }
+
+    public RoguelikeCharacterProgressData GetCharacterProgress(int characterId)
+        => RoguelikeSaveJson.DeepClone(RequireCharacter(characterId));
+
     public void UpdateCharacterProgress(int characterId, int level, int experience, int ascension,
         int constellationLevel, IReadOnlyList<int> skillLevels)
     {
@@ -149,14 +160,24 @@ public sealed class RoguelikeChapterRuntime
         RequireCharacter(characterId).EquippedWeaponInstanceId = null;
     }
 
-    public void AddArtifact(string instanceId, GeneratedArtifact artifact, int experience = 0)
+    public void RemoveWeapon(string instanceId)
+    {
+        var weapon = RequireWeapon(instanceId);
+        if (snapshot.Characters.Any(character => character.EquippedWeaponInstanceId == instanceId))
+            throw new InvalidOperationException("已装备的武器必须先卸下，不能直接移除。");
+        snapshot.Inventory.Weapons.Remove(weapon);
+    }
+
+    public void AddArtifact(string instanceId, GeneratedArtifact artifact, int experience = 0, int artifactSetId = 0)
     {
         RequireNewInstanceId(instanceId);
         if (artifact == null) throw new ArgumentNullException(nameof(artifact));
         if (experience < 0) throw new ArgumentOutOfRangeException(nameof(experience));
+        if (artifactSetId < 0) throw new ArgumentOutOfRangeException(nameof(artifactSetId));
         var instance = new RoguelikeArtifactInstanceData
         {
             InstanceId = instanceId,
+            ArtifactSetID = artifactSetId,
             Experience = experience,
             Artifact = RoguelikeSaveJson.DeepClone(artifact),
         };
@@ -188,6 +209,15 @@ public sealed class RoguelikeChapterRuntime
     {
         if (!Enum.IsDefined(typeof(ArtifactSlot), slot)) throw new ArgumentOutOfRangeException(nameof(slot));
         RequireCharacter(characterId).EquippedArtifacts.RemoveAll(equipment => equipment.Slot == slot);
+    }
+
+    public void RemoveArtifact(string instanceId)
+    {
+        var artifact = RequireArtifact(instanceId);
+        if (snapshot.Characters.Any(character => character.EquippedArtifacts.Any(
+            equipped => equipped.ArtifactInstanceId == instanceId)))
+            throw new InvalidOperationException("已装备的圣遗物必须先卸下，不能直接移除。");
+        snapshot.Inventory.Artifacts.Remove(artifact);
     }
 
     public RoguelikeProgressSnapshot ExportSnapshot()

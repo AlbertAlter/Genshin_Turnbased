@@ -19,21 +19,28 @@ public partial class CharacterBattleController
             await BattleExecution.Play(new BattlePresentationRequest(
                 BattlePresentationKind.Heal, source, effectID, index + 1, targets), () =>
             {
+                if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
                 string formula = WeaponExpressionEvaluator.Expand(segments[index], sourceStatus);
-                float amount = ResolveHealingAmount(formula, effectID, skillType, element);
+                // 受术者变量必须逐目标求值；没有Target变量的旧公式仍每段只算一次。
+                bool targetDependent = formula.Contains("Target.") || StatusFormulaSnapshot.For(Entity, effectID) != null;
+                float amount = targetDependent ? 0f : ResolveHealingAmount(formula, effectID, skillType, element);
                 using (var batch = new HealBatch())
                 {
                     foreach (BattleEntity target in targets.Distinct())
                     {
                         if (target == null || !target.IsAlive) continue;
+                        using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(target);
+                        float targetAmount = targetDependent
+                            ? ResolveHealingAmount(formula, effectID, skillType, element, target) : amount;
                         var healer = source ?? Entity;
                         string skillID = GetExecutingSkillID2(skillType);
-                        float outgoing = healer.HealBonus + healer.GetStatusHealingBonus(
-                            "HealBonus", effectID, skillID, skillType, element, target);
+                        var memory = StatusFormulaSnapshot.For(healer, effectID);
+                        float outgoing = memory != null ? memory.Raw("HealBonus") + memory.Bonus("HealBonus", effectID, element, target)
+                            : healer.HealBonus + healer.GetStatusHealingBonus("HealBonus", effectID, skillID, skillType, element, target);
                         float incoming = target.BeHealedBonus + target.GetStatusHealingBonus(
                             "BeHealedBonus", effectID, skillID, skillType, element, target);
                         // 术语1.20：加成在同一个加法区，每段、每个目标只求值一次。
-                        batch.Add(target, amount * Mathf.Max(0f, 1f + outgoing + incoming), source, effectID, index + 1);
+                        batch.Add(target, targetAmount * Mathf.Max(0f, 1f + outgoing + incoming), source, effectID, index + 1);
                     }
                     batch.Flush();
                     foreach (HealResolvedEvent heal in batch.Results)
@@ -56,9 +63,9 @@ public partial class CharacterBattleController
             return result;
         }
         if (!_levelDataBySkillType.TryGetValue(skillType, out var levels)) return result;
-        int level = skillType >= 0 && skillType < SkillLevels.Length ? SkillLevels[skillType] : 1;
+        int level = SourceSkillLevel(effectID, skillType);
         var levelOne = levels.Find(row => row.ParamID == effectID && row.SkillLevel == 1);
-        var current = levels.Find(row => row.ParamID == effectID && row.SkillLevel == Mathf.Clamp(level, 1, 15)) ?? levelOne;
+        var current = levels.Find(row => row.ParamID == effectID && row.SkillLevel == level) ?? levelOne;
         if (current == null) return result;
         for (int index = 1; index <= 7; index++)
         {
@@ -79,8 +86,36 @@ public partial class CharacterBattleController
         return result;
     }
 
-    // 沿用配表的加法/乘法治疗公式，例如 0.15*TotalHP+154；不引入通用脚本解释器。
-    float ResolveHealingAmount(string formula, string effectID, int skillType, string element)
+    /// <summary>Buff/减伤的Param1留空时读取自身等级表的单个标量，不重算状态或修改共享表。</summary>
+    public bool TryResolveStatusLevelScalar(StatusEffectData effect, out float scalar)
+    {
+        scalar = 0f;
+        if (effect == null || !string.IsNullOrWhiteSpace(effect.Param1)) return false;
+        int type = GetEffectSkillType(effect.StatusEffectID2, -1);
+        if (type < 0) return false;
+        return TryGetSkillLevelScalar(effect.StatusEffectID2, type, out scalar);
+    }
+
+    /// <summary>按明确的ParamID与SkillType读取等级表单标量，例如诺艾尔治疗概率；不制造虚构效果或执行状态。</summary>
+    public bool TryGetSkillLevelScalar(string paramID, int skillType, out float scalar)
+    {
+        scalar = 0f;
+        if (string.IsNullOrWhiteSpace(paramID)) return false;
+        var segments = GetHealingSegments(paramID, null, skillType);
+        return segments.Count == 1 && float.TryParse(segments[0], NumberStyles.Float,
+            CultureInfo.InvariantCulture, out scalar) && !float.IsNaN(scalar) && !float.IsInfinity(scalar);
+    }
+
+    private float ResolveShieldAmount(string formula, string effectID, int skillType, string element)
+    {
+        var segments = GetHealingSegments(effectID, formula, skillType);
+        if (segments.Count == 0) return ResolveBaseValue(formula, effectID, skillType, element);
+        if (segments.Count != 1) throw new FormatException("护盾量只接受一段完整公式：" + effectID);
+        return ResolveHealingAmount(segments[0], effectID, skillType, element);
+    }
+
+    // 治疗与护盾共用既有加法/乘法属性公式，例如 0.15*TotalHP+154，不引入脚本解释器。
+    float ResolveHealingAmount(string formula, string effectID, int skillType, string element, BattleEntity target = null)
     {
         if (string.IsNullOrWhiteSpace(formula)) return 0f;
         if (formula.StartsWith("%", StringComparison.Ordinal))
@@ -101,10 +136,14 @@ public partial class CharacterBattleController
                     switch (factor)
                     {
                         case "ATK": case "TotalATK": value *= GetFinalATK(effectID, skillType, element); break;
-                        case "DEF": case "TotalDEF": value *= Entity.GetFinalDEF(effectID, GetExecutingSkillID2(skillType), skillType, element); break;
-                        case "MaxHP": case "TotalHP": value *= Entity.TotalHP; break;
+                        case "DEF": case "TotalDEF": value *= SourceAttribute("TotalDEF", effectID, skillType, element); break;
+                        case "MaxHP": case "TotalHP": value *= SourceAttribute("TotalHP", effectID, skillType, element); break;
+                        case "Target.TotalHP":
+                            if (target == null) throw new InvalidOperationException("Target.TotalHP治疗公式缺少本次受术者。");
+                            value *= target.GetFinalHP(effectID, GetExecutingSkillID2(skillType), skillType, element);
+                            break;
                         default:
-                            LogManager.LogWarning(LogCategory.Effect, $"无法解析治疗公式 {effectID}: {formula}");
+                            LogManager.LogWarning(LogCategory.Effect, $"无法解析属性公式 {effectID}: {formula}");
                             return 0f;
                     }
                 }

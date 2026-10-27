@@ -7,9 +7,6 @@ public static class EnemyShieldRuleParser
     private const string NumberPattern = @"(?:0|[1-9]\d*)(?:\.\d+)?";
     private static readonly Regex BareNumber = new Regex($@"^(?<value>{NumberPattern})$", RegexOptions.CultureInvariant);
     private static readonly Regex FixedGauge = new Regex($@"^(?<fixed>{NumberPattern})U$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-    private static readonly Regex PoiseOnly = new Regex($@"^(?<poise>{NumberPattern})U\*PoiseDMG$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-    private static readonly Regex ElementPlusPoise = new Regex($@"^(?<element>{NumberPattern})\+(?<poise>{NumberPattern})U\*PoiseDMG$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-    private static readonly Regex FixedPlusPoise = new Regex($@"^(?<fixed>{NumberPattern})U\+(?<poise>{NumberPattern})U\*PoiseDMG$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     private static readonly Regex InitialGauge = new Regex($@"^(?<gauge>{NumberPattern})U$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
     /// <summary>解析 Status_Effect.Shield 对敌方目标配置的初始元素盾量，例如 12U。</summary>
@@ -45,32 +42,6 @@ public static class EnemyShieldRuleParser
         {
             EnemyShieldRule rule = Create(shieldElement, hitKind, EnemyShieldRuleKind.FixedGauge, raw);
             rule.FixedGauge = ParseNumber(match.Groups["fixed"].Value, raw);
-            return rule;
-        }
-
-        match = ElementPlusPoise.Match(raw);
-        if (match.Success)
-        {
-            EnemyShieldRule rule = Create(shieldElement, hitKind, EnemyShieldRuleKind.ElementAmountPlusPoiseFormula, raw);
-            rule.ElementAmountMultiplier = ParseNumber(match.Groups["element"].Value, raw);
-            rule.PoiseGaugePerPoint = ParseNumber(match.Groups["poise"].Value, raw);
-            return rule;
-        }
-
-        match = FixedPlusPoise.Match(raw);
-        if (match.Success)
-        {
-            EnemyShieldRule rule = Create(shieldElement, hitKind, EnemyShieldRuleKind.FixedGaugePlusPoiseFormula, raw);
-            rule.FixedGauge = ParseNumber(match.Groups["fixed"].Value, raw);
-            rule.PoiseGaugePerPoint = ParseNumber(match.Groups["poise"].Value, raw);
-            return rule;
-        }
-
-        match = PoiseOnly.Match(raw);
-        if (match.Success)
-        {
-            EnemyShieldRule rule = Create(shieldElement, hitKind, EnemyShieldRuleKind.FixedGaugePlusPoiseFormula, raw);
-            rule.PoiseGaugePerPoint = ParseNumber(match.Groups["poise"].Value, raw);
             return rule;
         }
 

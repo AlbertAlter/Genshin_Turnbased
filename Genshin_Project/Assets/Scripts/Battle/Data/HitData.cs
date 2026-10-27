@@ -8,13 +8,11 @@ using System.Globalization;
 public struct HitData
 {
     public float Multiplier;    // M: 倍率部分
-    public float Poise;         // 仅供待移除的旧运行时接口保留，HitDataParser 不再赋值。
     public float ElementAura;   // E: 元素附着量
 
-    public HitData(float multiplier, float poise, float aura)
+    public HitData(float multiplier, float aura)
     {
         Multiplier = multiplier;
-        Poise = poise;
         ElementAura = aura;
     }
 

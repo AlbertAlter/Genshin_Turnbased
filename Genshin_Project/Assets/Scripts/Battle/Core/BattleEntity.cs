@@ -16,10 +16,12 @@ public partial class BattleEntity : MonoBehaviour
     // ========== 身份 ==========
     public EntityType Type;
     public int EntityID;
+    [NonSerialized] internal long EquipmentDeathVersion;
     /// <summary>角色固有武器类型：0单手剑、1双手剑、2弓、3长柄、4法器；非角色/未初始化为-1。</summary>
     public int WeaponType = -1;
     /// <summary>角色控制器引用（角色实体在 Init 时由 CharacterBattleController 设置，用于状态行动回找执行器）</summary>
     [NonSerialized] public CharacterBattleController CharacterCtrl;
+    [NonSerialized] public EnemyBattleController EnemyCtrl;
 
     // ========== 位置（2026-08-06 位置系统） ==========
     /// <summary>所在阵营（Ally=我方/Enemy=敌方）</summary>
@@ -29,7 +31,7 @@ public partial class BattleEntity : MonoBehaviour
     /// <summary>威胁度（Enemy_Main.Threat，自动选择目标用；空=0）</summary>
     public int Threat;
     public int ConstellationLevel;   // 命座等级 0-6（效果实装前仅存储）
-    public bool IsAscended;          // 是否已突破（突破加成实装前仅存储）
+    public bool IsAscended;          // 兼容旧布尔条件；正式面板读取CharacterCtrl.Ascension的0～6阶段，不靠此值猜阶段。
 
     // ========== 等级 ==========
     public int Level;
@@ -37,8 +39,14 @@ public partial class BattleEntity : MonoBehaviour
     // ========== 基础属性（公式 1.1 ~ 1.4） ==========
     public float TotalHP;
     public float CurrentHP;
+    /// <summary>角色基础攻击白值（成长加已生效的突破固定值），不含百分比；实际攻击读取GetFinalATK。</summary>
     public float TotalATK;
+    /// <summary>角色已生效的突破攻击百分比，与武器副属性、状态ATKBonus同区加算。</summary>
+    public float CharacterATKBonus;
     public float TotalDEF;
+    // HP/DEF旧面板已包含的百分比。仅记录乘区，不把ExtraBase或固定加数混入；重建面板时覆盖。
+    [NonSerialized] internal float BakedHPBonus;
+    [NonSerialized] internal float CharacterDEFBonus;
 
     // ========== 武器面板（角色基础面板之外独立保存，便于安全卸装） ==========
     public float WeaponATK;
@@ -60,24 +68,29 @@ public partial class BattleEntity : MonoBehaviour
 
     // ========== 元素精通（公式 1.11: TotalEM = EM + WeaponEM + EMBonus） ==========
     public float EM;
-    public float TotalEM;
+    public float TotalEM; // 不含状态EMBonus；运行时计算通过GetFinalEM读取，队伍/武器的原加减仍保留。
 
     // ========== 暴击（公式 1.6） ==========
     public float CritRate;
     public float CritDMG;
 
     // ========== 充能（公式 1.12） ==========
-    public float TotalRechargeRate;
+    public float TotalRechargeRate; // 不含状态RechargeBonus；Based回能通过GetFinalRechargeRate读取。
     public int MaxEnergy;
     [SerializeField, Min(0), UnityEngine.Serialization.FormerlySerializedAs("CurrentEnergy")]
-    private int _currentEnergy;
+    private float _currentEnergy;
 
-    /// <summary>能量下限属于实体自身约束，所有赋值、充能和扣能统一最低为0。</summary>
-    public int CurrentEnergy
+    /// <summary>当前能量的公开查询/赋值入口；保留float小数，不按固定小数位取整，最低为0。</summary>
+    public float CurrentEnergy
     {
         // 兼容旧场景或存量序列化数据中可能已经存在的负值。
-        get => Math.Max(0, _currentEnergy);
-        set => _currentEnergy = Math.Max(0, value);
+        get => Math.Max(0f, _currentEnergy);
+        set
+        {
+            if (float.IsNaN(value) || float.IsInfinity(value))
+                throw new ArgumentOutOfRangeException(nameof(value), "当前能量必须为有限数值。");
+            _currentEnergy = Math.Max(0f, value);
+        }
     }
 
     // ========== 伤害加成类（公式 1.8 DMGBonus） ==========
@@ -118,11 +131,6 @@ public partial class BattleEntity : MonoBehaviour
     public float BeHealedBonus;
     public float Elevation;
 
-    // ========== 韧性（公式 1.9 Poise） ==========
-#if UNITY_EDITOR || GTB_POISE_SYSTEM
-    public float Poise;
-#endif
-    public float MaxPoise;
 
     // ========== 受击权重（公式 1.10 HitWeight） ==========
     public float HitWeight;

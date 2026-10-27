@@ -273,7 +273,7 @@ public class UIBattleController : MonoBehaviour
                     slot.highlight.color = ActiveAllyHighlightColor;
                 }
             }
-            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _allyStatusIcons[i]);
+            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _allyStatusIcons[i], ent);
         }
     }
 
@@ -304,7 +304,7 @@ public class UIBattleController : MonoBehaviour
             float maxHp = ent.TotalHP;
             if (slot.hpBar != null) slot.hpBar.fillAmount = maxHp > 0 ? Mathf.Clamp01(ent.CurrentHP / maxHp) : 0;
             if (slot.hpText != null) slot.hpText.text = $"{Mathf.CeilToInt(ent.CurrentHP)}/{Mathf.CeilToInt(maxHp)}";
-            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _enemyStatusIcons[i]);
+            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _enemyStatusIcons[i], ent);
         }
     }
 
@@ -520,7 +520,7 @@ public class UIBattleController : MonoBehaviour
     }
 
     /// <summary>状态栏刷新：最新10条（新到旧），纯色占位图标，剩1回合闪烁。</summary>
-    void RefreshStatusBar(Transform container, List<StatusInstance> statuses, List<Image> icons)
+    void RefreshStatusBar(Transform container, List<StatusInstance> statuses, List<Image> icons, object host)
     {
         if (container == null) return;
         var sorted = statuses.FindAll(item => item != null && item.IsActive
@@ -534,6 +534,9 @@ public class UIBattleController : MonoBehaviour
             {
                 var inst = sorted[i];
                 icons[i].gameObject.SetActive(true);
+                var view = icons[i].GetComponent<BattleStatusDescriptionView>();
+                if (view == null) view = icons[i].gameObject.AddComponent<BattleStatusDescriptionView>();
+                view.Bind(inst, host);
                 var c = statusColor;
                 if (!inst.IsPermanent && inst.RemainingPhaseCount <= 1)
                     c.a = 0.35f + 0.65f * Mathf.Abs(Mathf.Sin(Time.time * 6f)); // 剩1回合淡入淡出闪烁
@@ -549,7 +552,7 @@ public class UIBattleController : MonoBehaviour
         go.transform.SetParent(parent, false);
         var img = go.GetComponent<Image>();
         img.color = statusColor;
-        img.raycastTarget = false;
+        img.raycastTarget = true; // 状态说明悬停；弹出的说明面板本身不拦截射线。
         var rt = go.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(24, 24);
         return img;

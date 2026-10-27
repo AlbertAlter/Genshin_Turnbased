@@ -1,39 +1,36 @@
 using NUnit.Framework;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
     /// <summary>Hit/OnDamage 语义、批次元数据与状态来源的回归测试。</summary>
+    [Category("Unit")]
     public sealed class HitBatchDispatchTests
     {
-        private HookTestDataManager _dm;
-        private BattleManager _battleManager;
-        private CharacterBattleController _allyController;
+        private BattleFlowTestEnv _env;
+        private DataManager _dm;
         private BattleEntity _ally;
         private BattleEntity _enemy;
+        private readonly List<BattleEntity> _otherTargets = new List<BattleEntity>();
 
         [SetUp]
         public void SetUp()
         {
-            HookTestEnv.ResetStaticState();
-            _dm = HookTestEnv.CreateDataManager();
-            _battleManager = HookTestEnv.CreateBattleManager();
-            _allyController = HookTestEnv.CreateCharacter(1010, 80, 1, _battleManager);
-            _ally = _allyController.Entity;
+            _env = new BattleFlowTestEnv();
+            _env.CreateMinimalBattle();
+            _dm = _env.DataManager;
+            _ally = _env.Ally.Entity;
             _ally.TotalHP = 100f;
             _ally.CurrentHP = 100f;
-            _enemy = HookTestEnv.CreateEnemy(20000, 1, 1, _battleManager, 100f);
+            _enemy = _env.Enemy.Entity;
+            _enemy.TotalHP = _enemy.CurrentHP = 100f;
         }
 
         [TearDown]
         public void TearDown()
         {
-            HookTestEnv.ResetStaticState();
-            HookTestEnv.ClearBattleManagerSingleton();
-            if (_enemy != null) Object.DestroyImmediate(_enemy.gameObject);
-            if (_allyController != null) Object.DestroyImmediate(_allyController.gameObject);
-            if (_battleManager != null) Object.DestroyImmediate(_battleManager.gameObject);
-            HookTestEnv.DestroyDataManager(_dm);
+            try { _env?.Dispose(); }
+            finally { _otherTargets.Clear(); _env = null; }
         }
 
         [Test]
@@ -109,24 +106,37 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void RefreshingCharacterStatus_UpdatesOwnerAndDamageSourceSnapshot()
+        public void ReapplyingCharacterStatus_PreservesEachInstanceOwnerAndDamageSourceSnapshot()
         {
-            StatusInstance status = _ally.AddStatus("ST_TEST_OWNER", _enemy, 2);
+            const string statusID = "ST_TEST_OWNER";
+            var main = new StatusMainData { StatusID = 9909001, StatusID2 = statusID, MaxStack = 2 };
+            _dm.StatusMainDict[statusID] = main;
+            StatusInstance status = _ally.AddStatus(statusID, _enemy, 2, 2, 0, main);
+            DamageSourceInfo originalSource = DamageSourceInfo.FromStatus(status, "STE_TEST_OWNER", ReactionType.None);
             Assert.That(status.HasSourceEntity, Is.True);
             Assert.That(status.SourceEntityID, Is.EqualTo(_enemy.EntityID));
             Assert.That(status.SourceSide, Is.EqualTo(BattleSide.Enemy));
 
-            StatusInstance refreshed = _ally.AddStatus("ST_TEST_OWNER", _ally, 2);
+            StatusInstance reapplied = _ally.AddStatus(statusID, _ally, 2, 2, 0, main);
             DamageSourceInfo source = DamageSourceInfo.FromStatus(
-                refreshed, "STE_TEST_OWNER", ReactionType.None);
+                reapplied, "STE_TEST_OWNER", ReactionType.None);
 
-            Assert.That(refreshed, Is.SameAs(status));
-            Assert.That(refreshed.Caster, Is.SameAs(_ally));
-            Assert.That(refreshed.SourceEntityID, Is.EqualTo(_ally.EntityID));
-            Assert.That(refreshed.SourceSide, Is.EqualTo(BattleSide.Ally));
-            Assert.That(source.SourceStatus, Is.SameAs(refreshed));
-            Assert.That(source.SourceStatusID, Is.EqualTo("ST_TEST_OWNER"));
-            Assert.That(source.SourceStatusApplyOrder, Is.EqualTo(refreshed.ApplyOrder));
+            Assert.That(reapplied, Is.Not.SameAs(status));
+            CollectionAssert.AreEqual(new[] { status, reapplied }, _ally.GetStatusInstances(statusID));
+            Assert.That(status.Caster, Is.SameAs(_enemy));
+            Assert.That(status.SourceEntityID, Is.EqualTo(_enemy.EntityID));
+            Assert.That(status.SourceSide, Is.EqualTo(BattleSide.Enemy));
+            Assert.That(originalSource.SourceStatus, Is.SameAs(status));
+            Assert.That(originalSource.SourceEntityID, Is.EqualTo(_enemy.EntityID));
+            Assert.That(originalSource.SourceSide, Is.EqualTo(BattleSide.Enemy));
+            Assert.That(originalSource.SourceStatusApplyOrder, Is.EqualTo(status.ApplyOrder));
+            Assert.That(reapplied.Caster, Is.SameAs(_ally));
+            Assert.That(reapplied.SourceEntityID, Is.EqualTo(_ally.EntityID));
+            Assert.That(reapplied.SourceSide, Is.EqualTo(BattleSide.Ally));
+            Assert.That(source.SourceStatus, Is.SameAs(reapplied));
+            Assert.That(source.SourceStatusID, Is.EqualTo(statusID));
+            Assert.That(source.SourceStatusApplyOrder, Is.EqualTo(reapplied.ApplyOrder));
+            Assert.That(source.SourceStatusApplyOrder, Is.GreaterThan(originalSource.SourceStatusApplyOrder));
             Assert.That(source.HasSourceEntity, Is.True);
             Assert.That(source.CountsAsHit, Is.True);
         }
@@ -182,6 +192,66 @@ namespace GenshinTurnBased.Tests.EditMode
                 HookTestEnv.InjectStatusAction(
                     _dm, statusID, actionType, string.Empty, string.Empty, damageSource: filter);
             return status;
+        }
+
+        [TestCase(1, 1)]
+        [TestCase(2, 2)]
+        [TestCase(0, 3)]
+        public void OutgoingHit_FilterAndTargetDispatchStayUnchanged_OnlyConfiguredLimitCapsResponses(int limit, int expected)
+        {
+            StatusInstance capped = HookTestEnv.AttachStatus(_ally, "ST_TEST_HIT_CAP", _ally, 3);
+            StatusActionData action = HookTestEnv.InjectStatusAction(_dm, capped.StatusID2,
+                "OnTrigger", "", "", maxTimePerLife: 0, outgoingHitSource: "All");
+            action.SetTriggerLimits("Hit", limit.ToString());
+            StatusInstance unchanged = HookTestEnv.AttachStatus(_ally, "ST_TEST_TARGET_DISPATCH", _ally, 3);
+            HookTestEnv.InjectStatusAction(_dm, unchanged.StatusID2, "OnTrigger", "", "",
+                maxTimePerLife: 0, outgoingHitSource: "All");
+
+            using (BattleResolutionContext.BeginEffect())
+            {
+                SubmitOutgoingTargets(3);
+                Assert.That(capped.LifeTriggerCount, Is.EqualTo(expected));
+                Assert.That(unchanged.LifeTriggerCount, Is.EqualTo(3), "未配置行仍收到每个目标的命中");
+                SubmitOutgoingTargets(3);
+                Assert.That(capped.LifeTriggerCount, Is.EqualTo(expected * 2), "下一hit拥有自己的额度");
+            }
+        }
+
+        [Test]
+        public void HitLimit_FailedConditionDoesNotConsumeQuota_AndSuccessfulReservationPreventsExtraRolls()
+        {
+            StatusInstance status = HookTestEnv.AttachStatus(_ally, "ST_TEST_HIT_CHANCE", _ally, 3);
+            StatusActionData action = HookTestEnv.InjectStatusAction(_dm, status.StatusID2,
+                "OnTrigger", "", "Chance(0.5)", maxTimePerLife: 0, outgoingHitSource: "All");
+            action.SetTriggerLimits("Hit", "1");
+            var random = new SequenceBattleRandomSource(new[] { 0.9f, 0.1f });
+            BattleRandom.SetSource(random);
+            try
+            {
+                SubmitOutgoingTargets(3);
+                Assert.That(status.LifeTriggerCount, Is.EqualTo(1));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2),
+                    "首目标失败不占次数，第二目标成功预留后，第三目标不再重复判概率");
+            }
+            finally { BattleRandom.ResetSource(); }
+        }
+
+        private void SubmitOutgoingTargets(int count)
+        {
+            while (_otherTargets.Count < count - 1)
+                _otherTargets.Add(_env.CreateEnemy(_otherTargets.Count + 2, 100f).Entity);
+            using (var batch = new HitBatch())
+            {
+                for (int index = 0; index < count; index++)
+                    batch.Resolve(new HitRequest
+                    {
+                        Target = index == 0 ? _enemy : _otherTargets[index - 1],
+                        DamageBeforeShield = 1f, Element = "Physical",
+                        Source = DamageSourceInfo.Create(_ally, ReactionSourceKind.CharacterSkill, "SK_TEST", "SE_TEST"),
+                        HitIndex = 0, TargetIndex = index
+                    });
+                batch.Flush();
+            }
         }
     }
 }

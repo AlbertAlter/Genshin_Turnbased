@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,77 @@ namespace Roguelike.Tests.RouteGeneration
         private Vector2 _nodeSize;
         private Texture2D _circleTexture;
         private Sprite _circleSprite;
+        private readonly Dictionary<RouteNodeType, Sprite> _nodeIcons = new Dictionary<RouteNodeType, Sprite>();
+        private readonly Dictionary<string, Sprite> _artSprites = new Dictionary<string, Sprite>();
+        private readonly List<Sprite> _brushes = new List<Sprite>();
+        private RouteMapStyle _style = new RouteMapStyle();
+
+        public static string GetNodeIconPath(RouteNodeType type)
+        {
+            return new RouteMapStyle().GetIconPath(type);
+        }
+
+        public IEnumerator ApplyStyle(RouteMapStyle style)
+        {
+            var loaded = new Dictionary<string, Sprite>();
+            foreach (string path in style.ArtPaths().Distinct())
+            {
+                yield return StreamingAssetSpriteLoader.Load(path,
+                    sprite => loaded[path] = PrepareNodeIcon(sprite),
+                    error => Debug.LogWarning(error, this));
+            }
+            ClearChildren(_edgeLayer);
+            ClearChildren(_nodeLayer);
+            ReleaseArt();
+            _style = style;
+            foreach (KeyValuePair<string, Sprite> art in loaded) _artSprites.Add(art.Key, art.Value);
+            foreach (RouteNodeType type in new[] { RouteNodeType.Battle, RouteNodeType.Event, RouteNodeType.Elite })
+                if (loaded.TryGetValue(style.GetIconPath(type), out Sprite icon)) _nodeIcons.Add(type, icon);
+            if (style.RenderMode == RouteLineMode.BrushTexture)
+            {
+                foreach (string path in style.BrushTextures)
+                    if (loaded.TryGetValue(path, out Sprite brush)) _brushes.Add(brush);
+                if (_brushes.Count == 0 || _brushes.Count != style.BrushTextures.Length)
+                {
+                    _brushes.Clear();
+                    Debug.LogWarning("Route brush textures are missing; using procedural strokes.", this);
+                }
+            }
+        }
+
+        private static Sprite PrepareNodeIcon(Sprite source)
+        {
+            Texture2D texture = source.texture;
+            Color32[] pixels = texture.GetPixels32();
+            int minX = texture.width;
+            int minY = texture.height;
+            int maxX = -1;
+            int maxY = -1;
+            for (int y = 0; y < texture.height; y++)
+            for (int x = 0; x < texture.width; x++)
+            {
+                int index = y * texture.width + x;
+                byte alpha = pixels[index].a;
+                // Treat the source as an alpha mask so Image.color is the exact UI brown.
+                pixels[index] = new Color32(255, 255, 255, alpha);
+                if (alpha <= 8) continue;
+                minX = Mathf.Min(minX, x);
+                minY = Mathf.Min(minY, y);
+                maxX = Mathf.Max(maxX, x);
+                maxY = Mathf.Max(maxY, y);
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply(false, true);
+            // Unequal transparent padding must not make one node type appear smaller.
+            Rect bounds = maxX >= minX
+                ? new Rect(minX, minY, maxX - minX + 1, maxY - minY + 1)
+                : source.rect;
+            Sprite icon = Sprite.Create(texture, bounds, new Vector2(0.5f, 0.5f),
+                100f, 0u, SpriteMeshType.FullRect);
+            icon.name = source.name;
+            Destroy(source);
+            return icon;
+        }
 
         public void Initialize(RectTransform content, RectTransform debugLayer, RectTransform edgeLayer, RectTransform nodeLayer,
             Font font, Vector2 nodeSize)
@@ -39,7 +111,7 @@ namespace Roguelike.Tests.RouteGeneration
             Dictionary<int, RouteNodeData> nodes = map.Stages.SelectMany(stage => stage.Nodes)
                 .ToDictionary(node => node.Id);
             foreach (RouteEdgeData edge in map.Edges)
-                CreateEdge(nodes[edge.FromNodeId].Position, nodes[edge.ToNodeId].Position);
+                CreateEdge(nodes[edge.FromNodeId], nodes[edge.ToNodeId]);
             foreach (RouteStageData stage in map.Stages)
                 foreach (RouteNodeData node in stage.Nodes)
                     CreateNode(stage, node);
@@ -116,22 +188,53 @@ namespace Roguelike.Tests.RouteGeneration
             circle.raycastTarget = false;
         }
 
-        private void CreateEdge(Vector2 from, Vector2 to)
+        private float NodeSize(RouteNodeType type) =>
+            _style.UseIcons && _nodeIcons.ContainsKey(type) ? _style.IconSize : _nodeSize.x;
+
+        private void CreateEdge(RouteNodeData from, RouteNodeData to)
         {
-            GameObject lineObject = new GameObject("Edge", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            Vector2 delta = to.Position - from.Position;
+            float insetFrom = NodeSize(from.Type) * 0.5f + _style.NodeGap;
+            float insetTo = NodeSize(to.Type) * 0.5f + _style.NodeGap;
+            float length = delta.magnitude - insetFrom - insetTo;
+            if (length <= 0f) return;
+            uint seed = RouteDashLayout.EdgeSeed(_style.PatternSeed, from.Id, to.Id);
+            List<RouteDash> dashes = RouteDashLayout.Build(length, _style, seed);
+            GameObject lineObject = new GameObject("Edge_" + from.Id + "_" + to.Id,
+                typeof(RectTransform), typeof(CanvasRenderer));
             lineObject.layer = gameObject.layer;
             RectTransform line = lineObject.GetComponent<RectTransform>();
             line.SetParent(_edgeLayer, false);
             line.anchorMin = Vector2.zero;
             line.anchorMax = Vector2.zero;
             line.pivot = new Vector2(0f, 0.5f);
-            Vector2 delta = to - from;
-            line.anchoredPosition = from;
-            line.sizeDelta = new Vector2(delta.magnitude, 5f);
+            line.anchoredPosition = from.Position + delta.normalized * insetFrom;
+            float height = _style.Width * (1f + _style.WidthVariation) + _style.OffsetVariation * 2f +
+                           _style.DashLength * (1f + _style.LengthVariation) * Mathf.Sin(_style.AngleVariation * Mathf.Deg2Rad) + 2f;
+            line.sizeDelta = new Vector2(length, height);
             line.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
-            Image image = lineObject.GetComponent<Image>();
-            image.color = new Color(0.78f, 0.83f, 0.92f, 0.72f);
-            image.raycastTarget = false;
+            if (_brushes.Count == 0)
+            {
+                lineObject.AddComponent<RouteHandDrawnLineGraphic>().Configure(_style, dashes, seed, length);
+            }
+            else
+            {
+                for (int i = 0; i < _brushes.Count; i++)
+                {
+                    GameObject brushObject = new GameObject("Brush_" + i, typeof(RectTransform),
+                        typeof(CanvasRenderer), typeof(RouteHandDrawnLineGraphic));
+                    brushObject.layer = gameObject.layer;
+                    RectTransform brushRect = brushObject.GetComponent<RectTransform>();
+                    brushRect.SetParent(line, false);
+                    brushRect.anchorMin = Vector2.zero;
+                    brushRect.anchorMax = Vector2.one;
+                    brushRect.offsetMin = Vector2.zero;
+                    brushRect.offsetMax = Vector2.zero;
+                    brushRect.pivot = line.pivot;
+                    brushObject.GetComponent<RouteHandDrawnLineGraphic>()
+                        .Configure(_style, dashes, seed, length, _brushes[i], i, _brushes.Count);
+                }
+            }
         }
 
         private void CreateNode(RouteStageData stage, RouteNodeData node)
@@ -144,11 +247,20 @@ namespace Roguelike.Tests.RouteGeneration
             rect.anchorMax = Vector2.zero;
             rect.pivot = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = node.Position;
-            rect.sizeDelta = _nodeSize;
+            rect.sizeDelta = Vector2.one * NodeSize(node.Type);
             Image image = nodeObject.GetComponent<Image>();
             image.sprite = _circleSprite;
             image.type = Image.Type.Simple;
-            image.color = GetNodeColor(node.Type);
+            if (_style.UseIcons && _nodeIcons.TryGetValue(node.Type, out Sprite icon))
+            {
+                image.sprite = icon;
+                image.preserveAspect = true;
+                image.color = new Color(_style.NodeColor.r, _style.NodeColor.g, _style.NodeColor.b, _style.NodeOpacity);
+            }
+            else
+            {
+                image.color = GetNodeColor(node.Type);
+            }
             image.raycastTarget = false;
 
             GameObject textObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
@@ -158,7 +270,7 @@ namespace Roguelike.Tests.RouteGeneration
             textRect.anchorMin = new Vector2(0.5f, 0.5f);
             textRect.anchorMax = new Vector2(0.5f, 0.5f);
             textRect.pivot = new Vector2(0.5f, 1f);
-            textRect.anchoredPosition = new Vector2(0f, -20f);
+            textRect.anchoredPosition = new Vector2(0f, -NodeSize(node.Type) * 0.5f - 5f);
             textRect.sizeDelta = new Vector2(120f, 38f);
             Text label = textObject.GetComponent<Text>();
             label.font = _font;
@@ -203,8 +315,22 @@ namespace Roguelike.Tests.RouteGeneration
             _circleSprite.name = "RouteNodeCircleSprite";
         }
 
+        private void ReleaseArt()
+        {
+            foreach (Sprite icon in _artSprites.Values)
+            {
+                if (icon == null) continue;
+                Destroy(icon.texture);
+                Destroy(icon);
+            }
+            _artSprites.Clear();
+            _nodeIcons.Clear();
+            _brushes.Clear();
+        }
+
         private void OnDestroy()
         {
+            ReleaseArt();
             if (_circleSprite != null)
                 Destroy(_circleSprite);
             if (_circleTexture != null)

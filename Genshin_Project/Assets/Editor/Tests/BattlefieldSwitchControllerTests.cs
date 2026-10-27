@@ -1,16 +1,25 @@
 using System.Reflection;
 using NUnit.Framework;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
     public sealed class BattlefieldSwitchControllerTests
     {
+        private EditorSceneTestScope _scenes;
+
         [SetUp]
         public void SetUp()
         {
-            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            _scenes = new EditorSceneTestScope();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _scenes?.Dispose();
+            _scenes = null;
         }
 
         [Test]
@@ -58,14 +67,14 @@ namespace GenshinTurnBased.Tests.EditMode
                 int beforeAP = env.Manager.APManager.CurrentAP;
                 Assert.That(env.Manager.TrySwitchActiveAllyWithAPCost(1), Is.True);
                 Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(beforeAP - BattleManager.SwitchAPCost));
-                Assert.That(env.Enemy.Entity.GetStatus(mark).StackCount, Is.EqualTo(1));
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(mark), Is.EqualTo(1));
                 Assert.That(secondEnemy.Entity.GetStatus(mark).IsPermanent, Is.True);
                 Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(1));
                 Assert.That(ScriptHookEvaluator.Evaluate("OnField(1011)", lisa.Entity), Is.True);
                 Assert.That(env.Manager.TrySwitchActiveAllyWithAPCost(1), Is.False);
                 Assert.That(env.Manager.TrySwitchActiveAlly(0), Is.True);
                 Assert.That(env.Manager.TrySwitchActiveAlly(1), Is.True);
-                Assert.That(env.Enemy.Entity.GetStatus(mark).StackCount, Is.EqualTo(1), "本回合上场第二次不再施加");
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(mark), Is.EqualTo(1), "本回合上场第二次不再施加");
                 Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(2));
 
                 int turn = env.Manager.TurnCount;
@@ -78,9 +87,12 @@ namespace GenshinTurnBased.Tests.EditMode
                 env.Manager.APManager.ConsumeAP(env.Manager.APManager.CurrentAP);
                 Assert.That(env.Manager.TrySwitchActiveAllyWithAPCost(1), Is.False);
                 Assert.That(env.Ally.IsActive, Is.True);
-                Assert.That(env.Enemy.Entity.GetStatus(mark).StackCount, Is.EqualTo(1));
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(mark), Is.EqualTo(1));
                 Assert.That(env.Manager.TrySwitchActiveAlly(1), Is.True);
-                Assert.That(env.Enemy.Entity.GetStatus(mark).StackCount, Is.EqualTo(2));
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(mark), Is.EqualTo(2));
+                Assert.That(env.Enemy.Entity.GetStatusInstances(mark), Has.Count.EqualTo(2));
+                foreach (var instance in env.Enemy.Entity.GetStatusInstances(mark))
+                    Assert.That(instance.StackCount, Is.EqualTo(1), "每次施加保留独立状态实例，不合并旧实例层数");
             }
         }
 
@@ -100,6 +112,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     BattleInputController input = runtime.AddComponent<BattleInputController>();
                     BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
+                    BindTestControls(switcher, input);
                     int apBefore = env.Manager.APManager.CurrentAP;
 
                     Assert.That(switcher.UIBeginSwitch(), Is.True);
@@ -143,6 +156,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     BattleInputController input = runtime.AddComponent<BattleInputController>();
                     BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
+                    BindTestControls(switcher, input);
                     int apBefore = env.Manager.APManager.CurrentAP;
 
                     InvokeLifecycle(switcher, "Update");
@@ -161,6 +175,24 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     Object.DestroyImmediate(runtime);
                 }
+            }
+        }
+
+        private static void BindTestControls(BattlefieldSwitchController controller, BattleInputController input)
+        {
+            // 保留用户场景时不能依赖全局查找；只使用该测试的输入和按钮。
+            var hitArea = new GameObject("TestSwitchButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            hitArea.transform.SetParent(controller.transform, false);
+            foreach (var binding in new[]
+            {
+                new { Name = "_input", Value = (object)input },
+                new { Name = "_button", Value = (object)hitArea.GetComponent<Button>() }
+            })
+            {
+                FieldInfo field = typeof(BattlefieldSwitchController).GetField(binding.Name,
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(field, Is.Not.Null);
+                field.SetValue(controller, binding.Value);
             }
         }
 

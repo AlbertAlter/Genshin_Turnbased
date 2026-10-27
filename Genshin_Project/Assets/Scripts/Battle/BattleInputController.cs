@@ -190,7 +190,7 @@ public class BattleInputController : MonoBehaviour
             score = position =>
             {
                 var entity = bm.GetEntityByPosition(side, position);
-                return entity != null && entity.TotalHP > 0f ? entity.CurrentHP / entity.TotalHP : 0f;
+                return entity != null && entity.GetFinalHP() > 0f ? entity.CurrentHP / entity.GetFinalHP() : 0f;
             };
         }
 
@@ -466,14 +466,6 @@ public class BattleInputController : MonoBehaviour
         if (bm.CurrentPhase == TurnPhase.AllyAction) bm.EndAllyTurn();
     }
 
-#if GTB_POISE_SYSTEM
-    /// <summary>UI：让当前出战的倒地角色花费10 AP起身。</summary>
-    public bool UIStandUp()
-    {
-        var bm = BattleManager.Instance;
-        return bm != null && !_selecting && bm.TryStandUpActiveAlly();
-    }
-#endif
 
     /// <summary>UI：让当前出战的冻结角色花费10 AP解冻。</summary>
     public bool UIThaw()

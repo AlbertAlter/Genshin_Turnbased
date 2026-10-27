@@ -135,7 +135,7 @@ public sealed partial class BattlefieldStageViewLoader
             {
                 StageAllySetup ally = allies[index];
                 PreviewBoundImage(group, "CharacterCardArt",
-                    $"art_assets/Character_Whole/{ally.CharacterID}_03.png");
+                    $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
             });
 
         // Keep this paired with the runtime binding call above: the generated
@@ -303,8 +303,8 @@ public sealed partial class BattlefieldStageViewLoader
             if (sheet?.Dimension == null) return names;
             for (int row = 2; row <= sheet.Dimension.End.Row; row++)
             {
-                if (int.TryParse(sheet.Cells[row, 1].Text, out int id) && id > 0)
-                    names[id] = sheet.Cells[row, 3].Text;
+                if (int.TryParse(ExcelTableHeaders.For(sheet).Cell(row, "EnemyID").Text, out int id) && id > 0)
+                    names[id] = ExcelTableHeaders.For(sheet).Cell(row, "EnemyName").Text;
             }
         }
         catch

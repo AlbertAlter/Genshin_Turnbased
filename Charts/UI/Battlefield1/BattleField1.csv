@@ -11,7 +11,7 @@
 0008:character/0012:CharacterCard2,CharacterCard2,Instance,Template,163.0,203.0,245,338,Fixed,Instance,,-,charactercard_79f9eb05,instance,Top,,False,,,,,
 0008:character/0015:CharacterCard3,CharacterCard3,Instance,Template,329.0,0.0,245,338,Fixed,Instance,,-,charactercard_79f9eb05,instance,Bottom,,False,,,,,
 0008:character/0018:CharacterCard1,CharacterCard1,Group,MiddleCenter,207.5,-68.0,245,338,Fixed,Group,,-,charactercard_79f9eb05,template,Bottom,,False,,,,,
-0008:character/0018:CharacterCard1/0021:1009_01,1009_01,Layer,MiddleCenter,207.5,-68.0,197,338,Uniform,DynamicStreaming,,art_assets/Character_Whole/{CharacterID}_03.png,,,,CharacterCardArt,False,,,,,
+0008:character/0018:CharacterCard1/0021:1009_01,1009_01,Layer,MiddleCenter,207.5,-68.0,197,338,Uniform,DynamicStreaming,,art_assets/Character_Bare/{CharacterID}_03.png,,,,CharacterCardArt,False,,,,,
 0022:Enemy,Enemy,Group,MiddleLeft,509.5,33.0,855,542,Fixed,Group,,-,,,,,False,,,,,
 0022:Enemy/0023:EnemyCard2,EnemyCard2,Instance,Template,-155.0,204.0,197,338,Fixed,Instance,,-,enemycard_f2259c96,instance,Top,,False,,,,,
 0022:Enemy/0025:EnemyCard4,EnemyCard4,Instance,Template,-484.0,204.0,197,338,Fixed,Instance,,-,enemycard_f2259c96,instance,Top,,False,,,,,

@@ -23,7 +23,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
         private static void Configure(BattleFlowTestEnv env)
         {
-            env.ConfigureAllyAction(2, Skill, "SE_Prepare", "None", null, cooldown: 2,
+            env.ConfigureAllyAction(2, Skill, "SE_Prepare", "Physical", null, cooldown: 2,
                 effectType: "ApplyStatus", param1: First);
             var skill = env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID][0];
             skill.EnergyUsed = 10;
@@ -141,7 +141,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv();
             Configure(env);
-            env.ConfigureAllyAction(0, "SK_Child", "SE_Child", "None", null, apCost: 0,
+            env.ConfigureAllyAction(0, "SK_Child", "SE_Child", "Physical", null, apCost: 0,
                 effectType: "ApplyStatus", param1: First);
             string called = callType == "ExecuteSkill" ? "SK_Child" : "SE_Child";
             var input = Start(env, Status("SE_Prepare_0", Before, "Self", false),
@@ -185,7 +185,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv();
             Configure(env);
-            env.ConfigureAllyAction(0, "SK_Other", "SE_Other", "None", null, apCost: 5,
+            env.ConfigureAllyAction(0, "SK_Other", "SE_Other", "Physical", null, apCost: 5,
                 effectType: "ApplyStatus", param1: Second);
             var input = Start(env, Status("SE_Prepare_0", Before, "Self", false),
                 Status("SE_Prepare_1", First), Status("SE_Prepare_2", Second));
@@ -206,7 +206,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv();
             Configure(env);
-            env.ConfigureAllyAction(0, "SK_Upgrade", "SE_Upgrade", "None", null, apCost: 5,
+            env.ConfigureAllyAction(0, "SK_Upgrade", "SE_Upgrade", "Physical", null, apCost: 5,
                 effectType: "ApplyStatus", param1: Second);
             var skills = env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID];
             skills[0].SkillID = 10;
@@ -232,12 +232,12 @@ namespace GenshinTurnBased.Tests.EditMode
             Configure(env);
             var first = Status("SE_Prepare_1", First);
             first.EffectType = "Damage";
-            first.Element = "None";
+            first.Element = "Physical";
             first.DamageType = "Skill";
             first.Param1 = "1*TotalATK,0";
             var second = Status("SE_Prepare_2", Second);
             second.EffectType = "Damage";
-            second.Element = "None";
+            second.Element = "Physical";
             second.DamageType = "Skill";
             second.Param1 = "2*TotalATK,0";
             var input = Start(env, first, second);
@@ -275,6 +275,99 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(other.Entity.HasStatus(First), Is.True);
             Assert.That(env.Enemy.Entity.HasStatus(Second), Is.False);
             Assert.That(other.Entity.HasStatus(Second), Is.True);
+        }
+
+        [TestCase("Self", 1)]
+        [TestCase("Allies", 4)]
+        [TestCase("Enemy", 5)]
+        public void FixedSelfOrWholeSide_EntersOneCancelableConfirmationBeforeAnyCommit(string target, int count)
+        {
+            using var env = new BattleFlowTestEnv();
+            Configure(env);
+            var effect = Status("SE_Prepare_Confirm", First, target);
+            effect.TargetNumber = count;
+            effect.TargetConsecutive = 1;
+            var input = Start(env, effect);
+            input.UIEnterSelectSkill(2);
+            Assert.That(input.IsSelecting, Is.True);
+            Assert.That(input.Selector.CurrentSelection.Count, Is.EqualTo(count));
+            AssertUncommitted(env);
+            input.UICancelSelection();
+            Assert.That(input.IsSelecting, Is.False);
+            Assert.That(env.Ally.Entity.HasStatus(First), Is.False);
+            AssertUncommitted(env);
+        }
+
+        [Test]
+        public void FourAllyPositions_ConfirmOnceAndApplyOnlyToActualLivingMembers()
+        {
+            using var env = new BattleFlowTestEnv();
+            Configure(env);
+            var effect = Status("SE_Prepare_Party", First, "Allies");
+            effect.TargetNumber = 4;
+            var input = Start(env, effect);
+            var other = env.CreateAlly(2);
+            input.UIEnterSelectSkill(2);
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 1, 2, 3, 4 }));
+            AssertUncommitted(env);
+            input.UIConfirmSelection();
+            Assert.That(input.IsSelecting, Is.False);
+            Assert.That(env.Ally.Entity.HasStatus(First), Is.True);
+            Assert.That(other.Entity.HasStatus(First), Is.True);
+            Assert.That(env.Enemy.Entity.HasStatus(First), Is.False);
+            Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(80));
+            Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(20));
+        }
+
+        [Test]
+        public void RandomTarget_WholeEnemyPreviewDoesNotForceAnActualWholeEnemyApplication()
+        {
+            using var env = new BattleFlowTestEnv();
+            Configure(env);
+            var effect = Status("SE_Prepare_Random", First);
+            effect.TargetConsecutive = 3;
+            var input = Start(env, effect);
+            var second = env.CreateEnemy(2);
+            var third = env.CreateEnemy(3);
+            var random = new SequenceBattleRandomSource(intValues: new[] { 2 });
+            BattleRandom.SetSource(random);
+            input.UIEnterSelectSkill(2);
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 1, 2, 3 }));
+            Assert.That(random.IntCallCount, Is.Zero, "全体预览不提前抽实际随机目标");
+            AssertUncommitted(env);
+            input.UIConfirmSelection();
+            Assert.That(input.IsSelecting, Is.False);
+            Assert.That(env.Enemy.Entity.HasStatus(First), Is.False);
+            Assert.That(second.Entity.HasStatus(First), Is.False);
+            Assert.That(third.Entity.HasStatus(First), Is.True);
+            Assert.That(random.IntCallCount, Is.EqualTo(1));
+            Assert.That(random.FloatCallCount, Is.Zero);
+        }
+
+        [Test]
+        public void SkillPhaseUpgrade_WithWholeEnemyTarget_StillWaitsForConfirmationAndCanCancel()
+        {
+            using var env = new BattleFlowTestEnv();
+            Configure(env);
+            env.ConfigureAllyAction(0, "SK_UpgradeAll", "SE_UpgradeAll", "Physical", null,
+                apCost: 30, cooldown: 2, effectType: "ApplyStatus", param1: Second);
+            var skills = env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID];
+            skills[0].SkillID = 10; skills[0].SkillPhase = 1;
+            skills[1].SkillID = 11; skills[1].SkillPhase = 1; skills[1].ActionType = "Skill";
+            skills[1].MaxCharge = 2; skills[1].InitialCharge = 2;
+            env.DataManager.SkillEffectDict["SE_UpgradeAll"].TargetNumber = 5;
+            var input = Start(env, Status("SE_Prepare_1", First));
+            input.UIEnterSelectSkill(2);
+            input.UISelectSkillKey(2);
+            Assert.That(env.Ally.GetBoundSkillID(2), Is.EqualTo("SK_UpgradeAll"));
+            Assert.That(input.IsSelecting, Is.True);
+            Assert.That(env.Ally.PendingSelectEffect.SkillEffectID2, Is.EqualTo("SE_UpgradeAll"));
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 1, 2, 3, 4, 5 }));
+            AssertUncommitted(env);
+            input.UICancelSelection();
+            Assert.That(env.Ally.GetBoundSkillID(2), Is.EqualTo(Skill));
+            Assert.That(env.Ally.Entity.HasStatus(Second), Is.False);
+            AssertUncommitted(env);
         }
 
         [Test]

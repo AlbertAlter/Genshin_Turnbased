@@ -5,6 +5,17 @@ using UnityEngine;
 
 public partial class CharacterBattleController
 {
+    /// <summary>
+    /// 战斗技能等级的统一只读入口：SkillType只决定倍率/等级归属，不按DamageType或ActionType猜测。
+    /// 当前读取已加载的自身等级；队伍加级以后也只在此入口汇总，不改培养记录或反复修改数组。
+    /// </summary>
+    public int GetEffectiveSkillLevel(int skillType)
+    {
+        if (skillType < 0 || skillType >= CharacterSkillLevelInfo.SkillCount
+            || SkillLevels == null || skillType >= SkillLevels.Length) return 1;
+        return Mathf.Clamp(SkillLevels[skillType], 1, CharacterSkillLevelInfo.MaximumLevel);
+    }
+
     /// <summary>查询某按钮（0普攻/1重击/2战技/3爆发）是否被 ChangeControl Freeze 冻结。</summary>
     public bool IsButtonFrozen(int skillType)
     {
@@ -56,7 +67,7 @@ public partial class CharacterBattleController
     public int GetBoundSkillAPCost(int skillType)
     {
         if (skillType < 0 || skillType > 3) return 0;
-        if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return APCostResolver.ForSkill(Entity, sk);
+        if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return APCostResolver.ForSkill(Entity, sk, skillType);
         return 0;
     }
 
@@ -127,9 +138,6 @@ public partial class CharacterBattleController
     public void OnTurnStart()
     {
         //AP重置移到 BattleManager 全局（我方每回合共用100，2026-08-14）
-#if GTB_POISE_SYSTEM
-        PoiseSystem.RestoreAtTurnStart(Entity);
-#endif
 
         // 技能效果表挂载的 ChangeControl（填了Duration）：每回合递减，到0时结束（返回原技能/解冻）
         // 状态效果表挂载的由状态计时（状态消失时解除），永久型（IsPermanent）不递减
@@ -163,7 +171,7 @@ public partial class CharacterBattleController
             int cd;
             if (!_cooldownRemaining.TryGetValue(k, out cd) || cd <= 0) continue;
             if (cd == 1) CompleteSkillCooldown(k);
-            else _cooldownRemaining[k] = cd - 1;
+            else { _cooldownRemaining[k] = cd - 1; SyncSelectionPhaseRuntime(k); }
         }
     }
 
@@ -173,60 +181,48 @@ public partial class CharacterBattleController
     public bool CanUseNormalAttack()
     {
         if (!IsActive || Entity == null || Entity.IsDead) return false;
-#if GTB_POISE_SYSTEM
-        if (PoiseSystem.IsKnockedDown(Entity)) return false;
-#endif
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(0)) return false;
         string nid0 = _boundSkills[0];
         if (string.IsNullOrEmpty(nid0)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(nid0, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 0))) return false;
         return HasSkillUseAvailable(nid0, sk);
     }
 
     public bool CanUseHeavyAttack()
     {
         if (!IsActive || Entity == null || Entity.IsDead) return false;
-#if GTB_POISE_SYSTEM
-        if (PoiseSystem.IsKnockedDown(Entity)) return false;
-#endif
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(1)) return false;
         string hid1 = _boundSkills[1];
         if (string.IsNullOrEmpty(hid1)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(hid1, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 1))) return false;
         return HasSkillUseAvailable(hid1, sk);
     }
 
     public bool CanUseSkill()
     {
         if (!IsActive || Entity == null || Entity.IsDead) return false;
-#if GTB_POISE_SYSTEM
-        if (PoiseSystem.IsKnockedDown(Entity)) return false;
-#endif
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(2)) return false;
         string sid2 = _boundSkills[2];
         if (string.IsNullOrEmpty(sid2)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(sid2, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 2))) return false;
         return HasSkillUseAvailable(sid2, sk);
     }
 
     public bool CanUseBurst()
     {
         if (Entity == null || Entity.IsDead) return false;
-#if GTB_POISE_SYSTEM
-        if (PoiseSystem.IsKnockedDown(Entity)) return false;
-#endif
         if (FrozenReactionHandler.IsFrozen(Entity)) return false;
         if (IsButtonFrozen(3)) return false;
         string bid3 = _boundSkills[3];
         if (string.IsNullOrEmpty(bid3)) return false;
         if (_skillById2 == null || !_skillById2.TryGetValue(bid3, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk))) return false;
+        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 3))) return false;
         if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed) return false;
         return HasSkillUseAvailable(bid3, sk);
     }
@@ -249,10 +245,6 @@ public partial class CharacterBattleController
             return "角色实体不存在";
         if (Entity.IsDead)
             return "角色已经死亡";
-#if GTB_POISE_SYSTEM
-        if (PoiseSystem.IsKnockedDown(Entity))
-            return "角色处于倒地状态，需要先花费10 AP起身";
-#endif
         if (FrozenReactionHandler.IsFrozen(Entity))
             return "角色处于冻结状态，无法行动";
 
@@ -289,7 +281,7 @@ public partial class CharacterBattleController
         if (!_skillById2.TryGetValue(skillID2, out var sk))
             return $"技能数据缺失({skillID2})";
 
-        int apCost = APCostResolver.ForSkill(Entity, sk);
+        int apCost = APCostResolver.ForSkill(Entity, sk, skillType);
         if (APManager == null) return "战斗行动点系统未初始化";
         if (!APManager.CanAfford(apCost))
             return $"AP不足（需要{apCost}，当前{APManager.CurrentAP}）";

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using GenshinTurnBased.Tests.EditMode;
 using NUnit.Framework;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,19 +10,28 @@ using UnityEngine.UI;
 public sealed class BattlefieldSelectionPresentationTests
 {
     private readonly List<GameObject> _roots = new List<GameObject>();
+    private EditorSceneTestScope _scenes;
 
     [SetUp]
     public void SetUp()
     {
-        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        _scenes = new EditorSceneTestScope();
     }
 
     [TearDown]
     public void TearDown()
     {
-        foreach (GameObject root in _roots)
-            if (root != null) UnityEngine.Object.DestroyImmediate(root);
-        _roots.Clear();
+        try
+        {
+            for (int index = _roots.Count - 1; index >= 0; index--)
+                if (_roots[index] != null) UnityEngine.Object.DestroyImmediate(_roots[index]);
+        }
+        finally
+        {
+            _roots.Clear();
+            _scenes?.Dispose();
+            _scenes = null;
+        }
     }
 
     [Test]
@@ -52,6 +61,7 @@ public sealed class BattlefieldSelectionPresentationTests
 
         GameObject runtime = NewRoot("BattleRuntime");
         BattleInputController input = runtime.AddComponent<BattleInputController>();
+        BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
         CharacterBattleController caster = runtime.AddComponent<CharacterBattleController>();
         caster.Entity = runtime.AddComponent<BattleEntity>();
         caster.Entity.Side = BattleSide.Ally;
@@ -62,7 +72,7 @@ public sealed class BattlefieldSelectionPresentationTests
         input.Selector.Side = BattleSide.Enemy;
         input.Selector.CurrentSelection = new List<int> { 1 };
 
-        InvokeLifecycle(presentation, "Start");
+        BindTestHierarchy(presentation, canvasObject.GetComponent<Canvas>(), dimmer, input, switcher);
         InvokeLifecycle(presentation, "LateUpdate");
 
         Assert.That(dimmer.enabled, Is.True);
@@ -132,13 +142,13 @@ public sealed class BattlefieldSelectionPresentationTests
         Transform allyPanel2 = NewChild(allyInfo, "角色2").transform;
 
         GameObject runtime = NewRoot("BattleRuntime");
-        runtime.AddComponent<BattleInputController>();
+        BattleInputController input = runtime.AddComponent<BattleInputController>();
         BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
         BattlefieldSelectionPresentation presentation = runtime.AddComponent<BattlefieldSelectionPresentation>();
         SetPrivateField(switcher, "_switching", true);
         SetPrivateField(switcher, "_selectedSlot", 1);
 
-        InvokeLifecycle(presentation, "Start");
+        BindTestHierarchy(presentation, canvasObject.GetComponent<Canvas>(), dimmer, input, switcher);
         InvokeLifecycle(presentation, "LateUpdate");
 
         Assert.That(dimmer.enabled, Is.True);
@@ -153,11 +163,11 @@ public sealed class BattlefieldSelectionPresentationTests
     [Test]
     public void GeneratedScene_HasPresenterAndTargetGlowsDefaultOff()
     {
-        EditorSceneManager.OpenScene("Assets/Scene/BattleField1.unity", OpenSceneMode.Single);
+        Scene scene = _scenes.OpenPreview("Assets/Scene/BattleField1.unity");
 
-        Assert.That(UnityEngine.Object.FindObjectOfType<BattlefieldSelectionPresentation>(true), Is.Not.Null);
-        Assert.That(UnityEngine.Object.FindObjectOfType<BattlefieldSwitchController>(true), Is.Not.Null);
-        PsdUiBinding[] bindings = UnityEngine.Object.FindObjectsOfType<PsdUiBinding>(true);
+        Assert.That(EditorSceneTestScope.GetComponents<BattlefieldSelectionPresentation>(scene), Is.Not.Empty);
+        Assert.That(EditorSceneTestScope.GetComponents<BattlefieldSwitchController>(scene), Is.Not.Empty);
+        List<PsdUiBinding> bindings = EditorSceneTestScope.GetComponents<PsdUiBinding>(scene);
         var glows = new List<PsdUiBinding>();
         PsdUiBinding dimmerBinding = null;
         foreach (PsdUiBinding binding in bindings)
@@ -185,8 +195,55 @@ public sealed class BattlefieldSelectionPresentationTests
     private GameObject NewRoot(string name, params Type[] components)
     {
         var root = new GameObject(name, components);
+        if (root.scene != _scenes.TestScene) SceneManager.MoveGameObjectToScene(root, _scenes.TestScene);
         _roots.Add(root);
         return root;
+    }
+
+    [Test]
+    public void SceneScope_RestoresActiveSceneAndClosesOnlyItsOwnScene()
+    {
+        Scene original = SceneManager.GetActiveScene();
+        Scene nested;
+        using (var scope = new EditorSceneTestScope())
+        {
+            nested = scope.TestScene;
+            Assert.That(nested, Is.Not.EqualTo(original));
+            Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(nested));
+            Assert.That(original.isLoaded, Is.True);
+        }
+        Assert.That(original.isLoaded, Is.True);
+        Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(original));
+        Assert.That(nested.IsValid() && nested.isLoaded, Is.False);
+    }
+
+    private static void BindTestHierarchy(BattlefieldSelectionPresentation presentation, Canvas canvas,
+        Image dimmer, BattleInputController input, BattlefieldSwitchController switcher)
+    {
+        // 行为单元测试显式绑定自身界面，不调用包含全局查找和资源读取的 Start。
+        // 正式场景的组件及绑定结构由独立预览场景测试检查。
+        SetPrivateField(presentation, "_canvas", canvas);
+        SetPrivateField(presentation, "_dimmer", dimmer);
+        SetPrivateField(presentation, "_input", input);
+        SetPrivateField(presentation, "_switch", switcher);
+        Transform allyCards = canvas.transform.Find("character");
+        Transform enemyCards = canvas.transform.Find("Enemy");
+        Transform allyInfo = canvas.transform.Find("角色栏");
+        Transform enemyInfo = canvas.transform.Find("敌人栏");
+        foreach (Transform container in new[] { allyCards, enemyCards, allyInfo, enemyInfo })
+            InvokePrivate(presentation, "AddContainer", container);
+        InvokePrivate(presentation, "AddSide", BattleSide.Ally, allyCards, "CharacterCard", allyInfo, "角色");
+        InvokePrivate(presentation, "AddSide", BattleSide.Enemy, enemyCards, "EnemyCard", enemyInfo, "敌人");
+        InvokePrivate(presentation, "SetAllGlows", false);
+    }
+
+    private static void InvokePrivate(BattlefieldSelectionPresentation presentation, string methodName,
+        params object[] arguments)
+    {
+        MethodInfo method = typeof(BattlefieldSelectionPresentation).GetMethod(methodName,
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.That(method, Is.Not.Null);
+        method.Invoke(presentation, arguments);
     }
 
     private static GameObject NewChild(Transform parent, string name, params Type[] components)

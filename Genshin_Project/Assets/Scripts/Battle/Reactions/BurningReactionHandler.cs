@@ -18,14 +18,11 @@ public static class BurningReactionHandler
             && ReactionStateSystem.TryGetEntityState(target, ReactionType.Burning, out _);
 
     public static float GetBurningAuraAsPyro(BattleEntity target)
-    {
-        return ReactionStateSystem.TryGetEntityState(target, ReactionType.Burning, out var state)
-            ? Mathf.Max(0f, state.ReactionElementAmount)
-            : 0f;
-    }
+        => ElementQuery.GetAmount(target, "Pyro", ReactionPoolKind.Burning);
 
     public static float ConsumeBurningAura(BattleEntity target, float amount)
     {
+        using var declarations = ElementEventScope.Begin("ReactionConsumption", target);
         if (target == null || amount <= 0f
             || !ReactionStateSystem.TryGetEntityState(target, ReactionType.Burning, out var state))
             return 0f;
@@ -41,22 +38,20 @@ public static class BurningReactionHandler
     }
 
     public static float GetPyroAmountIncludingBurning(BattleEntity target)
-    {
-        if (target == null) return 0f;
-        return (target.GetAura("Pyro")?.AuraAmount ?? 0f) + GetBurningAuraAsPyro(target);
-    }
+        => ElementQuery.GetReactionAmount(target, "Pyro");
 
     /// <summary>先消耗普通过量火，再消耗燃元素。</summary>
     public static float ConsumePyroIncludingBurning(BattleEntity target, float amount)
     {
+        using var declarations = ElementEventScope.Begin("ReactionConsumption", target);
         if (target == null || amount <= 0f) return 0f;
 
         float remaining = amount;
         float consumedTotal = 0f;
-        ElementalAura pyro = target.GetAura("Pyro");
+        ElementPoolReading pyro = ElementQuery.ReadNormal(target, "Pyro");
         if (pyro != null)
         {
-            float consumed = Mathf.Min(pyro.AuraAmount, remaining);
+            float consumed = Mathf.Min(pyro.Amount, remaining);
             target.ConsumeAura("Pyro", consumed);
             consumedTotal += consumed;
             remaining -= consumed;
@@ -75,11 +70,11 @@ public static class BurningReactionHandler
         out BurningReactionResolution resolution)
     {
         resolution = default;
-        ElementalAura aura = GetOpposingNormalAura(context);
+        ElementPoolReading aura = GetOpposingNormalAura(context);
         if (aura == null) return false;
 
-        float consumed = Mathf.Min(context.AttackAmount, aura.AuraAmount);
-        context.Target.ConsumeAura(aura.Element, consumed);
+        float consumed = aura.AvailableFor(context.AttackAmount);
+        ElementAuraSystem.ConsumeReactionAura(context, aura.Element, consumed);
         float totalBurningAmount = consumed;
         if (ReactionStateSystem.TryGetEntityState(
                 context.Target,
@@ -187,10 +182,9 @@ public static class BurningReactionHandler
             EffectExecutionID = ReactionResolver.BeginEffectExecution(),
             ApplicationPhase = (int)phase,
             AttackElement = "Pyro",
-            AttackAmount = 1f,
+            AttackAmount = target.GetEnemyElementalShield()?.Element == "Pyro" ? 0f : 1f,
             PreReactionDamage = damage,
             DamageType = "Reaction",
-            PoiseDamage = 0f,
             SkipImmediateAuraDecay = true
         });
 
@@ -201,10 +195,10 @@ public static class BurningReactionHandler
             {
                 Target = target,
                 DamageBeforeShield = result.FinalDamage,
+                EnemyShieldHit = result.EnemyShieldHit,
                 Element = "Pyro",
                 DamageType = "Reaction",
                 DMGTaken = taken,
-                PoiseDamage = 0f,
                 // 燃烧保留触发者/阵营，但它是反应伤害，只产生 OnDamage。
                 Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Burning),
                 HitIndex = 0,
@@ -220,7 +214,7 @@ public static class BurningReactionHandler
         ReactionEffectExecutor.ExecuteDerivedHits(result);
     }
 
-    private static ElementalAura GetOpposingNormalAura(ReactionContext context)
+    private static ElementPoolReading GetOpposingNormalAura(ReactionContext context)
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f)
             return null;
@@ -230,8 +224,7 @@ public static class BurningReactionHandler
         else if (context.AttackElement == "Dendro") auraElement = "Pyro";
         else return null;
 
-        ElementalAura aura = context.Target.GetAura(auraElement);
-        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
-            && aura != null && aura.AuraAmount > 0f ? aura : null;
+        ElementPoolReading aura = ElementQuery.ReadReactionAura(context, auraElement);
+        return aura?.IsPresent == true ? aura : null;
     }
 }

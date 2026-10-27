@@ -1,15 +1,15 @@
 using System;
 using System.Globalization;
 
-/// <summary>只读标量语法：数字、四则运算、括号、Index(n)、Count(状态ID)。不执行脚本。</summary>
+/// <summary>只读标量语法：四则、括号、min(a,b)、Index、Count及调用者明确提供的属性。不执行脚本。</summary>
 public static class BuffScalarParser
 {
     public static float Evaluate(string expression, Func<int, float> readIndex = null,
-        Func<string, float> readCount = null)
+        Func<string, float> readCount = null, Func<string, float> readAttribute = null)
     {
         if (string.IsNullOrWhiteSpace(expression) || expression.Length > 1024)
             throw new FormatException("Buff 数值表达式为空或过长。");
-        var parser = new Parser(expression, readIndex, readCount);
+        var parser = new Parser(expression, readIndex, readCount, readAttribute);
         double value = parser.Sum();
         parser.Space();
         if (parser.Position != expression.Length || double.IsNaN(value)
@@ -23,11 +23,13 @@ public static class BuffScalarParser
         private readonly string text;
         private readonly Func<int, float> readIndex;
         private readonly Func<string, float> readCount;
+        private readonly Func<string, float> readAttribute;
         private int depth;
         public int Position;
 
-        public Parser(string text, Func<int, float> readIndex, Func<string, float> readCount)
-        { this.text = text; this.readIndex = readIndex; this.readCount = readCount; }
+        public Parser(string text, Func<int, float> readIndex, Func<string, float> readCount,
+            Func<string, float> readAttribute)
+        { this.text = text; this.readIndex = readIndex; this.readCount = readCount; this.readAttribute = readAttribute; }
 
         public void Space()
         { while (Position < text.Length && char.IsWhiteSpace(text[Position])) Position++; }
@@ -82,7 +84,21 @@ public static class BuffScalarParser
                 if (Position < text.Length && char.IsLetter(text[Position]))
                 {
                     string function = Name();
+                    Space();
+                    if (Position >= text.Length || text[Position] != '(')
+                    {
+                        if (readAttribute == null) throw new FormatException("缺少 Buff 属性读取上下文：" + function);
+                        return Finite(readAttribute(function));
+                    }
                     Need('(');
+                    if (string.Equals(function, "min", StringComparison.OrdinalIgnoreCase))
+                    {
+                        double first = Sum();
+                        Need(',');
+                        double second = Sum();
+                        Need(')');
+                        return Math.Min(first, second);
+                    }
                     if (function == "Count")
                     {
                         string id = Name();

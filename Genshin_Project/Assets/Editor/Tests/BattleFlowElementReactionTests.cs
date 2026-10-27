@@ -90,13 +90,13 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
-        public void FreezeThenShatter_UsesClaymorePhysicalHeavyWithoutPoise()
+        public void FreezeThenShatter_UsesClaymorePhysicalHeavy()
         {
             using (var env = new BattleFlowTestEnv())
             {
                 env.ConfigureAllyAction(0, "SK_Normal_Flow", "SE_Normal_Flow", "Cryo", "1*TotalATK,1", 10);
                 env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Hydro", "1*TotalATK,1", 10);
-                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "None", "1*TotalATK,0", 10);
+                env.ConfigureAllyAction(1, "SK_Heavy_Flow", "SE_Heavy_Flow", "Physical", "1*TotalATK,0", 10);
                 env.DataManager.CharacterAttributesDict[BattleFlowTestEnv.AllyID].WeaponType = 1;
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
@@ -109,7 +109,6 @@ namespace GenshinTurnBased.Tests.EditMode
 
                 env.Manager.UseHeavyAttackBySlot(0);
                 Assert.That(FrozenReactionHandler.IsFrozen(env.Enemy.Entity), Is.False);
-                Assert.That(env.Enemy.Entity.Poise, Is.EqualTo(env.Enemy.Entity.MaxPoise).Within(0.01f));
                 Assert.That(env.Enemy.Entity.HasStatus("ST_Fall_Enemy"), Is.False);
                 // 碎冰：17.2*3=51.6；三次直伤各50。
                 Assert.That(env.Enemy.Entity.CurrentHP, Is.EqualTo(798.4f).Within(0.01f));

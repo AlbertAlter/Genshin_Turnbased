@@ -38,7 +38,7 @@ namespace GenshinTurnBased.Tests.EditMode
             _target.ApplyAura("Cryo", 1.5f, 1);
 
             bool triggered = FrozenReactionHandler.TryResolveFreeze(
-                NewContext("Hydro", 2f, 20f),
+                NewContext("Hydro", 2f),
                 out FrozenReactionResolution result);
 
             Assert.That(triggered, Is.True);
@@ -56,7 +56,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _target.ApplyAura("Cryo", 1.5f, 1);
             FrozenReactionHandler.TryResolveFreeze(
-                NewContext("Hydro", 1.5f, 20f),
+                NewContext("Hydro", 1.5f),
                 out _);
 
             float consumed = FrozenReactionHandler.ConsumeFrozenAura(_target, 0.6f);
@@ -77,7 +77,7 @@ namespace GenshinTurnBased.Tests.EditMode
             _target.ApplyAura("Hydro", 1f, 1);
 
             FrozenReactionHandler.TryResolveFreeze(
-                NewContext("Cryo", 1f, 20f),
+                NewContext("Cryo", 1f),
                 out _);
 
             ReactionStateSystem.TryGetEntityState(_target, ReactionType.Frozen, out var current);
@@ -92,7 +92,7 @@ namespace GenshinTurnBased.Tests.EditMode
             BattleManager battle = NewObject("Frozen_Battle").AddComponent<BattleManager>();
             SetPhase(battle, TurnPhase.AllyAction);
             _target.ApplyAura("Cryo", 1f, 1);
-            ReactionContext context = NewContext("Hydro", 1f, 20f);
+            ReactionContext context = NewContext("Hydro", 1f);
             context.ApplicationPhase = (int)TurnPhase.AllyAction;
             FrozenReactionHandler.TryResolveFreeze(context, out _);
 
@@ -105,10 +105,11 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [TestCase(1, "Physical", "Normal", true)]
-        [TestCase(1, "None", "Heavy", true)]
+        [TestCase(1, "Physical", "Heavy", true)]
+        [TestCase(1, "None", "Heavy", false)]
         [TestCase(1, "Physical", "Heavy", true)]
         [TestCase(0, "Physical", "Normal", false)]
-        [TestCase(2, "None", "Heavy", false)]
+        [TestCase(2, "Physical", "Heavy", false)]
         [TestCase(3, "Physical", "Normal", false)]
         [TestCase(4, "Physical", "Heavy", false)]
         [TestCase(1, "Physical", "Skill", false)]
@@ -125,8 +126,7 @@ namespace GenshinTurnBased.Tests.EditMode
             ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
                 new ReactionSourceSnapshot(), -1, true, 3f);
             _source.WeaponType = weaponType;
-            _target.MaxPoise = -1f;
-            ReactionContext context = NewContext(element, 0f, 0f);
+            ReactionContext context = NewContext(element, 0f);
             context.DamageType = damageType;
             Assert.That(FrozenReactionHandler.CanShatter(context), Is.EqualTo(expected));
         }
@@ -136,7 +136,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
                 new ReactionSourceSnapshot(), -1, true, 3f);
-            ReactionContext context = NewContext("Geo", 0f, 0f);
+            ReactionContext context = NewContext("Geo", 0f);
             _source.Type = BattleEntity.EntityType.Enemy;
             context.SourceKind = ReactionSourceKind.EnemySkill;
             Assert.That(FrozenReactionHandler.CanShatter(context), Is.True);
@@ -157,12 +157,12 @@ namespace GenshinTurnBased.Tests.EditMode
         [Test]
         public void CanShatter_RequiresFrozenTarget()
         {
-            Assert.That(FrozenReactionHandler.CanShatter(NewContext("Geo", 1f, 0f)), Is.False);
+            Assert.That(FrozenReactionHandler.CanShatter(NewContext("Geo", 1f)), Is.False);
         }
 
         [TestCase(0f)]
         [TestCase(1f)]
-        public void FinalizePrimaryHit_ClearsAllFrozenAuraWithoutBreakingPoise(float actualHPDamage)
+        public void FinalizePrimaryHit_ClearsAllFrozenAuraOnce(float actualHPDamage)
         {
             ReactionStateSystem.SetEntityState(_target, ReactionType.Frozen, 3,
                 new ReactionSourceSnapshot(), -1, true, 3f);
@@ -176,7 +176,6 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(FrozenReactionHandler.GetFrozenAuraAsCryo(_target), Is.Zero);
             Assert.That(_target.HasStatus("ST_Freeze"), Is.False);
             Assert.That(_target.GetAura("Cryo").AuraAmount, Is.EqualTo(2f));
-            Assert.That(_target.Poise, Is.EqualTo(100f));
             Assert.That(_target.HasStatus("ST_Fall_Enemy"), Is.False);
             Assert.That(result.DerivedHits, Has.Count.EqualTo(1));
             Assert.That(result.DerivedHits[0].DamageElement, Is.EqualTo("Physical"));
@@ -187,7 +186,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [Test]
         public void BuildPendingShatter_UsesCharacterAndEnemyFormulas()
         {
-            ReactionContext context = NewContext("None", 0f, 100f);
+            ReactionContext context = NewContext("Physical", 0f);
             float resistance = ReactionDamageCalculator.GetResistanceMultiplier(_target, "Physical");
 
             PendingShatterEffect character = FrozenReactionHandler.BuildPendingShatter(context, 100f);
@@ -230,7 +229,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(ally.HasStatus("ST_Freeze"), Is.False);
         }
 
-        private ReactionContext NewContext(string element, float amount, float poiseDamage)
+        private ReactionContext NewContext(string element, float amount)
         {
             return new ReactionContext
             {
@@ -241,7 +240,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 AttackElement = element,
                 AttackAmount = amount,
                 PreReactionDamage = 100f,
-                PoiseDamage = poiseDamage
             };
         }
 
@@ -271,8 +269,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.Level = 80;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 100f;
-            entity.Poise = 100f;
             return entity;
         }
 

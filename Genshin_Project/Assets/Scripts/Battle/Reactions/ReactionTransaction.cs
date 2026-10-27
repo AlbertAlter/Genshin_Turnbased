@@ -6,5 +6,10 @@ public sealed class ReactionTransaction
 {
     private readonly List<Action> _writes = new List<Action>();
     public void Enqueue(Action write) { if (write != null) _writes.Add(write); }
-    public void Commit() { foreach (Action write in _writes) write(); _writes.Clear(); }
+    public void Commit()
+    {
+        using var declarations = ElementEventScope.Begin("SwirlPropagationCommit");
+        foreach (Action write in _writes) write();
+        _writes.Clear();
+    }
 }

@@ -21,7 +21,12 @@ public partial class EnemyBattleController
             effect.TargetOverride,
             null,
             null,
-            _lastEnemyTargetResult);
+            _lastEnemyTargetResult,
+            deadOnly: effect.EffectType == "Revive",
+            // 是否受嘲讽由目标模式决定，与执行次数、次数处理器及hit数无关。
+            // 公共解析器仅对0/1应用嘲讽；2/3/4始终保持各自的随机规则。
+            respectTaunt: effect.EffectType == "Damage",
+            weightProvider: position => battle.GetEntityByPosition(BattleSide.Ally, position)?.HitWeight ?? 0f);
 
         if (!result.IsValid)
         {
@@ -40,7 +45,7 @@ public partial class EnemyBattleController
     {
         var result = ResolveEnemyTargetResult(effect);
         return result.IsValid
-            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result)
+            ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
     }
 

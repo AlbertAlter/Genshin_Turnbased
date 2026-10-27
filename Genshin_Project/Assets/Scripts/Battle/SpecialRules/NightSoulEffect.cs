@@ -26,6 +26,8 @@ public static class NightSoulEffect
             NightSoulStatusHandler.RequireInitialized(target);
             prepared.Add(target);
         }
+        using var resolution = BattleEventHub.BeginResolution();
+        using var collection = BattleResolutionContext.BeginCollection();
         foreach (BattleEntity target in prepared)
         {
             NightSoulValueChange change = NightSoulStatusHandler.ChangeValue(target, delta);

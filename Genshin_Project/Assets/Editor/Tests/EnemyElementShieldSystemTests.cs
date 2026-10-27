@@ -34,7 +34,7 @@ namespace GenshinTurnBased.Tests.EditMode
             table.Add(EnemyShieldRuleParser.Parse("2", "Pyro", "Hydro"));
 
             EnemyShieldHitResult result = EnemyElementShieldSystem.ResolveHit(
-                _target, "Hydro", 1f, 0f, rules: table);
+                _target, "Hydro", 1f, rules: table);
 
             Assert.That(result.HadShieldAtStart, Is.True);
             Assert.That(result.ShieldRow, Is.EqualTo("Pyro"));
@@ -49,10 +49,10 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _target.AddOrReplaceEnemyElementalShield(5f, "Geo", _status);
             var table = new EnemyShieldRuleTable();
-            table.Add(EnemyShieldRuleParser.Parse("0.01U*PoiseDMG", "Geo", "Overloaded"));
+            table.Add(EnemyShieldRuleParser.Parse("1U", "Geo", "Overloaded"));
 
             EnemyShieldHitResult result = EnemyElementShieldSystem.ResolveHit(
-                _target, "Pyro", 0f, 100f, "Overloaded", table);
+                _target, "Pyro", 0f, "Overloaded", table);
 
             Assert.That(result.HitColumn, Is.EqualTo("Overloaded"));
             Assert.That(result.AppliedLoss, Is.EqualTo(1f));
@@ -69,7 +69,7 @@ namespace GenshinTurnBased.Tests.EditMode
             table.Add(EnemyShieldRuleParser.Parse("2", "Freeze", "Cryo"));
 
             EnemyShieldHitResult result = EnemyElementShieldSystem.ResolveHit(
-                _target, "Cryo", 1f, 0f, rules: table);
+                _target, "Cryo", 1f, rules: table);
 
             Assert.That(result.ShieldRow, Is.EqualTo("Freeze"));
             Assert.That(result.AppliedLoss, Is.EqualTo(2f));
@@ -84,7 +84,7 @@ namespace GenshinTurnBased.Tests.EditMode
             table.Add(EnemyShieldRuleParser.Parse("1U", "Electro", "Hydro"));
 
             EnemyShieldHitResult result = EnemyElementShieldSystem.ResolveHit(
-                _target, "Hydro", 2f, 0f, rules: table);
+                _target, "Hydro", 2f, rules: table);
 
             Assert.That(result.BrokeShield, Is.True);
             Assert.That(result.RemainingShield, Is.Zero);
@@ -97,7 +97,7 @@ namespace GenshinTurnBased.Tests.EditMode
             _target.AddOrReplaceEnemyElementalShield(5f, "Dendro", _status);
 
             EnemyShieldHitResult result = EnemyElementShieldSystem.ResolveHit(
-                _target, "Geo", 1f, 100f, rules: new EnemyShieldRuleTable());
+                _target, "Geo", 1f, rules: new EnemyShieldRuleTable());
 
             Assert.That(result.HadShieldAtStart, Is.True);
             Assert.That(result.AppliedLoss, Is.Zero);

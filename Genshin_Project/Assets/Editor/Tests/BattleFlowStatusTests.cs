@@ -80,7 +80,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 const string statusID = "ST_BattleFlow_Debuff";
                 env.ConfigureStatus(statusID, maxStack: 2);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", null,
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", null,
                     effectType: "ApplyStatus", param1: statusID, duration: 2,
                     addInPhase: (int)TurnPhase.AllyAction, triggerPhase: (int)TurnPhase.AllyPostTurn);
                 env.CreateMinimalBattle();
@@ -102,27 +102,57 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test]
         [Timeout(5000)]
-        public void SameStatus_FromRealSkill_StacksAndRefreshesWithoutReplacingEarly()
+        public void SameStatus_FromRealSkill_AddsIndependentInstancesAndReplacesOldestOnlyAtCap()
         {
             using (var env = new BattleFlowTestEnv())
             {
                 const string statusID = "ST_BattleFlow_Stack";
                 env.ConfigureStatus(statusID, maxStack: 2);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", null,
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", null,
                     apCost: 10, effectType: "ApplyStatus", param1: statusID,
-                    duration: 2, addInPhase: 2, triggerPhase: 3);
+                    duration: 2, addInPhase: 2);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
 
                 Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
-                long firstOrder = env.Enemy.Entity.GetStatus(statusID).ApplyOrder;
+                StatusInstance first = env.Enemy.Entity.GetStatus(statusID);
+                Assert.That(first, Is.Not.Null);
+                long firstOrder = first.ApplyOrder;
                 Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
 
-                StatusInstance status = env.Enemy.Entity.GetStatus(statusID);
-                Assert.That(status.StackCount, Is.EqualTo(2));
-                Assert.That(status.RemainingPhaseCount, Is.EqualTo(2));
-                Assert.That(status.ApplyOrder, Is.EqualTo(firstOrder));
+                // 普通状态按实例叠加，不合并进第一份的 StackCount，也不提前替换旧实例。
+                var instances = env.Enemy.Entity.GetStatusInstances(statusID);
+                Assert.That(instances, Has.Count.EqualTo(2));
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(statusID), Is.EqualTo(2));
+                Assert.That(env.Enemy.Entity.GetStatus(statusID), Is.SameAs(first));
+                Assert.That(instances[0], Is.SameAs(first));
+                Assert.That(first.ApplyOrder, Is.EqualTo(firstOrder));
+                StatusInstance second = instances[1];
+                Assert.That(second, Is.Not.SameAs(first));
+                Assert.That(second.ApplyOrder, Is.GreaterThan(firstOrder));
+                foreach (StatusInstance instance in instances)
+                {
+                    Assert.That(instance.StackCount, Is.EqualTo(1));
+                    Assert.That(instance.RemainingPhaseCount, Is.EqualTo(2));
+                    Assert.That(instance.Caster, Is.SameAs(env.Ally.Entity));
+                    Assert.That(instance.IsActive, Is.True);
+                }
+
+                // MaxStack=2、WhenMax=0：第三次施加只替换最早的一份。
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+                instances = env.Enemy.Entity.GetStatusInstances(statusID);
+                Assert.That(instances, Has.Count.EqualTo(2));
+                Assert.That(env.Enemy.Entity.GetStatusStackCount(statusID), Is.EqualTo(2));
+                Assert.That(env.Enemy.Entity.HasStatusInstance(first), Is.False);
+                Assert.That(first.IsActive, Is.False);
+                Assert.That(instances[0], Is.SameAs(second));
+                Assert.That(second.RemainingPhaseCount, Is.EqualTo(2));
+                Assert.That(instances[1], Is.Not.SameAs(first));
+                Assert.That(instances[1], Is.Not.SameAs(second));
+                Assert.That(instances[1].ApplyOrder, Is.GreaterThan(second.ApplyOrder));
+                Assert.That(instances[1].StackCount, Is.EqualTo(1));
+                Assert.That(instances[1].RemainingPhaseCount, Is.EqualTo(2));
             }
         }
 
@@ -134,7 +164,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 const string statusID = "ST_BattleFlow_Reset";
                 env.ConfigureStatus(statusID);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", null,
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", null,
                     effectType: "ApplyStatus", param1: statusID, duration: 2, addInPhase: 2, triggerPhase: 3);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
@@ -161,7 +191,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 const string statusID = "ST_BattleFlow_Dot";
                 const string statusEffectID = "STE_BattleFlow_Dot";
                 env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: statusEffectID);
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", null,
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", null,
                     apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
                     addInPhase: (int)TurnPhase.AllyPostTurn,
                     triggerPhase: (int)TurnPhase.AllyPostTurn);
@@ -170,7 +200,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     StatusEffectID = 99000101,
                     StatusEffectID2 = statusEffectID,
                     EffectType = "Damage",
-                    Element = "None",
+                    Element = "Physical",
                     DamageType = "Skill",
                     Param1 = string.Empty,
                     TargetType = "Enemy",
@@ -215,7 +245,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 const string statusID = "ST_BattleFlow_CritDot";
                 const string statusEffectID = "STE_BattleFlow_CritDot";
                 env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: statusEffectID);
-                env.ConfigureAllyAction(2, "SK_Skill_CritDot", "SE_Skill_CritDot", "None", null,
+                env.ConfigureAllyAction(2, "SK_Skill_CritDot", "SE_Skill_CritDot", "Physical", null,
                     apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
                     addInPhase: (int)TurnPhase.AllyPostTurn,
                     triggerPhase: (int)TurnPhase.AllyPostTurn);
@@ -224,7 +254,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     StatusEffectID = 99000201,
                     StatusEffectID2 = statusEffectID,
                     EffectType = "Damage",
-                    Element = "None",
+                    Element = "Physical",
                     DamageType = "Skill",
                     TargetType = "Enemy",
                     TargetSelect = "1,1"

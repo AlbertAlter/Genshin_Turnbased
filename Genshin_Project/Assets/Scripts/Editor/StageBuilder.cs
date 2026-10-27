@@ -75,8 +75,8 @@ public class StageBuilder : EditorWindow
             int endRow = sheet.Dimension.End.Row;
             for (int row = startRow; row <= endRow; row++)
             {
-                string idStr = sheet.Cells[row, 1].Text;
-                string name = sheet.Cells[row, 2].Text;
+                string idStr = ExcelTableHeaders.For(sheet).Cell(row, "CharacterID").Text;
+                string name = ExcelTableHeaders.For(sheet).Cell(row, "Name").Text;
                 if (!int.TryParse(idStr, out int id) || id <= 0) continue;
                 _charOptions.Add(new CharOption { ID = id, Name = name });
             }
@@ -100,8 +100,7 @@ public class StageBuilder : EditorWindow
                         int r = 2; // 第1行表头，第2行起数据
                         while (r <= asc.Dimension.End.Row)
                         {
-                            // 第1列 = AscensionLevel（20/40/50/60/70/80）
-                            string lvlStr = asc.Cells[r, 1].Text;
+                            string lvlStr = ExcelTableHeaders.For(asc).Cell(r, "AscensionLevel").Text;
                             if (int.TryParse(lvlStr, out int lvl) && lvl > 0) levels.Add(lvl);
                             r++;
                         }
@@ -126,8 +125,8 @@ public class StageBuilder : EditorWindow
             int endRow = sheet.Dimension.End.Row;
             for (int row = startRow; row <= endRow; row++)
             {
-                string idStr = sheet.Cells[row, 1].Text;
-                string name = sheet.Cells[row, 3].Text; // EnemyName 第3列
+                string idStr = ExcelTableHeaders.For(sheet).Cell(row, "EnemyID").Text;
+                string name = ExcelTableHeaders.For(sheet).Cell(row, "EnemyName").Text;
                 if (!int.TryParse(idStr, out int id) || id <= 0) continue;
                 _enemyOptions.Add(new EnemyOption { ID = id, Name = name });
             }

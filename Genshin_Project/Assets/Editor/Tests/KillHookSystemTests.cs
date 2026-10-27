@@ -7,6 +7,7 @@ namespace GenshinTurnBased.Tests.EditMode
     /// KillHookSystem 测试（2026-08-19，规格第 2 项）：
     /// 使用真实配表数据（ST_Kaeya_C2 的 Kill(1010) + STE_Kaeya_C2 AddTurn 延长凛冽轮舞）。
     /// </summary>
+    [Category("RealConfig")]
     public class KillHookSystemTests
     {
         private GameObject _dmObject;
@@ -289,7 +290,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 AttackAmount = 1f,
                 PreReactionDamage = 1f,
                 DamageType = "Normal",
-                PoiseDamage = 0f
             };
             ReactionResult result = ReactionResolver.Resolve(context);
             Assert.That(result.HasReaction, Is.True, "火攻雷附着应触发超载");

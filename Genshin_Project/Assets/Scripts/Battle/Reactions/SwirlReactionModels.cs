@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public sealed class SwirlPreparedBatch
 {
     internal readonly List<SwirlTargetSnapshot> Targets = new List<SwirlTargetSnapshot>();
+    internal bool Resolved;
     public long EffectExecutionID;
 }
 
@@ -15,7 +16,7 @@ public sealed class SwirlBatchResult
     public readonly List<BattleEntity> DirectTargets = new List<BattleEntity>();
 }
 
-internal enum SwirlAuraKind { Normal, Frozen, Burning }
+internal enum SwirlAuraKind { Normal, Frozen, Burning, Intrinsic, Incoming, EnemyShield }
 
 internal sealed class SwirlAuraAtom
 {
@@ -27,10 +28,12 @@ internal sealed class SwirlAuraAtom
 
 internal sealed class SwirlTargetSnapshot
 {
+    public BattleDeclaration ContactDeclaration;
     public ReactionContext Context;
     public BattleEntity Target;
     public BattleSide Side;
     public int SlotIndex;
     public bool WasAlive;
+    public bool IsReverse;
     public readonly List<SwirlAuraAtom> SpreadAtoms = new List<SwirlAuraAtom>();
 }

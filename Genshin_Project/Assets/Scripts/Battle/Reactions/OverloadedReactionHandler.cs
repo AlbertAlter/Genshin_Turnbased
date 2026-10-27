@@ -23,17 +23,7 @@ public static class OverloadedReactionHandler
         if (!TryGetReactableAura(context, out string auraElement, out float auraAmount)) return false;
 
         float consumed = Mathf.Min(context.AttackAmount, auraAmount);
-        if (auraElement == "Pyro")
-        {
-            if (context.RestrictedAuraKind == ReactionPoolKind.Burning)
-                BurningReactionHandler.ConsumeBurningAura(context.Target, consumed);
-            else if (context.RestrictedAuraKind == ReactionPoolKind.NormalAura)
-                context.Target.ConsumeAura("Pyro", consumed);
-            else
-                BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, consumed);
-        }
-        else
-            context.Target.ConsumeAura(auraElement, consumed);
+        ElementAuraSystem.ConsumeReactionAura(context, auraElement, consumed);
 
         resolution.DisplayName = "超载";
         resolution.RemainingAttackAmount = Mathf.Max(0f, context.AttackAmount - consumed);
@@ -72,7 +62,6 @@ public static class OverloadedReactionHandler
                 Target = target,
                 Damage = damage,
                 DamageElement = "Pyro",
-                PoiseDamage = 100f,
                 ElementAmount = 0f,
                 // 超载来源声明（2026-08-19）：归属后手施加元素/触发反应的攻击方角色
                 Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Overloaded),
@@ -96,16 +85,7 @@ public static class OverloadedReactionHandler
         else if (context.AttackElement == "Electro") auraElement = "Pyro";
         else return false;
 
-        if (auraElement == "Pyro")
-        {
-            if (context.AllowsReactionPool("Pyro", ReactionPoolKind.NormalAura))
-                auraAmount += context.Target.GetAura("Pyro")?.AuraAmount ?? 0f;
-            if (context.AllowsReactionPool("Pyro", ReactionPoolKind.Burning))
-                auraAmount += BurningReactionHandler.GetBurningAuraAsPyro(context.Target);
-        }
-        else
-            auraAmount = context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
-                ? context.Target.GetAura(auraElement)?.AuraAmount ?? 0f : 0f;
+        auraAmount = ElementQuery.GetReactionAmount(context, auraElement);
         return auraAmount > 0f;
     }
 

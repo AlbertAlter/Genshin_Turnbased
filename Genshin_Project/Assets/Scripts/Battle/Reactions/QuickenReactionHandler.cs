@@ -21,12 +21,12 @@ public static class QuickenReactionHandler
         out QuickenReactionResolution resolution)
     {
         resolution = default;
-        ElementalAura aura = GetOpposingAura(context);
+        ElementPoolReading aura = GetOpposingAura(context);
         if (aura == null) return false;
 
-        float consumed = Mathf.Min(context.AttackAmount, aura.AuraAmount);
+        float consumed = aura.AvailableFor(context.AttackAmount);
         if (consumed <= 0f) return false;
-        context.Target.ConsumeAura(aura.Element, consumed);
+        ElementAuraSystem.ConsumeReactionAura(context, aura.Element, consumed);
 
         int duration = InitialDuration;
         if (ReactionStateSystem.TryGetEntityState(
@@ -54,7 +54,7 @@ public static class QuickenReactionHandler
         return true;
     }
 
-    private static ElementalAura GetOpposingAura(ReactionContext context)
+    private static ElementPoolReading GetOpposingAura(ReactionContext context)
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f)
             return null;
@@ -64,8 +64,7 @@ public static class QuickenReactionHandler
         else if (context.AttackElement == "Dendro") auraElement = "Electro";
         else return null;
 
-        ElementalAura aura = context.Target.GetAura(auraElement);
-        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
-            && aura != null && aura.AuraAmount > 0f ? aura : null;
+        ElementPoolReading aura = ElementQuery.ReadReactionAura(context, auraElement);
+        return aura?.IsPresent == true ? aura : null;
     }
 }

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public enum BattleTargetDomain
 {
     Unit = 0,
-    Field = 1
+    Field = 1,
+    Team = 2
 }
 
 /// <summary>
@@ -25,8 +26,11 @@ public sealed class TargetResolutionRequest
     public List<int> ForcedPositions;
     public List<int> PreviousPositions;
     public List<int> OverridePositions;
+    // 仅0/1读取；随机模式2/3/4忽略。不是配表新字段，也不改写已锁定目标。
+    public List<int> TauntPositions;
     public Func<int, bool> IsEligible;
     public Func<int, float> Score;
+    public Func<int, float> SelectionWeight;
     public Func<int, int> RandomIndex;
 }
 
@@ -284,6 +288,7 @@ public static class TargetResolver
         switch (request.TargetConsecutive)
         {
             case 1:
+                if (count == 1 && request.SelectionWeight != null) return SelectWeightedSingle(request, pool);
                 return SelectContinuous(request, pool, count, false);
             case 2:
                 return SelectContinuous(request, pool, count, true);
@@ -296,6 +301,38 @@ public static class TargetResolver
         }
     }
 
+    private static List<int> SelectWeightedSingle(TargetResolutionRequest request, List<int> pool)
+    {
+        var candidates = FilterEligible(request, pool);
+        var taunts = EligibleTaunts(request, pool);
+        if (taunts.Count > 0) candidates.RemoveAll(p => !taunts.Contains(p));
+        if (candidates.Count <= 1) return candidates;
+        double total = 0;
+        var weights = new List<double>();
+        foreach (int p in candidates)
+        {
+            float weight = request.SelectionWeight(p);
+            if (float.IsNaN(weight) || float.IsInfinity(weight) || weight < 0)
+                throw new InvalidOperationException("HitWeight必须为非负有限值。");
+            weights.Add(weight); total += weight;
+        }
+        if (total <= 0) throw new InvalidOperationException("合法角色的HitWeight总和必须大于0。");
+        int positiveCount = 0, onlyPositive = 0;
+        for (int i = 0; i < weights.Count; i++)
+            if (weights[i] > 0) { positiveCount++; onlyPositive = candidates[i]; }
+        if (positiveCount == 1) return new List<int> { onlyPositive };
+        double roll = BattleRandom.NextFloat01() * total;
+        double sum = 0;
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            sum += weights[i];
+            if (weights[i] > 0 && roll < sum) return new List<int> { candidates[i] };
+        }
+        for (int i = candidates.Count - 1; i >= 0; i--)
+            if (weights[i] > 0) return new List<int> { candidates[i] };
+        return new List<int>();
+    }
+
     private static List<int> SelectContinuous(
         TargetResolutionRequest request,
         List<int> pool,
@@ -303,6 +340,7 @@ public static class TargetResolver
         bool coverageFirst)
     {
         var allowed = new HashSet<int>(pool);
+        var taunts = EligibleTaunts(request, pool);
         var windows = BuildContinuousWindows(request.MaxPosition, count);
         var candidates = new List<List<int>>();
         int bestCoverage = int.MinValue;
@@ -321,6 +359,8 @@ public static class TargetResolver
             }
             if (!insidePool) continue;
             if (request.Domain == BattleTargetDomain.Unit && coverage == 0) continue;
+            // 强制包含合法嘲讽者优先于原覆盖率/评分；不要求居中，不缩放连续窗口。
+            if (taunts.Count > 0 && !window.Exists(taunts.Contains)) continue;
 
             if (coverageFirst)
             {
@@ -360,13 +400,16 @@ public static class TargetResolver
         int count)
     {
         var remaining = FilterEligible(request, pool);
+        var taunts = EligibleTaunts(request, pool);
         var selected = new List<int>();
         while (remaining.Count > 0 && selected.Count < count)
         {
             float bestScore = float.MinValue;
             var bestIndices = new List<int>();
+            bool requireTaunt = selected.Count == 0 && taunts.Count > 0;
             for (int i = 0; i < remaining.Count; i++)
             {
+                if (requireTaunt && !taunts.Contains(remaining[i])) continue;
                 float score = request.Score != null ? request.Score(remaining[i]) : 0f;
                 if (score > bestScore + ScoreEpsilon)
                 {
@@ -385,6 +428,16 @@ public static class TargetResolver
             remaining.RemoveAt(chosenRemainingIndex);
         }
         return selected;
+    }
+
+    private static HashSet<int> EligibleTaunts(TargetResolutionRequest request, List<int> pool)
+    {
+        var result = new HashSet<int>();
+        if (request.Domain != BattleTargetDomain.Unit || request.TauntPositions == null
+            || request.TargetConsecutive < 0 || request.TargetConsecutive > 1) return result;
+        foreach (int position in request.TauntPositions)
+            if (pool.Contains(position) && IsEligible(request, position)) result.Add(position);
+        return result;
     }
 
     private static List<int> SelectRandom(

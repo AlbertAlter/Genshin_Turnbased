@@ -75,7 +75,7 @@ namespace GenshinTurnBased.Tests.EditMode
             ValidateHeaders("StatusData_Overall.xlsx", "StatusAttributes_Overall", errors, StatusAttributeHeaders());
 
             ValidateHeaders("EnemyAttributes.xlsx", "Enemy_Main", errors,
-                "EnemyID", "EnemyNameID", "EnemyName", "Threat", "ActsGiven", "Poise", "ATK_Curve",
+                "EnemyID", "EnemyNameID", "EnemyName", "Threat", "ActsGiven", "ATK_Curve",
                 "HP_coeff", "ATK_coeff", "PhysicalRes", "PyroRes", "HydroRes", "ElectroRes",
                 "CryoRes", "AnemoRes", "DendroRes", "GeoRes", "PhysicalDmgBonus", "PyroDmgBonus",
                 "HydroDmgBonus", "ElectroDmgBonus", "CryoDmgBonus", "AnemoDmgBonus",
@@ -130,7 +130,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
                 ValidateHeaders(package, workbookName, "Attributes", errors,
                     "CharacterID", "NameID", "Name", "Star", "GrowthCurveID", "WeaponType", "Element",
-                    "BaseHP", "BaseATK", "BaseDEF", "MaxEnergy", "Poise", "HitWeight", "NormalAttackID",
+                    "BaseHP", "BaseATK", "BaseDEF", "MaxEnergy", "HitWeight", "NormalAttackID",
                     "HeavyAttackID", "ElementalSkillID", "ElementalBurstID", "BaseEM", "BaseRechargeRate",
                     "CritRate", "CritDMG", "PyroRes", "HydroRes", "ElectroRes", "CryoRes", "AnemoRes",
                     "DendroRes", "GeoRes", "PhysicalRes", "PyroDmgBonus", "HydroDmgBonus",
@@ -174,7 +174,8 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 "StatusID", "StatusID2", "ActionType", "Param1", "Param2", "Param3", "ScriptHook",
                 "OnAction", "OutgoingHit", "OutgoingDamage", "OnHit", "OnDamage", "OnHealFrom",
-                "WhenHealing", "APUsed", "ReactionTriggered", "MaxTimePerTurn", "MaxTimePerLife", "Cooldown"
+                // 新版 MaxTimePer/MaxTime 与旧限次列均由可选表头解析，兼容未迁移工作簿。
+                "WhenHealing", "APUsed", "ReactionTriggered", "Cooldown"
             };
         }
 
@@ -237,13 +238,17 @@ namespace GenshinTurnBased.Tests.EditMode
                 return;
             }
 
-            for (int index = 0; index < expectedHeaders.Length; index++)
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            for (int column = 1; column <= (sheet.Dimension?.End.Column ?? 0); column++)
             {
-                string actual = sheet.Cells[1, index + 1].Text.Trim();
-                string expected = expectedHeaders[index];
-                if (!string.Equals(actual, expected, StringComparison.Ordinal))
-                    errors.Add($"{workbookName}/{sheetName} 第 {index + 1} 列应为 {expected}，实际为 [{actual}]");
+                string actual = ExcelTableHeaders.Normalize(sheet.Cells[1, column].Text);
+                if (actual.Length > 0 && !seen.Add(actual))
+                    errors.Add($"{workbookName}/{sheetName} 重复表头：{actual}");
             }
+            // 只校验必需字段是否存在，不再约束物理列顺序；盾矩阵空白行标题由其专用解析器检查。
+            foreach (string expected in expectedHeaders)
+                if (expected.Length > 0 && !seen.Contains(expected))
+                    errors.Add($"{workbookName}/{sheetName} 缺少表头：{expected}");
         }
 
         private static Dictionary<string, string> FindWorkbooks(string root, List<string> errors)

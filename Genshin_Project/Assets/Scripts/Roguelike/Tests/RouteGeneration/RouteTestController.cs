@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Roguelike.Tests.RouteGeneration
         [SerializeField] private int fixedSeed = 12345;
         [SerializeField] private bool logRandomDraws = true;
         [SerializeField, Min(1f)] private float scrollSpeed = 900f;
+        [SerializeField] private bool useNodeIcons = true;
 
         private const string StageConfigRelativePath = "Data/Roguelike/StageConfig.xlsx";
         private const string StageRuleRelativePath = "Data/Roguelike/StageRule.xlsx";
@@ -23,15 +25,51 @@ namespace Roguelike.Tests.RouteGeneration
         private Text _statusText;
         private Text _debugToggleLabel;
         private Font _font;
+        private RouteMapData _map;
+        private Coroutine _artRequest;
 
         private void Awake()
         {
             BuildInterface();
+            _artRequest = StartCoroutine(InitializeRoute());
+        }
+
+        private IEnumerator InitializeRoute()
+        {
+            yield return ReadRouteArt();
+            _artRequest = null;
             GenerateRoute();
+        }
+
+        private IEnumerator ReadRouteArt()
+        {
+            RouteMapStyle style = null;
+            yield return RouteMapStyle.Load(value => style = value);
+            style.UseIcons &= useNodeIcons;
+            yield return _view.ApplyStyle(style);
+        }
+
+        public void ReloadRouteArt()
+        {
+            if (_artRequest != null) return;
+            _artRequest = StartCoroutine(RefreshRouteArt());
+        }
+
+        private IEnumerator RefreshRouteArt()
+        {
+            yield return ReadRouteArt();
+            if (_map != null)
+            {
+                _view.Render(_map, generationSettings);
+                Canvas.ForceUpdateCanvases();
+                _browser.ClampToBounds();
+            }
+            _artRequest = null;
         }
 
         public void GenerateRoute()
         {
+            if (_artRequest != null) return;
             try
             {
                 string workbookPath = Path.Combine(Application.streamingAssetsPath,
@@ -65,7 +103,8 @@ namespace Roguelike.Tests.RouteGeneration
                     return;
                 }
 
-                _view.Render(result.Map, generationSettings);
+                _map = result.Map;
+                _view.Render(_map, generationSettings);
                 Canvas.ForceUpdateCanvases();
                 _browser.ResetToStart();
                 _browser.ClampToBounds();
@@ -109,7 +148,7 @@ namespace Roguelike.Tests.RouteGeneration
             scaler.matchWidthOrHeight = 1f;
 
             RectTransform background = CreatePanel("Background", canvasObject.transform, uiLayer,
-                new Color(0.055f, 0.075f, 0.115f, 1f));
+                new Color32(153, 143, 129, 255));
             Stretch(background);
             background.GetComponent<Image>().raycastTarget = true;
 
@@ -127,7 +166,7 @@ namespace Roguelike.Tests.RouteGeneration
             statusRect.offsetMax = new Vector2(-24f, 0f);
 
             RectTransform routePlane = CreatePanel("RoutePlane", canvasObject.transform, uiLayer,
-                new Color(0.075f, 0.105f, 0.155f, 1f));
+                new Color32(153, 143, 129, 255));
             routePlane.anchorMin = Vector2.zero;
             routePlane.anchorMax = Vector2.one;
             routePlane.offsetMin = Vector2.zero;
@@ -179,6 +218,15 @@ namespace Roguelike.Tests.RouteGeneration
             debugRect.sizeDelta = new Vector2(220f, 48f);
             _debugToggleLabel = debugButton.GetComponentInChildren<Text>();
             debugButton.onClick.AddListener(ToggleCoordinateDebug);
+
+            Button artButton = CreateButton("RefreshRouteArtButton", bottomBar, uiLayer, "刷新路线美术");
+            RectTransform artRect = artButton.GetComponent<RectTransform>();
+            artRect.anchorMin = new Vector2(1f, 0.5f);
+            artRect.anchorMax = new Vector2(1f, 0.5f);
+            artRect.pivot = new Vector2(1f, 0.5f);
+            artRect.anchoredPosition = new Vector2(-476f, 0f);
+            artRect.sizeDelta = new Vector2(220f, 48f);
+            artButton.onClick.AddListener(ReloadRouteArt);
 
             CreateHoldControl("HoldLeftButton", routePlane, uiLayer, "<", true);
             CreateHoldControl("HoldRightButton", routePlane, uiLayer, ">", false);

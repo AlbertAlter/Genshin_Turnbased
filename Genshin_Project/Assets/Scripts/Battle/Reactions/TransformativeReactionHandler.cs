@@ -6,6 +6,9 @@ public struct TransformativeReactionResolution
     public string DisplayName;
     public float RemainingAttackAmount;
     public List<ReactionDerivedHit> DerivedHits;
+    public BloomCoreInstance CreatedBloomCore;
+    public PendingLunarConduct PendingLunarConduct;
+    public PendingStellarSuperconduct PendingStellarSuperconduct;
 }
 
 /// <summary>
@@ -41,7 +44,8 @@ public static class TransformativeReactionHandler
                     out SuperconductReactionResolution superconduct))
                 return false;
 
-            resolution.Type = ReactionType.Superconduct;
+            resolution.Type = superconduct.Type;
+            resolution.PendingStellarSuperconduct = superconduct.PendingStellarSuperconduct;
             resolution.DisplayName = superconduct.DisplayName;
             resolution.RemainingAttackAmount = superconduct.RemainingAttackAmount;
             resolution.DerivedHits = superconduct.DerivedHits;
@@ -58,7 +62,8 @@ public static class TransformativeReactionHandler
                     out ElectroChargedReactionResolution electroCharged))
                 return false;
 
-            resolution.Type = ReactionType.ElectroCharged;
+            resolution.Type = electroCharged.Type;
+            resolution.PendingLunarConduct = electroCharged.PendingLunarConduct;
             resolution.DisplayName = electroCharged.DisplayName;
             resolution.RemainingAttackAmount = electroCharged.RemainingAttackAmount;
             resolution.DerivedHits = electroCharged.DerivedHits;
@@ -92,10 +97,11 @@ public static class TransformativeReactionHandler
                     out BloomReactionResolution bloom))
                 return false;
 
-            resolution.Type = ReactionType.Bloom;
+            resolution.Type = bloom.Type;
             resolution.DisplayName = bloom.DisplayName;
             resolution.RemainingAttackAmount = bloom.RemainingAttackAmount;
             resolution.DerivedHits = bloom.DerivedHits;
+            resolution.CreatedBloomCore = bloom.CreatedCore;
             return true;
         }
 

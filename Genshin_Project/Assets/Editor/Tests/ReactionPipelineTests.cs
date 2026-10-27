@@ -167,7 +167,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 AttackAmount = amount,
                 PreReactionDamage = 100f,
                 DamageType = "Skill",
-                PoiseDamage = 20f
             };
         }
     }

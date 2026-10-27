@@ -18,7 +18,11 @@ public partial class CharacterBattleController
         object host,
         ScriptHookContext context, Func<bool> isStillValid = null)
     {
-        if (status == null || action == null) return false;
+        if (status == null || action == null || !EquipmentStatusLifetime.CanExecute(status)) return false;
+        if (context != null && context.Declaration == null)
+            context.Declaration = context.DamageEvent?.Declaration
+                ?? BattleEventHub.Find(context.HealEvent) ?? BattleEventHub.Find(context.ReactionEvent)
+                ?? BattleEventHub.Current;
         // 事件数据独立留存；实体仍为实时引用，不能快照属性或提前计算响应数值。
         context = context?.Snapshot();
         return BattleResolutionContext.Submit(status.ApplyOrder,
@@ -31,13 +35,14 @@ public partial class CharacterBattleController
         string key = $"{status.GetHashCode()}:{BattleResolutionContext.ActionKey(action)}";
         bool limited = BattleResolutionContext.HasApplicableLimit(action);
         // 未配置新限制的旧行保留重入保护；配置 N 次的行使用整条连锁额度。
-        if (!status.IsActive || (isStillValid != null && !isStillValid()) || (!limited && ExecutingStatusActions.Contains(key))) return null;
+        if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status)
+            || (isStillValid != null && !isStillValid()) || (!limited && ExecutingStatusActions.Contains(key))) return null;
         if (StatusActionLimitReached(status, action)
-            || BattleResolutionContext.LimitReached(status, action)) return null;
+            || BattleResolutionContext.LimitReached(status, action, context)) return null;
         // 治疗候选只能在整段正式提交后确认，不能把预计算数据当作已经发生的事件。
         if (context?.HealEvent != null && !context.HealEvent.IsCommitted) return null;
         if (!ScriptHookEvaluator.Evaluate(action.ScriptHook, context)) return null;
-        if (!BattleResolutionContext.TryCollect(status, action)) return null;
+        if (!BattleResolutionContext.TryCollect(status, action, context)) return null;
         StatusActionRuntimeState runtime = GetStatusActionRuntime(status, action);
         runtime.PendingTriggerCount++;
         bool pending = true;
@@ -50,7 +55,7 @@ public partial class CharacterBattleController
         return new BattleResolutionContext.PreparedTrigger(async () =>
         {
             // 不重复判断触发条件/概率；状态移除后取消请求，释放总次数预留。
-            if (!status.IsActive || (isStillValid != null && !isStillValid())) return;
+            if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status) || (isStillValid != null && !isStillValid())) return;
             using var triggerDepth = BattleResolutionContext.EnterTrigger();
             bool ownsGuard = ExecutingStatusActions.Add(key);
             try
@@ -58,7 +63,7 @@ public partial class CharacterBattleController
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Status,
                     status.Caster, action.Param1, statusID: status.StatusID2), () =>
                 {
-                    if (!status.IsActive || (isStillValid != null && !isStillValid())) return;
+                    if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status) || (isStillValid != null && !isStillValid())) return;
                     release();
                     CountStatusActionTrigger(status, action);
                     if (context != null && !string.IsNullOrEmpty(context.EventHookArgument)

@@ -59,7 +59,6 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(result.DerivedHits, Has.Count.EqualTo(1));
             Assert.That(result.DerivedHits[0].DamageElement, Is.EqualTo("Electro"));
             Assert.That(result.DerivedHits[0].ElementAmount, Is.Zero);
-            Assert.That(result.DerivedHits[0].PoiseDamage, Is.EqualTo(50f));
             Assert.That(ReactionStateSystem.TryGetEntityState(
                 _main,
                 ReactionType.ElectroCharged,
@@ -124,11 +123,6 @@ namespace GenshinTurnBased.Tests.EditMode
             ElectroChargedReactionHandler.TickTurnEnd(TurnPhase.AllyPostTurn);
 
             Assert.That(_main.CurrentHP, Is.LessThan(hpBeforeTick));
-#if GTB_POISE_SYSTEM
-            Assert.That(_main.Poise, Is.EqualTo(450f));
-#else
-            Assert.That(_main.Poise, Is.EqualTo(500f));
-#endif
             Assert.That(_main.GetAura("Hydro"), Is.Null);
             Assert.That(_main.GetAura("Electro"), Is.Null);
             Assert.That(ReactionStateSystem.TryGetEntityState(
@@ -182,8 +176,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.SlotPosition = position;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
 
             FieldPosition slot = _battle.Field.GetSlot(side, position);
             slot.Occupant = entity;

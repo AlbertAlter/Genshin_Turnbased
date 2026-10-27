@@ -1,4 +1,4 @@
-/// <summary>击飞的行动限制。施加、计时和移除仍走普通状态流程，不依赖韧性系统。</summary>
+/// <summary>击飞的行动限制。施加、计时和移除走普通状态流程。</summary>
 public static class AirborneStatusHandler
 {
     public const string EnemyStatusID = "ST_Fall_Enemy";

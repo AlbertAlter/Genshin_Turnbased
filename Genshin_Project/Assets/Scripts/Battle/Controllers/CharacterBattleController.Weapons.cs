@@ -6,6 +6,7 @@ public partial class CharacterBattleController
     public WeaponLoadout EquippedWeapon { get; private set; }
     public WeaponRuntimeContext EquippedWeaponContext { get; private set; }
 
+    /// <summary>开战前登记装备构筑；先设站位并注册完整编队，避免初始化子效果找不到Self或队友。</summary>
     public bool EquipWeapon(WeaponLoadout loadout)
     {
         if (loadout == null || loadout.WeaponID <= 0 || Entity == null) return false;
@@ -22,6 +23,7 @@ public partial class CharacterBattleController
             return false;
         }
 
+        BattleAttributeInitialization.BeginBuild(Entity);
         UnequipWeapon();
         int level = Mathf.Clamp(loadout.Level, 1, 90);
         int refinement = Mathf.Clamp(loadout.Refinement, 1, 5);
@@ -41,9 +43,12 @@ public partial class CharacterBattleController
             foreach (string statusID2 in statuses)
             {
                 if (!dm.StatusMainDict.TryGetValue(statusID2, out var main)) continue;
-                Entity.AddStatus(statusID2, Entity, 999, 2, 0, main, EquippedWeaponContext);
+                // 初始化常驻监听/属性永久存在；后续子状态或专用Count仍按各自配表/处理器计时。
+                StatusInstance status = Entity.AddStatus(statusID2, Entity, 0, 2, 0, main, EquippedWeaponContext);
+                RecordInitializationStatus(status, 0, 2, InitialStatusKind.Weapon);
             }
         }
+        // 这里只登记构筑输入；当前HP由StartBattle在全队/装备/绑定全部初始化后统一提交。
         LogManager.Log(LogCategory.Build, $"装备武器 {loadout.WeaponID} Lv{level} R{refinement}");
         return true;
     }
@@ -51,6 +56,7 @@ public partial class CharacterBattleController
     public void UnequipWeapon()
     {
         if (Entity == null || EquippedWeapon == null) return;
+        _initialStatuses.RemoveAll(entry => entry.Kind == InitialStatusKind.Weapon);
         string sourceInstanceID = EquippedWeaponContext?.SourceInstanceID;
         foreach (StatusInstance status in Entity.GetStatusList())
         {
@@ -74,6 +80,7 @@ public partial class CharacterBattleController
             case "ATKBonus": Entity.WeaponATKBonus += value; break;
             case "HPBonus":
                 Entity.WeaponHPBonus += value;
+                Entity.BakedHPBonus += value;
                 ApplyWeaponHPBonus(value);
                 break;
             case "DEFBonus":
@@ -99,12 +106,7 @@ public partial class CharacterBattleController
     {
         float baseValue = GetHPBeforePercentBonuses();
         if (baseValue <= 0f) return;
-        float oldTotal = Entity.TotalHP;
-        bool wasFull = Entity.CurrentHP >= oldTotal - 0.0001f;
-        Entity.TotalHP = Mathf.Max(0f, oldTotal + baseValue * bonusDelta);
-        Entity.CurrentHP = wasFull
-            ? Entity.TotalHP
-            : Mathf.Min(Entity.CurrentHP, Entity.TotalHP);
+        Entity.TotalHP = Mathf.Max(0f, Entity.TotalHP + baseValue * bonusDelta);
     }
 
     void ApplyWeaponDEFBonus(float bonusDelta)
@@ -114,7 +116,7 @@ public partial class CharacterBattleController
         Entity.TotalDEF = Mathf.Max(0f, Entity.TotalDEF + baseValue * bonusDelta);
     }
 
-    float GetHPBeforePercentBonuses()
+    internal float GetHPBeforePercentBonuses()
     {
         if (_attrData == null || DataManager.Instance == null) return 0f;
         float value = _attrData.BaseHP * DataManager.Instance.GetGrowthCurve(_attrData.GrowthCurveID, Level);

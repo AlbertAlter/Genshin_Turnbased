@@ -375,6 +375,7 @@ MonoBehaviour:
   fixedSeed: 12345
   logRandomDraws: 1
   scrollSpeed: 900
+  useNodeIcons: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

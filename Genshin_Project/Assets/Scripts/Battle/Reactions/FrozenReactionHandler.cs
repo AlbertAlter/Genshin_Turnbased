@@ -18,14 +18,11 @@ public static class FrozenReactionHandler
     }
 
     public static float GetFrozenAuraAsCryo(BattleEntity target)
-    {
-        return ReactionStateSystem.TryGetEntityState(target, ReactionType.Frozen, out var state)
-            ? Mathf.Max(0f, state.ReactionElementAmount)
-            : 0f;
-    }
+        => ElementQuery.GetAmount(target, "Cryo", ReactionPoolKind.Frozen);
 
     public static float ConsumeFrozenAura(BattleEntity target, float amount)
     {
+        using var declarations = ElementEventScope.Begin("ReactionConsumption", target);
         if (target == null || amount <= 0f
             || !ReactionStateSystem.TryGetEntityState(target, ReactionType.Frozen, out var state))
             return 0f;
@@ -43,12 +40,12 @@ public static class FrozenReactionHandler
     public static bool CanResolveFreeze(ReactionContext context)
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f) return false;
+        if (context.EnemyShieldHit?.HadShieldAtStart == true
+            && context.EnemyShieldHit.ShieldAtStart.Element == "Cryo") return false;
         if (context.AttackElement == "Hydro")
-            return context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura)
-                && context.Target.GetAura("Cryo")?.AuraAmount > 0f;
+            return ElementQuery.ReadReactionAura(context, "Cryo")?.IsPresent == true;
         if (context.AttackElement == "Cryo")
-            return context.AllowsReactionPool("Hydro", ReactionPoolKind.NormalAura)
-                && context.Target.GetAura("Hydro")?.AuraAmount > 0f;
+            return ElementQuery.ReadReactionAura(context, "Hydro")?.IsPresent == true;
         return false;
     }
 
@@ -63,15 +60,15 @@ public static class FrozenReactionHandler
         float consumed;
         if (context.AttackElement == "Hydro")
         {
-            ElementalAura cryo = context.Target.GetAura("Cryo");
-            consumed = Mathf.Min(context.AttackAmount, cryo.AuraAmount);
-            context.Target.ConsumeAura("Cryo", consumed);
+            ElementPoolReading cryo = ElementQuery.ReadReactionAura(context, "Cryo");
+            consumed = cryo.AvailableFor(context.AttackAmount);
+            ElementAuraSystem.ConsumeReactionAura(context, "Cryo", consumed);
         }
         else
         {
-            ElementalAura hydro = context.Target.GetAura("Hydro");
-            consumed = Mathf.Min(context.AttackAmount, hydro.AuraAmount);
-            context.Target.ConsumeAura("Hydro", consumed);
+            ElementPoolReading hydro = ElementQuery.ReadReactionAura(context, "Hydro");
+            consumed = hydro.AvailableFor(context.AttackAmount);
+            ElementAuraSystem.ConsumeReactionAura(context, "Hydro", consumed);
         }
 
         resolution.DisplayName = "冻结";
@@ -95,13 +92,14 @@ public static class FrozenReactionHandler
 
     public static bool CanShatter(ReactionContext context)
     {
-        if (context == null || context.Target == null || context.SourceEntity == null
+        if (context == null || !context.CanTriggerShatter || context.Target == null || context.SourceEntity == null
             || context.SourceKind == ReactionSourceKind.DerivedReaction || !IsFrozen(context.Target))
             return false;
+        if (context.Target.GetEnemyElementalShield()?.Element == "Cryo") return false;
 
         // 任意岩元素攻击，或双手剑角色的物理普攻/重击；不要求元素量或实际扣血。
         if (context.AttackElement == "Geo") return true;
-        bool physical = context.AttackElement == "Physical" || context.AttackElement == "None";
+        bool physical = context.AttackElement == "Physical";
         return physical
             && context.SourceEntity.Type == BattleEntity.EntityType.Character
             && context.SourceEntity.WeaponType == 1
@@ -142,7 +140,7 @@ public static class FrozenReactionHandler
             : ReactionDamageCalculator.CalculateCharacterTransformative(
                 levelCoefficient,
                 3f,
-                context.SourceEntity.TotalEM,
+                ReactionDamageCalculator.GetSourceMastery(context),
                 bonuses.DMGBonus,
                 bonuses.BaseDMGBonusFlat,
                 resistance);
@@ -154,6 +152,7 @@ public static class FrozenReactionHandler
             SourceEffectID = context.SourceEffectID,
             SourceKind = context.SourceKind,
             SourceSkillID = context.SourceSkillID,
+            EquipmentSource = context.EffectiveEquipmentSource,
             Damage = damage
         };
     }

@@ -83,6 +83,10 @@ public static class LevelUpCalculator
         return (int)total;
     }
 
+    /// <summary>
+    /// 参数只接受可培养的基础等级（最高 10），不接受叠加命座后的显示等级。
+    /// 例如基础 1、加成 +3，显示 4→5 时传入 1→2，消耗读取 NextLevel=2。
+    /// </summary>
     public static IReadOnlyDictionary<int, int> GetSkillMaterialsToReach(
         LevelUpRequirementsTable requirements,
         int currentLevel,

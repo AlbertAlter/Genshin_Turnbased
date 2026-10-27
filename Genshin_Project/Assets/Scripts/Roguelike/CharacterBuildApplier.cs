@@ -9,7 +9,7 @@ using UnityEngine;
 // 过滤激活条件后应用 Modifiers 指令：
 //   InitiateStatus(状态ID2) / ModifyEffect(效果ID2;字段=值)
 //   InsertEffect(位置;目标效果ID2;字段=值...) / ModifySkill(技能ID2;字段=值)
-//   SkillLevelUp(技能类型,等级)
+// SkillLevelUp由角色实例的自身等级查询解析；这里仅加载查询结果，不执行加级。
 // 不污染 BattleManager/CharacterBattleController：
 //   所有数据修改走其公开的克隆式接口（GetSkillEffects/SetSkillEffects/ModifySkillData），
 //   多次进出战斗不叠加。
@@ -18,33 +18,58 @@ using UnityEngine;
 
 public static class CharacterBuildApplier
 {
-    /// <summary>对出战角色应用档案对应的天赋/命座/突破效果（战斗开始前调用）。</summary>
+    /// <summary>创建裸面板时读取完整养成输入；注册完整编队后才调用ApplyBuild挂载天赋/装备。</summary>
+    public static void InitializePanel(CharacterBattleController ctrl, CharacterProfile profile)
+    {
+        if (ctrl == null) throw new System.ArgumentNullException(nameof(ctrl));
+        if (profile == null) throw new System.ArgumentNullException(nameof(profile));
+        int stage = profile.Ascension == -1 ? CharacterAscensionRules.FromLegacyFlag(profile.Level, profile.IsAscended)
+            : profile.Ascension;
+        CharacterAscensionRules.Validate(profile.Level, stage);
+        CharacterSkillLevelInfo skillLevels = profile.GetSkillLevelInfo();
+        bool flag = profile.Ascension == -1 ? profile.IsAscended
+            : CharacterAscensionRules.HasCurrentAscension(profile.Level, stage);
+        if (ctrl.Entity == null || ctrl.CharacterID != profile.CharacterID || ctrl.Level != profile.Level
+            || ctrl.Ascension != stage)
+        {
+            // 这里只构筑裸角色，不用重新Init去覆盖已挂载的武器、状态或本场资源，也不实现战斗内升级。
+            if (ctrl.EquippedWeapon != null || ctrl.Entity != null
+                && (BattleAttributeInitialization.IsComplete(ctrl.Entity) || ctrl.Entity.GetStatusList().Count > 0))
+                throw new System.InvalidOperationException("角色已应用构筑或进入战斗，不能通过养成查询重建面板；请创建新的裸角色。");
+            if (profile.Ascension == -1) ctrl.Init(profile.CharacterID, profile.Level, profile.IsAscended);
+            else ctrl.Init(profile.CharacterID, profile.Level, stage);
+        }
+        if (ctrl.Entity == null) throw new System.InvalidOperationException("角色裸面板初始化失败：" + profile.CharacterID);
+        ctrl.Entity.IsAscended = flag;
+        ctrl.Entity.ConstellationLevel = profile.ConstellationLevel;
+        ctrl.SkillLevels = skillLevels.CopyOwnLevels();
+    }
+
+    /// <summary>
+    /// 对出战角色应用档案对应的天赋/命座/突破及武器效果。
+    /// 裸面板先由InitializePanel读取profile的整数突破阶段（旧配置兼容布尔标记），不能事后补字段。
+    /// 战斗开始前、双方完整编队已设定SlotPosition并注册后调用；初始化OnApply/BindStatus沿正常目标入口解析。
+    /// 所有角色构筑完成后才调用StartBattle，由统一入口完成队伍效果与初始属性收尾。
+    /// </summary>
     public static void ApplyBuild(CharacterBattleController ctrl, CharacterProfile profile)
     {
         if (ctrl == null || profile == null) return;
         var dm = DataManager.Instance;
         if (dm == null) return;
 
-        // 1. 技能等级（关卡配置直接指定，1-15）
-        if (ctrl.SkillLevels == null || ctrl.SkillLevels.Length < 4)
-            ctrl.SkillLevels = new[] { 1, 1, 1, 1 };
-        if (profile.SkillLevels != null)
-        {
-            for (int i = 0; i < 4 && i < profile.SkillLevels.Length; i++)
-            {
-                if (profile.SkillLevels[i] > 0)
-                    ctrl.SkillLevels[i] = Mathf.Clamp(profile.SkillLevels[i], 1, 15);
-            }
-        }
+        InitializePanel(ctrl, profile);
+        BattleAttributeInitialization.BeginBuild(ctrl.Entity);
 
-        // 2. 天赋（等级 >= UnlockAfter 自动激活）
+        // 1. 自身技能等级已由InitializePanel从角色实例侧查询并加载，不再临时执行SkillLevelUp。
+
+        // 2. 天赋：必须完成UnlockAfter指定等级的突破；空白/0默认解锁。
         if (dm.TalentDict.TryGetValue(profile.CharacterID, out var talents))
         {
             foreach (var t in talents)
             {
-                if (profile.Level < t.UnlockAfter) continue;
+                if (!CharacterAscensionRules.IsTalentUnlocked(t.UnlockAfter, ctrl.Level, ctrl.Ascension)) continue;
                 ApplyModifiers(ctrl, t.Modifiers);
-                LogManager.Log(LogCategory.Build, $"天赋{t.TalentIndex} 生效（Lv{profile.Level}≥{t.UnlockAfter}）: {t.Description}");
+                LogManager.Log(LogCategory.Build, $"天赋{t.TalentIndex} 生效（Lv{ctrl.Level}, Ascension={ctrl.Ascension}, 解锁突破={t.UnlockAfter}）: {t.Description}");
             }
         }
 
@@ -103,12 +128,12 @@ public static class CharacterBuildApplier
             case "ModifyEffect": ApplyModifyEffect(ctrl, args); break;
             case "InsertEffect": ApplyInsertEffect(ctrl, args); break;
             case "ModifySkill": ApplyModifySkill(ctrl, args); break;
-            case "SkillLevelUp": ApplySkillLevelUp(ctrl, args); break;
+            case "SkillLevelUp": break; // 已由角色自身等级查询处理；不能随状态初始化/重建再次加级。
             default: LogManager.LogWarning(LogCategory.Build, $"未实现的指令类型: {name}({args})"); break;
         }
     }
 
-    /// <summary>InitiateStatus(状态ID2)：战斗开场施加状态（持续整场，999回合）。</summary>
+    /// <summary>InitiateStatus(状态ID2)：开场施加；月曜/始基力标记永久，其他状态保留原999回合约定。</summary>
     static void ApplyInitiateStatus(CharacterBattleController ctrl, string args)
     {
         string statusID2 = args.Trim();
@@ -119,7 +144,9 @@ public static class CharacterBuildApplier
             LogManager.LogWarning(LogCategory.Build, $"InitiateStatus 状态不存在: {statusID2}");
             return;
         }
-        ctrl.Entity.AddStatus(statusID2, ctrl.Entity, 999, 2, 0, main);
+        int duration = LunarReactionConversion.IsTalentMarker(statusID2) || ArkheStatuses.IsMarker(statusID2) ? 0 : 999;
+        StatusInstance status = ctrl.Entity.AddStatus(statusID2, ctrl.Entity, duration, 2, 0, main);
+        ctrl.RecordCharacterInitializationStatus(status, duration);
         LogManager.Log(LogCategory.Build, $"InitiateStatus: {statusID2} 已施加（开场）");
     }
 
@@ -208,26 +235,6 @@ public static class CharacterBuildApplier
         LogManager.Log(LogCategory.Build, $"ModifySkill: {skillID2} 已修改");
     }
 
-    /// <summary>SkillLevelUp(技能类型,等级)：技能等级+n（1-15，C3/C5 用）。</summary>
-    static void ApplySkillLevelUp(CharacterBattleController ctrl, string args)
-    {
-        var parts = args.Split(',');
-        if (parts.Length < 2) { LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 参数不足: {args}"); return; }
-        if (!int.TryParse(parts[0].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int skillType)
-            || !int.TryParse(parts[1].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out int add))
-        {
-            LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 参数不是整数: {args}");
-            return;
-        }
-        if (ctrl.SkillLevels == null || skillType < 0 || skillType >= ctrl.SkillLevels.Length)
-        {
-            LogManager.LogWarning(LogCategory.Build, $"SkillLevelUp 技能类型越界: {skillType}");
-            return;
-        }
-        ctrl.SkillLevels[skillType] = Mathf.Clamp(ctrl.SkillLevels[skillType] + add, 1, 15);
-        LogManager.Log(LogCategory.Build, $"SkillLevelUp: 技能{skillType} +{add}级 → {ctrl.SkillLevels[skillType]}");
-    }
-
     // ================= 工具 =================
 
     /// <summary>按分号切分参数（跳过空段）。</summary>
@@ -253,25 +260,7 @@ public static class CharacterBuildApplier
     }
 
     public static List<string> SplitModifierCommands(string text)
-    {
-        var result = new List<string>();
-        if (string.IsNullOrWhiteSpace(text)) return result;
-        int depth = 0, start = 0;
-        for (int i = 0; i < text.Length; i++)
-        {
-            if (text[i] == '(') depth++;
-            else if (text[i] == ')' && --depth < 0)
-                throw new System.FormatException("Modifiers 括号不匹配: " + text);
-            if (depth != 0 || (text[i] != ';' && text[i] != '\n' && text[i] != '\r')) continue;
-            string command = text.Substring(start, i - start).Trim();
-            if (command.Length > 0) result.Add(command);
-            start = i + 1;
-        }
-        if (depth != 0) throw new System.FormatException("Modifiers 括号不匹配: " + text);
-        string last = text.Substring(start).Trim();
-        if (last.Length > 0) result.Add(last);
-        return result;
-    }
+        => CharacterModifierParser.SplitCommands(text);
 
     /// <summary>从 startIndex 开始应用 "字段=值" 赋值（int/float/string 字段通用，反射）。</summary>
     static void ApplyFieldAssignments(object obj, List<string> parts, int startIndex)

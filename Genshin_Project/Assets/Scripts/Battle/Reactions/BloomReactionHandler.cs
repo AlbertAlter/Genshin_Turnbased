@@ -2,6 +2,7 @@ using UnityEngine;
 
 public struct BloomReactionResolution
 {
+    public ReactionType Type;
     public string DisplayName;
     public float RemainingAttackAmount;
     public BloomCoreInstance CreatedCore;
@@ -20,7 +21,7 @@ public static class BloomReactionHandler
         out BloomReactionResolution resolution)
     {
         resolution = default;
-        ElementalAura aura = GetOpposingAura(context);
+        ElementPoolReading aura = GetOpposingAura(context);
         if (aura == null) return false;
 
         float reactionUnits;
@@ -28,20 +29,21 @@ public static class BloomReactionHandler
         float auraConsumed;
         if (context.AttackElement == "Hydro")
         {
-            reactionUnits = Mathf.Min(context.AttackAmount / 2f, aura.AuraAmount);
+            reactionUnits = aura.AvailableFor(context.AttackAmount / 2f);
             attackConsumed = reactionUnits * 2f;
             auraConsumed = reactionUnits;
         }
         else
         {
-            reactionUnits = Mathf.Min(context.AttackAmount, aura.AuraAmount / 2f);
+            reactionUnits = aura.AvailableFor(context.AttackAmount * 2f) / 2f;
             attackConsumed = reactionUnits;
             auraConsumed = reactionUnits * 2f;
         }
         if (reactionUnits <= 0f) return false;
 
-        context.Target.ConsumeAura(aura.Element, auraConsumed);
-        resolution.DisplayName = "绽放";
+        resolution.Type = LunarReactionConversion.SelectReaction(context, ReactionType.Bloom, aura.Element);
+        ElementAuraSystem.ConsumeReactionAura(context, aura.Element, auraConsumed);
+        resolution.DisplayName = resolution.Type == ReactionType.LunarBloom ? "月绽放" : "绽放";
         resolution.RemainingAttackAmount = Mathf.Max(0f, context.AttackAmount - attackConsumed);
         resolution.CreatedCore = BloomCoreSystem.CreateCore(
             context,
@@ -51,7 +53,7 @@ public static class BloomReactionHandler
         return true;
     }
 
-    private static ElementalAura GetOpposingAura(ReactionContext context)
+    private static ElementPoolReading GetOpposingAura(ReactionContext context)
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f)
             return null;
@@ -60,8 +62,7 @@ public static class BloomReactionHandler
         if (context.AttackElement == "Hydro") auraElement = "Dendro";
         else if (context.AttackElement == "Dendro") auraElement = "Hydro";
         else return null;
-        ElementalAura aura = context.Target.GetAura(auraElement);
-        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
-            && aura != null && aura.AuraAmount > 0f ? aura : null;
+        ElementPoolReading aura = ElementQuery.ReadReactionAura(context, auraElement);
+        return aura?.IsPresent == true ? aura : null;
     }
 }

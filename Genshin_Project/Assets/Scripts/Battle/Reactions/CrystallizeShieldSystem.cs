@@ -7,9 +7,12 @@ public static class CrystallizeShieldSystem
         BattleManager battle,
         string element,
         float value,
-        int applicationPhase)
+        int applicationPhase, BattleEntity creator = null)
     {
         if (battle == null || string.IsNullOrEmpty(element) || value <= 0f) return;
+        using var resolution = BattleEventHub.BeginResolution();
+        using var responses = BattleResolutionContext.BeginCollection();
+        long batch = BattleEventHub.NextIdentity();
 
         foreach (CharacterBattleController ally in battle.Allies)
         {
@@ -19,7 +22,7 @@ public static class CrystallizeShieldSystem
                 value,
                 element,
                 ShieldDuration,
-                applicationPhase);
+                applicationPhase, batch, creator);
         }
     }
 }

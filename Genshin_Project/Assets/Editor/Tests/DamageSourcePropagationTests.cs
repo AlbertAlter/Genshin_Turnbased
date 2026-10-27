@@ -8,6 +8,7 @@ namespace GenshinTurnBased.Tests.EditMode
     /// 覆盖 角色直伤 / 溅射 / 敌人伤害 / 状态伤害 / 反应派生伤害 / 燃烧持续伤害 六条路径。
     /// 每条路径用 Kill(...) 钩子验证来源（角色ID/技能ID/效果ID）真实流过统一扣血入口。
     /// </summary>
+    [Category("RealConfig")]
     public class DamageSourcePropagationTests
     {
         private GameObject _dmObject;
@@ -149,8 +150,8 @@ namespace GenshinTurnBased.Tests.EditMode
             ResetEnemy(5f);
             var killStatus = RegisterKillStatus("ST_SRC_STATUS", "Kill(STE_SRC_STAT_DMG)", "STE_SRC_STAT_DMG_ENERGY");
 
-            // 状态伤害效果（Damage，等级数据沿用凯亚战技）
-            HookTestEnv.InjectStatusEffect(_dm, "STE_SRC_STAT_DMG", "Damage", "", "", "Pyro", "Enemy", 1);
+            // 自造效果必须提供自己的倍率，不能隐式沿用其他 ParamID 的战技等级行。
+            HookTestEnv.InjectStatusEffect(_dm, "STE_SRC_STAT_DMG", "Damage", "1*TotalATK,0", "", "Pyro", "Enemy", 1);
             var triggerStatus = HookTestEnv.AttachStatus(_kaeya.Entity, "ST_SRC_TRIGGER", _kaeya.Entity, 3);
             var actionLine = HookTestEnv.InjectStatusAction(_dm, "ST_SRC_TRIGGER", "OnTrigger", "STE_SRC_STAT_DMG", "");
 
@@ -185,7 +186,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 AttackAmount = 1f,
                 PreReactionDamage = 1f,
                 DamageType = "Normal",
-                PoiseDamage = 0f
             };
             ReactionResult result = ReactionResolver.Resolve(context);
             Assert.That(result.HasReaction, Is.True, "火攻雷附着应触发超载");
@@ -220,7 +220,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 AttackAmount = 2f,
                 PreReactionDamage = 1f,
                 DamageType = "Normal",
-                PoiseDamage = 0f
             };
             ReactionSourceSnapshot snapshot = ReactionSourceSnapshot.Capture(context, ReactionType.Burning, "Pyro");
             ReactionStateSystem.SetEntityState(

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public struct ElectroChargedReactionResolution
 {
+    public ReactionType Type;
+    public PendingLunarConduct PendingLunarConduct;
     public string DisplayName;
     public float RemainingAttackAmount;
     public List<ReactionDerivedHit> DerivedHits;
@@ -12,7 +14,6 @@ public struct ElectroChargedReactionResolution
 public static class ElectroChargedReactionHandler
 {
     private const float ReactionMultiplier = 9.6f;
-    private const float PoiseDamage = 50f;
 
     public static bool IsElectroCharged(BattleEntity target)
         => target != null
@@ -27,12 +28,24 @@ public static class ElectroChargedReactionHandler
         out ElectroChargedReactionResolution resolution)
     {
         resolution = default;
-        ElementalAura aura = GetOpposingAura(context);
+        ElementPoolReading aura = GetOpposingAura(context);
         if (aura == null) return false;
 
+        if (LunarElectroChargedReactionHandler.TryPrepare(context, aura, out var lunar))
+        {
+            ElementAuraSystem.ConsumeReactionAura(context, aura.Element, aura.AvailableFor(LunarElectroChargedReactionHandler.Consumption));
+            ReactionStateSystem.RemoveEntityState(context.Target, ReactionType.ElectroCharged);
+            resolution.Type = ReactionType.LunarElectroCharged;
+            resolution.DisplayName = "月感电";
+            resolution.RemainingAttackAmount = Mathf.Max(0f, context.AttackAmount - LunarElectroChargedReactionHandler.Consumption);
+            resolution.PendingLunarConduct = lunar;
+            resolution.DerivedHits = new List<ReactionDerivedHit>();
+            return true;
+        }
+
         float attackConsumed = Mathf.Min(1f, context.AttackAmount);
-        float auraConsumed = Mathf.Min(1f, aura.AuraAmount);
-        context.Target.ConsumeAura(aura.Element, auraConsumed);
+        float auraConsumed = aura.AvailableFor(1f);
+        ElementAuraSystem.ConsumeReactionAura(context, aura.Element, auraConsumed);
 
         float remainingAttack = Mathf.Max(0f, context.AttackAmount - attackConsumed);
         ReactionSourceSnapshot snapshot = ReactionSourceSnapshot.Capture(
@@ -40,6 +53,7 @@ public static class ElectroChargedReactionHandler
             ReactionType.ElectroCharged,
             "Electro");
         snapshot.LevelCoefficient = levelCoefficient;
+        resolution.Type = ReactionType.ElectroCharged;
         resolution.DisplayName = "感电";
         resolution.RemainingAttackAmount = remainingAttack;
         resolution.DerivedHits = BuildDamageChain(
@@ -49,10 +63,8 @@ public static class ElectroChargedReactionHandler
 
         if (WillKeepBothAuras(context, aura.Element, remainingAttack))
         {
-            ElementalAura remainingAura = context.Target.GetAura(aura.Element);
-            float coexistingAmount = remainingAura != null
-                ? Mathf.Min(remainingAttack, remainingAura.AuraAmount)
-                : 0f;
+            ElementPoolReading remainingAura = ReadConductingAura(context.Target, aura.Element);
+            float coexistingAmount = remainingAura?.AvailableFor(remainingAttack) ?? 0f;
             ReactionStateSystem.SetEntityState(
                 context.Target,
                 ReactionType.ElectroCharged,
@@ -104,8 +116,8 @@ public static class ElectroChargedReactionHandler
             if (state == null || state.Type != ReactionType.ElectroCharged) continue;
             BattleEntity target = state.Target;
             if (target == null
-                || target.GetAura("Hydro") == null
-                || target.GetAura("Electro") == null)
+                || ReadConductingAura(target, "Hydro")?.IsPresent != true
+                || ReadConductingAura(target, "Electro")?.IsPresent != true)
                 invalidTargets.Add(target);
         }
 
@@ -117,35 +129,38 @@ public static class ElectroChargedReactionHandler
     {
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
         BattleEntity target = state.Target;
-        ElementalAura hydro = target != null ? target.GetAura("Hydro") : null;
-        ElementalAura electro = target != null ? target.GetAura("Electro") : null;
+        ElementPoolReading hydro = ReadConductingAura(target, "Hydro");
+        ElementPoolReading electro = ReadConductingAura(target, "Electro");
         if (target == null || hydro == null || electro == null)
         {
             ReactionStateSystem.RemoveEntityState(target, ReactionType.ElectroCharged);
             return;
         }
 
-        target.ConsumeAura("Hydro", Mathf.Min(1f, hydro.AuraAmount));
-        target.ConsumeAura("Electro", Mathf.Min(1f, electro.AuraAmount));
+        EnemyShieldHitResult hydroShield = ConsumeConductingAura(target, hydro);
+        EnemyShieldHitResult electroShield = ConsumeConductingAura(target, electro);
 
         ReactionSourceSnapshot snapshot = state.SourceSnapshot;
         float levelCoefficient = snapshot != null && snapshot.LevelCoefficient > 0f
             ? snapshot.LevelCoefficient
             : ReactionDamageCalculator.GetLevelCoefficient(snapshot != null ? snapshot.Level : 1);
-        var result = new ReactionResult();
+        var result = new ReactionResult { EnemyShieldHit = hydroShield ?? electroShield };
         result.DerivedHits.AddRange(BuildDamageChain(
             target,
             snapshot,
             levelCoefficient));
         ReactionEffectExecutor.ExecuteDerivedHits(result);
 
-        hydro = target.GetAura("Hydro");
-        electro = target.GetAura("Electro");
+        hydro = ReadConductingAura(target, "Hydro");
+        electro = ReadConductingAura(target, "Electro");
         if (hydro == null || electro == null)
             ReactionStateSystem.RemoveEntityState(target, ReactionType.ElectroCharged);
         else
         {
-            state.ReactionElementAmount = Mathf.Min(hydro.AuraAmount, electro.AuraAmount);
+            // 只记录有限共存量供显示。双方都固有时没有有限量，存在性仍由两种真实状态判断，不能填1模拟无限池。
+            state.ReactionElementAmount = hydro.IsIntrinsic
+                ? (electro.IsIntrinsic ? 0f : electro.Amount)
+                : electro.IsIntrinsic ? hydro.Amount : Mathf.Min(hydro.Amount, electro.Amount);
             ReactionStateSystem.RefreshDisplay(state);
         }
     }
@@ -158,6 +173,7 @@ public static class ElectroChargedReactionHandler
         var hits = new List<ReactionDerivedHit>();
         var visited = new HashSet<BattleEntity>();
         var queue = new Queue<BattleEntity>();
+        var shieldHits = new Dictionary<BattleEntity, EnemyShieldHitResult>();
         if (mainTarget == null) return hits;
 
         visited.Add(mainTarget);
@@ -166,16 +182,19 @@ public static class ElectroChargedReactionHandler
         while (queue.Count > 0)
         {
             BattleEntity target = queue.Dequeue();
-            hits.Add(BuildHit(target, snapshot, levelCoefficient));
+            ReactionDerivedHit hit = BuildHit(target, snapshot, levelCoefficient);
+            if (shieldHits.TryGetValue(target, out var shieldHit)) hit.EnemyShieldHit = shieldHit;
+            hits.Add(hit);
 
             foreach (BattleEntity adjacent in GetAdjacentOccupiedTargets(target))
             {
                 if (adjacent == null || visited.Contains(adjacent)) continue;
-                ElementalAura hydro = adjacent.GetAura("Hydro");
-                if (hydro == null || hydro.AuraAmount <= 0f) continue;
+                ElementPoolReading hydro = ReadConductingAura(adjacent, "Hydro");
+                if (hydro?.IsPresent != true) continue;
 
                 visited.Add(adjacent);
-                adjacent.ConsumeAura("Hydro", Mathf.Min(1f, hydro.AuraAmount));
+                EnemyShieldHitResult adjacentShield = ConsumeConductingAura(adjacent, hydro);
+                if (adjacentShield != null) shieldHits[adjacent] = adjacentShield;
                 queue.Enqueue(adjacent);
             }
         }
@@ -202,7 +221,8 @@ public static class ElectroChargedReactionHandler
                 levelCoefficient,
                 ReactionMultiplier,
                 snapshot != null ? snapshot.TotalEM : 0f,
-                snapshot != null ? snapshot.DMGBonus : 0f,
+                (snapshot != null ? snapshot.DMGBonus : 0f) + ReactionDamageCalculator.CollectLiveTargetBonuses(
+                    snapshot?.SourceEntity, target, ReactionType.ElectroCharged, "Electro").DMGBonus,
                 snapshot != null ? snapshot.BaseDMGBonusFlat : 0f,
                 resistance);
 
@@ -211,7 +231,6 @@ public static class ElectroChargedReactionHandler
             Target = target,
             Damage = damage,
             DamageElement = "Electro",
-            PoiseDamage = PoiseDamage,
             ElementAmount = 0f,
             // 感电来源声明（2026-08-19）：使用创建感电状态时保存的来源快照，保留原始角色归属
             Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.ElectroCharged),
@@ -219,7 +238,7 @@ public static class ElectroChargedReactionHandler
         };
     }
 
-    private static ElementalAura GetOpposingAura(ReactionContext context)
+    private static ElementPoolReading GetOpposingAura(ReactionContext context)
     {
         if (context == null || context.Target == null || context.AttackAmount <= 0f)
             return null;
@@ -229,9 +248,8 @@ public static class ElectroChargedReactionHandler
         else if (context.AttackElement == "Electro") auraElement = "Hydro";
         else return null;
 
-        ElementalAura aura = context.Target.GetAura(auraElement);
-        return context.AllowsReactionPool(auraElement, ReactionPoolKind.NormalAura)
-            && aura != null && aura.AuraAmount > 0f ? aura : null;
+        ElementPoolReading aura = ElementQuery.ReadReactionAura(context, auraElement);
+        return aura?.IsPresent == true ? aura : null;
     }
 
     private static bool WillKeepBothAuras(
@@ -239,10 +257,21 @@ public static class ElectroChargedReactionHandler
         string opposingElement,
         float remainingAttack)
     {
-        ElementalAura opposingAura = context.Target.GetAura(opposingElement);
-        return remainingAttack > 0f
+        ElementPoolReading opposingAura = ReadConductingAura(context.Target, opposingElement);
+        return (remainingAttack > 0f || ElementQuery.ReadIntrinsic(context.Target, context.AttackElement) != null)
             && opposingAura != null
-            && opposingAura.AuraAmount > 0f;
+            && opposingAura.IsPresent;
+    }
+
+    private static ElementPoolReading ReadConductingAura(BattleEntity target, string element)
+        => ElementQuery.ReadShield(target, element) ?? ElementQuery.ReadAura(target, element);
+
+    private static EnemyShieldHitResult ConsumeConductingAura(BattleEntity target, ElementPoolReading aura)
+    {
+        if (aura.Kind == ReactionPoolKind.EnemyShield)
+            return EnemyElementShieldSystem.ResolveHit(target, aura.Element == "Hydro" ? "Electro" : "Hydro", 1f);
+        if (!aura.IsIntrinsic) target.ConsumeAura(aura.Element, aura.AvailableFor(1f));
+        return null;
     }
 
     private static IEnumerable<BattleEntity> GetAdjacentOccupiedTargets(BattleEntity target)

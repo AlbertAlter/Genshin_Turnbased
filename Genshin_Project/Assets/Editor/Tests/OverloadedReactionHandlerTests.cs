@@ -74,15 +74,6 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_left.CurrentHP, Is.EqualTo(10000f - normalDamage).Within(0.001f));
             Assert.That(_main.CurrentHP, Is.EqualTo(10000f - normalDamage).Within(0.001f));
             Assert.That(_right.CurrentHP, Is.EqualTo(10000f - normalDamage * 0.5f).Within(0.001f));
-#if GTB_POISE_SYSTEM
-            Assert.That(_left.Poise, Is.EqualTo(400f));
-            Assert.That(_main.Poise, Is.EqualTo(400f));
-            Assert.That(_right.Poise, Is.EqualTo(400f));
-#else
-            Assert.That(_left.Poise, Is.EqualTo(500f));
-            Assert.That(_main.Poise, Is.EqualTo(500f));
-            Assert.That(_right.Poise, Is.EqualTo(500f));
-#endif
         }
 
         [Test]
@@ -120,7 +111,7 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void ExecuteDerivedHits_FullyShieldedHitDoesNotDealPoiseDamage()
+        public void ExecuteDerivedHits_FullyShieldedHitDoesNotDamageHP()
         {
             _main.ApplyAura("Electro", 1f, 1);
             _main.AddShield(10000f, "Pyro", 1f);
@@ -132,7 +123,6 @@ namespace GenshinTurnBased.Tests.EditMode
             ReactionEffectExecutor.ExecuteDerivedHits(ToResult(result));
 
             Assert.That(_main.CurrentHP, Is.EqualTo(10000f));
-            Assert.That(_main.Poise, Is.EqualTo(500f));
         }
 
         private ReactionContext NewContext(
@@ -169,8 +159,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.SlotPosition = position;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
 
             FieldPosition slot = _battle.Field.GetSlot(side, position);
             slot.Occupant = entity;

@@ -27,12 +27,24 @@ public static class EnemyShieldRuleTableLoader
         var knownColumns = new HashSet<string>(HitColumns, StringComparer.OrdinalIgnoreCase);
         var seenColumns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var columns = new Dictionary<int, string>();
+        int shieldColumn = -1;
 
-        for (int column = 2; column <= sheet.Dimension.End.Column; column++)
+        for (int column = 1; column <= sheet.Dimension.End.Column; column++)
         {
             string hitKind = sheet.Cells[1, column].Text.Trim();
-            if (hitKind.Length == 0)
-                throw new TableValidationException($"[EnemyShield/Type1] 第 {column} 列表头为空");
+            // 旧矩阵盾元素列表头为空：按这份空表头定位，不再假定它在第1列。
+            // 同时接受明确的ShieldElement表头，不要求为本次代码修改重写旧表。
+            if (hitKind.Length == 0 || hitKind == "ShieldElement")
+            {
+                bool populated = false;
+                for (int row = 2; row <= sheet.Dimension.End.Row; row++)
+                    populated |= !string.IsNullOrWhiteSpace(sheet.Cells[row, column].Text);
+                if (!populated && hitKind.Length == 0) continue;
+                if (shieldColumn > 0)
+                    throw new TableValidationException("[EnemyShield/Type1] 盾元素列不唯一，请填写唯一ShieldElement表头");
+                shieldColumn = column;
+                continue;
+            }
             if (!knownColumns.Contains(hitKind))
                 throw new TableValidationException($"[EnemyShield/Type1] 未知攻击列：{hitKind}");
             if (!seenColumns.Add(hitKind))
@@ -42,12 +54,14 @@ public static class EnemyShieldRuleTableLoader
         foreach (string required in HitColumns)
             if (!seenColumns.Contains(required))
                 throw new TableValidationException($"[EnemyShield/Type1] 缺少攻击列：{required}");
+        if (shieldColumn < 1)
+            throw new TableValidationException("[EnemyShield/Type1] 缺少盾元素列（ShieldElement或旧表唯一非空数据的空表头列）");
 
         var table = new EnemyShieldRuleTable();
         var seenRows = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         for (int row = 2; row <= sheet.Dimension.End.Row; row++)
         {
-            string shieldElement = sheet.Cells[row, 1].Text.Trim();
+            string shieldElement = sheet.Cells[row, shieldColumn].Text.Trim();
             bool hasRuleCell = false;
             foreach (int column in columns.Keys)
                 hasRuleCell |= !string.IsNullOrWhiteSpace(sheet.Cells[row, column].Text);

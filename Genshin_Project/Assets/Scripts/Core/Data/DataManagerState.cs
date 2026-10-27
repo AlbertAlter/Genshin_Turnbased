@@ -26,6 +26,8 @@ internal sealed class DataManagerState
     internal Dictionary<int, float> WeaponAscensionCurve5 = new Dictionary<int, float>();
 
     internal Dictionary<string, StatusMainData> StatusMainDict = new Dictionary<string, StatusMainData>();
+    internal Dictionary<int, HashSet<string>> CharacterStatusIDs = new Dictionary<int, HashSet<string>>();
+    internal HashSet<string> HexereiStatusIDs = new HashSet<string>();
     internal Dictionary<string, StatusEffectData> StatusEffectDict = new Dictionary<string, StatusEffectData>();
     internal Dictionary<string, List<StatusActionData>> StatusActionDict = new Dictionary<string, List<StatusActionData>>();
     internal Dictionary<string, StatusAttributesData> StatusAttributesDict = new Dictionary<string, StatusAttributesData>();
@@ -42,6 +44,7 @@ internal sealed class DataManagerState
     internal Dictionary<int, float> BaseATK2Dict = new Dictionary<int, float>();
     internal Dictionary<int, float> ReactionLevelCoefficientDict = new Dictionary<int, float>();
     internal EnemyShieldRuleTable EnemyShieldRules = new EnemyShieldRuleTable();
+    internal TeamBonusRules TeamBonusRules = new TeamBonusRules();
     internal Dictionary<int, StageConfigData> StageConfigDict = new Dictionary<int, StageConfigData>();
     internal Dictionary<string, int> SkillStringToInt = new Dictionary<string, int>();
 
@@ -67,6 +70,8 @@ internal sealed class DataManagerState
             WeaponAscensionCurve4 = manager.WeaponAscensionCurve4,
             WeaponAscensionCurve5 = manager.WeaponAscensionCurve5,
             StatusMainDict = manager.StatusMainDict,
+            CharacterStatusIDs = manager.CharacterStatusIDs,
+            HexereiStatusIDs = manager.HexereiStatusIDs,
             StatusEffectDict = manager.StatusEffectDict,
             StatusActionDict = manager.StatusActionDict,
             StatusAttributesDict = manager.StatusAttributesDict,
@@ -81,6 +86,7 @@ internal sealed class DataManagerState
             BaseATK2Dict = manager.BaseATK2Dict,
             ReactionLevelCoefficientDict = manager.ReactionLevelCoefficientDict,
             EnemyShieldRules = manager.EnemyShieldRules,
+            TeamBonusRules = manager.TeamBonusRules,
             StageConfigDict = manager.StageConfigDict,
             SkillStringToInt = manager.SkillStringToInt
         };
@@ -106,6 +112,8 @@ internal sealed class DataManagerState
         manager.WeaponAscensionCurve4 = WeaponAscensionCurve4;
         manager.WeaponAscensionCurve5 = WeaponAscensionCurve5;
         manager.StatusMainDict = StatusMainDict;
+        manager.CharacterStatusIDs = CharacterStatusIDs;
+        manager.HexereiStatusIDs = HexereiStatusIDs;
         manager.StatusEffectDict = StatusEffectDict;
         manager.StatusActionDict = StatusActionDict;
         manager.StatusAttributesDict = StatusAttributesDict;
@@ -120,6 +128,7 @@ internal sealed class DataManagerState
         manager.BaseATK2Dict = BaseATK2Dict;
         manager.ReactionLevelCoefficientDict = ReactionLevelCoefficientDict;
         manager.EnemyShieldRules = EnemyShieldRules;
+        manager.TeamBonusRules = TeamBonusRules;
         manager.StageConfigDict = StageConfigDict;
         manager.SkillStringToInt = SkillStringToInt;
     }

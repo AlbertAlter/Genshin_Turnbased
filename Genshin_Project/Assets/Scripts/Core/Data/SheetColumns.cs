@@ -98,7 +98,6 @@ public static class SheetColumns
         public const int EnemyName         = 3;
         public const int Threat            = 4;
         public const int ActsGiven         = 5;
-        public const int Poise             = 6;
         public const int ATK_Curve         = 7;
         public const int HP_coeff          = 8;
         public const int ATK_coeff         = 9;

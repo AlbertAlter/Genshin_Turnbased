@@ -35,7 +35,7 @@ public static class HitDataParser
         TryNumber(multiplierText, out float multiplier);
         float aura = 0f;
         if (parts.Length == 2) TryNumber(parts[1], out aura);
-        return new HitData(multiplier, 0f, aura);
+        return new HitData(multiplier, aura);
     }
 
     /// <summary>Only omitted fields inherit; an explicitly authored zero remains zero.</summary>
@@ -47,7 +47,7 @@ public static class HitDataParser
         float multiplier = string.IsNullOrWhiteSpace(parts[0]) ? level1.Multiplier : current.Multiplier;
         float aura = parts.Length < 2 || string.IsNullOrWhiteSpace(parts[1])
             ? level1.ElementAura : current.ElementAura;
-        return new HitData(multiplier, 0f, aura);
+        return new HitData(multiplier, aura);
     }
 
     /// <summary>Resolve %Effect.HitsN.M*scale,E (or a numeric/ scaled E override).</summary>
@@ -68,7 +68,7 @@ public static class HitDataParser
         else if (!TryNumber(auraToken, out aura))
             throw new FormatException("Element amount must be E, E*scale or a number: " + expression);
 
-        return new HitData(sourceHit.Multiplier * reference.scale, 0f, aura);
+        return new HitData(sourceHit.Multiplier * reference.scale, aura);
     }
 
     /// <summary>Field codes retain 0=M and 2=E; the former P field is invalid.</summary>

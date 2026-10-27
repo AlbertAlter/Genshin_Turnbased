@@ -23,9 +23,17 @@ namespace GenshinTurnBased.Tests.EditMode
                 { 2, new SkillLevelData { Hits1 = "0.516" } }
             };
             data.TalentDict[1011] = new List<TalentData> { new TalentData { TalentIndex = 1, UnlockAfter = 20 } };
+            data.StatusMainDict[LisaScriptHooks.ConductiveID] = new StatusMainData
+            {
+                StatusID = 69011, StatusID2 = LisaScriptHooks.ConductiveID, MaxStack = 3
+            };
             battle = HookTestEnv.CreateBattleManager();
             lisa = Entity(1011, BattleSide.Ally, 1);
-            lisa.Level = 20;
+            data.CharacterAttributesDict[1011] = new CharacterAttributesData
+            { CharacterID = 1011, BaseHP = 100f, BaseATK = 100f, BaseDEF = 100f,
+                BaseRechargeRate = 1f, MaxEnergy = 80 };
+            var controller = lisa.gameObject.AddComponent<CharacterBattleController>();
+            controller.Init(1011, 20, 1); // 天赋资格来自真实突破阶段，不以裸Entity的等级冒充已突破。
         }
 
         [TearDown]
@@ -57,9 +65,14 @@ namespace GenshinTurnBased.Tests.EditMode
             return entity;
         }
 
-        private static void Conductive(BattleEntity target, int count)
+        private void Conductive(BattleEntity target, int count)
         {
-            target.StatusDict[LisaScriptHooks.ConductiveID] = new StatusInstance { IsActive = true, StackCount = count };
+            if (count < 0 || count > 3) throw new ArgumentOutOfRangeException(nameof(count));
+            target.RemoveStatus(LisaScriptHooks.ConductiveID, -1);
+            // 零层就是没有该状态；正层数用正式入口施加多份独立实例。
+            for (int index = 0; index < count; index++)
+                target.AddStatus(LisaScriptHooks.ConductiveID, lisa, 0, 2, 0,
+                    data.StatusMainDict[LisaScriptHooks.ConductiveID]);
         }
 
         [TestCase(0, 0f)]
@@ -70,7 +83,9 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             var target = Entity(2001, BattleSide.Enemy, 1);
             Conductive(target, stacks);
-            var original = new HitData(3.2f, 0f, 2f);
+            Assert.That(target.GetStatusInstances(LisaScriptHooks.ConductiveID), Has.Count.EqualTo(stacks));
+            Assert.That(target.HasStatus(LisaScriptHooks.ConductiveID), Is.EqualTo(stacks > 0));
+            var original = new HitData(3.2f, 2f);
             var result = LisaScriptHooks.ModifyHit(LisaScriptHooks.DamageHook, lisa, target, original, 1);
             Assert.That(result.Multiplier, Is.EqualTo(3.2f + expected).Within(0.00001f));
             Assert.That(result.ElementAura, Is.EqualTo(2f));

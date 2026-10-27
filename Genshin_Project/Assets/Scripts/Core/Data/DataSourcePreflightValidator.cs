@@ -28,19 +28,53 @@ public static class DataSourcePreflightValidator
             "Attributes", "LevelBonus", "WeaponParam", "AscensionCurve_3", "AscensionCurve_4", "AscensionCurve_5");
         ValidateWorkbook(dataRoot, "StatusData.xlsx", errors,
             "StatusData_Main", "Status_Effect", "Status_Action", "Status_Attributes");
-        ValidateWorkbook(dataRoot, "StatusData_Enemy.xlsx", errors,
-            "StatusData_Main_Enemy", "Status_Effect", "Status_Action_Enemy", "Status_Attributes");
         ValidateWorkbook(dataRoot, "StatusData_Weapon.xlsx", errors,
             "StatusWeapon_Main", "StatusWeapon_Action", "StatusWeapon_Effect", "Weapon_Initiate", "SpecialParam_Desc");
-        ValidateWorkbook(dataRoot, "EnemyAttributes.xlsx", errors,
-            "Enemy_Main", "Base_HP", "Base_ATK1", "Base_ATK2");
-        ValidateWorkbook(dataRoot, "EnemySkill.xlsx", errors,
-            "EnemySkill_Main", "EnemySkill_Effect", "EnemySkill_Param", "EnemyAI", "EnemyAI_Rule");
+        ValidateWorkbook(dataRoot, "EnemyAttributes.xlsx", errors, "Coeff", "Base_HP", "Base_ATK1", "Base_ATK2");
         ValidateWorkbook(dataRoot, "ReactionLevelCoefficient.xlsx", errors, "Sheet1");
         ValidateWorkbook(dataRoot, "EnemyShield.xlsx", errors, "Type1");
+        ValidateWorkbook(dataRoot, "TeamBonus.xlsx", errors, TeamBonusTableLoader.SheetNames);
         ValidateCharacterWorkbooks(dataRoot, errors);
+        ValidateEnemyWorkbooks(dataRoot, errors);
 
         return errors;
+    }
+
+    private static void ValidateEnemyWorkbooks(string dataRoot, List<string> errors)
+    {
+        foreach (string folder in new[] { "Enemies", "EnemyStatus" })
+        {
+            string root = Path.Combine(dataRoot, folder);
+            if (!Directory.Exists(root))
+            {
+                errors.Add("缺少 " + folder + " 敌人配表目录");
+                continue;
+            }
+            int count = 0;
+            foreach (string file in Directory.GetFiles(root, "*.xlsx"))
+            {
+                string title = Path.GetFileName(file);
+                if (title.StartsWith("~$", StringComparison.Ordinal) || title.StartsWith("#", StringComparison.Ordinal)
+                    || title.StartsWith("0_", StringComparison.Ordinal)) continue;
+                count++;
+                var required = folder == "Enemies"
+                    ? new[] { "Enemy_Main", "EnemySkill_Main", "EnemySkill_Effect", "EnemySkill_Param", "EnemyAI", "EnemyAI_Rule", "BattleInitiate" }
+                    : new[] { "StatusData_Main", "Status_Action", "Status_Effect", "Status_Attributes" };
+                ValidateWorkbookPath(file, folder + "/" + title, errors, required);
+            }
+            if (count == 0) errors.Add(folder + "目录没有有效敌人工作簿。");
+        }
+    }
+
+    public static bool UsesEnemyPackages(string dataRoot)
+    {
+        string root = Path.Combine(dataRoot, "Enemies");
+        if (!Directory.Exists(root)) return false;
+        return Directory.GetFiles(root, "*.xlsx").Any(file => {
+            string name = Path.GetFileName(file);
+            return !name.StartsWith("~$", StringComparison.Ordinal) && !name.StartsWith("#", StringComparison.Ordinal)
+                && !name.StartsWith("0_", StringComparison.Ordinal);
+        });
     }
 
     private static void ValidateCharacterWorkbooks(string dataRoot, List<string> errors)

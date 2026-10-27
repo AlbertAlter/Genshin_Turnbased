@@ -30,8 +30,8 @@ public partial class DataManager
         ExcelWorksheet initiate = package.Workbook.Worksheets["Artifacts_Initiate"]
             ?? RequireArtifactSheet(package, "Artifacts_Inititate");
 
-        Dictionary<int, string> statusKeys = ReadArtifactKeys(main, ArtifactStatusKey);
-        Dictionary<int, string> effectKeys = ReadArtifactKeys(effects, ArtifactEffectKey);
+        Dictionary<int, string> statusKeys = ReadArtifactKeys(main, "StatusID", "StatusID2", ArtifactStatusKey);
+        Dictionary<int, string> effectKeys = ReadArtifactKeys(effects, "StatusEffectID", "StatusEffectID2", ArtifactEffectKey);
         string ResolveStatus(string value) => ResolveArtifactReference(
             CountStatusSystem.ResolvePublicStatusReference(value), statusKeys, ArtifactStatusKey);
         string ResolveEffect(string value) => ResolveArtifactReference(value, effectKeys, ArtifactEffectKey);
@@ -42,8 +42,8 @@ public partial class DataManager
 
         for (int row = GetDataStartRow(actions); row <= GetSheetMaxRow(actions); row++)
         {
-            int id = SafeGetInt(actions.Cells[row, 1].Value);
-            string key = actions.Cells[row, 2].Text.Trim();
+            int id = SafeGetInt(actions.Cells[row, FindColumnByHeader(actions, "StatusID")].Value);
+            string key = actions.Cells[row, FindColumnByHeader(actions, "StatusID2")].Text.Trim();
             if (key.Length == 0 && id <= 0) continue;
             key = ResolveStatus(key.Length > 0 ? key : id.ToString(CultureInfo.InvariantCulture));
             if (!StatusMainDict.ContainsKey(key))
@@ -64,25 +64,15 @@ public partial class DataManager
     private void LoadArtifactInitiateSheet(ExcelWorksheet sheet, Func<string, string> resolveStatusKey)
     {
         // 初始化槽按表头发现，不限定6个；行末备注不会被当成状态引用。
-        const string prefix = "InitiateStatus";
-        var initiateColumns = new List<int>();
-        int lastColumn = sheet.Dimension?.End.Column ?? 0;
-        for (int column = 3; column <= lastColumn; column++)
-        {
-            string header = sheet.Cells[1, column].Text.Trim();
-            if (header.StartsWith(prefix, StringComparison.Ordinal)
-                && int.TryParse(header.Substring(prefix.Length), NumberStyles.None,
-                    CultureInfo.InvariantCulture, out int slot) && slot > 0)
-                initiateColumns.Add(column);
-        }
+        var initiateColumns = ExcelTableHeaders.For(sheet).NumberedColumns("InitiateStatus");
         if (initiateColumns.Count == 0)
             throw new InvalidDataException($"[{sheet.Name}] 缺少 InitiateStatus 初始化列。");
 
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
-            int setID = SafeGetInt(sheet.Cells[row, 1].Value);
+            int setID = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "ArtifactSetID")].Value);
             if (setID <= 0) continue;
-            int setNumber = SafeGetInt(sheet.Cells[row, 2].Value);
+            int setNumber = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "SetNumber")].Value);
             if (setNumber != 2 && setNumber != 4)
                 throw new InvalidDataException($"[{sheet.Name}] row {row}: SetNumber 必须是 2 或 4。");
 
@@ -125,14 +115,15 @@ public partial class DataManager
         return result;
     }
 
-    private Dictionary<int, string> ReadArtifactKeys(ExcelWorksheet sheet, Func<int, string> fallback)
+    private Dictionary<int, string> ReadArtifactKeys(ExcelWorksheet sheet, string idHeader,
+        string keyHeader, Func<int, string> fallback)
     {
         var keys = new Dictionary<int, string>();
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
-            int id = SafeGetInt(sheet.Cells[row, 1].Value);
+            int id = SafeGetInt(ExcelTableHeaders.For(sheet).Cell(row, idHeader).Value);
             if (id <= 0) continue;
-            string explicitKey = sheet.Cells[row, 2].Text.Trim();
+            string explicitKey = ExcelTableHeaders.For(sheet).Cell(row, keyHeader).Text.Trim();
             if (keys.ContainsKey(id))
                 throw new InvalidDataException($"[{sheet.Name}] row {row}: 重复编号 {id}。");
             keys.Add(id, explicitKey.Length > 0 ? explicitKey : fallback(id));

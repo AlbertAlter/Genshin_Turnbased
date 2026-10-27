@@ -34,7 +34,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase("%STE_Test.Hits2.M,E*0.5", 2f, 0.5f)]
         public void ResolveReference_UsesME(string raw, float multiplier, float aura)
         {
-            AssertHit(HitDataParser.ResolveReferencedHit(raw, new HitData(2f, 0f, 1f)),
+            AssertHit(HitDataParser.ResolveReferencedHit(raw, new HitData(2f, 1f)),
                 multiplier, aura);
         }
 
@@ -51,7 +51,7 @@ namespace GenshinTurnBased.Tests.EditMode
         public void ResolveReference_RejectsRetiredPoise(string raw)
         {
             Assert.Throws<FormatException>(() =>
-                HitDataParser.ResolveReferencedHit(raw, new HitData(2f, 0f, 1f)));
+                HitDataParser.ResolveReferencedHit(raw, new HitData(2f, 1f)));
         }
 
         [Test]
@@ -78,7 +78,6 @@ namespace GenshinTurnBased.Tests.EditMode
         private static void AssertHit(HitData hit, float multiplier, float aura)
         {
             Assert.That(hit.Multiplier, Is.EqualTo(multiplier).Within(0.000001f));
-            Assert.That(hit.Poise, Is.Zero);
             Assert.That(hit.ElementAura, Is.EqualTo(aura).Within(0.000001f));
         }
     }

@@ -8,6 +8,7 @@ namespace GenshinTurnBased.Tests.EditMode
     /// 钩子级严格条件 + 统一 OnHit 集成（敌人伤害也能触发）+ 15 回合冷却。
     /// 真实配表：ST_Kaeya_C4 OnHit → STE_Kaeya_C4 Shield 0.3*TotalHP, Cryo, 5t, Cooldown=15。
     /// </summary>
+    [Category("RealConfig")]
     public class KaeyaC4HookTests
     {
         private GameObject _dmObject;

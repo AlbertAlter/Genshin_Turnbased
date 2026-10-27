@@ -22,6 +22,7 @@ public sealed class EnemyTurnActionPool
     private long _spent;
 
     public long RemainingActions => Math.Max(0L, _budget - _spent);
+    public bool LastSelectionIsLastGuaranteedAction { get; private set; }
 
     public EnemyTurnActionPool(IEnumerable<EnemyBattleController> enemies)
     {
@@ -55,7 +56,10 @@ public sealed class EnemyTurnActionPool
             foreach (var entry in _entries) entry.ActedThisRound = false;
             CollectHighestThreat();
         }
+        if (_candidates.Count == 0) return false;
 
+        // 剩余预算覆盖整个最高威胁组时，本次分配才属于保证行动；部分覆盖属于随机补分。
+        bool currentIsGuaranteed = RemainingActions >= _candidates.Count;
         // 只为真正需要打破平局的本次分配抽取一次；日志不重复抽取。
         int index = _candidates.Count == 1 ? 0 : BattleRandom.NextInt(0, _candidates.Count);
         var selected = _candidates[index];
@@ -65,6 +69,17 @@ public sealed class EnemyTurnActionPool
         selected.ActedThisRound = true;
         _spent++;
         enemy = selected.Enemy;
+        int aheadOrTied = 0, unacted = 0;
+        foreach (var entry in _entries)
+        {
+            if (!entry.Enemy.CanReceiveOrdinaryAction) continue;
+            if (entry.Enemy.Entity.Threat >= selected.Enemy.Entity.Threat) aheadOrTied++;
+            if (!entry.ActedThisRound) unacted++;
+        }
+        // 当前轮其余单位分完后，下一轮须覆盖更高威胁度及整个同威胁组，才能保证本单位再行动。
+        // 不提前抽未来的随机数；同威胁度时等价于是否足够完整覆盖下一轮。
+        LastSelectionIsLastGuaranteedAction = currentIsGuaranteed
+            && RemainingActions < (long)unacted + aheadOrTied;
         return true;
     }
 
@@ -74,7 +89,7 @@ public sealed class EnemyTurnActionPool
         int highestThreat = int.MinValue;
         foreach (var entry in _entries)
         {
-            if (entry.ActedThisRound) continue;
+            if (entry.ActedThisRound || !entry.Enemy.CanReceiveOrdinaryAction) continue;
             int threat = entry.Enemy.Entity.Threat;
             if (threat < highestThreat) continue;
             if (threat > highestThreat)

@@ -6,9 +6,7 @@ public enum EnemyShieldRuleKind
 {
     None,
     ElementAmountMultiplier,
-    FixedGauge,
-    ElementAmountPlusPoiseFormula,
-    FixedGaugePlusPoiseFormula
+    FixedGauge
 }
 
 [Serializable]
@@ -19,21 +17,18 @@ public sealed class EnemyShieldRule
     public EnemyShieldRuleKind Kind;
     public float ElementAmountMultiplier;
     public float FixedGauge;
-    public float PoiseGaugePerPoint;
     public string RawText;
 
     public bool HasEffect => Kind != EnemyShieldRuleKind.None;
 
-    public float Evaluate(float attackElementAmount, float rawPoiseDamage, float currentShieldGauge)
+    public float Evaluate(float attackElementAmount, float currentShieldGauge)
     {
-        if (!IsFinite(attackElementAmount) || !IsFinite(rawPoiseDamage) || !IsFinite(currentShieldGauge))
+        if (!IsFinite(attackElementAmount) || !IsFinite(currentShieldGauge))
             throw new ArgumentOutOfRangeException(nameof(attackElementAmount), "Enemy shield inputs must be finite.");
-        if (attackElementAmount < 0f || rawPoiseDamage < 0f || currentShieldGauge < 0f)
+        if (attackElementAmount < 0f || currentShieldGauge < 0f)
             throw new ArgumentOutOfRangeException(nameof(attackElementAmount), "Enemy shield inputs cannot be negative.");
 
-        float result = attackElementAmount * ElementAmountMultiplier
-                       + FixedGauge
-                       + rawPoiseDamage * PoiseGaugePerPoint;
+        float result = attackElementAmount * ElementAmountMultiplier + FixedGauge;
         if (!IsFinite(result) || result < 0f)
             throw new InvalidOperationException($"Enemy shield rule produced an invalid result: {RawText}");
         return Mathf.Clamp(result, 0f, currentShieldGauge);

@@ -168,6 +168,7 @@ namespace GenshinTurnBased.Tests.EditMode
             enemy.Entity.SlotPosition = position;
             enemy.Entity.TotalHP = hp;
             enemy.Entity.CurrentHP = hp;
+            BattleAttributeInitialization.Prepare(enemy.Entity);
             Manager.RegisterEnemy(enemy);
             return enemy;
         }
@@ -185,13 +186,14 @@ namespace GenshinTurnBased.Tests.EditMode
             ally.Entity.SlotPosition = position;
             ally.Entity.TotalHP = hp;
             ally.Entity.CurrentHP = hp;
+            BattleAttributeInitialization.Prepare(ally.Entity);
             Manager.RegisterAlly(ally);
             return ally;
         }
 
         public void ConfigureEnemyDamageSkill(
             float multiplier = 1f,
-            string element = "None",
+            string element = "Physical",
             float elementAmount = 0f)
         {
             const int skillID = 990201;
@@ -271,6 +273,9 @@ namespace GenshinTurnBased.Tests.EditMode
 
         private void AddMinimalDeterministicData()
         {
+            foreach (string id in new[] { TeamPublicStatuses.VerdantDew, TeamPublicStatuses.Thundercloud,
+                TeamPublicStatuses.PolarDomain, TeamPublicStatuses.MoonCage })
+                DataManager.StatusMainDict[id] = TeamPublicStatuses.CreateDefinition(id);
             DataManager.CharacterAttributesDict[AllyID] = new CharacterAttributesData
             {
                 CharacterID = AllyID,
@@ -282,7 +287,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 BaseATK = 100f,
                 BaseDEF = 100f,
                 MaxEnergy = 60,
-                Poise = 100f,
                 HitWeight = 100f,
                 BaseRechargeRate = 1f,
                 CritRate = 0f,
@@ -300,7 +304,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 EnemyName = "流程测试敌人",
                 Threat = 1,
                 ActsGiven = 1,
-                Poise = 100f,
                 ATK_Curve = 1,
                 HP_coeff = 1f,
                 ATK_coeff = 1f

@@ -12,7 +12,7 @@ public partial class CharacterBattleController
     // ================================================================
     /// <summary>
     /// 状态行动触发限制（2026-08-14，Status_Action 新列）：
-    /// MaxTimePerTurn（每回合最大次数）/ MaxTimePerLife（全场最大次数）/ Cooldown（行动冷却回合）。
+    /// MaxTimePerTurn（每回合最大次数）/ MaxTimePerLife（全场最大次数）/ Cooldown（从触发阶段起算的冷却回合）。
     /// 返回 true = 已达上限/冷却中，不应触发。
     /// </summary>
     StatusActionRuntimeState GetStatusActionRuntime(StatusInstance inst, StatusActionData act)
@@ -23,6 +23,12 @@ public partial class CharacterBattleController
         string key = !string.IsNullOrEmpty(act.ActionKey)
             ? act.ActionKey
             : $"{act.StatusID2}|{act.ActionType}|{act.Param1}|{act.ScriptHook}";
+        key = BattleSpecialRules.GetActionCounterKey(inst, act, key);
+        if (WeaponCompletionHooks.TryGetSharedRuntime(inst, act, key, out var shared))
+        {
+            inst.ActionRuntime[key] = shared;
+            return shared;
+        }
         if (!inst.ActionRuntime.TryGetValue(key, out StatusActionRuntimeState state))
         {
             state = new StatusActionRuntimeState();
@@ -39,6 +45,7 @@ public partial class CharacterBattleController
         if (state == null) return false;
         var bm = BattleManager.Instance;
         int turn = bm != null ? bm.TurnCount : 0;
+        int phase = bm != null ? (int)bm.CurrentPhase : 0;
         // 懒重置：新回合时清零本回合计数
         if (state.LastActionTurn != turn)
         {
@@ -50,7 +57,7 @@ public partial class CharacterBattleController
         if (act.MaxTimePerLife > 0 && state.LifeTriggerCount + state.PendingTriggerCount >= act.MaxTimePerLife)
             return true;
         if (act.Cooldown > 0 && (state.PendingTriggerCount > 0
-            || (state.LastTriggerTurn >= 0 && turn - state.LastTriggerTurn < act.Cooldown)))
+            || state.IsCoolingDown(act.Cooldown, turn, phase)))
             return true;
         return false;
     }
@@ -63,6 +70,7 @@ public partial class CharacterBattleController
         if (state == null) return;
         var bm = BattleManager.Instance;
         int turn = bm != null ? bm.TurnCount : 0;
+        int phase = bm != null ? (int)bm.CurrentPhase : 0;
         if (state.LastActionTurn != turn)
         {
             state.LastActionTurn = turn;
@@ -73,7 +81,11 @@ public partial class CharacterBattleController
         // 在真正执行后同样必须留下计数。
         state.TurnTriggerCount++;
         state.LifeTriggerCount++;
-        if (act.Cooldown > 0) state.LastTriggerTurn = turn;
+        if (act.Cooldown > 0)
+        {
+            state.LastTriggerTurn = turn;
+            state.LastTriggerPhase = phase;
+        }
 
         // ActionRuntime 负责逐行动限制；StatusInstance 上的旧字段仍是状态级公开汇总，
         // 供界面、调试与既有调用方读取，不能在迁移后停止记账。
@@ -84,7 +96,11 @@ public partial class CharacterBattleController
         }
         inst.TurnTriggerCount++;
         inst.LifeTriggerCount++;
-        if (act.Cooldown > 0) inst.LastTriggerTurn = turn;
+        if (act.Cooldown > 0)
+        {
+            inst.LastTriggerTurn = turn;
+            inst.LastTriggerPhase = phase;
+        }
     }
 
     public void ExecuteStatusActions(StatusInstance inst, List<StatusActionData> actions, object host, string actionType)
@@ -92,22 +108,38 @@ public partial class CharacterBattleController
 
     public async Task ExecuteStatusActionsTask(StatusInstance inst, List<StatusActionData> actions, object host, string actionType)
     {
+        using var statusAction = BattleResolutionContext.BeginIndependentStatusAction(inst);
+        await BattleDeathResolution.RunAsync(() => ExecuteStatusActionsCoreAsync(inst, actions, host, actionType));
+    }
+
+    private async Task ExecuteStatusActionsCoreAsync(StatusInstance inst, List<StatusActionData> actions, object host, string actionType)
+    {
+        if (actionType == "OnEnd" && inst?.StatusID2 == KingsSquireWeaponCount.ID)
+        {
+            await KingsSquireWeaponCount.EndNaturally(inst, host, actions);
+            return;
+        }
         bool countTurnHandled = false;
         foreach (var act in actions)
         {
-            if (inst == null || !inst.IsActive) break;
+            if (inst == null || !inst.IsActive || !EquipmentStatusLifetime.CanExecute(inst)) break;
             if (act.ActionType != actionType) continue;
             // 事件驱动钩子行（ScriptHook=PreAlliesDamage / Kill(...)）：不参与普通触发（阶段/回合等），由各自钩子机制单独触发（2026-08-19）
             if (ScriptHookEvaluator.IsEventDriven(act.ScriptHook)) continue;
             // ScriptHook：只有该特殊处理器返回真值时才触发该行行动（统一求值入口 ScriptHookEvaluator）
-            if (!ScriptHookEvaluator.Evaluate(act.ScriptHook, inst != null ? inst.Caster : null)) continue;
+            var actionContext = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
+            actionContext.Caster = inst.Caster;
+            actionContext.Status = inst;
+            actionContext.StatusHost = host;
+            actionContext.Target = host as BattleEntity;
+            if (!ScriptHookEvaluator.Evaluate(act.ScriptHook, actionContext)) continue;
             // 触发限制：每回合/全场次数上限、行动冷却（2026-08-14）
             if (StatusActionLimitReached(inst, act)) continue;
-            if (!BattleResolutionContext.TryCollect(inst, act)) continue;
+            if (!BattleResolutionContext.TryCollect(inst, act, actionContext)) continue;
             await BattleExecution.Play(new BattlePresentationRequest(
                 BattlePresentationKind.Status, inst?.Caster, act.Param1, statusID: inst?.StatusID2), () =>
             {
-                if (!inst.IsActive) return;
+                if (!inst.IsActive || !EquipmentStatusLifetime.CanExecute(inst)) return;
                 // Count 在自己的首条有效 OnItsTurn 行动处结算一次，不增加阶段。
                 if (actionType == "OnItsTurn" && !countTurnHandled)
                 {
@@ -115,7 +147,7 @@ public partial class CharacterBattleController
                     CountStatusSystem.OnItsTurn(inst, host);
                 }
                 CountStatusActionTrigger(inst, act);
-                ExecuteStatusActionEffects(inst, act, host);
+                ExecuteStatusActionEffects(inst, act, host, actionContext);
             });
         }
     }
@@ -126,6 +158,29 @@ public partial class CharacterBattleController
     /// </summary>
     public System.Collections.IEnumerator ExecuteStatusActionsAsync(StatusInstance inst, List<StatusActionData> actions, object host, string actionType)
         => BattleExecution.Wait(BattleExecution.Run(() => ExecuteStatusActionsTask(inst, actions, host, actionType)));
+
+    /// <summary>仅接受3095处理器已一次性确认的终结请求，不把失效状态重新激活。</summary>
+    internal async Task ExecuteCommittedWeaponEnd(KingsSquireWeaponCount.Terminal terminal)
+    {
+        if (!terminal.CanExecute) return;
+        using var trigger = BattleResolutionContext.EnterTrigger();
+        using var context = ScriptHookContext.EnterExecution(terminal.Context);
+        foreach (var action in terminal.Actions)
+        {
+            if (!terminal.CanExecute) return;
+            if (ScriptHookEvaluator.IsEventDriven(action.ScriptHook)
+                || !ScriptHookEvaluator.Evaluate(action.ScriptHook, terminal.Context)
+                || StatusActionLimitReached(terminal.Status, action)
+                || !BattleResolutionContext.TryCollect(terminal.Status, action, terminal.Context)) continue;
+            await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Status,
+                terminal.Owner, action.Param1, statusID: terminal.Status.StatusID2), () =>
+            {
+                if (!terminal.CanExecute) return;
+                CountStatusActionTrigger(terminal.Status, action);
+                ExecuteStatusActionEffects(terminal.Status, action, terminal.Owner, terminal.Context);
+            });
+        }
+    }
 
     /// <summary>
     /// 预解析状态行动的效果目标并快照（结果先记着）：
@@ -179,7 +234,16 @@ public partial class CharacterBattleController
     async Task ExecuteStatusActionEffectsAsync(StatusInstance sourceStatus, StatusActionData act, object host,
         ScriptHookContext context)
     {
+        using var statusAction = BattleResolutionContext.BeginIndependentStatusAction(sourceStatus);
+        await BattleDeathResolution.RunAsync(() => ExecuteStatusActionEffectsCoreAsync(sourceStatus, act, host, context));
+    }
+
+    async Task ExecuteStatusActionEffectsCoreAsync(StatusInstance sourceStatus, StatusActionData act, object host,
+        ScriptHookContext context)
+    {
+        if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
         using var triggerContext = ScriptHookContext.EnterExecution(context);
+        using var actionGroup = BattleSpecialRules.BeginStatusAction(sourceStatus);
         if (string.IsNullOrEmpty(act.Param1)) return;
         int count = ExecuteCountEvaluator.Evaluate(act.ExecuteCount, act.ExecuteCountHandler,
             sourceStatus?.Caster ?? Entity);
@@ -197,6 +261,7 @@ public partial class CharacterBattleController
         string[] ids = act.Param1.Split(';');
         foreach (var id in ids)
         {
+            if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
             string tid = id.Trim();
             if (string.IsNullOrEmpty(tid)) continue;
 
@@ -251,6 +316,7 @@ public partial class CharacterBattleController
 
     async Task ExecuteEffectFromStatusAsync(SkillEffectData effect, int skillType, StatusInstance sourceStatus)
     {
+        using var snapshotIsolation = StatusFormulaSnapshot.Suspend();
         StatusInstance previous = _currentEffectSourceStatus;
         _currentEffectSourceStatus = sourceStatus;
         try
@@ -267,12 +333,19 @@ public partial class CharacterBattleController
     {
         int count = ExecuteCountEvaluator.Evaluate(statusEff.ExecuteCount,
             statusEff.ExecuteCountHandler, sourceStatus?.Caster ?? Entity);
-        return count == 0 ? Task.CompletedTask : BattleExecution.RepeatEffect(count, statusEff.DamageHook,
-            executionID => ExecuteStatusEffectOnceAsync(statusEff, sourceStatus, host, executionID));
+        bool handlesHook = (statusEff.EffectType == "Damage"
+            && BattleSpecialRules.HasStatusDamageHandler(statusEff.DamageHook))
+            || WeaponHooks.HandlesEffectHook(statusEff);
+        string repeatHook = handlesHook ? null : statusEff.DamageHook;
+        return count == 0 ? Task.CompletedTask : BattleExecution.RepeatEffect(count, repeatHook,
+            executionID => ExecuteStatusEffectOnceAsync(statusEff, sourceStatus, host, executionID),
+            sourceStatus?.Caster ?? Entity, statusEff.StatusEffectID2);
     }
 
     async Task ExecuteStatusEffectOnceAsync(StatusEffectData statusEff, StatusInstance sourceStatus, object host, long executionID)
     {
+        if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
+        if (!WeaponHooks.CanExecuteWindowEffect(statusEff, sourceStatus)) return;
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
         BattleExecution.ThrowIfCancelled();
         var hookContext = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
@@ -281,71 +354,118 @@ public partial class CharacterBattleController
         hookContext.StatusHost = host;
         hookContext.Target = hookContext.Target ?? host as BattleEntity;
         hookContext.HitEffectID = hookContext.HitEffectID ?? LastHitEffectID2;
+        hookContext.ExecutingStatusEffectID = statusEff.StatusEffectID;
         if (!ScriptHookEvaluator.Evaluate(statusEff.ScriptHook, hookContext)) return;
+        using var effectContext = ScriptHookContext.EnterExecution(hookContext);
+        using var formulaSnapshot = StatusFormulaSnapshot.Enter(sourceStatus, statusEff.StatusEffectID2);
+        // 父声明只提供因果；进入子效果后恢复实际执行身份，不能把追加伤害记成源攻击。
+        using var actualExecution = BattleEventHub.BeginEffectExecution(executionID);
         if (statusEff.EffectType == "Damage") await ExecuteStatusDamageAsync(statusEff, sourceStatus, host, executionID);
         else if (statusEff.EffectType == "Heal") await ExecuteStatusHealAsync(statusEff, sourceStatus, host);
         else await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
             sourceStatus?.Caster ?? Entity, statusEff.StatusEffectID2, statusID: sourceStatus?.StatusID2),
-            () => ExecuteStatusEffectImmediate(statusEff, sourceStatus, host));
+            () => { if (EquipmentStatusLifetime.CanExecute(sourceStatus)) ExecuteStatusEffectImmediate(statusEff, sourceStatus, host); });
         await BattleExecution.Flush();
     }
 
     async Task ExecuteStatusDamageAsync(StatusEffectData statusEff, StatusInstance sourceStatus, object host, long effectExecutionID)
     {
+        using var damageQuery = DamageQueryContext.Enter(statusEff.StatusEffectID2, statusEff.DamageType);
+        using var completion = BattleSpecialRules.BeginDamageEffect(sourceStatus?.Caster ?? Entity, statusEff.StatusEffectID2, effectExecutionID);
+        DamageProperties.Parse(statusEff.Element, statusEff.Param3).RequireImplementedFormula();
+        if (DamageProperties.IsFixed(statusEff.Element))
+        {
+            TableValidator.ValidateDamageProperties("Status_Effect", 0, "Damage", statusEff.Element,
+                statusEff.Param1, statusEff.Param2, statusEff.Param3, statusEff.DamageHook);
+            await ExecuteTrueStatusDamageAsync(statusEff, sourceStatus, host);
+            return;
+        }
+        if (BattleSpecialRules.HasStatusDamageHandler(statusEff.DamageHook))
+        {
+            var execution = new StatusDamageExecution
+            {
+                Effect = statusEff, Status = sourceStatus, Host = host,
+                Targets = ResolveStatusTargets(statusEff, sourceStatus, host), ExecutionID = effectExecutionID
+            };
+            if (execution.Targets == null) return;
+            // 特殊处理器回到普通结算时复用已经解析的目标，不再次随机选敌。
+            // 弹射处理器可在下一跳前明确更新自己的Targets，仍走同一效果执行编号。
+            execution.ExecuteDefault = prepared => ExecuteStatusDamageCoreAsync(prepared, sourceStatus, host, effectExecutionID, execution.Targets);
+            await BattleSpecialRules.ExecuteStatusDamage(execution);
+            return;
+        }
+        await ExecuteStatusDamageCoreAsync(statusEff, sourceStatus, host, effectExecutionID);
+    }
+
+    async Task ExecuteStatusDamageCoreAsync(StatusEffectData authoredEffect, StatusInstance sourceStatus, object host, long effectExecutionID,
+        List<BattleEntity> preparedTargets = null)
+    {
+        var statusEff = authoredEffect;
+        // 特殊状态可传入运行时改写后的效果，不能沿用外层占位定义。
+        using var damageQuery = DamageQueryContext.Enter(statusEff.StatusEffectID2, statusEff.DamageType);
         // 状态伤害（兔兔伯爵爆炸 STE_Bunny2 等）：从 SkillType=2 查等级，多段 Hits1-7 逐段结算
         var hits = GetHitDataFromStatusEffectList(statusEff);
         if (hits.Count == 0 || (hits.Count == 1 && hits[0].Multiplier <= 0)) return;
+        using var weaponCompletion = EndOfLineWeaponCount.BeginDamage(statusEff, sourceStatus, host, effectExecutionID);
         int stSkillType = GetEffectSkillType(statusEff.StatusEffectID2, 2);
         string resolvedParam = WeaponExpressionEvaluator.Expand(statusEff.Param1, sourceStatus);
         string[] directHits = statusEff.Param1 != null && statusEff.Param1.Contains("Index(")
             ? null : GetDirectHitExpressions(statusEff.Param1);
-        float baseValue = directHits != null
-            ? 0f // 逐段计算，不能在这里额外求值一次属性钩子。
-            : ResolveBaseValue(resolvedParam, statusEff.StatusEffectID2, stSkillType, statusEff.Element);
-        var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
+        var targets = preparedTargets ?? ResolveStatusTargets(statusEff, sourceStatus, host);
         if (targets == null) return;
-        if (statusEff.Element == "Geo" && targets.Count > 1)
-        {
-            targets = targets
-                .OrderBy(target => target != null ? target.SlotPosition : int.MaxValue)
-                .ToList();
-        }
-        if (statusEff.Element == "Anemo")
-        {
-            await ExecuteAnemoStatusDamageAsync(statusEff, sourceStatus, hits, stSkillType,
-                baseValue, targets, effectExecutionID, directHits);
-            return;
-        }
 
         for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
         {
+            var enchant = EnchantStatusSystem.Resolve(sourceStatus?.Caster ?? Entity, authoredEffect.DamageType, authoredEffect.Element);
+            statusEff = enchant.HasValue ? authoredEffect.WithDamageElement(enchant.Value.Element) : authoredEffect;
+            if (enchant.HasValue) hits[hitIndex] = new HitData(hits[hitIndex].Multiplier, enchant.Value.ElementAmount);
+            float baseValue = directHits != null || StatusFormulaSnapshot.For(Entity, statusEff.StatusEffectID2) != null
+                ? 0f : ResolveBaseValue(resolvedParam, statusEff.StatusEffectID2, stSkillType, statusEff.Element);
+            if (statusEff.Element == "Geo" && targets.Count > 1)
+                targets = targets.OrderBy(target => target != null ? target.SlotPosition : int.MaxValue).ToList();
+            if (statusEff.Element == "Anemo")
+            {
+                await ExecuteAnemoStatusDamageAsync(statusEff, sourceStatus, new List<HitData> { hits[hitIndex] }, stSkillType,
+                    baseValue, targets, effectExecutionID, directHits == null ? null : new[] { directHits[hitIndex] }, hitIndex);
+                continue;
+            }
             await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Hit, sourceStatus?.Caster ?? Entity, statusEff.StatusEffectID2, hitIndex + 1, targets), () =>
             {
+                if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
                 using var hitResponses = BattleResolutionContext.BeginCollection();
                 using var countDamage = new CountDamageBatch();
                 HitData hit = hits[hitIndex];
-                List<BattleEntity> hitTargets = targets
-                    .Where(target => target != null && target.IsAlive)
-                    .ToList();
+                var hitTargets = DamageHitTargets.Expand(targets, statusEff.Param2, statusEff.Element);
+                long logicalHitID = BattleEventHub.NextIdentity();
+                using var hitSnapshot = BattleSpecialRules.BeginHit(logicalHitID, sourceStatus?.Caster ?? Entity,
+                    hitTargets.Select(entry => entry.Target));
                 var reactions = new List<ReactionResult>();
                 var resolutions = new List<HitResolution>();
-                using (var batch = new HitBatch())
+                using (var batch = new HitBatch(logicalHitID))
                 {
                     for (int targetIndex = 0; targetIndex < hitTargets.Count; targetIndex++)
                     {
-                        BattleEntity target = hitTargets[targetIndex];
+                        var entry = hitTargets[targetIndex];
+                        BattleEntity target = entry.Target;
+                        using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(target);
+                        HitData targetHit = entry.Scale(BattleSpecialRules.ModifyStatusHit(statusEff.DamageHook,
+                            sourceStatus?.Caster ?? Entity, target, hit, GetEffectiveSkillLevel(stSkillType)));
+                        int resolvedTargetIndex = batch.Results.Count;
                         float hitBaseValue = directHits != null
-                            ? ResolveDirectHitBase(directHits[hitIndex], statusEff.StatusEffectID2, stSkillType, statusEff.Element) : baseValue;
+                            ? ResolveDirectHitBase(directHits[hitIndex], statusEff.StatusEffectID2, stSkillType, statusEff.Element)
+                            : StatusFormulaSnapshot.For(Entity, statusEff.StatusEffectID2) != null
+                                ? ResolveBaseValue(resolvedParam, statusEff.StatusEffectID2, stSkillType, statusEff.Element) : baseValue;
+                        hitBaseValue = SnowTombedWeaponHooks.ResolveBase(statusEff, sourceStatus, target, stSkillType, hitBaseValue);
                         CountDamagePlan countPlan = countDamage.Prepare(new CountDamageContext
                         {
                             Attacker = sourceStatus?.Caster ?? Entity, Target = target, SourceKind = ReactionSourceKind.StatusEffect,
                             EffectID = statusEff.StatusEffectID2, SkillID = string.Empty, DamageType = statusEff.DamageType,
                             Element = statusEff.Element, SkillType = stSkillType, EffectExecutionID = effectExecutionID,
-                            HitIndex = hitIndex + 1, TargetIndex = targetIndex + 1
+                            HitIndex = hitIndex + 1, TargetIndex = resolvedTargetIndex + 1
                         });
                         float damage = CalculateStatusDamage(
                             hitBaseValue,
-                            hit,
+                            targetHit,
                             statusEff,
                             target,
                             stSkillType,
@@ -358,16 +478,18 @@ public partial class CharacterBattleController
                             SourceEntity = sourceStatus != null && sourceStatus.Caster != null
                                 ? sourceStatus.Caster
                                 : Entity,
+                            EquipmentSource = sourceStatus?.EquipmentSource,
                             Target = target,
                             SourceKind = ReactionSourceKind.StatusEffect,
                             SourceEffectID = statusEff.StatusEffectID2,
                             EffectExecutionID = effectExecutionID,
+                            LogicalHitID = batch.RuntimeHitID,
+                            TargetIndex = resolvedTargetIndex + 1,
                             AttackElement = statusEff.Element,
-                            AttackAmount = hit.ElementAura,
+                            AttackAmount = targetHit.ElementAura,
                             PreReactionDamage = damage,
                             DamageComponents = damageComponents,
                             DamageType = statusEff.DamageType,
-                            PoiseDamage = hit.Poise
                         });
                         StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
                         if (reaction.HasReaction)
@@ -381,27 +503,31 @@ public partial class CharacterBattleController
                             stSkillType,
                             statusEff.Element,
                             hitIndex + 1,
-                            "状态直伤");
+                            entry.IsSplash ? "状态溅射" : "状态直伤", WeaponHooks.ForceCritical(statusEff), reaction.PrimaryDamageReactionType);
                         reactions.Add(reaction);
                         resolutions.Add(batch.Resolve(new HitRequest
                         {
+                            Properties = DamageProperties.Parse(statusEff.Element, statusEff.Param3),
                             Target = target,
                             DamageBeforeShield = critical.DamageAfterCritical,
+                            Critical = critical,
                             Element = statusEff.Element,
+                            ElementAmount = targetHit.ElementAura,
                             DamageType = statusEff.DamageType,
+                            EnemyShieldHit = reaction.EnemyShieldHit,
                             DMGTaken = taken,
-                            PoiseDamage = hit.Poise,
                             Source = CreateStatusDamageSource(
                                 sourceStatus,
                                 statusEff.StatusEffectID2,
                                 reaction.PrimaryDamageReactionType),
                             HitIndex = hitIndex,
-                            TargetIndex = targetIndex,
+                            TargetIndex = resolvedTargetIndex,
                             CountPlan = countPlan
                         }));
                     }
                     batch.Flush();
                 }
+                ReactionResult lunar = ReactionEffectExecutor.PrepareLunarBatch(reactions);
                 for (int index = 0; index < reactions.Count; index++)
                 {
                     HitResolution resolution = resolutions[index];
@@ -414,6 +540,7 @@ public partial class CharacterBattleController
                         $"hit#{hitIndex + 1} {statusEff.StatusEffectID2} -> " +
                         $"{resolution.Request.Target.EntityID} : {resolution.DamageAfterShield:F1}");
                 }
+                ReactionEffectExecutor.ExecuteDerivedHits(lunar);
             });
         }
 
@@ -424,7 +551,7 @@ public partial class CharacterBattleController
         // 治疗（2026-08-14）：Param1=治疗量公式，目标=TargetType解析
         var healTargets = ResolveStatusTargets(statusEff, sourceStatus, host);
         if (healTargets == null) return;
-        await ExecuteHealingSegmentsAsync(healTargets, statusEff.StatusEffectID2, statusEff.Param1,
+        await ExecuteHealingSegmentsAsync(healTargets, statusEff.StatusEffectID2, WeaponHooks.HealingFormula(statusEff, sourceStatus),
             GetEffectSkillType(statusEff.StatusEffectID2, 2), statusEff.Element,
             sourceStatus?.Caster ?? Entity, sourceStatus);
 
@@ -435,8 +562,14 @@ public partial class CharacterBattleController
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
         switch (statusEff.EffectType)
         {
+            case "SwitchIn":
+                SwitchInEffect.Execute(ResolveStatusTargets(statusEff, sourceStatus, host));
+                break;
             case "ResetCooldown":
                 ExecuteResetCooldown(statusEff.Param1, statusEff.StatusEffectID2);
+                break;
+            case "ReduceCooldown":
+                ExecuteReduceCooldown(statusEff.Param1, statusEff.Param2, statusEff.StatusEffectID2);
                 break;
             case "BondOfLife":
                 BondOfLifeEffect.Execute(statusEff.Param1, sourceStatus?.Caster ?? Entity,
@@ -446,6 +579,16 @@ public partial class CharacterBattleController
             case "NightSoul":
                 NightSoulEffect.Execute(statusEff.Param1,
                     ResolveStatusTargets(statusEff, sourceStatus, host), statusEff.StatusEffectID2);
+                break;
+            case "Count":
+                CountEffect.Execute(statusEff.Param1, statusEff.Param2, sourceStatus?.Caster ?? Entity,
+                    ResolveStatusTargets(statusEff, sourceStatus, host), statusEff.StatusEffectID2,
+                    sourceStatus, statusEff.TargetType);
+                break;
+            case "ApplyElement":
+                ApplyElementEffect.Execute(statusEff.Element, statusEff.Param1, sourceStatus?.Caster ?? Entity,
+                    ResolveStatusTargets(statusEff, sourceStatus, host), ReactionSourceKind.StatusEffect,
+                    string.Empty, statusEff.StatusEffectID2, BattleEventHub.CurrentEffectExecutionId, sourceStatus);
                 break;
             case "ApplyStatus":
             {
@@ -457,13 +600,24 @@ public partial class CharacterBattleController
                     LogManager.LogWarning(LogCategory.ApplyStatus, $"状态不存在: {statusEff.Param1}");
                     break;
                 }
+                if (BattleTargetResolver.IsTeamTarget(statusEff.TargetType))
+                {
+                    foreach (var team in BattleTargetResolver.GetTeams(BattleManager.Instance,
+                        ResolveStatusTargetResult(statusEff, sourceStatus, host)))
+                        team.AddStatus(appliedStatusID, sourceStatus?.Caster ?? Entity,
+                            statusEff.Duration, statusEff.AddInPhase, statusEff.TriggerPhase,
+                            main, sourceStatus?.WeaponContext, statusEff.Param2, sourceStatus?.EquipmentSource,
+                            enchantElement: statusEff.Element, enchantOverride: statusEff.Param3);
+                    break;
+                }
                 if (!string.IsNullOrEmpty(statusEff.TargetType)
                     && statusEff.TargetType.EndsWith("Field", StringComparison.Ordinal))
                 {
                     foreach (var field in ResolveStatusTargetFields(statusEff, sourceStatus, host))
                         field.AddStatus(appliedStatusID, sourceStatus?.Caster ?? Entity,
                             statusEff.Duration, statusEff.AddInPhase, statusEff.TriggerPhase,
-                            main, sourceStatus?.WeaponContext, statusEff.Param2);
+                            main, sourceStatus?.WeaponContext, statusEff.Param2, equipmentSource: sourceStatus?.EquipmentSource,
+                            enchantElement: statusEff.Element, enchantOverride: statusEff.Param3);
                     break;
                 }
                 var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
@@ -476,7 +630,8 @@ public partial class CharacterBattleController
                         statusEff.AddInPhase,
                         statusEff.TriggerPhase,
                         main,
-                        sourceStatus?.WeaponContext, statusEff.Param2);
+                        sourceStatus?.WeaponContext, statusEff.Param2, sourceStatus?.EquipmentSource,
+                        enchantElement: statusEff.Element, enchantOverride: statusEff.Param3);
                 }
                 break;
             }
@@ -489,6 +644,12 @@ public partial class CharacterBattleController
 
             case "RemoveStatus":
             {
+                if (BattleTargetResolver.IsTeamTarget(statusEff.TargetType))
+                {
+                    foreach (var team in BattleTargetResolver.GetTeams(BattleManager.Instance,
+                        ResolveStatusTargetResult(statusEff, sourceStatus, host))) team.RemoveStatus(statusEff.Param1);
+                    break;
+                }
                 if (!string.IsNullOrEmpty(statusEff.TargetType)
                     && statusEff.TargetType.EndsWith("Field", StringComparison.Ordinal))
                 {
@@ -499,7 +660,22 @@ public partial class CharacterBattleController
                 var targets = ResolveStatusTargets(statusEff, sourceStatus, host);
                 if (targets == null) return;
                 foreach (var target in targets)
-                    target.RemoveStatus(statusEff.Param1, -1);
+                {
+                    if (MonaScriptHooks.TryRemove(statusEff, sourceStatus, target)) continue;
+                    if (WeaponStackTransferHooks.TryRemove(statusEff, sourceStatus, target)) continue;
+                    if (statusEff.StatusEffectID == 430420301)
+                    {
+                        var weapon = sourceStatus?.WeaponContext;
+                        if (weapon?.WeaponID != 3042 || sourceStatus.StatusID2 != "ST_Weapon_4304203"
+                            || sourceStatus.Caster != weapon.Equipper || target != weapon.Equipper)
+                            throw new InvalidOperationException("纸伞死亡解除冷却必须保留原装备者及武器来源。");
+                        foreach (var cooldown in target.GetStatusInstances(statusEff.Param1))
+                            if (cooldown.Caster == sourceStatus.Caster
+                                && cooldown.WeaponContext?.SourceInstanceID == sourceStatus.WeaponContext.SourceInstanceID)
+                                target.RemoveStatusInstance(cooldown);
+                    }
+                    else target.RemoveStatus(statusEff.Param1, -1);
+                }
                 break;
             }
 
@@ -550,7 +726,8 @@ public partial class CharacterBattleController
                 calledEffect.TargetOverride = null;
                 calledEffect.TargetConsecutive = 0;
                 bool sameSide = statusTargets.Side == Entity.Side;
-                calledEffect.TargetType = statusTargets.Domain == BattleTargetDomain.Field
+                calledEffect.TargetType = statusTargets.Domain == BattleTargetDomain.Team
+                    ? (sameSide ? "AllyTeam" : "EnemyTeam") : statusTargets.Domain == BattleTargetDomain.Field
                     ? (sameSide ? "AllyField" : "EnemyField") : (sameSide ? "Allies" : "Enemy");
                 // 目标设置与还原必须跟随排队任务，覆盖整个异步执行区间。
                 BattleExecution.Enqueue(async () =>
@@ -590,6 +767,13 @@ public partial class CharacterBattleController
                 break;
             }
 
+            case "Revive":
+            {
+                ReviveEffect.Execute(statusEff.Param1, sourceStatus?.Caster ?? Entity,
+                    ResolveStatusTargets(statusEff, sourceStatus, host), sourceStatus);
+                break;
+            }
+
             case "AddTurn":
             {
                 // 延长状态回合（凯亚 C2 击杀延长：Param1 逗号分隔多个状态ID，存在的都 +Param2）
@@ -606,6 +790,7 @@ public partial class CharacterBattleController
                 float ordinaryShieldAmount = 0f;
                 bool ordinaryShieldAmountResolved = false;
                 float shieldDur = statusEff.Duration > 0 ? statusEff.Duration : 999;
+                long shieldGrantBatch = BattleEventHub.NextIdentity();
                 foreach (var t in shieldTargets)
                 {
                     if (t == null || !t.IsAlive) continue;
@@ -617,14 +802,15 @@ public partial class CharacterBattleController
                     {
                         if (!ordinaryShieldAmountResolved)
                         {
-                            ordinaryShieldAmount = ResolveBaseValue(
-                                statusEff.Param1,
+                            ordinaryShieldAmount = ResolveShieldAmount(
+                                WeaponHooks.ShieldFormula(statusEff, sourceStatus),
                                 statusEff.StatusEffectID2,
                                 GetEffectSkillType(statusEff.StatusEffectID2, 2),
                                 statusEff.Element);
                             ordinaryShieldAmountResolved = true;
                         }
-                        t.AddShield(ordinaryShieldAmount, statusEff.Element, shieldDur, sourceStatus: sourceStatus);
+                        t.AddShield(ordinaryShieldAmount, statusEff.Element, shieldDur, sourceStatus: sourceStatus,
+                            creator: sourceStatus?.Caster ?? Entity, grantBatchId: shieldGrantBatch);
                         LogManager.Log(LogCategory.Effect,
                             $"护盾 {t.EntityID} +{ordinaryShieldAmount:F1} (元素 {statusEff.Element})");
                     }
@@ -633,6 +819,8 @@ public partial class CharacterBattleController
             }
 
             default:
+                if (DamageImmunity.IsImmuneType(statusEff.EffectType))
+                    break; // 被动免疫由HitBatch读取，不因Action调用添加、切换或重复执行。
                 if (statusEff.EffectType == "APCost")
                     break; // 被动费用修正由 APCostResolver 查询，调用不额外扣费。
                 if (statusEff.EffectType == "Buff" || statusEff.EffectType == "Debuff")
@@ -681,6 +869,8 @@ public partial class CharacterBattleController
                     }
                 }
             }
+            else if (host is BattleTeamStatusHost team)
+                foreach (var inst in team.GetStatusInstances(tid)) StatusBindingSystem.ExtendDuration(inst, add);
         }
     }
 
@@ -703,7 +893,7 @@ public partial class CharacterBattleController
         // 武器效果把完整倍率公式直接写在 Param1（如 Index(1)*TotalATK），不依赖角色 SkillLevel 表。
         if (!string.IsNullOrEmpty(statusEff.Param1) && statusEff.Param1.Contains("Index("))
         {
-            list.Add(new HitData(1f, 0f, 0f));
+            list.Add(new HitData(1f, 0f));
             return list;
         }
 
@@ -719,7 +909,7 @@ public partial class CharacterBattleController
         {
             HitData reference = HitDataParser.ResolveReferencedHit(statusEff.Param1,
                 GetReferenceSourceHit(statusEff.Param1, GetEffectSkillType(statusEff.StatusEffectID2, 2)));
-            list.Add(new HitData(1f, 0f, reference.ElementAura));
+            list.Add(new HitData(1f, reference.ElementAura));
             return list;
         }
 
@@ -732,7 +922,8 @@ public partial class CharacterBattleController
         if (effectLevels.Count == 0) return list;
 
         SkillLevelData lv1 = effectLevels.Find(s => s.SkillLevel == 1);
-        int curLevel = Mathf.Clamp(Level, 1, 15);
+        // 状态伤害跟随所属技能的等级（包括C3/C5），不能把角色等级当作天赋等级。
+        int curLevel = SourceSkillLevel(statusEff.StatusEffectID2, effSkillType);
         SkillLevelData cur = effectLevels.Find(s => s.SkillLevel == curLevel);
         if (cur == null) cur = lv1;
         if (lv1 == null) lv1 = cur;
@@ -751,49 +942,62 @@ public partial class CharacterBattleController
     HitData GetHitDataFromStatusEffect(StatusEffectData statusEff)
     {
         var list = GetHitDataFromStatusEffectList(statusEff);
-        return list.Count > 0 ? list[0] : new HitData(0, 0, 0);
+        return list.Count > 0 ? list[0] : new HitData(0, 0);
     }
 
     private async Task ExecuteAnemoStatusDamageAsync(StatusEffectData statusEff, StatusInstance sourceStatus,
         List<HitData> hits, int skillType, float baseValue, List<BattleEntity> targets,
-        long effectExecutionID, string[] directHits)
+        long effectExecutionID, string[] directHits, int hitOffset = 0)
     {
         BattleEntity source = sourceStatus != null && sourceStatus.Caster != null
             ? sourceStatus.Caster : Entity;
         for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
         {
-            await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Hit, source, statusEff.StatusEffectID2, hitIndex + 1, targets), () =>
+            int actualHitIndex = hitOffset + hitIndex;
+            await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Hit, source, statusEff.StatusEffectID2, actualHitIndex + 1, targets), () =>
             {
+                if (!EquipmentStatusLifetime.CanExecute(sourceStatus)) return;
                 using var hitResponses = BattleResolutionContext.BeginCollection();
                 using var countDamage = new CountDamageBatch();
                 HitData hit = hits[hitIndex];
+                var hitTargets = DamageHitTargets.Expand(targets, statusEff.Param2, statusEff.Element);
+                long logicalHitID = BattleEventHub.NextIdentity();
+                using var hitSnapshot = BattleSpecialRules.BeginHit(logicalHitID, source,
+                    hitTargets.Select(entry => entry.Target));
                 var contexts = new List<ReactionContext>();
                 var countPlans = new List<CountDamagePlan>();
                 var takenSnapshots = new List<DMGTakenSnapshot>();
-                foreach (BattleEntity target in targets)
+                foreach (var entry in hitTargets)
                 {
-                    if (target == null || !target.IsAlive) continue;
+                    BattleEntity target = entry.Target;
+                    using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(target);
+                    HitData targetHit = entry.Scale(hit);
                     float hitBaseValue = directHits != null
-                        ? ResolveDirectHitBase(directHits[hitIndex], statusEff.StatusEffectID2, skillType, statusEff.Element) : baseValue;
+                        ? ResolveDirectHitBase(directHits[hitIndex], statusEff.StatusEffectID2, skillType, statusEff.Element)
+                        : StatusFormulaSnapshot.For(Entity, statusEff.StatusEffectID2) != null
+                            ? ResolveBaseValue(WeaponExpressionEvaluator.Expand(statusEff.Param1, sourceStatus),
+                                statusEff.StatusEffectID2, skillType, statusEff.Element) : baseValue;
                     CountDamagePlan countPlan = countDamage.Prepare(new CountDamageContext
                     {
                         Attacker = source, Target = target, SourceKind = ReactionSourceKind.StatusEffect,
                         EffectID = statusEff.StatusEffectID2, SkillID = string.Empty, DamageType = statusEff.DamageType,
                         Element = "Anemo", SkillType = skillType, EffectExecutionID = effectExecutionID,
-                        HitIndex = hitIndex + 1, TargetIndex = contexts.Count + 1
+                        HitIndex = actualHitIndex + 1, TargetIndex = contexts.Count + 1
                     });
                     countPlans.Add(countPlan);
                     takenSnapshots.Add(target.PrepareDMGTaken(
                         statusEff.StatusEffectID2, string.Empty, statusEff.DamageType, "Anemo"));
-                    float damage = CalculateStatusDamage(hitBaseValue, hit, statusEff, target, skillType,
+                    float damage = CalculateStatusDamage(hitBaseValue, targetHit, statusEff, target, skillType,
                         out ReactionDamageComponents components, countPlan.BaseDamageBonus);
                     contexts.Add(new ReactionContext
                     {
                         SourceEntity = source, Target = target, SourceKind = ReactionSourceKind.StatusEffect,
+                        EquipmentSource = sourceStatus?.EquipmentSource,
                         SourceEffectID = statusEff.StatusEffectID2, EffectExecutionID = effectExecutionID,
-                        AttackElement = "Anemo", AttackAmount = hit.ElementAura,
+                        LogicalHitID = logicalHitID, TargetIndex = contexts.Count + 1,
+                        AttackElement = "Anemo", AttackAmount = targetHit.ElementAura,
                         PreReactionDamage = damage, DamageComponents = components,
-                        DamageType = statusEff.DamageType, PoiseDamage = hit.Poise
+                        DamageType = statusEff.DamageType
                     });
                 }
                 var primaryReactions = new List<ReactionResult>(contexts.Count);
@@ -806,7 +1010,7 @@ public partial class CharacterBattleController
 
                 SwirlPreparedBatch prepared = SwirlReactionHandler.PrepareBatch(contexts);
                 var resolutions = new List<HitResolution>(contexts.Count);
-                using (var batch = new HitBatch())
+                using (var batch = new HitBatch(logicalHitID))
                 {
                     for (int index = 0; index < contexts.Count; index++)
                     {
@@ -818,19 +1022,22 @@ public partial class CharacterBattleController
                             string.Empty,
                             skillType,
                             "Anemo",
-                            hitIndex + 1,
-                            "风元素状态直伤");
+                            actualHitIndex + 1,
+                            "风元素状态直伤", WeaponHooks.ForceCritical(statusEff), primaryReactions[index].PrimaryDamageReactionType);
                         resolutions.Add(batch.Resolve(new HitRequest
                         {
+                            Properties = DamageProperties.Parse(statusEff.Element, statusEff.Param3),
                             Target = context.Target,
                             DamageBeforeShield = critical.DamageAfterCritical,
+                            Critical = critical,
                             Element = "Anemo",
+                            ElementAmount = context.AttackAmount,
                             DamageType = statusEff.DamageType,
+                            EnemyShieldHit = primaryReactions[index].EnemyShieldHit,
                             DMGTaken = takenSnapshots[index],
-                            PoiseDamage = hit.Poise,
                             Source = CreateStatusDamageSource(
                                 sourceStatus, statusEff.StatusEffectID2, ReactionType.None),
-                            HitIndex = hitIndex,
+                            HitIndex = actualHitIndex,
                             TargetIndex = index,
                             CountPlan = countPlans[index]
                         }));
@@ -847,6 +1054,8 @@ public partial class CharacterBattleController
                     ReactionEffectExecutor.ExecuteDerivedHits(primaryReactions[index]);
                 }
                 SwirlBatchResult swirl = SwirlReactionHandler.ResolvePreparedBatch(prepared);
+                BattleSpecialRules.OnAnemoResult(source, statusEff.StatusEffectID2,
+                    statusEff.DamageHook, sourceStatus, swirl.Reaction);
                 StatusOnHitHookSystem.NotifyReactions(swirl.Reaction.TriggeredReactions);
                 ReactionEffectExecutor.ExecuteDerivedHits(swirl.Reaction);
             });
@@ -876,27 +1085,40 @@ public partial class CharacterBattleController
         out ReactionDamageComponents components,
         float countBaseDamageBonus = 0f)
     {
-        float baseDMG = baseValue * hit.Multiplier + countBaseDamageBonus;
+        float baseDMG = baseValue * hit.Multiplier;
 
-        float dmgBonus = 1f + Entity.DMGBonus + GetElementBonus(eff.Element)
-            + Entity.GetStatusDMGBonus(eff.StatusEffectID2, "", skillType, eff.Element, target);
+        DamageProperties properties = DamageProperties.Parse(eff.Element, eff.Param3);
+        if (properties.UsesSpecialFormula)
+            return SpecialSkillDamageCalculator.Calculate(Entity, target, baseDMG, properties,
+                eff.Element, eff.StatusEffectID2, string.Empty, eff.DamageType, out components, countBaseDamageBonus);
 
+        baseDMG += countBaseDamageBonus + SourceValue("BaseDMGBonusFlat", Entity.BaseDMGBonusFlat)
+            + SourceBonus("BaseDMGBonusFlat", eff.StatusEffectID2, eff.Element, target,
+                () => Entity.GetStatusBaseDMGBonusFlat(eff.StatusEffectID2, "", skillType, eff.Element, target));
+
+        var memory = StatusFormulaSnapshot.For(Entity, eff.StatusEffectID2);
+        float dmgBonus = 1f + SourceValue("DMGBonus", Entity.DMGBonus) + GetElementBonus(eff.Element)
+            + (memory != null ? memory.TeamDamage(eff.Element) + memory.Bonus("DMGBonus", eff.StatusEffectID2, eff.Element, target)
+                : Entity.GetStatusDMGBonus(eff.StatusEffectID2, "", skillType, eff.Element, target));
+        float sourceLevel = memory?.SourceLevel ?? Entity.Level;
+        float reduction = SourceValue("DEFReduction", Entity.DEFReduction);
+        float ignored = SourceValue("DEFIgnored", Entity.DEFIgnored);
         float defRes;
         if (target.Type == BattleEntity.EntityType.Enemy)
         {
-            float attacker = Entity.Level + 100f;
-            float defender = (target.Level + 100f) * (1f - Entity.DEFReduction) * (1f - Entity.DEFIgnored);
+            float attacker = sourceLevel + 100f;
+            float defender = (target.Level + 100f) * (1f - reduction) * (1f - ignored);
             defRes = attacker / (attacker + defender);
         }
         else
         {
-            float effectiveDef = target.GetFinalDEF() * (1f - Entity.DEFReduction) * (1f - Entity.DEFIgnored);
+            float effectiveDef = target.GetFinalDEF() * (1f - reduction) * (1f - ignored);
             if (effectiveDef < 0) effectiveDef = 0;
-            defRes = 1f - effectiveDef / (effectiveDef + 5f * Entity.Level + 500f);
+            defRes = 1f - effectiveDef / (effectiveDef + 5f * sourceLevel + 500f);
             defRes = Mathf.Clamp(defRes, 0.1f, 1f);
         }
 
-        float res = GetElementResistance(target, eff.Element ?? "None");
+        float res = GetElementResistance(target, eff.Element);
         float resMultiplier;
         if (res < 0)
             resMultiplier = 1f - res / 2f;
@@ -912,6 +1134,7 @@ public partial class CharacterBattleController
             DefenseMultiplier = defRes,
             ResistanceMultiplier = resMultiplier
         };
+        memory?.Trace(eff.StatusEffectID2, target, baseValue, hit.Multiplier, baseDMG, dmgBonus, defRes, resMultiplier);
         return baseDMG * dmgBonus * defRes * resMultiplier;
     }
 }

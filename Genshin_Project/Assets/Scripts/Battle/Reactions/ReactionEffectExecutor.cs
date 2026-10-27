@@ -10,14 +10,18 @@ public static class ReactionEffectExecutor
         PendingShatterEffect pending = result.PendingShatter;
         result.PendingShatter = null;
         if (pending.Target == null) return;
+        using var resolution = BattleEventHub.BeginResolution();
+        using var execution = BattleEventHub.BeginEffectExecution(result.EffectExecutionID);
+        using var hit = BattleEventHub.BeginHit(result.RuntimeHitID, result.TargetIndex);
+        using var cause = BattleEventHub.Enter(result.ContactDeclaration);
 
         ReactionStateSystem.RemoveEntityState(pending.Target, ReactionType.Frozen);
         result.DerivedHits.Insert(0, new ReactionDerivedHit
         {
+            EnemyShieldHit = result.EnemyShieldHit,
             Target = pending.Target,
             Damage = pending.Damage,
             DamageElement = "Physical",
-            PoiseDamage = 0f,
             ElementAmount = 0f,
             // 碎冰来源声明（2026-08-19）：归属触发碎冰的攻击方角色/技能/效果
             Source = DamageSourceInfo.Create(
@@ -39,40 +43,97 @@ public static class ReactionEffectExecutor
             InvolvedElements = new List<string> { "Cryo" }
         };
         result.TriggeredReactions.Insert(0, occurrence);
+        result.DerivedHits[0].Source.EquipmentSource = pending.EquipmentSource;
+        occurrence.Declaration = BattleEventHub.Record(occurrence, new ReactionEventData(occurrence));
+        result.DerivedHits[0].CauseEventIds = new[] { occurrence.Declaration.Header.EventId };
         StatusOnHitHookSystem.NotifyReactions(new[] { occurrence });
         LogManager.Log(LogCategory.Reaction, $"碎冰：{pending.Target.EntityID} 受到 {pending.Damage:F1} 物理剧变伤害");
     }
 
     public static void ExecuteDerivedHits(ReactionResult result)
+        => ExecuteDerivedHitBatch(new[] { result });
+
+    /// <summary>同一逻辑hit全部目标一起提交雷暴云，不能逐目标生成并丢掉先前目标的贡献者。</summary>
+    public static void ExecuteDerivedHitBatch(IReadOnlyList<ReactionResult> results)
     {
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
-        if (result == null) return;
+        if (results == null) return;
         using var responses = BattleResolutionContext.BeginCollection();
+        ReactionResult lunar = PrepareLunarBatch(results);
+        foreach (var result in results) if (result != null) ExecuteDerivedHitsCore(result);
+        if (lunar != null) ExecuteDerivedHitsCore(lunar);
+    }
+
+    /// <summary>本hit全部目标完成后汇总雷云和月笼，保留原逐目标碎冰/派生收尾顺序。</summary>
+    public static ReactionResult PrepareLunarBatch(IReadOnlyList<ReactionResult> results)
+    {
+        var merged = new SwirlPreparedBatch();
+        var all = new List<ReactionResult>();
+        if (results != null) foreach (var source in results)
+        {
+            if (source == null) continue;
+            all.Add(source);
+            var pending = source.PendingReverseSwirl;
+            source.PendingReverseSwirl = null; // 先消费计划，子响应及重复调用不重复扩散。
+            if (pending == null || pending.Resolved) continue;
+            merged.Targets.AddRange(pending.Targets);
+            if (merged.EffectExecutionID == 0) merged.EffectExecutionID = pending.EffectExecutionID;
+            pending.Resolved = true;
+        }
+        ReactionResult result = null;
+        if (merged.Targets.Count > 0)
+        {
+            result = SwirlReactionHandler.ResolvePreparedBatch(merged).Reaction;
+            all.Add(result);
+        }
+        var hits = LunarElectroChargedReactionHandler.CompleteBatch(all);
+        hits.AddRange(LunarCrystallizeReactionHandler.CompleteBatch(all));
+        if (result == null && hits.Count == 0) return null;
+        result = result ?? new ReactionResult();
+        result.DerivedHits.AddRange(hits);
+        return result;
+    }
+
+    private static void ExecuteDerivedHitsCore(ReactionResult result)
+    {
         StatusOnHitHookSystem.NotifyReactions(result.TriggeredReactions);
 
-        using (var batch = new HitBatch())
+        HitBatch batch = null;
+        long currentExplicitHit = 0;
+        try
         {
             int targetIndex = 0;
             foreach (ReactionDerivedHit hit in result.DerivedHits)
             {
                 if (hit == null || hit.Target == null) continue;
+                if (batch == null || currentExplicitHit != hit.RuntimeHitID)
+                {
+                    batch?.Dispose();
+                    batch = new HitBatch(hit.RuntimeHitID);
+                    currentExplicitHit = hit.RuntimeHitID;
+                    targetIndex = 0;
+                }
 
                 DamageSourceInfo source = hit.Source ?? DamageSourceInfo.CreateUnknown();
                 source.CountsAsHit = false;
-                batch.Resolve(new HitRequest
+                HitResolution resolution = batch.Resolve(new HitRequest
                 {
+                    EnemyShieldHit = hit.EnemyShieldHit ?? (hit.RuntimeHitID == 0
+                        && result.EnemyShieldHit?.Target == hit.Target ? result.EnemyShieldHit : null),
+                    Properties = hit.Properties,
+                    CauseEventIds = hit.CauseEventIds,
                     Target = hit.Target,
                     DamageBeforeShield = hit.Damage,
                     Element = hit.DamageElement,
+                    ElementAmount = hit.ElementAmount,
                     DamageType = "Reaction",
-                    // 派生反应是否削韧由 handler 产生的数值决定，与 CountsAsHit 无关。
-                    PoiseDamage = hit.PoiseDamage,
                     Source = source,
                     HitIndex = 0,
                     TargetIndex = targetIndex++
                 });
+                hit.OnResolved?.Invoke(resolution); // 仅记本次已提交伤害结果，不发布第二份声明。
             }
-            batch.Flush();
         }
+        finally { batch?.Dispose(); }
     }
 }

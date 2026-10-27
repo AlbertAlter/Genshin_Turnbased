@@ -60,12 +60,12 @@ public static class BondOfLifeEffect
         if (entity == null) throw new InvalidOperationException("BondOfLife 公式缺少变量所属实体：" + variable);
         switch (variable)
         {
-            case "TotalHP": return entity.TotalHP;
+            case "TotalHP": return entity.GetFinalHP(effectID, "", skillType, element);
             case "CurrentHP": return entity.CurrentHP;
             case "TotalATK": return entity.CharacterCtrl != null
                 ? entity.CharacterCtrl.GetFinalATK(effectID, skillType, element) : entity.TotalATK;
             case "TotalDEF": return entity.GetFinalDEF();
-            case "TotalEM": return entity.TotalEM;
+            case "TotalEM": return entity.GetFinalEM(effectID, "", skillType, element);
             case "CurrentEnergy": return entity.CurrentEnergy;
             case "MaxEnergy": return entity.MaxEnergy;
             case "BondOfLife": return BondOfLifeStatusHandler.GetValue(entity);
@@ -97,6 +97,8 @@ public static class BondOfLifeEffect
             preparedTargets.Add(target);
             deltas.Add(delta);
         }
+        using var resolution = BattleEventHub.BeginResolution();
+        using var collection = BattleResolutionContext.BeginCollection();
         for (int index = 0; index < preparedTargets.Count; index++)
         {
             BattleEntity target = preparedTargets[index];

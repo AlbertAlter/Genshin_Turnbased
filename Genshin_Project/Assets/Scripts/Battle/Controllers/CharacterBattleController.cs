@@ -31,7 +31,9 @@ public List<int> ForcedTargetPositions = new List<int>();
     private StatusInstance _currentEffectSourceStatus; // 状态触发技能/效果时保留直接来源状态
     public int CharacterID { get; private set; }
     public int Level { get; private set; }
-    // 技能等级（1-15，顺序：0=普攻 1=重击 2=战技 3=爆发）
+    public int Ascension { get; private set; }
+    // 已加载的自身等级（培养+自身固定加级）；正式业务只通过GetEffectiveSkillLevel读取。
+    // 数组保留供旧测试/调试输入，不能再把命座加级写进这里累加。
     public int[] SkillLevels = new int[4] { 1, 1, 1, 1 };
     public string LastHitEffectID2; // 最近一次造成命中的效果ID2（Hit()钩子判定：Damage效果有目标即算命中，不看伤害数值）
     // 本技能序列内造成过命中的效果ID2集合（2026-08-13）：
@@ -68,9 +70,26 @@ public List<int> ForcedTargetPositions = new List<int>();
     //  初始化
     // ================================================================
     public void Init(int characterID, int level)
+        => Init(characterID, level, false);
+
+    /// <summary>
+    /// 裸面板构筑。等级等于突破门槛时由isAscended决定是否计入该行；超过门槛则保留已完成的低档突破。
+    /// 1级初始行始终计入。这是开战前输入，不实现升级或战斗内重建装备。
+    /// </summary>
+    public void Init(int characterID, int level, bool isAscended)
+        => InitPanel(characterID, level, CharacterAscensionRules.FromLegacyFlag(level, isAscended), isAscended);
+
+    /// <summary>正式养成输入：完整保留0～6突破阶段，不按角色等级猜测已完成的突破。</summary>
+    public void Init(int characterID, int level, int ascension)
+        => InitPanel(characterID, level, ascension, CharacterAscensionRules.HasCurrentAscension(level, ascension));
+
+    private void InitPanel(int characterID, int level, int ascension, bool isAscended)
     {
+        CharacterAscensionRules.Validate(level, ascension);
         CharacterID = characterID;
         Level = level;
+        Ascension = ascension;
+        _initialStatuses.Clear();
 
         var dm = DataManager.Instance;
 
@@ -80,7 +99,11 @@ public List<int> ForcedTargetPositions = new List<int>();
             LogManager.LogError(LogCategory.Ally, $"未找到角色属性 CharacterID={characterID}");
             return;
         }
-        dm.CharacterAscensionDict.TryGetValue(characterID, out _ascDataList);
+        _ascDataList = new List<CharacterAscensionData>();
+        if (dm.CharacterAscensionDict.TryGetValue(characterID, out var ascensions))
+            foreach (var row in ascensions)
+                if (row != null && CharacterAscensionRules.IncludesRow(row.AscensionLevel, level, Ascension))
+                    _ascDataList.Add(row);
 
         // 技能数据
         _skillById2 = new Dictionary<string, SkillMainData>();
@@ -148,7 +171,11 @@ public List<int> ForcedTargetPositions = new List<int>();
         if (Entity == null) Entity = gameObject.AddComponent<BattleEntity>();
         Entity.CharacterCtrl = this;
         Entity.Side = BattleSide.Ally;   // 位置系统：角色属于我方阵营（2026-08-06）
+        Entity.IsAscended = isAscended;
         BuildEntityPanel();
+        // 先于天赋、命座和战斗事件准备本角色的夜魂池；平时为0，不自动进入加持。
+        NightSoulStatusHandler.InitializeForCharacter(Entity, characterID);
+        RecordInitializationStatus(NightSoulStatusHandler.Find(Entity), 0, 0, InitialStatusKind.Character);
 
         //AP改为全局共用（BattleManager.APManager），角色不再各自持有（2026-08-14）
     }
@@ -177,7 +204,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         float hpFlat = 0f, atkFlat = 0f, defFlat = 0f;
         float hpBonus = 0f, atkBonus = 0f, defBonus = 0f;
         float critRateBonus = 0f, critDmgBonus = 0f;
-        float emBonus = 0f, rechargeBonus = 0f;
+        float emBonus = 0f, rechargeBonus = 0f, healBonus = 0f;
         float pyroDmgBonus = 0f, hydroDmgBonus = 0f, electroDmgBonus = 0f;
         float cryoDmgBonus = 0f, anemoDmgBonus = 0f, dendroDmgBonus = 0f, geoDmgBonus = 0f, physicalDmgBonus = 0f;
 
@@ -195,6 +222,7 @@ public List<int> ForcedTargetPositions = new List<int>();
                 critDmgBonus += asc.CritDMG;
                 emBonus += asc.EM;
                 rechargeBonus += asc.EnergyRechargeRate;
+                healBonus += asc.HealBonus;
                 pyroDmgBonus += asc.PyroDmgBonus;
                 hydroDmgBonus += asc.HydroDmgBonus;
                 electroDmgBonus += asc.ElectroDmgBonus;
@@ -206,17 +234,16 @@ public List<int> ForcedTargetPositions = new List<int>();
             }
         }
 
-        // 最终属性： (基础值×成长 + 突破固定值) × (1 + 突破百分比)
+        // HP/DEF保留原面板百分比；攻击白值与突破百分比分开，避免后续装备百分比乘已放大的面板。
         Entity.TotalHP = (baseHP + hpFlat) * (1f + hpBonus);
-        Entity.TotalATK = (baseATK + atkFlat) * (1f + atkBonus);
+        Entity.BakedHPBonus = hpBonus;
+        Entity.TotalATK = baseATK + atkFlat;
+        Entity.CharacterATKBonus = atkBonus;
         Entity.TotalDEF = (baseDEF + defFlat) * (1f + defBonus);
+        Entity.CharacterDEFBonus = defBonus;
         Entity.CurrentHP = Entity.TotalHP;
         Entity.MaxEnergy = _attrData.MaxEnergy;
         Entity.CurrentEnergy = 0;
-        Entity.MaxPoise = _attrData.Poise;
-#if UNITY_EDITOR || GTB_POISE_SYSTEM
-        Entity.Poise = _attrData.Poise;
-#endif
         Entity.HitWeight = _attrData.HitWeight;
 
         // 元素精通 / 充能效率 / 暴击
@@ -225,6 +252,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         Entity.TotalRechargeRate = _attrData.BaseRechargeRate + rechargeBonus;
         Entity.CritRate = _attrData.CritRate + critRateBonus;
         Entity.CritDMG = _attrData.CritDMG + critDmgBonus;
+        Entity.HealBonus = healBonus; // 重建低突破面板时也覆盖，不能残留上一份面板。
 
         // 抗性
         Entity.PhysicalRes = _attrData.PhysicalRes;
@@ -252,6 +280,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         _boundSkills[2] = _attrData.ElementalSkillID;
         _boundSkills[3] = _attrData.ElementalBurstID;
         _ccRecords.Clear();
+        BattleAttributeInitialization.Prepare(Entity);
     }
 
     // ================================================================

@@ -20,7 +20,10 @@ public static class BattleTargetResolver
         TargetResolutionResult previousResult,
         Func<int, float> scoreProvider = null,
         Func<int, int> randomIndex = null,
-        bool selfUsesOrigin = false)
+        bool selfUsesOrigin = false,
+        bool deadOnly = false,
+        bool respectTaunt = false,
+        Func<int, float> weightProvider = null)
     {
         if (battle == null || battle.Field == null)
         {
@@ -32,6 +35,15 @@ public static class BattleTargetResolver
 
         BattleSide sourceSide = source != null ? source.Side : GetOriginSide(origin, BattleSide.Ally);
         DescribeTarget(sourceSide, origin, targetType, out BattleSide targetSide, out BattleTargetDomain domain);
+        if (domain == BattleTargetDomain.Team)
+        {
+            // 队伍是单个宿主，没有伪造的0号/第六号格子，手选和随机位置不参与。
+            return new TargetResolutionResult { Side = targetSide, Domain = domain,
+                Error = !string.IsNullOrWhiteSpace(targetOverride) || !string.IsNullOrWhiteSpace(targetSelect)
+                    ? "队伍目标不使用TargetOverride/TargetSelect位置筛选" : null };
+        }
+        // 新队伍宿主不改变旧Self的个人来源语义。选择宿主请明确写AllyTeam/EnemyTeam。
+        if (origin is BattleTeamStatusHost && targetType == "Self") selfUsesOrigin = false;
         if (selfUsesOrigin && targetType == "Self")
         {
             targetSide = GetOriginSide(origin, sourceSide);
@@ -57,6 +69,7 @@ public static class BattleTargetResolver
             Score = scoreProvider ?? (position => GetAbsoluteHp(battle, targetSide, position)),
             RandomIndex = randomIndex
         };
+        request.SelectionWeight = weightProvider;
 
         if (string.IsNullOrEmpty(targetType) || targetType == "Self")
         {
@@ -67,10 +80,24 @@ public static class BattleTargetResolver
         request.IsEligible = position =>
         {
             var entity = battle.GetEntityByPosition(targetSide, position);
-            if (entity == null || !entity.IsAlive) return false;
+            if (entity == null || (deadOnly ? entity.IsAlive : !entity.IsAlive)) return false;
             if (targetType == "AlliesOnly" && entity == source) return false;
             return true;
         };
+
+        // 仅0/1选取可请求嘲讽约束，随机模式2/3/4始终忽略，与执行次数无关。
+        // Field/Team、全体、固定/继承范围、治疗及状态赋予均不借此重选。
+        if (respectTaunt && !deadOnly && domain == BattleTargetDomain.Unit && targetSide != sourceSide
+            && targetNumber > 0 && targetConsecutive >= 0 && targetConsecutive <= 1
+            && string.IsNullOrWhiteSpace(targetOverride) && string.IsNullOrWhiteSpace(targetSelect))
+        {
+            request.TauntPositions = new List<int>();
+            for (int position = 1; position <= request.MaxPosition; position++)
+            {
+                var target = battle.GetEntityByPosition(targetSide, position);
+                if (target?.IsAlive == true && target.HasStatus("Taunt")) request.TauntPositions.Add(position);
+            }
+        }
 
         if (!string.IsNullOrWhiteSpace(targetOverride) && !targetOverride.Contains(","))
         {
@@ -108,15 +135,17 @@ public static class BattleTargetResolver
         return TargetResolver.Resolve(request);
     }
 
-    public static List<BattleEntity> GetEntities(BattleManager battle, TargetResolutionResult result)
+    public static List<BattleEntity> GetEntities(BattleManager battle, TargetResolutionResult result, bool deadOnly = false)
     {
         var entities = new List<BattleEntity>();
         if (battle == null || result == null) return entities;
+        if (result.Domain == BattleTargetDomain.Team)
+            throw new InvalidOperationException("队伍宿主不是伤害、治疗、能量或其他个人效果的实体目标。");
 
         foreach (int position in result.Positions)
         {
             var entity = battle.GetEntityByPosition(result.Side, position);
-            if (entity != null && entity.IsAlive) entities.Add(entity);
+            if (entity != null && (deadOnly ? entity.IsDead : entity.IsAlive)) entities.Add(entity);
         }
         return entities;
     }
@@ -135,6 +164,16 @@ public static class BattleTargetResolver
         return fields;
     }
 
+    public static bool IsTeamTarget(string targetType) => targetType == "AllyTeam" || targetType == "EnemyTeam";
+
+    public static List<BattleTeamStatusHost> GetTeams(BattleManager battle, TargetResolutionResult result)
+    {
+        var teams = new List<BattleTeamStatusHost>();
+        if (battle != null && result != null && result.IsValid && result.Domain == BattleTargetDomain.Team)
+            teams.Add(battle.GetTeam(result.Side));
+        return teams;
+    }
+
     public static void DescribeTarget(
         BattleSide sourceSide,
         object origin,
@@ -147,6 +186,13 @@ public static class BattleTargetResolver
 
         switch (targetType)
         {
+            case "AllyTeam":
+                domain = BattleTargetDomain.Team;
+                break;
+            case "EnemyTeam":
+                targetSide = Opposite(sourceSide);
+                domain = BattleTargetDomain.Team;
+                break;
             case "Enemy":
                 targetSide = Opposite(sourceSide);
                 break;
@@ -226,6 +272,7 @@ public static class BattleTargetResolver
 
     private static BattleSide GetOriginSide(object origin, BattleSide fallback)
     {
+        if (origin is BattleTeamStatusHost team) return team.Side;
         if (origin is FieldPosition field) return field.Side;
         if (origin is BattleEntity entity) return entity.Side;
         return fallback;

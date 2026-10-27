@@ -10,6 +10,8 @@ public sealed class BloomCoreInstance
     public long CreatedEffectExecutionID;
     public ReactionSourceSnapshot SourceSnapshot;
     public StatusInstance DisplayStatus;
+    internal bool LunarDewGranted;
+    internal TeamBonusSystem CreationTeam;
 }
 
 /// <summary>草原核运行时容器：独立管理位置、来源快照、到期爆炸及五枚上限。</summary>
@@ -60,6 +62,7 @@ public static class BloomCoreSystem
             ApplyOrder = applyOrder,
             CreatedEffectExecutionID = context != null ? context.EffectExecutionID : 0,
             SourceSnapshot = snapshot,
+            CreationTeam = BattleManager.Instance?.TeamBonuses,
             DisplayStatus = display
         };
         Cores.Add(core);
@@ -192,7 +195,6 @@ public static class BloomCoreSystem
             Target = target,
             Damage = damage,
             DamageElement = "Dendro",
-            PoiseDamage = 0f,
             ElementAmount = 0f,
             Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Bloom),
             ReactionType = ReactionType.Bloom

@@ -3,9 +3,11 @@ using UnityEngine;
 
 public struct SuperconductReactionResolution
 {
+    public ReactionType Type;
     public string DisplayName;
     public float RemainingAttackAmount;
     public List<ReactionDerivedHit> DerivedHits;
+    public PendingStellarSuperconduct PendingStellarSuperconduct;
 }
 
 /// <summary>普通超导：冰雷 1:1 消耗，对主目标及相邻目标造成冰元素剧变伤害并施加减物抗状态。</summary>
@@ -26,13 +28,23 @@ public static class SuperconductReactionHandler
         if (auraAmount <= 0f) return false;
 
         float consumed = Mathf.Min(context.AttackAmount, auraAmount);
+        PendingStellarSuperconduct pending = null;
+        bool stellar = BattleManager.Instance?.TeamBonuses?.Stellar.TryPrepareSuperconduct(context, out pending) == true;
         ConsumeAura(context, consumed);
 
+        resolution.Type = stellar ? ReactionType.StellarSuperconduct : ReactionType.Superconduct;
+        if (stellar)
+        {
+            resolution.DisplayName = "星超导";
+            resolution.PendingStellarSuperconduct = pending;
+            resolution.RemainingAttackAmount = Mathf.Max(0f, context.AttackAmount - consumed);
+            resolution.DerivedHits = new List<ReactionDerivedHit>();
+            return true;
+        }
         resolution.DisplayName = "超导";
         resolution.RemainingAttackAmount = Mathf.Max(0f, context.AttackAmount - consumed);
-        resolution.DerivedHits = BuildDerivedHits(context, levelCoefficient);
-
         ReactionSourceSnapshot snapshot = ReactionSourceSnapshot.Capture(context);
+        resolution.DerivedHits = BuildDerivedHits(context, levelCoefficient, snapshot);
         foreach (ReactionDerivedHit hit in resolution.DerivedHits)
         {
             if (!ReactionStateSystem.TryGetEntityState(
@@ -53,10 +65,10 @@ public static class SuperconductReactionHandler
 
     private static List<ReactionDerivedHit> BuildDerivedHits(
         ReactionContext context,
-        float levelCoefficient)
+        float levelCoefficient,
+        ReactionSourceSnapshot snapshot)
     {
         var hits = new List<ReactionDerivedHit>();
-        ReactionSourceSnapshot snapshot = ReactionSourceSnapshot.Capture(context);
         ReactionBuffTotals bonuses = ReactionDamageCalculator.CollectReactionBonuses(
             context.SourceEntity,
             ReactionType.Superconduct,
@@ -74,7 +86,7 @@ public static class SuperconductReactionHandler
                 : ReactionDamageCalculator.CalculateCharacterTransformative(
                     levelCoefficient,
                     1f,
-                    context.SourceEntity != null ? context.SourceEntity.TotalEM : 0f,
+                    snapshot.TotalEM,
                     bonuses.DMGBonus,
                     bonuses.BaseDMGBonusFlat,
                     resistance);
@@ -84,7 +96,6 @@ public static class SuperconductReactionHandler
                 Target = target,
                 Damage = damage,
                 DamageElement = "Cryo",
-                PoiseDamage = 0f,
                 ElementAmount = 0f,
                 // 超导来源声明（2026-08-19）：归属触发反应的攻击方角色
                 Source = DamageSourceInfo.FromReactionSnapshot(snapshot, ReactionType.Superconduct),
@@ -100,38 +111,16 @@ public static class SuperconductReactionHandler
             return 0f;
 
         if (context.AttackElement == "Cryo")
-            return context.AllowsReactionPool("Electro", ReactionPoolKind.NormalAura)
-                ? context.Target.GetAura("Electro")?.AuraAmount ?? 0f
-                : 0f;
+            return ElementQuery.GetReactionAmount(context, "Electro");
         if (context.AttackElement != "Electro")
             return 0f;
 
-        float normalCryo = context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura)
-            ? context.Target.GetAura("Cryo")?.AuraAmount ?? 0f : 0f;
-        float frozenCryo = context.IgnoreFrozenAura
-            || !context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen)
-            ? 0f : FrozenReactionHandler.GetFrozenAuraAsCryo(context.Target);
-        return normalCryo + frozenCryo;
+        return ElementQuery.GetReactionAmount(context, "Cryo");
     }
 
     private static void ConsumeAura(ReactionContext context, float amount)
     {
-        if (context.AttackElement == "Cryo")
-        {
-            context.Target.ConsumeAura("Electro", amount);
-            return;
-        }
-
-        float remaining = amount;
-        ElementalAura normalCryo = context.Target.GetAura("Cryo");
-        if (context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && normalCryo != null)
-        {
-            float normalConsumed = Mathf.Min(normalCryo.AuraAmount, remaining);
-            context.Target.ConsumeAura("Cryo", normalConsumed);
-            remaining -= normalConsumed;
-        }
-        if (remaining > 0f && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen))
-            FrozenReactionHandler.ConsumeFrozenAura(context.Target, remaining);
+        ElementAuraSystem.ConsumeReactionAura(context, context.AttackElement == "Cryo" ? "Electro" : "Cryo", amount);
     }
 
     private static IEnumerable<BattleEntity> GetTargets(BattleEntity mainTarget)

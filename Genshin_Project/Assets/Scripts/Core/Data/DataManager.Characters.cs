@@ -20,32 +20,76 @@ public partial class DataManager
         int maxRow = GetSheetMaxRow(sheet);
         for (int row = startRow; row <= maxRow; row++)
         {
-            string cell = sheet.Cells[row, 1].Text;
-            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, 2].Text)) continue;
-            var data = new CharacterOverviewData
-            {
-                CharacterID = SafeGetInt(sheet.Cells[row, 1].Value),
-                Name = sheet.Cells[row, 2].Text
-            };
+            string cell = sheet.Cells[row, FindColumnByHeader(sheet, "CharacterID")].Text;
+            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, FindColumnByHeader(sheet, "Name")].Text)) continue;
+            var data = ReadCharacterOverviewRow(sheet, row);
             if (data.CharacterID == 0) continue;
+            if (GetCharacterOverview(data.CharacterID) != null)
+                throw new TableValidationException($"Characters 第{row}行重复CharacterID：{data.CharacterID}");
             CharacterOverviewList.Add(data);
         }
     }
 
-    static int FindColumnByHeader(ExcelWorksheet sheet, string header, int fallback)
+    static CharacterOverviewData ReadCharacterOverviewRow(ExcelWorksheet sheet, int row)
     {
-        if (sheet?.Dimension == null) return fallback;
-        for (int column = 1; column <= sheet.Dimension.End.Column; column++)
+        string Text(string english, string chinese)
         {
-            if (string.Equals(sheet.Cells[1, column].Text.Trim(), header, StringComparison.OrdinalIgnoreCase))
-                return column;
+            var headers = ExcelTableHeaders.For(sheet);
+            int column = headers.Optional(english);
+            if (column < 1) column = headers.Optional(chinese);
+            return column > 0 ? sheet.Cells[row, column].Text.Trim() : string.Empty;
         }
-        return fallback;
+        return new CharacterOverviewData
+        {
+            CharacterID = int.Parse(sheet.Cells[row, FindColumnByHeader(sheet, "CharacterID")].Text.Trim()),
+            NameID = Text("NameID", "英文标识"),
+            Name = sheet.Cells[row, FindColumnByHeader(sheet, "Name")].Text.Trim(),
+            Nation = CharacterMetadataParser.ParseNation(Text("Nation", "国家")),
+            Element = CharacterMetadataParser.ParseElement(Text("Element", "元素")),
+            WeaponType = CharacterMetadataParser.ParseWeaponType(Text("WeaponType", "武器类型"))
+        };
+    }
+
+    /// <summary>统一角色身份查询，未配置返回null；国家不由技能、元素或姓名推断。</summary>
+    public CharacterOverviewData GetCharacterOverview(int characterID)
+        => CharacterOverviewList.Find(character => character.CharacterID == characterID);
+
+    /// <summary>统计完整编队ID，去重但不筛存活/前后台；没有归属数据时明确报错，不当成无归属。</summary>
+    public int CountCharactersFromNation(IEnumerable<int> characterIDs, string nation)
+    {
+        if (characterIDs == null) throw new ArgumentNullException(nameof(characterIDs));
+        string expected = CharacterMetadataParser.ParseNation(nation);
+        if (string.IsNullOrEmpty(expected)) throw new ArgumentException("必须明确指定统计的国家。", nameof(nation));
+        var seen = new HashSet<int>();
+        int count = 0;
+        foreach (int id in characterIDs)
+        {
+            if (!seen.Add(id)) continue;
+            var metadata = GetCharacterOverview(id);
+            if (metadata == null || string.IsNullOrEmpty(metadata.Nation))
+                throw new InvalidOperationException("角色缺少正式Nation归属配置：" + id);
+            if (metadata.Nation == expected) count++;
+        }
+        return count;
+    }
+
+    void ApplyCharacterOverviewIdentity(CharacterAttributesData attributes)
+    {
+        var metadata = GetCharacterOverview(attributes.CharacterID);
+        if (metadata == null) return; // 兼容独立角色表/内存测试；不伪造不存在的身份。
+        attributes.Nation = metadata.Nation;
+        if (!string.IsNullOrEmpty(metadata.Element)) attributes.Element = metadata.Element;
+        if (metadata.WeaponType >= 0) attributes.WeaponType = metadata.WeaponType;
+    }
+
+    static int FindColumnByHeader(ExcelWorksheet sheet, string header)
+    {
+        return ExcelTableHeaders.For(sheet).Required(header);
     }
 
     static string ReadOptionalEffectText(ExcelWorksheet sheet, int row, string header)
     {
-        int column = FindColumnByHeader(sheet, header, -1);
+        int column = ExcelTableHeaders.For(sheet).Optional(header);
         return column > 0 ? sheet.Cells[row, column].Text.Trim() : string.Empty;
     }
 
@@ -67,9 +111,9 @@ public partial class DataManager
         }
     }
 
-    static string ReadEffectParam2(ExcelWorksheet sheet, int row, string effectType, int fallback)
+    static string ReadEffectParam2(ExcelWorksheet sheet, int row, string effectType)
     {
-        string param = sheet.Cells[row, FindColumnByHeader(sheet, "Param2", fallback)].Text;
+        string param = ExcelTableHeaders.For(sheet).Cell(row, "Param2").Text;
         if (effectType != "GainEnergy") return param;
         string mode = ReadOptionalEffectText(sheet, row, "EnergyGainMode");
         if (!string.IsNullOrWhiteSpace(mode) && !string.IsNullOrWhiteSpace(param)
@@ -111,49 +155,49 @@ public partial class DataManager
                     int maxRow = GetSheetMaxRow(attrSheet);
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = attrSheet.Cells[row, 1].Text;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(attrSheet.Cells[row, 2].Text)) continue;
+                        string cell = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CharacterID")].Text;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "NameID")].Text)) continue;
                         var data = new CharacterAttributesData
                         {
-                            CharacterID = SafeGetInt(attrSheet.Cells[row, 1].Value),
-                            NameID = attrSheet.Cells[row, 2].Text,
-                            Name = attrSheet.Cells[row, 3].Text,
-                            Star = SafeGetInt(attrSheet.Cells[row, 4].Value),
-                            GrowthCurveID = SafeGetInt(attrSheet.Cells[row, 5].Value),
-                            WeaponType = SafeGetInt(attrSheet.Cells[row, 6].Value),
-                            Element = attrSheet.Cells[row, 7].Text,
-                            BaseHP = SafeGetFloat(attrSheet.Cells[row, 8].Value),
-                            BaseATK = SafeGetFloat(attrSheet.Cells[row, 9].Value),
-                            BaseDEF = SafeGetFloat(attrSheet.Cells[row, 10].Value),
-                            MaxEnergy = SafeGetInt(attrSheet.Cells[row, 11].Value),
-                            Poise = SafeGetFloat(attrSheet.Cells[row, 12].Value),
-                            HitWeight = SafeGetFloat(attrSheet.Cells[row, 13].Value),
-                            NormalAttackID = attrSheet.Cells[row, 14].Text,
-                            HeavyAttackID = attrSheet.Cells[row, 15].Text,
-                            ElementalSkillID = attrSheet.Cells[row, 16].Text,
-                            ElementalBurstID = attrSheet.Cells[row, 17].Text,
-                            BaseEM = SafeGetInt(attrSheet.Cells[row, 18].Value),
-                            BaseRechargeRate = SafeGetFloat(attrSheet.Cells[row, 19].Value),
-                            CritRate = SafeGetFloat(attrSheet.Cells[row, 20].Value),
-                            CritDMG = SafeGetFloat(attrSheet.Cells[row, 21].Value),
-                            PyroRes = SafeGetFloat(attrSheet.Cells[row, 22].Value),
-                            HydroRes = SafeGetFloat(attrSheet.Cells[row, 23].Value),
-                            ElectroRes = SafeGetFloat(attrSheet.Cells[row, 24].Value),
-                            CryoRes = SafeGetFloat(attrSheet.Cells[row, 25].Value),
-                            AnemoRes = SafeGetFloat(attrSheet.Cells[row, 26].Value),
-                            DendroRes = SafeGetFloat(attrSheet.Cells[row, 27].Value),
-                            GeoRes = SafeGetFloat(attrSheet.Cells[row, 28].Value),
-                            PhysicalRes = SafeGetFloat(attrSheet.Cells[row, 29].Value),
-                            PyroDmgBonus = SafeGetFloat(attrSheet.Cells[row, 30].Value),
-                            HydroDmgBonus = SafeGetFloat(attrSheet.Cells[row, 31].Value),
-                            ElectroDmgBonus = SafeGetFloat(attrSheet.Cells[row, 32].Value),
-                            CryoDmgBonus = SafeGetFloat(attrSheet.Cells[row, 33].Value),
-                            AnemoDmgBonus = SafeGetFloat(attrSheet.Cells[row, 34].Value),
-                            GeoDmgBonus = SafeGetFloat(attrSheet.Cells[row, 35].Value),
-                            DendroDmgBonus = SafeGetFloat(attrSheet.Cells[row, 36].Value),
-                            PhysicalDmgBonus = SafeGetFloat(attrSheet.Cells[row, 37].Value)
+                            CharacterID = SafeGetInt(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CharacterID")].Value),
+                            NameID = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "NameID")].Text,
+                            Name = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "Name")].Text,
+                            Star = SafeGetInt(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "Star")].Value),
+                            GrowthCurveID = SafeGetInt(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "GrowthCurveID")].Value),
+                            WeaponType = CharacterMetadataParser.ParseWeaponType(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "WeaponType")].Text),
+                            Element = CharacterMetadataParser.ParseElement(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "Element")].Text),
+                            BaseHP = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "BaseHP")].Value),
+                            BaseATK = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "BaseATK")].Value),
+                            BaseDEF = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "BaseDEF")].Value),
+                            MaxEnergy = SafeGetInt(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "MaxEnergy")].Value),
+                            HitWeight = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "HitWeight")].Value),
+                            NormalAttackID = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "NormalAttackID")].Text,
+                            HeavyAttackID = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "HeavyAttackID")].Text,
+                            ElementalSkillID = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "ElementalSkillID")].Text,
+                            ElementalBurstID = attrSheet.Cells[row, FindColumnByHeader(attrSheet, "ElementalBurstID")].Text,
+                            BaseEM = SafeGetInt(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "BaseEM")].Value),
+                            BaseRechargeRate = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "BaseRechargeRate")].Value),
+                            CritRate = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CritRate")].Value),
+                            CritDMG = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CritDMG")].Value),
+                            PyroRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "PyroRes")].Value),
+                            HydroRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "HydroRes")].Value),
+                            ElectroRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "ElectroRes")].Value),
+                            CryoRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CryoRes")].Value),
+                            AnemoRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "AnemoRes")].Value),
+                            DendroRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "DendroRes")].Value),
+                            GeoRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "GeoRes")].Value),
+                            PhysicalRes = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "PhysicalRes")].Value),
+                            PyroDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "PyroDmgBonus")].Value),
+                            HydroDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "HydroDmgBonus")].Value),
+                            ElectroDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "ElectroDmgBonus")].Value),
+                            CryoDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "CryoDmgBonus")].Value),
+                            AnemoDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "AnemoDmgBonus")].Value),
+                            GeoDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "GeoDmgBonus")].Value),
+                            DendroDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "DendroDmgBonus")].Value),
+                            PhysicalDmgBonus = SafeGetFloat(attrSheet.Cells[row, FindColumnByHeader(attrSheet, "PhysicalDmgBonus")].Value)
                         };
                         if (data.CharacterID == 0) continue;
+                        ApplyCharacterOverviewIdentity(data);
                         if (workbookCharacterId != 0 && workbookCharacterId != data.CharacterID)
                             throw new InvalidDataException($"角色表 {fileName} 的 Attributes 中出现了多个 CharacterID");
                         workbookCharacterId = data.CharacterID;
@@ -171,29 +215,30 @@ public partial class DataManager
                     int maxRow = GetSheetMaxRow(ascSheet);
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = ascSheet.Cells[row, 1].Text;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(ascSheet.Cells[row, 2].Text)) continue;
+                        string cell = ascSheet.Cells[row, FindColumnByHeader(ascSheet, "AscensionLevel")].Text;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "BaseHPFlat")].Text)) continue;
                         var data = new CharacterAscensionData
                         {
-                            AscensionLevel = SafeGetInt(ascSheet.Cells[row, 1].Value),
-                            BaseHPFlat = SafeGetFloat(ascSheet.Cells[row, 2].Value),
-                            BaseATKFlat = SafeGetFloat(ascSheet.Cells[row, 3].Value),
-                            BaseDEFFlat = SafeGetFloat(ascSheet.Cells[row, 4].Value),
-                            HPBonus = SafeGetFloat(ascSheet.Cells[row, 5].Value),
-                            ATKBonus = SafeGetFloat(ascSheet.Cells[row, 6].Value),
-                            DEFBonus = SafeGetFloat(ascSheet.Cells[row, 7].Value),
-                            CritRate = SafeGetFloat(ascSheet.Cells[row, 8].Value),
-                            CritDMG = SafeGetFloat(ascSheet.Cells[row, 9].Value),
-                            EM = SafeGetFloat(ascSheet.Cells[row, 10].Value),
-                            EnergyRechargeRate = SafeGetFloat(ascSheet.Cells[row, 11].Value),
-                            PyroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 12].Value),
-                            HydroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 13].Value),
-                            ElectroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 14].Value),
-                            CryoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 15].Value),
-                            AnemoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 16].Value),
-                            GeoDmgBonus = SafeGetFloat(ascSheet.Cells[row, 17].Value),
-                            DendroDmgBonus = SafeGetFloat(ascSheet.Cells[row, 18].Value),
-                            PhysicalDmgBonus = SafeGetFloat(ascSheet.Cells[row, 19].Value)
+                            AscensionLevel = SafeGetInt(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "AscensionLevel")].Value),
+                            BaseHPFlat = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "BaseHPFlat")].Value),
+                            BaseATKFlat = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "BaseATKFlat")].Value),
+                            BaseDEFFlat = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "BaseDEFFlat")].Value),
+                            HPBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "HPBonus")].Value),
+                            ATKBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "ATKBonus")].Value),
+                            DEFBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "DEFBonus")].Value),
+                            CritRate = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "CritRate")].Value),
+                            CritDMG = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "CritDMG")].Value),
+                            EM = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "EM")].Value),
+                            EnergyRechargeRate = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "EnergyRechargeRate")].Value),
+                            HealBonus = SafeGetFloat(ReadOptionalEffectText(ascSheet, row, "HealBonus")),
+                            PyroDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "PyroDmgBonus")].Value),
+                            HydroDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "HydroDmgBonus")].Value),
+                            ElectroDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "ElectroDmgBonus")].Value),
+                            CryoDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "CryoDmgBonus")].Value),
+                            AnemoDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "AnemoDmgBonus")].Value),
+                            GeoDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "GeoDmgBonus")].Value),
+                            DendroDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "DendroDmgBonus")].Value),
+                            PhysicalDmgBonus = SafeGetFloat(ascSheet.Cells[row, FindColumnByHeader(ascSheet, "PhysicalDmgBonus")].Value)
                         };
                         if (!CharacterAscensionDict.ContainsKey(workbookCharacterId))
                             CharacterAscensionDict[workbookCharacterId] = new List<CharacterAscensionData>();
@@ -204,27 +249,27 @@ public partial class DataManager
                 var skillSheet = sheets["Skills"];
                 if (skillSheet != null)
                 {
-                    int iconColumn = FindColumnByHeader(skillSheet, "Icon", -1);
-                    int descriptionColumn = FindColumnByHeader(skillSheet, "Description", 11);
+                    int iconColumn = ExcelTableHeaders.For(skillSheet).Optional("Icon");
+                    int descriptionColumn = FindColumnByHeader(skillSheet, "Description");
                     int startRow = GetDataStartRow(skillSheet);
                     int maxRow = GetSheetMaxRow(skillSheet);
                     int charId = 0;
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = skillSheet.Cells[row, 1].Text;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(skillSheet.Cells[row, 2].Text)) continue;
+                        string cell = skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillID")].Text;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillID2")].Text)) continue;
                         var data = new SkillMainData
                         {
-                            SkillID = SafeGetInt(skillSheet.Cells[row, 1].Value),
-                            SkillID2 = skillSheet.Cells[row, 2].Text,
-                            SkillName = skillSheet.Cells[row, 3].Text,
-                            APCost = SafeGetInt(skillSheet.Cells[row, 4].Value),
-                            Cooldown = SafeGetFloat(skillSheet.Cells[row, 5].Value),
-                            EnergyUsed = SafeGetInt(skillSheet.Cells[row, 6].Value),
-                            MaxCharge = SafeGetInt(skillSheet.Cells[row, 7].Value),
-                            InitialCharge = SafeGetInt(skillSheet.Cells[row, 8].Value),
-                            SkillPhase = SafeGetInt(skillSheet.Cells[row, 9].Value),
-                            ActionType = skillSheet.Cells[row, 10].Text,
+                            SkillID = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillID")].Value),
+                            SkillID2 = skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillID2")].Text,
+                            SkillName = skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillName")].Text,
+                            APCost = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "APCost")].Value),
+                            Cooldown = SafeGetFloat(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "Cooldown")].Value),
+                            EnergyUsed = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "EnergyUsed")].Value),
+                            MaxCharge = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "MaxCharge")].Value),
+                            InitialCharge = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "InitialCharge")].Value),
+                            SkillPhase = SafeGetInt(skillSheet.Cells[row, FindColumnByHeader(skillSheet, "SkillPhase")].Value),
+                            ActionType = skillSheet.Cells[row, FindColumnByHeader(skillSheet, "ActionType")].Text,
                             Icon = iconColumn > 0 ? skillSheet.Cells[row, iconColumn].Text.Trim() : string.Empty,
                             Description = skillSheet.Cells[row, descriptionColumn].Text
                         };
@@ -244,46 +289,65 @@ public partial class DataManager
                     int maxRow = GetSheetMaxRow(seSheet);
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = seSheet.Cells[row, 2].Text;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(seSheet.Cells[row, 1].Text)) continue;
+                        string cell = seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID2")].Text;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID")].Text)) continue;
                         var data = new SkillEffectData
                         {
                             AuthoredFields = ReadAuthoredEffectFields(seSheet, row),
-                            SkillEffectID = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID", 1)].Value),
-                            SkillEffectID2 = seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID2", 2)].Text,
-                            EffectIndex = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectIndex", 3)].Value),
-                            EffectType = seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType", 4)].Text,
-                            Element = seSheet.Cells[row, FindColumnByHeader(seSheet, "Element", 5)].Text,
-                            DamageType = seSheet.Cells[row, FindColumnByHeader(seSheet, "DamageType", 6)].Text,
-                            Duration = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "Duration", 7)].Value),
-                            AddInPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "AddInPhase", 8)].Value),
-                            TriggerPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TriggerPhase", 9)].Value),
-                            Param1 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param1", 10)].Text,
-                            Param2 = ReadEffectParam2(seSheet, row, seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType", 4)].Text, 11),
-                            Param3 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param3", 12)].Text,
-                            TargetType = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetType", 13)].Text,
-                            TargetNumber = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetNumber", 14)].Value),
-                            TargetConsecutive = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive", 15)].Value),
-                            TargetConsecutiveSet = !string.IsNullOrEmpty(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive", 15)].Text),
-                            TargetOverride = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetOverride", 16)].Text,
-                            ScriptHook = seSheet.Cells[row, FindColumnByHeader(seSheet, "ScriptHook", 17)].Text,
+                            SkillEffectID = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID")].Value),
+                            SkillEffectID2 = seSheet.Cells[row, FindColumnByHeader(seSheet, "SkillEffectID2")].Text,
+                            EffectIndex = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectIndex")].Value),
+                            EffectType = seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType")].Text,
+                            Element = seSheet.Cells[row, FindColumnByHeader(seSheet, "Element")].Text,
+                            DamageType = seSheet.Cells[row, FindColumnByHeader(seSheet, "DamageType")].Text,
+                            Duration = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "Duration")].Value),
+                            AddInPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "AddInPhase")].Value),
+                            TriggerPhase = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TriggerPhase")].Value),
+                            Param1 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param1")].Text,
+                            Param2 = ReadEffectParam2(seSheet, row, seSheet.Cells[row, FindColumnByHeader(seSheet, "EffectType")].Text),
+                            Param3 = seSheet.Cells[row, FindColumnByHeader(seSheet, "Param3")].Text,
+                            TargetType = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetType")].Text,
+                            TargetNumber = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetNumber")].Value),
+                            TargetConsecutive = SafeGetInt(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive")].Value),
+                            TargetConsecutiveSet = !string.IsNullOrEmpty(seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetConsecutive")].Text),
+                            TargetOverride = seSheet.Cells[row, FindColumnByHeader(seSheet, "TargetOverride")].Text,
+                            ScriptHook = seSheet.Cells[row, FindColumnByHeader(seSheet, "ScriptHook")].Text,
                             DamageHook = ReadOptionalEffectText(seSheet, row, "DamageHook"),
                             ExecuteCount = ReadExecuteCount(seSheet, row),
                             ExecuteCountHandler = ReadExecuteCountHandler(seSheet, row)
                         };
-                        TryValidate("SkillsEffect", () => TableValidator.ValidateEffectRow("SkillsEffect", row,
+                        string validationSource = $"Characters/{Path.GetFileName(f)}/{seSheet.Name} "
+                            + $"(SkillEffectID={data.SkillEffectID}, ID2={data.SkillEffectID2})";
+                        TryValidate(validationSource, () => TableValidator.ValidateEffectRow("SkillsEffect", row,
                             data.EffectType, data.Element, data.Duration, data.Param2,
                             data.TargetType, data.TargetNumber, data.TargetConsecutive,
                             data.TargetOverride, isEnemy: false));
+                        TryValidate(validationSource, () =>
+                        {
+                            TableValidator.ValidateDamageProperties("SkillsEffect", row,
+                                data.EffectType, data.Element, data.Param1, data.Param2, data.Param3, data.DamageHook);
+                            if (data.EffectType == "Damage") data.Element = DamageProperties.NormalizeElement(data.Element);
+                        });
+                        if (data.EffectType == "ApplyElement")
+                            TryValidate(validationSource, () => TableValidator.ValidateApplyElement("SkillsEffect", row,
+                                data.Element, data.Param1, data.Param2, data.Param3, data.DamageType, data.DamageHook));
+                        if (data.EffectType == "Revive")
+                            TryValidate(validationSource, () => TableValidator.ValidateRevive("SkillsEffect", row,
+                                data.Param1, data.Param2, data.Param3, data.Element, data.DamageType, data.DamageHook, data.Duration, data.TargetType));
+                        if (data.EffectType == "SwitchIn")
+                            TryValidate(validationSource, () => TableValidator.ValidateSwitchIn("SkillsEffect", row,
+                                data.Param1, data.Param3, data.DamageType, data.DamageHook, data.AddInPhase, data.TriggerPhase));
                         // ChangeControl 专属校验（2026-08-11）：技能效果表允许，填了Duration定时结束，没填=永久
                         if (data.EffectType == "ResetCooldown")
-                            TryValidate("SkillsEffect", () => TableValidator.ValidateResetCooldown("SkillsEffect", row, data.Param1));
+                            TryValidate(validationSource, () => TableValidator.ValidateResetCooldown("SkillsEffect", row, data.Param1));
+                        if (data.EffectType == "ReduceCooldown")
+                            TryValidate(validationSource, () => TableValidator.ValidateReduceCooldown("SkillsEffect", row, data.Param1, data.Param2));
                         if (data.EffectType == "BondOfLife")
-                            TryValidate("SkillsEffect", () => TableValidator.ValidateBondOfLife("SkillsEffect", row, data.Param1));
-                        TryValidate("SkillsEffect", () => TableValidator.ValidatePublicCountEffect(
+                            TryValidate(validationSource, () => TableValidator.ValidateBondOfLife("SkillsEffect", row, data.Param1));
+                        TryValidate(validationSource, () => TableValidator.ValidatePublicCountEffect(
                             "SkillsEffect", row, data.EffectType, data.Param1, data.Param2, data.TargetType));
                         if (data.EffectType == "ChangeControl")
-                            TryValidate("SkillsEffect", () => TableValidator.ValidateChangeControl("SkillsEffect", row,
+                            TryValidate(validationSource, () => TableValidator.ValidateChangeControl("SkillsEffect", row,
                                 data.Param1, data.Param2, data.Param3, data.Duration,
                                 isStatusEffectTable: false, isEnemy: false));
                         if (string.IsNullOrEmpty(data.SkillEffectID2)) continue;
@@ -303,15 +367,15 @@ public partial class DataManager
                     string paramID = string.Empty;
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cid = slSheet.Cells[row, 1].Text;
-                        string stype = slSheet.Cells[row, 2].Text;
-                        string slevel = slSheet.Cells[row, 3].Text;
-                        string rowParamID = slSheet.Cells[row, 4].Text;
+                        string cid = slSheet.Cells[row, FindColumnByHeader(slSheet, "CharacterID")].Text;
+                        string stype = slSheet.Cells[row, FindColumnByHeader(slSheet, "SkillType")].Text;
+                        string slevel = slSheet.Cells[row, FindColumnByHeader(slSheet, "SkillLevel")].Text;
+                        string rowParamID = slSheet.Cells[row, FindColumnByHeader(slSheet, "ParamID")].Text;
                         if (string.IsNullOrEmpty(cid) && string.IsNullOrEmpty(stype)
                             && string.IsNullOrEmpty(slevel) && string.IsNullOrEmpty(rowParamID)) continue;
 
                         if (!string.IsNullOrEmpty(cid))
-                            charId = SafeGetInt(slSheet.Cells[row, 1].Value);
+                            charId = SafeGetInt(slSheet.Cells[row, FindColumnByHeader(slSheet, "CharacterID")].Value);
                         if (!string.IsNullOrEmpty(stype))
                         {
                             if (!int.TryParse(stype, out skillType))
@@ -341,13 +405,13 @@ public partial class DataManager
                             SkillType = skillType,
                             SkillLevel = skillLevel,
                             ParamID = paramID,
-                            Hits1 = slSheet.Cells[row, 5].Text,
-                            Hits2 = slSheet.Cells[row, 6].Text,
-                            Hits3 = slSheet.Cells[row, 7].Text,
-                            Hits4 = slSheet.Cells[row, 8].Text,
-                            Hits5 = slSheet.Cells[row, 9].Text,
-                            Hits6 = slSheet.Cells[row, 10].Text,
-                            Hits7 = slSheet.Cells[row, 11].Text
+                            Hits1 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits1")].Text,
+                            Hits2 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits2")].Text,
+                            Hits3 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits3")].Text,
+                            Hits4 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits4")].Text,
+                            Hits5 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits5")].Text,
+                            Hits6 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits6")].Text,
+                            Hits7 = slSheet.Cells[row, FindColumnByHeader(slSheet, "Hits7")].Text
                         };
                         if (!SkillLevelDict.ContainsKey(key)) SkillLevelDict[key] = new Dictionary<int, SkillLevelData>();
                         SkillLevelData previous = null;
@@ -376,17 +440,17 @@ public partial class DataManager
                     int charId = 0;
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = conSheet.Cells[row, 1].Text;
-                        if (!string.IsNullOrEmpty(cell)) charId = SafeGetInt(conSheet.Cells[row, 1].Value);
+                        string cell = conSheet.Cells[row, FindColumnByHeader(conSheet, "CharacterID")].Text;
+                        if (!string.IsNullOrEmpty(cell)) charId = SafeGetInt(conSheet.Cells[row, FindColumnByHeader(conSheet, "CharacterID")].Value);
                         if (charId == 0) continue;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(conSheet.Cells[row, 2].Text)) continue;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(conSheet.Cells[row, FindColumnByHeader(conSheet, "ConstellationIndex")].Text)) continue;
                         var data = new ConstellationData
                         {
                             CharacterID = charId,
-                            ConstellationIndex = SafeGetInt(conSheet.Cells[row, 2].Value),
-                            ConstellationName = conSheet.Cells[row, 3].Text,
-                            Modifiers = conSheet.Cells[row, 4].Text,
-                            Description = conSheet.Cells[row, 5].Text
+                            ConstellationIndex = SafeGetInt(conSheet.Cells[row, FindColumnByHeader(conSheet, "ConstellationIndex")].Value),
+                            ConstellationName = conSheet.Cells[row, FindColumnByHeader(conSheet, "ConstellationName")].Text,
+                            Modifiers = conSheet.Cells[row, FindColumnByHeader(conSheet, "Modifiers")].Text,
+                            Description = conSheet.Cells[row, FindColumnByHeader(conSheet, "Description")].Text
                         };
                         if (!ConstellationDict.ContainsKey(charId)) ConstellationDict[charId] = new List<ConstellationData>();
                         ConstellationDict[charId].Add(data);
@@ -401,18 +465,18 @@ public partial class DataManager
                     int charId = 0;
                     for (int row = startRow; row <= maxRow; row++)
                     {
-                        string cell = talSheet.Cells[row, 1].Text;
-                        if (!string.IsNullOrEmpty(cell)) charId = SafeGetInt(talSheet.Cells[row, 1].Value);
+                        string cell = talSheet.Cells[row, FindColumnByHeader(talSheet, "CharacterID")].Text;
+                        if (!string.IsNullOrEmpty(cell)) charId = SafeGetInt(talSheet.Cells[row, FindColumnByHeader(talSheet, "CharacterID")].Value);
                         if (charId == 0) continue;
-                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(talSheet.Cells[row, 2].Text)) continue;
+                        if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(talSheet.Cells[row, FindColumnByHeader(talSheet, "TalentIndex")].Text)) continue;
                         var data = new TalentData
                         {
                             CharacterID = charId,
-                            TalentIndex = SafeGetInt(talSheet.Cells[row, 2].Value),
-                            TalentName = talSheet.Cells[row, 3].Text,
-                            UnlockAfter = SafeGetInt(talSheet.Cells[row, 4].Value),
-                            Modifiers = talSheet.Cells[row, 5].Text,
-                            Description = talSheet.Cells[row, 6].Text
+                            TalentIndex = SafeGetInt(talSheet.Cells[row, FindColumnByHeader(talSheet, "TalentIndex")].Value),
+                            TalentName = talSheet.Cells[row, FindColumnByHeader(talSheet, "TalentName")].Text,
+                            UnlockAfter = SafeGetInt(talSheet.Cells[row, FindColumnByHeader(talSheet, "UnlockAfter")].Value),
+                            Modifiers = talSheet.Cells[row, FindColumnByHeader(talSheet, "Modifiers")].Text,
+                            Description = talSheet.Cells[row, FindColumnByHeader(talSheet, "Description")].Text
                         };
                         if (!TalentDict.ContainsKey(charId)) TalentDict[charId] = new List<TalentData>();
                         TalentDict[charId].Add(data);
@@ -449,9 +513,9 @@ public partial class DataManager
             int maxRow = GetSheetMaxRow(sheet);
             for (int row = startRow; row <= maxRow; row++)
             {
-                string cell = sheet.Cells[row, 1].Text;
-                if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, 2].Text)) continue;
-                GrowthCurveDict[curveID][SafeGetInt(sheet.Cells[row, 1].Value)] = SafeGetFloat(sheet.Cells[row, 2].Value);
+                string cell = sheet.Cells[row, FindColumnByHeader(sheet, "Level")].Text;
+                if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, FindColumnByHeader(sheet, "Multiplier")].Text)) continue;
+                GrowthCurveDict[curveID][SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Level")].Value)] = SafeGetFloat(sheet.Cells[row, FindColumnByHeader(sheet, "Multiplier")].Value);
             }
         }
     }

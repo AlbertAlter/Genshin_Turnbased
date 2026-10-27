@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 单次伤害来源声明（2026-08-19，状态钩子任务）。
@@ -29,7 +30,7 @@ public sealed class DamageSourceInfo
     /// <summary>实际造成该次伤害的效果ID2。</summary>
     public string SourceEffectID;
 
-    /// <summary>该次伤害对应的反应类型（不是反应伤害时为 None）。</summary>
+    /// <summary>该次伤害的反应分类，含显式月曜/星烁技能伤害；不代表一定发生了ReactionOccurred。</summary>
     public ReactionType ReactionType;
 
     /// <summary>直接产生本次伤害的角色状态；技能和全局反应伤害为空。</summary>
@@ -38,9 +39,13 @@ public sealed class DamageSourceInfo
     /// <summary>来源状态身份快照；状态移除后仍可用于日志与筛选。</summary>
     public string SourceStatusID;
     public long SourceStatusApplyOrder;
+    /// <summary>仅装备来源携带；死亡后取消尚未提交的伤害，不影响已发生的伤害声明。</summary>
+    public EquipmentEffectSource EquipmentSource;
 
     /// <summary>本次伤害是否同时构成一次“攻击命中”。反应派生伤害只产生 OnDamage，不产生 OnHit。</summary>
     public bool CountsAsHit;
+    /// <summary>公共月曜伤害的不可变得分明细；归功由来源保存（雷云生成者/月笼本次协奏者），不按权重重派发。</summary>
+    public IReadOnlyList<LunarDamageContribution> LunarContributions { get; internal set; }
 
     public DamageSourceInfo Snapshot() => (DamageSourceInfo)MemberwiseClone();
 
@@ -110,6 +115,7 @@ public sealed class DamageSourceInfo
             SourceEffectID = sourceEffectID ?? string.Empty,
             ReactionType = reactionType,
             SourceStatus = status,
+            EquipmentSource = status?.EquipmentSource,
             SourceStatusID = status != null ? status.StatusID2 ?? string.Empty : string.Empty,
             SourceStatusApplyOrder = status != null ? status.ApplyOrder : 0,
             CountsAsHit = hasOwner
@@ -129,6 +135,7 @@ public sealed class DamageSourceInfo
             SourceSide = source != null ? source.Side : BattleSide.Ally,
             HasSourceEntity = source != null,
             SourceKind = context != null ? context.SourceKind : ReactionSourceKind.DerivedReaction,
+            EquipmentSource = context?.EffectiveEquipmentSource,
             SourceSkillID = context != null ? context.SourceSkillID : string.Empty,
             SourceEffectID = context != null ? context.SourceEffectID : string.Empty,
             ReactionType = reactionType,
@@ -153,6 +160,7 @@ public sealed class DamageSourceInfo
             HasSourceEntity = snapshot != null
                 && (snapshot.SourceEntity != null || snapshot.SourceEntityID != 0),
             SourceKind = snapshot != null ? snapshot.SourceKind : ReactionSourceKind.DerivedReaction,
+            EquipmentSource = snapshot?.EquipmentSource,
             SourceSkillID = snapshot != null ? snapshot.SourceSkillID : string.Empty,
             SourceEffectID = snapshot != null ? snapshot.SourceEffectID : string.Empty,
             ReactionType = reactionType,

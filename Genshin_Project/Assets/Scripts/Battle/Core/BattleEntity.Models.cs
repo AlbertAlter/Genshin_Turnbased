@@ -7,6 +7,7 @@ public class ElementalAura
     public string Element;          // Pyro / Hydro / Electro / Cryo / Anemo / Dendro / Geo
     public float AuraAmount;        // 剩余附着量
     public int SourceEntityID;      // 附着来源实体ID（用于扩散感电/结晶追踪）
+    [NonSerialized] public BattleEntity SourceEntity; // 精确来源实例；同配置ID的不同单位不能互相冒领
     public string SourceSkillID;    // 附着来源技能
     public string SourceEffectID;   // 附着来源效果
     public int OriginPhase = -1;    // 施加时的阶段（2026-08-14）：元素量每回合-0.5，按施加阶段定原点
@@ -44,6 +45,7 @@ public class Shield
 [Serializable]
 public class StatusInstance
 {
+    [NonSerialized] public object Host;              // 真实宿主；不是Buff受益者，也不改变Caster/self语义。
     public string StatusID2;                        // 对应 StatusMainData.StatusID2
     public int StackCount;                          // 普通状态每份实例固定1；兼容旧脚本数据，Count点数不放这里
     public int RemainingPhaseCount;                 // 剩余持续回合数（按 Phase 结算）
@@ -54,14 +56,21 @@ public class StatusInstance
     public int SourceEntityID;                      // 状态来源实体ID；来源退场后仍可查询归属
     public BattleSide SourceSide;                   // 状态来源阵营
     public bool HasSourceEntity;                    // 全局反应状态等无角色来源时为 false
-    public Dictionary<string, float> Snapshot;      // 快照属性（状态生成时读取施法者面板）
+    public Dictionary<string, float> Snapshot;      // 专用规则的数值缓存（如武器）；通用公式记忆使用FormulaSnapshot。
+    // 公共魔导白名单状态在实际创建时固定。重新施加产生新实例才重读窗口，旧实例不追溯。
+    [NonSerialized] public float HexereiMultiplier = 1f;
+    /// <summary>通用公式快照；与武器Snapshot字典缓存分开，不拥有状态行动或资源。</summary>
+    [NonSerialized] public StatusFormulaSnapshot FormulaSnapshot;
+    [NonSerialized] internal StatusInstance FormulaSnapshotParent; // 仅绑定子状态跨阶段调用父效果时定位同一份记忆。
     /// <summary>
-    /// 钩子可读写的实例级元素记录；空字符串表示尚未记录，不等同于物理元素 None。
+    /// 钩子可读写的实例级元素记录；空字符串表示尚未记录，不等同于 Physical 或 None 伤害类型。
     /// 使用 Pyro/Hydro/Electro/Cryo/Anemo/Dendro/Geo 等既有元素标识。
     /// 同一实例叠层/刷新时保留，新建实例为空；不自动继承给绑定子状态，也不自动改变伤害元素。
     /// 何时写入、锁定或清除由使用该字段的钩子决定，不修改共享配表。
     /// </summary>
     public string RuntimeElement = string.Empty;
+    /// <summary>Enchant专用实例数据：元素、攻击附着量、是否允许被覆盖；与Count及元素记录独立。</summary>
+    public EnchantStatusData Enchant;
     /// <summary>
     /// 特殊代码管理的状态运行时数值，不是层数或配表常量。
     /// 生命之契保存剩余绝对值；Count 由各自的专用处理器管理，可存小数且不自动归零移除。
@@ -103,13 +112,21 @@ public class StatusInstance
     }
     /// <summary>专用 Count 自己拥有的附加记录；公共系统不解释这些规则。</summary>
     public object CountRuntimeState;
+    /// <summary>仅开战构筑处理器标记：此实例的生命加成已计入TotalHP，最终查询不得重复相加。</summary>
+    [NonSerialized] internal bool HPBonusIncludedInPanel;
     public bool IsActive;                           // 是否已执行过 OnApply
     public StatusMainData MainData;                 // 配表状态主数据（MaxStack/WhenMax 等规则）
     public WeaponRuntimeContext WeaponContext;      // 武器来源上下文；非武器状态为空
+    /// <summary>真实装备者的生命期；普通子状态、队友和场地上的效果均继承，不改归功来源。</summary>
+    public EquipmentEffectSource EquipmentSource;
+    /// <summary>每次读取动态解析{n}，不修改共享主表Description。</summary>
+    public string GetDescription(object host = null)
+        => StatusDescriptionResolver.Resolve(this, host);
     // ========== 行动触发计数（2026-08-14，Status_Action 的 MaxTimePerTurn/MaxTimePerLife/Cooldown） ==========
     public int TurnTriggerCount;                    // 本回合已触发次数（MaxTimePerTurn，回合开始懒重置）
     public int LifeTriggerCount;                    // 全场已触发次数（MaxTimePerLife，不重置）
-    public int LastTriggerTurn = -1;                // 上次触发回合（Cooldown 冷却判定）
+    public int LastTriggerTurn = -1;                // 上次成功触发的回合
+    public int LastTriggerPhase;                    // 上次成功触发的阶段（1～6；0为旧记录未提供）
     public int LastActionTurn = -1;                 // 上次计数回合（懒重置对比用）
     public long ApplyOrder;                         // 施加顺序序号（全局递增，同阶段结算时先施加的先触发）
     public Dictionary<string, StatusActionRuntimeState> ActionRuntime = new Dictionary<string, StatusActionRuntimeState>();
@@ -138,5 +155,16 @@ public sealed class StatusActionRuntimeState
     public int TurnTriggerCount;
     public int LifeTriggerCount;
     public int LastTriggerTurn = -1;
+    public int LastTriggerPhase;
     public int LastActionTurn = -1;
+
+    /// <summary>冷却N回合须到上次成功触发后第N轮的同一阶段；不影响每回合次数分桶。</summary>
+    public bool IsCoolingDown(int cooldown, int turn, int phase)
+    {
+        if (cooldown <= 0 || LastTriggerTurn < 0) return false;
+        long readyTurn = (long)LastTriggerTurn + cooldown;
+        if (turn != readyTurn) return turn < readyTurn;
+        // 兼容没有阶段信息的旧记录，不凭空构造一个触发阶段。
+        return LastTriggerPhase >= 1 && LastTriggerPhase <= 6 && phase < LastTriggerPhase;
+    }
 }

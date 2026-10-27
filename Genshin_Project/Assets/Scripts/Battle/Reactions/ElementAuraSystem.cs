@@ -4,6 +4,29 @@
 /// </summary>
 public static class ElementAuraSystem
 {
+    /// <summary>写回分流：固有池满足本次额度但不扣除；有限池仍由原宿主处理。查询类不承担修改。</summary>
+    public static void ConsumeReactionAura(ReactionContext context, string element, float amount)
+    {
+        if (context?.Target == null || amount <= 0f) return;
+        // 盾的GU按EnemyShield表统一扣除，反应handler不再按普通元素比例重复扣盾。
+        if (context.RestrictedAuraKind == ReactionPoolKind.EnemyShield
+            && ElementQuery.ReadShield(context, element) != null) return;
+        if (context.AllowsReactionPool(element, ReactionPoolKind.Intrinsic)
+            && ElementQuery.ReadIntrinsic(context.Target, element) != null) return;
+        float remaining = amount;
+        if (context.AllowsReactionPool(element, ReactionPoolKind.NormalAura))
+        {
+            float consumed = ElementQuery.ReadNormal(context.Target, element)?.AvailableFor(remaining) ?? 0f;
+            context.Target.ConsumeAura(element, consumed);
+            remaining -= consumed;
+        }
+        if (remaining <= 0f) return;
+        if (element == "Cryo" && !context.IgnoreFrozenAura && context.AllowsReactionPool(element, ReactionPoolKind.Frozen))
+            FrozenReactionHandler.ConsumeFrozenAura(context.Target, remaining);
+        if (element == "Pyro" && context.AllowsReactionPool(element, ReactionPoolKind.Burning))
+            BurningReactionHandler.ConsumeBurningAura(context.Target, remaining);
+    }
+
     public static void PrepareIncomingAura(ReactionContext context)
     {
         if (!CanApply(context) || context.PreserveIncomingAuraBeforeReaction) return;
@@ -16,20 +39,38 @@ public static class ElementAuraSystem
     public static void CommitIncomingAura(ReactionContext context, float remainingAmount)
     {
         if (!CanApply(context)) return;
-        if (context.PreserveIncomingAuraBeforeReaction && remainingAmount <= 0f)
+        if (context.EnemyShieldHit?.HadShieldAtStart == true)
         {
-            context.Target.RemoveAura(context.AttackElement);
+            // 仅感电仍可保留未消耗完的后手水/雷供后续tick；破盾这一击不留下溢出附着。
+            Shield shield = context.Target.GetEnemyElementalShield();
+            bool conducting = shield != null && !context.EnemyShieldHit.BrokeShield
+                && (shield.Element == "Hydro" && context.AttackElement == "Electro"
+                    || shield.Element == "Electro" && context.AttackElement == "Hydro");
+            if (!conducting) return;
+        }
+        if (context.PreserveIncomingAuraBeforeReaction)
+        {
+            // 残留清算不刷新已有池的真实来源和计时原点。
+            using var elements = ElementEventScope.Begin("ReactionConsumption", context.Target);
+            if (remainingAmount <= 0f) context.Target.RemoveAura(context.AttackElement);
+            else
+            {
+                ElementalAura existing = context.Target.GetAura(context.AttackElement);
+                if (existing != null) existing.AuraAmount = remainingAmount;
+            }
             return;
         }
         if (remainingAmount <= 0f) return;
 
-        int sourceEntityID = context.SourceEntity != null ? context.SourceEntity.EntityID : 0;
+        BattleEntity sourceEntity = context.SourceEntity ?? context.SourceSnapshotOverride?.SourceEntity;
+        int sourceEntityID = sourceEntity != null ? sourceEntity.EntityID : 0;
         context.Target.ApplyAura(
             context.AttackElement,
             remainingAmount,
             sourceEntityID,
             context.SourceEffectID,
-            context.SourceSkillID);
+            context.SourceSkillID,
+            sourceEntity);
         if (context.SkipImmediateAuraDecay)
         {
             ElementalAura aura = context.Target.GetAura(context.AttackElement);
@@ -44,7 +85,7 @@ public static class ElementAuraSystem
             && context.Target != null
             && context.AttackAmount > 0f
             && !string.IsNullOrEmpty(context.AttackElement)
-            && context.AttackElement != "None"
+            && ElementQuery.IntrinsicStatusID(context.AttackElement) != null
             // Geo and Anemo attacks can react, but neither is written as a normal aura.
             && context.AttackElement != "Geo"
             && context.AttackElement != "Anemo";

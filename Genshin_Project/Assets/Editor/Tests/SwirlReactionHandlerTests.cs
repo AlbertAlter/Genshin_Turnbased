@@ -199,7 +199,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             typeof(SwirlReactionHandler)
                 .GetMethod("ResolveStageThree", BindingFlags.Static | BindingFlags.NonPublic)
-                .Invoke(null, new object[] { target, source, aggregate });
+                .Invoke(null, new object[] { target, source, aggregate, null });
 
             Assert.That(target.GetAura("Electro"), Is.Null);
             Assert.That(target.GetAura("Cryo").AuraAmount, Is.EqualTo(1f).Within(0.001f));
@@ -221,6 +221,56 @@ namespace GenshinTurnBased.Tests.EditMode
             };
         }
 
+        [Test]
+        public void ReverseSwirl_ConductsThroughIntrinsicAnemo_WithoutReturnOrRepeatedSwirlDamage()
+        {
+            var left = NewEntity("Chain_Left", BattleSide.Enemy, 1);
+            var origin = NewEntity("Chain_Origin", BattleSide.Enemy, 2);
+            var right = NewEntity("Chain_Right", BattleSide.Enemy, 3);
+            AddIntrinsic(left, "Anemo"); AddIntrinsic(origin, "Anemo"); AddIntrinsic(right, "Anemo");
+            var context = NewContext(origin, 1.5f, 101);
+            context.AttackElement = "Pyro";
+            var prepared = SwirlReactionHandler.PrepareBatch(new[] { context });
+            var result = SwirlReactionHandler.ResolvePreparedBatch(prepared);
+            float expected = 100f * 1.2f * (1f + 16f * 200f / 2200f);
+            Assert.That(origin.CurrentHP, Is.EqualTo(10000f - expected).Within(.001f));
+            Assert.That(left.CurrentHP, Is.EqualTo(10000f));
+            Assert.That(right.CurrentHP, Is.EqualTo(10000f));
+            Assert.That(result.Reaction.TriggeredReactions.FindAll(r => r.Type == ReactionType.Swirl), Has.Count.EqualTo(3));
+            foreach (var target in new[] { left, origin, right })
+            {
+                Assert.That(result.Reaction.TriggeredReactions.FindAll(r => r.Type == ReactionType.Swirl && ReferenceEquals(r.Target, target)),
+                    Has.Count.EqualTo(1));
+                Assert.That(ElementQuery.ReadIntrinsic(target, "Anemo"), Is.Not.Null);
+                Assert.That(ElementQuery.ReadNormal(target, "Pyro"), Is.Null);
+            }
+            Assert.That(SwirlReactionHandler.ResolvePreparedBatch(prepared).Reaction.HasReaction, Is.False,
+                "同一已提交计划不能再次伤害、声明或传播");
+        }
+
+        [Test]
+        public void IntrinsicAuraSwirl_SuppliesOnlyTheFiniteAnemoQuota_AndIndependentHitsCanTriggerAgain()
+        {
+            var origin = NewEntity("Intrinsic_Hydro", BattleSide.Enemy, 2);
+            var adjacent = NewEntity("Intrinsic_Adjacent", BattleSide.Enemy, 1);
+            AddIntrinsic(origin, "Hydro");
+            var result = SwirlReactionHandler.ResolveBatch(new[] { NewContext(origin, .375f, 102) });
+            Assert.That(result.Reaction.HasReaction, Is.True);
+            Assert.That(ElementQuery.GetAmount(adjacent, "Hydro"), Is.EqualTo(.375f));
+            Assert.That(ElementQuery.ReadIntrinsic(origin, "Hydro"), Is.Not.Null);
+            Assert.That(ElementQuery.ReadNormal(origin, "Hydro"), Is.Null);
+            float before = origin.CurrentHP;
+            Assert.That(SwirlReactionHandler.ResolveBatch(new[] { NewContext(origin, .375f, 103) }).Reaction.HasReaction, Is.True);
+            Assert.That(origin.CurrentHP, Is.LessThan(before), "新hit不沿用上一次来源链的访问集合");
+        }
+
+        private static void AddIntrinsic(BattleEntity target, string element)
+        {
+            string id = ElementQuery.IntrinsicStatusID(element);
+            target.AddStatus(id, target, 0, 1, 0,
+                new StatusMainData { StatusID2 = id, MaxStack = 1, MaxCount = 1, WhenMax = "1" });
+        }
+
         private BattleEntity NewEntity(string name, BattleSide side, int position)
         {
             GameObject gameObject = NewObject(name);
@@ -229,8 +279,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.SlotPosition = position;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
             FieldPosition slot = _battle.Field.GetSlot(side, position);
             slot.Occupant = entity;
             entity.Position = slot;

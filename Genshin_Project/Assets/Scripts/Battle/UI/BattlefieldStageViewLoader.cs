@@ -14,6 +14,11 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
 {
     public TextAsset stageConfigJson;
 
+    private void Awake()
+    {
+        if (Application.isPlaying) BattlefieldPresentationPlayer.EnsureOn(gameObject);
+    }
+
     private IEnumerator Start()
     {
         // ExecuteAlways also invokes lifecycle methods while the scene is being
@@ -78,7 +83,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
         {
             StageAllySetup ally = allies[index];
-            BindImage(group, "CharacterCardArt", $"art_assets/Character_Whole/{ally.CharacterID}_03.png");
+            BindImage(group, "CharacterCardArt", $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
         });
         BindOrderedGroups("角色栏", "角色", allies.Count,
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>

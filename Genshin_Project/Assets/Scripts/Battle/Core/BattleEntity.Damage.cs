@@ -4,12 +4,10 @@ using UnityEngine;
 
 public partial class BattleEntity
 {
-    private static bool _battleEndCheckPending;
-
     /// <summary>清理战斗会话的待处理结束检查，供战斗重置和测试环境清理共用。</summary>
     public static void ResetDamageResolutionSession()
     {
-        _battleEndCheckPending = false;
+        BattleDeathResolution.ResetSession();
     }
 
     // ========== 伤害/治疗 ==========
@@ -25,7 +23,7 @@ public partial class BattleEntity
     ///  1. 记录 HPBefore；2. 扣除并限制血量不低于0；3. 生成 DamageResolvedEvent；
     ///  4. HitLanded 时触发目标的统一 OnHit（StatusOnHitHookSystem）；
     ///  5. CausedDeath 时广播死亡声明（KillHookSystem，先于战斗结束通知，确保击杀最后敌人仍能收到）；
-    ///  6. 最后调用 BattleManager.CheckBattleEnd()；7. 返回事件对象。
+    ///  6. 在完整行为或独立状态效果链结清后处理复活及胜负；7. 返回事件对象。
     /// </summary>
     public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source)
     {
@@ -35,6 +33,7 @@ public partial class BattleEntity
 
     public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source, bool hitLanded)
     {
+        if (!EquipmentStatusLifetime.CanExecute(source)) return null;
         DamageResolvedEvent damageEvent = ApplyDamageCore(damage, source, hitLanded);
         FinalizeDamageEvents(new[] { damageEvent });
         return damageEvent;
@@ -48,6 +47,13 @@ public partial class BattleEntity
         if (IsDead)
             hitLanded = false;
 
+        BattleEntity sourceEntity = source?.SourceEntity;
+        bool sourceWasPartyMember = false;
+        var battle = BattleManager.Instance;
+        if (sourceEntity != null && battle != null)
+            foreach (var ally in battle.Allies)
+                if (ally?.Entity == sourceEntity) { sourceWasPartyMember = true; break; }
+        bool sourceWasOnField = sourceWasPartyMember && sourceEntity.CharacterCtrl?.IsActive == true;
         float hpBefore = CurrentHP;
         CurrentHP -= damage;
         if (CurrentHP < 0f) CurrentHP = 0f;
@@ -56,9 +62,12 @@ public partial class BattleEntity
         {
             Target = this,
             Source = source?.Snapshot() ?? DamageSourceInfo.CreateUnknown(),
+            SourceWasPartyMember = sourceWasPartyMember,
+            SourceWasOnField = sourceWasOnField,
             HPBefore = hpBefore,
             HPAfter = CurrentHP,
             RequestedHPDamage = damage,
+            DamageBeforeShield = damage,
             ActualHPDamage = Mathf.Max(0f, hpBefore - CurrentHP),
             HitLanded = hitLanded,
             CausedDeath = hpBefore > 0f && CurrentHP <= 0f
@@ -73,28 +82,32 @@ public partial class BattleEntity
     /// </summary>
     internal static void FinalizeDamageEvents(IReadOnlyList<DamageResolvedEvent> damageEvents)
     {
+        using var declarationResolution = BattleEventHub.BeginResolution();
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
         if (damageEvents == null || damageEvents.Count == 0) return;
 
+        bool hasDeaths = false;
+        foreach (DamageResolvedEvent damage in damageEvents)
+            if (damage?.CausedDeath == true) { hasDeaths = true; break; }
+        using var deathWindow = BattleDeathResolution.EnterDamageBatch(hasDeaths);
         using var responses = BattleResolutionContext.BeginCollection();
+        foreach (DamageResolvedEvent damage in damageEvents)
+            if (damage?.CausedDeath == true) EquipmentStatusLifetime.OnDeath(damage.Target);
+        foreach (DamageResolvedEvent damage in damageEvents)
+            if (damage?.CausedDeath == true) CharacterStatusLifetime.OnDeath(damage.Target);
         StatusOnHitHookSystem.NotifyDamageBatch(damageEvents);
         var deaths = new List<DamageResolvedEvent>();
         foreach (DamageResolvedEvent damageEvent in damageEvents)
             if (damageEvent != null && damageEvent.CausedDeath)
                 deaths.Add(damageEvent.Snapshot());
         if (deaths.Count == 0) return;
+        BattleDeathResolution.RecordDeaths(deaths);
         BattleResolutionContext.AfterResponses(() =>
         {
             using (BattleResolutionContext.BeginCollection())
                 foreach (DamageResolvedEvent death in deaths)
                     KillHookSystem.NotifyDeath(death);
-            _battleEndCheckPending = true;
-            BattleResolutionContext.AfterSettlement(() =>
-            {
-                if (!_battleEndCheckPending) return;
-                _battleEndCheckPending = false;
-                BattleManager.Instance?.CheckBattleEnd();
-            });
+            BattleResolutionContext.AfterSettlement(BattleDeathResolution.AfterDamageSettlement);
         });
     }
 

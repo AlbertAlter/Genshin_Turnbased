@@ -76,37 +76,27 @@ public static class StatusOnHitHookSystem
     {
         using var collection = BattleResolutionContext.BeginCollection();
         if (actor == null || skill == null) return;
+        using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(
+            new ActionEventData(actor, skill.SkillID2, skill.ActionType, false)));
         DataManager dm = DataManager.Instance;
         if (dm == null) return;
 
-        foreach (StatusInstance status in new List<StatusInstance>(actor.GetStatusList()))
-            NotifyPlayerActionForStatus(status, actor, actor, skill, dm);
-        if (actor.Position == null) return;
-        foreach (StatusInstance status in new List<StatusInstance>(actor.Position.StatusList))
-            NotifyPlayerActionForStatus(status, actor.Position, actor, skill, dm);
+        StatusHostAccess.VisitEntity(actor, (statuses, host) =>
+        {
+            foreach (var status in statuses) NotifyPlayerActionForStatus(status, host, actor, skill, dm);
+        });
     }
 
     /// <summary>换人正式提交后，收集双方进出场声明；响应仍按全局 ApplyOrder 执行。</summary>
-    public static void NotifySwitch(BattleEntity outgoing, BattleEntity incoming)
+    public static void NotifySwitch(BattleEntity outgoing, BattleEntity incoming, BattleSwitchReason reason = BattleSwitchReason.Unknown)
     {
         if (outgoing == incoming || incoming == null) return;
         using var collection = BattleResolutionContext.BeginCollection();
+        using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(new SwitchEventData(outgoing, incoming, reason)));
         DataManager dm = DataManager.Instance;
         BattleManager battle = BattleManager.Instance;
         if (dm == null || battle == null) return;
-        foreach (CharacterBattleController ally in battle.Allies)
-            if (ally != null && ally.Entity != null)
-                NotifySwitchForHost(ally.Entity.GetStatusList(), ally.Entity, outgoing, incoming, dm);
-        foreach (EnemyBattleController enemy in battle.Enemies)
-            if (enemy != null && enemy.Entity != null)
-                NotifySwitchForHost(enemy.Entity.GetStatusList(), enemy.Entity, outgoing, incoming, dm);
-        if (battle.Field != null)
-        {
-            foreach (FieldPosition field in battle.Field.AllySlots)
-                if (field != null) NotifySwitchForHost(field.StatusList, field, outgoing, incoming, dm);
-            foreach (FieldPosition field in battle.Field.EnemySlots)
-                if (field != null) NotifySwitchForHost(field.StatusList, field, outgoing, incoming, dm);
-        }
+        StatusHostAccess.VisitBattle(battle, (statuses, host) => NotifySwitchForHost(statuses, host, outgoing, incoming, dm));
     }
 
     static void NotifySwitchForHost(IEnumerable<StatusInstance> statuses, object host,
@@ -156,17 +146,29 @@ public static class StatusOnHitHookSystem
         using var collection = BattleResolutionContext.BeginCollection();
         if (damageEvents == null) return;
         DataManager dm = DataManager.Instance;
-        if (dm == null) return;
 
         var candidates = new List<DamageHookCandidate>();
         long sequence = 0;
         foreach (DamageResolvedEvent damageEvent in damageEvents)
         {
             if (damageEvent == null || damageEvent.Target == null) continue;
+            damageEvent.Declaration = damageEvent.Declaration ?? BattleEventHub.Record(damageEvent,
+                new DamageEventData(damageEvent), damageEvent.RuntimeHitID, damageEvent.TargetIndex);
+            using var declaration = BattleEventHub.Enter(damageEvent.Declaration);
+            BattleEventHub.Dispatch(damageEvent.Declaration);
+            HPDecreaseEvent hpDecrease = null;
+            BattleDeclaration hpDeclaration = null;
+            if (damageEvent.ActualHPDamage > 0f)
+            {
+                hpDecrease = new HPDecreaseEvent(damageEvent.Target, damageEvent.HPBefore, damageEvent.HPAfter);
+                hpDeclaration = BattleEventHub.Publish(new HPChangedEventData(damageEvent.Target,
+                    damageEvent.HPBefore, damageEvent.HPAfter, "Damage"), hpDecrease);
+            }
+            if (dm == null) continue;
             if (!damageEvent.HitLanded && damageEvent.ActualHPDamage <= 0f) continue;
             RecordDamageEffectHit(damageEvent);
             if (damageEvent.ActualHPDamage > 0f)
-                CollectHPDecrease(new HPDecreaseEvent(damageEvent.Target, damageEvent.HPBefore, damageEvent.HPAfter), dm, damageEvent);
+                CollectHPDecrease(hpDecrease, dm, damageEvent, hpDeclaration);
 
             BattleEntity source = damageEvent.Source != null ? damageEvent.Source.SourceEntity : null;
             if (source != null)
@@ -174,12 +176,16 @@ public static class StatusOnHitHookSystem
                 AddDamageCandidates(candidates, source.GetStatusList(), source, damageEvent, dm, true, ref sequence);
                 if (source.Position != null)
                     AddDamageCandidates(candidates, source.Position.StatusList, source.Position, damageEvent, dm, true, ref sequence);
+                var sourceTeam = BattleManager.Instance?.GetTeamFor(source);
+                if (sourceTeam != null) AddDamageCandidates(candidates, sourceTeam.GetStatusList(), sourceTeam, damageEvent, dm, true, ref sequence);
             }
 
             BattleEntity target = damageEvent.Target;
             AddDamageCandidates(candidates, target.GetStatusList(), target, damageEvent, dm, false, ref sequence);
             if (target.Position != null)
                 AddDamageCandidates(candidates, target.Position.StatusList, target.Position, damageEvent, dm, false, ref sequence);
+            var targetTeam = BattleManager.Instance?.GetTeamFor(target);
+            if (targetTeam != null) AddDamageCandidates(candidates, targetTeam.GetStatusList(), targetTeam, damageEvent, dm, false, ref sequence);
         }
 
         candidates.Sort((left, right) =>
@@ -238,18 +244,20 @@ public static class StatusOnHitHookSystem
     {
         if (change == null) return;
         using var collection = BattleResolutionContext.BeginCollection();
+        using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(new HPChangedEventData(
+            change.Target, change.HPBefore, change.HPAfter, "HPCost"), change));
         DataManager dm = DataManager.Instance;
         if (dm != null) CollectHPDecrease(change, dm, null);
     }
 
-    static void CollectHPDecrease(HPDecreaseEvent change, DataManager dm, DamageResolvedEvent damage)
+    static void CollectHPDecrease(HPDecreaseEvent change, DataManager dm, DamageResolvedEvent damage, BattleDeclaration declaration = null)
     {
         // 保存变化发生时已存在的状态候选；不能让同层响应新建的潜光追溯获得本次计数。
-        foreach (StatusInstance status in change.Target.GetEffectiveStatusList())
+        StatusHostAccess.VisitEntity(change.Target, (statuses, host) =>
         {
+          foreach (StatusInstance status in statuses)
+          {
             if (!CanExecute(status) || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) continue;
-            object host = change.Target.HasStatusInstance(status)
-                ? (object)change.Target : change.Target.Position;
             foreach (StatusActionData action in actions)
             {
                 if (action.ActionType != "OnTrigger"
@@ -259,11 +267,13 @@ public static class StatusOnHitHookSystem
                 {
                     Caster = status.Caster, Target = change.Target, Status = status, StatusHost = host,
                     HPDecreaseEvent = change, DamageEvent = damage,
+                    Declaration = declaration ?? BattleEventHub.Find(change) ?? BattleEventHub.Current,
                     HitEffectID = damage?.Source?.SourceEffectID,
                     EventHookName = "HPDecreased", EventHookArgument = argument
                 });
             }
-        }
+          }
+        });
     }
 
     static bool ContainsDamageCandidate(
@@ -306,12 +316,7 @@ public static class StatusOnHitHookSystem
 
     static bool IsStillHosted(StatusInstance status, object host)
     {
-        if (status == null || host == null) return false;
-        if (host is BattleEntity entity)
-            return entity.HasStatusInstance(status);
-        if (host is FieldPosition field)
-            return field.StatusList != null && field.StatusList.Contains(status);
-        return true;
+        return StatusHostAccess.Contains(host, status);
     }
 
     static void RecordDamageEffectHit(DamageResolvedEvent damageEvent)
@@ -331,6 +336,7 @@ public static class StatusOnHitHookSystem
         if (frame == null) return;
         int index = DamageEffectFrames.LastIndexOf(frame);
         if (index >= 0) DamageEffectFrames.RemoveAt(index);
+        BattleSpecialRules.CompleteDamageEffect(frame.Source, frame.SourceEffectID);
         if (!frame.IsActiveAction
             || frame.Source == null
             || frame.Source.Side != BattleSide.Ally
@@ -345,11 +351,17 @@ public static class StatusOnHitHookSystem
         AddPostDamageCandidates(candidates, frame.Source.GetStatusList(), frame.Source, "PostSelfDamage", dm);
         if (frame.Source.Position != null)
             AddPostDamageCandidates(candidates, frame.Source.Position.StatusList, frame.Source.Position, "PostSelfDamage", dm);
+        var sourceTeam = BattleManager.Instance?.GetTeamFor(frame.Source);
+        if (sourceTeam != null)
+            foreach (var status in sourceTeam.GetStatusList())
+                if (status.Caster == frame.Source)
+                    AddPostDamageCandidates(candidates, new[] { status }, sourceTeam, "PostSelfDamage", dm);
 
         // Allies：检查我方所有角色和我方场地状态。
         BattleManager battle = BattleManager.Instance;
         if (battle != null)
         {
+            AddPostDamageCandidates(candidates, battle.AllyTeam.GetStatusList(), battle.AllyTeam, "PostAlliesDamage", dm);
             foreach (CharacterBattleController ally in battle.Allies)
             {
                 BattleEntity entity = ally != null ? ally.Entity : null;
@@ -427,7 +439,7 @@ public static class StatusOnHitHookSystem
         DamageEffectFrame frame,
         DataManager dm)
     {
-        if (!CanExecute(status)) return;
+        if (!CanExecute(status) || WeaponDamageCompletionHooks.OwnsPostDamage(status)) return;
         if (!dm.StatusActionDict.TryGetValue(status.StatusID2, out List<StatusActionData> actions)) return;
 
         foreach (StatusActionData action in actions)
@@ -460,6 +472,7 @@ public static class StatusOnHitHookSystem
 
             PostDamageHookSystem.SetPositions(argument, positions);
             DamageResolvedEvent lastEvent = matchedEvents[matchedEvents.Count - 1];
+            if (!WeaponPostDamageGate.Allow(status, action, lastEvent)) continue;
             ExecuteEvent(status, action, host, new ScriptHookContext
             {
                 Caster = status.Caster,
@@ -487,42 +500,51 @@ public static class StatusOnHitHookSystem
     {
         if (target == null || requestedAmount <= 0f) return;
         var heal = new HealResolvedEvent(source, target, requestedAmount,
-            target.CurrentHP - actualAmount, target.CurrentHP, target.TotalHP, null, 1, 1);
+            target.CurrentHP - actualAmount, target.CurrentHP, target.GetFinalHP(), null, 1, 1);
         heal.MarkCommitted();
-        using (BattleResolutionContext.BeginCollection()) CollectHeal(heal);
+        using (BattleResolutionContext.BeginCollection())
+        {
+            BattleEventHub.Publish(new HealEventData(heal), heal);
+            CollectHeal(heal);
+        }
     }
 
     /// <summary>只记录候选；由 HealBatch 的收集作用域在全部 HP 提交后统一确认。</summary>
     internal static void CollectHeal(HealResolvedEvent heal)
     {
         if (heal == null || heal.Target == null || heal.RequestedAmount <= 0f) return;
+        BattleEventHub.Record(heal, new HealEventData(heal), targetIndex: heal.TargetIndex);
         BattleEntity source = heal.Source;
         BattleEntity target = heal.Target;
         DataManager dm = DataManager.Instance;
         if (dm == null) return;
 
-        bool selfHeal = source != null && source == target;
-        foreach (StatusInstance status in new List<StatusInstance>(target.GetStatusList()))
-            NotifyHealForStatus(status, target, heal, true, selfHeal, dm);
-        if (target.Position != null)
+        var visited = new HashSet<object>();
+        var sourceTeam = BattleManager.Instance?.GetTeamFor(source);
+        StatusHostAccess.VisitEntity(target, (statuses, host) =>
         {
-            foreach (StatusInstance status in new List<StatusInstance>(target.Position.StatusList))
-                NotifyHealForStatus(status, target.Position, heal, true, selfHeal, dm);
-        }
-
-        if (source == null || selfHeal) return;
-        foreach (StatusInstance status in new List<StatusInstance>(source.GetStatusList()))
-            NotifyHealForStatus(status, source, heal, false, true, dm);
-        if (source.Position == null) return;
-        foreach (StatusInstance status in new List<StatusInstance>(source.Position.StatusList))
-            NotifyHealForStatus(status, source.Position, heal, false, true, dm);
+            if (!visited.Add(host)) return;
+            bool performed = source == target || host is BattleTeamStatusHost team && team == sourceTeam;
+            foreach (var status in statuses) NotifyHealForStatus(status, host, heal, true, performed, dm);
+        });
+        StatusHostAccess.VisitEntity(source, (statuses, host) =>
+        {
+            if (!visited.Add(host)) return;
+            foreach (var status in statuses) NotifyHealForStatus(status, host, heal, false, true, dm);
+        });
     }
 
     /// <summary>我方角色实际消耗 AP 后派发全局 APUsed。</summary>
-    public static void NotifyAPUsed(BattleEntity spender, int amount)
+    public static void NotifyAPUsed(BattleEntity spender, int amount,
+        APSpendKind spendKind = APSpendKind.Unspecified, string sourceSkillID = null)
     {
         using var collection = BattleResolutionContext.BeginCollection();
         if (spender == null || spender.Side != BattleSide.Ally || amount <= 0) return;
+        int after = BattleManager.Instance?.APManager?.CurrentAP ?? 0;
+        // 独立调用方没有全局池时仅声明已知的消耗量，不伪造池前后余额。
+        using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(
+            new APSpentEventData(spender, amount, BattleManager.Instance?.APManager != null ? (int?)after : null,
+                spendKind, sourceSkillID)));
         DataManager dm = DataManager.Instance;
         if (dm == null) return;
 
@@ -540,6 +562,9 @@ public static class StatusOnHitHookSystem
         }
 
         var visited = new HashSet<StatusInstance>();
+        foreach (var team in new[] { bm.AllyTeam, bm.EnemyTeam })
+            foreach (var status in team.GetStatusList())
+                if (visited.Add(status)) NotifyAPUsedForStatus(status, team, spender, dm);
         foreach (CharacterBattleController ally in bm.Allies)
         {
             BattleEntity owner = ally != null ? ally.Entity : null;
@@ -565,21 +590,24 @@ public static class StatusOnHitHookSystem
         using var collection = BattleResolutionContext.BeginCollection();
         if (occurrences == null) return;
         DataManager dm = DataManager.Instance;
-        if (dm == null) return;
 
         foreach (ReactionOccurrence occurrence in occurrences)
         {
             if (occurrence == null || NotifiedReactions.TryGetValue(occurrence, out _)) continue;
             NotifiedReactions.Add(occurrence, ReactionNotifiedMarker);
+            occurrence.Declaration = BattleEventHub.Publish(new ReactionEventData(occurrence), occurrence);
+            using var declaration = BattleEventHub.Enter(occurrence.Declaration);
+            // 沿原反应派发边界提交资源；先有真实反应身份，整批候选收集完成后才执行响应。
+            LunarBloomReactionHandler.GrantDew(occurrence);
             BattleExecution.Record(occurrence);
+            if (dm == null) continue;
             BattleEntity source = occurrence.SourceEntity;
             if (source == null || occurrence.Type == ReactionType.None) continue;
 
-            foreach (StatusInstance status in new List<StatusInstance>(source.GetStatusList()))
-                NotifyReactionForStatus(status, source, occurrence, dm);
-            if (source.Position == null) continue;
-            foreach (StatusInstance status in new List<StatusInstance>(source.Position.StatusList))
-                NotifyReactionForStatus(status, source.Position, occurrence, dm);
+            StatusHostAccess.VisitEntity(source, (statuses, host) =>
+            {
+                foreach (var status in statuses) NotifyReactionForStatus(status, host, occurrence, dm);
+            });
         }
     }
 
@@ -672,6 +700,7 @@ public static class StatusOnHitHookSystem
             if (action.ActionType != "OnTrigger" || !MatchesRelatedStatus(action.APUsed, spender)) continue;
             ExecuteEvent(status, action, host, new ScriptHookContext
             {
+                Declaration = BattleEventHub.Current,
                 Caster = status.Caster,
                 Target = spender,
                 Status = status,
@@ -714,7 +743,52 @@ public static class StatusOnHitHookSystem
     static bool CanExecute(StatusInstance status)
     {
         return status != null && status.IsActive && status.Caster != null
-            && status.Caster.CharacterCtrl != null;
+            && (status.Caster.CharacterCtrl != null || status.Caster.EnemyCtrl != null);
+    }
+
+    /// <summary>新声明钩子统一捕获具体实例；旧 OnHit/APUsed 等仍由各自适配器分发，不重复执行。</summary>
+    internal static Action CaptureDeclaration(BattleDeclaration declaration)
+    {
+        var dm = DataManager.Instance;
+        if (dm == null || declaration == null) return null;
+        var responses = new List<Action>();
+        var visited = new HashSet<StatusInstance>();
+        void Collect(IEnumerable<StatusInstance> statuses, object host)
+        {
+            foreach (StatusInstance status in new List<StatusInstance>(statuses))
+            {
+                if (!visited.Add(status) || !CanExecute(status)
+                    || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) continue;
+                foreach (StatusActionData action in actions)
+                {
+                    if (action.ActionType != "OnTrigger"
+                        || !ScriptHookParser.TryParseAll(action.ScriptHook, out var calls)) continue;
+                    foreach (var call in calls)
+                    {
+                        if (!ScriptHookEvaluator.IsDeclarationHook(call.FunctionName)
+                            || !ScriptHookEvaluator.MatchesDeclaration(call.FunctionName, call.Argument, status, declaration)) continue;
+                        var context = new ScriptHookContext {
+                            Caster = status.Caster, Target = declaration.Data.Subject, Status = status,
+                            StatusHost = host, Declaration = declaration,
+                            EventHookName = call.FunctionName, EventHookArgument = call.Argument };
+                        responses.Add(() => ExecuteEvent(status, action, host, context));
+                        break; // 一条行动只提交一次；全部条件仍在原确认阶段求值一次。
+                    }
+                }
+            }
+        }
+        BattleManager battle = BattleManager.Instance;
+        if (battle != null)
+        {
+            StatusHostAccess.VisitBattle(battle, Collect);
+        }
+        BattleEntity subject = declaration.Data.Subject;
+        if (subject != null)
+        {
+            Collect(subject.GetStatusList(), subject);
+            if (subject.Position != null) Collect(subject.Position.StatusList, subject.Position);
+        }
+        return () => { foreach (var response in responses) response(); };
     }
 
     static void ExecuteEvent(
@@ -723,8 +797,11 @@ public static class StatusOnHitHookSystem
         object host,
         ScriptHookContext context)
     {
-        status.Caster.CharacterCtrl.TryExecuteEventStatusAction(status, action, host, context,
-            () => CanExecute(status) && IsStillHosted(status, host));
+        if (status.Caster.CharacterCtrl != null)
+            status.Caster.CharacterCtrl.TryExecuteEventStatusAction(status, action, host, context,
+                () => CanExecute(status) && IsStillHosted(status, host));
+        else status.Caster.EnemyCtrl.TryExecuteEventStatusAction(status, action, host, context,
+                () => CanExecute(status) && IsStillHosted(status, host));
     }
 
     static bool MatchesPlayerAction(string configured, SkillMainData skill)
@@ -749,6 +826,9 @@ public static class StatusOnHitHookSystem
 
         GetDamageMetadata(damageEvent.Source, dm,
             out int effectID, out string damageType, out string element);
+        // 动态转化不能按共享配表的占位元素分类；事件中的实际提交结果优先。
+        if (!string.IsNullOrEmpty(damageEvent.Element)) element = damageEvent.Element;
+        if (!string.IsNullOrEmpty(damageEvent.DamageType)) damageType = damageEvent.DamageType;
         string reaction = ReactionDamageCalculator.GetConfiguredReactionName(damageEvent.Source.ReactionType);
         bool isElement = !string.IsNullOrEmpty(element)
             && !string.Equals(element, "None", StringComparison.OrdinalIgnoreCase)

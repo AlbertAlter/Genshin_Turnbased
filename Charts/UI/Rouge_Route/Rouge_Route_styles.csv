@@ -1,0 +1,27 @@
+﻿Key,Value,Type,Unit,ValidRange,Description,Adjustment
+Line.RenderMode,Procedural,enum,无,Procedural / BrushTexture,Procedural由程序生成短笔触轮廓；BrushTexture沿连线排列笔触贴图。两种方式均随长度增减笔触数量。,当前默认纯程序方案；笔触贴图准备好后可改用BrushTexture。
+Line.Color,#716758,color,#RRGGBB,六位十六进制RGB,所有连线的基础颜色；当前使用UI统一深棕RGB(113/103/88)。透明度单独由Line.Opacity控制。,改为#998F81即为UI浅棕；不在此列填写透明度。
+Line.Opacity,0.9,float,比例,0～1,整条连线的不透明度；0完全透明；1完全不透明。,降低后路线更淡；提高后更醒目。
+Line.Width,3,float,设计像素,大于0；建议2～4,单个笔触中部的基础厚度；屏幕分辨率变化时随Canvas整体缩放。,增大线会变粗；不会增加每段长度或改变节点间距。
+Line.DashLength,12,float,设计像素,大于0；建议8～18,单段笔触沿连线方向的目标长度；不是整条连线长度。,增大后每一笔更长；同一条连线通常会排更少段。
+Line.GapLength,8,float,设计像素,大于0；建议4～12,相邻两段笔触之间的目标空白长度；实际间隔还会受长度适配与间隔变化影响。,增大更稀疏；减小更密集。
+Line.LengthVariation,0.1,float,相对变化比例,0～0.5；建议0～0.15,每段长度相对DashLength的最大上下变化；0.1表示目标长度乘0.9～1.1。,填0则每笔目标长度一致；过大会显得杂乱。
+Line.WidthVariation,0.1,float,相对变化比例,0～0.5；建议0～0.15,不同笔触的基础厚度相对Width的最大上下变化；0.1表示乘0.9～1.1。,控制笔与笔之间的粗细差异；不控制单笔边缘的起伏。
+Line.GapVariation,0.1,float,相对变化比例,0～0.5；建议0～0.15,分配空白时各段间隔权重的上下变化；0.1表示权重乘0.9～1.1；最终归一化到剩余总空白。,填0则适配后的间隔均分；增大可减少机械等距感。
+Line.AngleVariation,2,float,度,0～5；建议0～2,每段笔触相对节点连线方向的最大上下旋转角；2表示-2度～+2度。,只旋转短笔触；不改变路线端点和实际连接关系。
+Line.OffsetVariation,0.5,float,设计像素,0～2；建议0～0.5,每段中心沿连线垂直方向的最大上下偏移；0.5表示-0.5～+0.5。,控制轻微手抖感；过大会让路线看起来弯曲。
+Line.EdgeRoughness,0.15,float,设计像素,0～Width的0.25倍；建议0～0.3,纯程序模式下单笔边缘相对平滑轮廓的最大起伏；贴图模式由贴图Alpha决定并忽略此项。,与OffsetVariation不同；此项改变笔触边缘而非整笔中心位置。
+Line.EndRoundness,1,float,比例,0～1,纯程序模式下短笔触端部的圆润程度；0为平头；1为完全圆润的端帽。贴图模式由原图决定。,接近1更圆润可爱；接近0更像截断的直线。
+Line.EndTaper,0.1,float,收窄比例,0～0.5,纯程序模式下端帽之前的笔触厚度相对中部收窄比例；0.1表示端部过渡至中部厚度的90%。,填0粗细均匀；数值增大则笔触两头更细；与端部圆角共同生效。
+Line.SamplesPerDash,5,int,采样点数,3～12；建议4～6,纯程序模式下沿每段笔触建立轮廓的采样点数；越多越能表达边缘起伏。贴图模式忽略。,增加会提高几何量；不是虚线的段数。
+Line.NodeGap,4,float,设计像素,大于等于0；建议3～6,连线两端在节点外接半径之外额外保留的空白；每端退让量为该端节点半径加本值。,30x30节点按半径15计算；填4表示从节点中心退让19；不按镂空眼孔或剑刃形状穿入图标。
+Line.FitMode,AdjustGap,enum,无,AdjustGap / CenterPattern,AdjustGap保留笔触长度并将余量分配到内部间隔；CenterPattern保持目标笔触和间隔并将余量平均留在两端。,两种模式均靠改变笔触段数适配长度；可用长度不足一笔时缩短该笔并居中。
+Line.PatternSeed,12345,int,固定样式种子,0～2147483647,只用于确定笔触变化的固定输入；结合起终节点ID和笔触序号生成稳定样式；不消耗BattleRandom。,同一地图与相同参数会显示相同笔触；改此值换一套变化；拖动缩放时不重新抽样。
+Line.BrushTextures,,path_list,StreamingAssets相对路径,可空；多个路径用英文分号分隔,仅BrushTexture模式使用；填写透明底笔触PNG路径；从StreamingAssets根目录开始。纯程序模式忽略。,示例art_assets/rouge/routeicon/Brush_01.png；空值或缺图时回退Procedural并提示；当前尚无笔触贴图。
+Node.UseIcons,True,bool,无,True / False,True显示已配置的节点图标；False使用原测试圆点。,此项仅影响显示；不改变节点种类和地图生成结果。
+Node.Color,#716758,color,#RRGGBB,六位十六进制RGB,当前三种单色图标的统一颜色；运行时按图片Alpha绘制；当前为UI深棕RGB(113/103/88)。,保留透明轮廓；不会因生成图自身轻微RGB色差导致节点颜色不一致。
+Node.Opacity,1,float,比例,0～1,普通战斗事件和精英图标的不透明度；0透明；1不透明。,与Line.Opacity分开控制；当前不定义可达或已通过状态。
+Node.IconSize,30,float,设计像素,大于0；建议保持30,图标等比缩放后的最大宽高；先按有效Alpha内容去除透明留白；较长一边使用本值。,当前为30x30显示框；改变尺寸后需同时检查节点最小间距是否仍合适。
+Node.BattleIcon,art_assets/rouge/routeicon/Battle_v1.png,path,StreamingAssets相对路径,非空PNG路径,普通战斗节点使用的交叉剑图标；源文件在仓库art_assets对应相对位置。,运行程序读取已发布的StreamingAssets图片；不读取美术源目录。
+Node.EventIcon,art_assets/rouge/routeicon/Event_v1.png,path,StreamingAssets相对路径,非空PNG路径,事件节点使用的问号图标。,更换图片路径后还需按既有美术同步流程发布资源。
+Node.EliteIcon,art_assets/rouge/routeicon/Elite_v3.png,path,StreamingAssets相对路径,非空PNG路径,精英节点使用的双角圆脸图标；v3为已去掉两侧耳朵的版本。,Boss不共用此图标；Boss后续按各自身份单独配置。

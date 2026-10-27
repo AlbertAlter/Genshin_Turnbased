@@ -38,7 +38,6 @@ namespace GenshinTurnBased.Tests.EditMode
                     Assert.That(hits, Has.Count.EqualTo(1));
                     Assert.That(hits[0].Multiplier, Is.EqualTo(1f));
                     Assert.That(hits[0].ElementAura, Is.EqualTo(2f));
-                    Assert.That(hits[0].Poise, Is.Zero);
                 }
                 float baseValue = (float)controller.GetMethod("ResolveReferenceBaseValue", flags)
                     .Invoke(env.Ally, new object[] { expression, "STE_Bunny3", 2, "Pyro" });
@@ -53,7 +52,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", "1*TotalATK,0", 30, 2);
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", "1*TotalATK,0", 30, 2);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();
                 env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
@@ -73,7 +72,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", "1*TotalATK,0");
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", "1*TotalATK,0");
                 env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_2"][1].Hits2 = "1*TotalATK,0";
                 env.CreateMinimalBattle();
                 env.Enemy.Entity.TotalHP = 75f;
@@ -98,7 +97,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using (var env = new BattleFlowTestEnv())
             {
                 const string effectID = "SE_Skill_CritSequence";
-                env.ConfigureAllyAction(2, "SK_Skill_CritSequence", effectID, "None", "1*TotalATK,0");
+                env.ConfigureAllyAction(2, "SK_Skill_CritSequence", effectID, "Physical", "1*TotalATK,0");
                 env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_2"][1].Hits2 =
                     "1*TotalATK,0";
                 env.CreateMinimalBattle();
@@ -130,7 +129,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using (var env = new BattleFlowTestEnv())
             {
                 const string effectID = "SE_Skill_SplashCrit";
-                env.ConfigureAllyAction(2, "SK_Skill_SplashCrit", effectID, "None", "1*TotalATK,0");
+                env.ConfigureAllyAction(2, "SK_Skill_SplashCrit", effectID, "Physical", "1*TotalATK,0");
                 env.DataManager.SkillEffectDict[effectID].Param2 = "Splash(1; 0,1)";
                 env.CreateMinimalBattle();
                 EnemyBattleController adjacent = env.CreateEnemy(2);
@@ -159,7 +158,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None", "1*TotalATK,0");
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical", "1*TotalATK,0");
                 env.CreateMinimalBattle();
                 env.Enemy.Entity.AddShield(30f, string.Empty, 2f);
                 env.Manager.StartBattle();

@@ -16,4 +16,6 @@ public class RoguelikeProgressSnapshot
     public PendingRewardData PendingRewardData;
     public int RunSeed;
     public int RandomStep;
+    // 可空以兼容旧快照；新流程由 RoguelikeFlowService 维护。
+    public RoguelikeFlowData Flow;
 }

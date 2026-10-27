@@ -68,9 +68,9 @@ public static class WorkbookIntegrityValidator
         "BondOfLife", "NightSoul"
     };
 
-    private static readonly HashSet<string> AllowedElements = new HashSet<string>(StringComparer.Ordinal)
+    private static readonly HashSet<string> AllowedElements = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        "None", "Physical", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro"
+        "None", "Physical", "True", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro"
     };
 
     private static readonly HashSet<string> AllowedDamageTypes = new HashSet<string>(StringComparer.Ordinal)

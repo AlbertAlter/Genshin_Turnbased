@@ -20,9 +20,9 @@ public partial class DataManager
         int maxRow = GetSheetMaxRow(sheet);
         for (int row = startRow; row <= maxRow; row++)
         {
-            string cell = sheet.Cells[row, 1].Text;
-            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, 2].Text)) continue;
-            ReactionLevelCoefficientDict[SafeGetInt(sheet.Cells[row, 1].Value)] = SafeGetFloat(sheet.Cells[row, 2].Value);
+            string cell = sheet.Cells[row, FindColumnByHeader(sheet, "lv")].Text;
+            if (string.IsNullOrEmpty(cell) && string.IsNullOrEmpty(sheet.Cells[row, FindColumnByHeader(sheet, "coefficient")].Text)) continue;
+            ReactionLevelCoefficientDict[SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "lv")].Value)] = SafeGetFloat(sheet.Cells[row, FindColumnByHeader(sheet, "coefficient")].Value);
         }
     }
 }

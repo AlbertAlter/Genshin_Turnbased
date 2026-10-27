@@ -117,6 +117,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _source.Type = BattleEntity.EntityType.Enemy;
             _source.TotalEM = 999f;
+            _source.BaseDMGBonus = 1f;
             ApplyQuickenState(_source);
 
             QuickenDamageHandler.TryResolve(

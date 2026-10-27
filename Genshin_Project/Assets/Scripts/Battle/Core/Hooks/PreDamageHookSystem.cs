@@ -81,13 +81,15 @@ public static class PreDamageHookSystem
 
         foreach (PreDamageHookEntry entry in snapshot)
         {
-            if (entry.EventHookName == "PreSelfDamage" && !IsHostedByActor(entry.Host, activeActor))
+            if (entry.EventHookName == "PreSelfDamage" && !(entry.Host is BattleTeamStatusHost
+                    ? entry.Caster == activeActor : IsHostedByActor(entry.Host, activeActor)))
                 continue;
 
             StatusInstance status = GetActiveInstance(entry);
             if (status == null || status.Caster == null || status.Caster.CharacterCtrl == null) continue;
             ScriptHookParser.TryFind(entry.TriggerLine.ScriptHook, entry.EventHookName, out string argument);
-            object executionHost = entry.EventHookName == "PreSelfDamage" ? entry.Host : status.Caster;
+            object executionHost = entry.EventHookName == "PreSelfDamage" || entry.Host is BattleTeamStatusHost
+                ? entry.Host : status.Caster;
             status.Caster.CharacterCtrl.TryExecuteEventStatusAction(
                 status,
                 entry.TriggerLine,
@@ -136,8 +138,7 @@ public static class PreDamageHookSystem
             if (eventHookName == "PreSelfDamage" && !ReferenceEquals(entry.Host, host)) continue;
             // 一次赋予多个宿主的 Allies 钩子仍共享声明；同一宿主上的再次施加是独立实例。
             if (!entry.Instances.Contains(instance) && entry.Instances.Exists(existing =>
-                host is BattleEntity entity ? entity.HasStatusInstance(existing)
-                    : host is FieldPosition field && field.StatusList.Contains(existing))) continue;
+                StatusHostAccess.Contains(host, existing))) continue;
             return entry;
         }
         return null;

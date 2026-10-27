@@ -23,11 +23,9 @@ public sealed class DMGTakenSnapshot
             bool matches = string.IsNullOrWhiteSpace(filter);
             if (!matches)
             {
-                foreach (string token in filter.Split(';'))
-                    if (string.Equals(token.Trim(), "All", StringComparison.OrdinalIgnoreCase))
-                    { matches = true; break; }
-                if (!matches && reactionType != ReactionType.None)
-                    matches = ReactionFilterMatcher.Matches(filter, reactionType, reactionType.ToString());
+                // All仍限定真实反应，不把普通无反应伤害算进反应专属承伤。
+                matches = reactionType != ReactionType.None && Enum.IsDefined(typeof(ReactionType), reactionType)
+                    && ReactionFilterMatcher.Matches(filter, reactionType, reactionType.ToString());
             }
             if (matches) total += contribution.Value;
         }
@@ -55,35 +53,43 @@ public partial class BattleEntity
             if (main == null || !status.IsActive || main.GetMultiplierPart() != "DMGTaken") continue;
             if (!MatchesDMGTakenFilter(main.ApplyString, effectID, skillID)) continue;
             if (!MatchesDMGTakenFilter(main.ApplyDamageType, damageType)) continue;
-            string physicalElement = string.IsNullOrWhiteSpace(element)
-                || string.Equals(element, "None", StringComparison.OrdinalIgnoreCase) ? "Physical" : element;
-            if (!MatchesDMGTakenFilter(main.ApplyElementType, physicalElement,
-                    string.Equals(physicalElement, "Physical", StringComparison.OrdinalIgnoreCase) ? "None" : null)) continue;
+            if (!MatchesDMGTakenFilter(main.ApplyElementType, element)) continue;
 
             var context = new ScriptHookContext
             {
                 Caster = status.Caster,
                 Target = this,
                 Status = status,
-                StatusHost = Position != null && Position.StatusList != null && Position.StatusList.Contains(status)
-                    ? (object)Position : this,
-                HitEffectID = effectID
+                Recipient = this,
+                StatusHost = StatusHostAccess.FindHost(status, this),
+                HitEffectID = effectID,
+                DamageSkillID = skillID,
+                DamageType = damageType,
+                DamageElement = element
             };
             if (!ScriptHookEvaluator.Evaluate(main.ScriptHook, context)) continue;
             int count = StatusAggregation.Take(status, used);
             if (count == 0) continue;
 
             float value = 0f;
+            bool collected = false;
             foreach (StatusEffectData effect in dm.StatusEffectDict.Values)
             {
                 if (effect == null || effect.StatusEffectID / 100 != main.StatusID
                     || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
                 if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, context)) continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, status, out float scalar)
-                    && !float.IsNaN(scalar) && !float.IsInfinity(scalar))
-                    value += scalar * count;
+                if (!HexereiStatusEnhancement.TryResolveScalar(effect, status, out float scalar)) continue;
+                if (float.IsNaN(scalar) || float.IsInfinity(scalar)) continue;
+                value += scalar * count;
+                collected = true; // 合法的0也占额度；全部条件/解析失败才退还。
             }
-            contributions.Add(new KeyValuePair<string, float>(main.ApplyReactionType, value));
+            if (collected) contributions.Add(new KeyValuePair<string, float>(main.ApplyReactionType, value));
+            else if (main.MaxCount > 0)
+            {
+                string id = status.StatusID2 ?? main.StatusID.ToString();
+                used[id] -= count;
+                if (used[id] == 0) used.Remove(id);
+            }
         }
         return new DMGTakenSnapshot(contributions);
     }

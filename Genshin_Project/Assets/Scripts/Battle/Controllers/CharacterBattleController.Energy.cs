@@ -1,14 +1,16 @@
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 /// <summary>
-/// 角色能量获取：统一处理技能效果与状态效果的 Based / Flat / Direct 充能。
+/// 角色能量获取：统一处理技能效果与状态效果的 Based / Flat 充能，保留float小数。
 /// </summary>
 public partial class CharacterBattleController
 {
     void ExecuteGainEnergy(SkillEffectData effect)
     {
-        if (effect == null || !float.TryParse(effect.Param1, out float gainedEnergy)) return;
+        if (effect == null || !float.TryParse(effect.Param1, NumberStyles.Float,
+            CultureInfo.InvariantCulture, out float gainedEnergy)) return;
         List<BattleEntity> targets = ResolveTargets(effect);
         if (targets == null) return;
 
@@ -27,7 +29,9 @@ public partial class CharacterBattleController
         StatusInstance sourceStatus,
         object host)
     {
-        if (effect == null || !float.TryParse(effect.Param1, out float gainedEnergy)) return;
+        if (effect == null) return;
+        if (!WeaponHooks.TryResolveEnergy(effect, sourceStatus, out float gainedEnergy)
+            && !float.TryParse(effect.Param1, NumberStyles.Float, CultureInfo.InvariantCulture, out gainedEnergy)) return;
         List<BattleEntity> targets = ResolveStatusTargets(effect, sourceStatus, host);
         if (targets == null) return;
 
@@ -36,13 +40,14 @@ public partial class CharacterBattleController
             if (target == null) continue;
             float totalEnergy = ApplyEnergyGain(
                 target, gainedEnergy, effect.Param2, effect.Element);
+            WeaponStackTransferHooks.EnergyCommitted(effect, sourceStatus, target);
             LogManager.Log(LogCategory.StatusEnergy,
                 $"{target.EntityID} +{totalEnergy:F1}");
         }
     }
 
     // TotalEnergy = GainedEnergy × OnstageStatus × ElementStatus × TotalRechargeRate
-    private static float ApplyEnergyGain(
+    public static float ApplyEnergyGain(
         BattleEntity target,
         float gainedEnergy,
         string gainMode,
@@ -55,15 +60,18 @@ public partial class CharacterBattleController
         {
             float onstageStatus = GetEnergyOnstageStatus(target);
             float elementStatus = GetEnergyElementStatus(target, energyElement);
-            float totalRechargeRate = target.TotalRechargeRate > 0f
-                ? target.TotalRechargeRate
-                : 1f;
+            float totalRechargeRate = target.GetFinalRechargeRate();
             totalEnergy = gainedEnergy * onstageStatus * elementStatus * totalRechargeRate;
         }
 
+        if (float.IsNaN(totalEnergy) || float.IsInfinity(totalEnergy))
+            throw new System.InvalidOperationException("GainEnergy计算结果必须为有限数值。");
+        float before = target.CurrentEnergy;
         target.CurrentEnergy = Mathf.Min(
-            target.CurrentEnergy + Mathf.RoundToInt(totalEnergy),
+            before + totalEnergy,
             target.MaxEnergy);
+        if (totalEnergy != 0f) BattleEventHub.Publish(new ResourceEventData("Energy", "Energy", target,
+            before, target.CurrentEnergy, totalEnergy, ResourceChangeReason.Gain, false));
         return totalEnergy;
     }
 

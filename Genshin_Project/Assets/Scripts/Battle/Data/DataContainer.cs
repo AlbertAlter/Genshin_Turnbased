@@ -8,7 +8,67 @@ using System.Collections.Generic;
 public class CharacterOverviewData
 {
     public int CharacterID;              // 角色唯一ID
+    public string NameID;                // 原有英文标识，不由中文元数据覆盖
     public string Name;                  // 角色显示名
+    public string Nation;                // 中文归属；明确无归属="无归属"，空值=尚未配置
+    public string Element;               // 中文配表解析为既有Pyro/Hydro等战斗标识
+    public int WeaponType = -1;          // 中文配表解析为既有0..4；-1=尚未配置，不能冒充单手剑
+}
+
+/// <summary>角色总表的中文身份值映射。只转换明确填写的值，空白不自动等于无归属。</summary>
+public static class CharacterMetadataParser
+{
+    public static string ParseNation(string raw)
+    {
+        string value = (raw ?? string.Empty).Trim();
+        switch (value)
+        {
+            case "": return string.Empty;
+            case "无归属": case "None": return "无归属";
+            case "蒙德": case "Mondstadt": return "蒙德";
+            case "璃月": case "Liyue": return "璃月";
+            case "稻妻": case "Inazuma": return "稻妻";
+            case "须弥": case "Sumeru": return "须弥";
+            case "枫丹": case "Fontaine": return "枫丹";
+            case "纳塔": case "Natlan": return "纳塔";
+            case "挪德卡莱": case "NodKrai": return "挪德卡莱";
+            case "至冬": case "Snezhnaya": return "至冬";
+            default: throw new TableValidationException("角色Nation未识别的归属：[" + raw + "]");
+        }
+    }
+
+    public static string ParseElement(string raw)
+    {
+        string value = (raw ?? string.Empty).Trim();
+        switch (value)
+        {
+            case "": return string.Empty;
+            case "火": case "火元素": case "Pyro": return "Pyro";
+            case "水": case "水元素": case "Hydro": return "Hydro";
+            case "雷": case "雷元素": case "Electro": return "Electro";
+            case "冰": case "冰元素": case "Cryo": return "Cryo";
+            case "风": case "风元素": case "Anemo": return "Anemo";
+            case "草": case "草元素": case "Dendro": return "Dendro";
+            case "岩": case "岩元素": case "Geo": return "Geo";
+            case "无": case "无元素": case "None": return "None";
+            default: throw new TableValidationException("角色Element未识别的元素：[" + raw + "]");
+        }
+    }
+
+    public static int ParseWeaponType(string raw)
+    {
+        string value = (raw ?? string.Empty).Trim();
+        switch (value)
+        {
+            case "": return -1;
+            case "单手剑": case "0": return 0;
+            case "双手剑": case "1": return 1;
+            case "弓": case "弓箭": case "2": return 2;
+            case "长枪": case "长柄": case "长柄武器": case "3": return 3;
+            case "法器": case "4": return 4;
+            default: throw new TableValidationException("角色WeaponType未识别的武器类型：[" + raw + "]");
+        }
+    }
 }
 
 // ============================================================
@@ -20,6 +80,7 @@ public class CharacterAttributesData
     public int CharacterID;              // 角色唯一ID
     public string NameID;                // 角色英文标识（用于代码匹配）
     public string Name;                  // 角色显示名
+    public string Nation;                // 从角色总表取得的中文归属，不要求每个Attributes重复配置
     public int Star;                     // 稀有度（4/5）
     public int GrowthCurveID;            // 成长GrowthCurve的曲线编号
     public int WeaponType;               // 武器类型（用枚举：0单手剑 1双手剑 2弓 3长柄 4法器）
@@ -28,7 +89,6 @@ public class CharacterAttributesData
     public float BaseATK;                // Lv1 基础攻击力
     public float BaseDEF;                // Lv1 基础防御力
     public int MaxEnergy;                // 最大能量值（元素爆发最大方可释放元素爆发）
-    public float Poise;                  // 初始韧性（受击打断）
     public float HitWeight;              // 受击权重
     public string NormalAttackID;        // 普攻技能字符串ID
     public string HeavyAttackID;         // 重击技能字符串ID
@@ -73,6 +133,7 @@ public class CharacterAscensionData
     public float CritDMG;                // 暴击伤害（0.5=50%）
     public float EM;                     // 元素精通
     public float EnergyRechargeRate;     // 充能效率加成
+    public float HealBonus;              // 本次突破的治疗加成增量；旧表未配置时为0
     public float PyroDmgBonus;           // 元素增伤
     public float HydroDmgBonus;
     public float ElectroDmgBonus;
@@ -98,7 +159,7 @@ public class SkillMainData
     public int MaxCharge;                // 可存储技能次数（-1=无限制）
     public int InitialCharge;            // 战斗开始时初始技能次数
     public int SkillPhase;               // 多段技能阶段（0=非多段；同Phase值的技能按SkillID顺序连段）
-    public string ActionType;            // Normal/Skill/Burst/Heavy 用于监听
+    public string ActionType;            // 主动行为类别；空=不声明行为，不由倍率SkillType或伤害DamageType推断
     public string Icon;                  // UI 图标ID或相对路径（不含扩展名时默认PNG）
     public string Description;           // 技能描述（长按按钮显示）
 }
@@ -109,6 +170,9 @@ public class SkillMainData
 [Serializable]
 public class SkillEffectData
 {
+    /// <summary>伤害运行时副本，仅改实际元素，不污染共享配表或伤害/行为分类。</summary>
+    public SkillEffectData WithDamageElement(string element)
+    { var copy = (SkillEffectData)MemberwiseClone(); copy.Element = element; return copy; }
     public HashSet<string> AuthoredFields; // 非空源单元格，区分空白与显式0。
     public string DamageHook;
     public int ExecuteCount = 1; // Empty table cell means one execution.
@@ -118,14 +182,14 @@ public class SkillEffectData
     public string SkillEffectID2;        // 效果字符串ID（SE_xxx）
     public int EffectIndex;              // 效果执行顺序（0起）
     public string EffectType;            // Damage / ApplyStatus / BindStatus / ExecuteSkill / ExecuteEffect / GainEnergy / RemoveStatus / ChangeControl 等
-    public string Element;               // 元素类型（Pyro/None等，None=物理）
+    public string Element;               // Damage填七元素、Physical物理、None直接伤害或True真实伤害；其他效果按自身规则。
     public string DamageType;            // Normal/Heavy/Skill/Burst（伤害标签）
     public int Duration;                 // ApplyStatus持续回合数；留空或0=永久
     public int AddInPhase;               // 状态加入的回合制状态机的阶段（1-6）
     public int TriggerPhase;             // OnItsTurn 触发阶段（1-6）；不调用事件行动 OnTrigger
     public string Param1;                // 效果参数1
-    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
-    public string Param3;
+    public string Param2;                // GainEnergy=Based/Flat；ApplyStatus目标为Enchant时=攻击附着量。
+    public string Param3;                // ApplyStatus目标为Enchant时空/0允许覆盖、1不可覆盖；Damage仍为性质标签。
     public string TargetType;            // Self / Enemy / EnemyField / Allies / AlliesOnly
     public int TargetNumber;             // 目标数量（-1=全部）
     public int TargetConsecutive;        // 0非连续 1连续 2连续随机 3非连续随机可重复 4非连续随机不可重复
@@ -141,10 +205,10 @@ public class SkillEffectData
 public class SkillLevelData
 {
     public int CharacterID;              // 所属角色ID（空=继承上一行）
-    public int SkillType;                // 0=普攻 1=重击 2=元素战技 3=元素爆发（空值继承）
+    public int SkillType;                // 倍率/技能等级归属：0普攻1重击2战技3爆发；不决定DamageType或ActionType
     public int SkillLevel;               // 技能等级（1-15）
     public string ParamID;               // Extensible parameter key; not restricted to effect IDs.
-    public string Hits1;                 // HitData格式（倍率*属性;削韧;元素量），支持多Hit
+    public string Hits1;                 // HitData格式（倍率*属性,元素量），支持多Hit
     public string Hits2;
     public string Hits3;
     public string Hits4;
@@ -175,7 +239,7 @@ public class TalentData
     public int CharacterID;              // 所属角色ID
     public int TalentIndex;              // 天赋序号
     public string TalentName;            // 天赋名（2026-08-14 新增列）
-    public int UnlockAfter;              // 解锁所需角色等级
+    public int UnlockAfter;              // 完成该等级突破后解锁；空白/0默认解锁
     public string Modifiers;             // 修改指令集（格式同命座）
     public string Description;           // 天赋文本（用于描述与展示）
 }
@@ -212,7 +276,7 @@ public class StatusMainData
     public string StatusName;            // 状态名称
     public string StatusType;            // Buff / Debuff / Shield 等
     public int Display;                  // 局内是否显示（0不显示，1显示）；不控制层数或数值的展示方式
-    public string Description;           // 状态描述
+    public string Description;           // 状态描述模板；{n}由StatusDescriptionResolver在显示时只读解析
     public string MultiplierPart1;       // Buff/Debuff加成公式（属性分类之一）
     public string MultiplierPart2;
     public string MultiplierPart3;
@@ -244,6 +308,8 @@ public class StatusMainData
 [Serializable]
 public class StatusEffectData
 {
+    public StatusEffectData WithDamageElement(string element)
+    { var copy = (StatusEffectData)MemberwiseClone(); copy.Element = element; return copy; }
     public HashSet<string> AuthoredFields;
     public string DamageHook;
     public int ExecuteCount = 1; // Empty table cell means one execution.
@@ -253,14 +319,14 @@ public class StatusEffectData
     public string StatusEffectID2;       // 状态效果字符串ID（STE_xxx）
     public int EffectIndex;              // 该状态效果执行顺序
     public string EffectType;            // Damage / ApplyStatus / BindStatus / Buff / Debuff / ExecuteEffect / GainEnergy / RemoveStatus
-    public string Element;               // 元素类型（Pyro/None等，None=物理）
+    public string Element;               // Damage填七元素、Physical物理、None直接伤害或True真实伤害；其他效果按自身规则。
     public string DamageType;            // Normal/Heavy/Skill/Burst（伤害标签）
     public int Duration;                 // ApplyStatus持续回合数；留空或0=永久
     public int AddInPhase;               // 状态加入的回合制状态机的阶段
     public int TriggerPhase;             // OnItsTurn 触发阶段；不调用事件行动 OnTrigger
     public string Param1;                // 参数1（Damage=HitData，支持%引用 P E token / ApplyStatus=目标状态ID2 / BindStatus=绑定的子状态ID2）
-    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
-    public string Param3;                // 参数3（Damage=元素量）
+    public string Param2;                // GainEnergy=Based/Flat；ApplyStatus/BindStatus目标为Enchant时=攻击附着量。
+    public string Param3;                // Damage=性质标签；施加Enchant时0/空=允许覆盖，1=不可覆盖。
     public string TargetType;            // Self / Allies / AlliesOnly / Enemy / EnemyField
     public string TargetSelect;          // X,X格式（原点为状态所在实体）
     public int TargetConsecutive;        // 同技能定义
@@ -276,13 +342,13 @@ public class StatusActionData
 {
     public int StatusID;                 // 所属状态数字ID
     public string StatusID2;             // 所属状态字符串ID（ST_xxx）
-    public string ActionType;            // OnApply / OnItsTurn / OnTrigger / OnEnd / OnHit 等（触发时机）
+    public string ActionType;            // 状态行动的触发时机OnApply/OnItsTurn/OnTrigger/OnEnd；不是Skill.ActionType行为分类
     public string Param1;                // 执行的状态效果ID2列表（分号分隔，如 STE_Bunny2;STE_Bunny4）
     public string Param2;                // 附加参数
     public string Param3;                // 附加参数
     public string ScriptHook;            // 布尔条件钩子；事件字段匹配后再求值
     public string OnAction;              // 主动行为类型过滤：Normal/Heavy/Skill/Burst/All
-    public string OutgoingHit;            // 状态拥有者主动命中过滤
+    public string OutgoingHit;            // 状态拥有者真实命中过滤，按实际DamageType等筛选；不要求主动行为
     public string OutgoingDamage;         // 状态拥有者实际造成伤害过滤
     public string OnHit;                  // 状态拥有者被命中过滤
     public string OnDamage;               // 状态拥有者实际损失生命过滤
@@ -294,17 +360,54 @@ public class StatusActionData
     public string ExecuteCountHandler;
     [Obsolete("Use OutgoingHit/OutgoingDamage/OnHit/OnDamage filters")]
     public string HitSource;              // 旧运行时构造兼容；工作簿不再读取此列
+    // 以下是运行时限次字段；新配表统一填写 MaxTimePer / MaxTime 两列。
+    public int MaxTimePerHit;            // 同一逻辑 hit 的最大收集次数（0=不限），不改变逐目标事件
     public int MaxTimePerTurn;           // 每回合最大触发次数（0=不限）
     public int MaxTimePerEffect;         // 同一源效果及全部衍生连锁的最大收集次数（<=0=不限）
-    public int MaxTimePerAction;         // 同一行动及全部效果/连锁的最大收集次数（<=0=不限）
-    public int MaxTimePerLife;           // 全场最大触发次数（0=不限）
+    public int MaxTimePerAction;         // 同一行动及全部效果/连锁；无外层行动时按具体状态本阶段完整调用（<=0=不限）
+    public int MaxTimePerLife;           // 本状态实例生命周期内累计最大触发次数（0=不限）
     public int Cooldown;                 // 行动冷却（回合，0=无）
     public string ActionKey;              // 运行时稳定键（工作簿/Sheet/数据行），用于逐行计数和冷却
+
+    public void SetTriggerLimits(string scopesText, string countsText)
+    {
+        var parsed = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(scopesText) || !string.IsNullOrWhiteSpace(countsText))
+        {
+            if (string.IsNullOrWhiteSpace(scopesText) || string.IsNullOrWhiteSpace(countsText))
+                throw new TableValidationException("MaxTimePer 与 MaxTime 必须对应填写，或同时留空");
+            string[] scopes = scopesText.Split(';');
+            string[] counts = countsText.Split(';');
+            if (scopes.Length != counts.Length)
+                throw new TableValidationException("MaxTimePer 与 MaxTime 的分号分项数量必须一致");
+            for (int index = 0; index < scopes.Length; index++)
+            {
+                string scope = scopes[index].Trim();
+                bool supported = scope.Equals("Hit", StringComparison.OrdinalIgnoreCase)
+                    || scope.Equals("Effect", StringComparison.OrdinalIgnoreCase)
+                    || scope.Equals("Action", StringComparison.OrdinalIgnoreCase)
+                    || scope.Equals("Turn", StringComparison.OrdinalIgnoreCase)
+                    || scope.Equals("Life", StringComparison.OrdinalIgnoreCase);
+                if (!supported || parsed.ContainsKey(scope))
+                    throw new TableValidationException($"MaxTimePer 类型无效或重复：[{scope}]；支持 Hit/Effect/Action/Turn/Life");
+                if (!int.TryParse(counts[index].Trim(), System.Globalization.NumberStyles.Integer,
+                        System.Globalization.CultureInfo.InvariantCulture, out int count) || count < 0)
+                    throw new TableValidationException($"MaxTime 必须为非负整数：[{counts[index]}]");
+                parsed.Add(scope, count);
+            }
+        }
+        MaxTimePerHit = parsed.TryGetValue("Hit", out int hit) ? hit : 0;
+        MaxTimePerEffect = parsed.TryGetValue("Effect", out int effect) ? effect : 0;
+        MaxTimePerAction = parsed.TryGetValue("Action", out int action) ? action : 0;
+        MaxTimePerTurn = parsed.TryGetValue("Turn", out int turn) ? turn : 0;
+        MaxTimePerLife = parsed.TryGetValue("Life", out int life) ? life : 0;
+    }
 }
 
 // ============================================================
-// StatusData.xlsx 的 Status_Attributes sheet —— 状态属性快照定义
-//   只有列在此表的状态在生成时需要快照施法者属性（空值表示仅记录用途）
+// StatusData.xlsx 的 Status_Attributes sheet —— 状态公式快照启用标记
+//   只需状态身份；后续旧属性列保留表结构兼容，不是数值常量或逐项开关。
+//   运行时公式参数独立保存到StatusInstance.FormulaSnapshot；武器Snapshot字典用途不变。
 // ============================================================
 [Serializable]
 public class StatusAttributesData
@@ -338,12 +441,13 @@ public class StatusAttributesData
 [Serializable]
 public class EnemyMainData
 {
+    public List<string> InitiateStatuses = new List<string>();
+    public string EnemyType;             // Enemy.xlsx的明确EnemyType；空表示未配置，不能猜为Minion。
     public int EnemyID;                  // 敌人唯一数字ID
     public string EnemyNameID;           // 敌人英文标识
     public string EnemyName;             // 敌人显示名
     public int Threat;                   // 威胁度
     public int ActsGiven;                // 每回合提供的可用行动次数
-    public float Poise;                  // 韧性
     public int ATK_Curve;                // 攻击力成长曲线编号
     public float HP_coeff;               // 生命值系数（乘以等级基础值=实际HP）
     public float ATK_coeff;              // 攻击力系数（乘以等级基础值=实际ATK）
@@ -386,6 +490,8 @@ public class EnemySkillMainData
 [Serializable]
 public class EnemySkillEffectData
 {
+    public EnemySkillEffectData WithDamageElement(string element)
+    { var copy = (EnemySkillEffectData)MemberwiseClone(); copy.Element = element; return copy; }
     public string DamageHook;
     public int ExecuteCount = 1; // Empty table cell means one execution.
     public string ExecuteCountHandler;
@@ -395,13 +501,13 @@ public class EnemySkillEffectData
     public int EffectIndex;              // 执行顺序
     public string EffectType;            // Damage / ApplyStatus / ApplyStatusToSelf 等
     public string Element;               // 元素类型
-    public string DamageType;            // Normal/Skill/Burst
+    public string DamageType;            // 实际伤害类别；不由敌人技能序号或倍率分类推断
     public int Duration;                 // ApplyStatus持续回合数；留空或0=永久
     public int AddInPhase;               // 添加阶段
     public int TriggerPhase;             // 触发阶段
     public string Param1;                // 参数1
-    public string Param2;                // GainEnergy：Based/Flat；ApplyStatus夜魂：非负int上限
-    public string Param3;                // 参数3
+    public string Param2;                // GainEnergy=Based/Flat；ApplyStatus目标为Enchant时=攻击附着量。
+    public string Param3;                // ApplyStatus目标为Enchant时空/0允许覆盖、1不可覆盖；Damage仍为性质标签。
     public string TargetType;            // 目标类型
     public int TargetNumber;             // 目标数量
     public int TargetConsecutive;        // 连续选取模式
@@ -418,7 +524,7 @@ public class EnemySkillParamData
     public int SkillEffectID;            // 对应的效果数字ID
     public string SkillEffectID2;        // 对应的效果字符串ID
     public string EffectType;            // Damage 等
-    public string Hits1;                 // HitData格式（倍率;削韧;元素量），敌人伤害统一用敌人TotalATK，倍率后不写属性
+    public string Hits1;                 // HitData格式（倍率,元素量），敌人伤害统一用敌人TotalATK，倍率后不写属性
     public string Hits2;
     public string Hits3;
     public string Hits4;
@@ -457,6 +563,7 @@ public class EnemyAIRuleData
     public int SkillID;                  // 该规则对应的技能数字ID
     public int SkillIndex;               // 技能序号
     public int Weight;                   // 权重值（权重模式使用）
+    public string ScriptHook;            // 抽选前判断资格，仅求值一次
 }
 
 // ============================================================

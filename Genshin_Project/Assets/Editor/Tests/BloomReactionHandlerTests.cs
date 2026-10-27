@@ -83,7 +83,6 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(_left.CurrentHP, Is.EqualTo(10000f - damage).Within(0.001f));
             Assert.That(_main.CurrentHP, Is.EqualTo(10000f - damage).Within(0.001f));
             Assert.That(_right.CurrentHP, Is.EqualTo(10000f - damage).Within(0.001f));
-            Assert.That(_main.Poise, Is.EqualTo(500f));
             Assert.That(BloomCoreSystem.ActiveCores, Is.Empty);
             Assert.That(core.Position.StatusList.Contains(core.DisplayStatus), Is.False);
         }
@@ -249,8 +248,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.SlotPosition = position;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
 
             FieldPosition slot = _battle.Field.GetSlot(side, position);
             slot.Occupant = entity;

@@ -4,21 +4,36 @@ using System.Threading;
 using System.Threading.Tasks;
 
 /// <summary>
-/// 源效果内所有 Hit、反应与状态派生共享 Effect，同一 ActionType 行动共享 Action。
+/// 源效果内所有 Hit、反应与状态派生共享 Effect，同一行动及其延伸共享 Action。
+/// 无外层行动的独立状态，以本阶段该次完整状态调用定义 Action，不新增主动行为声明。
 /// 上下文属于当前异步调用链；等待表现期间不会泄漏到 UI 或下一次外部调用。
 /// </summary>
 public static class BattleResolutionContext
 {
     public sealed class CounterScope
     {
+        /// <summary>独立状态行动的根实例；角色/敌人行动及Effect计数范围为null。</summary>
+        public StatusInstance IndependentStatus { get; }
+        public CounterScope() { }
+        internal CounterScope(StatusInstance status) { IndependentStatus = status; }
+        public long ScopeId { get; } = BattleEventHub.NextIdentity();
         private readonly Dictionary<(StatusInstance, string), int> _counts
             = new Dictionary<(StatusInstance, string), int>();
+        // 由根效果范围持有，随该范围释放；不保存跨战斗或全场历史 hit。
+        private readonly Dictionary<(long, StatusInstance, string), int> _hitCounts
+            = new Dictionary<(long, StatusInstance, string), int>();
 
         internal int Count(StatusInstance status, string key)
             => _counts.TryGetValue((status, key), out int count) ? count : 0;
 
         internal void Collect(StatusInstance status, string key)
             => _counts[(status, key)] = Count(status, key) + 1;
+
+        internal int CountHit(long hitID, StatusInstance status, string key)
+            => _hitCounts.TryGetValue((hitID, status, key), out int count) ? count : 0;
+
+        internal void CollectHit(long hitID, StatusInstance status, string key)
+            => _hitCounts[(hitID, status, key)] = CountHit(hitID, status, key) + 1;
     }
 
     private sealed class RestoreScope : IDisposable
@@ -193,6 +208,14 @@ public static class BattleResolutionContext
     }
 
     /// <summary>
+    /// 无外层行动时，一个状态本阶段的全部行动行、效果及延伸响应共享Action额度。
+    /// 嵌套状态沿用外层范围；这里只定义限次/因果范围，不提交角色主动行为声明。
+    /// </summary>
+    public static IDisposable BeginIndependentStatusAction(StatusInstance status)
+        => CurrentAction != null || status == null ? new RestoreScope(null)
+            : EnterAction(new CounterScope(status));
+
+    /// <summary>
     /// 正在记录同一批次时合并收集入口（伤害、反应、治疗等），不提前执行内层通知。
     /// 批次开始执行前会脱离收集器，因此响应产生的子层仍独立收集并深度优先结清。
     /// </summary>
@@ -234,25 +257,40 @@ public static class BattleResolutionContext
         }
     }
 
-    public static bool LimitReached(StatusInstance status, StatusActionData action)
+    private static long TriggerHitID(ScriptHookContext context)
+    {
+        // 优先使用当前响应保留的真实 hit 身份，不能使用后续子响应的“最后命中”。
+        context = context ?? ScriptHookContext.Current;
+        if (context?.DamageEvent != null && context.DamageEvent.RuntimeHitID > 0)
+            return context.DamageEvent.RuntimeHitID;
+        return context?.Declaration?.Header.HitId ?? BattleEventHub.Current?.Header.HitId ?? 0;
+    }
+
+    public static bool LimitReached(StatusInstance status, StatusActionData action, ScriptHookContext context = null)
     {
         string key = ActionKey(action);
-        return (action.MaxTimePerEffect > 0 && CurrentEffect != null
+        long hitID = action.MaxTimePerHit > 0 ? TriggerHitID(context) : 0;
+        return (hitID > 0 && CurrentEffect != null
+                && CurrentEffect.CountHit(hitID, status, key) >= action.MaxTimePerHit)
+            || (action.MaxTimePerEffect > 0 && CurrentEffect != null
                 && CurrentEffect.Count(status, key) >= action.MaxTimePerEffect)
             || (action.MaxTimePerAction > 0 && CurrentAction != null
                 && CurrentAction.Count(status, key) >= action.MaxTimePerAction);
     }
 
-    public static bool TryCollect(StatusInstance status, StatusActionData action)
+    public static bool TryCollect(StatusInstance status, StatusActionData action, ScriptHookContext context = null)
     {
-        if (LimitReached(status, action)) return false;
+        if (LimitReached(status, action, context)) return false;
         string key = ActionKey(action);
+        long hitID = action.MaxTimePerHit > 0 ? TriggerHitID(context) : 0;
+        if (hitID > 0) CurrentEffect?.CollectHit(hitID, status, key);
         if (action.MaxTimePerEffect > 0) CurrentEffect?.Collect(status, key);
         if (action.MaxTimePerAction > 0) CurrentAction?.Collect(status, key);
         return true;
     }
 
     public static bool HasApplicableLimit(StatusActionData action)
+        // Hit 额度不能替代旧重入保护：递归追加的新 hit 会有新 ID，不能据此无限自触发。
         => (action.MaxTimePerEffect > 0 && CurrentEffect != null)
             || (action.MaxTimePerAction > 0 && CurrentAction != null);
 

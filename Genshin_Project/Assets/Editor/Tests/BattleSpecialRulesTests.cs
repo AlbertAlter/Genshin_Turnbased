@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using UnityEngine.TestTools;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
@@ -31,12 +33,16 @@ namespace GenshinTurnBased.Tests.EditMode
             }
         }
 
-        [Test]
-        public async Task RegisteredLisaScope_SurvivesAwaitAndRestoresCallerAfterNestedException()
+        [UnityTest]
+        public IEnumerator RegisteredLisaScope_SurvivesAwaitAndRestoresCallerAfterNestedException()
+            => HookTestEnv.AwaitTask(RegisteredLisaScope_SurvivesAwaitAndRestoresCallerAfterNestedExceptionAsync);
+
+        private async Task RegisteredLisaScope_SurvivesAwaitAndRestoresCallerAfterNestedExceptionAsync()
         {
             using (var env = new BattleFlowTestEnv())
             {
                 env.CreateMinimalBattle();
+                env.Ally.Init(BattleFlowTestEnv.AllyID, 20, 1);
                 var lisa = env.Ally.Entity;
                 lisa.EntityID = 1011;
                 lisa.ConstellationLevel = 1;
@@ -59,7 +65,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     BattleSpecialRules.ValidateDamageHook(LisaScriptHooks.DamageHook, lisa, "Damage");
                     var hit = BattleSpecialRules.ModifyHit(LisaScriptHooks.DamageHook, lisa,
-                        env.Enemy.Entity, new HitData(3.2f, 0f, 2f), 1);
+                        env.Enemy.Entity, new HitData(3.2f, 2f), 1);
                     Assert.That(hit.Multiplier, Is.EqualTo(4.76f).Within(0.00001f));
                     Assert.That(hit.ElementAura, Is.EqualTo(2f));
                     await Task.Yield();
@@ -116,7 +122,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 env.CreateMinimalBattle();
                 var caster = env.Ally.Entity;
                 var hit = BattleSpecialRules.ModifyHit(null, caster, env.Enemy.Entity,
-                    new HitData(2f, 0f, 1f), 1);
+                    new HitData(2f, 1f), 1);
                 Assert.That(hit.Multiplier, Is.EqualTo(2f));
                 Assert.Throws<NotSupportedException>(() =>
                     BattleSpecialRules.ValidateDamageHook("Unknown()", caster, "Damage"));

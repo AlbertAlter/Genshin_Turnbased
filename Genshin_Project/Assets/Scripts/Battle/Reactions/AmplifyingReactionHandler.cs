@@ -26,12 +26,12 @@ public static class AmplifyingReactionHandler
         if (context.AttackElement == "Pyro" && HasAura(context, "Hydro"))
         {
             // 蒸发固定水:火=1:2。此处火为攻击元素，水为目标附着。
-            float hydroAmount = target.GetAura("Hydro").AuraAmount;
+            float hydroAmount = ElementQuery.GetReactionAmount(context, "Hydro");
             float consumedHydro = Mathf.Min(hydroAmount, attackAmount / 2f);
             float consumedPyro = consumedHydro * 2f;
             if (consumedHydro <= 0f) return false;
 
-            target.ConsumeAura("Hydro", consumedHydro);
+            ElementAuraSystem.ConsumeReactionAura(context, "Hydro", consumedHydro);
             resolution.Type = ReactionType.Vaporize;
             resolution.DisplayName = "蒸发（火×水）";
             resolution.RemainingAttackAmount = Mathf.Max(0f, attackAmount - consumedPyro);
@@ -89,6 +89,16 @@ public static class AmplifyingReactionHandler
 
         bool sourceIsEnemy = context.SourceKind == ReactionSourceKind.EnemySkill
             || (context.SourceEntity != null && context.SourceEntity.Type == BattleEntity.EntityType.Enemy);
+        if (context.DamageComponents?.Properties.UsesSpecialFormula == true)
+        {
+            resolution.FinalDamage = context.PreReactionDamage;
+            return true; // 只提交真实融化/蒸发，不把倍率、精通括号再乘到特殊技能伤害上。
+        }
+        float baseDamageBonus = sourceIsEnemy ? 0f : context.SourceSnapshotOverride != null
+            ? context.SourceSnapshotOverride.BaseDMGBonus
+            : ReactionDamageCalculator.CollectReactionBaseDamageBonus(context.SourceEntity, resolution.Type, context.AttackElement);
+        if (!sourceIsEnemy) baseDamageBonus += ReactionDamageCalculator.CollectLiveTargetBonuses(
+            context.SourceEntity, target, resolution.Type, context.AttackElement).BaseDMGBonus;
         resolution.FinalDamage = sourceIsEnemy
             ? ReactionDamageCalculator.CalculateEnemyAmplifying(
                 context.PreReactionDamage,
@@ -96,9 +106,8 @@ public static class AmplifyingReactionHandler
             : ReactionDamageCalculator.CalculateCharacterAmplifying(
                 context.PreReactionDamage,
                 reactionMultiplier,
-                context.SourceSnapshotOverride != null
-                    ? context.SourceSnapshotOverride.TotalEM
-                    : (context.SourceEntity != null ? context.SourceEntity.TotalEM : 0f));
+                ReactionDamageCalculator.GetSourceMastery(context),
+                baseDamageBonus);
 
         LogManager.Log(
             LogCategory.Reaction,
@@ -109,67 +118,32 @@ public static class AmplifyingReactionHandler
 
     private static bool HasAura(ReactionContext context, string element)
     {
-        if (!context.AllowsReactionPool(element, ReactionPoolKind.NormalAura)) return false;
-        ElementalAura aura = context.Target.GetAura(element);
-        return aura != null && aura.AuraAmount > 0f;
+        return ElementQuery.ReadReactionAura(context, element)?.IsPresent == true;
     }
 
     private static bool HasBurningWithExcessDendro(ReactionContext context)
     {
         BattleEntity target = context.Target;
-        ElementalAura dendro = target != null ? target.GetAura("Dendro") : null;
+        ElementPoolReading dendro = ElementQuery.ReadAura(target, "Dendro");
         return string.IsNullOrEmpty(context.RestrictedAuraElement)
             && BurningReactionHandler.IsBurning(target)
             && dendro != null
-            && dendro.AuraAmount > 0f;
+            && dendro.IsPresent;
     }
 
     private static float GetPyroAmount(ReactionContext context)
-    {
-        float amount = 0f;
-        if (context.AllowsReactionPool("Pyro", ReactionPoolKind.NormalAura))
-            amount += context.Target.GetAura("Pyro")?.AuraAmount ?? 0f;
-        if (context.AllowsReactionPool("Pyro", ReactionPoolKind.Burning))
-            amount += BurningReactionHandler.GetBurningAuraAsPyro(context.Target);
-        return amount;
-    }
+        => ElementQuery.GetReactionAmount(context, "Pyro");
 
     private static void ConsumePyro(ReactionContext context, float amount)
     {
-        if (context.RestrictedAuraKind == ReactionPoolKind.Burning)
-            BurningReactionHandler.ConsumeBurningAura(context.Target, amount);
-        else if (context.RestrictedAuraKind == ReactionPoolKind.NormalAura)
-            context.Target.ConsumeAura("Pyro", amount);
-        else
-            BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, amount);
+        ElementAuraSystem.ConsumeReactionAura(context, "Pyro", amount);
     }
 
     private static float GetCryoAmount(ReactionContext context)
-    {
-        BattleEntity target = context.Target;
-        ElementalAura aura = target.GetAura("Cryo");
-        float normalCryo = context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && aura != null
-            ? aura.AuraAmount : 0f;
-        float frozenCryo = !context.IgnoreFrozenAura
-            && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen)
-            ? FrozenReactionHandler.GetFrozenAuraAsCryo(target) : 0f;
-        return normalCryo + frozenCryo;
-    }
+        => ElementQuery.GetReactionAmount(context, "Cryo");
 
     private static void ConsumeCryo(ReactionContext context, float amount)
     {
-        BattleEntity target = context.Target;
-        float remaining = amount;
-        ElementalAura aura = target.GetAura("Cryo");
-        if (context.AllowsReactionPool("Cryo", ReactionPoolKind.NormalAura) && aura != null)
-        {
-            float consumed = Mathf.Min(aura.AuraAmount, remaining);
-            target.ConsumeAura("Cryo", consumed);
-            remaining -= consumed;
-        }
-
-        if (remaining > 0f && !context.IgnoreFrozenAura
-            && context.AllowsReactionPool("Cryo", ReactionPoolKind.Frozen))
-            FrozenReactionHandler.ConsumeFrozenAura(target, remaining);
+        ElementAuraSystem.ConsumeReactionAura(context, "Cryo", amount);
     }
 }

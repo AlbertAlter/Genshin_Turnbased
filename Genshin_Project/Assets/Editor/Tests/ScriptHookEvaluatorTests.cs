@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using UnityEngine;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
@@ -7,35 +6,19 @@ namespace GenshinTurnBased.Tests.EditMode
     /// ScriptHookEvaluator 单元测试（2026-08-19）：
     /// 原有 Check / HitLanded / 未知钩子 / 非法格式 不退化；新事件驱动识别与 Kill 普通路径拦截。
     /// </summary>
+    [Category("Unit")]
     public class ScriptHookEvaluatorTests
     {
-        private GameObject _dmObject;
-        private HookTestDataManager _dm;
-        private GameObject _casterObject;
+        private BattleFlowTestEnv _env;
         private BattleEntity _caster;
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            _dmObject = new GameObject("HookEval_DM");
-            _dm = _dmObject.AddComponent<HookTestDataManager>();
-            _dm.ReloadAllData();
-            HookTestEnv.SetDataManagerSingleton(_dm);
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            HookTestEnv.DestroyDataManager(_dm);
-            _dmObject = null;
-        }
 
         [SetUp]
         public void SetUp()
         {
-            BattleRandom.ResetSource();
-            _casterObject = new GameObject("HookEval_Caster");
-            _caster = _casterObject.AddComponent<BattleEntity>();
+            // 只测试钩子条件；使用内存数据，不让无关角色表阻断这些单元测试。
+            _env = new BattleFlowTestEnv();
+            _env.CreateMinimalBattle();
+            _caster = _env.Ally.Entity;
             _caster.EntityID = 1010;
             _caster.ConstellationLevel = 2;
             _caster.Level = 60;
@@ -44,8 +27,8 @@ namespace GenshinTurnBased.Tests.EditMode
         [TearDown]
         public void TearDown()
         {
-            BattleRandom.ResetSource();
-            Object.DestroyImmediate(_casterObject);
+            try { _env?.Dispose(); }
+            finally { _env = null; _caster = null; }
         }
 
         // ---------- 基础规则 ----------
@@ -133,54 +116,23 @@ namespace GenshinTurnBased.Tests.EditMode
         [Test]
         public void KaeyaT2_NoActionTargets_ReturnsFalse()
         {
-            var bm = HookTestEnv.CreateBattleManager();
-            try
-            {
-                Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.False);
-            }
-            finally
-            {
-                HookTestEnv.ClearBattleManagerSingleton();
-                Object.DestroyImmediate(bm.gameObject);
-            }
+            Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.False);
         }
 
         [Test]
         public void KaeyaT2_FrozenTargetInActionPositions_ReturnsTrue()
         {
-            var bm = HookTestEnv.CreateBattleManager();
-            var enemy = HookTestEnv.CreateEnemy(20001, 1, 1, bm);
+            var enemy = _env.Enemy.Entity;
             ReactionStateSystem.SetEntityState(enemy, ReactionType.Frozen, 1, null);
-            bm.PendingActionTargetPositions.Add(1);
-            try
-            {
-                Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.True, "本次行动目标处于冻结状态应触发");
-            }
-            finally
-            {
-                ReactionStateSystem.ClearAll();
-                HookTestEnv.ClearBattleManagerSingleton();
-                Object.DestroyImmediate(enemy.gameObject);
-                Object.DestroyImmediate(bm.gameObject);
-            }
+            _env.Manager.PendingActionTargetPositions.Add(enemy.SlotPosition);
+            Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.True, "本次行动目标处于冻结状态应触发");
         }
 
         [Test]
         public void KaeyaT2_NonFrozenTarget_ReturnsFalse()
         {
-            var bm = HookTestEnv.CreateBattleManager();
-            var enemy = HookTestEnv.CreateEnemy(20001, 1, 1, bm);
-            bm.PendingActionTargetPositions.Add(1);
-            try
-            {
-                Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.False);
-            }
-            finally
-            {
-                HookTestEnv.ClearBattleManagerSingleton();
-                Object.DestroyImmediate(enemy.gameObject);
-                Object.DestroyImmediate(bm.gameObject);
-            }
+            _env.Manager.PendingActionTargetPositions.Add(_env.Enemy.Entity.SlotPosition);
+            Assert.That(ScriptHookEvaluator.Evaluate("Kaeya_T2", _caster), Is.False);
         }
 
         // ---------- 事件驱动钩子 ----------

@@ -66,6 +66,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _source.Type = BattleEntity.EntityType.Enemy;
             _source.TotalEM = 999f;
+            _source.BaseDMGBonus = 1f; // 我方新增反应基础加成不改变敌人专用公式。
             _target.ApplyAura("Pyro", 1f, 1);
 
             ReactionResult result = Resolve("Hydro", 1f, ReactionSourceKind.EnemySkill);

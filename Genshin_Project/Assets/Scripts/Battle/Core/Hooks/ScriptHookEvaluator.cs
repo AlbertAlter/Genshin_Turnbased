@@ -96,11 +96,31 @@ public static class ScriptHookEvaluator
             || funcName == "Kill"
             || funcName == "SwitchIn"
             || funcName == "SwitchOut"
-            || funcName == "HPDecreased";
+            || funcName == "HPDecreased"
+            || IsDeclarationHook(funcName);
+    }
+
+    public static bool IsDeclarationHook(string name)
+        => name == "ResourceChanged" || name == "NightSoulConsumed" || name == "AuraChanged"
+            || name == "ElementContactResolved" || name == "NightSoulBurst";
+
+    public static bool MatchesDeclaration(string name, string argument, StatusInstance status, BattleDeclaration declaration)
+    {
+        if (declaration == null) return false;
+        bool kind = name == declaration.Kind.ToString();
+        if (name == "NightSoulConsumed")
+        {
+            var resource = declaration.Get<ResourceEventData>();
+            kind = resource != null && resource.Resource == "NightSoul"
+                && resource.Reason == ResourceChangeReason.Spend && resource.Removed > 0d;
+        }
+        return kind && (argument == "All" || MatchesSwitchActor(argument, status, declaration.Data.Subject));
     }
 
     static bool EvaluateEventHook(string funcName, string argStr, ScriptHookContext context)
     {
+        if (IsDeclarationHook(funcName))
+            return MatchesDeclaration(funcName, argStr, context?.Status, context?.Declaration);
         bool eventMatches = context != null && context.EventHookName == funcName;
         if (!eventMatches) return false;
 
@@ -115,7 +135,10 @@ public static class ScriptHookEvaluator
         {
             bool ok = context.DamageEvent != null
                 && context.DamageEvent.CausedDeath
-                && KillHookSystem.MatchesKillArgument(argStr, context.DamageEvent.Source);
+                && KillHookSystem.MatchesKillArgument(argStr, context.DamageEvent.Source, context.Status);
+            if (ok && (argStr?.Trim() == "Self" || argStr?.Trim() == "Equipper"))
+                ok = context.DamageEvent.Target != null
+                    && context.DamageEvent.Target.Side != context.DamageEvent.Source.SourceSide;
             LogManager.Log(LogCategory.ScriptHook, $"Kill({argStr}) → {ok}");
             return ok;
         }
@@ -146,6 +169,8 @@ public static class ScriptHookEvaluator
             case "HitLanded":
                 return EvalHit(argStr, context);
             case "Hook":
+                if (BattleSpecialRules.TryEvaluateCondition("Hook:" + (argStr?.Trim() ?? string.Empty), null, context, out bool numberedResult))
+                    return numberedResult;
                 return EvalWeaponHook(argStr, context);
             case "Chance":
                 return EvalChance(argStr, context);
@@ -153,6 +178,8 @@ public static class ScriptHookEvaluator
                 return EvalFieldPresence(argStr, true);
             case "OffField":
                 return EvalFieldPresence(argStr, false);
+            case "TeamBonus":
+                return BattleManager.Instance?.TeamBonuses?.HasBonus(argStr) == true;
             default:
                 if (BattleSpecialRules.TryEvaluateCondition(funcName, argStr, context, out bool result))
                     return result;
@@ -200,12 +227,12 @@ public static class ScriptHookEvaluator
             {
                 BattleEntity target = context?.Target;
                 return target != null
-                    && (target.GetAura("Hydro") != null
-                        || target.GetAura("Cryo") != null
+                    && (ElementQuery.HasAura(target, "Hydro")
+                        || ElementQuery.HasAura(target, "Cryo")
                         || FrozenReactionHandler.IsFrozen(target));
             }
             case "4300301":
-                return owner != null && owner.TotalHP > 0f && owner.CurrentHP / owner.TotalHP > 0.9f;
+                return owner != null && owner.GetFinalHP() > 0f && owner.CurrentHP / owner.GetFinalHP() > 0.9f;
             case "4300501":
             {
                 float roll = BattleRandom.NextFloat01();
@@ -215,7 +242,7 @@ public static class ScriptHookEvaluator
                 return triggered;
             }
             default:
-                LogManager.Log(LogCategory.ScriptHook, $"未实现的武器 Hook: Hook({argStr})，视为不触发");
+                LogManager.Log(LogCategory.ScriptHook, $"未实现的编号 Hook: Hook({argStr})，视为不触发");
                 return false;
         }
     }
@@ -264,7 +291,7 @@ public static class ScriptHookEvaluator
             return ok;
         }
 
-        // T：天赋激活 = 角色等级 >= 天赋解锁等级
+        // T：与构筑共用实际突破阶段判断；不能只看等级或把Ascension>0当成所有门槛已突破。
         var dm = DataManager.Instance;
         if (dm != null && dm.TalentDict.TryGetValue(roleId, out var talents))
         {
@@ -272,8 +299,10 @@ public static class ScriptHookEvaluator
             {
                 if (t.TalentIndex == idx)
                 {
-                    bool ok = caster.Level >= t.UnlockAfter;
-                    LogManager.Log(LogCategory.ScriptHook, $"Check({argStr}) 等级{caster.Level}≥解锁{t.UnlockAfter} → {ok}");
+                    var controller = caster.CharacterCtrl;
+                    bool ok = t.UnlockAfter <= 0 || controller != null
+                        && CharacterAscensionRules.IsTalentUnlocked(t.UnlockAfter, caster.Level, controller.Ascension);
+                    LogManager.Log(LogCategory.ScriptHook, $"Check({argStr}) Lv{caster.Level}, Ascension={controller?.Ascension}, 解锁突破={t.UnlockAfter} → {ok}");
                     return ok;
                 }
             }

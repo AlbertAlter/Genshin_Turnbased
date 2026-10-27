@@ -106,6 +106,7 @@ public static class BattlefieldUiSceneGenerator
                 keycap.gameObject.SetActive(keycap.bindingKey == desired);
             }
             EnforceTargetSelectionLayering(canvas);
+            EnsureTargetSelectionGlows(canvas);
             BattlefieldHealthBarBuilder.Configure(canvas);
             BattlefieldHealthBarBuilder.ConfigurePsdLayers(canvas);
             UiConfigurationSyncWindow.ConfigureInitialVectorRendering(canvas.gameObject);
@@ -385,6 +386,7 @@ public static class BattlefieldUiSceneGenerator
             BattlefieldHealthBarBuilder.Configure(canvas);
             BattlefieldHealthBarBuilder.ConfigurePsdLayers(canvas);
             UiConfigurationSyncWindow.ConfigureInitialVectorRendering(canvas.gameObject);
+            EnsureTargetSelectionGlows(canvas);
             return canvas;
         }
         catch { EditorSceneManager.ClosePreviewScene(previewScene); throw; }
@@ -481,6 +483,41 @@ public static class BattlefieldUiSceneGenerator
     /// lifts the caster/current targets above it as complete card + HUD pairs.
     /// The dimmer is visual-only and must never consume pointer events.
     /// </summary>
+    internal static void EnsureTargetSelectionGlows(Canvas canvas)
+    {
+        // 公共PNG的原始画布：卡牌517x885、辉光573x941。透明度已在资源中，不再额外乘色。
+        foreach (var art in canvas.GetComponentsInChildren<PsdUiBinding>(true)
+                     .Where(item => item.bindingKey == "CharacterCardArt" || item.bindingKey == "EnemyCardArt"))
+        {
+            Transform card = art.transform.parent;
+            if (card == null || card.GetComponentsInChildren<PsdUiBinding>(true)
+                .Any(item => item.bindingKey == "CardOverGlow")) continue;
+            RectTransform basis = card.Find("CardShadow") as RectTransform;
+            bool fromShadow = basis != null;
+            if (basis == null) basis = art.GetComponent<RectTransform>();
+            if (basis == null) continue;
+            var node = new GameObject("CardOverGlow", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            node.SetActive(false);
+            var rect = node.GetComponent<RectTransform>();
+            rect.SetParent(card, false);
+            rect.anchorMin = basis.anchorMin; rect.anchorMax = basis.anchorMax; rect.pivot = basis.pivot;
+            rect.anchoredPosition = basis.anchoredPosition;
+            rect.localRotation = basis.localRotation; rect.localScale = basis.localScale;
+            rect.sizeDelta = fromShadow
+                ? Vector2.Scale(basis.sizeDelta, new Vector2(573f / 555f, 941f / 923f))
+                : basis.sizeDelta + new Vector2(basis.rect.width * (573f / 517f - 1f), basis.rect.height * (941f / 885f - 1f));
+            rect.SetSiblingIndex(fromShadow ? basis.GetSiblingIndex() + 1 : art.transform.GetSiblingIndex());
+            Image image = node.GetComponent<Image>();
+            image.enabled = false; image.raycastTarget = false; image.color = Color.white;
+            var binding = node.AddComponent<PsdUiBinding>();
+            binding.bindingKey = "CardOverGlow"; binding.sourcePath = art.sourcePath + "/component:CardOverGlow";
+            var reference = node.AddComponent<StreamingSpriteReference>();
+            reference.relativePath = "art_assets/UI/BattleField1/UI_components/card/CardOverGlow.png";
+            reference.loadOnEnable = true; reference.revealOnLoad = false; reference.allowCrop = true;
+            node.SetActive(true);
+        }
+    }
+
     private static void EnforceTargetSelectionLayering(Canvas canvas)
     {
         PsdUiBinding[] bindings = canvas.GetComponentsInChildren<PsdUiBinding>(true);

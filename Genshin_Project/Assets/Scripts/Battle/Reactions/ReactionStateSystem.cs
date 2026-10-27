@@ -9,11 +9,15 @@ public sealed class ReactionSourceSnapshot
     public int SourceEntityID;
     public BattleSide SourceSide;
     public ReactionSourceKind SourceKind;
+    public EquipmentEffectSource EquipmentSource;
     public int Level;
     public float LevelCoefficient;
     public float TotalEM;
     public float DMGBonus;
     public float BaseDMGBonusFlat;
+    public float BaseDMGBonus;
+    public float LunarDMGBonus;
+    public float StellarDMGBonus;
     public string SourceSkillID;
     public string SourceEffectID;
 
@@ -28,16 +32,21 @@ public sealed class ReactionSourceSnapshot
             return context.SourceSnapshotOverride.Clone();
 
         BattleEntity source = context != null ? context.SourceEntity : null;
+        var formula = StatusFormulaSnapshot.For(source);
         return new ReactionSourceSnapshot
         {
             SourceEntity = source,
             SourceEntityID = source != null ? source.EntityID : 0,
             SourceSide = source != null ? source.Side : BattleSide.Ally,
             SourceKind = context != null ? context.SourceKind : ReactionSourceKind.DerivedReaction,
-            Level = source != null ? source.Level : 0,
-            TotalEM = source != null ? source.TotalEM : 0f,
-            DMGBonus = source != null ? source.DMGBonus : 0f,
-            BaseDMGBonusFlat = source != null ? source.BaseDMGBonusFlat : 0f,
+            EquipmentSource = context?.EffectiveEquipmentSource,
+            Level = formula?.SourceLevel ?? (source != null ? source.Level : 0),
+            TotalEM = ReactionDamageCalculator.GetSourceMastery(context),
+            DMGBonus = formula?.Raw("DMGBonus") ?? (source != null ? source.DMGBonus : 0f),
+            BaseDMGBonusFlat = formula?.Raw("BaseDMGBonusFlat") ?? (source != null ? source.BaseDMGBonusFlat : 0f),
+            BaseDMGBonus = formula?.Raw("BaseDMGBonus") ?? (source != null ? source.BaseDMGBonus : 0f),
+            LunarDMGBonus = formula?.Raw("LunarDMGBonus") ?? (source != null ? source.LunarDMGBonus : 0f),
+            StellarDMGBonus = formula?.Raw("StellarDMGBonus") ?? (source != null ? source.StellarDMGBonus : 0f),
             SourceSkillID = context != null ? context.SourceSkillID : string.Empty,
             SourceEffectID = context != null ? context.SourceEffectID : string.Empty
         };
@@ -59,6 +68,9 @@ public sealed class ReactionSourceSnapshot
             damageElement);
         snapshot.DMGBonus = bonuses.DMGBonus;
         snapshot.BaseDMGBonusFlat = bonuses.BaseDMGBonusFlat;
+        snapshot.BaseDMGBonus = bonuses.BaseDMGBonus;
+        snapshot.LunarDMGBonus = bonuses.LunarDMGBonus;
+        snapshot.StellarDMGBonus = bonuses.StellarDMGBonus;
         return snapshot;
     }
 }
@@ -122,6 +134,10 @@ public static class ReactionStateSystem
         bool skipNextDurationTick = false)
     {
         if (target == null || type == ReactionType.None || duration <= 0) return null;
+        using var declarations = ElementEventScope.Begin("ReactionStateSet", target);
+        if (type == ReactionType.Frozen || type == ReactionType.Burning)
+            declarations.Refresh(target, type == ReactionType.Frozen ? ReactionPoolKind.Frozen : ReactionPoolKind.Burning,
+                type == ReactionType.Frozen ? "Cryo" : "Pyro");
 
         int oldIndex = States.FindIndex(x => ReferenceEquals(x.Target, target) && x.Type == type);
         if (oldIndex >= 0) States.RemoveAt(oldIndex);
@@ -152,6 +168,7 @@ public static class ReactionStateSystem
 
     public static bool RemoveEntityState(BattleEntity target, ReactionType type)
     {
+        using var declarations = ElementEventScope.Begin("ReactionStateRemove", target);
         int index = States.FindIndex(x => ReferenceEquals(x.Target, target) && x.Type == type);
         if (index < 0) return false;
         States.RemoveAt(index);
@@ -167,6 +184,8 @@ public static class ReactionStateSystem
     /// <summary>反应状态使用施加阶段作为计时原点；下一次进入同阶段时扣减一回合。</summary>
     public static void TickPhase(int phase)
     {
+        using var declarations = ElementEventScope.Begin("Decay");
+        foreach (ReactionStateInstance state in States) if (state != null) declarations.Touch(state.Target);
         var expired = new List<ReactionStateInstance>();
         foreach (ReactionStateInstance state in States)
         {

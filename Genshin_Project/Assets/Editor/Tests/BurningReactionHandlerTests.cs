@@ -104,7 +104,6 @@ namespace GenshinTurnBased.Tests.EditMode
 
             float expected = 100f * 2f * (1f + 16f * 200f / 2200f);
             Assert.That(_target.CurrentHP, Is.EqualTo(10000f - expected).Within(0.001f));
-            Assert.That(_target.Poise, Is.EqualTo(500f));
             Assert.That(_target.GetAura("Pyro").AuraAmount, Is.EqualTo(1f));
             Assert.That(_target.GetAura("Pyro").SkipNextOriginDecay, Is.True);
         }
@@ -230,8 +229,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.Type = type;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
             return entity;
         }
 

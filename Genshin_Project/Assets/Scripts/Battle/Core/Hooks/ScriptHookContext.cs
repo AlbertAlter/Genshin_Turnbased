@@ -15,6 +15,8 @@ public sealed class ScriptHookContext
 {
     private static readonly AsyncLocal<ScriptHookContext> Execution = new AsyncLocal<ScriptHookContext>();
     public static ScriptHookContext Current => Execution.Value;
+    /// <summary>本次响应对应的不可变声明，不是全局最近一次事件。</summary>
+    public BattleDeclaration Declaration;
 
     // 每个状态响应保留自己的事件；嵌套响应结束后恢复父事件，不依赖全局“最后命中”。
     public static IDisposable EnterExecution(ScriptHookContext context) => new ExecutionScope(context);
@@ -22,12 +24,14 @@ public sealed class ScriptHookContext
     private sealed class ExecutionScope : IDisposable
     {
         private readonly ScriptHookContext previous;
+        private readonly IDisposable declaration;
         public ExecutionScope(ScriptHookContext context)
         {
             previous = Execution.Value;
             Execution.Value = context;
+            declaration = BattleEventHub.Enter(context?.Declaration);
         }
-        public void Dispose() => Execution.Value = previous;
+        public void Dispose() { declaration.Dispose(); Execution.Value = previous; }
     }
 
     /// <summary>钩子所属状态/效果的施放者。</summary>
@@ -35,15 +39,30 @@ public sealed class ScriptHookContext
 
     /// <summary>判断目标（如 Kaeya_C1 的攻击前目标）。</summary>
     public BattleEntity Target;
+    /// <summary>属性加成的实际受益单位；不替换来源Caster或本次攻击Target。</summary>
+    public BattleEntity Recipient;
 
     /// <summary>触发本次判断的状态实例（可为空：效果级钩子）。</summary>
     public StatusInstance Status;
 
-    /// <summary>状态宿主（BattleEntity 或 FieldPosition，可为空）。</summary>
+    /// <summary>真实状态宿主（BattleEntity、FieldPosition或BattleTeamStatusHost，可为空）。</summary>
     public object StatusHost;
 
     /// <summary>最近一次造成命中的效果ID2（HitLanded 判定用）。</summary>
     public string HitEffectID;
+
+    /// <summary>正在执行的状态效果数值ID；区别于引发响应的伤害效果，嵌套效果结束后恢复。</summary>
+    public int ExecutingStatusEffectID;
+
+    /// <summary>本次属性查询对应的实际伤害元素；空表示没有伤害上下文，不能以角色固有元素代替。</summary>
+    public string DamageElement;
+    /// <summary>本次实际DamageType；与倍率所属SkillType、主动行为ActionType独立。</summary>
+    public string DamageType;
+    /// <summary>属性查询的实际技能身份；状态独立伤害不得借用调用者技能。</summary>
+    public string DamageSkillID;
+
+    /// <summary>仅反应伤害数值收集入口填写；不能从引发响应的ReactionEvent推断当前伤害域。</summary>
+    public ReactionType? DamageReaction;
 
     /// <summary>本次伤害结算事件（Kaeya_C4 / Kill 判定用）。</summary>
     public DamageResolvedEvent DamageEvent;
@@ -68,6 +87,7 @@ public sealed class ScriptHookContext
             copy.ReactionEvent = new ReactionOccurrence
             {
                 Type = ReactionEvent.Type,
+                Declaration = ReactionEvent.Declaration,
                 DisplayName = ReactionEvent.DisplayName,
                 SourceEntity = ReactionEvent.SourceEntity,
                 Target = ReactionEvent.Target,

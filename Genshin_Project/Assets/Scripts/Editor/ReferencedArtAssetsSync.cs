@@ -35,7 +35,12 @@ public static class ReferencedArtAssetsSync
         else warnings.Add("StreamingAssets/Data 不存在；本次只按 Charts/UI 收集美术资源：" + dataRoot);
         CollectSkillIcons(dataRoot, sourceRoot, required, warnings);
         CollectUiTableReferences(sourceRoot, required, warnings);
+        // Card overlays can be serialized in existing scenes without UI-table rows.
+        required.Add("UI/BattleField1/UI_components/card/CardShadow.png");
+        required.Add("UI/BattleField1/UI_components/card/CardInnerShadow.png");
+        required.Add("UI/BattleField1/UI_components/card/CardOverGlow.png");
         CollectStageBackgrounds(sourceRoot, required, warnings);
+        CollectRouteNodeIcons(required, warnings);
         CharacterCardArtManifest cardManifest = CollectCharacterCards(dataRoot, sourceRoot, required, warnings);
         EnemyArtManifest enemyManifest = CollectEnemyArt(dataRoot, sourceRoot, required, warnings);
 
@@ -97,6 +102,19 @@ public static class ReferencedArtAssetsSync
             $"按配表同步美术资源完成：识别 {paths.Length}，复制/更新 {copied}，跳过 {skipped}，" +
             $"缺失 {missing.Count}，角色表 {cardManifest.characters.Length}，有图片的敌人 {enemyManifest.enemies.Length}。" +
             (cancelled ? "同步已取消，角色和敌人图片清单未改动。" : string.Empty));
+    }
+
+    private static void CollectRouteNodeIcons(HashSet<string> result, List<string> warnings)
+    {
+        string published = Path.Combine(Application.streamingAssetsPath,
+            Roguelike.Tests.RouteGeneration.RouteMapStyle.RelativePath.Replace('/', Path.DirectorySeparatorChar));
+        var style = new Roguelike.Tests.RouteGeneration.RouteMapStyle();
+        try { style = Roguelike.Tests.RouteGeneration.RouteMapStyle.ReadFile(published); }
+        catch (Exception exception) { warnings.Add("Route art table unavailable; collecting default icons. " + exception.Message); }
+        foreach (string path in style.ArtPaths())
+        {
+            if (TryNormalizeImagePath(path, out string relative)) result.Add(relative);
+        }
     }
 
     private static void CollectStageBackgrounds(
@@ -203,7 +221,7 @@ public static class ReferencedArtAssetsSync
                 continue;
             }
 
-            string relativeCardPath = $"Character_Whole/{characterId}_01.png";
+            string relativeCardPath = $"Character_Bare/{characterId}_03.png";
             string sourceCardPath = SafeCombine(sourceRoot, relativeCardPath);
             if (!File.Exists(sourceCardPath))
             {
@@ -326,7 +344,7 @@ public static class ReferencedArtAssetsSync
         HashSet<string> result,
         List<string> warnings)
     {
-        string frameRoot = Path.Combine(sourceRoot, "Character_Whole", "Frame");
+        string frameRoot = Path.Combine(sourceRoot, "Character_Bare", "Frame");
         if (!Directory.Exists(frameRoot))
         {
             warnings.Add("Character card frame folder does not exist: " + frameRoot);

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GenshinTurnBased.Tests.EditMode
@@ -11,6 +13,19 @@ namespace GenshinTurnBased.Tests.EditMode
     /// </summary>
     internal static class HookTestEnv
     {
+        /// <summary>
+        /// Test Framework 1.1的UnityTest入口桥接：逐帧等待，保留真实await及原始断言/取消异常。
+        /// 只在协程开始执行时启动任务；任务完成前不阻塞Unity主线程。
+        /// </summary>
+        public static IEnumerator AwaitTask(System.Func<Task> execute)
+        {
+            if (execute == null) throw new System.ArgumentNullException(nameof(execute));
+            Task task = execute();
+            if (task == null) throw new System.InvalidOperationException("异步测试必须返回Task。");
+            while (!task.IsCompleted) yield return null;
+            task.GetAwaiter().GetResult();
+        }
+
         public static void SetDataManagerSingleton(DataManager instance)
         {
             typeof(Singleton<DataManager>)
@@ -28,10 +43,19 @@ namespace GenshinTurnBased.Tests.EditMode
         public static HookTestDataManager CreateDataManager(bool loadRealData = true)
         {
             var go = new GameObject("HookTest_DataManager");
-            var dm = go.AddComponent<HookTestDataManager>();
-            if (loadRealData) dm.ReloadAllData();
-            SetDataManagerSingleton(dm);
-            return dm;
+            try
+            {
+                var dm = go.AddComponent<HookTestDataManager>();
+                if (loadRealData) dm.ReloadAllData();
+                SetDataManagerSingleton(dm);
+                return dm;
+            }
+            catch
+            {
+                // 创建未返回时调用方仍拿到null，不能依赖调用方finally清理这个对象。
+                Object.DestroyImmediate(go);
+                throw;
+            }
         }
 
         public static void DestroyDataManager(HookTestDataManager dm)
@@ -61,10 +85,12 @@ namespace GenshinTurnBased.Tests.EditMode
             SetBattleManagerSingleton(null);
         }
 
-        /// <summary>创建并初始化角色控制器（Init 读 DataManager 真实配表），注册到战场，AP 重置。</summary>
+        /// <summary>从当前 DataManager 初始化角色，挂到测试管理器下并注册，AP 重置；销毁管理器会连带清理单位。</summary>
         public static CharacterBattleController CreateCharacter(int characterID, int level, int slotPosition, BattleManager bm)
         {
+            if (bm == null) throw new System.ArgumentNullException(nameof(bm));
             var go = new GameObject($"HookTest_Char_{characterID}");
+            go.transform.SetParent(bm.transform, false); // Init 失败时也由管理器持有并清理。
             var ctrl = go.AddComponent<CharacterBattleController>();
             ctrl.Init(characterID, level);
             ctrl.Entity.SlotPosition = slotPosition;
@@ -74,10 +100,12 @@ namespace GenshinTurnBased.Tests.EditMode
             return ctrl;
         }
 
-        /// <summary>创建敌人（InitEnemy 读 DataManager 真实配表），注册到战场；hp&lt;0 时用配表默认值。</summary>
+        /// <summary>从当前 DataManager 初始化敌人并归测试管理器所有；hp&lt;0 时用配表默认值。</summary>
         public static BattleEntity CreateEnemy(int enemyID, int level, int slotPosition, BattleManager bm, float hp = -1f)
         {
+            if (bm == null) throw new System.ArgumentNullException(nameof(bm));
             var go = new GameObject($"HookTest_Enemy_{enemyID}");
+            go.transform.SetParent(bm.transform, false);
             var ctrl = go.AddComponent<EnemyBattleController>();
             ctrl.InitEnemy(enemyID, level);
             ctrl.Entity.SlotPosition = slotPosition;
@@ -116,7 +144,7 @@ namespace GenshinTurnBased.Tests.EditMode
         /// <summary>向 DataManager 注入测试用状态行动行（返回注入的实例）。
         /// 默认 MaxTimePerLife=5：同时覆盖全场次数上限；LifeTriggerCount 本身会记录所有实际触发。</summary>
         public static StatusActionData InjectStatusAction(
-            HookTestDataManager dm,
+            DataManager dm,
             string statusID2,
             string actionType,
             string param1,
@@ -161,12 +189,12 @@ namespace GenshinTurnBased.Tests.EditMode
 
         /// <summary>向 DataManager 注入测试用状态效果（返回注入的实例）。</summary>
         public static StatusEffectData InjectStatusEffect(
-            HookTestDataManager dm,
+            DataManager dm,
             string statusEffectID2,
             string effectType,
             string param1,
             string param2 = "",
-            string element = "None",
+            string element = null,
             string targetType = "Self",
             int duration = 1)
         {
@@ -176,7 +204,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 StatusEffectID2 = statusEffectID2,
                 EffectIndex = 0,
                 EffectType = effectType,
-                Element = element,
+                Element = element ?? (effectType == "Damage" ? "Physical" : "None"),
                 DamageType = string.Empty,
                 Duration = duration,
                 AddInPhase = 0,

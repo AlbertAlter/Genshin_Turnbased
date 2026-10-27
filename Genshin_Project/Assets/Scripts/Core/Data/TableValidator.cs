@@ -19,6 +19,26 @@ public class TableValidationException : System.Exception
 
 public static class TableValidator
 {
+    public static void ValidateDamageProperties(string table, int row, string effectType, string element,
+        string param1, string param2, string param3, string damageHook = null)
+    {
+        if (effectType != "Damage") return; // 其他效果的 Param3 有各自含义。
+        try
+        {
+            DamageProperties.Parse(element, param3);
+            if (!DamageProperties.IsFixed(element)) return;
+            DamageProperties.TryReadFixedTrueBase(param1, out _);
+            if (string.IsNullOrWhiteSpace(param1))
+                throw new FormatException("True/None 必须填写 Param1 固定基准或技能倍率表达式。");
+            if (!string.IsNullOrWhiteSpace(damageHook) || (DamageProperties.IsTrue(element) && !string.IsNullOrWhiteSpace(param2)))
+                throw new FormatException("True/None 不使用特殊 DamageHook；True 不使用 Splash，目标范围使用 Target 列配置。");
+        }
+        catch (FormatException error)
+        {
+            throw new TableValidationException($"[配表校验] {table} 第{row}行 (Damage): {error.Message}");
+        }
+    }
+
     public static int ParseExecuteCount(string value)
     {
         if (string.IsNullOrWhiteSpace(value)) return 1;
@@ -49,9 +69,45 @@ public static class TableValidator
     public static void ValidateEffectRow(string tableName, int row,
         string effectType, string element, int duration, string param2, string targetType,
         int targetNumber, int targetConsecutive, string targetOverride,
-        bool isEnemy, bool checkTargetNumber = true)
+        bool isEnemy, bool checkTargetNumber = true, string targetSelect = null, bool isStatusEffectTable = false)
     {
         string tag = $"[配表校验] {tableName} 第{row}行 ({effectType})";
+        if (effectType == "Count")
+        {
+            try
+            {
+                CountChangeRequest.Parse(param2);
+                CountEffect.ValidateTargetType(targetType);
+                if (!string.IsNullOrWhiteSpace(element) || duration != 0)
+                    throw new FormatException("Count不使用Element或Duration。");
+            }
+            catch (Exception error) when (error is FormatException || error is NotSupportedException)
+            { throw new TableValidationException(tag + ": " + error.Message); }
+        }
+        if (effectType == "SwitchIn")
+        {
+            if (isEnemy || targetType != "Self" || !string.IsNullOrWhiteSpace(targetOverride)
+                || !string.IsNullOrWhiteSpace(targetSelect))
+                throw new TableValidationException(tag + ": 只支持我方角色Self目标，不使用TargetOverride/TargetSelect，敌人没有前后台切换。");
+            if (!string.IsNullOrWhiteSpace(element) || !string.IsNullOrWhiteSpace(param2) || duration != 0)
+                throw new TableValidationException(tag + ": Element、Param2、Duration必须留空。");
+            return;
+        }
+        if (DamageImmunity.IsImmuneType(effectType))
+        {
+            if (!isStatusEffectTable)
+                throw new TableValidationException($"{tag}: Immune只用于状态被动效果，技能须通过ApplyStatus施加。");
+            DamageImmunity.ParseElements(element);
+            return; // 不选目标，随真实宿主状态存在生效。
+        }
+        if (BattleTargetResolver.IsTeamTarget(targetType))
+        {
+            if (effectType != "ApplyStatus" && effectType != "RemoveStatus" && effectType != "BindStatus")
+                throw new TableValidationException($"{tag}: 队伍目标只用于ApplyStatus/RemoveStatus/BindStatus，不能当作单位。");
+            if (!string.IsNullOrWhiteSpace(targetOverride) || !string.IsNullOrWhiteSpace(targetSelect))
+                throw new TableValidationException($"{tag}: 队伍目标不使用TargetOverride/TargetSelect位置筛选。");
+            return; // 单个队伍宿主，不读取TargetNumber/TargetConsecutive。
+        }
 
         // ===== 术语表 L101-L111：各效果类型需要的参数 =====
         // 不需要目标概念的效果（target完全忽略）：
@@ -61,19 +117,30 @@ public static class TableValidator
         bool noTarget = effectType == "ExecuteSkill" || effectType == "ExecuteEffect"
                      || effectType == "BindStatus" || effectType == "Buff" || effectType == "Debuff"
                      || effectType == "ChangeControl" || effectType == "APCost"
-                     || effectType == "ResetCooldown";
-        if (effectType == "ResetCooldown" && isEnemy)
-            throw new TableValidationException($"{tag}: ResetCooldown 当前作用于角色技能；敌人没有对应的技能按钮绑定");
+                     || effectType == "ResetCooldown" || effectType == "ReduceCooldown" || effectType == "SwitchPattern";
+        if (effectType == "SwitchPattern" && !isEnemy)
+            throw new TableValidationException($"{tag}: SwitchPattern仅供敌人使用。");
+        if ((effectType == "ResetCooldown" || effectType == "ReduceCooldown") && isEnemy)
+            throw new TableValidationException($"{tag}: {effectType} 当前作用于角色技能；敌人没有对应的技能按钮绑定");
         // GainEnergy 的模式仍须合法；只有 Based 读取元素系数。
         // Flat 忽略 Element，允许留空或填 None/none。
         string energyMode = effectType == "GainEnergy" ? NormalizeEnergyMode(param2) : null;
-        bool needsElement = effectType == "Damage" || energyMode == "Based";
+        bool needsElement = effectType == "Damage" || effectType == "ApplyElement" || energyMode == "Based";
+        if (effectType == "ApplyElement")
+        {
+            try { ApplyElementEffect.ParseElement(element); }
+            catch (FormatException error) { throw new TableValidationException(tag + ": " + error.Message); }
+            if (duration != 0)
+                throw new TableValidationException(tag + ": 不使用Duration，元素量按既有元素池规则衰减。");
+            if (!string.IsNullOrEmpty(targetType) && targetType.EndsWith("Field", StringComparison.Ordinal))
+                throw new TableValidationException(tag + ": 仅支持实体目标，不能给空场地附着元素。");
+        }
         // ApplyStatus 的 Duration 留空/0 表示永久；角色、状态和敌人效果共用此规则。
         // 生命周期由 StatusInstance.IsPermanent 控制，不能在读表时拒绝永久状态。
 
         if (needsElement && string.IsNullOrEmpty(element))
         {
-            throw new TableValidationException($"{tag}: Element不能为空/0（{effectType}需要填元素；None=物理也要写None）");
+            throw new TableValidationException($"{tag}: Element不能为空/0（{effectType}需要填元素；Damage的物理写Physical，直接伤害写None）");
         }
 
         if (noTarget)
@@ -98,12 +165,47 @@ public static class TableValidator
 
         // TargetOverride 非空时：忽略 TargetNumber/TargetConsecutive（L139/L141，不额外校验）
 
-        // 敌人技能 TargetConsecutive：只能填2,3,4（L263 "没有选择目标的过程，不能填0和1，要报错"）
+        // 敌人模式1按HitWeight，2/3/4真随机；覆盖或固定目标不使用此参数。
         // 例外：TargetType=Self 的效果（如跳舞给自己加buff）不需要选目标，跳过此校验
-        if (isEnemy && targetType != "Self" && (targetConsecutive < 2 || targetConsecutive > 4))
+        if (isEnemy && targetType != "Self" && string.IsNullOrWhiteSpace(targetOverride)
+            && (targetConsecutive < 1 || targetConsecutive > 4))
         {
-            throw new TableValidationException($"{tag}: 敌人技能TargetConsecutive只能填2,3,4（当前{targetConsecutive}）");
+            throw new TableValidationException($"{tag}: 敌人技能TargetConsecutive只能填1,2,3,4（当前{targetConsecutive}）");
         }
+    }
+
+    public static void ValidateSwitchIn(string tableName, int row, string param1, string param3,
+        string damageType, string damageHook, int addInPhase, int triggerPhase)
+    {
+        if (!string.IsNullOrWhiteSpace(param1) || !string.IsNullOrWhiteSpace(param3)
+            || !string.IsNullOrWhiteSpace(damageType) || !string.IsNullOrWhiteSpace(damageHook)
+            || addInPhase != 0 || triggerPhase != 0)
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (SwitchIn): Param1/Param3、DamageType/DamageHook、AddInPhase/TriggerPhase必须留空。");
+    }
+
+    public static void ValidateSwitchPattern(string table, int row, string param1, string param2, string param3,
+        string element, string damageType, string damageHook, int duration, int addPhase, int triggerPhase)
+    {
+        if (!int.TryParse(param1, out int id) || id <= 0 || !string.IsNullOrWhiteSpace(param2)
+            || !string.IsNullOrWhiteSpace(param3) || !string.IsNullOrWhiteSpace(element)
+            || !string.IsNullOrWhiteSpace(damageType) || !string.IsNullOrWhiteSpace(damageHook)
+            || duration != 0 || addPhase != 0 || triggerPhase != 0)
+            throw new TableValidationException($"{table}第{row}行：SwitchPattern只填写正整数Param1模式ID；其他效果参数留空。");
+    }
+
+    public static void ValidateApplyElement(string tableName, int row, string element,
+        string param1, string param2, string param3, string damageType, string damageHook)
+    {
+        try
+        {
+            ApplyElementEffect.ParseElement(element);
+            ApplyElementEffect.ParseAmount(param1);
+            if (!string.IsNullOrWhiteSpace(param2) || !string.IsNullOrWhiteSpace(param3)
+                || !string.IsNullOrWhiteSpace(damageType) || !string.IsNullOrWhiteSpace(damageHook))
+                throw new FormatException("ApplyElement的Param2/Param3、DamageType和DamageHook必须留空。");
+        }
+        catch (FormatException error)
+        { throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ApplyElement): {error.Message}"); }
     }
 
     public static void ValidateResetCooldown(string tableName, int row, string param1)
@@ -112,10 +214,36 @@ public static class TableValidator
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ResetCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
     }
 
+    public static void ValidateReduceCooldown(string tableName, int row, string param1, string param2)
+    {
+        if (!ResetCooldownTarget.IsValid(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ReduceCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
+        int rounds;
+        if (!ReduceCooldownParameters.TryParseAmount(param2, out rounds))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ReduceCooldown): Param2 必须为非负int回合数，不接受空值、小数或公式，当前=[{param2}]");
+    }
+
     public static void ValidateBondOfLife(string tableName, int row, string param1)
     {
         if (!BondOfLifeEffect.IsValidExpression(param1))
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (BondOfLife): Param1 必须为有限正负数或系数*变量。系数可用武器Index(n)；变量支持TotalHP/CurrentHP/TotalATK/TotalDEF/TotalEM/CurrentEnergy/MaxEnergy/BondOfLife，可加Target.前缀，当前=[{param1}]");
+    }
+
+    public static void ValidateRevive(string tableName, int row, string param1, string param2,
+        string param3, string element, string damageType, string damageHook, int duration, string targetType)
+    {
+        try
+        {
+            ReviveEffect.ParseAmount(param1, out _);
+            if (!string.IsNullOrWhiteSpace(param2) || !string.IsNullOrWhiteSpace(param3)
+                || !string.IsNullOrWhiteSpace(element) || !string.IsNullOrWhiteSpace(damageType)
+                || !string.IsNullOrWhiteSpace(damageHook) || duration != 0)
+                throw new FormatException("Revive不使用Param2/Param3、Element、DamageType、DamageHook或Duration。");
+            if (BattleTargetResolver.IsTeamTarget(targetType) || targetType?.EndsWith("Field", StringComparison.Ordinal) == true)
+                throw new FormatException("Revive只接受阵亡实体，不接受场地或队伍宿主。");
+        }
+        catch (FormatException error)
+        { throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Revive): {error.Message}"); }
     }
 
     public static void ValidatePublicCountEffect(string tableName, int row, string effectType,
@@ -125,37 +253,22 @@ public static class TableValidator
         if (effectType == "NightSoul" && !NightSoulEffect.IsValidAmount(param1))
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (NightSoul): Param1必须为有符号int增减量，当前=[{param1}]");
         if ((effectType == "NightSoul" || appliesNightSoul) && !string.IsNullOrEmpty(targetType)
-            && targetType.EndsWith("Field", System.StringComparison.Ordinal))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行: 公共夜魂只允许实体目标，不能施加到场地。");
-        if (appliesNightSoul)
-        {
-            try { NightSoulStatusHandler.ParseMaximum(param2); }
-            catch (System.FormatException exception)
-            {
-                throw new TableValidationException($"[配表校验] {tableName} 第{row}行: {exception.Message}");
-            }
-        }
+            && (targetType.EndsWith("Field", System.StringComparison.Ordinal) || BattleTargetResolver.IsTeamTarget(targetType)))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行: 夜魂只允许实体目标，不能施加到场地或队伍。");
     }
 
-    public static void ValidateAPCost(string param1, string param2)
+    public static void ValidateAPCost(string param1, string param2, int effectID = 0, string parameterHook = null)
     {
         if (!int.TryParse(param1, System.Globalization.NumberStyles.Integer,
-                System.Globalization.CultureInfo.InvariantCulture, out _) && !APCostResolver.IsFreeValue(param1))
-            throw new TableValidationException("APCost 的 Param1 必须为整数增减量或Free（强制免除该操作AP费用）");
+                System.Globalization.CultureInfo.InvariantCulture, out _) && !APCostResolver.IsFreeValue(param1)
+            && !APCostResolver.TryParseMultiplier(param1, out _)
+            && !WeaponHooks.SupportsAPCostParameter(effectID, param1, parameterHook))
+            throw new TableValidationException($"APCost 的 Param1 必须为整数增减量、*非负系数（如*0.5）、Free或此效果已支持的参数钩子，当前效果=[{effectID}] Param1=[{param1}] DamageHook=[{parameterHook}]");
         if (string.IsNullOrWhiteSpace(param2))
             throw new TableValidationException("APCost 的 Param2 必须填写适用操作");
         foreach (string operation in param2.Split(';'))
             if (!APCostResolver.IsOperation(operation.Trim()))
                 throw new TableValidationException($"APCost 操作无效：[{operation}]；支持 Normal/Heavy/Skill/Burst/SwitchIn/SwitchOut，多个用分号分隔");
-    }
-
-    /// <summary>Enemy_Main 行校验。Poise 不能填0（-1=无法被削韧，正数=韧性值）。</summary>
-    public static void ValidateEnemyMainRow(int row, int enemyID, float poise)
-    {
-        if (poise == 0f)
-        {
-            throw new TableValidationException($"[配表校验] Enemy_Main 第{row}行 (EnemyID={enemyID}): Poise不能为0（-1=无法被削韧）");
-        }
     }
 
     /// <summary>Skills 行校验。MaxCharge=0合法（无此概念）；InitialCharge 无额外限制。</summary>
@@ -181,7 +294,10 @@ public static class TableValidator
 
         if (isEnemy)
         {
-            throw new TableValidationException($"{tag}: 敌人没有按键绑定，ChangeControl 禁止出现在敌人技能效果表");
+            if (!isStatusEffectTable || param1 != "All" || param2 != "Freeze"
+                || !string.IsNullOrEmpty(param3) || duration != 0)
+                throw new TableValidationException($"{tag}: 敌人ChangeControl仅支持状态效果All/Freeze，跟随状态持续时间，Param3留空。");
+            return;
         }
 
         if (string.IsNullOrEmpty(param1) ||

@@ -34,16 +34,44 @@ namespace GenshinTurnBased.Tests.EditMode
                 BattleExecution.Run(() => env.Ally.ExecuteStatusActionsTask(
                     source, actions, env.Ally.Entity, "OnTrigger")).GetAwaiter().GetResult();
 
-                var first = env.Ally.Entity.GetStatus("ST_ListFirst");
-                var second = env.Ally.Entity.GetStatus("ST_ListSecond");
-                Assert.That(first, Is.Not.Null);
-                Assert.That(second, Is.Not.Null);
-                Assert.That(first.StackCount, Is.EqualTo(repeats));
-                Assert.That(second.StackCount, Is.EqualTo(repeats));
-                Assert.That(first.ApplyOrder, Is.LessThan(second.ApplyOrder));
+                Assert.That(env.Ally.Entity.GetStatusInstances("ST_ListFirst"), Has.Count.EqualTo(repeats));
+                Assert.That(env.Ally.Entity.GetStatusInstances("ST_ListSecond"), Has.Count.EqualTo(repeats));
+                var expectedOrder = new List<string>();
+                for (int round = 0; round < repeats; round++)
+                {
+                    expectedOrder.Add("ST_ListFirst");
+                    expectedOrder.Add("ST_ListSecond");
+                }
+                var actualOrder = new List<string>();
+                foreach (StatusInstance instance in env.Ally.Entity.GetStatusList())
+                {
+                    if (instance.StatusID2 != "ST_ListFirst" && instance.StatusID2 != "ST_ListSecond") continue;
+                    Assert.That(instance.StackCount, Is.EqualTo(1), "每次效果施加产生一份独立状态");
+                    actualOrder.Add(instance.StatusID2);
+                }
+                CollectionAssert.AreEqual(expectedOrder, actualOrder,
+                    "ExecuteCount 应按 First、Second、First、Second 重复整份效果列表");
                 Assert.That(source.LifeTriggerCount, Is.EqualTo(1),
                     "ExecuteCount repeats the list, not the trigger itself.");
             }
+        }
+
+        [Test]
+        public void HookFactory_UnitsBelongToManagerAndAreDestroyedWithIt()
+        {
+            GameObject characterObject;
+            GameObject enemyObject;
+            using (var env = new BattleFlowTestEnv())
+            {
+                var character = HookTestEnv.CreateCharacter(BattleFlowTestEnv.AllyID, 1, 1, env.Manager);
+                var enemy = HookTestEnv.CreateEnemy(BattleFlowTestEnv.EnemyID, 1, 1, env.Manager);
+                characterObject = character.gameObject;
+                enemyObject = enemy.gameObject;
+                Assert.That(characterObject.transform.parent, Is.SameAs(env.Manager.transform));
+                Assert.That(enemyObject.transform.parent, Is.SameAs(env.Manager.transform));
+            }
+            Assert.That(characterObject == null, Is.True, "销毁测试管理器时必须一并销毁工厂创建的角色");
+            Assert.That(enemyObject == null, Is.True, "销毁测试管理器时必须一并销毁工厂创建的敌人");
         }
 
         [TestCase(" 101 ;STE_Custom; 102 ", "STE_Weapon_101;STE_Custom;STE_Weapon_102")]
@@ -88,7 +116,7 @@ namespace GenshinTurnBased.Tests.EditMode
             }
         }
 
-        [TestCase("None")]
+        [TestCase("Physical")]
         [TestCase("Anemo")]
         public void DirectDamage_MultipleBasesWithoutLevelRows_AreAppliedOnce(string element)
         {

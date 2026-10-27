@@ -31,6 +31,11 @@ public class SyncExcelFiles
 
         foreach (string file in files)
         {
+            if (string.Equals(Path.GetDirectoryName(file), sourceDir, System.StringComparison.OrdinalIgnoreCase))
+            {
+                string name = Path.GetFileName(file);
+                if (name == "EnemySkill.xlsx" || name == "StatusData_Enemy.xlsx") continue;
+            }
             string relPath = file.Substring(sourceDir.Length + 1);
             string destPath = Path.Combine(targetDir, relPath);
 

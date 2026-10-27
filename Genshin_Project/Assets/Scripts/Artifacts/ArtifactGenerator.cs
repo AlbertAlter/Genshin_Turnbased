@@ -246,7 +246,12 @@ public static class ArtifactConfigurationLoader
             LoadMaxLevels(RequireSheet(package, "MaxLevel"), config);
             LoadMainGrowth(RequireSheet(package, "LevelBonus"), config);
             LoadMainWeights(RequireSheet(package, "AttributeWeight"), config);
-            LoadSecondaryRules(RequireSheet(package, "SecondaryAttribute"), config);
+            // 当前表名为Affix；仍接受旧工作簿的SecondaryAttribute。
+            ExcelWorksheet secondarySheet = package.Workbook.Worksheets["Affix"]
+                ?? package.Workbook.Worksheets["SecondaryAttribute"];
+            if (secondarySheet == null)
+                throw new InvalidDataException($"{WorkbookName} 缺少副属性工作表 Affix 或 SecondaryAttribute。");
+            LoadSecondaryRules(secondarySheet, config);
         }
 
         config.Validate();
@@ -258,9 +263,9 @@ public static class ArtifactConfigurationLoader
         ValidateHeaders(sheet, "Star", "MaxLevel");
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            int star = ReadInt(sheet, row, 1);
+            int star = ReadInt(sheet, row, "Star");
             if (star <= 0) continue;
-            config.AddMaxLevel(star, ReadInt(sheet, row, 2));
+            config.AddMaxLevel(star, ReadInt(sheet, row, "MaxLevel"));
         }
     }
 
@@ -270,10 +275,10 @@ public static class ArtifactConfigurationLoader
         string currentAttributeType = null;
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            string attributeType = sheet.Cells[row, 1].Text.Trim();
+            string attributeType = ExcelTableHeaders.For(sheet).Cell(row, "AttributeType").Text.Trim();
             if (!string.IsNullOrEmpty(attributeType)) currentAttributeType = attributeType;
 
-            int star = ReadInt(sheet, row, 2);
+            int star = ReadInt(sheet, row, "ArtifactStar");
             if (star <= 0) continue;
             if (string.IsNullOrEmpty(currentAttributeType))
                 throw new InvalidDataException($"LevelBonus 第 {row} 行缺少 AttributeType，且没有可继承的上一项。");
@@ -281,8 +286,8 @@ public static class ArtifactConfigurationLoader
             config.AddMainGrowth(
                 currentAttributeType,
                 star,
-                ReadFloat(sheet, row, 3),
-                ReadFloat(sheet, row, 4));
+                ReadFloat(sheet, row, "InitialStat"),
+                ReadFloat(sheet, row, "LevelBonus"));
         }
     }
 
@@ -291,26 +296,31 @@ public static class ArtifactConfigurationLoader
         ValidateHeaders(sheet, "Slot", "AttributeType", "Weight");
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            int slot = ReadInt(sheet, row, 1);
+            int slot = ReadInt(sheet, row, "Slot");
             if (slot <= 0) continue;
             config.AddMainWeight(
                 (ArtifactSlot)slot,
-                sheet.Cells[row, 2].Text.Trim(),
-                ReadFloat(sheet, row, 3));
+                ExcelTableHeaders.For(sheet).Cell(row, "AttributeType").Text.Trim(),
+                ReadFloat(sheet, row, "Weight"));
         }
     }
 
     private static void LoadSecondaryRules(ExcelWorksheet sheet, ArtifactGenerationConfig config)
     {
-        ValidateHeaders(sheet, "SecondaryAttribute", "Weight", "Stat");
+        // 当前源表使用Affix，兼容已有SecondaryAttribute命名；两者均按名称，不猜列号。
+        var headers = ExcelTableHeaders.For(sheet);
+        if (headers.Optional("Affix") > 0 && headers.Optional("SecondaryAttribute") > 0)
+            throw new InvalidDataException($"{WorkbookName}/{sheet.Name} 不应同时定义Affix与SecondaryAttribute。");
+        string attributeHeader = headers.Optional("Affix") > 0 ? "Affix" : "SecondaryAttribute";
+        ValidateHeaders(sheet, attributeHeader, "Weight", "Stat");
         for (int row = 2; row <= LastRow(sheet); row++)
         {
-            string attributeType = sheet.Cells[row, 1].Text.Trim();
+            string attributeType = headers.Cell(row, attributeHeader).Text.Trim();
             if (string.IsNullOrEmpty(attributeType)) continue;
             config.AddSecondaryRule(
                 attributeType,
-                ReadFloat(sheet, row, 2),
-                ReadFloat(sheet, row, 3));
+                ReadFloat(sheet, row, "Weight"),
+                ReadFloat(sheet, row, "Stat"));
         }
     }
 
@@ -323,15 +333,7 @@ public static class ArtifactConfigurationLoader
 
     private static void ValidateHeaders(ExcelWorksheet sheet, params string[] expected)
     {
-        for (int index = 0; index < expected.Length; index++)
-        {
-            string actual = sheet.Cells[1, index + 1].Text.Trim();
-            if (!string.Equals(actual, expected[index], StringComparison.Ordinal))
-            {
-                throw new InvalidDataException(
-                    $"{WorkbookName}/{sheet.Name} 第 {index + 1} 列应为 {expected[index]}，实际为 [{actual}]。");
-            }
-        }
+        ExcelTableHeaders.For(sheet).Require(expected);
     }
 
     private static int LastRow(ExcelWorksheet sheet)
@@ -339,18 +341,18 @@ public static class ArtifactConfigurationLoader
         return sheet.Dimension == null ? 1 : sheet.Dimension.End.Row;
     }
 
-    private static int ReadInt(ExcelWorksheet sheet, int row, int column)
+    private static int ReadInt(ExcelWorksheet sheet, int row, string header)
     {
-        object value = sheet.Cells[row, column].Value;
+        object value = ExcelTableHeaders.For(sheet).Cell(row, header).Value;
         if (value is int intValue) return intValue;
         if (value is double doubleValue) return (int)doubleValue;
         if (int.TryParse(Convert.ToString(value), out int parsed)) return parsed;
         return 0;
     }
 
-    private static float ReadFloat(ExcelWorksheet sheet, int row, int column)
+    private static float ReadFloat(ExcelWorksheet sheet, int row, string header)
     {
-        object value = sheet.Cells[row, column].Value;
+        object value = ExcelTableHeaders.For(sheet).Cell(row, header).Value;
         if (value is float floatValue) return floatValue;
         if (value is double doubleValue) return (float)doubleValue;
         if (value is int intValue) return intValue;

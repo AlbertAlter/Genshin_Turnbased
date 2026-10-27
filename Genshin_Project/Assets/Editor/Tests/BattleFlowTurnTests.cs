@@ -35,7 +35,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "None",
+                env.ConfigureAllyAction(2, "SK_Skill_Flow", "SE_Skill_Flow", "Physical",
                     "1*TotalATK,0", 30, 2);
                 env.CreateMinimalBattle();
                 env.Manager.StartBattle();

@@ -24,16 +24,15 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [TestCase("2", EnemyShieldRuleKind.ElementAmountMultiplier, 3f)]
         [TestCase("1U", EnemyShieldRuleKind.FixedGauge, 1f)]
-        [TestCase("0.5+0.01U*PoiseDMG", EnemyShieldRuleKind.ElementAmountPlusPoiseFormula, 1.75f)]
-        [TestCase("0.25U+0.01U*PoiseDMG", EnemyShieldRuleKind.FixedGaugePlusPoiseFormula, 1.25f)]
-        [TestCase("0.01U*PoiseDMG", EnemyShieldRuleKind.FixedGaugePlusPoiseFormula, 1f)]
+        [TestCase("0.5", EnemyShieldRuleKind.ElementAmountMultiplier, .75f)]
+        [TestCase("0.25U", EnemyShieldRuleKind.FixedGauge, .25f)]
         [TestCase("0", EnemyShieldRuleKind.ElementAmountMultiplier, 0f)]
         public void Parse_RecognizesSupportedGrammar(string raw, EnemyShieldRuleKind kind, float expected)
         {
             EnemyShieldRule rule = EnemyShieldRuleParser.Parse(raw, "Pyro", "Hydro");
 
             Assert.That(rule.Kind, Is.EqualTo(kind));
-            Assert.That(rule.Evaluate(1.5f, 100f, 999f), Is.EqualTo(expected).Within(0.0001f));
+            Assert.That(rule.Evaluate(1.5f, 999f), Is.EqualTo(expected).Within(0.0001f));
             Assert.That(rule.RawText, Is.EqualTo(raw));
         }
 
@@ -52,7 +51,7 @@ namespace GenshinTurnBased.Tests.EditMode
             EnemyShieldRule rule = EnemyShieldRuleParser.Parse("0.25", "Dendro", "Physical");
 
             Assert.That(rule.Kind, Is.EqualTo(EnemyShieldRuleKind.ElementAmountMultiplier));
-            Assert.That(rule.Evaluate(0f, 100f, 100f), Is.Zero);
+            Assert.That(rule.Evaluate(0f, 100f), Is.Zero);
         }
 
         [Test]
@@ -60,13 +59,15 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             EnemyShieldRule rule = EnemyShieldRuleParser.Parse("2", "Pyro", "Hydro");
 
-            Assert.That(rule.Evaluate(4f, 0f, 3f), Is.EqualTo(3f));
+            Assert.That(rule.Evaluate(4f, 3f), Is.EqualTo(3f));
         }
 
         [TestCase("-1")]
         [TestCase("NaN")]
         [TestCase("1U+bad")]
         [TestCase("0.5+0.01*PoiseDMG")]
+        [TestCase("0.01U*PoiseDMG")]
+        [TestCase("0.25U+0.01U*PoiseDMG")]
         [TestCase("eval(1)")]
         public void Parse_RejectsUnsupportedOrInvalidText(string raw)
         {

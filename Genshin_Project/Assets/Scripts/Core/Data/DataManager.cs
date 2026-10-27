@@ -35,6 +35,8 @@ public partial class DataManager : Singleton<DataManager>
 
     // ========== Status ==========
     public Dictionary<string, StatusMainData> StatusMainDict = new Dictionary<string, StatusMainData>();
+    // 角色独立状态工作簿中的完整ID集合；死亡清理按此目录，不猜名字/编号，也不筛施加者。
+    public Dictionary<int, HashSet<string>> CharacterStatusIDs = new Dictionary<int, HashSet<string>>();
     public Dictionary<string, StatusEffectData> StatusEffectDict = new Dictionary<string, StatusEffectData>();
     public Dictionary<string, List<StatusActionData>> StatusActionDict = new Dictionary<string, List<StatusActionData>>();
     public Dictionary<string, StatusAttributesData> StatusAttributesDict = new Dictionary<string, StatusAttributesData>();
@@ -74,16 +76,11 @@ public partial class DataManager : Singleton<DataManager>
 
     // ================================================================
     //  通用读取辅助：探测数据起始行 + 安全行范围
-    //  约定：第1行永远是表头。若第2行第一个单元格能解析为数字，
-    //  说明没有"类型行"（Type,string,int...），数据从第2行开始；
-    //  否则第2行是类型行，数据从第3行开始。
+    //  第1行是表头；仅当第2行明确为字段类型声明时跳过，不依赖任何字段的列位置。
     // ================================================================
     static int GetDataStartRow(ExcelWorksheet sheet)
     {
-        if (sheet.Dimension == null) return 2;
-        string c1 = sheet.Cells[2, 1].Text;
-        if (int.TryParse(c1, out _)) return 2;   // 无类型行，数据从第2行开始
-        return 3;                                 // 有类型行，数据从第3行开始
+        return ExcelTableHeaders.For(sheet).DataStartRow;
     }
 
     static int GetSheetMaxRow(ExcelWorksheet sheet)

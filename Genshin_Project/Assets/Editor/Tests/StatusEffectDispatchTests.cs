@@ -17,13 +17,13 @@ namespace GenshinTurnBased.Tests.EditMode
             first.RuntimeElement = "Pyro";
             first.BoundStatuses.Add(second);
             Assert.That(second.RuntimeElement, Is.Empty, "同名实例和绑定子状态不自动共享元素记录");
-            second.RuntimeElement = "None";
+            second.RuntimeElement = "Physical";
             Assert.That(first.RuntimeElement, Is.EqualTo("Pyro"));
-            Assert.That(second.RuntimeElement, Is.EqualTo("None"), "物理元素不等于尚未记录");
+            Assert.That(second.RuntimeElement, Is.EqualTo("Physical"), "物理伤害类型不等于尚未记录");
         }
 
         [Test]
-        public void RuntimeElement_PersistsOnStackingButResetsWhenInstanceIsRecreated()
+        public void RuntimeElement_RemainsIndependentAcrossReapplicationAndReplacement()
         {
             using var env = new BattleFlowTestEnv();
             const string id = "ST_RuntimeElement";
@@ -33,14 +33,24 @@ namespace GenshinTurnBased.Tests.EditMode
             var main = env.DataManager.StatusMainDict[id];
             var first = entity.AddStatus(id, entity, 2, 2, 0, main);
             first.RuntimeElement = "Hydro";
-            var stacked = entity.AddStatus(id, entity, 3, 2, 0, main);
-            Assert.That(stacked, Is.SameAs(first));
-            Assert.That(stacked.RuntimeElement, Is.EqualTo("Hydro"));
+            var second = entity.AddStatus(id, entity, 3, 2, 0, main);
+            Assert.That(second, Is.Not.SameAs(first));
+            Assert.That(second.RuntimeElement, Is.Empty);
+            second.RuntimeElement = "Electro";
+            Assert.That(first.RuntimeElement, Is.EqualTo("Hydro"));
+            Assert.That(first.RemainingPhaseCount, Is.EqualTo(2));
+            CollectionAssert.AreEqual(new[] { first, second }, entity.GetStatusInstances(id));
             var replacement = entity.AddStatus(id, entity, 2, 2, 0, main);
             Assert.That(replacement, Is.Not.SameAs(first));
             Assert.That(replacement.RuntimeElement, Is.Empty);
-            replacement.RuntimeElement = "Electro";
+            Assert.That(first.IsActive, Is.False);
+            CollectionAssert.AreEqual(new[] { second, replacement }, entity.GetStatusInstances(id));
+            Assert.That(second.RuntimeElement, Is.EqualTo("Electro"));
+            Assert.That(second.RemainingPhaseCount, Is.EqualTo(3));
+            replacement.RuntimeElement = "Cryo";
             entity.RemoveStatus(id, -1);
+            Assert.That(second.IsActive, Is.False);
+            Assert.That(replacement.IsActive, Is.False);
             var reapplied = entity.AddStatus(id, entity, 2, 2, 0, main);
             Assert.That(reapplied.RuntimeElement, Is.Empty);
         }
@@ -133,7 +143,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using (var env = new BattleFlowTestEnv())
             {
-                env.ConfigureAllyAction(2, "SK_Dispatch", "SE_Dispatch", "None", "1*TotalATK,0");
+                env.ConfigureAllyAction(2, "SK_Dispatch", "SE_Dispatch", "Physical", "1*TotalATK,0");
                 if (fail) env.DataManager.SkillEffectDict["SE_Dispatch"].DamageHook = "Unknown()";
                 env.ConfigureStatus("ST_Dispatch", actionType: "OnTrigger", actionEffectID2: "STE_Dispatch");
                 env.DataManager.StatusEffectDict["STE_Dispatch"] = new StatusEffectData

@@ -6,6 +6,20 @@ using System;
 /// </summary>
 public static class EnemyShieldEffectSystem
 {
+    /// <summary>敌方Shield状态自身持有盾；无需敌人借角色控制器执行OnApply行动。</summary>
+    public static void ApplyStatus(BattleEntity target, StatusInstance status)
+    {
+        if (target == null || target.Type != BattleEntity.EntityType.Enemy || status?.MainData == null
+            || !string.Equals(status.MainData.StatusType, "Shield", StringComparison.OrdinalIgnoreCase)
+            || DataManager.Instance == null) return;
+        var definitions = new System.Collections.Generic.List<StatusEffectData>();
+        foreach (StatusEffectData effect in DataManager.Instance.StatusEffectDict.Values)
+            if (effect != null && effect.StatusEffectID / 100 == status.MainData.StatusID
+                && string.Equals(effect.EffectType, "Shield", StringComparison.OrdinalIgnoreCase)) definitions.Add(effect);
+        definitions.Sort((left, right) => left.StatusEffectID.CompareTo(right.StatusEffectID));
+        foreach (StatusEffectData effect in definitions) Apply(target, effect, status);
+    }
+
     public static Shield Apply(
         BattleEntity target,
         StatusEffectData effect,
@@ -36,6 +50,12 @@ public static class EnemyShieldEffectSystem
                 $"敌方元素盾 {effect.StatusEffectID2} 的 Element 无对应 EnemyShield.Type1 行：{element}");
             return null;
         }
+
+        foreach (string canonical in ElementQuery.Elements)
+            if (string.Equals(element, canonical, StringComparison.OrdinalIgnoreCase)) { element = canonical; break; }
+        Shield existing = target.GetEnemyElementalShield();
+        if (existing != null && ReferenceEquals(existing.SourceStatus, sourceStatus)
+            && existing.Value == gauge && existing.Element == element) return existing;
 
         Shield shield = target.AddOrReplaceEnemyElementalShield(gauge, element, sourceStatus);
         if (shield != null)

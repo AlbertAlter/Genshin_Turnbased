@@ -10,12 +10,13 @@ public sealed class CountStatusApplication
     public int TriggerPhase;
     public StatusMainData MainData;
     public WeaponRuntimeContext WeaponContext;
-    public string Param2; // 专用Count自行解释；夜魂使用本次ApplyStatus填写的整数上限。
+    public EquipmentEffectSource EquipmentSource;
+    public string Param2; // 原始施加参数；夜魂上限由角色处理器定义，不读取此字段。
 
     public StatusInstance ApplyTo(BattleEntity target)
     {
         return target.AddStatus(MainData.StatusID2, Caster, Duration, AddInPhase,
-            TriggerPhase, MainData, WeaponContext, Param2);
+            TriggerPhase, MainData, WeaponContext, Param2, EquipmentSource);
     }
 }
 
@@ -29,13 +30,13 @@ public sealed class CountDamageContext
     public string SkillID;
     public string DamageType;
     public string Element;
-    public int SkillType;
+    public int SkillType; // 仅倍率/技能等级归属；伤害资格和触发筛选必须用上面的DamageType。
     public long EffectExecutionID;
     public int HitIndex;
     public int TargetIndex;
 }
 
-/// <summary>Count 只有存储和回调入口；没有统一初值、上限、扣除、刷新或归零移除规则。</summary>
+/// <summary>Count提供数值存储和回调；初值、范围与刷新由各状态定义。数值归零不自动删除，结束另走正常RemoveStatus/生命周期。</summary>
 public abstract class CountStatusHandler
 {
     public abstract void OnCreated(StatusInstance status, object host);
@@ -44,6 +45,20 @@ public abstract class CountStatusHandler
         OnCreated(status, host);
     }
     public abstract StatusInstance OnReapplied(StatusInstance status, BattleEntity host, CountStatusApplication application);
+    /// <summary>显式接入Count效果；默认保留专用脚本，不允许通用效果绕过额外记账。</summary>
+    public virtual bool SupportsEffectChange => false;
+    public virtual bool EffectUsesIntegerValue => false;
+    public virtual void ValidateEffectChange(StatusInstance status, BattleEntity host, CountChangeRequest request)
+    {
+        if (!SupportsEffectChange) throw new NotSupportedException("该Count尚未接入数值效果：" + status.StatusID2);
+        if (status.HasIntegerRuntimeValue != EffectUsesIntegerValue)
+            throw new InvalidOperationException("Count效果处理器与实例存储类型不符：" + status.StatusID2);
+        request.ValidateNumber(EffectUsesIntegerValue);
+    }
+    public virtual void ChangeFromEffect(StatusInstance status, BattleEntity host, CountChangeRequest request)
+    {
+        throw new NotSupportedException("该Count尚未接入数值效果：" + status.StatusID2);
+    }
     public virtual void OnRemoved(StatusInstance status, object host) { }
     public virtual void OnItsTurn(StatusInstance status, object host) { }
     public virtual CountDamageContribution PrepareDamage(StatusInstance status, object host, CountDamageContext context)
@@ -61,12 +76,22 @@ public static class CountStatusSystem
     static CountStatusSystem()
     {
         Register(BondOfLifeStatusHandler.StatusID, new BondOfLifeStatusHandler());
-        Register(NightSoulStatusHandler.StatusID, new NightSoulStatusHandler());
-        Register(SturdyBoneCountHandler.StatusID, new SturdyBoneCountHandler());
-        Register(HuskCountHandler.StatusID, new HuskCountHandler());
-        Register(CrimsonWitchCountHandler.StatusID, new CrimsonWitchCountHandler());
-        Register(PaleFlameCountHandler.StatusID, new PaleFlameCountHandler());
-        Register(VermillionCountHandler.StatusID, new VermillionCountHandler());
+        NightSoulStatusHandler.RegisterHandlers();
+        Register(JeanC6ResidualCount.ID, new JeanC6ResidualCount());
+        Register(KleeSparkCount.ID, new KleeSparkCount());
+        Register(NingguangStarJadeCount.ID, new NingguangStarJadeCount());
+        Register(NingguangScreenCount.ID, new NingguangScreenCount());
+        Register(BeidouScriptHooks.GuardID, new BeidouGuardCount());
+        Register(RazorScriptHooks.Sigils, new RazorSigilCount());
+        Register(NoelleScriptHooks.CleanActions, new NoelleCleanActionCount());
+        Register(XianglingScriptHooks.Pyronado, new XianglingPyronadoCount());
+        Register(XianglingScriptHooks.FifthNormal, new XianglingFifthNormalCount());
+        Register(ChongyunScriptHooks.ThirdNormal, new ChongyunThirdNormalCount());
+        Register(XingqiuScriptHooks.Rain, new XingqiuRainSwordCount());
+        Register(XingqiuScriptHooks.Rainbow, new XingqiuRainbowCount());
+        Register(MonaScriptHooks.Calamity, new MonaCalamityCount());
+        WeaponHooks.RegisterCounts();
+        ArtifactHooks.RegisterCounts();
     }
 
     internal static void Register(string statusID, CountStatusHandler handler)
@@ -85,14 +110,14 @@ public static class CountStatusSystem
         if (int.TryParse(value, out id))
         {
             if (id == BondOfLifeStatusHandler.NumericStatusID) return BondOfLifeStatusHandler.StatusID;
-            if (id == NightSoulStatusHandler.NumericStatusID) return NightSoulStatusHandler.StatusID;
         }
-        return value;
+        return NightSoulStatusHandler.ResolveStatusReference(value);
     }
 
     public static bool IsCount(StatusMainData main)
     {
-        return main != null && string.Equals(main.StatusType, "Count", StringComparison.OrdinalIgnoreCase);
+        return main != null && (string.Equals(main.StatusType, "Count", StringComparison.OrdinalIgnoreCase)
+            || NightSoulStatusHandler.IsNightSoul(main));
     }
 
     private static CountStatusHandler GetHandler(StatusMainData main)
@@ -100,12 +125,24 @@ public static class CountStatusSystem
         CountStatusHandler handler;
         if (!Handlers.TryGetValue(main.StatusID2, out handler))
             throw new NotSupportedException("Count 状态尚未登记专用处理器：" + main.StatusID2);
+        if (NightSoulStatusHandler.IsNightSoul(main) != (handler is NightSoulStatusHandler))
+            throw new InvalidOperationException("夜魂值状态必须使用NightSoul类型及对应处理器：" + main.StatusID2);
         return handler;
     }
 
     public static void Validate(StatusMainData main)
     {
         if (IsCount(main)) GetHandler(main);
+    }
+
+    internal static CountStatusHandler RequireEffectHandler(StatusMainData main)
+    {
+        if (main == null || !string.Equals(main.StatusType, "Count", StringComparison.OrdinalIgnoreCase))
+            throw new NotSupportedException("Count效果只接受Count类型，夜魂仍使用NightSoul效果。");
+        CountStatusHandler handler = GetHandler(main);
+        if (!handler.SupportsEffectChange)
+            throw new NotSupportedException("该Count保留专用脚本，尚未开放Count效果：" + main.StatusID2);
+        return handler;
     }
 
     public static void OnCreated(StatusInstance status, object host, CountStatusApplication application = null)
@@ -138,6 +175,8 @@ public static class CountStatusSystem
         BattleManager battle = BattleManager.Instance;
         if (battle != null)
         {
+            foreach (var team in new[] { battle.AllyTeam, battle.EnemyTeam })
+                foreach (var status in team.GetStatusList()) Add(status, team, statuses, seen);
             foreach (CharacterBattleController ally in battle.Allies)
                 if (ally != null) AddEntity(ally.Entity, statuses, seen);
             foreach (EnemyBattleController enemy in battle.Enemies)
@@ -151,7 +190,9 @@ public static class CountStatusSystem
         statuses.Sort((left, right) => left.Key.ApplyOrder.CompareTo(right.Key.ApplyOrder));
         foreach (var pair in statuses)
         {
-            CountDamageContribution contribution = GetHandler(pair.Key.MainData).PrepareDamage(pair.Key, pair.Value, context);
+            CountDamageContribution contribution = IsCount(pair.Key.MainData)
+                ? GetHandler(pair.Key.MainData).PrepareDamage(pair.Key, pair.Value, context)
+                : BattleSpecialRules.PrepareDamage(pair.Key, pair.Value, context);
             if (contribution != null) contributions.Add(contribution);
         }
     }
@@ -171,7 +212,8 @@ public static class CountStatusSystem
 
     private static void Add(StatusInstance status, object host, List<KeyValuePair<StatusInstance, object>> list, HashSet<StatusInstance> seen)
     {
-        if (status != null && status.IsActive && IsCount(status.MainData) && seen.Add(status))
+        if (status != null && status.IsActive && EquipmentStatusLifetime.CanExecute(status)
+            && (IsCount(status.MainData) || BattleSpecialRules.HasDamagePreparation(status.StatusID2)) && seen.Add(status))
             list.Add(new KeyValuePair<StatusInstance, object>(status, host));
     }
 }

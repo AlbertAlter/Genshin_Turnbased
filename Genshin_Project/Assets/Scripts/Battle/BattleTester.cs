@@ -20,6 +20,9 @@ public class BattleTester : MonoBehaviour
     [Header("测试配置（由 Tools/关卡编辑器 生成的 StageConfig.json 驱动）")]
     public TextAsset StageConfigJson;   // 可留空：留空时自动从 Resources/StageConfig.json 读取
 
+    /// <summary>可由章节/存档入口注入；有来源时只读其真实角色养成，不回退到测试关卡等级。</summary>
+    public RoguelikeChapterRuntime CharacterProgressSource { get; set; }
+
     void Start()
     {
         // 输入控制：测试时自动挂载（正式场景手动挂 BattleInputController）
@@ -67,10 +70,22 @@ public class BattleTester : MonoBehaviour
     /// <summary>
     /// 销毁现有战斗实体并按配置重建（编辑器热加载/首次启动共用）
     /// </summary>
+    public void ReloadStage(StageSetupData cfg, RoguelikeChapterRuntime characterProgress)
+    {
+        CharacterProgressSource = characterProgress;
+        ReloadStage(cfg);
+    }
+
     public void ReloadStage(StageSetupData cfg)
     {
         var bm = BattleManager.Instance;
         if (bm == null) return;
+
+        // 每次创建前重新查询，避免升级后沿用旧profile；缺少正式记录直接失败，不伪造测试配置数据。
+        var profiles = new List<CharacterProfile>();
+        for (int i = 0; i < cfg.Allies.Count && i < 4; i++)
+            profiles.Add(CharacterProgressSource == null ? CharacterProfile.FromStageAlly(cfg.Allies[i])
+                : CharacterProfile.FromProgress(CharacterProgressSource.GetCharacterProgress(cfg.Allies[i].CharacterID)));
 
         // 先保留旧对象引用，再彻底结束上一场。ResetBattle 会清空注册表和场地。
         var oldAllies = new List<CharacterBattleController>(bm.Allies);
@@ -96,21 +111,13 @@ public class BattleTester : MonoBehaviour
             var a = cfg.Allies[i];
             var allyGO = new GameObject($"Ally_{a.CharacterID}");
             var allyCtrl = allyGO.AddComponent<CharacterBattleController>();
-            allyCtrl.Init(a.CharacterID, a.Level);
-            // 技能等级（独立升级，0=普攻 1=重击 2=战技 3=爆发）
-            if (a.SkillLevels != null && a.SkillLevels.Length >= 4)
-                Array.Copy(a.SkillLevels, allyCtrl.SkillLevels, 4);
-
-            // 天赋/命座/突破初始化（独立玩法层：按档案应用 Modifiers，开场状态/技能等级/效果注入）
-            CharacterBuildApplier.ApplyBuild(allyCtrl, CharacterProfile.FromStageAlly(a));
+            CharacterBuildApplier.InitializePanel(allyCtrl, profiles[i]);
 
             allyCtrl.IsActive = (i == 0);
             if (allyCtrl.Entity != null)
             {
                 allyCtrl.Entity.Side = BattleSide.Ally;
                 allyCtrl.Entity.SlotPosition = i + 1;  // 先设位置再注册，避免 AssignToField 用默认0
-                allyCtrl.Entity.ConstellationLevel = a.Constellation;  // 命座（效果实装前仅存储）
-                allyCtrl.Entity.IsAscended = a.IsAscended;             // 突破标记
                 LogManager.Log(LogCategory.Ally, $"{a.CharacterID} 分配位置 pos={i + 1}");
             }
             bm.RegisterAlly(allyCtrl);
@@ -121,6 +128,11 @@ public class BattleTester : MonoBehaviour
         {
             SpawnEnemy(bm, e.EnemyID, $"Enemy_{e.EnemyID}", e.Slot, e.Level);
         }
+
+        // 先完成双方实体、真实站位和注册，再挂载构筑。OnApply/BindStatus 的 Self、全队、
+        // 敌方目标都依赖这些注册信息；逐人创建时提前应用会漏掉本人或后续成员，不能靠重跑OnApply补救。
+        for (int i = 0; i < bm.Allies.Count; i++)
+            CharacterBuildApplier.ApplyBuild(bm.Allies[i], profiles[i]);
 
         // ---- 初始能量 ----
         ApplyInitialEnergy(cfg);
@@ -162,9 +174,9 @@ public class BattleTester : MonoBehaviour
             if (max <= 0) continue;
 
             if (cfg.InitialEnergyMode == "Fixed")
-                ally.Entity.CurrentEnergy = Mathf.RoundToInt(cfg.InitialEnergyValue);
+                ally.Entity.CurrentEnergy = cfg.InitialEnergyValue;
             else
-                ally.Entity.CurrentEnergy = Mathf.RoundToInt(max * Mathf.Clamp01(cfg.InitialEnergyValue / 100f));
+                ally.Entity.CurrentEnergy = max * Mathf.Clamp01(cfg.InitialEnergyValue / 100f);
         }
     }
 

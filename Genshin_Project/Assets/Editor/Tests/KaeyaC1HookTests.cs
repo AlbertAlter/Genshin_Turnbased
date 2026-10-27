@@ -7,6 +7,7 @@ namespace GenshinTurnBased.Tests.EditMode
     /// Kaeya_C1 钩子测试（2026-08-19，规格第 11 项）：
     /// 普攻/重击攻击带冰附着或冻结的敌人时暴击率 +15%（真实配表 ST_Kaeya_C1 = CritRate 0.15）。
     /// </summary>
+    [Category("RealConfig")]
     public class KaeyaC1HookTests
     {
         private const float ExpectedBonus = 0.15f;
@@ -70,7 +71,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _icyTarget.ApplyAura("Cryo", 1f, 1010);
 
-            float bonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "None", _icyTarget);
+            float bonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "Physical", _icyTarget);
 
             Assert.That(bonus, Is.EqualTo(ExpectedBonus).Within(0.0001f), "普攻攻击冰附着目标应获得 15% 暴击率");
         }
@@ -90,7 +91,7 @@ namespace GenshinTurnBased.Tests.EditMode
             });
             ReactionStateSystem.SetEntityState(_icyTarget, ReactionType.Frozen, 1, snapshot);
 
-            float bonus = _kaeya.GetStatusCritRate("SE_Heavy_Kaeya", "SK_Heavy_Kaeya", 1, "None", _icyTarget);
+            float bonus = _kaeya.GetStatusCritRate("SE_Heavy_Kaeya", "SK_Heavy_Kaeya", 1, "Physical", _icyTarget);
 
             Assert.That(bonus, Is.EqualTo(ExpectedBonus).Within(0.0001f), "重击攻击冻结目标应获得 15% 暴击率");
         }
@@ -98,7 +99,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [Test]
         public void CleanTarget_NoAuraNoFrozen_NoBonus()
         {
-            float bonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "None", _cleanTarget);
+            float bonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "Physical", _cleanTarget);
 
             Assert.That(bonus, Is.Zero, "无冰附着无冻结的目标不应享受加成");
         }
@@ -129,8 +130,8 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             _icyTarget.ApplyAura("Cryo", 1f, 1010);
 
-            float icyBonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "None", _icyTarget);
-            float cleanBonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "None", _cleanTarget);
+            float icyBonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "Physical", _icyTarget);
+            float cleanBonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "Physical", _cleanTarget);
 
             Assert.That(icyBonus, Is.EqualTo(ExpectedBonus).Within(0.0001f));
             Assert.That(cleanBonus, Is.Zero, "不同目标应分别判断");

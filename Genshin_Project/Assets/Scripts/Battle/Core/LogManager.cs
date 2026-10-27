@@ -47,7 +47,8 @@ public enum LogCategory{
     ScriptHook,  // [ScriptHook] 钩子判定
     PreDamageHook,// [PreDamageHook] 主动伤害钩子
     // 数据
-    Data         // [DataManager] 数据加载/校验
+    Data,        // [DataManager] 数据加载/校验
+    TeamBonus    // [TeamBonus] 队伍增益触发、覆盖和计数
 }
 
 /// <summary>
@@ -69,6 +70,7 @@ public static class LogManager{
     public static bool EnableVerboseLogs { get; set; } = false;
 
     static readonly Dictionary<LogCategory, string> Tags = new Dictionary<LogCategory, string>{
+        { LogCategory.TeamBonus,     "[TeamBonus] " },
         { LogCategory.Turn,          "[Turn] " },
         { LogCategory.AP,            "[AP] " },
         { LogCategory.Battle,        "[战斗] " },

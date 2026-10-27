@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class BattleEntity
@@ -12,11 +13,15 @@ public partial class BattleEntity
 
     public StatusInstance AddStatus(string statusID2, BattleEntity caster, int initialPhaseCount)
     {
+        if (statusID2 == TeamPublicStatuses.MoonCage)
+            throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
         if (StatusDict.TryGetValue(statusID2, out var existing))
         {
             if (existing.MainData != null)
                 return AddStatus(statusID2, caster, initialPhaseCount, existing.AddInPhase,
-                    existing.TriggerPhase, existing.MainData, existing.WeaponContext);
+                    existing.TriggerPhase, existing.MainData, existing.WeaponContext,
+                    EnchantStatusSystem.IsEnchant(existing.MainData) ? existing.Enchant.ElementAmount.ToString(System.Globalization.CultureInfo.InvariantCulture) : null,
+                    existing.EquipmentSource, existing.Enchant.Element, existing.Enchant.CanBeOverridden ? "0" : "1");
         }
         if (CountStatusSystem.IsRegistered(statusID2))
             throw new InvalidOperationException("新建 Count 状态必须使用携带主数据和来源上下文的完整 ApplyStatus 入口。");
@@ -31,6 +36,7 @@ public partial class BattleEntity
             ApplyOrder = ++_applyOrderCounter
         };
         inst.RecordSource(caster);
+        inst.Host = this;
         StatusDict.Add(inst);
         return inst;
     }
@@ -49,13 +55,26 @@ public partial class BattleEntity
         return AddStatus(statusID2, caster, duration, addInPhase, triggerPhase, mainData, null);
     }
 
-    public StatusInstance AddStatus(string statusID2, BattleEntity caster, int duration, int addInPhase, int triggerPhase, StatusMainData mainData, WeaponRuntimeContext weaponContext, string param2 = null)
+    public StatusInstance AddStatus(string statusID2, BattleEntity caster, int duration, int addInPhase, int triggerPhase, StatusMainData mainData, WeaponRuntimeContext weaponContext, string param2 = null,
+        EquipmentEffectSource equipmentSource = null, string enchantElement = null, string enchantOverride = null)
     {
+        if (statusID2 == TeamPublicStatuses.MoonCage)
+            throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
+        using var declarationResolution = BattleEventHub.BeginResolution();
+        using var declarations = BattleResolutionContext.BeginCollection();
+        using var intrinsicElements = ElementQuery.IsIntrinsicStatus(statusID2)
+            ? ElementEventScope.Begin("IntrinsicStatusApplied", this) : null;
+        equipmentSource = EquipmentStatusLifetime.Resolve(statusID2, caster, weaponContext, equipmentSource);
+        if (equipmentSource != null && !equipmentSource.IsAvailable) return null;
+        // 配表留空解析为0；按术语取实际施加阶段，不能把状态登记到不会推进的阶段0。
+        if (addInPhase == 0 && BattleManager.Instance != null)
+            addInPhase = (int)BattleManager.Instance.CurrentPhase;
         CountStatusSystem.Validate(mainData);
+        var enchant = EnchantStatusSystem.Parse(mainData, enchantElement, param2, enchantOverride);
         var application = new CountStatusApplication
         {
             Caster = caster, Duration = duration, AddInPhase = addInPhase, TriggerPhase = triggerPhase,
-            MainData = mainData, WeaponContext = weaponContext, Param2 = param2
+            MainData = mainData, WeaponContext = weaponContext, Param2 = param2, EquipmentSource = equipmentSource
         };
         StatusInstance currentCount;
         if (CountStatusSystem.IsCount(mainData) && StatusDict.TryGetValue(statusID2, out currentCount))
@@ -76,6 +95,15 @@ public partial class BattleEntity
         }
 
         var existingInstances = StatusDict.GetAll(statusID2);
+        // 已明确要求同源刷新、异源共存的武器标记；不改变普通状态的全局MaxStack规则。
+        if (statusID2 == "ST_Weapon_4304203" || statusID2 == "ST_Weapon_4304103" || statusID2 == "ST_Weapon_4304104")
+        {
+            int expectedWeapon = statusID2 == "ST_Weapon_4304203" ? 3042 : 3041;
+            if (weaponContext?.WeaponID != expectedWeapon || weaponContext.Equipper != caster)
+                throw new InvalidOperationException("同源刷新状态必须保留原武器装备者与来源身份。");
+            existingInstances.RemoveAll(status => status.Caster != caster
+                || status.WeaponContext?.SourceInstanceID != weaponContext.SourceInstanceID);
+        }
         int maxStack = mainData != null ? mainData.MaxStack : 0;
         if (maxStack > 0 && existingInstances.Count >= maxStack)
         {
@@ -83,7 +111,7 @@ public partial class BattleEntity
             // 满额只替换最早的那一份，不能删掉整个同 ID 分组或刷新其他实例。
             int removeCount = existingInstances.Count - maxStack + 1;
             for (int index = 0; index < removeCount; index++)
-                RemoveStatusInstance(existingInstances[index]);
+                RemoveStatusInstance(existingInstances[index], "Replaced");
         }
 
         var inst = new StatusInstance
@@ -96,13 +124,24 @@ public partial class BattleEntity
             TriggerPhase = triggerPhase,
             MainData = mainData,
             WeaponContext = weaponContext,
+            EquipmentSource = equipmentSource,
+            Enchant = enchant,
             Snapshot = null,
             IsActive = true,
             ApplyOrder = ++_applyOrderCounter
         };
         inst.RecordSource(caster);
+        inst.Host = this;
         CountStatusSystem.OnCreated(inst, this, application);
+        BattleSpecialRules.OnStatusCreated(inst, this);
         StatusDict.Add(inst);
+        if (ElementQuery.IsIntrinsicStatus(statusID2))
+            foreach (string element in ElementQuery.Elements)
+                if (statusID2 == ElementQuery.IntrinsicStatusID(element)) RemoveAura(element);
+        var appliedFact = BattleEventHub.Publish(new StatusEventData(inst, this, true, "Applied"));
+        intrinsicElements?.AddCause(appliedFact.Header.EventId, this);
+        using var appliedDeclaration = BattleEventHub.Enter(appliedFact);
+        EnemyShieldEffectSystem.ApplyStatus(this, inst);
 
         // ========== BindStatus 自动绑定（2026-08-06） ==========
         // 术语表原文："只要该效果来源的状态存在，其所定义的目标或场地位置就一直存在其 Param1 所填写的子状态"
@@ -118,6 +157,8 @@ public partial class BattleEntity
         // 术语：OnApply = 状态施加时立刻生效的效果，由状态施放者（角色控制器）执行
         if (inst.Caster != null && inst.Caster.CharacterCtrl != null)
             inst.Caster.CharacterCtrl.OnStatusApplied(inst, this);
+        else if (inst.Caster?.EnemyCtrl != null)
+            inst.Caster.EnemyCtrl.OnStatusApplied(inst, this);
         if (!HasStatusInstance(inst)) return inst;
 
         // ========== 状态结算登记（2026-08-12） ==========
@@ -132,6 +173,7 @@ public partial class BattleEntity
         // ========== Kill 钩子登记（2026-08-19，逻辑见 KillHookSystem.cs） ==========
         // 状态带 OnTrigger+ScriptHook=Kill(...) 时登记，死亡声明时按 ApplyOrder 触发。
         KillHookSystem.Register(inst, this);
+        StatusHostAccess.OnExtraBaseHPChanged(inst, this);
 
         return inst;
     }
@@ -161,10 +203,18 @@ public partial class BattleEntity
     }
 
     /// <summary>只移除这一份实例；到期、绑定清理、满层替换必须用此入口。</summary>
-    public bool RemoveStatusInstance(StatusInstance status)
+    public bool RemoveStatusInstance(StatusInstance status, string reason = "Removed")
     {
+        using var declarationResolution = BattleEventHub.BeginResolution();
+        using var declarations = BattleResolutionContext.BeginCollection();
+        using var intrinsicElements = ElementQuery.IsIntrinsicStatus(status?.StatusID2)
+            ? ElementEventScope.Begin("IntrinsicStatusRemoved", this) : null;
         if (!StatusDict.Remove(status)) return false;
         status.IsActive = false; // 先失效，已收集的旧实例响应不能作用于其他同 ID 实例。
+        BattleSpecialRules.OnStatusRemoved(status, this);
+        var removedFact = BattleEventHub.Publish(new StatusEventData(status, this, false, reason));
+        intrinsicElements?.AddCause(removedFact.Header.EventId, this);
+        using var removedDeclaration = BattleEventHub.Enter(removedFact);
         StatusBindingSystem.RemoveBindings(status);
         CharacterCtrl?.OnStatusChangeControlRemoved(status);
         BattleManager.Instance?.UnregisterStatusTick(status);
@@ -172,6 +222,7 @@ public partial class BattleEntity
         KillHookSystem.Unregister(status);
         RemoveShieldOwnedByStatus(status);
         CountStatusSystem.OnRemoved(status, this);
+        StatusHostAccess.OnExtraBaseHPChanged(status, this);
         return true;
     }
 
@@ -207,8 +258,8 @@ public partial class BattleEntity
     }
 
     /// <summary>
-    /// 获取"生效状态"列表 = 自身身上的状态 + 所在位置上的状态。
-    /// 位置上的状态对该位置的单位同样生效（位置状态不随单位死亡消失）。
+    /// 获取"生效状态"列表 = 自身状态 + 所在位置状态 + 同阵营队伍宿主的被动Buff/Debuff/Immune/Enchant。
+    /// 不复制队伍状态进个人容器；个人HasStatus/Count和状态栏仍只读真实个人挂载。
     /// </summary>
     public List<StatusInstance> GetEffectiveStatusList()
     {
@@ -222,6 +273,11 @@ public partial class BattleEntity
                     list.Add(s);
             }
         }
+        var team = BattleManager.Instance?.GetTeamFor(this);
+        if (team != null)
+            foreach (var status in team.GetStatusList())
+                if (StatusHostAccess.IsTeamBuff(status) && !list.Contains(status)) list.Add(status);
+        list.RemoveAll(status => !EquipmentStatusLifetime.CanExecute(status));
         list.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
         return list;
     }
@@ -229,70 +285,40 @@ public partial class BattleEntity
     /// <summary>累加目标身上适用于当前元素的 ResBonus 状态效果。</summary>
     public float GetStatusResBonus(string element)
     {
-        DataManager dataManager = DataManager.Instance;
-        if (dataManager == null || dataManager.StatusEffectDict == null) return 0f;
-
-        string configuredElement = string.IsNullOrEmpty(element) || element == "None"
-            ? "Physical"
-            : element;
-
-        float total = 0f;
-        var used = new Dictionary<string, int>();
-        foreach (StatusInstance instance in GetEffectiveStatusList())
-        {
-            StatusMainData mainData = instance != null ? instance.MainData : null;
-            if (mainData == null || !instance.IsActive) continue;
-            if (mainData.GetMultiplierPart() != "ResBonus") continue;
-            if (!StatusAppliesTo(
-                    mainData,
-                    string.Empty,
-                    string.Empty,
-                    0,
-                    configuredElement)) continue;
-
-            int count = StatusAggregation.Take(instance, used);
-            if (count == 0) continue;
-            foreach (StatusEffectData effect in dataManager.StatusEffectDict.Values)
-            {
-                if (effect == null || effect.StatusEffectID == 0) continue;
-                if (effect.StatusEffectID / 100 != mainData.StatusID) continue;
-                if (effect.EffectType != "Buff" && effect.EffectType != "Debuff") continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, instance, out float value))
-                    total += value * count;
-            }
-        }
-        return total;
+        string configuredElement = element;
+        return GetTeamResistanceBonus(element)
+            + GetStatusAdditiveAttributeBonus("ResBonus", "", "", -1, configuredElement, this);
     }
 
-    /// <summary>
-    /// 累加生效状态中的 ATKBonus（百分比攻击力加成，如跳舞+10%）。
-    /// 按状态生效范围过滤：ApplyString（只对该效果生效）/ ApplyDamageType（适用伤害类型）/ ApplyElementType（适用元素）。
-    /// </summary>
+    /// <summary>固定攻击力位于攻击百分比之后，不放大白值，也不再次乘攻击百分比。</summary>
+    public float GetStatusATKBonusFlat(string effectID2, string skillID2, int skillType, string element, BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("ATKBonusFlat", effectID2, skillID2, skillType, element, target);
+
+    /// <summary>普通直伤的基础伤害加数；只读适用Buff，不再次收集CountDamageContribution。</summary>
+    public float GetStatusBaseDMGBonusFlat(string effectID, string skillID, int skillType, string element, BattleEntity target)
+        => GetStatusAdditiveAttributeBonus("BaseDMGBonusFlat", effectID, skillID, skillType, element, target);
+
+    public float GetFinalATK(string effectID2, string skillID2, int skillType, string element)
+        => GetTotalBaseATK(effectID2, skillID2, skillType, element) * (1f + CharacterATKBonus + WeaponATKBonus
+            + GetStatusATKBonus(effectID2, skillID2, skillType, element))
+            + GetStatusATKBonusFlat(effectID2, skillID2, skillType, element);
+
+    /// <summary>白值：角色成长/突破+武器白值+ExtraBaseATK；不含任何攻击百分比或ATKBonusFlat。</summary>
+    public float GetTotalBaseATK(string effectID = "", string skillID = "", int skillType = -1, string element = "")
+        => TotalATK + WeaponATK + GetStatusAdditiveAttributeBonus("ExtraBaseATK", effectID, skillID, skillType, element, null);
+
+    public float GetStatusExtraBaseHP(string effectID = "", string skillID = "", int skillType = -1,
+        string element = "", BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("ExtraBaseHP", effectID, skillID, skillType, element, target);
+
+    public float GetStatusExtraBaseDEF(string effectID = "", string skillID = "", int skillType = -1,
+        string element = "", BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("ExtraBaseDEF", effectID, skillID, skillType, element, target);
+
+    /// <summary>按实际伤害/技能范围累加百分比攻击力。</summary>
     public float GetStatusATKBonus(string effectID2, string skillID2, int skillType, string element)
-    {
-        float total = 0f;
-        var used = new Dictionary<string, int>();
-        foreach (var inst in GetEffectiveStatusList())
-        {
-            if (inst.MainData == null) continue;
-            string part = inst.MainData.GetMultiplierPart();
-            if (part != "ATKBonus") continue;
-            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, null)) continue;
-            int count = StatusAggregation.Take(inst, used);
-            if (count == 0) continue;
-            foreach (var kv in DataManager.Instance.StatusEffectDict)
-            {
-                // 效果ID数值前缀匹配：StatusEffectID / 100 == 父状态 StatusID
-                var eff = kv.Value;
-                if (eff.StatusEffectID == 0) continue;
-                if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
-                if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
-                    total += v * count;
-            }
-        }
-        return total;
-    }
+        => (BattleManager.Instance?.TeamBonuses?.Resonance.ATKBonus(this) ?? 0f)
+            + GetStatusAdditiveAttributeBonus("ATKBonus", effectID2, skillID2, skillType, element, null);
 
     /// <summary>
     /// 累加生效状态中的 CritRate（百分比暴击率加成，如安柏天赋1 +10%）。
@@ -309,25 +335,152 @@ public partial class BattleEntity
     /// 每个目标独立判断（不同目标分别决定是否计入）。
     /// </summary>
     public float GetStatusCritRate(string effectID2, string skillID2, int skillType, string element, BattleEntity target)
+        => GetStatusCritRate(effectID2, skillID2, skillType, element, target, null);
+
+    public float GetStatusCritRate(string effectID2, string skillID2, int skillType, string element, BattleEntity target, ReactionType? damageReaction)
+        => (BattleManager.Instance?.TeamBonuses?.Resonance.CritBonus(this, target) ?? 0f)
+            + GetStatusAdditiveAttributeBonus("CritRate", effectID2, skillID2, skillType, element, target, damageReaction: damageReaction);
+
+    /// <summary>本次实际伤害的状态暴伤，限定反应仅在明确传入对应身份时汇总。</summary>
+    public float GetStatusCritDMG(string effectID, string skillID, int skillType, string element, BattleEntity target,
+        ReactionType? damageReaction = null)
+        => GetStatusAdditiveAttributeBonus("CritDMG", effectID, skillID, skillType, element, target, damageReaction: damageReaction);
+
+    /// <summary>
+    /// 累加当前适用的状态防御百分比；Count表达式只读来源角色数值，不修改面板或计数。
+    /// 与其他状态属性查询统一放在本分片，避免调用方依赖尚未导入的新分片。
+    /// </summary>
+    public float GetStatusDEFBonus(string effectID = "", string skillID = "", int skillType = 0,
+        string element = "", BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("DEFBonus", effectID, skillID, skillType, element, target);
+
+    /// <summary>固定防御位于百分比乘区之外；仍按状态来源、条件、范围和MaxCount只读汇总。</summary>
+    public float GetStatusDEFBonusFlat(string effectID = "", string skillID = "", int skillType = 0,
+        string element = "", BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("DEFBonusFlat", effectID, skillID, skillType, element, target);
+
+    /// <summary>保留已有面板与武器加成；基础防御乘状态百分比后再加固定值，不回写TotalDEF。</summary>
+    public float GetFinalDEF(string effectID = "", string skillID = "", int skillType = 0,
+        string element = "", BattleEntity target = null)
     {
+        float basis = CharacterCtrl != null ? CharacterCtrl.GetDEFBeforePercentBonuses() : TotalDEF;
+        if (basis <= 0f) basis = TotalDEF;
+        float percent = GetStatusDEFBonus(effectID, skillID, skillType, element, target);
+        float extra = GetStatusExtraBaseDEF(effectID, skillID, skillType, element, target);
+        return Mathf.Max(0f, TotalDEF + basis * percent
+            + extra * (1f + CharacterDEFBonus + WeaponDEFBonus + percent)
+            + GetStatusDEFBonusFlat(effectID, skillID, skillType, element, target));
+    }
+
+    /// <summary>只读状态精通加成；TotalEM保留基础、武器及已有队伍常驻值，不反复回写。</summary>
+    public float GetStatusEMBonus(string effectID = "", string skillID = "", int skillType = -1,
+        string element = "", BattleEntity target = null)
+        => GetStatusAdditiveAttributeBonus("EMBonus", effectID, skillID, skillType, element, target);
+
+    public float GetFinalEM(string effectID = "", string skillID = "", int skillType = -1,
+        string element = "", BattleEntity target = null)
+        => Mathf.Max(0f, TotalEM + GetStatusEMBonus(effectID, skillID, skillType, element, target));
+
+    public float GetStatusRechargeBonus()
+        => GetStatusAdditiveAttributeBonus("RechargeBonus", "", "", -1, "", null);
+
+    /// <summary>缺少基础充能配置时沿用原1.0兜底；状态百分比加算，Flat回能不调用本入口。</summary>
+    public float GetFinalRechargeRate()
+        => Mathf.Max(0f, (TotalRechargeRate > 0f ? TotalRechargeRate : 1f) + GetStatusRechargeBonus());
+
+    /// <summary>只汇总调用者明确提供的开战固定生命状态；不在属性查询中修改生命或发布声明。</summary>
+    internal float GetInitialArtifactHPBonusFlat(IEnumerable<StatusInstance> statuses)
+        => GetStatusAdditiveAttributeBonus("HPBonusFlat", "", "", -1, "", null, statuses);
+
+    internal float GetInitialArtifactHPBonus(IEnumerable<StatusInstance> statuses)
+        => GetStatusAdditiveAttributeBonus("HPBonus", "", "", -1, "", null, statuses);
+
+    private IEnumerable<StatusInstance> GetUnbakedHPStatuses()
+    {
+        foreach (var status in GetEffectiveStatusList())
+            if (status != null && !status.HPBonusIncludedInPanel && EquipmentStatusLifetime.CanExecute(status)) yield return status;
+    }
+
+    /// <summary>纯查询：生命百分比与已有百分比同乘区，固定生命最后相加；不额外改变当前HP或生成治疗。</summary>
+    public float GetFinalHP(string effectID = "", string skillID = "", int skillType = -1,
+        string element = "", BattleEntity target = null)
+    {
+        float percent = GetStatusAdditiveAttributeBonus("HPBonus", effectID, skillID, skillType, element, target, GetUnbakedHPStatuses());
+        float flat = GetStatusAdditiveAttributeBonus("HPBonusFlat", effectID, skillID, skillType, element, target, GetUnbakedHPStatuses());
+        float basis = CharacterCtrl != null ? CharacterCtrl.GetHPBeforePercentBonuses() : TotalHP;
+        float extra = GetStatusExtraBaseHP(effectID, skillID, skillType, element, target);
+        // 已烘入TotalHP的百分比不重复求值；ExtraBaseHP仍须吃到它们，固定生命始终留在乘区外。
+        float result = TotalHP + basis * percent + flat + extra * (1f + BakedHPBonus + percent);
+        if (float.IsNaN(result) || float.IsInfinity(result)) throw new InvalidOperationException("最终生命上限必须为有限值。");
+        return Mathf.Max(0f, result);
+    }
+
+    /// <summary>真实生命上限降低后的提交入口；不在查询中钳制，不伪造伤害或治疗。</summary>
+    internal void ClampCurrentHPToMaximum()
+    {
+        float before = CurrentHP;
+        CurrentHP = Mathf.Min(CurrentHP, GetFinalHP());
+        var battle = BattleManager.Instance;
+        if (before != CurrentHP && battle != null && battle.IsBattleRunning && !battle.IsBattleOver)
+            BattleEventHub.Publish(new HPChangedEventData(this, before, CurrentHP, "MaxHPAdjustment"));
+    }
+
+    /// <summary>受盾者自身的状态护盾强效，来源与Count仍按原Buff实例只读汇总。</summary>
+    public float GetStatusShieldStrengthBonus(string damageElement = "")
+        => GetStatusAdditiveAttributeBonus("ShieldStrength", "", "", -1, damageElement, this);
+
+    /// <summary>基础1 + 原字段 + 队伍 + 状态加算；不改写任何盾的原始Value。</summary>
+    public float GetShieldStrengthMultiplier(string damageElement = "")
+    {
+        float value = 1f + ShieldStrength + GetTeamShieldStrength() + GetStatusShieldStrengthBonus(damageElement);
+        if (float.IsNaN(value) || float.IsInfinity(value))
+            throw new InvalidOperationException("护盾强效必须为有限数值。");
+        return Mathf.Max(0f, value);
+    }
+
+    internal float GetLiveTargetStatusBonus(string part, string effectID, string element, BattleEntity target,
+        string damageType, ReactionType? reaction)
+    {
+        using var query = DamageQueryContext.Enter(effectID, damageType);
+        return GetStatusAdditiveAttributeBonus(part, effectID, "", -1, element, target,
+            GetEffectiveStatusList().Where(StatusSnapshotConditions.IsLiveTargetStatus), reaction);
+    }
+
+    private float GetStatusAdditiveAttributeBonus(string part, string effectID, string skillID, int skillType,
+        string element, BattleEntity target, IEnumerable<StatusInstance> suppliedStatuses = null, ReactionType? damageReaction = null)
+    {
+        var dm = DataManager.Instance;
+        if (dm == null) return 0f;
         float total = 0f;
         var used = new Dictionary<string, int>();
-        foreach (var inst in GetEffectiveStatusList())
+        foreach (var status in suppliedStatuses ?? GetEffectiveStatusList())
         {
-            if (inst.MainData == null) continue;
-            string part = inst.MainData.GetMultiplierPart();
-            if (part != "CritRate") continue;
-            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
-            int count = StatusAggregation.Take(inst, used);
+            var main = status?.MainData;
+            if (main == null || !status.IsActive || main.GetMultiplierPart() != part) continue;
+            if (!StatusAppliesTo(status, effectID, skillID, skillType, element, target, damageReaction)) continue;
+            int count = StatusAggregation.Take(status, used);
             if (count == 0) continue;
-            foreach (var kv in DataManager.Instance.StatusEffectDict)
+            bool collected = false;
+            foreach (var effect in dm.StatusEffectDict.Values)
             {
-                var eff = kv.Value;
-                if (eff.StatusEffectID == 0) continue;
-                if (eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
-                if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float v))
-                    total += v * count;
+                if (effect == null || effect.StatusEffectID / 100 != main.StatusID
+                    || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
+                if (part == "BaseDMGBonusFlat" && BattleSpecialRules.IsPreparedBaseDamageEffect(status, effect)) continue;
+                if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
+                { Caster = status.Caster, Status = status, Target = target, Recipient = this,
+                    StatusHost = StatusHostAccess.FindHost(status, this), HitEffectID = effectID, DamageElement = element,
+                    DamageType = DamageQueryContext.ResolveType(effectID),
+                    DamageReaction = damageReaction,
+                    DamageSkillID = DamageQueryContext.ResolveSkillID(effectID, skillID) })) continue;
+                if (!HexereiStatusEnhancement.TryResolveScalar(effect, status, out float value)) continue;
+                collected = true;
+                total += value * count;
+            }
+            if (!collected && main.MaxCount > 0)
+            {
+                string id = status.StatusID2 ?? main.StatusID.ToString();
+                used[id] -= count;
+                if (used[id] == 0) used.Remove(id);
             }
         }
         return total;
@@ -335,52 +488,12 @@ public partial class BattleEntity
 
     /// <summary>累加适用于当前命中目标的状态增伤；武器 Index(n) 在状态实例上下文内求值。</summary>
     public float GetStatusDMGBonus(string effectID2, string skillID2, int skillType, string element, BattleEntity target)
-    {
-        float total = 0f;
-        var dm = DataManager.Instance;
-        if (dm == null) return total;
-        var used = new Dictionary<string, int>();
-        foreach (var inst in GetEffectiveStatusList())
-        {
-            if (inst?.MainData == null || inst.MainData.GetMultiplierPart() != "DMGBonus") continue;
-            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
-            int count = StatusAggregation.Take(inst, used);
-            if (count == 0) continue;
-            foreach (var eff in dm.StatusEffectDict.Values)
-            {
-                if (eff == null || eff.StatusEffectID / 100 != inst.MainData.StatusID) continue;
-                if (eff.EffectType != "Buff" && eff.EffectType != "Debuff") continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(eff.Param1, inst, out float value)) total += value * count;
-            }
-        }
-        return total;
-    }
+        => GetTeamDamageBonus(element)
+            + GetStatusAdditiveAttributeBonus("DMGBonus", effectID2, skillID2, skillType, element, target);
 
     public float GetStatusHealingBonus(string part, string effectID2, string skillID2,
         int skillType, string element, BattleEntity target)
-    {
-        var dm = DataManager.Instance;
-        if (dm == null) return 0f;
-        float total = 0f;
-        var used = new Dictionary<string, int>();
-        foreach (var inst in GetEffectiveStatusList())
-        {
-            if (inst?.MainData == null || !inst.IsActive || inst.MainData.GetMultiplierPart() != part) continue;
-            if (!StatusAppliesTo(inst, effectID2, skillID2, skillType, element, target)) continue;
-            int count = StatusAggregation.Take(inst, used);
-            if (count == 0) continue;
-            foreach (var effect in dm.StatusEffectDict.Values)
-            {
-                if (effect == null || effect.StatusEffectID / 100 != inst.MainData.StatusID
-                    || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
-                if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
-                { Caster = inst.Caster, Target = target, Status = inst, HitEffectID = effectID2 })) continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, inst, out float value))
-                    total += value * count;
-            }
-        }
-        return total;
-    }
+        => GetStatusAdditiveAttributeBonus(part, effectID2, skillID2, skillType, element, target);
 
     /// <summary>
     /// 状态生效范围判定（术语 L313-L331）：
@@ -393,9 +506,14 @@ public partial class BattleEntity
     /// 在 ApplyString / ApplyDamageType / ApplyElementType 检查之后，追加 StatusMainData.ScriptHook 判定
     /// （如 Kaeya_C1：目标攻击前已有冰附着/冻结才计入暴击率；返回假时该状态的加成不得加入）。
     /// </summary>
-    static bool StatusAppliesTo(StatusInstance status, string effectID2, string skillID2, int skillType, string element, BattleEntity target)
+    bool StatusAppliesTo(StatusInstance status, string effectID2, string skillID2, int skillType, string element, BattleEntity target,
+        ReactionType? damageReaction = null)
     {
         if (status == null || !status.IsActive || status.MainData == null) return false;
+        if (!string.IsNullOrWhiteSpace(status.MainData.ApplyReactionType)
+            && (!damageReaction.HasValue || !ReactionFilterMatcher.Matches(status.MainData.ApplyReactionType,
+                damageReaction.Value, null, element))) return false;
+        skillID2 = DamageQueryContext.ResolveSkillID(effectID2, skillID2);
         if (!StatusAppliesTo(status.MainData, effectID2, skillID2, skillType, element)) return false;
         if (!string.IsNullOrEmpty(status.MainData.ScriptHook))
         {
@@ -404,7 +522,13 @@ public partial class BattleEntity
                 Caster = status.Caster,
                 Target = target,
                 Status = status,
-                HitEffectID = effectID2
+                Recipient = this,
+                StatusHost = StatusHostAccess.FindHost(status, this),
+                HitEffectID = effectID2,
+                DamageSkillID = skillID2,
+                DamageType = DamageQueryContext.ResolveType(effectID2),
+                DamageReaction = damageReaction,
+                DamageElement = element
             };
             if (!ScriptHookEvaluator.Evaluate(status.MainData.ScriptHook, context))
                 return false;
@@ -412,7 +536,12 @@ public partial class BattleEntity
         return true;
     }
 
-    static bool StatusAppliesTo(StatusMainData md, string effectID2, string skillID2, int skillType, string element)
+    internal static bool StatusAppliesTo(StatusMainData md, string effectID2, string skillID2, int skillType, string element)
+        // skillType仅为旧属性查询签名保留，不参与伤害类别过滤。
+        => StatusAppliesTo(md, effectID2, DamageQueryContext.ResolveSkillID(effectID2, skillID2),
+            DamageQueryContext.ResolveType(effectID2), element);
+
+    internal static bool StatusAppliesTo(StatusMainData md, string effectID2, string skillID2, string damageType, string element)
     {
         if (!string.IsNullOrEmpty(md.ApplyString))
         {
@@ -435,17 +564,12 @@ public partial class BattleEntity
         }
         if (!string.IsNullOrEmpty(md.ApplyDamageType))
         {
-            string typeName = skillType switch
-            {
-                0 => "Normal",
-                1 => "Heavy",
-                2 => "Skill",
-                _ => "Burst",
-            };
             bool matched = false;
             foreach (string configuredType in md.ApplyDamageType.Split(';'))
             {
-                if (string.Equals(configuredType.Trim(), typeName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(configuredType.Trim(), "All", StringComparison.OrdinalIgnoreCase)
+                    || (!string.IsNullOrWhiteSpace(damageType)
+                        && string.Equals(configuredType.Trim(), damageType.Trim(), StringComparison.OrdinalIgnoreCase)))
                 {
                     matched = true;
                     break;
@@ -455,7 +579,17 @@ public partial class BattleEntity
         }
         if (!string.IsNullOrEmpty(md.ApplyElementType))
         {
-            if (element != md.ApplyElementType) return false;
+            bool matched = false;
+            // Physical 与 None（直接伤害）独立匹配，空白查询不假定伤害性质。
+            string actualElement = element?.Trim();
+            foreach (string configured in md.ApplyElementType.Split(';'))
+                if (string.Equals(configured.Trim(), "All", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(configured.Trim(), actualElement, StringComparison.OrdinalIgnoreCase))
+                {
+                    matched = true;
+                    break;
+                }
+            if (!matched) return false;
         }
         return true;
     }

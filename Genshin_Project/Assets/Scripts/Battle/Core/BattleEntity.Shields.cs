@@ -12,12 +12,13 @@ public partial class BattleEntity
         float strength = 1f,
         ShieldKind kind = ShieldKind.Skill,
         int originPhase = -1,
-        StatusInstance sourceStatus = null)
+        StatusInstance sourceStatus = null, BattleEntity creator = null, long grantBatchId = 0)
     {
+        using var declarations = ShieldEventScope.Begin(this, "Added");
         int resolvedOriginPhase = originPhase > 0
             ? originPhase
             : (BattleManager.Instance != null ? (int)BattleManager.Instance.CurrentPhase : -1);
-        Shields.Add(new Shield
+        var shield = new Shield
         {
             Value = value,
             Element = element,
@@ -28,15 +29,18 @@ public partial class BattleEntity
             SourceStatusID2 = sourceStatus != null ? sourceStatus.StatusID2 : null,
             SourceStatusApplyOrder = sourceStatus != null ? sourceStatus.ApplyOrder : 0,
             SourceStatus = sourceStatus
-        });
+        };
+        Shields.Add(shield);
+        if (shield.Value > 0f) BattleEventHub.Publish(new ShieldGrantedEventData(this, shield, "Added", grantBatchId, creator));
     }
 
     public Shield AddOrReplaceCrystallizeShield(
         float value,
         string element,
         int duration,
-        int originPhase)
+        int originPhase, long grantBatchId = 0, BattleEntity creator = null)
     {
+        using var declarations = ShieldEventScope.Begin(this, "CrystallizeReplacement");
         if (value <= 0f || duration <= 0) return null;
 
         int resolvedOriginPhase = originPhase > 0
@@ -67,6 +71,7 @@ public partial class BattleEntity
         shield.Strength = 1f;
         shield.Kind = ShieldKind.Crystallize;
         shield.OriginPhase = resolvedOriginPhase;
+        BattleEventHub.Publish(new ShieldGrantedEventData(this, shield, "CrystallizeReplacement", grantBatchId, creator));
         return shield;
     }
 
@@ -79,6 +84,7 @@ public partial class BattleEntity
         string element,
         StatusInstance sourceStatus)
     {
+        using var declarations = ShieldEventScope.Begin(this, "EnemyElementalReplacement");
         if (Type != EntityType.Enemy || value <= 0f || sourceStatus == null)
             return null;
 
@@ -118,6 +124,7 @@ public partial class BattleEntity
 
     private void RemoveShieldOwnedByStatus(StatusInstance status)
     {
+        using var declarations = ShieldEventScope.Begin(this, "SourceStatusRemoved");
         if (status == null) return;
         for (int i = Shields.Count - 1; i >= 0; i--)
         {
@@ -129,6 +136,7 @@ public partial class BattleEntity
 
     private void RefreshShieldOwnedByStatus(StatusInstance status)
     {
+        using var declarations = ShieldEventScope.Begin(this, "DurationRefreshed");
         if (status == null) return;
         foreach (Shield shield in Shields)
         {
@@ -139,6 +147,7 @@ public partial class BattleEntity
 
     private void RemoveEnemyElementalShieldObjects(StatusInstance owner)
     {
+        using var declarations = ShieldEventScope.Begin(this, "Replacement");
         for (int i = Shields.Count - 1; i >= 0; i--)
         {
             Shield shield = Shields[i];
@@ -165,6 +174,7 @@ public partial class BattleEntity
     /// </summary>
     public float ApplyEnemyElementalShieldLoss(float requestedLoss, out bool broken)
     {
+        using var declarations = ShieldEventScope.Begin(this, "ElementalShieldLoss");
         broken = false;
         if (requestedLoss <= 0f || float.IsNaN(requestedLoss) || float.IsInfinity(requestedLoss))
             return 0f;
@@ -191,6 +201,7 @@ public partial class BattleEntity
 
     public void RemoveShields(ShieldKind kind)
     {
+        using var declarations = ShieldEventScope.Begin(this, "Removed");
         if (kind == ShieldKind.EnemyElemental)
         {
             var owners = new List<StatusInstance>();
@@ -208,6 +219,7 @@ public partial class BattleEntity
 
     public void TickShields(int currentPhase)
     {
+        using var declarations = ShieldEventScope.Begin(this, "Decay");
         if (currentPhase <= 0) return;
 
         for (int i = Shields.Count - 1; i >= 0; i--)
@@ -245,12 +257,15 @@ public partial class BattleEntity
     private float GetMaximumShieldCapacity(string damageElement, bool includeAbsorptionMultiplier)
     {
         float maximum = 0f;
+        float? strength = null;
         foreach (Shield shield in Shields)
         {
             if (shield == null || shield.Value <= 0f || shield.Kind == ShieldKind.EnemyElemental) continue;
 
-            float factor = (1f + ShieldStrength) * shield.Strength;
-            if (includeAbsorptionMultiplier)
+            bool direct = includeAbsorptionMultiplier && DamageProperties.IsDirect(damageElement);
+            if (!direct && !strength.HasValue) strength = GetShieldStrengthMultiplier(damageElement);
+            float factor = direct ? 1f : strength.Value * shield.Strength;
+            if (includeAbsorptionMultiplier && !direct)
                 factor *= GetShieldAbsorptionMultiplier(shield.Element, damageElement);
             if (factor <= 0f || float.IsNaN(factor) || float.IsInfinity(factor)) continue;
 
@@ -262,11 +277,20 @@ public partial class BattleEntity
     }
 
     public float AbsorbDamageWithShield(float incomingDamage, string damageElement)
+        => AbsorbDamageWithShieldCore(incomingDamage, damageElement, DamageProperties.IsDirect(damageElement));
+
+    /// <summary>直接伤害按原始盾量1:1抵扣；多个护盾仍同时承伤，不串联累加。</summary>
+    public float AbsorbDirectDamageWithShield(float incomingDamage)
+        => AbsorbDamageWithShieldCore(incomingDamage, "None", true);
+
+    private float AbsorbDamageWithShieldCore(float incomingDamage, string damageElement, bool direct)
     {
+        using var declarations = ShieldEventScope.Begin(this, "Absorption");
         if (incomingDamage <= 0f || Shields.Count == 0)
             return Mathf.Max(0f, incomingDamage);
 
         float maxBlocked = 0f;
+        float? strength = null;
         for (int i = Shields.Count - 1; i >= 0; i--)
         {
             Shield shield = Shields[i];
@@ -278,8 +302,8 @@ public partial class BattleEntity
             if (shield.Kind == ShieldKind.EnemyElemental)
                 continue;
 
-            float absorbMultiplier = GetShieldAbsorptionMultiplier(shield.Element, damageElement);
-            float factor = absorbMultiplier * (1f + ShieldStrength) * shield.Strength;
+            if (!direct && !strength.HasValue) strength = GetShieldStrengthMultiplier(damageElement);
+            float factor = direct ? 1f : GetShieldAbsorptionMultiplier(shield.Element, damageElement) * strength.Value * shield.Strength;
             if (factor <= 0f || float.IsNaN(factor) || float.IsInfinity(factor))
                 continue;
 

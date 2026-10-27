@@ -2,6 +2,8 @@ using UnityEngine;
 
 public struct CrystallizeReactionResolution
 {
+    public ReactionType Type;
+    public PendingLunarCrystallize PendingLunarCrystallize;
     public string DisplayName;
     public string ReactedElement;
     public float RemainingAttackAmount;
@@ -27,53 +29,60 @@ public static class CrystallizeReactionHandler
         if (!TrySelectReactedElement(context, out string reactedElement, out float availableAmount))
             return false;
 
-        float otherConsumed = Mathf.Min(availableAmount, context.AttackAmount / 2f);
+        bool reverse = context.AttackElement != "Geo";
+        bool lunar = LunarCrystallizeReactionHandler.TryPrepare(context, reverse ? "Geo" : reactedElement, out var pending);
+
+        float otherConsumed = reverse ? context.AttackAmount : Mathf.Min(availableAmount, context.AttackAmount / 2f);
         if (otherConsumed <= Epsilon) return false;
 
-        ConsumeReactedElement(context, reactedElement, otherConsumed);
+        if (!reverse) ConsumeReactedElement(context, reactedElement, otherConsumed);
+
+        if (lunar)
+        {
+            resolution = new CrystallizeReactionResolution { Type = ReactionType.LunarCrystallize,
+                DisplayName = "月结晶", ReactedElement = reverse ? "Geo" : reactedElement, RemainingAttackAmount = 0f,
+                PendingLunarCrystallize = pending };
+            return true; // 水岩消耗仍按1:2；不生成普通结晶盾，也不把协奏伪装成本次接触的即时伤害。
+        }
 
         ReactionSourceSnapshot snapshot = ReactionSourceSnapshot.Capture(context);
         bool sourceIsEnemy = IsEnemySource(context, snapshot);
         bool sourceIsConfirmedAlly = !sourceIsEnemy && IsConfirmedAllySource(context, snapshot);
-        float shieldValue = 0f;
-        if (sourceIsConfirmedAlly)
-        {
-            int sourceLevel = snapshot != null && snapshot.Level > 0
-                ? snapshot.Level
-                : (context.SourceEntity != null ? context.SourceEntity.Level : 1);
-            float levelCoefficient = snapshot != null && snapshot.LevelCoefficient > 0f
-                ? snapshot.LevelCoefficient
-                : ReactionDamageCalculator.GetLevelCoefficient(sourceLevel);
-            float totalEM = snapshot != null ? Mathf.Max(0f, snapshot.TotalEM) : 0f;
-            shieldValue = Mathf.Max(0f,
-                ReactionDamageCalculator.CalculateCharacterCrystalShield(levelCoefficient, totalEM));
-
-            BattleManager battle = BattleManager.Instance;
-            if (battle == null)
-            {
-                LogManager.LogWarning(
-                    LogCategory.Reaction,
-                    "结晶反应已完成，但当前没有 BattleManager，无法为队伍施加结晶盾。");
-            }
-            else
-            {
-                CrystallizeShieldSystem.ApplyPartyShield(
-                    battle,
-                    reactedElement,
-                    shieldValue,
-                    context.ApplicationPhase);
-            }
-        }
+        float shieldValue = sourceIsConfirmedAlly ? GrantPartyShield(context, reactedElement) : 0f;
 
         resolution = new CrystallizeReactionResolution
         {
+            Type = sourceIsConfirmedAlly ? ReactionType.Crystallize : ReactionType.None,
             DisplayName = sourceIsConfirmedAlly ? "结晶" : null,
-            ReactedElement = reactedElement,
+            ReactedElement = reverse ? "Geo" : reactedElement,
             RemainingAttackAmount = 0f,
             ShieldValue = shieldValue,
             GrantsPartyShield = sourceIsConfirmedAlly
         };
         return true;
+    }
+
+    internal static bool IsPartySource(ReactionContext context)
+    {
+        var snapshot = ReactionSourceSnapshot.Capture(context);
+        return !IsEnemySource(context, snapshot) && IsConfirmedAllySource(context, snapshot);
+    }
+
+    /// <summary>只提交护盾，供已经完成元素消耗的扩散分份复用；不会再次反应或扣量。</summary>
+    internal static float GrantPartyShield(ReactionContext context, string element)
+    {
+        var snapshot = ReactionSourceSnapshot.Capture(context);
+        if (!IsPartySource(context)) return 0f;
+        int level = snapshot != null && snapshot.Level > 0 ? snapshot.Level : context.SourceEntity != null ? context.SourceEntity.Level : 1;
+        float coefficient = snapshot != null && snapshot.LevelCoefficient > 0f
+            ? snapshot.LevelCoefficient : ReactionDamageCalculator.GetLevelCoefficient(level);
+        float shield = Mathf.Max(0f, ReactionDamageCalculator.CalculateCharacterCrystalShield(coefficient,
+            snapshot != null ? Mathf.Max(0f, snapshot.TotalEM) : 0f));
+        var battle = BattleManager.Instance;
+        if (battle != null) CrystallizeShieldSystem.ApplyPartyShield(battle, element, shield, context.ApplicationPhase,
+            context.SourceEntity ?? context.SourceSnapshotOverride?.SourceEntity);
+        else LogManager.LogWarning(LogCategory.Reaction, "结晶反应已完成，但当前没有 BattleManager，无法为队伍施加结晶盾。");
+        return shield;
     }
 
     private static bool TrySelectReactedElement(
@@ -87,11 +96,21 @@ public static class CrystallizeReactionHandler
             || !context.CanTriggerReaction
             || context.Target == null
             || !context.Target.IsAlive
-            || context.AttackElement != "Geo"
             || context.AttackAmount <= Epsilon)
             return false;
 
-        float pyro = BurningReactionHandler.GetPyroAmountIncludingBurning(context.Target);
+        if (context.AttackElement != "Geo")
+        {
+            if (!ReactionPairRules.IsSwirlable(context.AttackElement)
+                || !(context.AllowsReactionPool("Geo", ReactionPoolKind.Intrinsic)
+                    && ElementQuery.ReadIntrinsic(context.Target, "Geo") != null
+                    || ElementQuery.ReadShield(context, "Geo") != null)) return false;
+            reactedElement = context.AttackElement;
+            availableAmount = context.AttackAmount;
+            return true;
+        }
+
+        float pyro = ElementQuery.GetReactionAmount(context, "Pyro");
         if (pyro > Epsilon)
         {
             reactedElement = "Pyro";
@@ -99,7 +118,7 @@ public static class CrystallizeReactionHandler
             return true;
         }
 
-        float hydro = context.Target.GetAura("Hydro")?.AuraAmount ?? 0f;
+        float hydro = ElementQuery.GetReactionAmount(context, "Hydro");
         if (hydro > Epsilon)
         {
             reactedElement = "Hydro";
@@ -107,7 +126,7 @@ public static class CrystallizeReactionHandler
             return true;
         }
 
-        float electro = context.Target.GetAura("Electro")?.AuraAmount ?? 0f;
+        float electro = ElementQuery.GetReactionAmount(context, "Electro");
         if (electro > Epsilon)
         {
             reactedElement = "Electro";
@@ -115,11 +134,7 @@ public static class CrystallizeReactionHandler
             return true;
         }
 
-        float normalCryo = context.Target.GetAura("Cryo")?.AuraAmount ?? 0f;
-        float frozenCryo = context.IgnoreFrozenAura
-            ? 0f
-            : FrozenReactionHandler.GetFrozenAuraAsCryo(context.Target);
-        float cryo = Mathf.Max(0f, normalCryo) + Mathf.Max(0f, frozenCryo);
+        float cryo = ElementQuery.GetReactionAmount(context, "Cryo");
         if (cryo <= Epsilon) return false;
 
         reactedElement = "Cryo";
@@ -132,28 +147,7 @@ public static class CrystallizeReactionHandler
         string reactedElement,
         float amount)
     {
-        if (reactedElement == "Pyro")
-        {
-            BurningReactionHandler.ConsumePyroIncludingBurning(context.Target, amount);
-            return;
-        }
-
-        if (reactedElement == "Hydro" || reactedElement == "Electro")
-        {
-            context.Target.ConsumeAura(reactedElement, amount);
-            return;
-        }
-
-        float remaining = amount;
-        ElementalAura normalCryo = context.Target.GetAura("Cryo");
-        if (normalCryo != null)
-        {
-            float normalConsumed = Mathf.Min(normalCryo.AuraAmount, remaining);
-            context.Target.ConsumeAura("Cryo", normalConsumed);
-            remaining -= normalConsumed;
-        }
-        if (remaining > Epsilon && !context.IgnoreFrozenAura)
-            FrozenReactionHandler.ConsumeFrozenAura(context.Target, remaining);
+        ElementAuraSystem.ConsumeReactionAura(context, reactedElement, amount);
     }
 
     private static bool IsEnemySource(ReactionContext context, ReactionSourceSnapshot snapshot)

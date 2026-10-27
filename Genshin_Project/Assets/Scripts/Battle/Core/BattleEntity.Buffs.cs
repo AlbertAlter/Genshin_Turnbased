@@ -1,37 +1,5 @@
-using UnityEngine;
-
+// 防御查询实现已合并到 BattleEntity.Statuses.cs，与其他状态属性聚合共用已参与编译的分片。
+// 保留本脚本及meta，不改变已有资源GUID；重新导入后也不会出现同名方法重复定义。
 public partial class BattleEntity
 {
-    public float GetStatusDEFBonus(string effectID = "", string skillID = "", int skillType = 0,
-        string element = "", BattleEntity target = null)
-    {
-        var dm = DataManager.Instance;
-        if (dm == null) return 0f;
-        float total = 0f;
-        var used = new System.Collections.Generic.Dictionary<string, int>();
-        foreach (StatusInstance status in GetEffectiveStatusList())
-        {
-            if (status?.MainData == null || !status.IsActive || status.MainData.GetMultiplierPart() != "DEFBonus"
-                || !StatusAppliesTo(status, effectID, skillID, skillType, element, target)) continue;
-            int stacks = StatusAggregation.Take(status, used);
-            if (stacks == 0) continue;
-            foreach (var effect in dm.StatusEffectDict.Values)
-            {
-                if (effect == null || effect.StatusEffectID / 100 != status.MainData.StatusID
-                    || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
-                if (BuffExpressionEvaluator.TryResolveScalar(effect.Param1, status, out float value))
-                    total += value * stacks;
-            }
-        }
-        return total;
-    }
-
-    /// <summary>保留已有面板与武器加成，状态百分比以基础防御加算，不回写 TotalDEF。</summary>
-    public float GetFinalDEF(string effectID = "", string skillID = "", int skillType = 0,
-        string element = "", BattleEntity target = null)
-    {
-        float basis = CharacterCtrl != null ? CharacterCtrl.GetDEFBeforePercentBonuses() : TotalDEF;
-        if (basis <= 0f) basis = TotalDEF;
-        return Mathf.Max(0f, TotalDEF + basis * GetStatusDEFBonus(effectID, skillID, skillType, element, target));
-    }
 }

@@ -11,6 +11,22 @@ public sealed class DamageResolvedEvent
 {
     /// <summary>所属 HitBatch 的运行时序号；直接调用 TakeDamage 时为0。</summary>
     public long HitBatchID;
+    public long RuntimeHitID;
+    public BattleDeclaration Declaration;
+    public float DamageBeforeShield;
+    public CriticalHitResult? Critical;
+    public float ShieldAbsorbed;
+    /// <summary>本次对应元素的伤害被Immune效果免疫；不同于未命中、护盾吸收或普通零伤害。</summary>
+    public bool IsImmune;
+    /// <summary>免疫阻止的伤害，不计护盾吸收或实际扣血；DamageBeforeShield保留免疫前计算值。</summary>
+    public float ImmuneDamage;
+    public string Element;
+    public string DamageType;
+    public float ElementAmount;
+    public bool IsNightSoulDamage;
+    public DamageProperties Properties;
+    public bool IsPneumaDamage => Properties.IsPneuma;
+    public bool IsOusiaDamage => Properties.IsOusia;
 
     /// <summary>效果内第几个 hit（从1开始）；未知时为0。</summary>
     public int HitIndex;
@@ -23,6 +39,10 @@ public sealed class DamageResolvedEvent
 
     /// <summary>伤害来源声明（谁/哪个技能/哪个效果）。</summary>
     public DamageSourceInfo Source;
+
+    /// <summary>本次正式受击提交前的来源编队/前台事实；未知不能按当前IsActive倒推。</summary>
+    public bool SourceWasPartyMember;
+    public bool SourceWasOnField;
 
     /// <summary>受击前生命值。</summary>
     public float HPBefore;

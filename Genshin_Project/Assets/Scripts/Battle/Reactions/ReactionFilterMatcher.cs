@@ -24,6 +24,18 @@ public static class ReactionFilterMatcher
             string token = raw.Trim();
             if (token.Length == 0) continue;
             if (!string.IsNullOrEmpty(configuredName)
+                && string.Equals(token, "All", StringComparison.OrdinalIgnoreCase)) return true;
+            if (!string.IsNullOrEmpty(configuredName) && reactionType != ReactionType.None
+                && string.Equals(token, reactionType.ToString(), StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (reactionType == ReactionType.ElectroCharged
+                && string.Equals(token, "Electro-Charged", StringComparison.OrdinalIgnoreCase))
+                return true;
+            if ((token == "月曜" || string.Equals(token, "Lunar", StringComparison.OrdinalIgnoreCase))
+                && IsLunar(reactionType)) return true;
+            if ((token == "星烁" || string.Equals(token, "Stellar", StringComparison.OrdinalIgnoreCase))
+                && IsStellar(reactionType)) return true;
+            if (!string.IsNullOrEmpty(configuredName)
                 && string.Equals(token, configuredName, StringComparison.Ordinal))
                 return true;
             if (!string.IsNullOrEmpty(displayName)
@@ -34,6 +46,12 @@ public static class ReactionFilterMatcher
         }
         return false;
     }
+
+    public static bool IsLunar(ReactionType type) => type == ReactionType.LunarElectroCharged
+        || type == ReactionType.LunarBloom || type == ReactionType.LunarCrystallize;
+
+    // 只列真实已定义的反应，不从字符串前缀猜测尚未实现的星扩散等类型。
+    public static bool IsStellar(ReactionType type) => type == ReactionType.StellarSuperconduct;
 
     public static bool Matches(
         string configured,
@@ -56,6 +74,10 @@ public static class ReactionFilterMatcher
             case ReactionType.Melt: return "融化";
             case ReactionType.Overloaded: return "超载";
             case ReactionType.Superconduct: return "超导";
+            case ReactionType.StellarSuperconduct: return "星超导";
+            case ReactionType.LunarElectroCharged: return "月感电";
+            case ReactionType.LunarBloom: return "月绽放";
+            case ReactionType.LunarCrystallize: return "月结晶";
             case ReactionType.ElectroCharged: return "感电";
             case ReactionType.Frozen: return "冻结";
             case ReactionType.Shatter: return "碎冰";
@@ -89,6 +111,10 @@ public static class ReactionFilterMatcher
             case ReactionType.Melt: Add(elements, "Pyro", "Cryo"); break;
             case ReactionType.Overloaded: Add(elements, "Pyro", "Electro"); break;
             case ReactionType.Superconduct: Add(elements, "Cryo", "Electro"); break;
+            case ReactionType.StellarSuperconduct: Add(elements, "Cryo", "Electro"); break;
+            case ReactionType.LunarElectroCharged: Add(elements, "Hydro", "Electro"); break;
+            case ReactionType.LunarBloom: Add(elements, "Hydro", "Dendro"); break;
+            case ReactionType.LunarCrystallize: Add(elements, "Hydro", "Geo"); break;
             case ReactionType.ElectroCharged: Add(elements, "Hydro", "Electro"); break;
             case ReactionType.Frozen: Add(elements, "Hydro", "Cryo"); break;
             case ReactionType.Shatter: elements.Add("Cryo"); break;

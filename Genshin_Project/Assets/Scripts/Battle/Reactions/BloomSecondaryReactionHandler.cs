@@ -160,7 +160,6 @@ public static class BloomSecondaryReactionHandler
             Target = target,
             Damage = damage,
             DamageElement = "Dendro",
-            PoiseDamage = 0f,
             ElementAmount = 0f,
             // 绽放次生来源声明（2026-08-19）：使用创建时的来源快照，保留原始角色归属
             Source = DamageSourceInfo.FromReactionSnapshot(snapshot, reactionType),

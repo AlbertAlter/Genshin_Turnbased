@@ -50,6 +50,28 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void CalculateAmplifying_BaseBonusAddsAlongsideMastery_NotAsAnotherFinalMultiplier()
+        {
+            float baseline = ReactionDamageCalculator.CalculateCharacterAmplifying(100f, 1.5f, 200f);
+            float actual = ReactionDamageCalculator.CalculateCharacterAmplifying(100f, 1.5f, 200f, .15f);
+            Assert.That(actual, Is.EqualTo(100f * 1.5f * (1f + 2.78f * 200f / 1600f + .15f)).Within(.001f));
+            Assert.That(actual - baseline, Is.EqualTo(100f * 1.5f * .15f).Within(.001f));
+            Assert.That(actual, Is.Not.EqualTo(baseline * 1.15f).Within(.001f));
+        }
+
+        [TestCase(ReactionType.Aggravate, 1.15f)]
+        [TestCase(ReactionType.Spread, 1.25f)]
+        public void CalculateQuicken_BaseBonusOnlyRaisesReactionIncrement_NotSkillBase(
+            ReactionType reaction, float coefficient)
+        {
+            float baseline = ReactionDamageCalculator.CalculateCharacterQuicken(200f, 100f, reaction, 200f, 1.2f, .5f, .8f);
+            float actual = ReactionDamageCalculator.CalculateCharacterQuicken(200f, 100f, reaction, 200f, 1.2f, .5f, .8f, .2f);
+            float expected = (200f + coefficient * 100f * (1f + 5f * 200f / 1400f + .2f)) * 1.2f * .5f * .8f;
+            Assert.That(actual, Is.EqualTo(expected).Within(.001f));
+            Assert.That(actual - baseline, Is.EqualTo(coefficient * 100f * .2f * 1.2f * .5f * .8f).Within(.001f));
+        }
+
+        [Test]
         public void CalculateTransformative_UsesCharacterAndEnemyDedicatedFormulas()
         {
             float characterDamage = ReactionDamageCalculator.CalculateCharacterTransformative(
@@ -104,6 +126,132 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(totals.DMGBonus, Is.EqualTo(0.5f).Within(0.001f));
             Assert.That(totals.BaseDMGBonusFlat, Is.EqualTo(10f).Within(0.001f));
+        }
+
+        [TestCase("月曜", ReactionType.LunarElectroCharged, true)]
+        [TestCase("Lunar", ReactionType.LunarBloom, true)]
+        [TestCase("月曜", ReactionType.LunarCrystallize, true)]
+        [TestCase("星烁", ReactionType.StellarSuperconduct, true)]
+        [TestCase("Stellar", ReactionType.StellarSuperconduct, true)]
+        [TestCase("月曜", ReactionType.StellarSuperconduct, false)]
+        [TestCase("星烁", ReactionType.Superconduct, false)]
+        [TestCase("Lunar", ReactionType.ElectroCharged, false)]
+        [TestCase("Stellar", ReactionType.Swirl, false)]
+        [TestCase("Swirl", ReactionType.Swirl, true)]
+        [TestCase("Superconduct", ReactionType.Superconduct, true)]
+        [TestCase("Superconduct", ReactionType.StellarSuperconduct, false)]
+        [TestCase("Electro-Charged", ReactionType.ElectroCharged, true)]
+        [TestCase("ElectroCharged", ReactionType.ElectroCharged, true)]
+        [TestCase("月曜;星烁", ReactionType.StellarSuperconduct, true)]
+        [TestCase("All", ReactionType.LunarBloom, true)]
+        [TestCase("all", ReactionType.Superconduct, true)]
+        [TestCase("All", ReactionType.None, false)]
+        [TestCase("Physical", ReactionType.None, false)]
+        [TestCase("999", (ReactionType)999, false)]
+        [TestCase("月曜", ReactionType.None, false)]
+        public void ReactionFilter_RecognizesDeclaredFamiliesAndCanonicalNames_NotOrdinaryLookalikes(
+            string filter, ReactionType reaction, bool expected)
+        {
+            Assert.That(ReactionFilterMatcher.Matches(filter, reaction), Is.EqualTo(expected));
+        }
+
+        [TestCase(ReactionType.LunarElectroCharged, "Electro", .37f, 0f, .2f)]
+        [TestCase(ReactionType.LunarBloom, "Dendro", .02f, 0f, .2f)]
+        [TestCase(ReactionType.LunarCrystallize, "Geo", .47f, 0f, .2f)]
+        [TestCase(ReactionType.StellarSuperconduct, "Cryo", 0f, .53f, .2f)]
+        [TestCase(ReactionType.StellarSuperconduct, "Electro", 0f, .03f, .2f)]
+        [TestCase(ReactionType.Superconduct, "Cryo", 0f, 0f, .2f)]
+        [TestCase(ReactionType.ElectroCharged, "Electro", 0f, 0f, .2f)]
+        [TestCase(ReactionType.Swirl, "Geo", 0f, 0f, .2f)]
+        public void SpecialReactionParts_KeepIndependentTotals_AndFilterFamilyAndActualDamageElement(
+            ReactionType reaction, string element, float lunar, float stellar, float baseBonus)
+        {
+            var statuses = new[]
+            {
+                NewStatus(1, "DMGBonus", "", "", 1),
+                NewStatus(2, "LunarDMGBonus", "月曜", "Electro", 1),
+                NewStatus(3, "LunarDMGBonus", "Lunar", "Geo", 1),
+                NewStatus(4, "StellarDMGBonus", "星烁", "Cryo", 1),
+                NewStatus(5, "BaseDMGBonus", "", "", 1),
+                NewStatus(6, "BaseDMGBonusFlat", "", "", 1),
+                NewStatus(7, "LunarDMGBonus", "", "", 1),
+                NewStatus(8, "StellarDMGBonus", "", "", 1),
+                NewStatus(9, "LunarDMGBonus", "月曜", "Electro;Geo", 1)
+            };
+            var effects = new[]
+            {
+                NewBuffEffect(1, .1f), NewBuffEffect(2, .3f), NewBuffEffect(3, .4f),
+                NewBuffEffect(4, .5f), NewBuffEffect(5, .2f), NewBuffEffect(6, 10f),
+                NewBuffEffect(7, .02f), NewBuffEffect(8, .03f), NewBuffEffect(9, .05f)
+            };
+            ReactionBuffTotals totals = ReactionDamageCalculator.CollectReactionBonuses(statuses, effects, reaction, element);
+            Assert.That(totals.DMGBonus, Is.EqualTo(.1f).Within(.00001f));
+            Assert.That(totals.BaseDMGBonusFlat, Is.EqualTo(10f));
+            Assert.That(totals.BaseDMGBonus, Is.EqualTo(baseBonus).Within(.00001f));
+            Assert.That(totals.LunarDMGBonus, Is.EqualTo(lunar).Within(.00001f));
+            Assert.That(totals.StellarDMGBonus, Is.EqualTo(stellar).Within(.00001f));
+            Assert.That(ReactionDamageCalculator.CollectExclusiveReactionDamageBonus(statuses, effects, reaction, element), Is.Zero,
+                "专用乘区不能混进普通反应专属DMGBonus返回值");
+        }
+
+        [TestCase(ReactionType.Aggravate, "Aggravate")]
+        [TestCase(ReactionType.Vaporize, "Vaporize;Melt")]
+        [TestCase(ReactionType.Melt, "Vaporize;Melt")]
+        public void OrdinaryReactionBaseBonus_IsCollectedSeparatelyFromOtherParts(
+            ReactionType reaction, string filter)
+        {
+            var status = NewStatus(1, "BaseDMGBonus", filter, "", 1);
+            var totals = ReactionDamageCalculator.CollectReactionBonuses(new[] { status },
+                new[] { NewBuffEffect(1, .15f) }, reaction, "Pyro");
+            Assert.That(totals.BaseDMGBonus, Is.EqualTo(.15f).Within(.00001f));
+            Assert.That(totals.DMGBonus, Is.Zero);
+            Assert.That(totals.BaseDMGBonusFlat, Is.Zero);
+            Assert.That(totals.LunarDMGBonus, Is.Zero);
+            Assert.That(totals.StellarDMGBonus, Is.Zero);
+        }
+
+        [Test]
+        public void ReactionCollectors_RespectEffectConditionsAndSemicolonElementFilters()
+        {
+            var status = NewStatus(1, "DMGBonus", "超导", "Cryo;Electro", 1);
+            var gated = NewBuffEffect(1, .8f);
+            gated.ScriptHook = "Hook(456302)";
+            var stellarOnly = NewBuffEffect(1, 10f);
+            stellarOnly.ScriptHook = "Check(999999_C6)";
+            var statuses = new[] { status };
+            var effects = new[] { gated, stellarOnly };
+            Assert.That(ReactionDamageCalculator.CollectReactionBonuses(statuses, effects,
+                ReactionType.Superconduct, "Cryo").DMGBonus, Is.EqualTo(.8f).Within(.00001f));
+            Assert.That(ReactionDamageCalculator.CollectExclusiveReactionDamageBonus(statuses, effects,
+                ReactionType.Superconduct, "Cryo"), Is.EqualTo(.8f).Within(.00001f));
+            Assert.That(ReactionDamageCalculator.CollectReactionBonuses(statuses, effects,
+                ReactionType.StellarSuperconduct, "Cryo").DMGBonus, Is.Zero);
+            status.MainData.ApplyReactionType = "All";
+            status.MainData.ApplyElementType = "all";
+            Assert.That(ReactionDamageCalculator.CollectReactionBonuses(statuses, effects,
+                ReactionType.Superconduct, "Cryo").DMGBonus, Is.EqualTo(.8f).Within(.00001f));
+        }
+
+        [Test]
+        public void ReactionCollectors_IneligibleEffectDoesNotConsumeAnotherSourcesMaxCountSlot()
+        {
+            var first = NewStatus(1, "DMGBonus", "超导", "Cryo", 1);
+            var second = NewStatus(1, "DMGBonus", "超导", "Cryo", 1);
+            first.MainData.MaxCount = second.MainData.MaxCount = 1;
+            _target.EntityID = 999999;
+            _target.ConstellationLevel = 6;
+            second.Caster = _target;
+            var effect = NewBuffEffect(1, .8f);
+            effect.ScriptHook = "Check(999999_C6)";
+            var statuses = new[] { first, second };
+            var effects = new[] { effect };
+            Assert.That(ReactionDamageCalculator.CollectReactionBonuses(statuses, effects,
+                ReactionType.Superconduct, "Cryo").DMGBonus, Is.EqualTo(.8f).Within(.00001f));
+            Assert.That(ReactionDamageCalculator.CollectExclusiveReactionDamageBonus(statuses, effects,
+                ReactionType.Superconduct, "Cryo"), Is.EqualTo(.8f).Within(.00001f));
+            first.Caster = _target;
+            Assert.That(ReactionDamageCalculator.CollectReactionBonuses(statuses, effects,
+                ReactionType.Superconduct, "Cryo").DMGBonus, Is.EqualTo(.8f).Within(.00001f), "都适用时仍只计一次");
         }
 
         [Test]

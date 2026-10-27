@@ -48,6 +48,12 @@ public static class QuickenDamageHandler
         }
 
         ReactionDamageComponents components = context.DamageComponents;
+        if (components.Properties.UsesSpecialFormula)
+        {
+            resolution = new QuickenDamageResolution
+            { Type = type, DisplayName = displayName, FinalDamage = context.PreReactionDamage };
+            return true; // 保留真实反应事实，但不使用普通激化公式改写特殊技能伤害。
+        }
         float reactionDamageBonus = ReactionDamageCalculator.CollectExclusiveReactionDamageBonus(
             context.SourceEntity,
             type,
@@ -56,6 +62,9 @@ public static class QuickenDamageHandler
         bool sourceIsEnemy = context.SourceKind == ReactionSourceKind.EnemySkill
             || (context.SourceEntity != null
                 && context.SourceEntity.Type == BattleEntity.EntityType.Enemy);
+        float baseDamageBonus = sourceIsEnemy ? 0f : context.SourceSnapshotOverride != null
+            ? context.SourceSnapshotOverride.BaseDMGBonus
+            : ReactionDamageCalculator.CollectReactionBaseDamageBonus(context.SourceEntity, type, context.AttackElement);
 
         float finalDamage = sourceIsEnemy
             ? ReactionDamageCalculator.CalculateEnemyQuicken(
@@ -69,10 +78,11 @@ public static class QuickenDamageHandler
                 components.SkillBaseDamage,
                 levelCoefficient,
                 type,
-                context.SourceEntity != null ? context.SourceEntity.TotalEM : 0f,
+                ReactionDamageCalculator.GetSourceMastery(context),
                 damageBonusMultiplier,
                 components.DefenseMultiplier,
-                components.ResistanceMultiplier);
+                components.ResistanceMultiplier,
+                baseDamageBonus);
 
         resolution = new QuickenDamageResolution
         {

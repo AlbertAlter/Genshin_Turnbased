@@ -71,7 +71,6 @@ namespace GenshinTurnBased.Tests.EditMode
                 Assert.That(hit.Damage, Is.EqualTo(expectedDamage).Within(0.001f));
                 Assert.That(hit.DamageElement, Is.EqualTo("Dendro"));
                 Assert.That(hit.ElementAmount, Is.Zero);
-                Assert.That(hit.PoiseDamage, Is.Zero);
             }
         }
 
@@ -213,8 +212,6 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.SlotPosition = position;
             entity.TotalHP = 10000f;
             entity.CurrentHP = 10000f;
-            entity.MaxPoise = 500f;
-            entity.Poise = 500f;
             FieldPosition slot = _battle.Field.GetSlot(side, position);
             slot.Occupant = entity;
             entity.Position = slot;

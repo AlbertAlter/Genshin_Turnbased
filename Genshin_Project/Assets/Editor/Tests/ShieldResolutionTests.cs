@@ -222,19 +222,78 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void CharacterShieldStatus_RefreshesAndRemovesItsOwnedShield()
+        [Timeout(6000)]
+        public void CharacterShieldStatus_ConfiguredReplacementRebuildsItsShieldAndPreservesOtherShields()
         {
-            _entity.Type = BattleEntity.EntityType.Character;
-            var shieldMain = new StatusMainData { StatusID2 = "ST_PlayerShield", StatusType = "Shield" };
-            StatusInstance status = _entity.AddStatus("ST_PlayerShield", null, 2, 1, 1, shieldMain);
-            _entity.AddShield(15f, "Cryo", 2f, sourceStatus: status);
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_PlayerShield";
+                const string effectID = "STE_PlayerShield";
+                // 文档规定同一角色的技能盾刷新；由单例状态配表完成覆盖，不复用旧实例。
+                env.ConfigureStatus(statusID, maxStack: 1, whenMax: "0",
+                    actionType: "OnApply", actionEffectID2: effectID);
+                var main = env.DataManager.StatusMainDict[statusID];
+                main.StatusID = 69021;
+                main.StatusType = "Shield";
+                var shieldEffect = new StatusEffectData
+                {
+                    StatusEffectID = 6902101, StatusEffectID2 = effectID, EffectType = "Shield",
+                    Param1 = "15", Element = "Cryo", Duration = 2, TargetType = "Self"
+                };
+                env.DataManager.StatusEffectDict[effectID] = shieldEffect;
+                env.ConfigureAllyAction(2, "SK_PlayerShield", "SE_PlayerShield", "Physical", null,
+                    apCost: 10, effectType: "ApplyStatus", param1: statusID, duration: 2,
+                    addInPhase: (int)TurnPhase.AllyAction, targetType: "Self");
+                env.CreateMinimalBattle();
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                var entity = env.Ally.Entity;
+                _entity.EntityID = 990003;
+                _entity.Side = BattleSide.Ally;
+                var otherMain = new StatusMainData
+                {
+                    StatusID = 69022, StatusID2 = "ST_OtherPlayerShield", StatusType = "Shield",
+                    MaxStack = 1, WhenMax = "0"
+                };
+                env.DataManager.StatusMainDict[otherMain.StatusID2] = otherMain;
+                StatusInstance otherStatus = entity.AddStatus(otherMain.StatusID2, _entity, 2, 2, 0, otherMain);
+                entity.AddShield(8f, "Hydro", 2f, sourceStatus: otherStatus);
+                Shield otherSkillShield = entity.Shields[0];
+                Shield crystallize = entity.AddOrReplaceCrystallizeShield(20f, "Geo", 2, 2);
 
-            StatusInstance refreshed = _entity.AddStatus("ST_PlayerShield", null, 5, 1, 1, shieldMain);
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+                StatusInstance first = entity.GetStatus(statusID);
+                Assert.That(first, Is.Not.Null);
+                Shield oldShield = entity.Shields.Find(shield => shield.SourceStatus == first);
+                Assert.That(oldShield, Is.Not.Null);
+                Assert.That(oldShield.Value, Is.EqualTo(15f));
+                Assert.That(oldShield.Duration, Is.EqualTo(2f));
 
-            Assert.That(refreshed, Is.SameAs(status));
-            Assert.That(_entity.Shields[0].Duration, Is.EqualTo(5f));
-            Assert.That(_entity.RemoveStatus("ST_PlayerShield"), Is.True);
-            Assert.That(_entity.Shields, Is.Empty);
+                env.DataManager.SkillEffectDict["SE_PlayerShield"].Duration = 5;
+                shieldEffect.Duration = 5;
+                shieldEffect.Param1 = "25";
+                Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+                StatusInstance replacement = entity.GetStatus(statusID);
+                Assert.That(replacement, Is.Not.Null.And.Not.SameAs(first));
+                Assert.That(first.IsActive, Is.False);
+                Assert.That(entity.HasStatusInstance(first), Is.False);
+                Assert.That(entity.GetStatusInstances(statusID), Has.Count.EqualTo(1));
+                Assert.That(entity.Shields, Has.No.Member(oldShield));
+                Assert.That(entity.Shields, Has.Count.EqualTo(3));
+                Shield newShield = entity.Shields.Find(shield => shield.SourceStatus == replacement);
+                Assert.That(newShield, Is.Not.Null);
+                Assert.That(newShield.Value, Is.EqualTo(25f));
+                Assert.That(newShield.Duration, Is.EqualTo(5f));
+                Assert.That(entity.Shields, Has.Member(otherSkillShield));
+                Assert.That(entity.Shields, Has.Member(crystallize));
+                Assert.That(entity.HasStatusInstance(otherStatus), Is.True,
+                    "覆盖本角色的盾不能移除另一角色的护盾状态");
+
+                Assert.That(entity.RemoveStatus(statusID), Is.True);
+                Assert.That(entity.Shields, Has.No.Member(newShield));
+                CollectionAssert.AreEquivalent(new[] { otherSkillShield, crystallize }, entity.Shields);
+                Assert.That(entity.HasStatusInstance(otherStatus), Is.True);
+            }
         }
 
         [Test]
