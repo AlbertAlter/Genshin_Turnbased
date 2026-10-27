@@ -69,7 +69,33 @@ public static class UiChartSync
             File.Copy(artSource, artTarget, true);
             File.SetLastWriteTimeUtc(artTarget, File.GetLastWriteTimeUtc(artSource));
         }
+        SyncShieldEffects();
         AssetDatabase.Refresh();
+    }
+
+    // Shared by the existing art/config/hit-effect menus; never changes scene transforms.
+    public static void SyncShieldEffects()
+    {
+        string repository = Path.GetFullPath(Path.Combine(Application.dataPath, "..", ".."));
+        string source = Path.Combine(repository, "Charts", "UI", UIShieldStyle.FileName);
+        var style = UIShieldStyle.ReadFile(source);
+        foreach (string relative in style.ArtPaths)
+            if (!File.Exists(Path.Combine(repository, relative)))
+                throw new FileNotFoundException("缺少护盾独立PSD图层：" + relative);
+        string target = Path.Combine(Application.streamingAssetsPath, "Data", "UI", UIShieldStyle.FileName);
+        Directory.CreateDirectory(Path.GetDirectoryName(target));
+        File.Copy(source, target, true);
+        File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(source));
+        foreach (string relative in style.ArtPaths)
+        {
+            string artSource = Path.Combine(repository, relative);
+            string artTarget = Path.Combine(Application.streamingAssetsPath, relative);
+            Directory.CreateDirectory(Path.GetDirectoryName(artTarget));
+            if (File.Exists(artTarget) && new FileInfo(artSource).Length == new FileInfo(artTarget).Length &&
+                File.GetLastWriteTimeUtc(artSource) == File.GetLastWriteTimeUtc(artTarget)) continue;
+            File.Copy(artSource, artTarget, true);
+            File.SetLastWriteTimeUtc(artTarget, File.GetLastWriteTimeUtc(artSource));
+        }
     }
 
     public static void SyncDamagePopup()

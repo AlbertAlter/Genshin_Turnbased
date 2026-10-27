@@ -87,6 +87,7 @@ public static class UiConfigurationSyncWindow
             // In Edit Mode the scene is not touched at all; the next run reads the published table.
             if(EditorApplication.isPlaying)
             {
+                foreach(var preview in UnityEngine.Object.FindObjectsOfType<ShieldPreviewPanel>(true))preview.RequestReload();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldApView>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldHealthBar>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldDamagePopupController>(true))view.ReloadConfiguration();

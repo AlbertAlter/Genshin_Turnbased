@@ -91,6 +91,7 @@ MonoBehaviour:
   fixedSeed: 12345
   newSeedEachPlay: 1
   autoReplay: 0
+  startWithShields: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

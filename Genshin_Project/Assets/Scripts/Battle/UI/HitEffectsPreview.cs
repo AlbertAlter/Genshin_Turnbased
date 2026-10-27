@@ -26,6 +26,9 @@ public sealed class HitEffectsPreview : MonoBehaviour
     public Vector2 cardSize = new Vector2(197, 338);
     public int fixedSeed = 12345;
     public bool newSeedEachPlay = true, autoReplay;
+    public bool startWithShields = true;
+    private ShieldPreviewPanel shieldPanel;
+    private int previewTab;
 
     private static readonly string[] Elements = { "Physical", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro" };
     private static readonly string[] ElementLabels = { "物理", "火", "水", "雷", "冰", "风", "岩", "草" };
@@ -79,7 +82,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
         textureLibrary = new HitTextureLibrary();
         yield return textureLibrary.Load(textures, Fail);
         if (error != null) yield break;
-        Build(); ready = true; Replay();
+        Build(); ready = true; previewTab = startWithShields ? 1 : 0;
+        if (!startWithShields) Replay();
     }
     private bool ReadSettings()
     {
@@ -116,6 +120,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
         shake = gameObject.AddComponent<UIHitShakeController>(); shake.AutomaticClock = false;
         shake.BindScreen(canvasObject.transform as RectTransform);
         foreach (var card in cards) shake.RegisterCard(card);
+        shieldPanel = gameObject.AddComponent<ShieldPreviewPanel>();
+        shieldPanel.Bind(cards, numberFont);
     }
     private void BuildCard(int index, RectTransform parent, Vector2 position, string artPath)
     {
@@ -202,6 +208,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
     }
     private void Spawn(Cue cue)
     {
+        if (shieldPanel != null) shieldPanel.NotifyHit(cue.Target);
         shake.PulseCard(playIndex, cards[cue.Target], playingShake.Card, cue.Seed);
         shake.PulseScreen(playIndex, 0, playIndex, "Preview", cue.Hit, playingShake.Screen,
             HitEffectMath.CueSeed(playingSeed, cue.Hit, 0));
@@ -279,7 +286,15 @@ public sealed class HitEffectsPreview : MonoBehaviour
         var toggle = new GUIStyle(skin.toggle) { fontSize = 21 };
         var field = new GUIStyle(skin.textField) { fontSize = 21 };
         GUILayout.BeginArea(new UnityEngine.Rect(24, 12, 1872, 252), GUI.skin.box);
-        GUILayout.Label("命中特效预览｜四名我方 / 五名敌方｜仅模拟显示，不结算真实伤害", label);
+        previewTab = GUILayout.Toolbar(previewTab, new[] { "命中特效预览", "护盾与扫光预览" }, button);
+        if (previewTab == 1)
+        {
+            if (shieldPanel != null) shieldPanel.DrawMain(label, button, toggle);
+            else GUILayout.Label(error ?? "加载卡面中…", label);
+            GUILayout.EndArea();
+            if (shieldPanel != null) shieldPanel.DrawAdjustments(label);
+            skin.font = savedFont; GUI.matrix = oldMatrix; return;
+        }
         GUILayout.BeginHorizontal(); weapon = GUILayout.SelectionGrid(weapon, WeaponLabels, 5, button, GUILayout.Width(650));
         attack = GUILayout.SelectionGrid(attack, new[] { "普攻", "重击" }, 2, button, GUILayout.Width(230));
         GUILayout.Label("实际伤害元素 / 附魔色：", label, GUILayout.Width(265));
