@@ -10,11 +10,7 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
         string statusID = GetStatusID(state.Type);
         if (string.IsNullOrEmpty(statusID)) return;
 
-        StatusMainData mainData = null;
-        if (DataManager.Instance != null)
-            DataManager.Instance.StatusMainDict.TryGetValue(statusID, out mainData);
-        if (mainData == null)
-            mainData = CreateFallbackMainData(state.Type, statusID);
+        StatusMainData mainData = GetMainData(state.Type);
 
         if (state.Target.StatusDict.TryGetValue(statusID, out StatusInstance existing))
         {
@@ -50,6 +46,14 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
             target.RemoveStatus(statusID);
     }
 
+    internal static StatusMainData GetMainData(ReactionType type)
+    {
+        string id = GetStatusID(type);
+        if (string.IsNullOrEmpty(id)) return null;
+        if (DataManager.Instance != null && DataManager.Instance.StatusMainDict.TryGetValue(id, out var main)) return main;
+        return CreateFallbackMainData(type, id);
+    }
+
     private static string GetStatusID(ReactionType type)
     {
         switch (type)
@@ -75,7 +79,7 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
                 StatusType = "Debuff",
                 Display = 1,
                 Description = "降低40%物理抗性",
-                MultiplierPart2 = "ResBonus",
+                MultiplierPart = "ResBonus",
                 ApplyElementType = "Physical"
             };
         }

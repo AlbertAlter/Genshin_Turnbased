@@ -192,7 +192,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static void AddHealingBuff(BattleFlowTestEnv env, string id, int numericID, string part, string value, string effect)
         {
             var main = new StatusMainData { StatusID = numericID, StatusID2 = id,
-                MultiplierPart1 = part, ApplyString = effect, MaxStack = 1 };
+                MultiplierPart = part, ApplyString = effect, MaxStack = 1 };
             env.DataManager.StatusMainDict[id] = main;
             env.DataManager.StatusEffectDict[id + "_Buff"] = new StatusEffectData
             { StatusEffectID = numericID * 100 + 1, EffectType = "Buff", Param1 = value };

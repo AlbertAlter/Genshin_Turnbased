@@ -13,11 +13,8 @@ using UnityEngine;
 public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
 {
     public TextAsset stageConfigJson;
-
-    private void Awake()
-    {
-        if (Application.isPlaying) BattlefieldPresentationPlayer.EnsureOn(gameObject);
-    }
+    public Canvas canvas;
+    public Transform characterCards, characterRoster, enemyCards, enemyRoster;
 
     private IEnumerator Start()
     {
@@ -47,7 +44,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
         BindEnemies(stage.Enemies ?? new List<StageEnemySetup>());
     }
 
-    private static void SetRosterSlotsVisible(bool visible)
+    private void SetRosterSlotsVisible(bool visible)
     {
         SetMatchingChildrenVisible("character", "CharacterCard", visible);
         SetMatchingChildrenVisible("角色栏", "角色", visible);
@@ -55,7 +52,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
         SetMatchingChildrenVisible("敌人栏", "敌人", visible);
     }
 
-    private static void SetMatchingChildrenVisible(string containerName, string childPrefix, bool visible)
+    private void SetMatchingChildrenVisible(string containerName, string childPrefix, bool visible)
     {
         Transform container = FindTransform(containerName);
         if (container == null) return;
@@ -66,9 +63,10 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
         }
     }
 
-    private static void BindBackground(int battleId)
+    private void BindBackground(int battleId)
     {
-        PsdUiBinding binding = FindObjectsOfType<PsdUiBinding>(true)
+        if (canvas == null) return;
+        PsdUiBinding binding = canvas.GetComponentsInChildren<PsdUiBinding>(true)
             .FirstOrDefault(item => item.bindingKey == "BattleBackground");
         StreamingSpriteReference reference = binding != null
             ? binding.GetComponent<StreamingSpriteReference>() ?? binding.GetComponentInChildren<StreamingSpriteReference>(true)
@@ -83,7 +81,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
         {
             StageAllySetup ally = allies[index];
-            BindImage(group, "CharacterCardArt", $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
+            if (!UsesSharedCards()) BindImage(group, "CharacterCardArt", $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
         });
         BindOrderedGroups("角色栏", "角色", allies.Count,
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
@@ -97,7 +95,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
     {
         BindSlottedEnemyGroups("Enemy", "EnemyCard", enemies, (group, enemy) =>
         {
-            BindEnemyImage(group, "EnemyCardArt", enemy.EnemyID);
+            if (!UsesSharedCards()) BindEnemyImage(group, "EnemyCardArt", enemy.EnemyID);
         });
         BindSlottedEnemyGroups("敌人栏", "敌人", enemies, (group, enemy) =>
         {
@@ -161,6 +159,12 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
         }
     }
 
+    private bool UsesSharedCards()
+    {
+        var cards = GetComponent<BattleUiAnimatedCards>();
+        return cards != null && cards.isActiveAndEnabled && cards.factory != null && cards.factory.isActiveAndEnabled;
+    }
+
     private static void BindImage(Transform group, string bindingKey, string path)
     {
         foreach (PsdUiBinding binding in group.GetComponentsInChildren<PsdUiBinding>(true))
@@ -174,51 +178,34 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
 
     private void BindEnemyImage(Transform group, string bindingKey, int enemyId)
     {
-        foreach (PsdUiBinding binding in group.GetComponentsInChildren<PsdUiBinding>(true))
-        {
-            if (binding.bindingKey != bindingKey) continue;
-            StreamingSpriteReference reference = binding.GetComponent<StreamingSpriteReference>() ??
-                                                 binding.GetComponentInChildren<StreamingSpriteReference>(true);
-            if (reference == null) continue;
-            UnityEngine.UI.Image image = reference.GetComponent<UnityEngine.UI.Image>();
-            if (image != null)
-            {
-                image.sprite = null;
-                image.enabled = false;
-            }
-            StartCoroutine(EnemyArtResolver.Load(enemyId, sprite =>
-            {
-                if (image == null) return;
-                image.sprite = sprite;
-                image.enabled = true;
-                image.preserveAspect = !reference.allowCrop;
-                UnityEngine.UI.AspectRatioFitter fitter = image.GetComponent<UnityEngine.UI.AspectRatioFitter>();
-                if (reference.allowCrop && fitter != null && sprite.rect.height > 0f)
-                {
-                    fitter.aspectRatio = sprite.rect.width / sprite.rect.height;
-                    fitter.aspectMode = UnityEngine.UI.AspectRatioFitter.AspectMode.EnvelopeParent;
-                }
-            }, _ => { }));
-        }
+        BindImage(group, bindingKey, $"art_assets/Enemy/{enemyId}_01.png");
     }
 
     private void SetDeferredSectionsVisible(bool visible)
     {
-        foreach (Transform item in FindObjectsOfType<Transform>(true))
+        if (canvas == null) return;
+        foreach (Transform item in canvas.GetComponentsInChildren<Transform>(true))
         {
             if ((item.name == "Boss" && Application.isPlaying) || item.name == "状态栏" || item.name == "敌人状态区")
                 item.gameObject.SetActive(visible);
         }
-        foreach (PsdUiBinding binding in FindObjectsOfType<PsdUiBinding>(true))
+        foreach (PsdUiBinding binding in canvas.GetComponentsInChildren<PsdUiBinding>(true))
         {
-            if (binding.bindingKey == "ElementAura" || binding.bindingKey == "StatusIcon")
+            if (binding.bindingKey == "StatusIcon" || (!Application.isPlaying && binding.bindingKey == "ElementAura"))
                 binding.gameObject.SetActive(visible);
         }
     }
 
-    private static Transform FindTransform(string name)
+    private Transform FindTransform(string name)
     {
-        return FindObjectsOfType<Transform>(true).FirstOrDefault(item => item.name == name);
+        switch (name)
+        {
+            case "character": return characterCards;
+            case "角色栏": return characterRoster;
+            case "Enemy": return enemyCards;
+            case "敌人栏": return enemyRoster;
+            default: return null;
+        }
     }
 
     private static int FirstNumber(string value)

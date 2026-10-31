@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>重新施加时的原始请求；如何刷新数值和生命周期由对应 Count 自己决定。</summary>
+/// <summary>Count创建/重施请求；新Count走公共ApplyStatus实例规则，旧处理器保留专用重施回调。</summary>
 public sealed class CountStatusApplication
 {
     public BattleEntity Caster;
@@ -36,7 +36,7 @@ public sealed class CountDamageContext
     public int TargetIndex;
 }
 
-/// <summary>Count提供数值存储和回调；初值、范围与刷新由各状态定义。数值归零不自动删除，结束另走正常RemoveStatus/生命周期。</summary>
+/// <summary>Count提供数值存储和回调；初值和范围由各状态定义。新Count启用UseStandardApplication后不处理重施。数值归零不自动删除。</summary>
 public abstract class CountStatusHandler
 {
     public abstract void OnCreated(StatusInstance status, object host);
@@ -44,7 +44,10 @@ public abstract class CountStatusHandler
     {
         OnCreated(status, host);
     }
-    public abstract StatusInstance OnReapplied(StatusInstance status, BattleEntity host, CountStatusApplication application);
+    /// <summary>新Count显式启用：ApplyStatus按MaxStack/WhenMax管理实例，不调用Count重施回调。旧处理器默认保持原行为。</summary>
+    public virtual bool UseStandardApplication => false;
+    public virtual StatusInstance OnReapplied(StatusInstance status, BattleEntity host, CountStatusApplication application)
+        => throw new NotSupportedException("此Count不提供专用重施处理：" + status.StatusID2);
     /// <summary>显式接入Count效果；默认保留专用脚本，不允许通用效果绕过额外记账。</summary>
     public virtual bool SupportsEffectChange => false;
     public virtual bool EffectUsesIntegerValue => false;
@@ -90,6 +93,17 @@ public static class CountStatusSystem
         Register(XingqiuScriptHooks.Rain, new XingqiuRainSwordCount());
         Register(XingqiuScriptHooks.Rainbow, new XingqiuRainbowCount());
         Register(MonaScriptHooks.Calamity, new MonaCalamityCount());
+        Register(ZhongliScriptHooks.Fortify, new ZhongliFortifyCount());
+        Register(AlbedoScriptHooks.Reckoning, new AlbedoReckoningCount());
+        Register(GanyuScriptHooks.C4, new GanyuC4Count());
+        Register(XiaoScriptHooks.Tamer, new XiaoCounter(1, int.MaxValue));
+        Register(XiaoScriptHooks.Cycling, new XiaoCounter(0, 3));
+        Register(YanfeiScriptHooks.Seals, new YanfeiSealCount());
+        Register(YanfeiScriptHooks.Brilliance, new YanfeiBrillianceCount());
+        Register(EulaScriptHooks.Heart, new EulaGrimheartCount());
+        Register(EulaScriptHooks.Sword, new EulaLightfallCount());
+        Register(Enemy2021To2030Hooks.Growth, new Enemy2021To2030Hooks.Counter(3, 3));
+        Register(Enemy2021To2030Hooks.Charge, new Enemy2021To2030Hooks.Counter(0, 8));
         WeaponHooks.RegisterCounts();
         ArtifactHooks.RegisterCounts();
     }
@@ -134,6 +148,9 @@ public static class CountStatusSystem
     {
         if (IsCount(main)) GetHandler(main);
     }
+
+    public static bool UsesStandardApplication(StatusMainData main)
+        => IsCount(main) && GetHandler(main).UseStandardApplication;
 
     internal static CountStatusHandler RequireEffectHandler(StatusMainData main)
     {

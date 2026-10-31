@@ -54,7 +54,7 @@ public static class BattlefieldUiSceneGenerator
             CreateCamera();
             Canvas canvas = CreateCanvas();
             CreateEventSystem();
-            CreateBattleRuntime();
+            GameObject runtime = CreateBattleRuntime();
             var byPath = new Dictionary<string, GameObject>(StringComparer.OrdinalIgnoreCase);
             var rowByPath = new Dictionary<string, BattlefieldUiLayoutRow>(StringComparer.OrdinalIgnoreCase);
             var templateById = new Dictionary<string, GameObject>(StringComparer.OrdinalIgnoreCase);
@@ -95,6 +95,10 @@ public static class BattlefieldUiSceneGenerator
                 byPath[row.Path] = instance;
             }
 
+            // Include original template cards as well as clones in the explicit layout registry.
+            foreach (var row in rows.Where(row => Equals(row.LayoutVariant, "Top") || Equals(row.LayoutVariant, "Bottom")))
+                if (byPath.TryGetValue(row.Path, out var card)) AdjustElementAuras(card, row.LayoutVariant);
+
             // Keycap artwork comes from the component PSD, while the table keeps
             // each variant aligned to its glyph position in the battlefield PSD.
             foreach (PsdUiBinding keycap in canvas.GetComponentsInChildren<PsdUiBinding>(true))
@@ -110,6 +114,7 @@ public static class BattlefieldUiSceneGenerator
             BattlefieldHealthBarBuilder.Configure(canvas);
             BattlefieldHealthBarBuilder.ConfigurePsdLayers(canvas);
             UiConfigurationSyncWindow.ConfigureInitialVectorRendering(canvas.gameObject);
+            ConfigureInitialUiModules(runtime, canvas);
 
             Directory.CreateDirectory(Path.Combine(Application.dataPath, "Scene"));
             EditorSceneManager.MarkSceneDirty(scene);
@@ -161,10 +166,12 @@ public static class BattlefieldUiSceneGenerator
         new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
     }
 
-    private static void CreateBattleRuntime()
+    private static GameObject CreateBattleRuntime()
     {
         const string stageFolder = "Assets/Resources/Stages";
-        string[] stageGuids = AssetDatabase.FindAssets("t:TextAsset", new[] { stageFolder });
+        string[] stageGuids = AssetDatabase.FindAssets("t:TextAsset", new[] { stageFolder })
+            .Where(guid => Path.GetDirectoryName(AssetDatabase.GUIDToAssetPath(guid)).Replace('\\', '/') == stageFolder)
+            .ToArray(); // Version1 test variants do not replace the original template's stage.
         if (stageGuids.Length != 1)
             throw new InvalidDataException($"BattleField1 需要关卡编辑器目录中恰好一个 Stage，当前为 {stageGuids.Length} 个：{stageFolder}");
 
@@ -181,6 +188,24 @@ public static class BattlefieldUiSceneGenerator
         runtime.AddComponent<BattlefieldSwitchController>();
         tester.StageConfigJson = stage;
         viewLoader.stageConfigJson = stage;
+        return runtime;
+    }
+
+    // Initial scene construction only. Daily art/config sync must never rebuild these references or layout.
+    private static void ConfigureInitialUiModules(GameObject runtime, Canvas canvas)
+    {
+        var layout = runtime.AddComponent<BattleUiLayout>(); layout.canvas = canvas;
+        layout.cards = canvas.GetComponentsInChildren<BattlefieldElementAuraBar>(true)
+            .OrderBy(bar => bar.side).ThenBy(bar => bar.slot).Select(bar => new BattleUiCardBinding
+            {
+                side = bar.side, slot = bar.slot, root = bar.transform as RectTransform, auraBar = bar,
+                art = bar.GetComponentsInChildren<PsdUiBinding>(true)
+                    .First(binding => binding.bindingKey == (bar.side == BattleSide.Ally ? "CharacterCardArt" : "EnemyCardArt")).transform as RectTransform
+            }).ToArray();
+        var source = runtime.AddComponent<BattleUiCombatAuraSource>();
+        var auras = runtime.AddComponent<BattlefieldElementAuraController>(); auras.layout = layout; auras.dataSource = source;
+        BattleUiHudAssembler.Configure(runtime, canvas);
+        BattleUiSceneModules.Configure(runtime, layout);
     }
 
     private static GameObject CreateNode(
@@ -565,6 +590,13 @@ public static class BattlefieldUiSceneGenerator
             position.y = desiredY - (auras[index].anchorMin.y - 0.5f) * DesignHeight;
             auras[index].anchoredPosition = position;
         }
+        var auraBar = instance.GetComponent<BattlefieldElementAuraBar>() ?? instance.AddComponent<BattlefieldElementAuraBar>();
+        auraBar.side = enemy ? BattleSide.Enemy : BattleSide.Ally;
+        auraBar.slot = FirstNumber(instance.name);
+        auraBar.topAligned = Equals(variant, "Top");
+        auraBar.gap = 4;
+        auraBar.icons = (auraBar.topAligned ? auras.OrderByDescending(rect => rect.anchoredPosition.y)
+            : auras.OrderBy(rect => rect.anchoredPosition.y)).Select(rect => rect.GetComponent<Image>()).ToArray();
     }
 
     /// <summary>

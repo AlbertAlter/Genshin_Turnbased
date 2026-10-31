@@ -112,7 +112,7 @@ public static class OverloadedReactionHandler
         foreach (int position in BattlePositionSystem.GetAdjacentPositions(side, origin, 1))
         {
             FieldPosition slot = field.GetSlot(side, position);
-            if (slot != null && slot.IsOccupied && slot.Occupant != null)
+            if (slot != null && slot.Occupant?.IsOnField == true)
                 yield return slot.Occupant;
         }
     }

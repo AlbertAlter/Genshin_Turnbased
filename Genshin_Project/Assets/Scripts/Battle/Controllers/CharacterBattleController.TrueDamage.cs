@@ -24,12 +24,20 @@ public partial class CharacterBattleController
                     : ResolveBaseValue(effect.Param1, effect.SkillEffectID2, skillType, effect.Element),
                 CreateCurrentDamageSource(effect.SkillEffectID2, skillType, ReactionType.None),
                 effect.SkillEffectID2, effect.DamageType, effect.Element, effect.Param2,
-                DamageProperties.Parse(effect.Element, effect.Param3));
+                DamageProperties.Parse(effect.Element, effect.Param3),
+                effect.TargetType == "Self" && _currentEffectSourceStatus != null ? Entity : null);
         }
     }
 
     private Task ExecuteTrueStatusDamageAsync(StatusEffectData effect, StatusInstance status, object host)
     {
+        if (BattleSpecialRules.HasFixedStatusAmount(effect.DamageHook))
+            return TrueDamageExecutor.ExecuteAsync(ResolveStatusTargets(effect, status, host),
+                new[] { new HitData(1f, 0f) },
+                _ => BattleSpecialRules.ResolveFixedStatusAmount(effect, status, host),
+                CreateStatusDamageSource(status, effect.StatusEffectID2, ReactionType.None),
+                effect.StatusEffectID2, effect.DamageType, effect.Element, effect.Param2,
+                DamageProperties.Parse(effect.Element, effect.Param3), host as BattleEntity);
         string expanded = WeaponExpressionEvaluator.Expand(effect.Param1, status);
         bool fixedBase = DamageProperties.TryReadFixedTrueBase(expanded, out float basis);
         var query = new StatusEffectData { StatusEffectID2 = effect.StatusEffectID2, Param1 = fixedBase ? "M*ATK" : effect.Param1 };
@@ -43,6 +51,7 @@ public partial class CharacterBattleController
                 : ResolveBaseValue(expanded, effect.StatusEffectID2, skillType, effect.Element),
             CreateStatusDamageSource(status, effect.StatusEffectID2, ReactionType.None),
             effect.StatusEffectID2, effect.DamageType, effect.Element, effect.Param2,
-            DamageProperties.Parse(effect.Element, effect.Param3));
+            DamageProperties.Parse(effect.Element, effect.Param3),
+            effect.TargetType == "Self" ? host as BattleEntity : null);
     }
 }

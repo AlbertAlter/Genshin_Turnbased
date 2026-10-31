@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 单次伤害结算结果（2026-08-19，状态钩子任务）。
@@ -27,6 +28,10 @@ public sealed class DamageResolvedEvent
     public DamageProperties Properties;
     public bool IsPneumaDamage => Properties.IsPneuma;
     public bool IsOusiaDamage => Properties.IsOusia;
+    public bool IsResonanceDamage => Properties.IsResonance;
+    /// <summary>本次共鸣的原岩脊和实际出伤造物；用于区分岩脊自身产能，不改变Source归属。</summary>
+    public GeoResonanceEmission Resonance;
+    public IReadOnlyList<OverallShieldProtection> OverallShieldProtections = Array.Empty<OverallShieldProtection>();
 
     /// <summary>效果内第几个 hit（从1开始）；未知时为0。</summary>
     public int HitIndex;

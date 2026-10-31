@@ -1,0 +1,83 @@
+{
+  "StageName": "05 岩队：共鸣防线",
+  "BattleID": 1,
+  "Allies": [
+    {
+      "CharacterID": 1017,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1032,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1034,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1021,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  ],
+  "Enemies": [
+    {
+      "EnemyID": 2009,
+      "Level": 42,
+      "Slot": 1
+    },
+    {
+      "EnemyID": 2008,
+      "Level": 42,
+      "Slot": 2
+    },
+    {
+      "EnemyID": 2013,
+      "Level": 42,
+      "Slot": 3
+    },
+    {
+      "EnemyID": 2026,
+      "Level": 42,
+      "Slot": 4
+    },
+    {
+      "EnemyID": 2005,
+      "Level": 42,
+      "Slot": 5
+    }
+  ],
+  "InitialEnergyMode": "Percent",
+  "InitialEnergyValue": 100.0
+}

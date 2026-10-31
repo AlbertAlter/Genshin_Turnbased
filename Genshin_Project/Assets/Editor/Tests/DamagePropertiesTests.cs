@@ -32,7 +32,7 @@ namespace GenshinTurnBased.Tests.EditMode
             target.AddShield(12, "Hydro", 3, kind: ShieldKind.EnemyElemental);
             target.ApplyAura("Hydro", 1, actor.EntityID);
             var main = new StatusMainData { StatusID = 459990, StatusID2 = "ST_NoneReduction", StatusType = "Buff",
-                MultiplierPart1 = "DMGTaken", ScriptHook = "Chance(0.5)", MaxStack = 1 };
+                MultiplierPart = "DMGTaken", ScriptHook = "Chance(0.5)", MaxStack = 1 };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             env.DataManager.StatusEffectDict["STE_NoneReduction"] = new StatusEffectData
                 { StatusEffectID = 45999001, StatusEffectID2 = "STE_NoneReduction", EffectType = "Buff", Param1 = "-1" };
@@ -229,7 +229,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 var main = new StatusMainData
                 {
                     StatusID = 459988, StatusID2 = "ST_SpecialElevation", StatusType = "Buff",
-                    MultiplierPart1 = "Elevation", ApplyDamageType = "Burst", ApplyReactionType = "Lunar",
+                    MultiplierPart = "Elevation", ApplyDamageType = "Burst", ApplyReactionType = "Lunar",
                     MaxStack = 1, MaxCount = 1
                 };
                 env.DataManager.StatusMainDict[main.StatusID2] = main;
@@ -265,7 +265,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 var reduction = new StatusMainData
                 {
                     StatusID = 459989, StatusID2 = "ST_TrueReduction", StatusType = "Buff",
-                    MultiplierPart1 = "DMGTaken", ScriptHook = "Chance(0.5)", MaxStack = 1
+                    MultiplierPart = "DMGTaken", ScriptHook = "Chance(0.5)", MaxStack = 1
                 };
                 env.DataManager.StatusMainDict[reduction.StatusID2] = reduction;
                 env.DataManager.StatusEffectDict["STE_TrueReduction"] = new StatusEffectData

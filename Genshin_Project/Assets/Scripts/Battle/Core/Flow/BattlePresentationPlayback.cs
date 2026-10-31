@@ -10,6 +10,9 @@ public interface IBattlePresentationView
     void Cancel(long playbackID);
 }
 
+/// <summary>Opt in to cosmetic launch cues. These are not additional battle results.</summary>
+public interface IBattlePresentationAnticipationView : IBattlePresentationView { }
+
 /// <summary>纯时间调度器；只展示快照，不调用战斗效果。FIFO批次、稳定同刻顺序、代次隔离迟到回调。</summary>
 public sealed class BattlePresentationPlayback
 {

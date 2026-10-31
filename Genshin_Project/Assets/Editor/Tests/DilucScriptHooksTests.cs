@@ -14,7 +14,7 @@ namespace GenshinTurnBased.Tests.EditMode
             string part = null, string hook = null)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = key, StatusName = key,
-                StatusType = part == null ? null : "Buff", MultiplierPart1 = part,
+                StatusType = part == null ? null : "Buff", MultiplierPart = part,
                 ScriptHook = hook, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[key] = main;
             return main;
@@ -78,6 +78,32 @@ namespace GenshinTurnBased.Tests.EditMode
                 ActionType = "OnEnd", Param1 = "SE_Diluc_SkillReset;SE_Diluc_ClearC4" } };
             SkillEffect(env, 10150901, "SE_Diluc_SkillReset", 0, "ChangeControl", "Skill", "SK_Skill_Diluc1", "0");
             SkillEffect(env, 10150902, "SE_Diluc_ClearC4", 1, "RemoveStatus", "ST_Diluc_C4Ready");
+        }
+
+        [Test]
+        public void Chain_PlayerSelectionExit_PreservesSecondAndThirdStageBindings()
+        {
+            using var env = new BattleFlowTestEnv(); ConfigureChain(env); var owner = Start(env);
+            var input = env.Manager.gameObject.AddComponent<BattleInputController>();
+            for (int stage = 1; stage <= 3; stage++)
+            {
+                Assert.That(env.Ally.GetBoundSkillID(2), Is.EqualTo("SK_Skill_Diluc" + stage));
+                Assert.That(env.Ally.GetBlockReason(2), Is.Null);
+                input.UIEnterSelectSkill(2);
+                Assert.That(input.IsSelecting, Is.True);
+                if (stage == 2)
+                {
+                    input.UICancelSelection();
+                    Assert.That(env.Ally.GetBoundSkillID(2), Is.EqualTo("SK_Skill_Diluc2"));
+                    input.UIEnterSelectSkill(2);
+                }
+                input.UIConfirmSelection();
+                Assert.That(input.IsSelecting, Is.False);
+                Assert.That(env.Ally.GetBoundSkillID(2), Is.EqualTo("SK_Skill_Diluc" + (stage == 3 ? 1 : stage + 1)));
+            }
+            Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(55));
+            Assert.That(owner.HasStatus(DilucScriptHooks.ChainStatus), Is.False);
+            Assert.That(env.Ally.GetCooldownRemaining(2), Is.EqualTo(2));
         }
 
         [TestCase(1, 3f), TestCase(2, 6f), TestCase(3, 10.5f)]
@@ -177,7 +203,7 @@ namespace GenshinTurnBased.Tests.EditMode
             env.ConfigureAllyAction(0, "SK_Teammate", "SE_Teammate", "Physical", "1*TotalATK,0", 10);
             env.DataManager.SkillEffectDict["SE_Skill_Diluc2"].ScriptHook = null;
             var ready = env.DataManager.StatusMainDict["ST_Diluc_C4Ready"];
-            ready.StatusType = "Buff"; ready.MultiplierPart1 = "DMGBonus"; ready.ApplyDamageType = "Skill";
+            ready.StatusType = "Buff"; ready.MultiplierPart = "DMGBonus"; ready.ApplyDamageType = "Skill";
             ready.ApplyString = "SK_Skill_Diluc2;SK_Skill_Diluc3";
             StatusEffect(env, 410151001, "STE_Diluc_C4Damage", "Buff", ".4");
             StatusEffect(env, 410150101, "STE_Diluc_C4Ready", "ApplyStatus", ready.StatusID2);

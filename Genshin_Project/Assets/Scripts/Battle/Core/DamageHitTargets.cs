@@ -15,18 +15,18 @@ internal static class DamageHitTargets
         internal HitData Scale(HitData hit) => new HitData(hit.Multiplier * Rate, hit.ElementAura);
     }
 
-    internal static List<Entry> Expand(List<BattleEntity> primary, string splash, string element)
+    internal static List<Entry> Expand(List<BattleEntity> primary, string splash, string element, BattleEntity boundStatusHost = null)
     {
         var result = new List<Entry>();
         var seen = new HashSet<BattleEntity>();
         foreach (BattleEntity target in primary)
-            if (target != null && target.IsAlive && seen.Add(target))
+            if (target != null && target.IsAlive && (!target.IsOffField || target == boundStatusHost) && seen.Add(target))
                 result.Add(new Entry(target, 1f, false));
         bool hasSplash = TryParse(splash, out float rate, out int left, out int right);
         var battle = BattleManager.Instance;
         if (hasSplash) foreach (BattleEntity target in primary)
         {
-            if (target == null || !target.IsAlive) continue;
+            if (target == null || !target.IsAlive || (target.IsOffField && target != boundStatusHost)) continue;
             int origin = target.Position != null ? target.Position.SlotIndex : -1;
             if (origin < 1) continue;
             for (int pos = Mathf.Max(1, origin - left);
@@ -35,7 +35,7 @@ internal static class DamageHitTargets
                 if (pos == origin) continue;
                 var slot = battle?.Field?.GetSlot(target.Side, pos);
                 BattleEntity extra = slot != null && slot.IsOccupied ? slot.Occupant : null;
-                if (extra != null && extra.IsAlive && seen.Add(extra)) result.Add(new Entry(extra, rate, true));
+                if (extra != null && extra.IsOnField && seen.Add(extra)) result.Add(new Entry(extra, rate, true));
             }
         }
         // 主目标优先，同hit重叠范围只受击一次；岩伤按实际位置稳定决定最终结晶盾。

@@ -183,14 +183,14 @@ public class UIBattleController : MonoBehaviour
             {
                 var img = allyFieldBlocks[i];
                 if (img == null) continue;
-                bool occupied = bm.Field.AllySlots[i] != null && bm.Field.AllySlots[i].IsOccupied;
+                bool occupied = bm.Field.AllySlots[i]?.Occupant?.IsOnField == true;
                 img.color = occupied ? AllyFieldBlockColor : AllyFieldBlockEmptyColor;
             }
             for (int i = 0; i < enemyFieldBlocks.Length && i < bm.Field.EnemySlots.Count; i++)
             {
                 var img = enemyFieldBlocks[i];
                 if (img == null) continue;
-                bool occupied = bm.Field.EnemySlots[i] != null && bm.Field.EnemySlots[i].IsOccupied;
+                bool occupied = bm.Field.EnemySlots[i]?.Occupant?.IsOnField == true;
                 img.color = occupied ? EnemyFieldBlockColor : EnemyFieldBlockEmptyColor;
             }
         }
@@ -311,8 +311,8 @@ public class UIBattleController : MonoBehaviour
     void RefreshAP(BattleManager bm)
     {
         var ally = bm.GetActiveAlly();
-        if (ally == null) return;
-        var ap = ally.APManager;
+        var ap = bm.APManager;
+        if (ap == null) return;
         if (apText != null) apText.text = $"{ap.CurrentAP}/{ap.MaxAP}";
         if (apBar != null) apBar.fillAmount = ap.MaxAP > 0 ? Mathf.Clamp01((float)ap.CurrentAP / ap.MaxAP) : 0;
         if (apCostHint != null)
@@ -322,7 +322,7 @@ public class UIBattleController : MonoBehaviour
             {
                 var caster = input != null && input.PendingAlly != null ? input.PendingAlly : ally;
                 int cost = _switching ? bm.GetSwitchAPCost(_switchIndex)
-                    : caster.GetBoundSkillAPCost(input.PendingSkill);
+                    : caster != null ? caster.GetBoundSkillAPCost(input.PendingSkill) : 0;
                 apCostHint.gameObject.SetActive(true);
                 apCostHint.text = $"-{cost}";
                 apCostHint.color = ap.CanAfford(cost) ? Color.green : Color.red;
@@ -333,8 +333,27 @@ public class UIBattleController : MonoBehaviour
 
     void RefreshButtons(BattleManager bm)
     {
+        // 四槽爆发各自读取对应角色；未出战者也可爆发，不能只刷新当前出战角色。
+        if (allyBurstCooldowns != null)
+            for (int i = 0; i < allyBurstCooldowns.Length; i++)
+            {
+                if (allyBurstCooldowns[i] == null) continue;
+                var owner = bm.GetAllyBySlot(i);
+                int cd = owner?.Entity?.IsOnField == true ? owner.GetCooldownRemaining(3) : 0;
+                allyBurstCooldowns[i].gameObject.SetActive(cd > 0);
+                if (cd > 0) allyBurstCooldowns[i].text = cd.ToString();
+            }
         var ally = bm.GetActiveAlly();
-        if (ally == null) return;
+        bool visible = ally?.Entity?.IsOnField == true;
+        foreach (var button in new[] { btnAttack, btnHeavy, btnSkill, btnBurst })
+            if (button != null) button.gameObject.SetActive(visible);
+        SetButtonState(btnSwitch, bm.CanSwitchActiveAlly());
+        if (!visible)
+        {
+            if (btnCooldowns != null) foreach (var item in btnCooldowns) if (item != null) item.gameObject.SetActive(false);
+            if (btnChargeDots != null) foreach (var item in btnChargeDots) if (item != null) item.gameObject.SetActive(false);
+            return;
+        }
         SetButtonState(btnAttack, ally.CanUseNormalAttack());
         SetButtonState(btnHeavy, ally.CanUseHeavyAttack());
         SetButtonState(btnSkill, ally.CanUseSkill());
@@ -357,19 +376,6 @@ public class UIBattleController : MonoBehaviour
                 int cd = ally.GetCooldownRemaining(i);
                 btnCooldowns[i].gameObject.SetActive(cd > 0);
                 btnCooldowns[i].text = cd.ToString();
-            }
-        }
-        // 爆发冷却：当前出战角色的能量球上显示
-        if (allyBurstCooldowns != null)
-        {
-            int activeIdx = ally.Entity != null ? ally.Entity.SlotPosition - 1 : -1;
-            for (int i = 0; i < allyBurstCooldowns.Length; i++)
-            {
-                if (allyBurstCooldowns[i] == null) continue;
-                bool show = i == activeIdx;
-                int cd = show ? ally.GetCooldownRemaining(3) : 0;
-                allyBurstCooldowns[i].gameObject.SetActive(show && cd > 0);
-                if (show) allyBurstCooldowns[i].text = cd.ToString();
             }
         }
         // 使用次数蓝点：MaxCharge>1 时按钮下方显示，用掉一个少一个，恢复时加1

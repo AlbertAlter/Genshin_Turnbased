@@ -201,20 +201,29 @@ public sealed class BattlefieldSelectionPresentationTests
     }
 
     [Test]
-    public void SceneScope_RestoresActiveSceneAndClosesOnlyItsOwnScene()
+    public void SceneScope_KeepsActiveSceneAndClosesOnlyItsOwnPreviewScene()
     {
         Scene original = SceneManager.GetActiveScene();
+        Scene outer = _scenes.TestScene;
         Scene nested;
+        GameObject nestedRoot;
         using (var scope = new EditorSceneTestScope())
         {
             nested = scope.TestScene;
             Assert.That(nested, Is.Not.EqualTo(original));
-            Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(nested));
+            Assert.That(nested, Is.Not.EqualTo(outer));
+            Assert.That(UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(nested), Is.True);
+            Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(original), "预览隔离不改变原活动场景");
             Assert.That(original.isLoaded, Is.True);
+            nestedRoot = new GameObject("NestedSceneOwnedRoot");
+            _roots.Add(nestedRoot);
+            SceneManager.MoveGameObjectToScene(nestedRoot, nested);
         }
         Assert.That(original.isLoaded, Is.True);
+        Assert.That(outer.IsValid() && outer.isLoaded, Is.True, "关闭内层不能关闭外层测试场景");
         Assert.That(SceneManager.GetActiveScene(), Is.EqualTo(original));
         Assert.That(nested.IsValid() && nested.isLoaded, Is.False);
+        Assert.That(nestedRoot == null, Is.True, "内层场景拥有的对象随场景清理");
     }
 
     private static void BindTestHierarchy(BattlefieldSelectionPresentation presentation, Canvas canvas,
@@ -252,6 +261,8 @@ public sealed class BattlefieldSelectionPresentationTests
         foreach (Type component in components)
             if (component != typeof(RectTransform)) requested.Add(component);
         var child = new GameObject(name, requested.ToArray());
+        if (child.scene != parent.gameObject.scene)
+            SceneManager.MoveGameObjectToScene(child, parent.gameObject.scene);
         child.transform.SetParent(parent, false);
         return child;
     }

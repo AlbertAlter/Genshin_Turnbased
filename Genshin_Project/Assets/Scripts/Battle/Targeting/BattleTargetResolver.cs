@@ -23,7 +23,8 @@ public static class BattleTargetResolver
         bool selfUsesOrigin = false,
         bool deadOnly = false,
         bool respectTaunt = false,
-        Func<int, float> weightProvider = null)
+        Func<int, float> weightProvider = null,
+        bool validateForcedTaunt = false)
     {
         if (battle == null || battle.Field == null)
         {
@@ -70,6 +71,7 @@ public static class BattleTargetResolver
             RandomIndex = randomIndex
         };
         request.SelectionWeight = weightProvider;
+        request.ValidateForcedTaunt = validateForcedTaunt;
 
         if (string.IsNullOrEmpty(targetType) || targetType == "Self")
         {
@@ -77,25 +79,26 @@ public static class BattleTargetResolver
             request.FixedPositions = fixedPosition > 0 ? new List<int> { fixedPosition } : new List<int>();
         }
 
+        var boundStatusHost = selfUsesOrigin && targetType == "Self" ? origin as BattleEntity : null;
         request.IsEligible = position =>
         {
             var entity = battle.GetEntityByPosition(targetSide, position);
             if (entity == null || (deadOnly ? entity.IsAlive : !entity.IsAlive)) return false;
+            if (entity.IsOffField && entity != boundStatusHost) return false;
             if (targetType == "AlliesOnly" && entity == source) return false;
             return true;
         };
 
         // 仅0/1选取可请求嘲讽约束，随机模式2/3/4始终忽略，与执行次数无关。
         // Field/Team、全体、固定/继承范围、治疗及状态赋予均不借此重选。
-        if (respectTaunt && !deadOnly && domain == BattleTargetDomain.Unit && targetSide != sourceSide
-            && targetNumber > 0 && targetConsecutive >= 0 && targetConsecutive <= 1
-            && string.IsNullOrWhiteSpace(targetOverride) && string.IsNullOrWhiteSpace(targetSelect))
+        if (respectTaunt && !deadOnly && AffectedByTaunt(sourceSide, targetSide, domain,
+            targetNumber, targetConsecutive, targetOverride, targetSelect))
         {
             request.TauntPositions = new List<int>();
             for (int position = 1; position <= request.MaxPosition; position++)
             {
                 var target = battle.GetEntityByPosition(targetSide, position);
-                if (target?.IsAlive == true && target.HasStatus("Taunt")) request.TauntPositions.Add(position);
+                if (IsTaunter(target)) request.TauntPositions.Add(position);
             }
         }
 
@@ -132,7 +135,9 @@ public static class BattleTargetResolver
                 request.OverridePositions = FindStatusPositions(battle, targetSide, domain, value);
         }
 
-        return TargetResolver.Resolve(request);
+        var resolved = TargetResolver.Resolve(request);
+        resolved.BoundStatusHost = boundStatusHost;
+        return resolved;
     }
 
     public static List<BattleEntity> GetEntities(BattleManager battle, TargetResolutionResult result, bool deadOnly = false)
@@ -145,7 +150,8 @@ public static class BattleTargetResolver
         foreach (int position in result.Positions)
         {
             var entity = battle.GetEntityByPosition(result.Side, position);
-            if (entity != null && (deadOnly ? entity.IsDead : entity.IsAlive)) entities.Add(entity);
+            if (entity != null && (deadOnly ? entity.IsDead : entity.IsAlive)
+                && (!entity.IsOffField || entity == result.BoundStatusHost)) entities.Add(entity);
         }
         return entities;
     }
@@ -165,6 +171,15 @@ public static class BattleTargetResolver
     }
 
     public static bool IsTeamTarget(string targetType) => targetType == "AllyTeam" || targetType == "EnemyTeam";
+
+    public static bool IsTaunter(BattleEntity entity)
+        => entity?.IsOnField == true && entity.HasStatus("Taunt");
+
+    public static bool AffectedByTaunt(BattleSide sourceSide, BattleSide targetSide,
+        BattleTargetDomain domain, int count, int mode, string targetOverride, string targetSelect)
+        => domain == BattleTargetDomain.Unit && targetSide != sourceSide && count > 0
+            && mode >= 0 && mode <= 1 && string.IsNullOrWhiteSpace(targetOverride)
+            && string.IsNullOrWhiteSpace(targetSelect);
 
     public static List<BattleTeamStatusHost> GetTeams(BattleManager battle, TargetResolutionResult result)
     {
@@ -251,7 +266,7 @@ public static class BattleTargetResolver
     private static float GetAbsoluteHp(BattleManager battle, BattleSide side, int position)
     {
         var entity = battle.GetEntityByPosition(side, position);
-        return entity != null && entity.IsAlive ? entity.CurrentHP : 0f;
+        return entity != null && entity.IsOnField ? entity.CurrentHP : 0f;
     }
 
     private static string ExtractHookStatusID(string value)

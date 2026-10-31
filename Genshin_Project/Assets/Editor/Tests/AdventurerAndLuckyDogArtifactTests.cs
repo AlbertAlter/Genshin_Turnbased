@@ -184,7 +184,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = "ST_Artifact_" + id,
                 StatusType = string.IsNullOrEmpty(part) ? "" : "Buff", Display = 0,
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "1" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "1" };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             return main;
         }

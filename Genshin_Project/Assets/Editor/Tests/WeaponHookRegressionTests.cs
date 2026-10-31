@@ -38,7 +38,7 @@ namespace GenshinTurnBased.Tests.EditMode
             entity.EntityID = 1009; entity.Side = BattleSide.Ally;
             entity.CurrentHP = entity.TotalHP = 100f;
             var controller = obj.AddComponent<CharacterBattleController>();
-            typeof(CharacterBattleController).GetProperty("Entity").SetValue(controller, entity);
+            controller.Entity = entity;
             entity.CharacterCtrl = controller;
             return entity;
         }
@@ -562,7 +562,7 @@ namespace GenshinTurnBased.Tests.EditMode
         public void ElementalReward_UsesTheActualDamageElement(string element, bool expected)
         {
             var owner = Owner(); var status = Create(owner, 3099, 4309902, .03f);
-            status.MainData.MultiplierPart2 = "DMGBonus";
+            status.MainData.MultiplierPart = "DMGBonus";
             status.MainData.ScriptHook = "Hook(4309905)";
             data.StatusEffectDict.Add("elemental-test", new StatusEffectData
                 { StatusEffectID = 430990201, EffectType = "Buff", Param1 = "0.21" });
@@ -701,7 +701,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     StatusID2 = DataManager.WeaponStatusKey(id), IsActive = true,
                     WeaponContext = context, MainData = new StatusMainData
-                        { StatusID = id, MultiplierPart1 = id == attackID ? "ATKBonus" : "CritRate", MaxCount = 1 }
+                        { StatusID = id, MultiplierPart = id == attackID ? "ATKBonus" : "CritRate", MaxCount = 1 }
                 };
                 status.RecordSource(owner); owner.StatusDict.Add(status);
                 int effectID = id * 100 + 1;

@@ -23,6 +23,9 @@ public sealed class MoonCageInstance
     public bool CountsTowardGeoConstructLimit => false;
     public bool HasDealtDamage { get; internal set; }
     public bool IsActive => Status.IsActive && Position.StatusList.Contains(Status);
+    // 共鸣有自己的每实例、每回合额度；不占月笼协奏次数，不要求公共表引用钟离技能。
+    internal bool TryReceiveResonance(BattleField field, int turn)
+        => IsActive && GeoConstructStatusSystem.TryReceiveResonance(Status, field, turn);
     internal readonly LunarCrystallizeReactionHandler Owner;
     internal readonly int CreatedTurn;
     internal MoonCageInstance(LunarCrystallizeReactionHandler owner, StatusInstance status, FieldPosition position, int turn)
@@ -171,7 +174,7 @@ public sealed class LunarCrystallizeReactionHandler : IDisposable
             foreach (int slot in BattlePositionSystem.GetAdjacentPositions(BattleSide.Enemy, cage.Position.SlotIndex, 1))
             {
                 var field = cage.Position.OwnerField.GetSlot(BattleSide.Enemy, slot);
-                if (field?.IsOccupied == true && field.Occupant.IsAlive) targets.Add(field.Occupant);
+                if (field?.Occupant?.IsOnField == true) targets.Add(field.Occupant);
             }
             attacks.Add(new MoonCageAttackSnapshot(cage,
                 targets.Count > 0 ? targets[BattleRandom.NextInt(0, targets.Count)] : null));

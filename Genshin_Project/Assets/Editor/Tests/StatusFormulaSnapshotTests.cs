@@ -30,7 +30,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             string id = "ST_Snapshot_Buff_" + n;
             var main = new StatusMainData { StatusID = n, StatusID2 = id, StatusType = "Buff",
-                MultiplierPart2 = part, MaxCount = cap, ApplyDamageType = scope };
+                MultiplierPart = part, MaxCount = cap, ApplyDamageType = scope };
             e.DataManager.StatusMainDict[id] = main;
             e.DataManager.StatusEffectDict[id + "_Value"] = new StatusEffectData
             { StatusEffectID = n * 100 + 1, StatusEffectID2 = id + "_Value", EffectType = "Buff",
@@ -97,6 +97,21 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [UnityTest]
+        public IEnumerator ShieldSnapshot_FreezesCreatorPercentAndFlatBonus()
+            => HookTestEnv.AwaitTask(ShieldSnapshotAsync);
+        private async Task ShieldSnapshotAsync()
+        {
+            using var e = Setup();
+            var percent = Buff(e, 4800091, "ShieldBonus", ".75");
+            var flat = Buff(e, 4800092, "ShieldBonusFlat", "40");
+            var root = CreateRoot(e, kind: "Shield", formula: "100");
+            e.Ally.Entity.RemoveStatusInstance(percent); e.Ally.Entity.RemoveStatusInstance(flat);
+            Buff(e, 4800093, "ShieldBonus", "10");
+            await Fire(e, root);
+            Assert.That(e.Ally.Entity.Shields.Single().Value, Is.EqualTo(215).Within(.001f));
+        }
+
+        [UnityTest]
         public IEnumerator TargetCondition_UsesEachHitsPreContactAura_AfterOriginalBuffExpired()
             => HookTestEnv.AwaitTask(TargetAsync);
         private async Task TargetAsync()
@@ -154,7 +169,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 string id = DataManager.WeaponStatusKey(n);
                 e.DataManager.StatusMainDict[id] = new StatusMainData { StatusID = n, StatusID2 = id,
-                    StatusType = n == 4318103 ? "Count" : "Buff", MultiplierPart1 = n == 4318103 ? null : "DMGBonus",
+                    StatusType = n == 4318103 ? "Count" : "Buff", MultiplierPart = n == 4318103 ? null : "DMGBonus",
                     ApplyDamageType = "Normal;Heavy", ScriptHook = n == 4318102 ? "Hook(4318102)" : null, MaxCount = 1, MaxStack = 1 };
                 if (n == 4318103) continue;
                 string effect = "STE_Weapon_" + (n * 100 + 1);
@@ -188,7 +203,7 @@ namespace GenshinTurnBased.Tests.EditMode
             // 先建立配置；重施同一根时旧绑定被清掉，新绑定不得先进入新根的快照。
             var first = CreateRoot(e);
             var child = new StatusMainData { StatusID = 4800020, StatusID2 = "ST_Snapshot_Child", StatusType = "Buff",
-                MultiplierPart2 = "DMGBonus", MaxCount = 1, MaxStack = 1 };
+                MultiplierPart = "DMGBonus", MaxCount = 1, MaxStack = 1 };
             e.DataManager.StatusMainDict[child.StatusID2] = child;
             e.DataManager.StatusEffectDict["STE_Snapshot_Child"] = new StatusEffectData
             { StatusEffectID = 480002001, StatusEffectID2 = "STE_Snapshot_Child", EffectType = "Buff", Param1 = ".15", TargetType = "Self" };

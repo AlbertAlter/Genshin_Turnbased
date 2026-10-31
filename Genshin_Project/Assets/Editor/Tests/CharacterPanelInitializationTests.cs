@@ -197,7 +197,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Buff(BattleFlowTestEnv env, int id, string part, string scalar)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = "ST_Artifact_" + id, StatusType = "Buff",
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1 };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1 };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             var effect = new StatusEffectData { StatusEffectID = id*100+1, StatusEffectID2 = "STE_Panel_"+id,
                 EffectType = "Buff", Param1 = scalar, TargetType = "Self" };

@@ -15,6 +15,15 @@ public sealed class StatusDamageExecution
     public Func<StatusEffectData, Task> ExecuteDefault;
 }
 
+/// <summary>特殊治疗只提供已确认的目标、基础值和可选最终上限，继续复用普通Heal结算与声明。</summary>
+public sealed class StatusHealExecution
+{
+    public StatusEffectData Effect;
+    public StatusInstance Status;
+    public object Host;
+    public Func<List<BattleEntity>, string, float?, Task> ExecuteDefault;
+}
+
 /// <summary>
 /// 非元素反应特例的统一接入点。这里只登记处理器，不保存战斗实例、不另建事件队列。
 /// 通用流程只调用本入口；新增角色在自己的脚本中登记能力，再加入静态注册列表。
@@ -42,8 +51,26 @@ public static class BattleSpecialRules
         = new List<Func<BattleEntity, IDisposable>>();
     private static readonly List<Func<BattleEntity, SkillMainData, IDisposable>> SkillExecutionScopes
         = new List<Func<BattleEntity, SkillMainData, IDisposable>>();
+    private static readonly List<Action<BattleEntity, SkillMainData, BattleDeclaration>> SkillSettled
+        = new List<Action<BattleEntity, SkillMainData, BattleDeclaration>>();
     private static readonly List<Func<BattleEntity, bool>> EnemyActionBlockers
         = new List<Func<BattleEntity, bool>>();
+    private static readonly List<Func<BattleEntity, float, float>> HPDamageGuards
+        = new List<Func<BattleEntity, float, float>>();
+
+    // 护盾结算后、扣HP和死亡声明前。处理器只能减少本次扣血，不执行伤害或治疗。
+    internal static void RegisterHPDamageGuard(Func<BattleEntity, float, float> guard) => HPDamageGuards.Add(guard);
+    internal static float GuardHPDamage(BattleEntity target, float amount)
+    {
+        foreach (var guard in HPDamageGuards)
+        {
+            float guarded = guard(target, amount);
+            if (float.IsNaN(guarded) || float.IsInfinity(guarded) || guarded < 0f || guarded > amount)
+                throw new InvalidOperationException("扣血保护只能返回0至本次原扣血量之间的有限数值。");
+            amount = guarded;
+        }
+        return amount;
+    }
     private static readonly List<Func<SkillEffectData, bool>> AutomaticSkillTargetRules
         = new List<Func<SkillEffectData, bool>>();
     private static readonly Dictionary<string, Action<StatusInstance, object>> StatusCreated
@@ -52,6 +79,12 @@ public static class BattleSpecialRules
         = new Dictionary<string, Action<StatusInstance, object>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, Func<StatusDamageExecution, Task>> StatusDamageRules
         = new Dictionary<string, Func<StatusDamageExecution, Task>>(StringComparer.Ordinal);
+    private static readonly Dictionary<string, Func<StatusEffectData, StatusInstance, object, float>> FixedStatusAmounts
+        = new Dictionary<string, Func<StatusEffectData, StatusInstance, object, float>>(StringComparer.Ordinal);
+    private static readonly Dictionary<string, Func<StatusHealExecution, Task>> StatusHealRules
+        = new Dictionary<string, Func<StatusHealExecution, Task>>(StringComparer.Ordinal);
+    private static readonly Dictionary<string, Func<BattleEntity, float, float>> ShieldBases
+        = new Dictionary<string, Func<BattleEntity, float, float>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, Func<StatusActionData, string>> ActionCounterGroups
         = new Dictionary<string, Func<StatusActionData, string>>(StringComparer.Ordinal);
     private static readonly List<Action<BattleManager>> BattleReadyRules = new List<Action<BattleManager>>();
@@ -129,7 +162,12 @@ public static class BattleSpecialRules
         StellarTeamBonusHandler.Register();
         LunarCrystallizeReactionHandler.Register();
         AirborneStatusHandler.Register();
+        PublicControlStates.Register();
         Enemy2001To2010Hooks.Register();
+        Enemy2011To2020Hooks.Register();
+        Enemy2021To2030Hooks.Register();
+        Enemy2031To2040Hooks.Register();
+        Enemy2041To2050Hooks.Register();
         LisaScriptHooks.Register();
         VentiScriptHooks.Register();
         JeanScriptHooks.Register();
@@ -148,6 +186,19 @@ public static class BattleSpecialRules
         SucroseScriptHooks.Register();
         QiqiScriptHooks.Register();
         MonaScriptHooks.Register();
+        KeqingScriptHooks.Register();
+        TartagliaScriptHooks.Register();
+        DionaScriptHooks.Register();
+        ZhongliC6Healing.Register();
+        ZhongliScriptHooks.Register();
+        XinyanScriptHooks.Register();
+        AlbedoScriptHooks.Register();
+        GanyuScriptHooks.Register();
+        XiaoScriptHooks.Register();
+        HuTaoScriptHooks.Register();
+        RosariaScriptHooks.Register();
+        YanfeiScriptHooks.Register();
+        EulaScriptHooks.Register();
         KaeyaScriptHooks.Register();
         WeaponHooks.Register();
         ArtifactHooks.RegisterSpecialRules();
@@ -255,6 +306,30 @@ public static class BattleSpecialRules
     internal static void RegisterStatusDamage(string hook, Func<StatusDamageExecution, Task> execute)
         => StatusDamageRules.Add(hook, execute);
 
+    // True状态专用数值钩子只返回本段原始扣血量，仍经过TrueDamageExecutor/HitBatch及原声明流程。
+    internal static void RegisterFixedStatusAmount(string hook, Func<StatusEffectData, StatusInstance, object, float> resolve)
+        => FixedStatusAmounts.Add(hook, resolve);
+    public static bool HasFixedStatusAmount(string hook)
+        => hook != null && FixedStatusAmounts.ContainsKey(hook.Trim());
+    public static float ResolveFixedStatusAmount(StatusEffectData effect, StatusInstance status, object host)
+        => FixedStatusAmounts[effect.DamageHook.Trim()](effect, status, host);
+
+    internal static void RegisterStatusHeal(string hook, Func<StatusHealExecution, Task> execute)
+        => StatusHealRules.Add(hook, execute);
+    // 特定盾的基础公式修正，发生在通用ShieldBonus/ShieldBonusFlat之前，不改变已生成的盾。
+    internal static void RegisterShieldBase(string effectID, Func<BattleEntity, float, float> resolve)
+        => ShieldBases.Add(effectID, resolve);
+    public static float ResolveShieldBase(string effectID, BattleEntity source, float basis)
+        => effectID != null && ShieldBases.TryGetValue(effectID, out var resolve) ? resolve(source, basis) : basis;
+    public static bool HasStatusHealHandler(string hook)
+        => hook != null && StatusHealRules.ContainsKey(hook.Trim());
+    public static Task ExecuteStatusHeal(StatusHealExecution context)
+    {
+        if (context?.Effect?.EffectType != "Heal")
+            throw new InvalidOperationException("专用状态治疗处理器只能执行Heal效果。");
+        return StatusHealRules[context.Effect.DamageHook.Trim()](context);
+    }
+
     // 少量普通Buff也需要正式hit的预备/取消/提交；复用同一贡献管线，不把它们伪装成Count状态。
     internal static void RegisterDamagePreparation(string statusID,
         Func<StatusInstance, object, CountDamageContext, CountDamageContribution> prepare)
@@ -294,6 +369,15 @@ public static class BattleSpecialRules
         => SkillScopes.Add(begin);
     internal static void RegisterSkillExecutionScope(Func<BattleEntity, SkillMainData, IDisposable> begin)
         => SkillExecutionScopes.Add(begin);
+    internal static void RegisterSkillSettled(Action<BattleEntity, SkillMainData, BattleDeclaration> settled)
+        => SkillSettled.Add(settled);
+    /// <summary>
+    /// 真实我方行动全部效果及ActionCompleted的响应结清之后调用，仍在技能作用域内。
+    /// 不伪造第二次行为声明；回调提交的状态行动继续由原执行队列清算。
+    /// 取消、异常、非主动技能容器不调用；嵌套行动是否等待外层由处理器按作用域判断。
+    /// </summary>
+    internal static void CompleteSkillSettlement(BattleEntity owner, SkillMainData skill, BattleDeclaration declaration)
+    { foreach (var settled in SkillSettled) settled(owner, skill, declaration); }
     internal static void RegisterEnemyActionBlocker(Func<BattleEntity, bool> blocks)
         => EnemyActionBlockers.Add(blocks);
     internal static void RegisterDamage(string hook, Action<string, BattleEntity, string> validate,
@@ -342,6 +426,7 @@ public static class BattleSpecialRules
     public static void ValidateDamageHook(string hook, BattleEntity caster, string effectType)
     {
         if (string.IsNullOrWhiteSpace(hook)) return;
+        if (effectType == "Heal" && HasStatusHealHandler(hook)) return;
         if ((effectType == "Buff" || effectType == "Debuff") && BuffScalarRules.ContainsKey(hook.Trim())) return;
         GetDamageRule(hook).Validate(hook, caster, effectType);
     }

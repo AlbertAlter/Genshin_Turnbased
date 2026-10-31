@@ -14,7 +14,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv e, int id, string key, string part = "")
         {
             var m = new StatusMainData { StatusID = 4102600 + id, StatusID2 = S + key, StatusType = part == "" ? "" : "Buff",
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             e.DataManager.StatusMainDict[m.StatusID2] = m;
             if (!e.DataManager.CharacterStatusIDs.TryGetValue(1026, out var ids)) e.DataManager.CharacterStatusIDs[1026] = ids = new HashSet<string>();
             ids.Add(m.StatusID2); return m;
@@ -52,7 +52,7 @@ namespace GenshinTurnBased.Tests.EditMode
             share.Duration = 2; share.TargetSelect = "-1";
             Action(e, "Mollis", "OnTrigger", E + "EMShareApply", "Sucrose_EMHit()", "Skill;Burst");
             Effect(e, 410260601, "EMShare", "Buff", ".2*TotalEM").DamageHook = "Sucrose_EMShare()";
-            Effect(e, 410260701, "Cooldown", "ReduceCooldown", "Skill").Param2 = "1";
+            Effect(e, 410260701, "Cooldown", "Cooldown", "Skill").Param2 = "-1";
             Action(e, "Alchemania", "OnTrigger", E + "Cooldown", "Chance(0.1)", "Normal;Heavy");
             Effect(e, 410260801, "C6Bonus", "Buff", ".2");
             e.CreateMinimalBattle(); e.CreateAlly(2); e.CreateEnemy(2, 10000); e.CreateEnemy(3, 10000);

@@ -46,7 +46,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Start(env); env.Enemy.Entity.ApplyAura("Hydro", 1f, env.Ally.Entity.EntityID);
             // 使用既有冷刃条件钩子：仅中心水附着满足20%增伤，不能传给无附着的邻格。
             var main = new StatusMainData { StatusID = 4300201, StatusID2 = "ST_Weapon_4300201", StatusType = "Buff",
-                MultiplierPart1 = "DMGBonus", ScriptHook = "Hook(4300201)", MaxStack = 1 };
+                MultiplierPart = "DMGBonus", ScriptHook = "Hook(4300201)", MaxStack = 1 };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             env.DataManager.StatusEffectDict["STE_Weapon_430020101"] = new StatusEffectData
             { StatusEffectID = 430020101, StatusEffectID2 = "STE_Weapon_430020101", EffectType = "Buff", Param1 = "Index(1)" };
@@ -84,7 +84,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using var env = new BattleFlowTestEnv(); Configure(env, status, "Physical", "Splash(0.5;0,1)");
             env.CreateMinimalBattle(); env.CreateEnemy(2); env.Ally.Entity.TotalDEF = 100f; Start(env);
             var main = new StatusMainData { StatusID = 4303801, StatusID2 = "ST_Weapon_4303801", StatusType = "Buff",
-                MultiplierPart1 = "BaseDMGBonusFlat", ScriptHook = "Hook(4303801)", ApplyDamageType = "Skill", MaxStack = 1 };
+                MultiplierPart = "BaseDMGBonusFlat", ScriptHook = "Hook(4303801)", ApplyDamageType = "Skill", MaxStack = 1 };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             env.DataManager.StatusEffectDict["STE_Weapon_430380101"] = new StatusEffectData
             { StatusEffectID = 430380101, StatusEffectID2 = "STE_Weapon_430380101", EffectType = "Buff",

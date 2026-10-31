@@ -144,7 +144,7 @@ public static class SeaHuedClamArtifact
         var targets = new List<BattleEntity>();
         if (context.Targets != null)
             foreach (BattleEntity target in context.Targets)
-                if (target != null && target.IsAlive && target.Side != context.Status.Caster.Side
+                if (target != null && target.IsOnField && target.Side != context.Status.Caster.Side
                     && !targets.Contains(target)) targets.Add(target);
         await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Hit,
             context.Status.Caster, context.Effect.StatusEffectID2, 1, targets), () =>

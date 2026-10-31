@@ -8,6 +8,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePresentationView
 {
+    public BattleUiLayout layout;
+    public TMP_FontAsset numberFont;
     private sealed class Pending
     {
         public BattleSide Side;
@@ -152,26 +154,10 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
 
     private void BindCards()
     {
-        rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas ?? GetComponentInChildren<Canvas>(true)?.rootCanvas;
-        if (rootCanvas == null)
-            rootCanvas = FindObjectsOfType<Canvas>(true).FirstOrDefault(canvas => canvas.isRootCanvas && canvas.gameObject.scene == gameObject.scene);
-        if (rootCanvas == null) return;
-        var transforms = rootCanvas.GetComponentsInChildren<Transform>(true);
-        Bind("character", "CharacterCard", BattleSide.Ally);
-        Bind("Enemy", "EnemyCard", BattleSide.Enemy);
-        void Bind(string containerName, string prefix, BattleSide side)
-        {
-            Transform container = transforms.FirstOrDefault(item => item.name == containerName);
-            if (container == null) return;
-            var groups = Enumerable.Range(0, container.childCount).Select(container.GetChild)
-                .Where(child => child.name.StartsWith(prefix, StringComparison.Ordinal)).OrderBy(child => FirstNumber(child.name)).ToList();
-            for (int i = 0; i < groups.Count; i++)
-            {
-                string artKey = side == BattleSide.Ally ? "CharacterCardArt" : "EnemyCardArt";
-                var art = groups[i].GetComponentsInChildren<PsdUiBinding>(true).FirstOrDefault(binding => binding.bindingKey == artKey);
-                RegisterCard(side, i + 1, art != null ? art.transform as RectTransform : groups[i] as RectTransform);
-            }
-        }
+        if (layout == null) return;
+        rootCanvas = layout.Canvas;
+        foreach (var card in layout.Cards)
+            if (card != null) RegisterCard(card.side, card.slot, card.art);
     }
 
     public void RegisterCard(BattleSide side, int slot, RectTransform card)
@@ -184,8 +170,9 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
         if (layer != null) return true;
         if (rootCanvas == null) BindCards();
         if (rootCanvas == null) return false;
-        font = TMP_Settings.defaultFontAsset;
+        font = numberFont;
         if (font == null) font = rootCanvas.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(text => text.font != null)?.font;
+        if (font == null) font = TMP_Settings.defaultFontAsset;
         if (font == null) return false;
         var go = new GameObject("DamagePopupLayer", typeof(RectTransform), typeof(Canvas));
         layer = (RectTransform)go.transform;
@@ -211,7 +198,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
             if (popup.Age >= popup.Style.Lifetime)
             { Recycle(popup); active.RemoveAt(i); continue; }
             popup.Text.rectTransform.anchoredPosition = popup.Origin + Vector2.up *
-                (popup.Height * popup.Style.RiseHeightRatio * popup.Age / popup.Style.Lifetime);
+                (popup.Height * popup.Style.RiseHeightRatio * popup.Style.RiseProgress(popup.Age));
             Color color = popup.BaseColor;
             color.a *= popup.Style.Alpha(popup.Age);
             popup.Text.color = color;
@@ -261,6 +248,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
         Vector2 origin = layer.InverseTransformPoint(card.TransformPoint(local));
         float height = layer.InverseTransformVector(card.TransformVector(Vector3.up * rect.height)).magnitude;
         text.fontSize = Mathf.Max(1, height * request.Style.FontHeightRatio) * request.FontMultiplier;
+        DamagePopupOutline.Apply(text, request.Style as BattlefieldDamagePopupStyle);
         text.text = request.Text;
         Color baseColor = request.BaseColor ?? request.Style.Color;
         Color initialColor = baseColor;

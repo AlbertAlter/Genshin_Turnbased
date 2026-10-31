@@ -55,17 +55,15 @@ public static class SheetColumns
         public const int StatusType        = 4;
         public const int Display           = 5;
         public const int Description       = 6;
-        public const int MultiplierPart1   = 7;
-        public const int MultiplierPart2   = 8;
-        public const int MultiplierPart3   = 9;
-        public const int ApplyDamageType   = 10;
-        public const int ApplyReactionType = 11;
-        public const int ApplyElementType  = 12;
-        public const int ApplyString       = 13;
-        public const int ScriptHook        = 14;
-        public const int MaxCount          = 15;
-        public const int MaxStack          = 16;
-        public const int WhenMax           = 17;
+        public const int MultiplierPart    = 7;
+        public const int ApplyDamageType   = 8;
+        public const int ApplyReactionType = 9;
+        public const int ApplyElementType  = 10;
+        public const int ApplyString       = 11;
+        public const int ScriptHook        = 12;
+        public const int MaxCount          = 13;
+        public const int MaxStack          = 14;
+        public const int WhenMax           = 15;
     }
 
     // ---------------- Status_Effect 表 ----------------
@@ -129,6 +127,7 @@ public static class SheetColumns
         public const int UsePerTurn      = 5;
         public const int HighThreat      = 6;
         public const int Description     = 7;
+        public const int SkillTags       = 8;
     }
 
     // ---------------- EnemySkill_Effect 表 ----------------

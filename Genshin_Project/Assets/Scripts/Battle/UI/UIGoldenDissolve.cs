@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// The material replaces this Image's current shader while active; ResetEffect restores that material.
 /// </summary>
 [DisallowMultipleComponent, RequireComponent(typeof(RectTransform), typeof(CanvasRenderer))]
-public sealed class UIGoldenDissolve : MonoBehaviour
+public sealed class UIGoldenDissolve : BaseMeshEffect
 {
     private const string ResourcePath = "UI/GoldenDissolve";
     [SerializeField] private Shader shader;
@@ -27,6 +27,39 @@ public sealed class UIGoldenDissolve : MonoBehaviour
     public bool IsPlaying { get; private set; }
     public float Progress { get; private set; }
     public int Seed { get; private set; }
+
+    // Canvas batching transforms POSITION into Canvas space. Preserve the original
+    // Graphic-local position in an untouched vertex channel for bounds/noise sampling.
+    public override void ModifyMesh(VertexHelper vertices)
+    {
+        if (!IsActive()) return;
+        var vertex = UIVertex.simpleVert;
+        for (int i = 0; i < vertices.currentVertCount; i++)
+        {
+            vertices.PopulateUIVertex(ref vertex, i);
+            vertex.uv1 = new Vector4(vertex.position.x, vertex.position.y, 0, 0);
+            vertices.SetUIVertex(vertex, i);
+        }
+    }
+
+    private void EnableLocalCoordinateChannel()
+    {
+        if (graphic != null && graphic.canvas != null)
+            graphic.canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        EnableLocalCoordinateChannel();
+    }
+
+    protected override void OnCanvasHierarchyChanged()
+    {
+        base.OnCanvasHierarchyChanged();
+        EnableLocalCoordinateChannel();
+        if (graphic != null) graphic.SetVerticesDirty();
+    }
 
     /// <summary>Inject an already-loaded runtime settings snapshot, e.g. from the full-card player.</summary>
     public void Configure(UIGoldenDissolveStyle style) => configuration = style ?? throw new ArgumentNullException(nameof(style));
@@ -169,8 +202,8 @@ public sealed class UIGoldenDissolve : MonoBehaviour
         ownedMaterial = null; previousMaterial = null;
     }
 
-    private void OnDisable() => ResetEffect();
-    private void OnDestroy() => ReleaseMaterial();
+    protected override void OnDisable() { ResetEffect(); base.OnDisable(); }
+    protected override void OnDestroy() { ReleaseMaterial(); base.OnDestroy(); }
 
     // Pure visual seed expansion. Never calls a gameplay random source or creates a texture.
     private static Vector4 OffsetForSeed(int seed)

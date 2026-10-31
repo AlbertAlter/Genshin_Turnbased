@@ -16,7 +16,7 @@ public static class ArtifactEligibilityHooks
         BattleSpecialRules.RegisterNumberedCondition("453202", (argument, context) =>
         {
             var owner = context?.Status?.Caster ?? context?.Caster;
-            return owner != null && owner.GetTotalShieldHP() > 0f;
+            return owner != null && owner.HasShieldProtection();
         });
     }
 }

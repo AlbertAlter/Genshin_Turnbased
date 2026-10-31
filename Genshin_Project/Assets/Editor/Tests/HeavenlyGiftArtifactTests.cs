@@ -142,7 +142,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int id, string part = null, bool independent = false)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = Key(id),
-                StatusType = part == null ? null : "Buff", MultiplierPart1 = part,
+                StatusType = part == null ? null : "Buff", MultiplierPart = part,
                 MaxCount = 1, MaxStack = independent ? 0 : 1 };
             env.DataManager.StatusMainDict[main.StatusID2] = main; return main;
         }

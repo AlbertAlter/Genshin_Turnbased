@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int id, string part = null)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = Key(id), StatusType = "Buff",
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[Key(id)] = main; return main;
         }
         private static StatusEffectData Effect(BattleFlowTestEnv env, int id, string type, string formula)
@@ -71,7 +71,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var second = env.CreateAlly(2, hp: 2000f).Entity; var third = env.CreateAlly(3, hp: 500f).Entity;
             var dead = env.CreateAlly(4, hp: 900f).Entity; dead.CurrentHP = 0f;
             env.ConfigureStatus("ST_AmberHP"); var hp = env.DataManager.StatusMainDict["ST_AmberHP"];
-            hp.StatusID = 990400; hp.MultiplierPart1 = "HPBonusFlat";
+            hp.StatusID = 990400; hp.MultiplierPart = "HPBonusFlat";
             env.DataManager.StatusEffectDict["STE_AmberHP"] = new StatusEffectData { StatusEffectID = hp.StatusID * 100 + 1,
                 StatusEffectID2 = "STE_AmberHP", EffectType = "Buff", Param1 = "500" };
             second.AddStatus("ST_AmberHP", second, 0, 2, 0, hp);

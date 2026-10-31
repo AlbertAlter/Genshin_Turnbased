@@ -5,14 +5,36 @@ using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 /// <summary>
-/// Temporary GPU-only composition of ordinary card Image layers, bottom to top.
+/// GPU-only composition of card Image/RawImage layers, bottom to top. A retained session can refresh live video.
 /// Preserves geometry, sprite UVs, vertex tint/alpha and normal source-over blending.
 /// Does not bake PNGs, read back pixels, move source transforms, or include the external shadow.
-/// Unsupported custom materials/internal masks fail explicitly rather than silently changing PSD rendering.
+/// UICardFrameView supplies its explicit opening mask; other custom materials/masks still fail explicitly.
 /// </summary>
 public static class UICardDissolveSnapshot
 {
-    public static RenderTexture Capture(RectTransform basis, IReadOnlyList<Image> layers, int heightPixels)
+    public sealed class CaptureSession : IDisposable
+    {
+        public RenderTexture Texture { get; private set; }
+        private CommandBuffer commands;
+        private List<UnityEngine.Object> resources;
+        internal CaptureSession(RenderTexture texture, CommandBuffer commands, List<UnityEngine.Object> resources)
+        { Texture = texture; this.commands = commands; this.resources = resources; }
+        public void Render() { if (commands != null) Graphics.ExecuteCommandBuffer(commands); }
+        internal RenderTexture Detach() { var texture = Texture; Texture = null; return texture; }
+        public void Dispose()
+        {
+            commands?.Release(); commands = null;
+            if (resources != null) foreach (var item in resources) UICardDissolveSnapshot.Dispose(item);
+            resources = null;
+            if (Texture != null) { Texture.Release(); UICardDissolveSnapshot.Dispose(Texture); Texture = null; }
+        }
+    }
+    public static RenderTexture Capture(RectTransform basis, IReadOnlyList<Graphic> layers, int heightPixels)
+    {
+        using (var session = BeginCapture(basis, layers, heightPixels)) return session.Detach();
+    }
+    public static CaptureSession BeginCapture(RectTransform basis, IReadOnlyList<Graphic> layers, int heightPixels,
+        Texture clipTexture = null, IReadOnlyList<Graphic> clippedLayers = null)
     {
         if (basis == null || layers == null || layers.Count == 0) throw new ArgumentException("Card snapshot needs a basis and Image layers.");
         Rect rect = basis.rect;
@@ -39,48 +61,122 @@ public static class UICardDissolveSnapshot
             commands.ClearRenderTarget(false, true, Color.clear);
             Matrix4x4 projection = GL.GetGPUProjectionMatrix(Matrix4x4.Ortho(rect.xMin, rect.xMax, rect.yMin, rect.yMax, -1000, 1000), true);
             int drawn = 0;
-            var seen = new HashSet<Image>();
+            var seen = new HashSet<Graphic>();
+            var clipped = clippedLayers == null ? new HashSet<Graphic>() : new HashSet<Graphic>(clippedLayers);
             foreach (var image in layers)
             {
                 if (image == null || !seen.Add(image)) throw new ArgumentException("Card layers must be non-null and unique.");
                 if (!image.transform.IsChildOf(basis) && image.transform != basis) throw new ArgumentException("Card layers must belong to the basis.");
                 if (!image.isActiveAndEnabled) continue;
-                if (image.sprite == null) throw new ArgumentException("Card layer sprite is not loaded: " + image.name);
+                var spriteImage = image as Image; var rawImage = image as RawImage;
+                if (spriteImage == null && rawImage == null) throw new NotSupportedException("Unsupported card graphic: " + image.name);
+                if ((spriteImage != null && spriteImage.sprite == null) || (rawImage != null && rawImage.texture == null))
+                    throw new ArgumentException("Card layer texture is not loaded: " + image.name);
                 var original = image.material;
                 if (original != null && original.shader.name != "UI/Default")
                     throw new NotSupportedException("Card snapshot needs an explicit adapter for custom material: " + image.name);
                 for (Transform t = image.transform; t != basis; t = t.parent)
-                    if (t.GetComponent<Mask>()?.isActiveAndEnabled == true || t.GetComponent<RectMask2D>()?.isActiveAndEnabled == true)
-                        throw new NotSupportedException("Card snapshot does not flatten internal UI masks: " + image.name);
-                if (image.sprite.associatedAlphaSplitTexture != null) throw new NotSupportedException("Split-alpha card textures need a capture adapter.");
-                var renderedMesh = image.canvasRenderer.GetMesh();
-                if (renderedMesh == null) throw new InvalidOperationException("Card UI mesh is not ready: " + image.name);
-                // The renderer owns its mesh; snapshot only disposes this private clone.
-                var mesh = UnityEngine.Object.Instantiate(renderedMesh);
-                mesh.name = "Card snapshot mesh"; mesh.hideFlags = HideFlags.HideAndDontSave;
+                {
+                    var mask = t.GetComponent<Mask>();
+                    bool knownMask = clipped.Contains(image) && clipTexture != null &&
+                        mask != null && mask.graphic.mainTexture == clipTexture;
+                    if ((mask?.isActiveAndEnabled == true && !knownMask) || t.GetComponent<RectMask2D>()?.isActiveAndEnabled == true)
+                        throw new NotSupportedException("Card snapshot needs an explicit adapter for this UI mask: " + image.name);
+                }
+                if (spriteImage != null && spriteImage.sprite.associatedAlphaSplitTexture != null)
+                    throw new NotSupportedException("Split-alpha card textures need a capture adapter.");
+                // Build in Graphic-local space, then convert to card-local space exactly once.
+                // CanvasRenderer's render cache must not be treated as a local source mesh.
+                var mesh = BuildLayerMesh(basis, image);
                 temporary.Add(mesh);
-                if (mesh.vertexCount == 0) throw new InvalidOperationException("Card UI mesh is not ready: " + image.name);
                 var material = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
                 temporary.Add(material);
                 material.SetTexture("_MainTex", image.mainTexture);
+                material.SetTexture("_ClipTex", clipped.Contains(image) && clipTexture != null ? clipTexture : Texture2D.whiteTexture);
+                material.SetVector("_CardRect", new Vector4(rect.xMin, rect.yMin, rect.width, rect.height));
+                material.SetMatrix("_CompositeLocal", Matrix4x4.identity);
                 Color tint = image.canvasRenderer.GetColor();
                 if (original != null && original.HasProperty("_Color")) tint *= original.GetColor("_Color");
                 material.SetColor("_Tint", tint);
-                material.SetMatrix("_CompositeMVP", projection * basis.worldToLocalMatrix * image.transform.localToWorldMatrix);
+                material.SetMatrix("_CompositeMVP", projection);
                 commands.DrawMesh(mesh, Matrix4x4.identity, material, 0, 0);
                 drawn++;
             }
             if (drawn == 0) throw new InvalidOperationException("No visible card layers to capture.");
             Graphics.ExecuteCommandBuffer(commands);
             success = true;
-            return target;
+            return new CaptureSession(target, commands, temporary);
         }
         finally
         {
-            commands.Release();
-            foreach (var item in temporary) Dispose(item);
-            if (!success) { target.Release(); Dispose(target); }
+            if (!success)
+            {
+                commands.Release();
+                foreach (var item in temporary) Dispose(item);
+                target.Release(); Dispose(target);
+            }
         }
+    }
+
+    // Matches uGUI's Simple Image / RawImage drawing rectangles and UVs without depending
+    // on a Canvas rebuild. The owned mesh survives disabling the source Graphic during exit.
+    internal static Mesh BuildLayerMesh(RectTransform basis, Graphic graphic)
+    {
+        Rect drawing = graphic.GetPixelAdjustedRect();
+        Vector4 uv;
+        var image = graphic as Image;
+        if (image != null)
+        {
+            if (image.type != Image.Type.Simple || image.useSpriteMesh)
+                throw new NotSupportedException("Card snapshot requires a Simple quad Image: " + image.name);
+            Sprite sprite = image.overrideSprite != null ? image.overrideSprite : image.sprite;
+            Vector2 size = sprite.rect.size;
+            if (image.preserveAspect && size.sqrMagnitude > 0)
+            {
+                float spriteRatio = size.x / size.y;
+                if (spriteRatio > drawing.width / drawing.height)
+                {
+                    float oldHeight = drawing.height;
+                    drawing.height = drawing.width / spriteRatio;
+                    drawing.y += (oldHeight - drawing.height) * image.rectTransform.pivot.y;
+                }
+                else
+                {
+                    float oldWidth = drawing.width;
+                    drawing.width = drawing.height * spriteRatio;
+                    drawing.x += (oldWidth - drawing.width) * image.rectTransform.pivot.x;
+                }
+            }
+            Vector4 padding = UnityEngine.Sprites.DataUtility.GetPadding(sprite);
+            float spriteWidth = Mathf.RoundToInt(size.x), spriteHeight = Mathf.RoundToInt(size.y);
+            drawing = Rect.MinMaxRect(drawing.x + drawing.width * padding.x / spriteWidth,
+                drawing.y + drawing.height * padding.y / spriteHeight,
+                drawing.xMax - drawing.width * padding.z / spriteWidth,
+                drawing.yMax - drawing.height * padding.w / spriteHeight);
+            uv = UnityEngine.Sprites.DataUtility.GetOuterUV(sprite);
+        }
+        else if (graphic is RawImage raw)
+        {
+            Rect source = raw.uvRect;
+            Texture texture = raw.mainTexture;
+            float sx = texture.width * texture.texelSize.x, sy = texture.height * texture.texelSize.y;
+            uv = new Vector4(source.xMin * sx, source.yMin * sy, source.xMax * sx, source.yMax * sy);
+        }
+        else throw new NotSupportedException("Unsupported card graphic: " + graphic.name);
+
+        Matrix4x4 toCard = basis.worldToLocalMatrix * graphic.transform.localToWorldMatrix;
+        var mesh = new Mesh { name = "Card-local snapshot mesh", hideFlags = HideFlags.HideAndDontSave };
+        using (var vertices = new VertexHelper())
+        {
+            vertices.AddVert(toCard.MultiplyPoint3x4(new Vector3(drawing.xMin, drawing.yMin)), graphic.color, new Vector2(uv.x, uv.y));
+            vertices.AddVert(toCard.MultiplyPoint3x4(new Vector3(drawing.xMin, drawing.yMax)), graphic.color, new Vector2(uv.x, uv.w));
+            vertices.AddVert(toCard.MultiplyPoint3x4(new Vector3(drawing.xMax, drawing.yMax)), graphic.color, new Vector2(uv.z, uv.w));
+            vertices.AddVert(toCard.MultiplyPoint3x4(new Vector3(drawing.xMax, drawing.yMin)), graphic.color, new Vector2(uv.z, uv.y));
+            vertices.AddTriangle(0, 1, 2);
+            vertices.AddTriangle(2, 3, 0);
+            vertices.FillMesh(mesh);
+        }
+        return mesh;
     }
 
     internal static void Dispose(UnityEngine.Object item)

@@ -32,7 +32,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 context.DamageReaction = ReactionType.StellarSuperconduct;
                 Assert.That(ScriptHookEvaluator.Evaluate("Hook(456302)", context), Is.False);
                 var main = Main(env, 456302, "Buff");
-                main.MultiplierPart2 = "DMGBonus";
+                main.MultiplierPart = "DMGBonus";
                 main.ApplyReactionType = "Superconduct";
                 main.ScriptHook = "Hook(456302)";
                 env.DataManager.StatusEffectDict["STE_Artifact_45630201"] = new StatusEffectData
@@ -61,14 +61,14 @@ namespace GenshinTurnBased.Tests.EditMode
                 var count = Add(env, owner, "ST_Artifact_453805");
                 count.RuntimeValue = 2f;
                 var lunar = Main(env, 459991, "Buff");
-                lunar.MultiplierPart3 = "LunarDMGBonus";
+                lunar.MultiplierPart = "LunarDMGBonus";
                 lunar.ApplyReactionType = "月曜";
                 lunar.ApplyElementType = "Geo";
                 env.DataManager.StatusEffectDict["STE_Artifact_45999101"] = new StatusEffectData
                 { StatusEffectID = 45999101, EffectType = "Buff", Param1 = "0.06 * Count(ST_Artifact_453805)" };
                 Add(env, owner, lunar.StatusID2);
                 var stellar = Main(env, 459992, "Buff");
-                stellar.MultiplierPart3 = "StellarDMGBonus";
+                stellar.MultiplierPart = "StellarDMGBonus";
                 stellar.ApplyReactionType = "星烁";
                 stellar.ApplyElementType = "Cryo";
                 env.DataManager.StatusEffectDict["STE_Artifact_45999201"] = new StatusEffectData
@@ -225,7 +225,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 foreach (int id in new[] { 455103, 455104 })
                 {
                     var main = Main(env, id, "Buff");
-                    main.MultiplierPart2 = "DMGBonus";
+                    main.MultiplierPart = "DMGBonus";
                     main.ApplyElementType = "Geo";
                     if (id == 455104) main.ScriptHook = "Hook(455104)";
                     env.DataManager.StatusEffectDict["STE_Artifact_" + id + "01"] = new StatusEffectData
@@ -283,7 +283,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 var owner = env.Ally.Entity;
                 var second = env.CreateEnemy(2).Entity;
                 var main = Main(env, 454102, "Buff");
-                main.MultiplierPart2 = "BaseDMGBonusFlat";
+                main.MultiplierPart = "BaseDMGBonusFlat";
                 main.ScriptHook = "Hook(454102)";
                 env.DataManager.StatusEffectDict["STE_Artifact_45410201"] = new StatusEffectData
                 { StatusEffectID = 45410201, EffectType = "Buff", Param1 = "0.70*TotalATK" };
@@ -437,7 +437,7 @@ namespace GenshinTurnBased.Tests.EditMode
             owner.TotalEM = 500f; owner.BaseDMGBonus = .5f; owner.BaseDMGBonusFlat = 7f;
             owner.LunarDMGBonus = owner.StellarDMGBonus = .2f; owner.Elevation = .25f;
             owner.CritRate = owner.WeaponCritRate = 0f;
-            var passive = Main(env, 459980, "Buff"); passive.MultiplierPart2 = "BaseDMGBonusFlat";
+            var passive = Main(env, 459980, "Buff"); passive.MultiplierPart = "BaseDMGBonusFlat";
             env.DataManager.StatusEffectDict["STE_Artifact_45998001"] = new StatusEffectData
             { StatusEffectID = 45998001, EffectType = "Buff", Param1 = "20" };
             Add(env, owner, passive.StatusID2);
@@ -603,7 +603,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static void AddReactionBaseBonus(BattleFlowTestEnv env, int id, string reaction, string value)
         {
             var main = Main(env, id, "Buff");
-            main.MultiplierPart3 = "BaseDMGBonus";
+            main.MultiplierPart = "BaseDMGBonus";
             main.ApplyReactionType = reaction;
             env.DataManager.StatusEffectDict["STE_Artifact_" + id + "01"] = new StatusEffectData
             { StatusEffectID = id * 100 + 1, EffectType = "Buff", Param1 = value };
@@ -612,7 +612,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static void AddUnrelatedProbabilityBonus(BattleFlowTestEnv env)
         {
             var main = Main(env, 459993, "Buff");
-            main.MultiplierPart2 = "DMGBonus";
+            main.MultiplierPart = "DMGBonus";
             main.ScriptHook = "Chance(0.5)";
             env.DataManager.StatusEffectDict["STE_Artifact_45999301"] = new StatusEffectData
             { StatusEffectID = 45999301, EffectType = "Buff", Param1 = "0.9" };
@@ -624,7 +624,7 @@ namespace GenshinTurnBased.Tests.EditMode
             env.CreateMinimalBattle();
             Main(env, 455002); Main(env, 455003, "Count"); Main(env, 455004, "Count");
             var bonus = Main(env, 455005, "Buff");
-            bonus.MultiplierPart2 = "BaseDMGBonusFlat";
+            bonus.MultiplierPart = "BaseDMGBonusFlat";
             bonus.ApplyDamageType = "Normal;Heavy;Skill;Burst";
             bonus.ScriptHook = "Hook(455005)";
             env.DataManager.StatusActionDict[SongOfDaysPastArtifact.ListenerID] = new List<StatusActionData>

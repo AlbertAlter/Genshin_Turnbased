@@ -142,6 +142,12 @@ public partial class CharacterBattleController
             _selectionIndex++;
             ForcedTargetPositions.Clear();
         }
+        if (!AreConfirmedTargetsValid())
+        {
+            BattleManager.Instance?.RequestTip(BattleTipKeys.NoValidTarget);
+            AbortEffectSequence();
+            return true;
+        }
         if (_selectionIndex < _selectionSteps.Count)
         {
             _pendingSelectEffect = _selectionSteps[_selectionIndex].Effect;
@@ -174,6 +180,22 @@ public partial class CharacterBattleController
         _selectionIndex = 0;
         _pendingSelectEffect = null;
         ForcedTargetPositions.Clear();
+    }
+
+    public bool AreConfirmedTargetsValid()
+    {
+        if (_selectionSteps == null) return true;
+        foreach (var step in _selectionSteps)
+        {
+            if (step.SelectedPositions == null) continue;
+            var effect = step.Effect;
+            var result = BattleTargetResolver.Resolve(BattleManager.Instance, Entity, Entity,
+                effect.TargetType, effect.TargetNumber, effect.TargetConsecutive, null, null,
+                step.SelectedPositions, null, deadOnly: effect.EffectType == "Revive",
+                respectTaunt: effect.EffectType == "Damage", validateForcedTaunt: true);
+            if (!result.IsValid) return false;
+        }
+        return true;
     }
 
     private void UsePlannedTargets(EffectSelectionPlan step)

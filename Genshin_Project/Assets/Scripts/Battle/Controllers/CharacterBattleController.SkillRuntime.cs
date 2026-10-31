@@ -50,7 +50,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能的名字（UI按钮显示用）。</summary>
     public string GetBoundSkillName(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return "";
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return "";
         if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return sk.SkillName;
         return "";
     }
@@ -58,7 +58,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能在 Skills/Icon 列填写的图标。</summary>
     public string GetBoundSkillIcon(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return "";
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return "";
         if (_skillById2.TryGetValue(_boundSkills[skillType], out var skill)) return skill.Icon ?? "";
         return "";
     }
@@ -66,7 +66,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能的 AP 消耗（目标选择阶段提示用）。</summary>
     public int GetBoundSkillAPCost(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return 0;
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return 0;
         if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return APCostResolver.ForSkill(Entity, sk, skillType);
         return 0;
     }
@@ -74,7 +74,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能的最大使用次数（0=无次数概念）。</summary>
     public int GetBoundSkillMaxCharge(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return 0;
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return 0;
         if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return sk.MaxCharge;
         return 0;
     }
@@ -82,7 +82,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能的剩余使用次数。</summary>
     public int GetBoundSkillCurrentCharge(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return 0;
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return 0;
         if (_currentCharges.TryGetValue(_boundSkills[skillType], out int c)) return c;
         return 0;
     }
@@ -90,7 +90,7 @@ public partial class CharacterBattleController
     /// <summary>查询当前按钮绑定技能的剩余冷却回合（UI 冷却数字显示；0=不在冷却）。</summary>
     public int GetCooldownRemaining(int skillType)
     {
-        if (skillType < 0 || skillType > 3) return 0;
+        if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return 0;
         if (_cooldownRemaining.TryGetValue(_boundSkills[skillType], out int cd)) return cd;
         return 0;
     }
@@ -104,7 +104,7 @@ public partial class CharacterBattleController
     {
         if (skillType < 0 || skillType > 3) return null;
         string cur = _boundSkills[skillType];
-        if (!_skillById2.TryGetValue(cur, out var sk) || sk.SkillPhase <= 0) return null;
+        if (string.IsNullOrEmpty(cur) || _skillById2 == null || !_skillById2.TryGetValue(cur, out var sk) || sk.SkillPhase <= 0) return null;
 
         SkillMainData next = null;
         foreach (var s in _skillById2.Values)
@@ -178,54 +178,11 @@ public partial class CharacterBattleController
     // ================================================================
     //  可用性判断
     // ================================================================
-    public bool CanUseNormalAttack()
-    {
-        if (!IsActive || Entity == null || Entity.IsDead) return false;
-        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
-        if (IsButtonFrozen(0)) return false;
-        string nid0 = _boundSkills[0];
-        if (string.IsNullOrEmpty(nid0)) return false;
-        if (_skillById2 == null || !_skillById2.TryGetValue(nid0, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 0))) return false;
-        return HasSkillUseAvailable(nid0, sk);
-    }
-
-    public bool CanUseHeavyAttack()
-    {
-        if (!IsActive || Entity == null || Entity.IsDead) return false;
-        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
-        if (IsButtonFrozen(1)) return false;
-        string hid1 = _boundSkills[1];
-        if (string.IsNullOrEmpty(hid1)) return false;
-        if (_skillById2 == null || !_skillById2.TryGetValue(hid1, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 1))) return false;
-        return HasSkillUseAvailable(hid1, sk);
-    }
-
-    public bool CanUseSkill()
-    {
-        if (!IsActive || Entity == null || Entity.IsDead) return false;
-        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
-        if (IsButtonFrozen(2)) return false;
-        string sid2 = _boundSkills[2];
-        if (string.IsNullOrEmpty(sid2)) return false;
-        if (_skillById2 == null || !_skillById2.TryGetValue(sid2, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 2))) return false;
-        return HasSkillUseAvailable(sid2, sk);
-    }
-
-    public bool CanUseBurst()
-    {
-        if (Entity == null || Entity.IsDead) return false;
-        if (FrozenReactionHandler.IsFrozen(Entity)) return false;
-        if (IsButtonFrozen(3)) return false;
-        string bid3 = _boundSkills[3];
-        if (string.IsNullOrEmpty(bid3)) return false;
-        if (_skillById2 == null || !_skillById2.TryGetValue(bid3, out var sk)) return false;
-        if (APManager == null || !APManager.CanAfford(APCostResolver.ForSkill(Entity, sk, 3))) return false;
-        if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed) return false;
-        return HasSkillUseAvailable(bid3, sk);
-    }
+    // 显示和实际按钮入口使用同一判定，替换技能也按当前绑定读取能量/AP/次数。
+    public bool CanUseNormalAttack() => GetBlockReason(0) == null;
+    public bool CanUseHeavyAttack() => GetBlockReason(1) == null;
+    public bool CanUseSkill() => GetBlockReason(2) == null;
+    public bool CanUseBurst() => GetBlockReason(3) == null;
 
     public bool CanSwitch()
     {
@@ -245,6 +202,8 @@ public partial class CharacterBattleController
             return "角色实体不存在";
         if (Entity.IsDead)
             return "角色已经死亡";
+        if (Entity.IsOffField)
+            return "角色处于离场状态";
         if (FrozenReactionHandler.IsFrozen(Entity))
             return "角色处于冻结状态，无法行动";
 
@@ -278,7 +237,7 @@ public partial class CharacterBattleController
                 return "未知技能类型";
         }
 
-        if (!_skillById2.TryGetValue(skillID2, out var sk))
+        if (_skillById2 == null || !_skillById2.TryGetValue(skillID2, out var sk))
             return $"技能数据缺失({skillID2})";
 
         int apCost = APCostResolver.ForSkill(Entity, sk, skillType);

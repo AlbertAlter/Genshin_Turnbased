@@ -34,7 +34,7 @@ public static class CharacterStatusLifetime
         }
         // 先快照再移除；绑定可能提前删掉后续项，正式移除接口保证幂等。
         pending.Sort((left, right) => left.Status.ApplyOrder.CompareTo(right.Status.ApplyOrder));
-        foreach (var item in pending) StatusHostAccess.Remove(item.Host, item.Status, "CharacterDied");
+        foreach (var item in pending) BattleDeathResolution.RemoveAfterDeathActions(item.Host, item.Status, "CharacterDied");
         // 保留正常StatusRemoved/解绑/护盾/属性声明及后续响应，不执行OnEnd、不伪造Count消费。
         // 此后响应合法新建的状态不是本次快照，不循环清理，以免吞掉触发或形成无限清理。
     }

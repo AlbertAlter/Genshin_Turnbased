@@ -20,7 +20,7 @@ public partial class BattleEntity
 
     /// <summary>
     /// 带来源的扣血接口（2026-08-19，状态钩子任务）。固定顺序：
-    ///  1. 记录 HPBefore；2. 扣除并限制血量不低于0；3. 生成 DamageResolvedEvent；
+    ///  1. 记录 HPBefore；2. 在护盾之后应用已登记的扣血保护，再扣HP并限制不低于0；3. 生成 DamageResolvedEvent；
     ///  4. HitLanded 时触发目标的统一 OnHit（StatusOnHitHookSystem）；
     ///  5. CausedDeath 时广播死亡声明（KillHookSystem，先于战斗结束通知，确保击杀最后敌人仍能收到）；
     ///  6. 在完整行为或独立状态效果链结清后处理复活及胜负；7. 返回事件对象。
@@ -55,7 +55,8 @@ public partial class BattleEntity
                 if (ally?.Entity == sourceEntity) { sourceWasPartyMember = true; break; }
         bool sourceWasOnField = sourceWasPartyMember && sourceEntity.CharacterCtrl?.IsActive == true;
         float hpBefore = CurrentHP;
-        CurrentHP -= damage;
+        float hpDamage = IsAlive ? BattleSpecialRules.GuardHPDamage(this, damage) : damage;
+        CurrentHP -= hpDamage;
         if (CurrentHP < 0f) CurrentHP = 0f;
 
         var damageEvent = new DamageResolvedEvent
@@ -95,13 +96,17 @@ public partial class BattleEntity
             if (damage?.CausedDeath == true) EquipmentStatusLifetime.OnDeath(damage.Target);
         foreach (DamageResolvedEvent damage in damageEvents)
             if (damage?.CausedDeath == true) CharacterStatusLifetime.OnDeath(damage.Target);
-        StatusOnHitHookSystem.NotifyDamageBatch(damageEvents);
+        foreach (DamageResolvedEvent damage in damageEvents)
+            if (damage?.CausedDeath == true && damage.Target.Type == EntityType.Enemy)
+                foreach (var status in damage.Target.GetStatusList())
+                    BattleDeathResolution.RemoveAfterDeathActions(damage.Target, status, "EnemyDied");
         var deaths = new List<DamageResolvedEvent>();
         foreach (DamageResolvedEvent damageEvent in damageEvents)
             if (damageEvent != null && damageEvent.CausedDeath)
                 deaths.Add(damageEvent.Snapshot());
-        if (deaths.Count == 0) return;
         BattleDeathResolution.RecordDeaths(deaths);
+        StatusOnHitHookSystem.NotifyDamageBatch(damageEvents);
+        if (deaths.Count == 0) return;
         BattleResolutionContext.AfterResponses(() =>
         {
             using (BattleResolutionContext.BeginCollection())

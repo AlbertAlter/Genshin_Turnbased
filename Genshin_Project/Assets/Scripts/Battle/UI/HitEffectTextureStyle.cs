@@ -9,6 +9,7 @@ using UnityEngine;
 /// <summary>Texture composition only. Hit positions/angle/depth still belong to HitEffects.xlsx.</summary>
 public sealed class HitEffectTextureStyle
 {
+    public enum PlaybackMode { PerTarget, PerHitGroup }
     public const string FileName = "HitEffectTextures.xlsx";
     public const string ArtRoot = "art_assets/UI/SlashComponents/";
     public sealed class Profile
@@ -16,17 +17,19 @@ public sealed class HitEffectTextureStyle
         internal readonly Dictionary<string, string> Values = new Dictionary<string, string>(StringComparer.Ordinal);
         public string Text(string key) => Values[key];
         public float Number(string key) => float.Parse(Values[key], CultureInfo.InvariantCulture);
+        public PlaybackMode Mode => (PlaybackMode)Enum.Parse(typeof(PlaybackMode), Text("PlaybackMode"));
         public string[] Bodies => new[] { Text("BodyTextureA"), Text("BodyTextureB") }.Where(x => x.Length > 0).ToArray();
         public float Duration(UIHitEffectStyle.Profile impact) => Mathf.Max(impact.Duration,
             Mathf.Max(Number("RevealSeconds"), Number("EraseDelaySeconds") + Number("EraseSeconds")) + Number("SecondSlashDelaySeconds"));
     }
     private readonly Profile[,] profiles = new Profile[5, 2];
     public Profile Get(HitEffectWeapon weapon, bool heavy) => profiles[(int)weapon, heavy ? 1 : 0];
-    private static readonly string[] TextKeys = { "BodyTextureA", "BodyTextureB", "GlowTexture", "FlashTexture", "ParticleTexture", "ProjectileTexture", "RevealMode" };
+    private static readonly string[] TextKeys = { "BodyTextureA", "BodyTextureB", "GlowTexture", "FlashTexture", "ParticleTexture", "ProjectileTexture", "RevealMode", "PlaybackMode" };
     private static readonly string[] NumberKeys = { "BodyWidthMultiplier", "BodyHeightRatio", "RevealSeconds", "EraseDelaySeconds", "EraseSeconds", "EdgeSoftness",
         "GlowOpacity", "GlowScale", "FlashOpacity", "FlashScale", "CoreWhiteMix", "ParticleOpacity", "ParticleSizeMultiplier",
         "ParticleSpeedMultiplier", "MirrorChance", "StretchMin", "StretchMax", "SecondSlashAngleDegrees", "SecondSlashDelaySeconds",
-        "FlightSeconds", "ProjectileWidthRatio", "SourceForwardRatio", "SourceHeightRatio" };
+        "FlightSeconds", "ProjectileWidthRatio", "SourceForwardRatio", "SourceHeightRatio",
+        "GroupPaddingCardWidthRatio", "GroupHeightSpanRatio", "GroupMaxHeightCardHeightRatio", "GroupAngleDegrees" };
     public static HitEffectTextureStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
     public static HitEffectTextureStyle ReadFile(string path)
     {
@@ -56,14 +59,22 @@ public sealed class HitEffectTextureStyle
     }
     private static void Validate(Profile p)
     {
+        // Older published workbooks keep their per-target behavior until the new rows are synced.
+        var defaults = new Dictionary<string, string> { { "PlaybackMode", "PerTarget" },
+            { "GroupPaddingCardWidthRatio", "0.1" }, { "GroupHeightSpanRatio", "0.5" },
+            { "GroupMaxHeightCardHeightRatio", "0.75" }, { "GroupAngleDegrees", "0" } };
+        foreach (var pair in defaults) if (!p.Values.ContainsKey(pair.Key)) p.Values.Add(pair.Key, pair.Value);
         foreach (string key in TextKeys) if (!p.Values.ContainsKey(key)) throw new InvalidDataException("缺少命中贴图参数：" + key);
         foreach (string key in NumberKeys)
         {
             if (!p.Values.TryGetValue(key, out string raw) || !float.TryParse(raw, NumberStyles.Float, CultureInfo.InvariantCulture, out float v)
-                || float.IsNaN(v) || float.IsInfinity(v) || (key != "SecondSlashAngleDegrees" && key != "SourceHeightRatio" && v < 0))
+                || float.IsNaN(v) || float.IsInfinity(v) || (key != "SecondSlashAngleDegrees" && key != "SourceHeightRatio" && key != "GroupAngleDegrees" && v < 0))
                 throw new InvalidDataException("无效的命中贴图数字：" + key);
         }
         if (p.Text("RevealMode") != "Sweep" && p.Text("RevealMode") != "Burst") throw new InvalidDataException("RevealMode 只支持 Sweep/Burst。");
+        if (p.Text("PlaybackMode") != "PerTarget" && p.Text("PlaybackMode") != "PerHitGroup")
+            throw new InvalidDataException("PlaybackMode 只支持 PerTarget / PerHitGroup。");
+        if (p.Number("GroupMaxHeightCardHeightRatio") <= 0) throw new InvalidDataException("群体特效厚度上限必须大于0。");
         if (p.Text("BodyTextureA").Length == 0) throw new InvalidDataException("BodyTextureA 不能为空。");
         foreach (string file in p.Bodies.Concat(new[] { p.Text("GlowTexture"), p.Text("FlashTexture"), p.Text("ParticleTexture"), p.Text("ProjectileTexture") }).Where(x => x.Length > 0))
             if (!ValidFileName(file)) throw new InvalidDataException("贴图必须是 SlashComponents 下的 PNG 文件名：" + file);

@@ -8,14 +8,20 @@ public sealed class BattlefieldHealthBar : MonoBehaviour
     public int slot;
     public RoundedHealthFill fill;
     public TMP_Text currentHPText;
+    public MonoBehaviour dataSource;
+    private IBattleUiHealthSource boundSource;
     [Min(0)] public float transitionSeconds = .2f;
-    private BattleEntity previous;
+    private object previous;
     private float from, target, elapsed;
 
     private void Start()
     {
+        if (boundSource == null) boundSource = dataSource as IBattleUiHealthSource;
+        if (dataSource != null && boundSource == null) Debug.LogError("Health bar Data Source must implement IBattleUiHealthSource.", this);
         ReloadAnimationParameters();
     }
+
+    public void Bind(IBattleUiHealthSource source) { boundSource = source; previous = null; }
 
     public void ReloadAnimationParameters()
     {
@@ -35,25 +41,24 @@ public sealed class BattlefieldHealthBar : MonoBehaviour
 
     private void LateUpdate()
     {
-        var battle = BattleManager.Instance;
-        Present(battle != null ? battle.GetEntityByPosition(side, slot) : null, Time.unscaledDeltaTime);
+        if (boundSource != null) Present(boundSource.GetHealth(side, slot), Time.unscaledDeltaTime);
     }
 
-    public void Present(BattleEntity entity, float deltaTime)
+    public void Present(BattleUiMeterState state, float deltaTime)
     {
         if (fill == null) return;
-        if (entity == null)
+        if (!state.Visible)
         {
             fill.Fraction = 0;
             if (currentHPText != null) currentHPText.text = "";
             previous = null;
             return;
         }
-        float next = entity.TotalHP > 0 ? Mathf.Clamp01(entity.CurrentHP/entity.TotalHP) : 0;
+        float next = state.Fraction;
         if (float.IsNaN(next) || float.IsInfinity(next)) next = 0;
-        if (previous != entity)
+        if (!ReferenceEquals(previous, state.Identity))
         {
-            previous = entity;
+            previous = state.Identity;
             from = target = next;
             fill.Fraction = next;
             elapsed = transitionSeconds;
@@ -67,7 +72,7 @@ public sealed class BattlefieldHealthBar : MonoBehaviour
         elapsed += Mathf.Max(0, deltaTime);
         float t = transitionSeconds <= 0 ? 1 : Mathf.Clamp01(elapsed/transitionSeconds);
         fill.Fraction = Mathf.Lerp(from, target, 1-Mathf.Pow(1-t, 3));
-        if (currentHPText != null) currentHPText.text = Mathf.CeilToInt(Mathf.Max(0, entity.CurrentHP)).ToString();
+        if (currentHPText != null) currentHPText.text = Mathf.CeilToInt(Mathf.Max(0, state.Current)).ToString();
     }
 
     private void OnDisable() { previous = null; }

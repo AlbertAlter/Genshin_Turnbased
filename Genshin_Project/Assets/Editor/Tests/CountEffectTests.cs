@@ -215,12 +215,67 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void AmbiguousInstances_AreRejectedRatherThanSelectingFirst()
+        public void MultipleInstances_AllChangeIndependently_WithoutRefreshingOrRemoving()
+        {
+            var host = Entity(); var other = Entity(1); var outside = Entity();
+            var first = Attach(host); var second = IndependentInstance(host, 2);
+            var third = Attach(other); var untouched = Attach(outside);
+            var differentID = Attach(host, FloatID);
+            var inactive = IndependentInstance(host, 1); inactive.IsActive = false;
+            long order = second.ApplyOrder;
+            CountEffect.Execute(IntegerID, "1", host, new[] { host, other });
+            Assert.That(first.RuntimeIntValue, Is.EqualTo(2));
+            Assert.That(second.RuntimeIntValue, Is.EqualTo(3));
+            Assert.That(third.RuntimeIntValue, Is.EqualTo(2));
+            Assert.That(untouched.RuntimeIntValue, Is.EqualTo(1));
+            Assert.That(differentID.RuntimeValue, Is.EqualTo(.25f));
+            Assert.That(inactive.RuntimeIntValue, Is.EqualTo(1));
+            CountEffect.Execute(IntegerID, "-1", host, new[] { host });
+            Assert.That(first.RuntimeIntValue, Is.EqualTo(1));
+            Assert.That(second.RuntimeIntValue, Is.EqualTo(2));
+            CountEffect.Execute(IntegerID, "full", host, new[] { host, other });
+            Assert.That(first.RuntimeIntValue, Is.EqualTo(3));
+            Assert.That(second.RuntimeIntValue, Is.EqualTo(3));
+            Assert.That(third.RuntimeIntValue, Is.EqualTo(7));
+            CountEffect.Execute(IntegerID, "clear", host, new[] { host, other });
+            Assert.That(first.RuntimeIntValue, Is.Zero);
+            Assert.That(second.RuntimeIntValue, Is.Zero);
+            Assert.That(third.RuntimeIntValue, Is.Zero);
+            Assert.That(host.HasStatusInstance(first) && host.HasStatusInstance(second), Is.True);
+            Assert.That(first.RemainingPhaseCount, Is.EqualTo(3));
+            Assert.That(second.RemainingPhaseCount, Is.EqualTo(2));
+            Assert.That(second.ApplyOrder, Is.EqualTo(order));
+            Assert.That(integerHandler.Reapplied, Is.Zero);
+        }
+
+        [Test]
+        public void RepeatedTarget_ChangesEveryMatchingInstancePerSelection()
+        {
+            var host = Entity(1); var first = Attach(host); var second = IndependentInstance(host, 2);
+            CountEffect.Execute(IntegerID, "1", host, new[] { host, host });
+            Assert.That(first.RuntimeIntValue, Is.EqualTo(3));
+            Assert.That(second.RuntimeIntValue, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void InvalidLaterInstance_RejectsWholeBatchBeforeChangingEarlierInstances()
         {
             var host = Entity(); var first = Attach(host);
-            host.StatusDict.Add(new StatusInstance { StatusID2 = IntegerID, MainData = data.StatusMainDict[IntegerID], IsActive = true });
+            // 故意用浮点存储构造非法整数Count，检查整批预校验。
+            host.StatusDict.Add(new StatusInstance { StatusID2 = IntegerID,
+                MainData = data.StatusMainDict[IntegerID], IsActive = true, ApplyOrder = first.ApplyOrder + 1 });
             Assert.Throws<InvalidOperationException>(() => CountEffect.Execute(IntegerID, "1", host, new[] { host }));
             Assert.That(first.RuntimeIntValue, Is.EqualTo(1));
+        }
+
+        private StatusInstance IndependentInstance(BattleEntity host, int value)
+        {
+            // 只验证数值效果；旧Count的ApplyStatus重施策略不在本测试中改动。
+            var state = new StatusInstance { StatusID2 = IntegerID, MainData = data.StatusMainDict[IntegerID],
+                IsActive = true, RemainingPhaseCount = 2, ApplyOrder = host.GetStatus(IntegerID).ApplyOrder + 1 };
+            typeof(StatusInstance).GetProperty(nameof(StatusInstance.RuntimeIntValue)).SetValue(state, value);
+            host.StatusDict.Add(state);
+            return state;
         }
     }
 }

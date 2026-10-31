@@ -45,6 +45,8 @@ public sealed class BattleTeamStatusHost : IDisposable
         EquipmentEffectSource equipmentSource, HashSet<string> bindingAncestry, bool managed, IEnumerable<long> causes = null,
         string enchantElement = null, string enchantOverride = null)
     {
+        if (id == PublicControlStates.OffField || id == PublicControlStates.EnemyStun)
+            throw new InvalidOperationException(id + "只能施加于合法单位实体。");
         if (IsDisposed) throw new ObjectDisposedException(nameof(BattleTeamStatusHost));
         if (string.IsNullOrWhiteSpace(id) || main == null || main.StatusID2 != id)
             throw new ArgumentException("队伍状态必须提供匹配的主表定义。", nameof(main));
@@ -52,6 +54,7 @@ public sealed class BattleTeamStatusHost : IDisposable
         using var collection = BattleResolutionContext.BeginCollection();
         equipmentSource = EquipmentStatusLifetime.Resolve(id, caster, weapon, equipmentSource);
         if (equipmentSource != null && !equipmentSource.IsAvailable) return null;
+        OverallShieldSystem.ValidateHost(main, this, caster);
         CountStatusSystem.Validate(main);
         var enchant = EnchantStatusSystem.Parse(main, enchantElement, param2, enchantOverride);
         if (string.Equals(main?.StatusType, "Shield", StringComparison.OrdinalIgnoreCase))
@@ -119,6 +122,7 @@ public sealed class BattleTeamStatusHost : IDisposable
         status.IsActive = false;
         BattleSpecialRules.OnStatusRemoved(status, this);
         using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(new StatusEventData(status, this, false, reason)));
+        StatusRemovalActions.OnRemoved(status, this, reason);
         StatusBindingSystem.RemoveBindings(status);
         BattleManager.Instance?.UnregisterStatusTick(status);
         PreDamageHookSystem.UnregisterPreDamageHook(status);
@@ -145,6 +149,7 @@ public sealed class BattleTeamStatusHost : IDisposable
 
     public void Dispose()
     {
+        using var teardown = StatusRemovalActions.SuppressForTeardown();
         if (IsDisposed) return;
         StatusInstance extraHP = GetStatusList().Find(status => status.MainData?.GetMultiplierPart() == "ExtraBaseHP");
         // 会话销毁不冒充战斗内消耗、到期或移除，不执行OnEnd。

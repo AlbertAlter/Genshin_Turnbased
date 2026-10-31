@@ -90,6 +90,7 @@ public static class UiConfigurationSyncWindow
                 foreach(var preview in UnityEngine.Object.FindObjectsOfType<ShieldPreviewPanel>(true))preview.RequestReload();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldApView>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldHealthBar>(true))view.ReloadAnimationParameters();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<BattleUiEnemyShieldBar>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldDamagePopupController>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldPresentationPlayer>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldSelectionPresentation>(true))view.ReloadAnimationParameters();

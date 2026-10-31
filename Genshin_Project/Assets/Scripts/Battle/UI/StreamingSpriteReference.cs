@@ -35,6 +35,14 @@ public sealed class StreamingSpriteReference : MonoBehaviour
     }
 
     private Coroutine request;
+    private Sprite runtimeSprite;
+    private void ReleaseRuntimeSprite()
+    {
+        if (runtimeSprite == null) return;
+        var image = GetComponent<Image>();
+        if (image != null && image.sprite == runtimeSprite) image.sprite = null;
+        Destroy(runtimeSprite.texture); Destroy(runtimeSprite); runtimeSprite = null;
+    }
 #if UNITY_EDITOR
     private Sprite editorPreview;
     public void RefreshEditorPreview()
@@ -68,6 +76,7 @@ public sealed class StreamingSpriteReference : MonoBehaviour
 
     private void OnDestroy()
     {
+        ReleaseRuntimeSprite();
 #if UNITY_EDITOR
         ClearEditorPreview();
 #endif
@@ -97,17 +106,20 @@ public sealed class StreamingSpriteReference : MonoBehaviour
     {
         if (request != null) StopCoroutine(request);
         request = null;
+        if (Application.isPlaying) ReleaseRuntimeSprite();
     }
 
     public void SetResolvedPath(string path)
     {
+        if (request != null) StopCoroutine(request);
+        request = null;
+        if (Application.isPlaying) ReleaseRuntimeSprite();
         relativePath = path;
         Image image = GetComponent<Image>();
         image.sprite = null;
         image.enabled = false;
         if (!isActiveAndEnabled) return;
         if (string.IsNullOrWhiteSpace(relativePath) || relativePath == "-" || relativePath.Contains("{")) return;
-        if (request != null) StopCoroutine(request);
         request = StartCoroutine(Load(relativePath));
     }
 
@@ -115,6 +127,8 @@ public sealed class StreamingSpriteReference : MonoBehaviour
     {
         yield return StreamingAssetSpriteLoader.Load(path, sprite =>
         {
+            ReleaseRuntimeSprite();
+            runtimeSprite = sprite;
             Image image = GetComponent<Image>();
             image.sprite = sprite;
             ApplyVectorMaterial(image);

@@ -1,0 +1,83 @@
+{
+  "StageName": "03 感电：雷雨交锋",
+  "BattleID": 1,
+  "Allies": [
+    {
+      "CharacterID": 1030,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1018,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1024,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1014,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  ],
+  "Enemies": [
+    {
+      "EnemyID": 2004,
+      "Level": 40,
+      "Slot": 1
+    },
+    {
+      "EnemyID": 2006,
+      "Level": 40,
+      "Slot": 2
+    },
+    {
+      "EnemyID": 2011,
+      "Level": 40,
+      "Slot": 3
+    },
+    {
+      "EnemyID": 2020,
+      "Level": 40,
+      "Slot": 4
+    },
+    {
+      "EnemyID": 2008,
+      "Level": 40,
+      "Slot": 5
+    }
+  ],
+  "InitialEnergyMode": "Percent",
+  "InitialEnergyValue": 100.0
+}

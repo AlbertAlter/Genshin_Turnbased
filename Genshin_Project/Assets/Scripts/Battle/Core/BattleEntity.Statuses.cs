@@ -13,6 +13,7 @@ public partial class BattleEntity
 
     public StatusInstance AddStatus(string statusID2, BattleEntity caster, int initialPhaseCount)
     {
+        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2)) return null;
         if (statusID2 == TeamPublicStatuses.MoonCage)
             throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
         if (StatusDict.TryGetValue(statusID2, out var existing))
@@ -62,6 +63,9 @@ public partial class BattleEntity
             throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
         using var declarationResolution = BattleEventHub.BeginResolution();
         using var declarations = BattleResolutionContext.BeginCollection();
+        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2, mainData)) return null;
+        // 先拒绝非法敌人盾配置，不能先覆盖旧盾后才发现新公式无效。
+        if (Type == EntityType.Enemy) EnemyShieldEffectSystem.ValidateStatusDefinition(mainData);
         using var intrinsicElements = ElementQuery.IsIntrinsicStatus(statusID2)
             ? ElementEventScope.Begin("IntrinsicStatusApplied", this) : null;
         equipmentSource = EquipmentStatusLifetime.Resolve(statusID2, caster, weaponContext, equipmentSource);
@@ -69,6 +73,7 @@ public partial class BattleEntity
         // 配表留空解析为0；按术语取实际施加阶段，不能把状态登记到不会推进的阶段0。
         if (addInPhase == 0 && BattleManager.Instance != null)
             addInPhase = (int)BattleManager.Instance.CurrentPhase;
+        OverallShieldSystem.ValidateHost(mainData, this, caster);
         CountStatusSystem.Validate(mainData);
         var enchant = EnchantStatusSystem.Parse(mainData, enchantElement, param2, enchantOverride);
         var application = new CountStatusApplication
@@ -77,7 +82,8 @@ public partial class BattleEntity
             MainData = mainData, WeaponContext = weaponContext, Param2 = param2, EquipmentSource = equipmentSource
         };
         StatusInstance currentCount;
-        if (CountStatusSystem.IsCount(mainData) && StatusDict.TryGetValue(statusID2, out currentCount))
+        if (CountStatusSystem.IsCount(mainData) && !CountStatusSystem.UsesStandardApplication(mainData)
+            && StatusDict.TryGetValue(statusID2, out currentCount))
             return CountStatusSystem.OnReapplied(currentCount, this, application);
         // 敌方 Shield 状态采用“后施加者覆盖前者”，包括同 ID 重放。
         // 统一走 RemoveStatus，确保旧状态的绑定、钩子和元素盾一并清理。
@@ -104,10 +110,10 @@ public partial class BattleEntity
             existingInstances.RemoveAll(status => status.Caster != caster
                 || status.WeaponContext?.SourceInstanceID != weaponContext.SourceInstanceID);
         }
-        int maxStack = mainData != null ? mainData.MaxStack : 0;
+        int maxStack = OverallShieldSystem.IsOverall(mainData) ? 1 : mainData != null ? mainData.MaxStack : 0;
         if (maxStack > 0 && existingInstances.Count >= maxStack)
         {
-            if (mainData.WhenMax == "1") return existingInstances[0];
+            if (!OverallShieldSystem.IsOverall(mainData) && mainData.WhenMax == "1") return existingInstances[0];
             // 满额只替换最早的那一份，不能删掉整个同 ID 分组或刷新其他实例。
             int removeCount = existingInstances.Count - maxStack + 1;
             for (int index = 0; index < removeCount; index++)
@@ -215,6 +221,7 @@ public partial class BattleEntity
         var removedFact = BattleEventHub.Publish(new StatusEventData(status, this, false, reason));
         intrinsicElements?.AddCause(removedFact.Header.EventId, this);
         using var removedDeclaration = BattleEventHub.Enter(removedFact);
+        StatusRemovalActions.OnRemoved(status, this, reason);
         StatusBindingSystem.RemoveBindings(status);
         CharacterCtrl?.OnStatusChangeControlRemoved(status);
         BattleManager.Instance?.UnregisterStatusTick(status);
@@ -223,6 +230,8 @@ public partial class BattleEntity
         RemoveShieldOwnedByStatus(status);
         CountStatusSystem.OnRemoved(status, this);
         StatusHostAccess.OnExtraBaseHPChanged(status, this);
+        if (status.StatusID2 == PublicControlStates.OffField)
+            BattleManager.Instance?.OnAllyReturnedToField(this);
         return true;
     }
 
@@ -423,6 +432,27 @@ public partial class BattleEntity
         var battle = BattleManager.Instance;
         if (before != CurrentHP && battle != null && battle.IsBattleRunning && !battle.IsBattleOver)
             BattleEventHub.Publish(new HPChangedEventData(this, before, CurrentHP, "MaxHPAdjustment"));
+    }
+
+    /// <summary>造盾来源的百分比/固定盾量加成；沿用范围、钩子、Count及MaxCount过滤，查询不修改旧盾。</summary>
+    public float GetStatusShieldBonus(string part, string effectID, string skillID, string element, BattleEntity recipient,
+        ReactionType? reaction = null)
+    {
+        if (part != "ShieldBonus" && part != "ShieldBonusFlat")
+            throw new ArgumentException("非护盾量加成分类：" + part, nameof(part));
+        return GetStatusAdditiveAttributeBonus(part, effectID, skillID, -1, element, recipient, damageReaction: reaction);
+    }
+
+    /// <summary>原始盾量生成公式；固定加数不吃百分比，允许减盾，最终最低为0。不处理敌方元素量盾。</summary>
+    public static float CalculateShieldAmount(float basis, float bonus, float flat)
+    {
+        if (float.IsNaN(basis) || float.IsInfinity(basis) || float.IsNaN(bonus) || float.IsInfinity(bonus)
+            || float.IsNaN(flat) || float.IsInfinity(flat))
+            throw new InvalidOperationException("护盾量及其加成必须为有限数值。");
+        float amount = basis * (1f + bonus) + flat;
+        if (float.IsNaN(amount) || float.IsInfinity(amount))
+            throw new InvalidOperationException("最终护盾量必须为有限数值。");
+        return Mathf.Max(0f, amount);
     }
 
     /// <summary>受盾者自身的状态护盾强效，来源与Count仍按原Buff实例只读汇总。</summary>

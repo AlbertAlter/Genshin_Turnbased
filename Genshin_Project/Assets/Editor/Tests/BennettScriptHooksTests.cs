@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int n, string id, string type = null, string part = null)
         {
             var value = new StatusMainData { StatusID = 4102000 + n, StatusID2 = id, StatusName = id,
-                StatusType = type, MultiplierPart2 = part, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
+                StatusType = type, MultiplierPart = part, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[id] = value;
             if (!env.DataManager.CharacterStatusIDs.TryGetValue(1020, out var ids))
                 env.DataManager.CharacterStatusIDs[1020] = ids = new HashSet<string>();

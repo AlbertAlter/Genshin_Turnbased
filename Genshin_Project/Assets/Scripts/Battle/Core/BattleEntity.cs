@@ -150,6 +150,9 @@ public partial class BattleEntity : MonoBehaviour
     // ========== 生死判断 ==========
     public bool IsDead => CurrentHP <= 0;
     public bool IsAlive => CurrentHP > 0;
+    // 离场独立于生死和角色前后台；原实体、位置及状态仍保留。
+    public bool IsOffField => HasStatus(PublicControlStates.OffField);
+    public bool IsOnField => IsAlive && !IsOffField;
 
     // ========== 初始化（子类覆写） ==========
 }

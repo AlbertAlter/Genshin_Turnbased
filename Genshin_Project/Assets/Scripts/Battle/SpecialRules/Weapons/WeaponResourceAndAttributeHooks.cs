@@ -32,13 +32,22 @@ internal static class WeaponResourceAndAttributeHooks
                 && fact.Maximum > 0f && fact.Before < fact.Maximum * .30f;
         });
         BattleSpecialRules.RegisterNumberedCondition("4317505", (_, c) =>
-            Owns(c?.Status, 3175, 4317505) && c.Status.WeaponContext.Equipper.GetTotalShieldHP() <= 0f);
+            Owns(c?.Status, 3175, 4317505) && !c.Status.WeaponContext.Equipper.HasShieldProtection());
         BattleSpecialRules.RegisterStatusLifecycle("ST_Weapon_4317505", (status, host) =>
         {
             var owner = RequireOwner(status, 3175, 4317505);
             if (!ReferenceEquals(owner, host)) throw new InvalidOperationException("苇海无盾生命状态必须挂在装备者身上。");
             ShieldSubscriptions.Add(status, BattleEventHub.Subscribe<ShieldChangedEventData>(BattleEventKind.ShieldChanged,
-                (_, fact) => { if (fact.Subject == owner) owner.ClampCurrentHPToMaximum(); }, status.ApplyOrder,
+                (_, fact) =>
+                {
+                    bool relevant = fact.Subject == owner;
+                    if (!relevant && fact.Subject?.Side == owner.Side)
+                    {
+                        foreach (var shield in fact.Before) if (shield.Kind == ShieldKind.Overall) relevant = true;
+                        foreach (var shield in fact.After) if (shield.Kind == ShieldKind.Overall) relevant = true;
+                    }
+                    if (relevant) owner.ClampCurrentHPToMaximum();
+                }, status.ApplyOrder,
                 () => status.IsActive && owner.HasStatusInstance(status) && EquipmentStatusLifetime.CanExecute(status)));
         }, (status, host) =>
         {

@@ -108,7 +108,60 @@ function Start-Work {
 }
 
 
+function Get-PushFailureReason {
+    param([string]$Output)
+
+    if ($Output -match '(?i)GH006|GH013|protected branch|repository rule violations|cannot force.?push|force.?push.*not allowed') {
+        return "远程分支保护或仓库规则禁止本次强推，不是网络故障。请检查 GitHub 分支保护设置。"
+    }
+    if ($Output -match '(?i)authentication failed|permission.*denied|access denied|could not read Username|terminal prompts disabled|SEC_E_NO_CREDENTIALS|repository not found|\b(401|403)\b') {
+        return "GitHub 身份认证或仓库权限失败。请检查登录、凭据和仓库写入权限。"
+    }
+    if ($Output -match '(?i)GH001|exceeds GitHub.*limit|exceeds.*file size limit|pack exceeds|file.*larger than.*MB') {
+        return "文件或推送数据超过远程限制。请检查上方 Git/LFS 错误及大文件配置。"
+    }
+    if ($Output -match '(?i)fetch first|non-fast-forward|stale info|\[rejected\]|\[remote rejected\]|hook declined') {
+        return "远程拒绝分支更新，不是网络故障。本脚本已请求强推，请检查上方具体拒绝原因。"
+    }
+    if ($Output -match '(?i)could not resolve|failed to connect|couldn.t connect|connection.*(reset|refused|closed)|timed? out|timeout|SSL connect error|SSL certificate problem|TLS.*(failed|error)|HTTP (502|503|504)|remote end hung up|unexpected disconnect') {
+        return "网络、代理或 TLS 连接异常。请根据上方原始错误检查连接后重试。"
+    }
+    return "Git 或 LFS 返回失败，请以上方原始错误为准；不能仅凭推送失败认定为网络问题。"
+}
+
+
+function Push-LocalMain {
+    $messages = New-Object 'System.Collections.Generic.List[string]'
+    $pushExitCode = $null
+    $previousErrorAction = $ErrorActionPreference
+    try {
+        # Windows PowerShell 会将重定向的原生命令 stderr 包装为 ErrorRecord。
+        # Git 进度也写在 stderr；必须显示完整输出并按退出码判断，不能提前当异常中断。
+        $ErrorActionPreference = "Continue"
+        & git push --force --progress origin refs/heads/main:refs/heads/main 2>&1 | ForEach-Object {
+            $line = $_.ToString()
+            [void]$messages.Add($line)
+            Write-Host $line
+        }
+        $pushExitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorAction
+    }
+
+    if ($pushExitCode -ne 0) {
+        $reason = Get-PushFailureReason -Output ($messages -join "`n")
+        throw "本地提交已保存，但强推失败（Git 退出码：$pushExitCode）。$reason"
+    }
+}
+
+
 function Save-Work {
+    $branch = & git branch --show-current
+    if ($LASTEXITCODE -ne 0 -or $branch -ne "main") {
+        throw "上传脚本只允许在本地 main 分支运行；请切回 main，避免覆盖错误的远程分支。"
+    }
+
     Write-Host "[1/4] 检查 PSDfiles 与 Git LFS 配置..." -ForegroundColor Cyan
 
     Assert-PsdSyncConfiguration
@@ -154,15 +207,11 @@ function Save-Work {
         Write-Host "[3/4] 没有新的本地修改，继续检查待上传提交..." -ForegroundColor Cyan
     }
 
-    Write-Host "[4/4] 自动上传到 GitHub（PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
+    Write-Host "[4/4] 以本地 main 为准强推 GitHub（覆盖远程 main；PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
 
-    & git push
+    Push-LocalMain
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "本地提交已保存，但上传失败。网络恢复后请重新运行脚本。"
-    }
-
-    Write-Host "[完成] 本地存档和 GitHub 上传均已完成。" -ForegroundColor Green
+    Write-Host "[完成] 本地存档已保存，GitHub main 已更新为本地 main。" -ForegroundColor Green
 }
 
 
@@ -197,7 +246,7 @@ while (-not $exitRequested) {
     Write-Host ""
 
     Write-Host "[1] 开始工作：检查干净后从 GitHub 拉取"
-    Write-Host "[2] 完成工作：检查、提交并上传 GitHub"
+    Write-Host "[2] 完成工作：检查、提交并以本地 main 强推 GitHub"
     Write-Host "[3] 只查看当前修改"
     Write-Host "[4] 退出"
 

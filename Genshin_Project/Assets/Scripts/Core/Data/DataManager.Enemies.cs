@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using OfficeOpenXml;
@@ -56,6 +56,9 @@ public partial class DataManager
                 ATK_Curve = coefficient.ATK_Curve,
                 HP_coeff = coefficient.HP_coeff,
                 ATK_coeff = coefficient.ATK_coeff,
+                EnemyType = coefficient.EnemyType,
+                EnemyFamily = coefficient.EnemyFamily,
+                StatusImmunities = new HashSet<string>(coefficient.StatusImmunities, StringComparer.OrdinalIgnoreCase),
                 PhysicalRes = SafeGetFloat(sheet.Cells[row, FindColumnByHeader(sheet, "PhysicalRes")].Value),
                 PyroRes = SafeGetFloat(sheet.Cells[row, FindColumnByHeader(sheet, "PyroRes")].Value),
                 HydroRes = SafeGetFloat(sheet.Cells[row, FindColumnByHeader(sheet, "HydroRes")].Value),
@@ -84,14 +87,21 @@ public partial class DataManager
         string path = Path.Combine(ChartsPath, "Enemy.xlsx");
         if (!File.Exists(path)) return; // 保留未知；需要此信息的技能须明确拒绝缺失分类。
         using var package = new ExcelPackage(new FileInfo(path));
-        var sheet = package.Workbook.Worksheets[0];
-        if (sheet == null) return;
+        if (package.Workbook.Worksheets.Count < 2)
+            throw new TableValidationException("Enemy.xlsx缺少第二个子表（敌人类别、生物种类与状态免疫）。");
+        LoadEnemyIdentitySheet(package.Workbook.Worksheets[1]);
+    }
+
+    void LoadEnemyIdentitySheet(ExcelWorksheet sheet)
+    {
         var headers = ExcelTableHeaders.For(sheet);
         int idColumn = headers.Optional("EnemyID");
         if (idColumn < 1) idColumn = headers.Optional("顺序ID");
         int typeColumn = headers.Optional("EnemyType");
-        if (idColumn < 1 || typeColumn < 1)
-            throw new TableValidationException("Enemy.xlsx缺少EnemyID/顺序ID或EnemyType表头。");
+        int familyColumn = headers.Optional("生物种类");
+        int immuneColumn = headers.Optional("Immune");
+        if (idColumn < 1 || typeColumn < 1 || familyColumn < 1 || immuneColumn < 1)
+            throw new TableValidationException("Enemy.xlsx第二子表须有EnemyID/顺序ID、EnemyType、生物种类、Immune表头。");
         var seen = new HashSet<int>();
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
@@ -99,7 +109,11 @@ public partial class DataManager
             if (id <= 0) continue;
             if (!seen.Add(id)) throw new TableValidationException($"Enemy.xlsx第{row}行重复敌人ID：{id}");
             if (EnemyMainDict.TryGetValue(id, out var enemy))
+            {
                 enemy.EnemyType = sheet.Cells[row, typeColumn].Text.Trim();
+                enemy.EnemyFamily = sheet.Cells[row, familyColumn].Text.Trim();
+                enemy.StatusImmunities = EnemyTraits.ParseStatusImmunities(sheet.Cells[row, immuneColumn].Text);
+            }
         }
     }
 
@@ -187,6 +201,7 @@ public partial class DataManager
                     EnemySkillID = SafeGetInt(mainSheet.Cells[row, FindColumnByHeader(mainSheet, "EnemySkillID")].Value),
                     EnemySkillID2 = mainSheet.Cells[row, FindColumnByHeader(mainSheet, "EnemySkillID2")].Text,
                     EnemySkillName = mainSheet.Cells[row, FindColumnByHeader(mainSheet, "EnemySkillName")].Text,
+                    SkillTags = EnemySkillTags.Parse(ReadOptionalEffectText(mainSheet, row, "SkillTags")),
                     Cooldown = SafeGetFloat(mainSheet.Cells[row, FindColumnByHeader(mainSheet, "Cooldown")].Value),
                     UsePerTurn = SafeGetInt(mainSheet.Cells[row, FindColumnByHeader(mainSheet, "UsePerTurn")].Value),
                     HighThreat = SafeGetInt(mainSheet.Cells[row, FindColumnByHeader(mainSheet, "HighThreat")].Value),
@@ -251,6 +266,13 @@ public partial class DataManager
                 TryValidate("EnemySkill_Effect", () => TableValidator.ValidatePublicCountEffect(
                     "EnemySkill_Effect", row, data.EffectType, data.Param1, data.Param2, data.TargetType));
                 // 敌人专用模式切换；ChangeControl仅允许在状态表中配置All/Freeze。
+                if (data.EffectType == "Cooldown")
+                    TryValidate("EnemySkill_Effect", () => TableValidator.ValidateCooldown("EnemySkill_Effect", row,
+                        data.Param1, data.Param2, isEnemy: true));
+                if (data.EffectType == "GrantAction")
+                    TryValidate("EnemySkill_Effect", () => TableValidator.ValidateGrantAction("EnemySkill_Effect", row,
+                        data.Param1, data.Param2, data.Param3, data.Element, data.DamageType, data.DamageHook,
+                        data.Duration, data.AddInPhase, data.TriggerPhase));
                 if (data.EffectType == "SwitchPattern")
                     TryValidate("EnemySkill_Effect", () => TableValidator.ValidateSwitchPattern("EnemySkill_Effect", row,
                         data.Param1, data.Param2, data.Param3, data.Element, data.DamageType, data.DamageHook,

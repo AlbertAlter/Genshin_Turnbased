@@ -36,12 +36,9 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
         runtimeOwner = this;
         playback = new BattlePresentationPlayback(Present, CancelViews);
         ReloadConfiguration();
-        var popup = GetComponent<BattlefieldDamagePopupController>();
-        if (popup == null) popup = gameObject.AddComponent<BattlefieldDamagePopupController>();
-        RegisterView(popup);
-        var shake = GetComponent<BattlefieldHitShakeView>();
-        if (shake == null) shake = gameObject.AddComponent<BattlefieldHitShakeView>();
-        RegisterView(shake);
+        // Scenes explicitly opt in to views; do not install unrelated UI modules.
+        foreach (var component in GetComponents<MonoBehaviour>())
+            if (component.isActiveAndEnabled && component is IBattlePresentationView view) RegisterView(view);
         BattlePresentationResults.Unsequenced += OnUnsequenced;
         BattleEventHub.SessionReset += OnSessionReset;
         BattleExecution.TryInstallDefaultPlayer(this);
@@ -74,7 +71,7 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
             }
     }
 
-    // 本实现消费已算好的结果；前摇/命中点接口仍保留给以后专门的技能表现播放器。
+    // 业务先结算；通用模板在结果时间轴中安排视觉前摇和命中，不延迟或重算业务。
     public void Begin(BattlePresentationRequest request, Action reachedResolutionPoint) => reachedResolutionPoint();
     public void ShowResult(BattlePresentationRequest request, Action readyToContinue) => readyToContinue();
     public void Cancel(BattlePresentationRequest request) => CancelResults();
@@ -105,7 +102,7 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
 
     private void Present(long id, BattlePresentationCue cue, Action<Exception> completed)
     {
-        var targets = views.ToArray();
+        var targets = views.FindAll(view => !cue.IsAnticipation || view is IBattlePresentationAnticipationView).ToArray();
         if (targets.Length == 0) { completed(null); return; }
         int remaining = targets.Length;
         bool closed = false;

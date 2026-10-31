@@ -103,7 +103,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 int id = 453103 + index;
                 var main = new StatusMainData { StatusID = id, StatusID2 = "ST_Artifact_" + id,
-                    StatusType = "Buff", MultiplierPart2 = "DMGBonus", ApplyElementType = elements[index],
+                    StatusType = "Buff", MultiplierPart = "DMGBonus", ApplyElementType = elements[index],
                     MaxCount = 1, MaxStack = 1, WhenMax = "0" };
                 env.DataManager.StatusMainDict[main.StatusID2] = main;
                 env.DataManager.StatusEffectDict["STE_Test_PetraValue" + index] = new StatusEffectData

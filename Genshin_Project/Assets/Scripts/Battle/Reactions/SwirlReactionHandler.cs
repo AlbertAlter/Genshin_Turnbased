@@ -218,7 +218,7 @@ public static class SwirlReactionHandler
                 var external = entry.Value;
                 effects.Add(() => TriggerCoresAtPosition(position, external, output.Reaction));
                 BattleEntity target = position != null && position.IsOccupied ? position.Occupant : null;
-                if (target == null || !target.IsAlive || IsStageOneDeadDirectTarget(batch, target)) continue;
+                if (target == null || !target.IsOnField || IsStageOneDeadDirectTarget(batch, target)) continue;
                 PlanStageTwo(target, external, transaction, effects, output.Reaction, next);
             }
             transaction.Commit();
@@ -229,7 +229,7 @@ public static class SwirlReactionHandler
             foreach (var entry in spread)
             {
                 BattleEntity target = entry.Key != null && entry.Key.IsOccupied ? entry.Key.Occupant : null;
-                if (target != null && target.IsAlive)
+                if (target != null && target.IsOnField)
                     ResolveStageThree(target, FirstSource(entry.Value), output.Reaction, PropagationCauses(entry.Value));
             }
             spread = next;
@@ -557,7 +557,7 @@ public static class SwirlReactionHandler
         foreach (int index in BattlePositionSystem.GetAdjacentPositions(side, slot, 1))
         {
             FieldPosition position = field.GetSlot(side, index);
-            if (position != null && position.IsOccupied) yield return position.Occupant;
+            if (position?.Occupant?.IsOnField == true) yield return position.Occupant;
         }
     }
 
@@ -585,7 +585,7 @@ public static class SwirlReactionHandler
         foreach (ExternalAmount amount in external.Values)
         {
             if (amount.Element != "Pyro" && amount.Element != "Electro") continue;
-            ReactionContext context = CloneFor(amount.Source, position != null ? position.Occupant : null,
+            ReactionContext context = CloneFor(amount.Source, position?.Occupant?.IsOnField == true ? position.Occupant : null,
                 amount.Element, amount.Amount);
             context.CauseEventIds = amount.ContactDeclaration != null
                 ? new[] { amount.ContactDeclaration.Header.EventId } : amount.CauseEventIds.ToArray();

@@ -10,7 +10,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusInstance Equip(BattleFlowTestEnv env)
         {
             var main = new StatusMainData { StatusID = 4310201, StatusID2 = ID,
-                StatusName = "PlumageTest", StatusType = "Count", MultiplierPart2 = "DMGBonus",
+                StatusName = "PlumageTest", StatusType = "Count", MultiplierPart = "DMGBonus",
                 ScriptHook = "Hook(4310201)", ApplyDamageType = "Heavy", MaxCount = 1, MaxStack = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[ID] = main;
             env.DataManager.StatusEffectDict["STE_Weapon_431020101"] = new StatusEffectData

@@ -14,6 +14,7 @@ public static class MonaScriptHooks
     private sealed class GainFrame { internal StatusInstance State; internal int Value; }
     private static readonly AsyncLocal<GainFrame> Gaining = new AsyncLocal<GainFrame>();
     private static readonly ConditionalWeakTable<BattleDeclaration, HitFrame> Facts = new ConditionalWeakTable<BattleDeclaration, HitFrame>();
+    private static readonly ConditionalWeakTable<StatusInstance, HitFrame> GlowClaims = new ConditionalWeakTable<StatusInstance, HitFrame>();
     private static readonly ConditionalWeakTable<StatusInstance, DodgeMemory> Dodges = new ConditionalWeakTable<StatusInstance, DodgeMemory>();
     private static readonly ConditionalWeakTable<StatusInstance, IDisposable> Listeners = new ConditionalWeakTable<StatusInstance, IDisposable>();
     private sealed class DodgeMemory { internal int Turn = -1; internal long Action; }
@@ -51,7 +52,7 @@ public static class MonaScriptHooks
             var battle = BattleManager.Instance;
             if (battle != null) foreach (var ally in battle.Allies)
                 if (ally?.Entity?.EntityID == 1028 && ally.Entity.IsAlive)
-                    Glows[ally.Entity] = ally.Entity.GetStatusInstances(Glow).Where(Active).ToList();
+                    Glows[ally.Entity] = ally.Entity.GetStatusInstances(Glow).Where(root => AvailableGlow(root, this)).ToList();
         }
         public void Dispose() => Hitting.Value = previous;
     }
@@ -115,7 +116,8 @@ public static class MonaScriptHooks
         BattleSpecialRules.RegisterCondition("Mona_Vape", (a, c) => Empty(a) && Active(c?.Status) && c.Status.StatusID2 == Hexerei
             && HasHexerei() && c.Declaration?.Get<ReactionEventData>() is ReactionEventData reaction
             && reaction.Reaction == ReactionType.Vaporize && reaction.Source != c.Caster && reaction.Source?.Side == c.Caster.Side
-            && Facts.TryGetValue(c.Declaration, out var hit) && hit.Glows.TryGetValue(c.Caster, out var layers) && layers.Count > 0);
+            && Facts.TryGetValue(c.Declaration, out var hit) && hit.Glows.TryGetValue(c.Caster, out var layers)
+            && layers.Any(root => Active(root) && GlowClaims.TryGetValue(root, out var claim) && claim == hit));
         BattleSpecialRules.RegisterCondition("Mona_C6Gain", (a, c) => int.TryParse(a, out int minimum) && c?.Caster?.EntityID == 1028
             && (Gaining.Value?.State == c.Status ? Gaining.Value.Value : C6Gain(c.Caster)) >= minimum);
         BattleSpecialRules.RegisterTargets("Mona_PhantomArea()", (_, owner) => Area(ScriptHookContext.Current?.StatusHost as FieldPosition, owner));
@@ -165,8 +167,10 @@ public static class MonaScriptHooks
             || c.Recipient == null || c.Recipient == c.Caster || c.Recipient.Side != c.Caster?.Side || c.Target == null) return false;
         var frame = Hitting.Value;
         var roots = frame != null && frame.Glows.TryGetValue(c.Caster, out var saved) ? saved : c.Caster.GetStatusInstances(Glow);
-        return roots.Any(root => Active(root) && root.BoundStatuses.Contains(c.Status));
+        return roots.Any(root => AvailableGlow(root, frame) && root.BoundStatuses.Contains(c.Status));
     }
+    private static bool AvailableGlow(StatusInstance root, HitFrame frame)
+        => Active(root) && (!GlowClaims.TryGetValue(root, out var claim) || claim == frame);
     private static bool C2Ready(ScriptHookContext c)
         => Frame(c, out var frame) && c.Caster == frame.Source && frame.Source.EntityID == 1028
             && frame.FirstNormal != 0 && frame.FirstNormal == c.DamageEvent.Declaration.Header.EventId
@@ -176,7 +180,17 @@ public static class MonaScriptHooks
         var frame = Hitting.Value;
         if (frame == null || declaration == null) return;
         if (declaration.Kind == BattleEventKind.ReactionOccurred)
-        { Facts.Add(declaration, frame); return; }
+        {
+            Facts.Add(declaration, frame);
+            var reaction = declaration.Get<ReactionEventData>();
+            if (reaction?.Reaction == ReactionType.Vaporize && reaction.Source == frame.Source && HasHexerei())
+                foreach (var pair in frame.Glows)
+                    if (pair.Key != reaction.Source && pair.Key.Side == reaction.Source.Side)
+                        foreach (var root in pair.Value)
+                            // 只索引已经发生的蒸发事实，不提前移除状态；同hit后续目标共享，嵌套hit不能借用。
+                            if (Active(root) && !GlowClaims.TryGetValue(root, out _)) GlowClaims.Add(root, frame);
+            return;
+        }
         if (declaration.Kind != BattleEventKind.DamageResolved) return;
         var damage = declaration.Get<DamageEventData>();
         if (damage?.HitLanded != true || !damage.Source.CountsAsHit || damage.Source.SourceEntity != frame.Source) return;
@@ -269,7 +283,9 @@ public static class MonaScriptHooks
         if (source?.StatusID2 != Hexerei || target != source.Caster) throw new InvalidOperationException("辉光消耗缺少本次莫娜来源。");
         var cause = ScriptHookContext.Current?.Declaration;
         if (cause != null && Facts.TryGetValue(cause, out var frame) && frame.Glows.TryGetValue(target, out var saved))
-            foreach (var glow in saved) if (Active(glow)) target.RemoveStatusInstance(glow, "Consumed");
+            foreach (var glow in saved)
+                if (Active(glow) && GlowClaims.TryGetValue(glow, out var claim) && claim == frame)
+                    target.RemoveStatusInstance(glow, "Consumed");
         return true;
     }
 }

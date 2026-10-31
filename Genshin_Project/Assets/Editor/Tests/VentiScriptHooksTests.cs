@@ -212,7 +212,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     var main = new StatusMainData
                     {
                         StatusID = pair.Key, StatusID2 = pair.Value, StatusType = "Debuff",
-                        MultiplierPart1 = "ResBonus", ApplyElementType = "Anemo;Physical",
+                        MultiplierPart = "ResBonus", ApplyElementType = "Anemo;Physical",
                         ScriptHook = pair.Value == VentiScriptHooks.AirborneDebuffID ? "1012_C2()" : null
                     };
                     env.DataManager.StatusMainDict[main.StatusID2] = main;
@@ -251,7 +251,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     var main = new StatusMainData
                     {
                         StatusID = 4101211, StatusID2 = "ST_Venti_C6Debuff2", StatusType = "Debuff",
-                        MultiplierPart1 = "ResBonus", ApplyElementType = "Pyro;Hydro;Electro;Cryo",
+                        MultiplierPart = "ResBonus", ApplyElementType = "Pyro;Hydro;Electro;Cryo",
                         ScriptHook = "1012_C6Element()"
                     };
                     env.DataManager.StatusMainDict[main.StatusID2] = main;

@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private const string S="ST_Chongyun_",E="STE_Chongyun_",Probe="SK_Chongyun_CooldownProbe";
         private static StatusMainData Main(BattleFlowTestEnv e,int n,string key,string type="",string part="")
         {
-            var main=new StatusMainData{StatusID=4102500+n,StatusID2=S+key,StatusType=type,MultiplierPart2=part,MaxStack=1,MaxCount=1,WhenMax="0"};
+            var main=new StatusMainData{StatusID=4102500+n,StatusID2=S+key,StatusType=type,MultiplierPart=part,MaxStack=1,MaxCount=1,WhenMax="0"};
             e.DataManager.StatusMainDict[main.StatusID2]=main;
             if(!e.DataManager.CharacterStatusIDs.TryGetValue(1025,out var ids))e.DataManager.CharacterStatusIDs[1025]=ids=new HashSet<string>();
             ids.Add(main.StatusID2);return main;
@@ -55,7 +55,8 @@ namespace GenshinTurnBased.Tests.EditMode
             Effect(e,410250603,"ThirdReset","Count",S+"ThirdNormal").Param2="clear";
             var energy=Effect(e,410250701,"C4Energy","GainEnergy","1");energy.Element="Cryo";energy.Param2="Flat";
             Effect(e,410250801,"C6Bonus","Buff",".15").ScriptHook="Chongyun_C6HP()";
-            Action(e,"Frost","OnEnd",E+"EndDamage","Chongyun_CommittedEnd();Check(1025_T2)");
+            Action(e,"Frost","OnEnd",E+"EndDamage","Chongyun_EndReady();Check(1025_T2)");
+            Action(e,"Frost","OnDestroy",E+"EndDamage","Chongyun_EndReady();Check(1025_T2)");
             Action(e,"Rimechaser","OnTrigger",E+"EndRes","Chongyun_EndHit()");e.DataManager.StatusActionDict[S+"Rimechaser"][0].OutgoingHit="Skill";
             Action(e,"ThirdNormal","OnTrigger",E+"ThirdGain;"+E+"ThirdDamage","Chongyun_Normal()");Action(e,"ThirdNormal","OnItsTurn",E+"ThirdReset");
             Action(e,"C4","OnTrigger",E+"C4Energy","Chongyun_C4Hit()");e.DataManager.StatusActionDict[S+"C4"][0].MaxTimePerTurn=1;
@@ -96,7 +97,7 @@ namespace GenshinTurnBased.Tests.EditMode
             await BattleExecution.Run(async()=>
             {
                 await e.Ally.ExecuteStatusActionsTask(current,e.DataManager.StatusActionDict[S+"Frost"],e.Ally.Entity,"OnEnd");
-                Assert.That(ends,Is.Empty,"普通到期步骤不先执行一次，再在移除时重复执行");
+                Assert.That(ends.Select(f=>f.Subject.SlotPosition),Is.EqualTo(new[]{2,3,4}),"自然到期在移除之前执行OnEnd");
                 e.Ally.Entity.RemoveStatusInstance(current,"Expired");await BattleExecution.Flush();
             });
             Assert.That(ends.Select(f=>f.Subject.SlotPosition),Is.EqualTo(new[]{2,3,4}));

@@ -14,13 +14,25 @@ public partial class BattleEntity
         int originPhase = -1,
         StatusInstance sourceStatus = null, BattleEntity creator = null, long grantBatchId = 0)
     {
+        OverallShieldSystem.ValidateHost(sourceStatus?.MainData, this, sourceStatus?.Caster);
+        if (OverallShieldSystem.IsOverall(sourceStatus?.MainData))
+        {
+            kind = ShieldKind.Overall;
+            if (sourceStatus?.IsActive != true || !HasStatusInstance(sourceStatus))
+                throw new InvalidOperationException("OverallShield 必须由仍有效的来源状态创建。");
+        }
+        else if (kind == ShieldKind.Overall)
+            throw new InvalidOperationException("场地盾必须有 OverallShield 来源状态。");
         using var declarations = ShieldEventScope.Begin(this, "Added");
+        if (kind == ShieldKind.Overall)
+            Shields.RemoveAll(previous => previous.Kind == kind && IsShieldOwnedByStatus(previous, sourceStatus));
         int resolvedOriginPhase = originPhase > 0
             ? originPhase
             : (BattleManager.Instance != null ? (int)BattleManager.Instance.CurrentPhase : -1);
         var shield = new Shield
         {
             Value = value,
+            InitialValue = value,
             Element = element,
             Duration = duration,
             Strength = strength,
@@ -66,6 +78,7 @@ public partial class BattleEntity
         }
 
         shield.Value = value;
+        shield.InitialValue = value;
         shield.Element = element;
         shield.Duration = duration;
         shield.Strength = 1f;
@@ -92,6 +105,7 @@ public partial class BattleEntity
         Shield shield = new Shield
         {
             Value = value,
+            InitialValue = value,
             Element = element,
             Duration = sourceStatus.RemainingPhaseCount,
             Strength = 1f,
@@ -202,7 +216,7 @@ public partial class BattleEntity
     public void RemoveShields(ShieldKind kind)
     {
         using var declarations = ShieldEventScope.Begin(this, "Removed");
-        if (kind == ShieldKind.EnemyElemental)
+        if (kind == ShieldKind.EnemyElemental || kind == ShieldKind.Overall)
         {
             var owners = new List<StatusInstance>();
             foreach (Shield shield in Shields)
@@ -243,6 +257,10 @@ public partial class BattleEntity
     /// 多个护盾同时承伤而非串联叠加，因此返回当前最强单盾的有效基础盾值。
     /// 不含元素吸收倍率；需要查询某种伤害的实际最大吸收量时使用带元素参数的重载。
     /// </summary>
+    /// <summary>战斗条件查询；个人盾显示仍只读个人盾，场地盾有独立显示接口。</summary>
+    public bool HasShieldProtection()
+        => IsAlive && (GetTotalShieldHP() > 0f || OverallShieldSystem.GetProtectingShields(this).Count > 0);
+
     public float GetTotalShieldHP()
     {
         return GetMaximumShieldCapacity(null, false);
@@ -260,7 +278,7 @@ public partial class BattleEntity
         float? strength = null;
         foreach (Shield shield in Shields)
         {
-            if (shield == null || shield.Value <= 0f || shield.Kind == ShieldKind.EnemyElemental) continue;
+            if (shield == null || shield.Value <= 0f || (shield.Kind == ShieldKind.EnemyElemental || shield.Kind == ShieldKind.Overall)) continue;
 
             bool direct = includeAbsorptionMultiplier && DamageProperties.IsDirect(damageElement);
             if (!direct && !strength.HasValue) strength = GetShieldStrengthMultiplier(damageElement);
@@ -291,6 +309,7 @@ public partial class BattleEntity
 
         float maxBlocked = 0f;
         float? strength = null;
+        var brokenEnemyOwners = Type == EntityType.Enemy ? new List<StatusInstance>() : null;
         for (int i = Shields.Count - 1; i >= 0; i--)
         {
             Shield shield = Shields[i];
@@ -299,7 +318,7 @@ public partial class BattleEntity
                 Shields.RemoveAt(i);
                 continue;
             }
-            if (shield.Kind == ShieldKind.EnemyElemental)
+            if (shield.Kind == ShieldKind.EnemyElemental || shield.Kind == ShieldKind.Overall)
                 continue;
 
             if (!direct && !strength.HasValue) strength = GetShieldStrengthMultiplier(damageElement);
@@ -318,13 +337,23 @@ public partial class BattleEntity
                 maxBlocked = Mathf.Max(maxBlocked, blocked);
             }
             if (shield.Value <= 0f)
+            {
+                if (brokenEnemyOwners != null && shield.SourceStatus != null
+                    && !brokenEnemyOwners.Contains(shield.SourceStatus)) brokenEnemyOwners.Add(shield.SourceStatus);
                 Shields.RemoveAt(i);
+            }
         }
+
+        // 先结束盾遍历，再清理来源状态及绑定；避免移除绑定时修改Shields破坏遍历。
+        if (brokenEnemyOwners != null)
+            foreach (var owner in brokenEnemyOwners)
+                if (HasStatusInstance(owner) && !Shields.Exists(s => s != null && s.Value > 0f && IsShieldOwnedByStatus(s, owner)))
+                    RemoveStatusInstance(owner, "ShieldBroken");
 
         return Mathf.Max(0f, incomingDamage - maxBlocked);
     }
 
-    private static float GetShieldAbsorptionMultiplier(string shieldElement, string damageElement)
+    internal static float GetShieldAbsorptionMultiplier(string shieldElement, string damageElement)
     {
         if (string.IsNullOrEmpty(shieldElement) || shieldElement == "None") return 1f;
         if (shieldElement == "Geo") return 2.5f;

@@ -12,7 +12,7 @@ namespace GenshinTurnBased.Tests.EditMode
             string hook = null, string damageType = null, int maxStack = 1)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = DataManager.WeaponStatusKey(id),
-                StatusName = "WeaponConditionalTest", StatusType = "Buff", MultiplierPart1 = part,
+                StatusName = "WeaponConditionalTest", StatusType = "Buff", MultiplierPart = part,
                 ScriptHook = hook, ApplyDamageType = damageType, MaxStack = maxStack,
                 MaxCount = maxStack, WhenMax = "1" };
             env.DataManager.StatusMainDict[main.StatusID2] = main;

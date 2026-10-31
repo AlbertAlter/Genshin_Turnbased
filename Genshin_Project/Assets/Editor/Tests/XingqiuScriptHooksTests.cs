@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private const string S="ST_Xingqiu_", F="STE_Xingqiu_";
         private static StatusMainData Main(BattleFlowTestEnv e,int n,string id,string kind="",string part="")
         {
-            var m=new StatusMainData{StatusID=4102300+n,StatusID2=S+id,StatusType=kind,MultiplierPart2=part,MaxCount=1,MaxStack=1,WhenMax="0"};
+            var m=new StatusMainData{StatusID=4102300+n,StatusID2=S+id,StatusType=kind,MultiplierPart=part,MaxCount=1,MaxStack=1,WhenMax="0"};
             e.DataManager.StatusMainDict[S+id]=m;
             if(!e.DataManager.CharacterStatusIDs.TryGetValue(1023,out var ids))e.DataManager.CharacterStatusIDs[1023]=ids=new HashSet<string>();
             ids.Add(S+id);return m;

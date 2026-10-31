@@ -5,6 +5,51 @@ namespace GenshinTurnBased.Tests.EditMode
 {
     public class TargetResolverTests
     {
+        [TestCase(1, false)]
+        [TestCase(3, false)]
+        [TestCase(3, true)]
+        public void ZeroTotalHitWeight_ReturnsNoTargetWithoutDrawing(int count, bool taunt)
+        {
+            var random = new SequenceBattleRandomSource();
+            BattleRandom.SetSource(random);
+            try
+            {
+                var request = UnitRequest(1, 1, count == 1 ? new[] { 1 } : new[] { 1, 2, 3 }, null);
+                request.Side = BattleSide.Ally;
+                request.SelectionWeight = _ => 0f;
+                if (taunt) request.TauntPositions = new List<int> { 1 };
+                var result = TargetResolver.Resolve(request);
+                Assert.That(result.IsValid, Is.False);
+                Assert.That(result.Positions, Is.Empty);
+                Assert.That(random.IntCallCount, Is.Zero);
+                Assert.That(random.FloatCallCount, Is.Zero);
+            }
+            finally { BattleRandom.ResetSource(); }
+        }
+
+        [TestCase(BattleSide.Ally, 1)]
+        [TestCase(BattleSide.Ally, 2)]
+        [TestCase(BattleSide.Ally, 3)]
+        [TestCase(BattleSide.Ally, 4)]
+        [TestCase(BattleSide.Enemy, 1)]
+        [TestCase(BattleSide.Enemy, 2)]
+        [TestCase(BattleSide.Enemy, 3)]
+        [TestCase(BattleSide.Enemy, 4)]
+        public void EmptyUnitCandidates_DoNotDrawOrEvaluateWeights(BattleSide side, int mode)
+        {
+            var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
+            try
+            {
+                var request = UnitRequest(mode == 1 ? 1 : 3, mode, new int[0], null);
+                request.Side = side; request.MaxPosition = side == BattleSide.Ally ? 4 : 5;
+                request.SelectionWeight = _ => { Assert.Fail("空候选不能进入权重计算"); return 0; };
+                var result = TargetResolver.Resolve(request);
+                Assert.That(result.IsValid, Is.False); Assert.That(result.Positions, Is.Empty);
+                Assert.That(random.IntCallCount, Is.Zero); Assert.That(random.FloatCallCount, Is.Zero);
+            }
+            finally { BattleRandom.ResetSource(); }
+        }
+
         [Test]
         public void ConsecutiveRandom_PrioritizesMaximumLiveCoverage()
         {

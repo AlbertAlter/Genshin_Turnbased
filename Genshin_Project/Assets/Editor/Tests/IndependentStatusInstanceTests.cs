@@ -24,7 +24,7 @@ namespace GenshinTurnBased.Tests.EditMode
             _main = new StatusMainData
             {
                 StatusID = 69001, StatusID2 = "ST_Independent_Test", StatusType = "Buff",
-                MaxStack = 3, WhenMax = "0", MultiplierPart1 = "ATKBonus"
+                MaxStack = 3, WhenMax = "0", MultiplierPart = "ATKBonus"
             };
             _data.StatusMainDict[_main.StatusID2] = _main;
             _data.StatusEffectDict["STE_Independent_Test"] = new StatusEffectData

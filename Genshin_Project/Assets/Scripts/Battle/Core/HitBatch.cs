@@ -41,11 +41,13 @@ public sealed class HitResolution
     public float DamageBeforeShield;
     public float DamageAfterShield;
     public DamageResolvedEvent DamageEvent;
+    public bool IsCommitted => DamageEvent != null;
 }
 
 /// <summary>
 /// 一个逻辑 hit 对全部目标的有序结算层。
-/// Resolve 只提交本层结果；Flush 时先统一按状态 ApplyOrder 派发 OnHit/OnDamage，
+/// 无场地盾时Resolve提交本层结果；有场地盾时先准备整批，Flush统一扣共享盾及各目标HP。
+/// Flush 时再统一按状态 ApplyOrder 派发 OnHit/OnDamage，
 /// 再处理死亡声明和战斗结束。这样同一 hit 的目标不会因遍历顺序提前触发状态树。
 /// </summary>
 public sealed class HitBatch : IDisposable
@@ -53,6 +55,10 @@ public sealed class HitBatch : IDisposable
     private static long _nextBatchID;
     private readonly List<HitResolution> _results = new List<HitResolution>();
     private bool _flushed;
+    private readonly bool _deferForOverallShield;
+    private readonly List<OverallShieldSystem.Hit> _sharedHits = new List<OverallShieldSystem.Hit>();
+    private readonly List<Action<float>> _commits = new List<Action<float>>();
+    private readonly List<Action> _afterCommit = new List<Action>();
     private readonly IDisposable _resolutionEffect;
     private readonly IDisposable _declarationResolution;
     private readonly IDisposable _declarationResponses;
@@ -70,6 +76,7 @@ public sealed class HitBatch : IDisposable
         _resolutionEffect = BattleResolutionContext.BeginEffect();
         _declarationResponses = BattleResolutionContext.BeginCollection();
         BatchID = ++_nextBatchID;
+        _deferForOverallShield = OverallShieldSystem.HasAny(BattleManager.Instance);
     }
 
     public HitResolution Resolve(HitRequest request)
@@ -118,47 +125,81 @@ public sealed class HitBatch : IDisposable
         // 敌方GU盾只结算元素耐久；本体承伤由状态决定，不能因有盾自动免伤。
         bool isImmune = !isTrue
             && DamageImmunity.Resolve(request.Target, request.Element, source.SourceEffectID);
-        float afterShield = isImmune ? 0f : isTrue ? incoming : isDirect
-            ? request.Target.AbsorbDirectDamageWithShield(incoming) : request.Target.AbsorbDamageWithShield(
-            incoming,
-            request.Element ?? string.Empty);
-        DamageResolvedEvent damageEvent = request.Target.ApplyDamageCore(
-            afterShield,
-            source,
-            source.CountsAsHit);
-        damageEvent.HitBatchID = BatchID;
-        damageEvent.HitIndex = request.HitIndex + 1;
-        damageEvent.TargetIndex = request.TargetIndex + 1;
-        damageEvent.RuntimeHitID = RuntimeHitID;
-        damageEvent.DamageBeforeShield = incoming;
-        damageEvent.Critical = isFixed ? null : request.Critical;
-        damageEvent.IsImmune = isImmune;
-        damageEvent.ImmuneDamage = isImmune ? incoming : 0f;
-        damageEvent.ShieldAbsorbed = isImmune ? 0f : Mathf.Max(0f, incoming - afterShield);
-        damageEvent.Element = request.Element;
-        damageEvent.DamageType = request.DamageType;
-        damageEvent.ElementAmount = isFixed ? 0f : request.ElementAmount;
-        damageEvent.Properties = isTrue ? default : request.Properties;
-        damageEvent.IsNightSoulDamage = !isFixed && (request.IsNightSoulDamage || request.Properties.IsNightSoul);
-        damageEvent.Declaration = BattleEventHub.Record(damageEvent, new DamageEventData(damageEvent), causes: request.CauseEventIds);
-        request.CountPlan?.Resolve(damageEvent);
-
+        if (_deferForOverallShield) source = source.Snapshot();
         var resolution = new HitResolution
         {
-            Request = request,
-            DMGTakenMultiplier = takenMultiplier,
-            DamageBeforeShield = incoming,
-            DamageAfterShield = afterShield,
-            DamageEvent = damageEvent
+            Request = request, DMGTakenMultiplier = takenMultiplier, DamageBeforeShield = incoming
         };
         _results.Add(resolution);
+        var resonance = request.Properties.IsResonance ? GeoConstructStatusSystem.Current : null;
+        var sharedHit = _deferForOverallShield ? new OverallShieldSystem.Hit
+        {
+            Target = request.Target, Damage = isImmune ? 0f : incoming, Element = request.Element,
+            Bypass = isTrue || isImmune, TargetMaxHP = request.Target.GetFinalHP()
+        } : null;
+        void Commit(float remaining)
+        {
+            using var committedHit = BattleEventHub.BeginHit(RuntimeHitID, request.TargetIndex + 1);
+            float afterShield = isImmune ? 0f : isTrue ? incoming : isDirect
+                ? request.Target.AbsorbDirectDamageWithShield(remaining) : request.Target.AbsorbDamageWithShield(
+                remaining,
+                request.Element ?? string.Empty);
+            DamageResolvedEvent damageEvent = request.Target.ApplyDamageCore(
+                afterShield,
+                source,
+                source.CountsAsHit);
+            damageEvent.HitBatchID = BatchID;
+            damageEvent.HitIndex = request.HitIndex + 1;
+            damageEvent.TargetIndex = request.TargetIndex + 1;
+            damageEvent.RuntimeHitID = RuntimeHitID;
+            damageEvent.DamageBeforeShield = incoming;
+            damageEvent.Critical = isFixed ? null : request.Critical;
+            damageEvent.IsImmune = isImmune;
+            damageEvent.ImmuneDamage = isImmune ? incoming : 0f;
+            damageEvent.ShieldAbsorbed = isImmune ? 0f : Mathf.Max(0f, incoming - afterShield);
+            damageEvent.Element = request.Element;
+            damageEvent.DamageType = request.DamageType;
+            damageEvent.ElementAmount = isFixed ? 0f : request.ElementAmount;
+            damageEvent.Properties = isTrue ? default : request.Properties;
+            damageEvent.Resonance = resonance;
+            damageEvent.OverallShieldProtections = sharedHit != null
+                ? sharedHit.Protections.AsReadOnly() : Array.Empty<OverallShieldProtection>();
+            damageEvent.IsNightSoulDamage = !isFixed && (request.IsNightSoulDamage || request.Properties.IsNightSoul);
+            damageEvent.Declaration = BattleEventHub.Record(damageEvent, new DamageEventData(damageEvent), causes: request.CauseEventIds);
+            request.CountPlan?.Resolve(damageEvent);
+    
+    
+            resolution.DamageAfterShield = afterShield;
+            resolution.DamageEvent = damageEvent;
+        }
+        if (_deferForOverallShield)
+        {
+            _sharedHits.Add(sharedHit);
+            _commits.Add(Commit);
+        }
+        else Commit(isImmune ? 0f : incoming);
         return resolution;
+    }
+
+    /// <summary>调用者需要已扣盾/血的结果时使用；有场地盾的批次在Flush完成提交后回调。</summary>
+    public void AfterCommit(HitResolution result, Action<HitResolution> callback)
+    {
+        if (result == null || callback == null) return;
+        if (result.IsCommitted) callback(result);
+        else _afterCommit.Add(() => callback(result));
     }
 
     public void Flush()
     {
         if (_flushed) return;
         _flushed = true;
+        if (_deferForOverallShield)
+        {
+            float[] remaining = OverallShieldSystem.Absorb(_sharedHits, out var payments);
+            for (int i = 0; i < _commits.Count; i++) _commits[i](remaining[i]);
+            OverallShieldSystem.RemoveBroken(payments);
+            foreach (var callback in _afterCommit) callback();
+        }
 
         var events = new List<DamageResolvedEvent>(_results.Count);
         foreach (HitResolution result in _results)

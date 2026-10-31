@@ -215,7 +215,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
         private static StatusInstance Residual(BattleFlowTestEnv env, BattleEntity owner)
         {
-            var buff = Main(env,4101307,"ST_Jean_C6Buff","Buff"); buff.MultiplierPart3 = "DMGTaken"; buff.MaxCount=1; buff.MaxStack=0;
+            var buff = Main(env,4101307,"ST_Jean_C6Buff","Buff"); buff.MultiplierPart = "DMGTaken"; buff.MaxCount=1; buff.MaxStack=0;
             env.DataManager.StatusEffectDict["STE_Jean_C6Reduction"] = new StatusEffectData
             { StatusEffectID=410130701,StatusEffectID2="STE_Jean_C6Reduction",EffectType="Buff",Param1="-0.35" };
             var count = Main(env,4101308,JeanC6ResidualCount.ID,"Count");

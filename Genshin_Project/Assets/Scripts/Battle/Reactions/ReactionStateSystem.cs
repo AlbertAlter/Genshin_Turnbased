@@ -83,6 +83,8 @@ public sealed class ReactionStateInstance
     public int RemainingRounds;
     public int OriginPhase;
     public long ApplyOrder;
+    /// <summary>该次冻结的主动解冻点击进度。前两次不扣AP，不消耗冻元素量。</summary>
+    public int ThawClicks { get; internal set; }
     public ReactionSourceSnapshot SourceSnapshot;
     public bool UsesRoundDuration = true;
     /// <summary>冻元素、燃元素等随反应状态保存的精确元素量。</summary>
@@ -134,6 +136,7 @@ public static class ReactionStateSystem
         bool skipNextDurationTick = false)
     {
         if (target == null || type == ReactionType.None || duration <= 0) return null;
+        if (EnemyTraits.IsReactionStateImmune(target, type)) return null;
         using var declarations = ElementEventScope.Begin("ReactionStateSet", target);
         if (type == ReactionType.Frozen || type == ReactionType.Burning)
             declarations.Refresh(target, type == ReactionType.Frozen ? ReactionPoolKind.Frozen : ReactionPoolKind.Burning,

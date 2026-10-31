@@ -57,18 +57,23 @@ public sealed class HealBatch : IDisposable
     public IReadOnlyList<HealResolvedEvent> Results => _events.AsReadOnly();
 
     public void Add(BattleEntity target, float amount, BattleEntity source = null,
-        string effectID = null, int segmentIndex = 1)
+        string effectID = null, int segmentIndex = 1, float? hpCeiling = null)
     {
         if (_flushed) throw new InvalidOperationException("HealBatch already flushed");
         if (target == null || target.IsDead || amount <= 0f
             || float.IsNaN(amount) || float.IsInfinity(amount)) return;
         float before = _projectedHP.TryGetValue(target, out float projected) ? projected : target.CurrentHP;
+        if (hpCeiling.HasValue && (float.IsNaN(hpCeiling.Value) || float.IsInfinity(hpCeiling.Value)))
+            throw new ArgumentOutOfRangeException(nameof(hpCeiling));
+        // 专用治疗钩子可限制治疗后的HP；超过该上限时不治疗，也不消耗生命之契。
+        if (hpCeiling.HasValue && before >= hpCeiling.Value) return;
         float bondBefore = _projectedBondOfLife.TryGetValue(target, out float projectedBond)
             ? projectedBond : BondOfLifeStatusHandler.GetValue(target);
         float absorbed = Mathf.Min(bondBefore, amount);
         float bondAfter = bondBefore - absorbed;
         float maximum = target.GetFinalHP();
-        float after = Mathf.Max(before, Mathf.Min(maximum, before + (amount - absorbed)));
+        float ceiling = hpCeiling.HasValue ? Mathf.Min(maximum, hpCeiling.Value) : maximum;
+        float after = Mathf.Max(before, Mathf.Min(ceiling, before + (amount - absorbed)));
         _projectedHP[target] = after;
         _projectedBondOfLife[target] = bondAfter;
         _events.Add(new HealResolvedEvent(source, target, amount, before, after, maximum,

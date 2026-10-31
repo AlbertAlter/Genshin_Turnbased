@@ -153,9 +153,8 @@ public partial class DataManager
                 StatusType = sheet.Cells[row, FindColumnByHeader(sheet, "StatusType")].Text,
                 Display = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Display")].Value),
                 Description = sheet.Cells[row, FindColumnByHeader(sheet, "Description")].Text,
-                MultiplierPart1 = sheet.Cells[row, FindColumnByHeader(sheet, "MultiplierPart1")].Text,
-                MultiplierPart2 = sheet.Cells[row, FindColumnByHeader(sheet, "MultiplierPart2")].Text,
-                MultiplierPart3 = sheet.Cells[row, FindColumnByHeader(sheet, "MultiplierPart3")].Text,
+                MultiplierPart = StatusMultiplierParts.Parse(sheet.Cells[row, FindColumnByHeader(sheet, "MultiplierPart")].Text,
+                    $"{sheet.Name} 第{row}行 ({id2})"),
                 ApplyDamageType = sheet.Cells[row, FindColumnByHeader(sheet, "ApplyDamageType")].Text,
                 ApplyReactionType = sheet.Cells[row, FindColumnByHeader(sheet, "ApplyReactionType")].Text,
                 ApplyElementType = sheet.Cells[row, FindColumnByHeader(sheet, "ApplyElementType")].Text,
@@ -247,8 +246,8 @@ public partial class DataManager
                     data.Param1, data.Param3, data.DamageType, data.DamageHook, data.AddInPhase, data.TriggerPhase));
             if (data.EffectType == "ResetCooldown")
                 TryValidate(sourceKey, () => TableValidator.ValidateResetCooldown(sourceKey, row, data.Param1));
-            if (data.EffectType == "ReduceCooldown")
-                TryValidate(sourceKey, () => TableValidator.ValidateReduceCooldown(sourceKey, row, data.Param1, data.Param2));
+            if (data.EffectType == "Cooldown")
+                TryValidate(sourceKey, () => TableValidator.ValidateCooldown(sourceKey, row, data.Param1, data.Param2, isEnemy));
             if (data.EffectType == "BondOfLife")
                 TryValidate(sourceKey, () => TableValidator.ValidateBondOfLife(sourceKey, row, data.Param1));
             if (data.EffectType == "Revive")
@@ -269,6 +268,10 @@ public partial class DataManager
                     isEnemy: isEnemy));
             }
 
+            if (data.EffectType == "GrantAction")
+                TryValidate(sourceKey, () => TableValidator.ValidateGrantAction(sourceKey, row,
+                    data.Param1, data.Param2, data.Param3, data.Element, data.DamageType, data.DamageHook,
+                    data.Duration, data.AddInPhase, data.TriggerPhase));
             if (data.EffectType == "SwitchPattern")
                 TryValidate(sourceKey, () => TableValidator.ValidateSwitchPattern(sourceKey, row,
                     data.Param1, data.Param2, data.Param3, data.Element, data.DamageType, data.DamageHook,

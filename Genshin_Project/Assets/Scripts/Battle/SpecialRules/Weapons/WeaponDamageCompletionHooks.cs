@@ -76,6 +76,8 @@ internal static class WeaponDamageCompletionHooks
             RequestedHPDamage = data.RequestedDamage, DamageBeforeShield = data.DamageBeforeShield, Critical = data.Critical,
             ShieldAbsorbed = data.ShieldAbsorbed, IsImmune = data.IsImmune, ImmuneDamage = data.ImmuneDamage,
             DamageType = data.DamageType, Element = data.Element, ElementAmount = data.ElementAmount, Properties = data.Properties,
+            Resonance = data.Resonance,
+            OverallShieldProtections = data.OverallShieldProtections,
             IsNightSoulDamage = data.IsNightSoulDamage, CausedDeath = data.CausedDeath, HitIndex = data.HitIndex,
             RuntimeHitID = declaration.Header.HitId, TargetIndex = declaration.Header.TargetIndex };
     private static void Observe(BattleDeclaration declaration)

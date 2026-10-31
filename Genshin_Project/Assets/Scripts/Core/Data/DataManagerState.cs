@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 internal sealed class DataManagerState
 {
+    internal Dictionary<string, LangEntry> LangDict = new Dictionary<string, LangEntry>(System.StringComparer.Ordinal);
     internal List<CharacterOverviewData> CharacterOverviewList = new List<CharacterOverviewData>();
     internal Dictionary<int, CharacterAttributesData> CharacterAttributesDict = new Dictionary<int, CharacterAttributesData>();
     internal Dictionary<int, List<CharacterAscensionData>> CharacterAscensionDict = new Dictionary<int, List<CharacterAscensionData>>();
@@ -52,6 +53,7 @@ internal sealed class DataManagerState
     {
         return new DataManagerState
         {
+            LangDict = manager.LangDict,
             CharacterOverviewList = manager.CharacterOverviewList,
             CharacterAttributesDict = manager.CharacterAttributesDict,
             CharacterAscensionDict = manager.CharacterAscensionDict,
@@ -94,6 +96,7 @@ internal sealed class DataManagerState
 
     internal void ApplyTo(DataManager manager)
     {
+        manager.LangDict = LangDict;
         manager.CharacterOverviewList = CharacterOverviewList;
         manager.CharacterAttributesDict = CharacterAttributesDict;
         manager.CharacterAscensionDict = CharacterAscensionDict;

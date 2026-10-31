@@ -305,8 +305,8 @@ namespace GenshinTurnBased.Tests.EditMode
                 var switcher = runtime.AddComponent<BattlefieldSwitchController>();
                 Assert.That(switcher.UIBeginSwitch(), Is.True);
                 switcher.UIMoveSwitch(1);
-                Assert.That(BattlefieldApView.GetPreviewCost(env.Manager, null, switcher), Is.EqualTo(expected));
-                Assert.That(BattlefieldApView.GetPreviewCost(env.Manager, null, switcher), Is.EqualTo(expected));
+                Assert.That(BattleUiCombatHudSource.GetPreviewCost(env.Manager, null, switcher), Is.EqualTo(expected));
+                Assert.That(BattleUiCombatHudSource.GetPreviewCost(env.Manager, null, switcher), Is.EqualTo(expected));
                 Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(100));
                 env.Manager.APManager.ConsumeAP(100 - expected);
                 Assert.That(switcher.UIConfirmSwitch(), Is.True);

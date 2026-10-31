@@ -125,8 +125,8 @@ public static class WeaponHooks
         BattleSpecialRules.RegisterNumberedCondition("4304204", (_, c) => HasOwnTargetMark(c, "ST_Weapon_4304203"));
         BattleSpecialRules.RegisterNumberedCondition("4303601", (_, c) => Owner(c) != null
             && OwnStatus(c?.Status, "ST_Weapon_4303603") == null);
-        BattleSpecialRules.RegisterNumberedCondition("4305001", (_, c) => Owner(c)?.GetTotalShieldHP() > 0f);
-        BattleSpecialRules.RegisterNumberedCondition("4305702", (_, c) => Owner(c)?.GetTotalShieldHP() > 0f);
+        BattleSpecialRules.RegisterNumberedCondition("4305001", (_, c) => Owner(c)?.HasShieldProtection() == true);
+        BattleSpecialRules.RegisterNumberedCondition("4305702", (_, c) => Owner(c)?.HasShieldProtection() == true);
         BattleSpecialRules.RegisterNumberedCondition("4305501", (_, c) => Aura(c, "Hydro", "Electro"));
         BattleSpecialRules.RegisterNumberedCondition("4310601", (_, c) => Aura(c, "Hydro", "Pyro"));
         BattleSpecialRules.RegisterNumberedCondition("4309003", (_, c) => Owner(c) != null

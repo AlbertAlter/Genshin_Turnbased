@@ -111,8 +111,8 @@ public partial class DataManager
                     StatusID = id, StatusID2 = id2,
                     StatusName = main.Cells[row, FindColumnByHeader(main, "StatusName")].Text, StatusType = main.Cells[row, FindColumnByHeader(main, "StatusType")].Text,
                     Display = SafeGetInt(main.Cells[row, FindColumnByHeader(main, "Display")].Value), Description = main.Cells[row, FindColumnByHeader(main, "Description")].Text,
-                    MultiplierPart1 = main.Cells[row, FindColumnByHeader(main, "MultiplierPart1")].Text, MultiplierPart2 = main.Cells[row, FindColumnByHeader(main, "MultiplierPart2")].Text,
-                    MultiplierPart3 = main.Cells[row, FindColumnByHeader(main, "MultiplierPart3")].Text, ApplyDamageType = main.Cells[row, FindColumnByHeader(main, "ApplyDamageType")].Text,
+                    MultiplierPart = StatusMultiplierParts.Parse(main.Cells[row, FindColumnByHeader(main, "MultiplierPart")].Text,
+                        $"{path}/{main.Name} 第{row}行 ({id2})"), ApplyDamageType = main.Cells[row, FindColumnByHeader(main, "ApplyDamageType")].Text,
                     ApplyReactionType = main.Cells[row, FindColumnByHeader(main, "ApplyReactionType")].Text, ApplyElementType = main.Cells[row, FindColumnByHeader(main, "ApplyElementType")].Text,
                     ApplyString = main.Cells[row, FindColumnByHeader(main, "ApplyString")].Text, ScriptHook = main.Cells[row, FindColumnByHeader(main, "ScriptHook")].Text,
                     MaxCount = SafeGetInt(main.Cells[row, FindColumnByHeader(main, "MaxCount")].Value), MaxStack = SafeGetInt(main.Cells[row, FindColumnByHeader(main, "MaxStack")].Value),
@@ -184,8 +184,8 @@ public partial class DataManager
                 if (effectType == "ResetCooldown")
                     TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateResetCooldown(
                         "StatusWeapon_Effect", row, effects.Cells[row, FindColumnByHeader(effects, "Param1")].Text));
-                if (effectType == "ReduceCooldown")
-                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateReduceCooldown(
+                if (effectType == "Cooldown")
+                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateCooldown(
                         "StatusWeapon_Effect", row,
                         effects.Cells[row, FindColumnByHeader(effects, "Param1")].Text,
                         effects.Cells[row, FindColumnByHeader(effects, "Param2")].Text));

@@ -40,6 +40,32 @@ namespace GenshinTurnBased.Tests.EditMode
                 "ApplyStatus", "", 0, "", "Enemy", -1, 3, "", enemy, checkNumber));
         }
 
+        [TestCase("EnemySkill_Effect", "ApplyStatus", "EnemyField", true)]
+        [TestCase("Status_Effect", "ApplyElement", "Enemy", false)]
+        [TestCase("Status_Effect", "ApplyElement", "Allies", false)]
+        [TestCase("Status_Effect", "Heal", "Allies", false)]
+        public void EnemyEffects_AllTargetsDoNotRequireSelectionMode(
+            string table, string effectType, string targetType, bool checkNumber)
+        {
+            Assert.DoesNotThrow(() => TableValidator.ValidateEffectRow(table, 10,
+                effectType, effectType == "ApplyElement" ? "Hydro" : "", 0, "", targetType,
+                checkNumber ? -1 : 0, 0, "", true, checkNumber,
+                targetSelect: checkNumber ? null : " -1 ", isStatusEffectTable: !checkNumber));
+        }
+
+        [TestCase(false, 0)]
+        [TestCase(false, 5)]
+        [TestCase(true, 0)]
+        [TestCase(true, 5)]
+        public void EnemyEffects_SingleTargetsStillRequireEnemySelectionMode(bool statusEffect, int mode)
+        {
+            Assert.Throws<TableValidationException>(() => TableValidator.ValidateEffectRow(
+                statusEffect ? "Status_Effect" : "EnemySkill_Effect", 3,
+                "Damage", "Physical", 0, "", "Enemy", statusEffect ? 0 : 1, mode, "", true,
+                checkTargetNumber: !statusEffect, targetSelect: statusEffect ? "1" : null,
+                isStatusEffectTable: statusEffect));
+        }
+
         [TestCase(null, 1)]
         [TestCase("", 1)]
         [TestCase("3", 3)]
@@ -53,6 +79,40 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(TableValidator.ParseExecuteCountHandler("1011_C1()"), Is.EqualTo("1011_C1()"));
             Assert.That(TableValidator.ParseExecuteCountHandler("3"), Is.Empty);
             Assert.That(ExecuteCountEvaluator.Evaluate(1, "1011_C1()", null), Is.Zero);
+            Assert.That(ExecuteCountEvaluator.Evaluate(1, "1011_C1", null), Is.Zero);
+        }
+
+        [TestCase("1011_C1")]
+        [TestCase("1014_C4")]
+        [TestCase("Jean_SkillEnergy")]
+        [TestCase("Diluc_DawnCount")]
+        [TestCase("Ningguang_BurstCount")]
+        [TestCase("Ningguang_FiredJades")]
+        [TestCase("Beidou_BurstBounces")]
+        [TestCase("Xingqiu_SwordCount")]
+        [TestCase("Chongyun_BurstHits")]
+        public void ExecuteCount_AcceptsOnlyRegisteredNames_WithOrWithoutEmptyParentheses(string name)
+        {
+            foreach (string raw in new[] { name, name + "()", " " + name + " " })
+            {
+                Assert.That(ExecuteCountEvaluator.IsSupportedHandler(raw), Is.True);
+                Assert.That(TableValidator.ParseExecuteCount(raw), Is.EqualTo(1));
+                Assert.That(TableValidator.ParseExecuteCountHandler(raw), Is.EqualTo(raw.Trim()));
+            }
+        }
+
+        [TestCase("SkillsEffect")]
+        [TestCase("Status_Effect")]
+        [TestCase("EnemySkill_Effect")]
+        public void ExecuteCount_ReadsBareXingqiuHandlerByHeader(string table)
+        {
+            using var package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add(table);
+            sheet.Cells[1, 2].Value = "ExecuteCount";
+            sheet.Cells[2, 2].Value = "string";
+            sheet.Cells[4, 2].Value = " Xingqiu_SwordCount ";
+            Assert.That(Call("ReadExecuteCount", sheet, 4), Is.EqualTo(1));
+            Assert.That(Call("ReadExecuteCountHandler", sheet, 4), Is.EqualTo("Xingqiu_SwordCount"));
         }
 
         [TestCase(0, 0)]
@@ -66,7 +126,11 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase("1.5")]
         [TestCase("All")]
         [TestCase("Unknown()")]
+        [TestCase("Unknown")]
         [TestCase("1011_C1(2)")]
+        [TestCase("Xingqiu_SwordCount(2)")]
+        [TestCase("Xingqiu_SwordCount(")]
+        [TestCase("Xingqiu_SwordCount)")]
         public void ExecuteCount_RejectsInvalidValues(string raw)
             => Assert.Throws<TableValidationException>(() => TableValidator.ParseExecuteCount(raw));
 

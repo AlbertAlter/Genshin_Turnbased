@@ -62,7 +62,7 @@ internal static class WeaponShieldAndLifeHooks
             {
                 // 仅共享只读算法。各武器仍使用自己的Count/参数/来源，尘世Hit/1不改成其他三把的Effect/1。
                 var owner = RequireOwner(status, effect.StatusEffectID / 10000 - 40000, effect.StatusEffectID / 100);
-                value = Count(status, 5) * WeaponHooks.Param(status, 2) * (owner.GetTotalShieldHP() > 0f ? 2f : 1f);
+                value = Count(status, 5) * WeaponHooks.Param(status, 2) * (owner.HasShieldProtection() ? 2f : 1f);
                 return true;
             }
             case 431570201:

@@ -50,7 +50,7 @@ public sealed class StatusFormulaSnapshot
         "ATKBonus", "ATKBonusFlat", "ExtraBaseATK", "HPBonus", "HPBonusFlat", "ExtraBaseHP",
         "DEFBonus", "DEFBonusFlat", "ExtraBaseDEF", "EMBonus", "RechargeBonus", "CritRate", "CritDMG",
         "BaseDMGBonusFlat", "DMGBonus", "BaseDMGBonus", "LunarDMGBonus", "StellarDMGBonus", "Elevation",
-        "DEFReduction", "DEFIgnored", "HealBonus"
+        "DEFReduction", "DEFIgnored", "HealBonus", "ShieldBonus", "ShieldBonusFlat"
     };
     private readonly Dictionary<string, float> raw = new Dictionary<string, float>(StringComparer.Ordinal);
     private readonly Dictionary<string, Plan> plans = new Dictionary<string, Plan>(StringComparer.Ordinal);

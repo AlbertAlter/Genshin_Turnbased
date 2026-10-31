@@ -23,11 +23,11 @@ public sealed class BattlefieldApView : MonoBehaviour
         public bool PreviewByAffordability;
     }
 
-    private TMP_Text value, loss, gain;
+    public TMP_Text value, loss, gain;
+    public MonoBehaviour dataSource;
+    private IBattleUiApSource boundSource;
     private Vector2 lossOrigin, gainOrigin;
-    private BattleInputController input;
-    private BattlefieldSwitchController switcher;
-    private ActionPointManager manager;
+    private object previousIdentity;
     private Style style;
     private int lastAP;
     private float displayedAP, countFrom, countStart;
@@ -61,11 +61,9 @@ public sealed class BattlefieldApView : MonoBehaviour
     private void Start()
     {
         style = LoadStyle();
-        var bindings = FindObjectsOfType<PsdUiBinding>(true)
-            .Where(item => item.gameObject.scene == gameObject.scene).ToArray();
-        value = FindLabel(bindings, "APValue");
-        loss = FindLabel(bindings, "APSpendHint");
-        gain = FindLabel(bindings, "APGainHint");
+        if (boundSource == null) boundSource = dataSource as IBattleUiApSource;
+        if (value == null || loss == null || gain == null)
+            Debug.LogError("AP view requires explicit value/loss/gain text references.", this);
         // The scene, not the table, owns the manually adjusted base colors.
         if (value != null) style.Text = value.color;
         if (loss != null) style.Loss = loss.color;
@@ -75,29 +73,27 @@ public sealed class BattlefieldApView : MonoBehaviour
         HideHints();
     }
 
-    private static TMP_Text FindLabel(PsdUiBinding[] bindings, string key) =>
-        bindings.FirstOrDefault(item => item.bindingKey == key)?.GetComponent<TMP_Text>();
+    public void Bind(IBattleUiApSource source) { boundSource = source; initialized = false; }
 
     private void LateUpdate()
     {
+        if (boundSource != null) Present(boundSource.GetAP(), Time.unscaledTime);
+    }
+
+    public void Present(BattleUiApState state, float now)
+    {
         if (style == null) return;
-        var battle = BattleManager.Instance;
-        var currentManager = battle != null ? battle.APManager : null;
-        if (currentManager == null)
+        if (!state.Available)
         {
             initialized = false;
             HideHints();
+            if (value != null) value.text = "";
             return;
         }
-        if (input == null) input = FindObjectsOfType<BattleInputController>()
-            .FirstOrDefault(item => item.gameObject.scene == gameObject.scene);
-        if (switcher == null) switcher = FindObjectsOfType<BattlefieldSwitchController>()
-            .FirstOrDefault(item => item.gameObject.scene == gameObject.scene);
-        float now = Time.unscaledTime;
-        int actual = currentManager.CurrentAP;
-        if (!initialized || manager != currentManager)
+        int actual = state.Current;
+        if (!initialized || !ReferenceEquals(previousIdentity, state.Identity))
         {
-            manager = currentManager;
+            previousIdentity = state.Identity;
             initialized = true;
             lastAP = actual;
             countFrom = displayedAP = actual;
@@ -115,20 +111,19 @@ public sealed class BattlefieldApView : MonoBehaviour
         displayedAP = Mathf.Lerp(countFrom, actual, 1f-Mathf.Pow(1f-countT, 3f));
         if (value != null)
         {
-            value.text = $"AP: {Mathf.RoundToInt(displayedAP)}/{manager.MaxAP}";
+            value.text = $"AP: {Mathf.RoundToInt(displayedAP)}/{state.Maximum}";
             value.color = style.Text;
         }
 
-        int? previewCost = GetPreviewCost(battle, input, switcher);
-        if (previewCost.HasValue)
+        if (state.PreviewDelta.HasValue)
         {
-            int cost = previewCost.Value;
-            if (cost > 0)
+            int delta = state.PreviewDelta.Value;
+            if (delta != 0)
             {
-                Color color = style.PreviewByAffordability && manager.CanAfford(cost) ? style.Gain : style.Loss;
+                Color color = delta > 0 ? style.Gain : style.Loss;
                 float pulse = .5f + .5f * Mathf.Cos(now * Mathf.PI * 2f/style.PulsePeriod);
                 color.a *= Mathf.Lerp(style.PulseMinAlpha, 1f, pulse);
-                ShowHint(loss, -cost, color, lossOrigin);
+                ShowHint(delta > 0 ? gain : loss, delta, color, delta > 0 ? gainOrigin : lossOrigin);
             }
             else HideHints();
             // A previous delta must not reappear after a later cancelled selection.
@@ -143,20 +138,6 @@ public sealed class BattlefieldApView : MonoBehaviour
         Vector2 origin = isGain ? gainOrigin : lossOrigin;
         ShowHint(isGain ? gain : loss, floatingDelta, floatingColor,
             origin + Vector2.up * (style.FloatDistance*floatT));
-    }
-
-    /// <summary>只读费用预览；换人模态优先于其下保留的技能目标选择。</summary>
-    public static int? GetPreviewCost(BattleManager battle, BattleInputController input,
-        BattlefieldSwitchController switcher)
-    {
-        if (battle == null) return null;
-        if (switcher != null && switcher.IsSwitching)
-            return battle.CanSwitchActiveAllyTo(switcher.SelectedSlot)
-                ? battle.GetSwitchAPCost(switcher.SelectedSlot) : 0;
-        if (input == null || !input.IsSelecting || input.PendingSkill < 0) return null;
-        var caster = input.PendingAlly != null ? input.PendingAlly : battle.GetActiveAlly();
-        if (caster == null || caster.HasPendingEffectSequence || battle.IsResolving) return null;
-        return caster.GetBoundSkillAPCost(input.PendingSkill);
     }
 
     private void ShowHint(TMP_Text label, int delta, Color color, Vector2 position)

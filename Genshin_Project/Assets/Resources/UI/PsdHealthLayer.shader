@@ -4,11 +4,14 @@ Shader "UI/PsdHealthLayer"
     {
         [PerRendererData] _MainTex ("Individual PSD layer", 2D) = "white" {}
         _BaseTex ("PSD red shape for clipping and Soft Light", 2D) = "white" {}
+        _OverrideBaseColor ("Element-colored base", Float) = 0
+        _BaseColor ("Element base color", Color) = (1,1,1,1)
         _LayerBounds ("Layer bounds in PSD canvas, bottom-left", Vector) = (0,0,176,19)
         _Mode ("Normal 0 / Multiply 1 / SoftLight 2", Float) = 0
         _VectorCircle ("Analytic shared solid circle", Float) = 0
         _VectorBase ("Analytic PSD capsule base and clipping", Float) = 0
         _Clipped ("Clip to red shape", Float) = 0
+        _NormalizeWithBase ("Follow base fractional normalization without clipping", Float) = 0
         _CanvasSize ("PSD canvas", Vector) = (176,19,0,0)
         _BaseBounds ("Base shape bounds", Vector) = (3,7,168,11)
         _PsdBaseBounds ("Original fractional PSD base bounds", Vector) = (3,7,168,11)
@@ -47,6 +50,9 @@ Shader "UI/PsdHealthLayer"
             sampler2D _MainTex, _BaseTex, _UnderA, _UnderB;
             float4 _LayerBounds, _ClipRect, _CanvasSize, _BaseBounds, _UnderBounds, _PsdBaseBounds;
             float _Mode, _Clipped, _HasUnder, _VectorCircle, _VectorBase;
+            float _OverrideBaseColor;
+            float _NormalizeWithBase;
+            float4 _BaseColor;
             float capsuleAlpha(float2 uv, float2 size)
             {
                 float radius = min(size.x, size.y) * .5;
@@ -81,21 +87,24 @@ Shader "UI/PsdHealthLayer"
                 // the layers used to reconstruct the Soft Light backdrop.
                 // Normalized Bezier PNG fallbacks need the same mapping as SDF bases.
                 float2 sourceP=_PsdBaseBounds.xy+(p-_BaseBounds.xy)*_PsdBaseBounds.zw/_BaseBounds.zw;
-                float2 uv=((_Clipped>.5 ? sourceP : p)-_LayerBounds.xy)/_LayerBounds.zw;
+                float2 uv=((_Clipped>.5 || _NormalizeWithBase>.5 ? sourceP : p)-_LayerBounds.xy)/_LayerBounds.zw;
                 // Exported alpha already includes PSD Opacity AND Fill Opacity.
                 // Do not multiply these static values again here or in Image.color.
                 float4 c=tex2D(_MainTex,saturate(uv));
                 c.a*=inside(uv)*i.color.a;
                 float2 buv=(p-_BaseBounds.xy)/_BaseBounds.zw;
                 float4 b=tex2D(_BaseTex,saturate(buv));
+                b.rgb=lerp(b.rgb,_BaseColor.rgb,_OverrideBaseColor);
                 if (_VectorBase>.5)
                 {
                     b=tex2D(_BaseTex,float2(.5,.5));
+                    b.rgb=lerp(b.rgb,_BaseColor.rgb,_OverrideBaseColor);
                     b.a*=capsuleAlpha(buv,_BaseBounds.zw);
                     if (_Mode<.5 && _Clipped<.5)
                         c=float4(b.rgb,b.a*i.color.a);
                 }
                 if (_Clipped>.5) c.a*=inside(buv)*b.a;
+                if (_Mode<.5 && _Clipped<.5) c.rgb=lerp(c.rgb,_BaseColor.rgb,_OverrideBaseColor);
                 if (_Mode>1.5)
                 {
                     // Upper/lower soft-light do not overlap in these PSD templates.

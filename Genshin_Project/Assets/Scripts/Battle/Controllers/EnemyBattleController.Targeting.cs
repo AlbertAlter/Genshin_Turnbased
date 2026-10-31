@@ -5,7 +5,7 @@ public partial class EnemyBattleController
 {
     private TargetResolutionResult _lastEnemyTargetResult;
 
-    private TargetResolutionResult ResolveEnemyTargetResult(EnemySkillEffectData effect)
+    private TargetResolutionResult ResolveEnemyTargetResult(EnemySkillEffectData effect, StatusInstance sourceStatus = null)
     {
         var battle = BattleManager.Instance;
         if (effect == null || battle == null)
@@ -14,7 +14,7 @@ public partial class EnemyBattleController
         var result = BattleTargetResolver.Resolve(
             battle,
             Entity,
-            Entity,
+            sourceStatus?.Host ?? (object)Entity,
             effect.TargetType,
             effect.TargetNumber,
             effect.TargetConsecutive,
@@ -22,6 +22,7 @@ public partial class EnemyBattleController
             null,
             null,
             _lastEnemyTargetResult,
+            selfUsesOrigin: sourceStatus != null || _statusCalledSkill,
             deadOnly: effect.EffectType == "Revive",
             // 是否受嘲讽由目标模式决定，与执行次数、次数处理器及hit数无关。
             // 公共解析器仅对0/1应用嘲讽；2/3/4始终保持各自的随机规则。
@@ -41,17 +42,17 @@ public partial class EnemyBattleController
         return result;
     }
 
-    private List<BattleEntity> ResolveEnemyTargets(EnemySkillEffectData effect)
+    private List<BattleEntity> ResolveEnemyTargets(EnemySkillEffectData effect, StatusInstance sourceStatus = null)
     {
-        var result = ResolveEnemyTargetResult(effect);
+        var result = ResolveEnemyTargetResult(effect, sourceStatus);
         return result.IsValid
             ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
     }
 
-    private List<FieldPosition> ResolveEnemyTargetFields(EnemySkillEffectData effect)
+    private List<FieldPosition> ResolveEnemyTargetFields(EnemySkillEffectData effect, StatusInstance sourceStatus = null)
     {
-        var result = ResolveEnemyTargetResult(effect);
+        var result = ResolveEnemyTargetResult(effect, sourceStatus);
         return result.IsValid
             ? BattleTargetResolver.GetFields(BattleManager.Instance, result)
             : new List<FieldPosition>();

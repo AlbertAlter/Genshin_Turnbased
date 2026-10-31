@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,19 +22,21 @@ public enum ShieldKind
 {
     Skill,
     Crystallize,
-    EnemyElemental
+    EnemyElemental,
+    Overall
 }
 
 [Serializable]
 public class Shield
 {
     public float Value;             // 当前盾值
+    public float InitialValue;      // 创建时的实际盾量；仅供显示分母，不随扣盾重新计算公式。
     public string Element;          // 护盾元素类型（影响吸收效率：同元素250%，其他元素150%）
     public float Duration;          // 剩余持续回合
     public float Strength;          // 单盾强度倍率
     public ShieldKind Kind;         // 技能盾 / 结晶盾
     public int OriginPhase = -1;    // 生命周期计时原点；仅结晶盾按该阶段递减
-    public string SourceStatusID2;  // 敌方元素盾来源状态；普通护盾为空
+    public string SourceStatusID2;  // 创建此盾的具体来源状态；无状态来源时为空
     public long SourceStatusApplyOrder;
     [NonSerialized] public StatusInstance SourceStatus;
 }
@@ -45,9 +47,11 @@ public class Shield
 [Serializable]
 public class StatusInstance
 {
+    [NonSerialized] internal bool DeathCleanupPending; // 保留供OnDeath读取，普通待执行行动停止。
     [NonSerialized] public object Host;              // 真实宿主；不是Buff受益者，也不改变Caster/self语义。
     public string StatusID2;                        // 对应 StatusMainData.StatusID2
     public int StackCount;                          // 普通状态每份实例固定1；兼容旧脚本数据，Count点数不放这里
+    public int EarliestTimerTurn;                   // 专用时序钩子设置；该回合前不递减，不改变配表时长。
     public int RemainingPhaseCount;                 // 剩余持续回合数（按 Phase 结算）
     public bool IsPermanent;                        // ApplyStatus 的 Duration 留空或为0时为 true，不自动扣减/到期
     public int AddInPhase;                          // 该状态所在的计时器阶段集合（1-6）
@@ -112,9 +116,14 @@ public class StatusInstance
     }
     /// <summary>专用 Count 自己拥有的附加记录；公共系统不解释这些规则。</summary>
     public object CountRuntimeState;
+    /// <summary>普通状态专用脚本的实例记忆；不参与Count余额/层数。移除时由登记的生命周期处理器释放。</summary>
+    [NonSerialized] public object ScriptRuntimeState;
     /// <summary>仅开战构筑处理器标记：此实例的生命加成已计入TotalHP，最终查询不得重复相加。</summary>
     [NonSerialized] internal bool HPBonusIncludedInPanel;
     public bool IsActive;                           // 是否已执行过 OnApply
+    // OnEnd 中自移除仍属于本次自然结束，不再触发 OnDestroy；移除候选每实例只提交一次。
+    [NonSerialized] internal int NaturalEndDepth;
+    [NonSerialized] internal bool RemovalActionCollected;
     public StatusMainData MainData;                 // 配表状态主数据（MaxStack/WhenMax 等规则）
     public WeaponRuntimeContext WeaponContext;      // 武器来源上下文；非武器状态为空
     /// <summary>真实装备者的生命期；普通子状态、队友和场地上的效果均继承，不改归功来源。</summary>

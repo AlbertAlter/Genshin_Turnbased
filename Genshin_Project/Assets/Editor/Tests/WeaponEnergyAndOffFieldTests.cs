@@ -11,7 +11,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static string Eff(int id) => "STE_Weapon_" + id;
         private static void Main(BattleFlowTestEnv env, int id, string part = null, bool count = false)
             => env.DataManager.StatusMainDict[Key(id)] = new StatusMainData { StatusID = id, StatusID2 = Key(id),
-                StatusType = count ? "Count" : "Buff", MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                StatusType = count ? "Count" : "Buff", MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
         private static StatusEffectData Effect(BattleFlowTestEnv env, int id, string type, string parameter)
         {
             var data = new StatusEffectData { StatusEffectID = id, StatusEffectID2 = Eff(id), EffectType = type,

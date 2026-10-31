@@ -43,6 +43,86 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(result.Positions, Is.EqualTo(new[] { 4, 1, 2 }));
         }
 
+        [TestCase(1, new[] { 3 })]
+        [TestCase(2, new[] { 3, 4 })]
+        [TestCase(3, new[] { 3, 4, 1 })]
+        public void NonAdjacentBatch_SelectsAllTauntersFirst(int count, int[] expected)
+        {
+            var request = Request(0, count);
+            request.TauntPositions = new List<int> { 3, 4 };
+            Assert.That(TargetResolver.Resolve(request).Positions, Is.EqualTo(expected));
+            request.ValidateForcedTaunt = true;
+            request.ForcedPositions = new List<int>(expected);
+            Assert.That(TargetResolver.Resolve(request).IsValid, Is.True);
+            request.ForcedPositions[0] = 1;
+            Assert.That(TargetResolver.Resolve(request).Error, Is.EqualTo(BattleTipKeys.TauntTargetRestricted));
+        }
+
+        [Test]
+        public void ManualContinuousWindow_CoversTaunter_AndStopsAtBothLimits()
+        {
+            var previous = BattleRandom.Source;
+            try
+            {
+                var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
+                var selector = new TargetSelector();
+                selector.Init(BattleSide.Enemy, 3, 1, p => 10 - p, _ => true, tauntProvider: p => p == 2);
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 1, 2, 3 }));
+                selector.MoveLeft(); Assert.That(selector.LastMoveBlockedByTaunt, Is.True);
+                selector.MoveRight(); Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 2, 3, 4 }));
+                Assert.That(selector.LastMoveBlockedByTaunt, Is.False);
+                selector.MoveRight(); Assert.That(selector.LastMoveBlockedByTaunt, Is.True);
+                Assert.That(random.IntCallCount, Is.EqualTo(1), "移动不重抽随机");
+            }
+            finally { BattleRandom.SetSource(previous); }
+        }
+
+        [Test]
+        public void ManualNonAdjacent_ExhaustsTaunters_ThenAllowsOthers()
+        {
+            var previous = BattleRandom.Source;
+            try
+            {
+                var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
+                var selector = new TargetSelector(); var excluded = new List<int>();
+                foreach (int expected in new[] { 3, 5, 1 })
+                {
+                    selector.Init(BattleSide.Enemy, 1, 0, p => 10 - p, _ => true,
+                        excluded, tauntProvider: p => p == 3 || p == 5);
+                    Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { expected }));
+                    excluded.Add(expected);
+                }
+                selector.MoveLeft(); Assert.That(selector.LastMoveBlockedByTaunt, Is.False);
+                Assert.That(random.IntCallCount, Is.EqualTo(3));
+            }
+            finally { BattleRandom.SetSource(previous); }
+        }
+
+        [Test]
+        public void ManualTaunt_RemovalAndAbsenceReleaseConstraint_AllModeResetsIt()
+        {
+            var previous = BattleRandom.Source;
+            try
+            {
+                BattleRandom.SetSource(new SequenceBattleRandomSource());
+                bool taunting = true, present = true;
+                var selector = new TargetSelector();
+                selector.Init(BattleSide.Enemy, 1, 0, p => 10 - p, p => p != 3 || present,
+                    tauntProvider: p => p == 3 && taunting);
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 3 }));
+                taunting = false; selector.MoveLeft();
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 2 }));
+                taunting = true; Assert.That(selector.IsSelectionValid(), Is.True);
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 3 }));
+                present = false; Assert.That(selector.IsSelectionValid(), Is.True);
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 1 }));
+                selector.MoveLeft(); Assert.That(selector.LastMoveBlockedByTaunt, Is.False);
+                selector.InitAll(BattleSide.Enemy, _ => 1, _ => true);
+                selector.MoveRight(); Assert.That(selector.LastMoveBlockedByTaunt, Is.False);
+            }
+            finally { BattleRandom.SetSource(previous); }
+        }
+
         [TestCase(2)] [TestCase(3)] [TestCase(4)]
         public void RandomSingle_IgnoresTaunt(int mode)
         {
@@ -144,6 +224,54 @@ namespace GenshinTurnBased.Tests.EditMode
         [UnityTest]
         public IEnumerator EnemyAdjacentRandom_SingleExecution_IgnoresTaunt()
             => HookTestEnv.AwaitTask(() => AdjacentRandomAsync(1));
+
+        [TestCase(0)] [TestCase(1)]
+        public void CharacterAutomaticDamage_UsesEnemyTaunt(int mode)
+        {
+            using var env = new BattleFlowTestEnv();
+            env.ConfigureAllyAction(2, "SK_TauntAuto", "SE_TauntAuto", "Physical", "0.01*TotalATK,0", 10);
+            env.DataManager.SkillEffectDict["SE_TauntAuto"].TargetConsecutive = mode;
+            env.ConfigureStatus("Taunt"); env.CreateMinimalBattle();
+            var taunter = env.CreateEnemy(3).Entity;
+            env.Manager.StartBattle(); env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+            taunter.AddStatus("Taunt", taunter, 0, 6, 0, env.DataManager.StatusMainDict["Taunt"]);
+            BattleRandom.SetSource(new SequenceBattleRandomSource());
+            var positions = new List<int>();
+            using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved,
+                (_, hit) => { if (hit.Source.SourceEffectID == "SE_TauntAuto") positions.Add(hit.Subject.SlotPosition); }, 0);
+            Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+            Assert.That(positions, Is.EqualTo(new[] { 3 }));
+        }
+
+        [Test]
+        public void PlayerInput_MultipleTauntersFirst_LimitEmitsKey_CancelClearsRestriction()
+        {
+            using var env = new BattleFlowTestEnv();
+            env.ConfigureAllyAction(2, "SK_TauntInput", "SE_TauntInput", "Physical", "0.01*TotalATK,0", 10);
+            var effect = env.DataManager.SkillEffectDict["SE_TauntInput"];
+            effect.TargetConsecutive = 0; effect.TargetNumber = 3;
+            env.ConfigureStatus("Taunt"); env.CreateMinimalBattle();
+            var first = env.CreateEnemy(3).Entity; var second = env.CreateEnemy(5).Entity;
+            env.Manager.StartBattle(); env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+            first.AddStatus("Taunt", first, 0, 6, 0, env.DataManager.StatusMainDict["Taunt"]);
+            second.AddStatus("Taunt", second, 0, 6, 0, env.DataManager.StatusMainDict["Taunt"]);
+            BattleRandom.SetSource(new SequenceBattleRandomSource());
+            var input = env.Manager.gameObject.AddComponent<BattleInputController>();
+            var tips = new List<string>(); input.TipRequested += tips.Add;
+            input.UIEnterSelectSkill(2);
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 3 }));
+            input.UIMoveSelection(-1);
+            Assert.That(tips, Is.EqualTo(new[] { BattleTipKeys.TauntTargetRestricted }));
+            input.UIConfirmSelection();
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 5 }));
+            input.UIConfirmSelection();
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 1 }));
+            tips.Clear(); input.UIMoveSelection(-1); Assert.That(tips, Is.Empty);
+            input.UICancelSelection();
+            input.UIEnterSelectSkill(2);
+            Assert.That(input.Selector.CurrentSelection, Is.EqualTo(new[] { 3 }));
+            Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(100), "选择/移动/取消不扣费");
+        }
 
         [UnityTest]
         public IEnumerator EnemyAdjacentRandom_FiveExecutions_IgnoreTauntFromFirstGroup()

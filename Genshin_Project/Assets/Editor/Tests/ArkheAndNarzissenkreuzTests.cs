@@ -88,9 +88,16 @@ namespace GenshinTurnBased.Tests.EditMode
             using var reactionListener = BattleEventHub.Subscribe<ReactionEventData>(BattleEventKind.ReactionOccurred, (_, fact) => reactions++, 0);
             using var damageListener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
             { if (fact.Source.SourceEffectID == effectID) hits.Add(fact); }, 0);
+            // 明确选择普攻目标，隔离自动选目标的随机数，只检查冲击和暴击的抽数。
+            env.Ally.ForcedTargetPositions.Clear();
+            env.Ally.ForcedTargetPositions.Add(env.Enemy.Entity.SlotPosition);
             Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
             Assert.That(hits, Has.Count.EqualTo(flags == 0 ? 2 : 0), "有任一标记不触发；队友的标记不算装备者的");
+            Assert.That(random.FloatCallCount, Is.EqualTo(flags == 0 ? 3 : 1), "普攻一次暴击判定；仅成功触发时为两个冲击目标各判定一次");
+            Assert.That(random.IntCallCount, Is.Zero, "已手选普攻目标，冲击全体不应额外随机选目标");
             owner.RemoveStatus(ArkheStatuses.Pneuma); owner.RemoveStatus(ArkheStatuses.Ousia);
+            env.Ally.ForcedTargetPositions.Clear();
+            env.Ally.ForcedTargetPositions.Add(env.Enemy.Entity.SlotPosition);
             Assert.That(env.Manager.UseNormalAttackBySlot(0), Is.True);
             Assert.That(hits, Has.Count.EqualTo(2), "无标记时先前成功已占冷却；有标记时先前失败不得占冷却");
             foreach (var hit in hits)
@@ -110,7 +117,8 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(definition.Element, Is.EqualTo("Physical"), "不改DataManager共享行");
             Assert.That(owner.HasStatus(ArkheStatuses.Pneuma), Is.False, "武器不会给角色反向初始化始基力");
             Assert.That(owner.HasStatus(ArkheStatuses.Ousia), Is.False);
-            Assert.That(random.FloatCallCount, Is.EqualTo(4)); Assert.That(random.IntCallCount, Is.Zero);
+            Assert.That(random.FloatCallCount, Is.EqualTo(4), "两次普攻加一次双目标冲击，共四次独立暴击判定");
+            Assert.That(random.IntCallCount, Is.Zero, "两次普攻均手选目标，冲击不额外抽取整数");
         }
     }
 }

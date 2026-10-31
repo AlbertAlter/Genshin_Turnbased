@@ -19,17 +19,18 @@ public sealed class UIHitTextureEffect : MonoBehaviour
     public bool Completed => age >= Duration;
 
     public static UIHitTextureEffect Create(Transform parent, HitTextureLibrary library, UIHitEffectStyle.Profile impact,
-        UIHitEffectStyle.Particles particles, HitEffectTextureStyle.Profile style, Color color, Vector2 cardSize, uint seed, int hit, int hitCount, float directionDegrees = 0)
+        UIHitEffectStyle.Particles particles, HitEffectTextureStyle.Profile style, Color color, Vector2 cardSize, uint seed, int hit, int hitCount, float directionDegrees = 0,
+        Vector2? groupCenter = null, Vector2? groupSpan = null)
     {
         var root = new GameObject("TexturedHit_" + hit, typeof(RectTransform)); root.transform.SetParent(parent, false);
         var rect = (RectTransform)root.transform; rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.one * .5f; rect.sizeDelta = cardSize;
-        rect.anchoredPosition = Vector2.Scale(HitEffectMath.Center(impact, seed) - Vector2.one * .5f, cardSize);
+        rect.anchoredPosition = groupCenter ?? Vector2.Scale(HitEffectMath.Center(impact, seed) - Vector2.one * .5f, cardSize);
         var effect = root.AddComponent<UIHitTextureEffect>();
-        effect.Initialize(library, impact, particles, style, color, cardSize, seed, hit, hitCount, directionDegrees); return effect;
+        effect.Initialize(library, impact, particles, style, color, cardSize, seed, hit, hitCount, directionDegrees, groupSpan); return effect;
     }
     private float N(string key) => style.Number(key);
     private void Initialize(HitTextureLibrary library, UIHitEffectStyle.Profile p, UIHitEffectStyle.Particles elementParticles,
-        HitEffectTextureStyle.Profile settings, Color color, Vector2 size, uint seed, int hit, int count, float directionDegrees)
+        HitEffectTextureStyle.Profile settings, Color color, Vector2 size, uint seed, int hit, int count, float directionDegrees, Vector2? groupSpan)
     {
         impact = p; particles = elementParticles; style = settings; tint = color;
         float scale = HitEffectMath.Scale(p, seed, hit, count);
@@ -39,6 +40,17 @@ public sealed class UIHitTextureEffect : MonoBehaviour
         mirror = HitEffectMath.Unit(seed, 701) < N("MirrorChance");
         width = size.x * p.Number("LengthCardWidthRatio") * N("BodyWidthMultiplier") * scale;
         height = size.x * N("BodyHeightRatio") * scale * HitEffectMath.Range(seed, 702, N("StretchMin"), N("StretchMax"));
+        if (groupSpan.HasValue)
+        {
+            // Only the slash body spans the group. Glint, fragment size and speed retain a single-card scale.
+            angle = N("GroupAngleDegrees");
+            float radians = angle * Mathf.Deg2Rad;
+            Vector2 span = groupSpan.Value;
+            float along = Mathf.Abs(Mathf.Cos(radians)) * span.x + Mathf.Abs(Mathf.Sin(radians)) * span.y;
+            float across = Mathf.Abs(Mathf.Sin(radians)) * span.x + Mathf.Abs(Mathf.Cos(radians)) * span.y;
+            width = Mathf.Max(width, along + 2 * size.x * N("GroupPaddingCardWidthRatio"));
+            height = Mathf.Min(Mathf.Max(height, across * N("GroupHeightSpanRatio")), size.y * N("GroupMaxHeightCardHeightRatio"));
+        }
         var body = library.Get(style.Bodies[HitTextureMath.Variant(seed, style.Bodies.Length)]);
         var glow = library.Get(style.Text("GlowTexture")) ?? body;
         Stroke MakeStroke(float degrees, float delay)
@@ -50,7 +62,7 @@ public sealed class UIHitTextureEffect : MonoBehaviour
             strokes.Add(stroke); return stroke;
         }
         MakeStroke(angle, 0);
-        if (N("SecondSlashAngleDegrees") != 0) MakeStroke(angle + N("SecondSlashAngleDegrees"), N("SecondSlashDelaySeconds"));
+        if (!groupSpan.HasValue && N("SecondSlashAngleDegrees") != 0) MakeStroke(angle + N("SecondSlashAngleDegrees"), N("SecondSlashDelaySeconds"));
         flashSize = size.x * p.Number("FlashCardWidthRatio") * N("FlashScale") * scale;
         var flashSprite = library.Get(style.Text("FlashTexture"));
         if (flashSprite != null) { flash = Image("ContactGlint", flashSprite, library.LightMaterial, Vector2.one * flashSize); flash.rectTransform.localEulerAngles = new Vector3(0, 0, angle); }
@@ -65,8 +77,10 @@ public sealed class UIHitTextureEffect : MonoBehaviour
             var graphic = Image("LightFragment_" + i, fragmentSprite, library.LightMaterial, new Vector2(length, length * fragmentSprite.rect.height / fragmentSprite.rect.width));
             fragments.Add(new Fragment { Image = graphic, Velocity = Direction(degrees) * speed, Size = length, Rotation = HitEffectMath.Range(seed, channel + 3, -35, 35) });
         }
+        grouped = groupSpan.HasValue;
         SetElapsed(0);
     }
+    private bool grouped;
     private UIHitTextureGraphic Image(string name, Sprite sprite, Material material, Vector2 size)
     {
         var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(UIHitTextureGraphic)); go.transform.SetParent(transform, false);
@@ -84,7 +98,7 @@ public sealed class UIHitTextureEffect : MonoBehaviour
             float erase = HitTextureMath.Erase(local, N("EraseDelaySeconds"), N("EraseSeconds"));
             float reveal = style.Text("RevealMode") == "Burst" ? 1 : HitTextureMath.Reveal(local, N("RevealSeconds"));
             float alpha = local < 0 || local >= Duration - stroke.Delay ? 0 : style.Text("RevealMode") == "Burst" ? 1 - erase : 1 - erase * .35f;
-            float angle = stroke.Angle + ((impact.Text("Pattern") == "SweepingSlash" || impact.Text("Pattern") == "SweepingThrust") ? Mathf.Max(0, local) * 65 : 0);
+            float angle = stroke.Angle + (!grouped && (impact.Text("Pattern") == "SweepingSlash" || impact.Text("Pattern") == "SweepingThrust") ? Mathf.Max(0, local) * 65 : 0);
             foreach (var graphic in new[] { stroke.Body, stroke.Glow }) graphic.rectTransform.localEulerAngles = new Vector3(0, 0, angle);
             stroke.Body.color = Color(alpha);
             stroke.Body.Appearance(reveal, erase, N("EdgeSoftness"), N("CoreWhiteMix"));

@@ -855,6 +855,7 @@ GameObject:
   m_Component:
   - component: {fileID: 25115180}
   - component: {fileID: 25115181}
+  - component: {fileID: 8500000000}
   m_Layer: 0
   m_Name: CharacterCard2
   m_TagString: Untagged
@@ -4118,6 +4119,8 @@ GameObject:
   m_Component:
   - component: {fileID: 122242632}
   - component: {fileID: 122242633}
+  - component: {fileID: 8500000001}
+  - component: {fileID: 8800000132}
   m_Layer: 0
   m_Name: EnemyCard4
   m_TagString: Untagged
@@ -4840,6 +4843,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 151439612}
+  - component: {fileID: 8800000027}
   m_Layer: 0
   m_Name: ElementalShield
   m_TagString: Untagged
@@ -4862,6 +4866,12 @@ RectTransform:
   - {fileID: 414761637}
   - {fileID: 933709382}
   - {fileID: 1486406733}
+  - {fileID: 8800000004}
+  - {fileID: 8800000008}
+  - {fileID: 8800000012}
+  - {fileID: 8800000016}
+  - {fileID: 8800000020}
+  - {fileID: 8800000024}
   m_Father: {fileID: 440020717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -8371,7 +8381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &324661099
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10373,6 +10383,8 @@ GameObject:
   m_Component:
   - component: {fileID: 413586865}
   - component: {fileID: 413586866}
+  - component: {fileID: 8500000002}
+  - component: {fileID: 8800000080}
   m_Layer: 0
   m_Name: EnemyCard2
   m_TagString: Untagged
@@ -10439,7 +10451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &414761637
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10916,6 +10928,8 @@ GameObject:
   m_Component:
   - component: {fileID: 440020717}
   - component: {fileID: 440020718}
+  - component: {fileID: 8500000003}
+  - component: {fileID: 8800000028}
   m_Layer: 0
   m_Name: EnemyCard5
   m_TagString: Untagged
@@ -13103,7 +13117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &512881591
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19337,7 +19351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &824962163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22476,7 +22490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &933709382
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22578,6 +22592,7 @@ GameObject:
   m_Component:
   - component: {fileID: 934260678}
   - component: {fileID: 934260679}
+  - component: {fileID: 8500000004}
   m_Layer: 0
   m_Name: CharacterCard4
   m_TagString: Untagged
@@ -23347,6 +23362,8 @@ GameObject:
   m_Component:
   - component: {fileID: 962253140}
   - component: {fileID: 962253141}
+  - component: {fileID: 8500000005}
+  - component: {fileID: 8800000054}
   m_Layer: 0
   m_Name: EnemyCard3
   m_TagString: Untagged
@@ -24647,6 +24664,7 @@ MonoBehaviour:
   fill: {fileID: 1000000003}
   currentHPText: {fileID: 1481936678}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000005
 GameObject:
   m_ObjectHideFlags: 0
@@ -24734,6 +24752,7 @@ MonoBehaviour:
   fill: {fileID: 1000000008}
   currentHPText: {fileID: 1861566083}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -24821,6 +24840,7 @@ MonoBehaviour:
   fill: {fileID: 1000000013}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000015
 GameObject:
   m_ObjectHideFlags: 0
@@ -24908,6 +24928,7 @@ MonoBehaviour:
   fill: {fileID: 1000000018}
   currentHPText: {fileID: 1059356239}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000020
 GameObject:
   m_ObjectHideFlags: 0
@@ -24995,6 +25016,7 @@ MonoBehaviour:
   fill: {fileID: 1000000023}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000025
 GameObject:
   m_ObjectHideFlags: 0
@@ -25082,6 +25104,7 @@ MonoBehaviour:
   fill: {fileID: 1000000028}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000030
 GameObject:
   m_ObjectHideFlags: 0
@@ -25169,6 +25192,7 @@ MonoBehaviour:
   fill: {fileID: 1000000033}
   currentHPText: {fileID: 736151546}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000035
 GameObject:
   m_ObjectHideFlags: 0
@@ -25256,6 +25280,7 @@ MonoBehaviour:
   fill: {fileID: 1000000038}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1000000040
 GameObject:
   m_ObjectHideFlags: 0
@@ -25343,6 +25368,7 @@ MonoBehaviour:
   fill: {fileID: 1000000043}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1006696434
 GameObject:
   m_ObjectHideFlags: 0
@@ -25738,7 +25764,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1031582693
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26345,7 +26371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1056620193
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33207,6 +33233,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1118229873}
+  - component: {fileID: 8800000053}
   m_Layer: 0
   m_Name: ElementalShield
   m_TagString: Untagged
@@ -33229,6 +33256,12 @@ RectTransform:
   - {fileID: 1483262375}
   - {fileID: 1735111505}
   - {fileID: 1135630559}
+  - {fileID: 8800000030}
+  - {fileID: 8800000034}
+  - {fileID: 8800000038}
+  - {fileID: 8800000042}
+  - {fileID: 8800000046}
+  - {fileID: 8800000050}
   m_Father: {fileID: 962253140}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -33597,7 +33630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1135630559
 RectTransform:
   m_ObjectHideFlags: 0
@@ -37437,6 +37470,7 @@ MonoBehaviour:
   fill: {fileID: 1300000005}
   currentHPText: {fileID: 0}
   transitionSeconds: 0.2
+  dataSource: {fileID: 8800000002}
 --- !u!1 &1300000007
 GameObject:
   m_ObjectHideFlags: 0
@@ -38827,6 +38861,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1331228736}
   - component: {fileID: 1331228737}
+  - component: {fileID: 8500000006}
   m_Layer: 0
   m_Name: CharacterCard1
   m_TagString: Untagged
@@ -39618,7 +39653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1353980143
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41482,7 +41517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1395127646
 RectTransform:
   m_ObjectHideFlags: 0
@@ -44205,7 +44240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1483262375
 RectTransform:
   m_ObjectHideFlags: 0
@@ -44299,7 +44334,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1486406733
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49414,6 +49449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1700403255}
+  - component: {fileID: 8800000079}
   m_Layer: 0
   m_Name: ElementalShield
   m_TagString: Untagged
@@ -49436,6 +49472,12 @@ RectTransform:
   - {fileID: 1353980143}
   - {fileID: 1395127646}
   - {fileID: 512881591}
+  - {fileID: 8800000056}
+  - {fileID: 8800000060}
+  - {fileID: 8800000064}
+  - {fileID: 8800000068}
+  - {fileID: 8800000072}
+  - {fileID: 8800000076}
   m_Father: {fileID: 413586865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -50165,6 +50207,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 8902000001}
   - component: {fileID: 1718145281}
   - component: {fileID: 1718145280}
   - component: {fileID: 1718145279}
@@ -50172,6 +50215,20 @@ GameObject:
   - component: {fileID: 1718145277}
   - component: {fileID: 1718145276}
   - component: {fileID: 1718145275}
+  - component: {fileID: 8600000000}
+  - component: {fileID: 8600000001}
+  - component: {fileID: 8600000002}
+  - component: {fileID: 8600000003}
+  - component: {fileID: 8600000004}
+  - component: {fileID: 8600000005}
+  - component: {fileID: 8800000000}
+  - component: {fileID: 8800000001}
+  - component: {fileID: 8800000002}
+  - component: {fileID: 8901000000}
+  - component: {fileID: 8901000001}
+  - component: {fileID: 8901000002}
+  - component: {fileID: 8901000003}
+  - component: {fileID: 8902000000}
   m_Layer: 0
   m_Name: BattleRuntime
   m_TagString: Untagged
@@ -50214,7 +50271,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e8acd70dc5b4f68a514b58cbfd94023, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
+  value: {fileID: 6345271}
+  loss: {fileID: 1287559396}
+  gain: {fileID: 539966921}
+  dataSource: {fileID: 8800000002}
 --- !u!114 &1718145278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50226,7 +50287,79 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e63158e780764f52a5d50104782941e4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
+  dataSource: {fileID: 8800000002}
+  actions:
+  - Root: {fileID: 106130127}
+    Icon: {fileID: 1369682475}
+    DisabledOverlay: {fileID: 2107224535}
+    StateBackground: {fileID: 70906965}
+    Cooldown: {fileID: 605768400}
+    IsBurst: 0
+    slot: 0
+    skillType: 0
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 873492159}
+    Icon: {fileID: 1439640766}
+    DisabledOverlay: {fileID: 1997135797}
+    StateBackground: {fileID: 825846109}
+    Cooldown: {fileID: 974474491}
+    IsBurst: 0
+    slot: 0
+    skillType: 1
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 999238299}
+    Icon: {fileID: 1513076900}
+    DisabledOverlay: {fileID: 185010500}
+    StateBackground: {fileID: 607258649}
+    Cooldown: {fileID: 556090384}
+    IsBurst: 0
+    slot: 0
+    skillType: 2
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 0}
+    Icon: {fileID: 781721664}
+    DisabledOverlay: {fileID: 1063388733}
+    StateBackground: {fileID: 1816181269}
+    Cooldown: {fileID: 2105372468}
+    IsBurst: 1
+    slot: 1
+    skillType: 3
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 0}
+    Icon: {fileID: 1444133197}
+    DisabledOverlay: {fileID: 1349234311}
+    StateBackground: {fileID: 1608202719}
+    Cooldown: {fileID: 26423068}
+    IsBurst: 1
+    slot: 2
+    skillType: 3
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 0}
+    Icon: {fileID: 36770594}
+    DisabledOverlay: {fileID: 668583339}
+    StateBackground: {fileID: 1638148321}
+    Cooldown: {fileID: 1208156486}
+    IsBurst: 1
+    slot: 3
+    skillType: 3
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
+  - Root: {fileID: 0}
+    Icon: {fileID: 1778464339}
+    DisabledOverlay: {fileID: 2052900429}
+    StateBackground: {fileID: 1697933221}
+    Cooldown: {fileID: 603519786}
+    IsBurst: 1
+    slot: 4
+    skillType: 3
+    DisabledMaxAlpha: 1
+    CooldownMaxAlpha: 1
 --- !u!114 &1718145279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50240,6 +50373,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageConfigJson: {fileID: 4900000, guid: 1e2a45d29451f4e42ba4ecb6a539d57a, type: 3}
+  canvas: {fileID: 1408812042}
+  characterCards: {fileID: 103469494}
+  characterRoster: {fileID: 1100790885}
+  enemyCards: {fileID: 867317994}
+  enemyRoster: {fileID: 886546088}
 --- !u!114 &1718145280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50438,7 +50576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1735111505
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58974,6 +59112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2036469714}
+  - component: {fileID: 8800000105}
   m_Layer: 0
   m_Name: ElementalShield
   m_TagString: Untagged
@@ -58996,6 +59135,12 @@ RectTransform:
   - {fileID: 2079761845}
   - {fileID: 1031582693}
   - {fileID: 324661099}
+  - {fileID: 8800000082}
+  - {fileID: 8800000086}
+  - {fileID: 8800000090}
+  - {fileID: 8800000094}
+  - {fileID: 8800000098}
+  - {fileID: 8800000102}
   m_Father: {fileID: 2108160493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -59175,7 +59320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2049831062
 RectTransform:
   m_ObjectHideFlags: 0
@@ -59911,6 +60056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2064542430}
   - component: {fileID: 2064542431}
+  - component: {fileID: 8500000007}
   m_Layer: 0
   m_Name: CharacterCard3
   m_TagString: Untagged
@@ -60201,7 +60347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2079761845
 RectTransform:
   m_ObjectHideFlags: 0
@@ -60799,6 +60945,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2094240036}
+  - component: {fileID: 8800000131}
   m_Layer: 0
   m_Name: ElementalShield
   m_TagString: Untagged
@@ -60821,6 +60968,12 @@ RectTransform:
   - {fileID: 1056620193}
   - {fileID: 824962163}
   - {fileID: 2049831062}
+  - {fileID: 8800000108}
+  - {fileID: 8800000112}
+  - {fileID: 8800000116}
+  - {fileID: 8800000120}
+  - {fileID: 8800000124}
+  - {fileID: 8800000128}
   m_Father: {fileID: 122242632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -61345,6 +61498,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2108160493}
   - component: {fileID: 2108160494}
+  - component: {fileID: 8500000008}
+  - component: {fileID: 8800000106}
   m_Layer: 0
   m_Name: EnemyCard1
   m_TagString: Untagged
@@ -65932,3 +66087,2768 @@ MonoBehaviour:
   revealOnLoad: 1
   vectorCircle: 0
   slotCenterAligned: 0
+--- !u!114 &8500000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25115179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 0
+  slot: 2
+  topAligned: 1
+  gap: 4
+  icons:
+  - {fileID: 457643214}
+  - {fileID: 478208412}
+--- !u!114 &8500000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122242631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  slot: 4
+  topAligned: 1
+  gap: 4
+  icons:
+  - {fileID: 2067217315}
+  - {fileID: 1154052849}
+--- !u!114 &8500000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413586864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  slot: 2
+  topAligned: 1
+  gap: 4
+  icons:
+  - {fileID: 211237267}
+  - {fileID: 1823336372}
+--- !u!114 &8500000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440020716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  slot: 5
+  topAligned: 0
+  gap: 4
+  icons:
+  - {fileID: 1402488578}
+  - {fileID: 669059627}
+--- !u!114 &8500000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934260677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 0
+  slot: 4
+  topAligned: 1
+  gap: 4
+  icons:
+  - {fileID: 967451010}
+  - {fileID: 443062209}
+--- !u!114 &8500000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962253139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  slot: 3
+  topAligned: 0
+  gap: 4
+  icons:
+  - {fileID: 1523061644}
+  - {fileID: 1303269957}
+--- !u!114 &8500000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331228735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 0
+  slot: 1
+  topAligned: 0
+  gap: 4
+  icons:
+  - {fileID: 32337517}
+  - {fileID: 1772356598}
+--- !u!114 &8500000007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064542429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 0
+  slot: 3
+  topAligned: 0
+  gap: 4
+  icons:
+  - {fileID: 460555880}
+  - {fileID: 1514644941}
+--- !u!114 &8500000008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108160492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57db3d34230a4d31936056ff3af6ae37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side: 1
+  slot: 1
+  topAligned: 0
+  gap: 4
+  icons:
+  - {fileID: 1569452972}
+  - {fileID: 1755696422}
+--- !u!114 &8600000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8f71c567e04131a6c62647a21c306e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1408812042}
+  cards:
+  - side: 0
+    slot: 1
+    root: {fileID: 1331228736}
+    art: {fileID: 96708294}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000006}
+  - side: 0
+    slot: 2
+    root: {fileID: 25115180}
+    art: {fileID: 154132818}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000000}
+  - side: 0
+    slot: 3
+    root: {fileID: 2064542430}
+    art: {fileID: 1507423360}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000007}
+  - side: 0
+    slot: 4
+    root: {fileID: 934260678}
+    art: {fileID: 1341749876}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000004}
+  - side: 1
+    slot: 1
+    root: {fileID: 2108160493}
+    art: {fileID: 631016745}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000008}
+  - side: 1
+    slot: 2
+    root: {fileID: 413586865}
+    art: {fileID: 1959222121}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000002}
+  - side: 1
+    slot: 3
+    root: {fileID: 962253140}
+    art: {fileID: 51446611}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000005}
+  - side: 1
+    slot: 4
+    root: {fileID: 122242632}
+    art: {fileID: 1777303413}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000001}
+  - side: 1
+    slot: 5
+    root: {fileID: 440020717}
+    art: {fileID: 396543796}
+    hitsBehind: {fileID: 0}
+    hitsFront: {fileID: 0}
+    auraBar: {fileID: 8500000003}
+  groupHitsBehind: {fileID: 0}
+  groupHitsFront: {fileID: 0}
+  projectiles: {fileID: 0}
+--- !u!114 &8600000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5085a5625b9043b3900cba3a67a40d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8600000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50417d1659ba4bba9ba5b1382eb3c2e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layout: {fileID: 8600000000}
+  dataSource: {fileID: 8600000001}
+--- !u!114 &8600000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0352630db13d42e5b9152985af4822d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8600000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8805eb1a3945e5a006291ceef51489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layout: {fileID: 8600000000}
+  numberFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+--- !u!114 &8600000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745cac49c1ad4d53a36ff7ca722c9c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layout: {fileID: 8600000000}
+--- !u!114 &8800000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca5171e75594744ab220ee6ba0e798e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PhaseInterval: 0.5
+--- !u!114 &8800000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb5d502c63fdc22488cbedf3b2cacab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier:
+  selectionLayout: {fileID: 8600000000}
+--- !u!114 &8800000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0cfc355e5924a76b77b5671f87de7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battle: {fileID: 8800000000}
+  input: {fileID: 8800000001}
+  switcher: {fileID: 1718145275}
+--- !u!1 &8800000003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000004}
+  - component: {fileID: 8800000005}
+  - component: {fileID: 8800000006}
+  m_Layer: 0
+  m_Name: ShieldAmountModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000004
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000005
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000003}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000003}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685d58b316b4f3b81d1acb0a6064ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  fraction: 1
+--- !u!1 &8800000007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000008}
+  - component: {fileID: 8800000009}
+  - component: {fileID: 8800000010}
+  m_Layer: 0
+  m_Name: PSD_Shield_01_DropShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000008
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000009
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000007}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/01_DropShadow.png
+  layerBounds: {x: 0, y: 0, z: 180, w: 22}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000006}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000012}
+  - component: {fileID: 8800000013}
+  - component: {fileID: 8800000014}
+  m_Layer: 0
+  m_Name: PSD_Shield_02_BaseShape
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000012
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000011}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000013
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000011}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/02_BaseShape.png
+  layerBounds: {x: 3, y: 6, z: 172, w: 14}
+  blendMode: 0
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000006}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000016}
+  - component: {fileID: 8800000017}
+  - component: {fileID: 8800000018}
+  m_Layer: 0
+  m_Name: PSD_Shield_03_UpperSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000016
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000015}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000017
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000015}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/03_UpperSoftLight.png
+  layerBounds: {x: 8, y: 14, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000006}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000020}
+  - component: {fileID: 8800000021}
+  - component: {fileID: 8800000022}
+  m_Layer: 0
+  m_Name: PSD_Shield_04_LowerSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000020
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000019}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000021
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000019}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/04_LowerSoftLight.png
+  layerBounds: {x: 9, y: 5, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000006}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000024}
+  - component: {fileID: 8800000025}
+  - component: {fileID: 8800000026}
+  m_Layer: 0
+  m_Name: PSD_Shield_05_InnerShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000024
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000023}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 151439612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000025
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000023}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/05_InnerShadow.png
+  layerBounds: {x: 4, y: 6, z: 172, w: 14}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000006}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+  normalizeWithBase: 1
+--- !u!114 &8800000027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151439611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823ac248b9243ea93f086f5850ed8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseIndex: 1
+  layers:
+  - {fileID: 8800000010}
+  - {fileID: 8800000014}
+  - {fileID: 8800000018}
+  - {fileID: 8800000022}
+  - {fileID: 8800000026}
+--- !u!114 &8800000028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440020716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1832e5e1feba48e89db72a4c446b873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 5
+  dataSource: {fileID: 8800000002}
+  visibilityRoot: {fileID: 151439611}
+  fill: {fileID: 8800000006}
+  layerStack: {fileID: 8800000027}
+  valueText: {fileID: 0}
+  useElementColor: 1
+  transitionSeconds: 0.2
+--- !u!1 &8800000029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000030}
+  - component: {fileID: 8800000031}
+  - component: {fileID: 8800000032}
+  m_Layer: 0
+  m_Name: ShieldAmountModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000030
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000029}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000031
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000029}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000029}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685d58b316b4f3b81d1acb0a6064ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  fraction: 1
+--- !u!1 &8800000033
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000034}
+  - component: {fileID: 8800000035}
+  - component: {fileID: 8800000036}
+  m_Layer: 0
+  m_Name: PSD_Shield_01_DropShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000034
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000033}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000035
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000033}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/01_DropShadow.png
+  layerBounds: {x: 0, y: 0, z: 180, w: 22}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000032}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000038}
+  - component: {fileID: 8800000039}
+  - component: {fileID: 8800000040}
+  m_Layer: 0
+  m_Name: PSD_Shield_02_BaseShape
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000038
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000039
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000037}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/02_BaseShape.png
+  layerBounds: {x: 3, y: 6, z: 172, w: 14}
+  blendMode: 0
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000032}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000041
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000042}
+  - component: {fileID: 8800000043}
+  - component: {fileID: 8800000044}
+  m_Layer: 0
+  m_Name: PSD_Shield_03_UpperSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000042
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000041}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000043
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000041}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/03_UpperSoftLight.png
+  layerBounds: {x: 8, y: 14, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000032}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000046}
+  - component: {fileID: 8800000047}
+  - component: {fileID: 8800000048}
+  m_Layer: 0
+  m_Name: PSD_Shield_04_LowerSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000046
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000047
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000045}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/04_LowerSoftLight.png
+  layerBounds: {x: 9, y: 5, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000032}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000050}
+  - component: {fileID: 8800000051}
+  - component: {fileID: 8800000052}
+  m_Layer: 0
+  m_Name: PSD_Shield_05_InnerShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000050
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000049}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1118229873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000051
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000049}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/05_InnerShadow.png
+  layerBounds: {x: 4, y: 6, z: 172, w: 14}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000032}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+  normalizeWithBase: 1
+--- !u!114 &8800000053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118229872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823ac248b9243ea93f086f5850ed8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseIndex: 1
+  layers:
+  - {fileID: 8800000036}
+  - {fileID: 8800000040}
+  - {fileID: 8800000044}
+  - {fileID: 8800000048}
+  - {fileID: 8800000052}
+--- !u!114 &8800000054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962253139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1832e5e1feba48e89db72a4c446b873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 3
+  dataSource: {fileID: 8800000002}
+  visibilityRoot: {fileID: 1118229872}
+  fill: {fileID: 8800000032}
+  layerStack: {fileID: 8800000053}
+  valueText: {fileID: 0}
+  useElementColor: 1
+  transitionSeconds: 0.2
+--- !u!1 &8800000055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000056}
+  - component: {fileID: 8800000057}
+  - component: {fileID: 8800000058}
+  m_Layer: 0
+  m_Name: ShieldAmountModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000056
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000055}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000057
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000055}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000055}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685d58b316b4f3b81d1acb0a6064ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  fraction: 1
+--- !u!1 &8800000059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000060}
+  - component: {fileID: 8800000061}
+  - component: {fileID: 8800000062}
+  m_Layer: 0
+  m_Name: PSD_Shield_01_DropShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000060
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000059}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000061
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000059}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/01_DropShadow.png
+  layerBounds: {x: 0, y: 0, z: 180, w: 22}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000058}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000064}
+  - component: {fileID: 8800000065}
+  - component: {fileID: 8800000066}
+  m_Layer: 0
+  m_Name: PSD_Shield_02_BaseShape
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000064
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000063}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000065
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000063}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/02_BaseShape.png
+  layerBounds: {x: 3, y: 6, z: 172, w: 14}
+  blendMode: 0
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000058}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000068}
+  - component: {fileID: 8800000069}
+  - component: {fileID: 8800000070}
+  m_Layer: 0
+  m_Name: PSD_Shield_03_UpperSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000068
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000069
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000067}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/03_UpperSoftLight.png
+  layerBounds: {x: 8, y: 14, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000058}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000072}
+  - component: {fileID: 8800000073}
+  - component: {fileID: 8800000074}
+  m_Layer: 0
+  m_Name: PSD_Shield_04_LowerSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000072
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000073
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000071}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/04_LowerSoftLight.png
+  layerBounds: {x: 9, y: 5, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000058}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000076}
+  - component: {fileID: 8800000077}
+  - component: {fileID: 8800000078}
+  m_Layer: 0
+  m_Name: PSD_Shield_05_InnerShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000076
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000075}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1700403255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000077
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000075}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/05_InnerShadow.png
+  layerBounds: {x: 4, y: 6, z: 172, w: 14}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000058}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+  normalizeWithBase: 1
+--- !u!114 &8800000079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700403254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823ac248b9243ea93f086f5850ed8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseIndex: 1
+  layers:
+  - {fileID: 8800000062}
+  - {fileID: 8800000066}
+  - {fileID: 8800000070}
+  - {fileID: 8800000074}
+  - {fileID: 8800000078}
+--- !u!114 &8800000080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413586864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1832e5e1feba48e89db72a4c446b873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 2
+  dataSource: {fileID: 8800000002}
+  visibilityRoot: {fileID: 1700403254}
+  fill: {fileID: 8800000058}
+  layerStack: {fileID: 8800000079}
+  valueText: {fileID: 0}
+  useElementColor: 1
+  transitionSeconds: 0.2
+--- !u!1 &8800000081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000082}
+  - component: {fileID: 8800000083}
+  - component: {fileID: 8800000084}
+  m_Layer: 0
+  m_Name: ShieldAmountModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000082
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000081}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000083
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000081}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000081}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685d58b316b4f3b81d1acb0a6064ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  fraction: 1
+--- !u!1 &8800000085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000086}
+  - component: {fileID: 8800000087}
+  - component: {fileID: 8800000088}
+  m_Layer: 0
+  m_Name: PSD_Shield_01_DropShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000086
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000085}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000087
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000085}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/01_DropShadow.png
+  layerBounds: {x: 0, y: 0, z: 180, w: 22}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000084}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000090}
+  - component: {fileID: 8800000091}
+  - component: {fileID: 8800000092}
+  m_Layer: 0
+  m_Name: PSD_Shield_02_BaseShape
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000090
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000091
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000089}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/02_BaseShape.png
+  layerBounds: {x: 3, y: 6, z: 172, w: 14}
+  blendMode: 0
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000084}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000094}
+  - component: {fileID: 8800000095}
+  - component: {fileID: 8800000096}
+  m_Layer: 0
+  m_Name: PSD_Shield_03_UpperSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000094
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000093}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000095
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000093}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/03_UpperSoftLight.png
+  layerBounds: {x: 8, y: 14, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000084}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000098}
+  - component: {fileID: 8800000099}
+  - component: {fileID: 8800000100}
+  m_Layer: 0
+  m_Name: PSD_Shield_04_LowerSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000098
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000097}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000099
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000097}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/04_LowerSoftLight.png
+  layerBounds: {x: 9, y: 5, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000084}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000102}
+  - component: {fileID: 8800000103}
+  - component: {fileID: 8800000104}
+  m_Layer: 0
+  m_Name: PSD_Shield_05_InnerShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000102
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2036469714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000103
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000101}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/05_InnerShadow.png
+  layerBounds: {x: 4, y: 6, z: 172, w: 14}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000084}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+  normalizeWithBase: 1
+--- !u!114 &8800000105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036469713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823ac248b9243ea93f086f5850ed8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseIndex: 1
+  layers:
+  - {fileID: 8800000088}
+  - {fileID: 8800000092}
+  - {fileID: 8800000096}
+  - {fileID: 8800000100}
+  - {fileID: 8800000104}
+--- !u!114 &8800000106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108160492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1832e5e1feba48e89db72a4c446b873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 1
+  dataSource: {fileID: 8800000002}
+  visibilityRoot: {fileID: 2036469713}
+  fill: {fileID: 8800000084}
+  layerStack: {fileID: 8800000105}
+  valueText: {fileID: 0}
+  useElementColor: 1
+  transitionSeconds: 0.2
+--- !u!1 &8800000107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000108}
+  - component: {fileID: 8800000109}
+  - component: {fileID: 8800000110}
+  m_Layer: 0
+  m_Name: ShieldAmountModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000108
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000107}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000109
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000107}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000107}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2685d58b316b4f3b81d1acb0a6064ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  fraction: 1
+--- !u!1 &8800000111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000112}
+  - component: {fileID: 8800000113}
+  - component: {fileID: 8800000114}
+  m_Layer: 0
+  m_Name: PSD_Shield_01_DropShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000112
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000113
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000111}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/01_DropShadow.png
+  layerBounds: {x: 0, y: 0, z: 180, w: 22}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000110}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000116}
+  - component: {fileID: 8800000117}
+  - component: {fileID: 8800000118}
+  m_Layer: 0
+  m_Name: PSD_Shield_02_BaseShape
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000116
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000115}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000117
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000115}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/02_BaseShape.png
+  layerBounds: {x: 3, y: 6, z: 172, w: 14}
+  blendMode: 0
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000110}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000120}
+  - component: {fileID: 8800000121}
+  - component: {fileID: 8800000122}
+  m_Layer: 0
+  m_Name: PSD_Shield_03_UpperSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000120
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000119}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000121
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000119}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/03_UpperSoftLight.png
+  layerBounds: {x: 8, y: 14, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000110}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000124}
+  - component: {fileID: 8800000125}
+  - component: {fileID: 8800000126}
+  m_Layer: 0
+  m_Name: PSD_Shield_04_LowerSoftLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000124
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000123}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000125
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000123}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/04_LowerSoftLight.png
+  layerBounds: {x: 9, y: 5, z: 163, w: 4}
+  blendMode: 2
+  clippedToBase: 1
+  followsHealth: 1
+  healthSource: {fileID: 8800000110}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+--- !u!1 &8800000127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8800000128}
+  - component: {fileID: 8800000129}
+  - component: {fileID: 8800000130}
+  m_Layer: 0
+  m_Name: PSD_Shield_05_InnerShadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8800000128
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000127}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2094240036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8800000129
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000127}
+  m_CullTransparentMesh: 1
+--- !u!114 &8800000130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8800000127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a19355b3c442a19d7619a977522d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  relativePath: art_assets/UI/BattleField1/UI_components/EnemyShield/05_InnerShadow.png
+  layerBounds: {x: 4, y: 6, z: 172, w: 14}
+  blendMode: 1
+  clippedToBase: 0
+  followsHealth: 1
+  healthSource: {fileID: 8800000110}
+  canvasSize: {x: 180, y: 22}
+  baseBounds: {x: 3, y: 6, z: 172, w: 14}
+  padding: {x: 3, y: 6, z: 5, w: 2}
+  caps: {x: 10, y: 12}
+  vectorBase: 1
+  sourceBaseExtent: {x: 0.997366, y: -0.014563, z: 171.99998, w: 13.99999}
+  contentOffset: {x: 0, y: 0}
+  normalizeWithBase: 1
+--- !u!114 &8800000131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094240035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e823ac248b9243ea93f086f5850ed8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseIndex: 1
+  layers:
+  - {fileID: 8800000114}
+  - {fileID: 8800000118}
+  - {fileID: 8800000122}
+  - {fileID: 8800000126}
+  - {fileID: 8800000130}
+--- !u!114 &8800000132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122242631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1832e5e1feba48e89db72a4c446b873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: 4
+  dataSource: {fileID: 8800000002}
+  visibilityRoot: {fileID: 2094240035}
+  fill: {fileID: 8800000110}
+  layerStack: {fileID: 8800000131}
+  valueText: {fileID: 0}
+  useElementColor: 1
+  transitionSeconds: 0.2
+--- !u!114 &8901000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1ccf5aa483a4f7890a9886763e2c51f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layout: {fileID: 8600000000}
+  loadOnStart: 1
+  automaticClock: 1
+  paused: 0
+--- !u!114 &8901000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2434e7377cb4880a9361f33a9ab32cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8600000003}
+  layout: {fileID: 8600000000}
+  effects: {fileID: 8901000000}
+--- !u!114 &8901000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bdb64fd7c0443780b8cc8d798a26f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layout: {fileID: 8600000000}
+  battle: {fileID: 8800000000}
+  factory: {fileID: 8902000000}
+  legacySkinObjects:
+  - {fileID: 780010000}
+  - {fileID: 780010010}
+  - {fileID: 780010020}
+  - {fileID: 780010030}
+  - {fileID: 780010040}
+  - {fileID: 780010050}
+  - {fileID: 780010060}
+  - {fileID: 780010070}
+  - {fileID: 780010080}
+  - {fileID: 780020000}
+  - {fileID: 780020010}
+  - {fileID: 780020020}
+  - {fileID: 780020030}
+  - {fileID: 780020040}
+  - {fileID: 780020050}
+  - {fileID: 780020060}
+  - {fileID: 780020070}
+  - {fileID: 780020080}
+  - {fileID: 780020090}
+  - {fileID: 780020100}
+  - {fileID: 780020110}
+  - {fileID: 780020120}
+  - {fileID: 780020130}
+  - {fileID: 780020140}
+  - {fileID: 780020150}
+  - {fileID: 780020160}
+  - {fileID: 780020170}
+--- !u!114 &8901000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7612251c2d3462498798f3091e0505a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 1718145278}
+  input: {fileID: 8800000001}
+--- !u!114 &8902000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec6a675ad5884cdfa71cf529c8d67295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8902000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95710baa7c564f16aa783ee5fffb2494, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  cards: {fileID: 8901000002}

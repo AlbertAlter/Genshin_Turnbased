@@ -4,184 +4,241 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>Isolated preview scene bootstrap. No DataManager, battle, source Charts reads, or scene lookups.</summary>
+/// <summary>Combined entrance/exit preview: four individually animated allies and five static enemies. No combat initialization.</summary>
 public sealed class GoldenDissolvePreview : MonoBehaviour
 {
-    private const string DefaultCardPath = "art_assets/Enemy/2001_01.png";
-    private const string DefaultFramePath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameOutline.png";
-    private const string DefaultInnerShadowPath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameInnerShadow.png";
-    private const string DefaultOuterShadowPath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameShadow.png";
-    public string cardPath = DefaultCardPath;
-    public string framePath = DefaultFramePath;
-    public string innerShadowPath = DefaultInnerShadowPath;
-    public string outerShadowPath = DefaultOuterShadowPath;
+    public Font controlsFont;
+    public int[] enemyIds = { 2001, 2002, 2003, 2004, 2005 };
+    public int[] characterIds = { 1009, 1010, 1011, 1012 };
     public bool autoReplay = true;
     public bool newSeedEachPlay = true;
     public int fixedSeed = 12345;
-
-    private UIGoldenDissolveStyle settings;
-    private UIGoldenDissolveCard effect;
-    private Image background;
-    private RectTransform cardRoot;
-    private readonly List<Sprite> ownedSprites = new List<Sprite>();
-    private string error;
-    private bool ready, paused;
-    private float loopElapsed;
-    private uint playIndex;
-
-    private void OnValidate() => MigrateLegacyPaths();
-
-    private void MigrateLegacyPaths()
+    private sealed class Card
     {
-        // Already-open scenes may retain serialized defaults after the scene file changes on disk.
-        // Migrate only the four obsolete preview paths; preserve custom image selections.
-        cardPath = MigrateLegacyPath(cardPath, "art_assets/Character_Whole/1009_03.png", DefaultCardPath);
-        framePath = MigrateLegacyPath(framePath, "art_assets/Character_Bare/Frame/01.png", DefaultFramePath);
-        innerShadowPath = MigrateLegacyPath(innerShadowPath,
-            "art_assets/UI/BattleField1/UI_components/card/CardInnerShadow.png", DefaultInnerShadowPath);
-        outerShadowPath = MigrateLegacyPath(outerShadowPath,
-            "art_assets/UI/BattleField1/UI_components/card/CardShadow.png", DefaultOuterShadowPath);
+        public bool Ally;
+        public UICardFrameView View;
+        public UICardEntrance Entrance;
+        public UIGoldenDissolveCard Exit;
     }
-
-    private static string MigrateLegacyPath(string path, string legacyPath, string replacement)
-        => string.Equals(path?.Trim().Replace('\\', '/').TrimStart('/'), legacyPath, StringComparison.Ordinal)
-            ? replacement : path;
+    private readonly List<Card> cards = new List<Card>();
+    private UICardFactory cardFactory;
+    private readonly List<UICardView> requestedCards = new List<UICardView>();
+    private Canvas previewCanvas;
+    private UIGoldenDissolveStyle exitStyle;
+    private UICardEntranceStyle entranceStyle;
+    private readonly List<UICardVideoPlayer> videos = new List<UICardVideoPlayer>();
+    private Camera previewCamera;
+    private Coroutine sequence;
+    private bool started, built, ready, paused;
+    private int selection;
+    private uint playIndex;
+    private string error, phase = "加载中";
+    private float frameMs;
 
     private IEnumerator Start()
     {
-        MigrateLegacyPaths();
-        if (!TryReadSettings()) yield break;
-        var paths = new[] { cardPath, framePath, innerShadowPath, outerShadowPath };
-        var sprites = new Sprite[paths.Length];
-        for (int i = 0; i < paths.Length; i++)
+        started = true;
+        if (!ReadSettings()) yield break;
+        if (characterIds == null || characterIds.Length != 4 || Array.Exists(characterIds, id => id <= 0))
+        { Fail("入退场预览需要四个有效角色编号。"); yield break; }
+        if (enemyIds == null || enemyIds.Length != 5 || Array.Exists(enemyIds, id => id <= 0))
+        { Fail("入退场预览需要五个有效敌人编号。"); yield break; }
+        cardFactory = GetComponent<UICardFactory>() ?? gameObject.AddComponent<UICardFactory>();
+        yield return Build();
+        if (error != null) yield break;
+        built = true;
+        yield return WaitForVideo();
+    }
+    private IEnumerator WaitForVideo()
+    {
+        foreach (var video in videos)
         {
-            int index = i;
-            yield return StreamingAssetSpriteLoader.Load(paths[i], sprite => { sprites[index] = sprite; ownedSprites.Add(sprite); }, Fail);
-            if (!string.IsNullOrEmpty(error) || sprites[i] == null) yield break;
+            while (!video.Ready && video.Error == null) yield return null;
+            if (video.Error != null) { Fail(video.Error); yield break; }
         }
-        if (!TryBuild(sprites)) yield break;
         ready = true;
-        Replay(); // No opening delay: play as soon as the four existing art layers have loaded.
+        if (autoReplay) BeginSequence(); else EntranceOnly();
     }
-
-    private bool TryReadSettings()
+    private bool ReadSettings()
     {
-        try { settings = UIGoldenDissolveStyle.Load(); error = null; return true; }
-        catch (Exception exception) { Fail("Cannot load GoldenDissolve.xlsx: " + exception.Message); return false; }
+        try { exitStyle = UIGoldenDissolveStyle.Load(); entranceStyle = UICardEntranceStyle.Load(); error = null; return true; }
+        catch (Exception ex) { Fail(ex.Message); return false; }
     }
-
-    private bool TryBuild(Sprite[] sprites)
+    private IEnumerator Build()
     {
-        try
+        previewCamera = new GameObject("PreviewCamera", typeof(Camera)).GetComponent<Camera>();
+        previewCamera.transform.SetParent(transform, false); previewCamera.clearFlags = CameraClearFlags.SolidColor;
+        previewCamera.backgroundColor = exitStyle.PreviewBackgroundColor; previewCamera.cullingMask = 0;
+        var canvas = new GameObject("EntryExitCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler)).GetComponent<Canvas>();
+        previewCanvas = canvas;
+        canvas.transform.SetParent(transform, false); canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        var scaler = canvas.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
+        for (int i = 0; i < 9; i++)
         {
-            var cameraObject = new GameObject("GoldenDissolvePreviewCamera", typeof(Camera));
-            cameraObject.transform.SetParent(transform, false);
-            var camera = cameraObject.GetComponent<Camera>();
-            camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = settings.PreviewBackgroundColor;
-            camera.cullingMask = 0; // Only the overlay Canvas is drawn; no battle/world objects are rendered.
-            var canvasObject = new GameObject("GoldenDissolvePreviewCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
-            canvasObject.transform.SetParent(transform, false);
-            var canvas = canvasObject.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObject.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280, 720); scaler.matchWidthOrHeight = .5f;
-            var bgObject = new GameObject("PreviewBackground", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            var bgRect = bgObject.GetComponent<RectTransform>();
-            bgRect.SetParent(canvasObject.transform, false); bgRect.anchorMin = Vector2.zero; bgRect.anchorMax = Vector2.one;
-            bgRect.offsetMin = bgRect.offsetMax = Vector2.zero;
-            background = bgObject.GetComponent<Image>(); background.color = settings.PreviewBackgroundColor; background.raycastTarget = false;
-            var cardObject = new GameObject("CardPreview_Art_Frame_InnerShadow", typeof(RectTransform));
-            cardRoot = cardObject.GetComponent<RectTransform>();
-            cardRoot.SetParent(canvasObject.transform, false); cardRoot.anchorMin = cardRoot.anchorMax = cardRoot.pivot = new Vector2(.5f, .5f);
-            cardRoot.sizeDelta = new Vector2(settings.PreviewCardHeight * sprites[0].rect.width / sprites[0].rect.height, settings.PreviewCardHeight);
-            // Preserve the existing exported padding and baked opacity; do not darken the PSD shadow again.
-            Vector2 shadowSize = Vector2.Scale(cardRoot.sizeDelta, new Vector2(sprites[3].rect.width / sprites[2].rect.width,
-                sprites[3].rect.height / sprites[2].rect.height));
-            Image shadow = CreateImage("OuterShadow_SeparateFade", sprites[3], shadowSize);
-            Image art = CreateImage("CardArt", sprites[0], cardRoot.sizeDelta);
-            Image inner = CreateImage("InnerShadow", sprites[2], cardRoot.sizeDelta);
-            Image frame = CreateImage("CardFrame", sprites[1], cardRoot.sizeDelta);
-            effect = cardObject.AddComponent<UIGoldenDissolveCard>();
-            effect.cardRoot = cardRoot; effect.bodyLayers = new[] { art, inner, frame }; effect.outerShadows = new[] { shadow };
-            Canvas.ForceUpdateCanvases();
-            return true;
+            bool ally = i >= 5; int slot = ally ? i - 5 : i;
+            var layout = Rect((ally ? "Ally" : "Enemy") + (slot + 1), canvas.transform);
+            layout.sizeDelta = new Vector2(160, 160 / UICardFactory.Aspect);
+            layout.anchoredPosition = new Vector2(ally ? 210 + slot * 170 : -810 + slot * 170, slot % 2 == 0 ? -130 : 80);
+            var motion = Rect("EntranceMotion", layout); motion.sizeDelta = layout.sizeDelta;
+            var opacity = motion.gameObject.AddComponent<CanvasGroup>();
+            var request = cardFactory.Request(motion, ally ? BattleSide.Ally : BattleSide.Enemy,
+                ally ? characterIds[slot] : enemyIds[slot]);
+            requestedCards.Add(request);
+            while ((!request.Ready || !request.MediaResolved) && request.Error == null) yield return null;
+            if (request.Error != null) { Fail(request.Error); yield break; }
+            var view = request.Appearance;
+            var entrance = motion.gameObject.AddComponent<UICardEntrance>(); entrance.motionRoot = motion; entrance.opacity = opacity;
+            var exit = motion.gameObject.AddComponent<UIGoldenDissolveCard>();
+            exit.cardRoot = motion; exit.framedView = view; exit.outerShadows = new[] { view.OuterShadow };
+            exit.keepSourceAnimated = ally;
+            cards.Add(new Card { Ally = ally, View = view, Entrance = entrance, Exit = exit });
+            if (request.Video != null) videos.Add(request.Video);
+            opacity.alpha = 0;
         }
-        catch (Exception exception) { Fail("Cannot build death preview: " + exception.Message); return false; }
     }
-
-    private Image CreateImage(string name, Sprite sprite, Vector2 size)
+    private static RectTransform Rect(string name, Transform parent)
     {
-        var node = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        var rect = node.GetComponent<RectTransform>();
-        rect.SetParent(cardRoot, false); rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
-        rect.sizeDelta = size;
-        var image = node.GetComponent<Image>();
-        image.sprite = sprite; image.color = Color.white; image.raycastTarget = false;
-        return image;
+        var rect = new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>();
+        rect.SetParent(parent, false); rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f); return rect;
     }
-
-    private void Replay()
+    private bool Selected(Card card) => selection == 0 || (selection == 1 ? card.Ally : !card.Ally);
+    private void RestoreCards()
     {
-        if (!ready) return;
-        paused = false; loopElapsed = 0;
-        cardRoot.sizeDelta = new Vector2(settings.PreviewCardHeight * ownedSprites[0].rect.width / ownedSprites[0].rect.height,
-            settings.PreviewCardHeight);
-        foreach (var layer in effect.bodyLayers) layer.rectTransform.sizeDelta = cardRoot.sizeDelta;
-        foreach (var shadow in effect.outerShadows)
-            shadow.rectTransform.sizeDelta = Vector2.Scale(cardRoot.sizeDelta, new Vector2(ownedSprites[3].rect.width / ownedSprites[2].rect.width,
-                ownedSprites[3].rect.height / ownedSprites[2].rect.height));
+        paused = false;
+        foreach (var card in cards)
+        { card.Entrance.Restore(); card.Exit.ResetEffect(); card.Entrance.opacity.alpha = 1; }
+        foreach (var video in videos) { video.paused = false; video.keepDecodingWhenHidden = false; }
+    }
+    private void Cancel()
+    {
+        if (sequence != null) StopCoroutine(sequence);
+        sequence = null; RestoreCards(); phase = "正常显示";
+    }
+    private void StartEntrance()
+    {
+        RestoreCards(); phase = "入场"; int allies = 0, enemies = 0;
+        foreach (var card in cards)
+            if (Selected(card))
+            {
+                int index = card.Ally ? allies++ : enemies++;
+                card.Entrance.Play(entranceStyle, card.Ally ? 1 : -1, index * entranceStyle.Stagger);
+            }
+    }
+    private bool StartExit()
+    {
+        foreach (var card in cards) card.Entrance.Restore();
+        phase = "动态退场"; foreach (var video in videos) video.keepDecodingWhenHidden = true;
         int seed = newSeedEachPlay ? unchecked((int)GoldenDissolveMath.Mix((uint)fixedSeed ^ ++playIndex)) : fixedSeed;
-        if (!effect.Play(settings, seed)) Fail("Death preview could not start; see the Console for the capture error.");
+        Canvas.ForceUpdateCanvases();
+        for (int index = 0; index < cards.Count; index++)
+        {
+            var card = cards[index];
+            int cardSeed = unchecked((int)GoldenDissolveMath.Mix((uint)seed ^ (uint)(index + 1)));
+            if (Selected(card) && !card.Exit.Play(exitStyle, cardSeed))
+            { RestoreCards(); Fail("退场未能开始，请查看 Console。"); return false; }
+        }
+        return true;
     }
-
+    private bool Entering() { foreach (var c in cards) if (c.Entrance.IsPlaying) return true; return false; }
+    private bool Exiting() { foreach (var c in cards) if (c.Exit.IsPlaying) return true; return false; }
+    private IEnumerator Delay(float seconds)
+    {
+        float elapsed = 0;
+        while (elapsed < seconds)
+        { if (!paused) elapsed += entranceStyle.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime; yield return null; }
+    }
+    private IEnumerator RunSequence()
+    {
+        do
+        {
+            StartEntrance();
+            while (Entering()) yield return null;
+            phase = "停留"; yield return Delay(entranceStyle.PreviewHold);
+            if (!StartExit()) yield break;
+            while (Exiting()) yield return null;
+            phase = "退场完成"; foreach (var video in videos) video.keepDecodingWhenHidden = false;
+            if (!autoReplay) break;
+            yield return Delay(exitStyle.PreviewLoopPauseSeconds);
+        } while (autoReplay);
+        sequence = null;
+    }
+    private void BeginSequence() { if (!ready) return; Cancel(); sequence = StartCoroutine(RunSequence()); }
+    private void EntranceOnly() { if (!ready) return; Cancel(); StartEntrance(); }
+    private void ExitOnly() { if (!ready) return; Cancel(); StartExit(); }
     private void Update()
     {
-        if (!ready || !string.IsNullOrEmpty(error)) return;
-        if (Input.GetKeyDown(KeyCode.R)) Replay();
+        frameMs = Mathf.Lerp(frameMs, Time.unscaledDeltaTime * 1000, .05f);
+        if (!ready) return;
+        if (Input.GetKeyDown(KeyCode.R)) BeginSequence();
         if (Input.GetKeyDown(KeyCode.Space)) paused = !paused;
-        effect.Paused = paused;
-        if (autoReplay && !paused && !effect.IsPlaying)
-        {
-            loopElapsed += settings.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-            if (loopElapsed >= settings.PreviewLoopPauseSeconds) Replay();
-        }
+        foreach (var video in videos) video.paused = paused;
+        foreach (var card in cards) { card.Entrance.Paused = paused; card.Exit.Paused = paused; }
+        if (phase == "动态退场" && !Exiting()) { phase = "退场完成"; foreach (var video in videos) video.keepDecodingWhenHidden = false; }
+        if (sequence == null && phase == "入场" && !Entering()) phase = "正常显示";
     }
-
     private void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(16, 16, Mathf.Max(100, Screen.width - 32), 110));
-        GUILayout.Label("Golden death preview | Card + frame + inner shadow dissolve together; outer shadow fades.");
-        if (!string.IsNullOrEmpty(error)) GUILayout.Label(error);
-        else if (!ready) GUILayout.Label("Loading card layers...");
-        else
-        {
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Replay [R]")) Replay();
-            if (GUILayout.Button(paused ? "Resume [Space]" : "Pause [Space]")) paused = !paused;
-            autoReplay = GUILayout.Toggle(autoReplay, "Auto replay");
-            newSeedEachPlay = GUILayout.Toggle(newSeedEachPlay, "New visual seed");
-            if (GUILayout.Button("Reload runtime table") && TryReadSettings())
-            {
-                background.color = settings.PreviewBackgroundColor;
-                Replay();
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.Label($"Body: {effect.BodyProgress:P0} | Effect: {effect.Elapsed:F2}s / {settings.TotalDuration:F2}s");
-        }
+        var matrix = GUI.matrix; var font = GUI.skin.font; bool enabled = GUI.enabled;
+        GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1));
+        if (controlsFont != null) GUI.skin.font = controlsFont;
+        var label = new GUIStyle(GUI.skin.label) { fontSize = 24 };
+        var button = new GUIStyle(GUI.skin.button) { fontSize = 22 };
+        var toggle = new GUIStyle(GUI.skin.toggle) { fontSize = 22 };
+        GUILayout.BeginArea(new Rect(24, 20, 1872, 210), GUI.skin.box);
+        GUILayout.Label("卡牌入场 / 退场：左侧 5 个敌人，右侧 4 张角色各自动画；退场时视频继续播放。", label);
+        GUI.enabled = ready && isActiveAndEnabled;
+        GUILayout.BeginHorizontal();
+        int next = GUILayout.SelectionGrid(selection, new[] { "双方", "只看我方", "只看敌方" }, 3, button, GUILayout.Width(510));
+        if (next != selection) { Cancel(); selection = next; }
+        if (GUILayout.Button("只播放入场", button)) EntranceOnly();
+        if (GUILayout.Button("只播放退场", button)) ExitOnly();
+        if (GUILayout.Button("入场 → 停留 → 退场 [R]", button)) BeginSequence();
+        if (GUILayout.Button("恢复", button)) Cancel();
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button(paused ? "继续 [Space]" : "暂停 [Space]", button)) paused = !paused;
+        autoReplay = GUILayout.Toggle(autoReplay, "连续模式循环", toggle);
+        newSeedEachPlay = GUILayout.Toggle(newSeedEachPlay, "更换消散种子", toggle);
+        if (GUILayout.Button("重读运行时动画参数", button))
+        { Cancel(); if (ReadSettings()) { previewCamera.backgroundColor = exitStyle.PreviewBackgroundColor; BeginSequence(); } }
+        GUILayout.EndHorizontal(); GUI.enabled = true;
+        GUILayout.Label(error ?? VideoError() ?? (ready ? "阶段：" + phase : "加载素材 / 准备视频首帧…"), label);
         GUILayout.EndArea();
+        if (ready)
+        {
+            GUILayout.BeginArea(new Rect(30, 925, 1850, 125));
+            GUILayout.Label($"入场 {entranceStyle.Duration:F2}s · 间隔 {entranceStyle.Stagger:F2}s · 偏移 {entranceStyle.OffsetWidthRatio:P0} 卡宽 · 缩放 {entranceStyle.StartScale:F2} → 1 · 退场 {exitStyle.TotalDuration:F2}s（含碎屑）", label);
+            GUILayout.Label(videos.Count > 0
+                ? $"{videos.Count} 个独立视频源，首张当前 {videos[0].Frame + 1}/{videos[0].FrameCount} 帧；屏幕帧时 {frameMs:F1} ms。场景位置不由动画参数表重置。"
+                : "当前角色使用公共静态卡面。", label);
+            GUILayout.EndArea();
+        }
+        GUI.enabled = enabled; GUI.skin.font = font; GUI.matrix = matrix;
     }
-
-    private void Fail(string message) { error = message; Debug.LogError(message, this); }
-
+    private string VideoError() { foreach (var video in videos) if (video.Error != null) return video.Error; return null; }
+    private void Fail(string message) { error = message; Debug.LogError("EntryExitPreview: " + message, this); }
+    private void OnDisable()
+    {
+        StopAllCoroutines(); sequence = null; ready = false; RestoreCards();
+        foreach (var video in videos) video.enabled = false;
+        if (!built)
+        {
+            foreach (var request in requestedCards) if (cardFactory != null) cardFactory.Release(request);
+            requestedCards.Clear(); cards.Clear(); videos.Clear();
+            if (previewCanvas != null) Destroy(previewCanvas.gameObject);
+            if (previewCamera != null) Destroy(previewCamera.gameObject);
+        }
+    }
+    private void OnEnable()
+    {
+        if (!started) return;
+        if (built) { foreach (var video in videos) video.enabled = true; StartCoroutine(WaitForVideo()); }
+        else StartCoroutine(Start());
+    }
     private void OnDestroy()
     {
-        if (effect != null) effect.ResetEffect();
-        foreach (var sprite in ownedSprites)
-        {
-            if (sprite == null) continue;
-            UICardDissolveSnapshot.Dispose(sprite.texture); UICardDissolveSnapshot.Dispose(sprite);
-        }
-        ownedSprites.Clear();
+        foreach (var video in videos) if (video != null) video.Unload();
+        foreach (var card in cards) { if (card.Exit != null) card.Exit.ResetEffect(); if (card.View != null) card.View.Clear(); }
     }
 }

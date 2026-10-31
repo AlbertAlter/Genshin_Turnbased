@@ -38,7 +38,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             var main = Main(env, 5, NingguangScreenCount.ID, "Count");
             var fieldMain = Main(env, 6, NingguangScriptHooks.ScreenFieldID, "Debuff"); fieldMain.MaxStack = 0;
-            fieldMain.MultiplierPart2 = "DMGBonus"; fieldMain.ScriptHook = "Ningguang_ScreenFieldActive()";
+            fieldMain.MultiplierPart = "DMGBonus"; fieldMain.ScriptHook = "Ningguang_ScreenFieldActive()";
             Effect(env, 6, 1, "STE_Ningguang_ScreenDamagePenalty", "Debuff", "-0.1");
             var screen = owner.AddStatus(main.StatusID2, owner, 5, 2, 0, main);
             foreach (int slot in slots)
@@ -100,7 +100,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var owner = Start(env); var member = env.CreateAlly(2).Entity;
             var screen = Screen(env, owner, 1, 2, 3);
             var outside = env.CreateEnemy(5).Entity;
-            var bonus = Main(env, 20, "ST_Test_EnemyBonus", "Buff"); bonus.MultiplierPart2 = "DMGBonus";
+            var bonus = Main(env, 20, "ST_Test_EnemyBonus", "Buff"); bonus.MultiplierPart = "DMGBonus";
             Effect(env, 20, 1, "STE_Test_EnemyBonus", "Buff", "0.5");
             env.Enemy.Entity.AddStatus(bonus.StatusID2, env.Enemy.Entity, 0, 2, 0, bonus);
             Assert.That(env.Enemy.Entity.GetStatusDMGBonus("x", "x", -1, "Physical", member), Is.EqualTo(.4f).Within(.00001f));
@@ -169,10 +169,10 @@ namespace GenshinTurnBased.Tests.EditMode
             { e.Duration = 1; e.AddInPhase = 1; e.ScriptHook = "Ningguang_SkillEnergy()"; });
             var screenMain = Main(env, 5, NingguangScreenCount.ID, "Count");
             var fieldMain = Main(env, 6, NingguangScriptHooks.ScreenFieldID, "Debuff"); fieldMain.MaxStack = 0;
-            fieldMain.MultiplierPart2 = "DMGBonus"; fieldMain.ScriptHook = "Ningguang_ScreenFieldActive()";
+            fieldMain.MultiplierPart = "DMGBonus"; fieldMain.ScriptHook = "Ningguang_ScreenFieldActive()";
             Effect(env, 6, 1, "STE_Ningguang_ScreenDamagePenalty", "Debuff", "-0.1");
             Main(env, 9, "ST_Ningguang_EnergyLock");
-            var res = Main(env, 8, "ST_Ningguang_C4Resistance", "Buff"); res.MultiplierPart2 = "ResBonus";
+            var res = Main(env, 8, "ST_Ningguang_C4Resistance", "Buff"); res.MultiplierPart = "ResBonus";
             res.ApplyElementType = "Pyro;Hydro;Electro;Cryo;Anemo;Dendro;Geo"; res.ScriptHook = "Ningguang_ScreenActive()";
             Effect(env, 8, 1, "STE_Ningguang_C4Resistance", "Buff", "0.1");
             var bind = Effect(env, 5, 2, "STE_Ningguang_C4Bind", "BindStatus", res.StatusID2, "AllyTeam");

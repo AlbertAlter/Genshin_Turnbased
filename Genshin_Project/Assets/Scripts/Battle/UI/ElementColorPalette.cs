@@ -10,8 +10,14 @@ public sealed class ElementColorPalette
     public const string FileName = "ElementColors.xlsx";
     private static readonly string[] Keys = { "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro", "Physical" };
     private readonly Dictionary<string, Color> colors;
+    private readonly Dictionary<string, string> auraIcons = new Dictionary<string, string>(StringComparer.Ordinal);
+    public IEnumerable<string> AuraIconPaths => auraIcons.Values;
+    public bool TryGetAuraIconPath(string element, out string path) => auraIcons.TryGetValue(element, out path);
 
     private ElementColorPalette(Dictionary<string, Color> colors) { this.colors = colors; }
+
+    /// <summary>Project white and Physical share one authoritative table entry.</summary>
+    public Color ProjectWhite => colors["Physical"];
 
     public static ElementColorPalette Load()
         => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
@@ -29,11 +35,23 @@ public sealed class ElementColorPalette
         for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
         {
             string key = headers.Cell(row, "Element").Text.Trim();
+            // Rows without an element key are personal notes/swatches, not palette entries.
+            if (key.Length == 0) continue;
             string color = headers.Cell(row, "Color").Text.Trim();
-            if (key.Length == 0 && color.Length == 0) continue;
             entries.Add(new KeyValuePair<string, string>(key, color));
         }
-        return Parse(entries);
+        var palette = Parse(entries);
+        headers.Require("SourceIcon");
+        for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
+        {
+            string key = headers.Cell(row, "Element").Text.Trim();
+            if (key.Length == 0 || key == "Physical") continue;
+            string file = headers.Cell(row, "SourceIcon").Text.Trim();
+            if (!HitEffectTextureStyle.ValidFileName(file))
+                throw new InvalidDataException("元素栏图标 SourceIcon 必须是 PNG 文件名：" + key);
+            palette.auraIcons.Add(key, "art_assets/Status_Icon/Element/" + file);
+        }
+        return palette;
     }
 
     public static ElementColorPalette Parse(IEnumerable<KeyValuePair<string, string>> entries)

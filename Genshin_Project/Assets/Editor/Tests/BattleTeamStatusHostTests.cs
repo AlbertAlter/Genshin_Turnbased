@@ -9,7 +9,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Buff(BattleFlowTestEnv env, string id = "ST_Team_Test", int number = 99110)
         {
             var main = new StatusMainData { StatusID = number, StatusID2 = id, StatusName = id,
-                Display = 1, MultiplierPart1 = "ATKBonus", MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                Display = 1, MultiplierPart = "ATKBonus", MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[id] = main;
             env.DataManager.StatusEffectDict["STE_" + id] = new StatusEffectData
                 { StatusEffectID = number * 100 + 1, StatusEffectID2 = "STE_" + id, EffectType = "Buff", Param1 = ".25" };
@@ -182,7 +182,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 Assert.Throws<NotSupportedException>(() => env.Manager.AllyTeam.AddStatus(BondOfLifeStatusHandler.StatusID,
                     env.Ally.Entity, 0, 2, 0, new StatusMainData { StatusID2 = BondOfLifeStatusHandler.StatusID, StatusType = "Count" }));
                 var hp = Buff(env, "ST_Team_HP", 99112);
-                hp.MultiplierPart1 = "HPBonus";
+                hp.MultiplierPart = "HPBonus";
                 Assert.Throws<NotSupportedException>(() => env.Manager.AllyTeam.AddStatus(hp.StatusID2,
                     env.Ally.Entity, 0, 2, 0, hp));
                 var cloud = env.DataManager.StatusMainDict[TeamPublicStatuses.Thundercloud];

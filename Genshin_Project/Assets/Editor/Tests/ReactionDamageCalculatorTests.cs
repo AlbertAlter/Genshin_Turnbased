@@ -288,7 +288,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     StatusID = statusID,
                     StatusID2 = $"ST_Test_{statusID}",
-                    MultiplierPart1 = multiplierPart,
+                    MultiplierPart = multiplierPart,
                     ApplyReactionType = reactionType,
                     ApplyElementType = elementType
                 }

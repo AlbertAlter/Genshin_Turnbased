@@ -100,6 +100,7 @@ public partial class DataManager
 
     private void LoadAllTables()
     {
+        LoadLang();
         LoadCharacterOverview();
         LoadCharacterSheets();
         LoadGrowthCurve();

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 /// <summary>重云：记住原战技位置、完整普攻行为及每hit反应前的冰附着/生命比例；效果数值仍由配表执行。</summary>
 public static class ChongyunScriptHooks
@@ -11,31 +10,10 @@ public static class ChongyunScriptHooks
     public const string ThirdNormal = "ST_Chongyun_ThirdNormal", C4 = "ST_Chongyun_C4";
     private static readonly AsyncLocal<Cast> Casting = new AsyncLocal<Cast>();
     private static readonly AsyncLocal<Hit> Hitting = new AsyncLocal<Hit>();
-    private static readonly ConditionalWeakTable<BattleEntity, FieldMemory> Fields = new ConditionalWeakTable<BattleEntity, FieldMemory>();
     private static readonly ConditionalWeakTable<StatusInstance, List<int>> FieldPositions = new ConditionalWeakTable<StatusInstance, List<int>>();
-    private static readonly ConditionalWeakTable<BattleDeclaration, EndTicket> EndFacts = new ConditionalWeakTable<BattleDeclaration, EndTicket>();
     private static readonly ConditionalWeakTable<BattleDeclaration, Cast> NormalFacts = new ConditionalWeakTable<BattleDeclaration, Cast>();
     private static readonly ConditionalWeakTable<BattleDeclaration, Hit> CryoFacts = new ConditionalWeakTable<BattleDeclaration, Hit>();
     private static readonly ConditionalWeakTable<StatusInstance, IDisposable> Listeners = new ConditionalWeakTable<StatusInstance, IDisposable>();
-    private sealed class FieldMemory { internal StatusInstance Root; }
-    /// <summary>领域移除时认领一次群攻请求；原位置和公式快照独立留存，不重新激活已移除状态。</summary>
-    internal sealed class EndTicket
-    {
-        internal readonly StatusInstance Status;
-        internal readonly BattleEntity Owner;
-        internal readonly object Host;
-        internal readonly List<StatusActionData> Actions;
-        internal readonly ScriptHookContext Context;
-        internal StatusInstance Guardian;
-        private bool started;
-        internal EndTicket(StatusInstance status,BattleDeclaration cause,List<StatusActionData> actions)
-        {
-            Status=status;Owner=status.Caster;Host=status.Host;Actions=new List<StatusActionData>(actions);
-            Context=new ScriptHookContext{Caster=Owner,Status=status,StatusHost=Host,Declaration=cause};
-        }
-        internal bool CanExecute => Owner?.IsAlive == true && Status.FormulaSnapshot != null && Active(Guardian);
-        internal bool TryBegin() { if(started || !CanExecute)return false;started=true;return true; }
-    }
     private sealed class Cast : IDisposable
     {
         internal readonly BattleEntity Owner;
@@ -78,7 +56,6 @@ public static class ChongyunScriptHooks
         BattleSpecialRules.RegisterEffectInvocationScope(CaptureSelection);
         BattleSpecialRules.RegisterDeclarationObserver(Index);
         BattleSpecialRules.RegisterStatusLifecycle(Frost, RememberField, null);
-        BattleSpecialRules.RegisterStatusLifecycle(End, StartEndListener, StopListener);
         BattleSpecialRules.RegisterStatusLifecycle(C4, StartC4, StopListener);
         BattleSpecialRules.RegisterCount("Chongyun_BurstHits", owner => owner?.EntityID == 1025 ? (owner.ConstellationLevel >= 6 ? 4 : 3) : 0);
         BattleSpecialRules.RegisterCastCooldownModifier(CastCooldown);
@@ -118,9 +95,12 @@ public static class ChongyunScriptHooks
             && c.Declaration != null && CryoFacts.TryGetValue(c.Declaration,out var hit) && hit.Owner == c.Caster);
         BattleSpecialRules.RegisterCondition("Chongyun_C6HP", (a,c) => Empty(a) && c?.Caster?.EntityID == 1025
             && Hitting.Value?.Owner == c.Caster && Hitting.Value.LowerHP.Contains(c.Target));
-        BattleSpecialRules.RegisterCondition("Chongyun_CommittedEnd", (a,c) => Empty(a) && c?.Status?.StatusID2 == Frost
-            && !c.Status.IsActive && c.Declaration?.Kind == BattleEventKind.StatusRemoved
-            && c.Declaration.Get<StatusEventData>()?.InstanceId == c.Status.ApplyOrder);
+        BattleSpecialRules.RegisterCondition("Chongyun_EndReady", (a,c) => Empty(a) && c?.Status?.StatusID2 == Frost
+            && c.Caster?.IsAlive == true && c.Status.FormulaSnapshot != null && Active(c.Caster.GetStatus(End))
+            && (c.Status.IsActive || (c.Declaration?.Kind == BattleEventKind.StatusRemoved
+                && c.Declaration.Get<StatusEventData>()?.InstanceId == c.Status.ApplyOrder
+                && (c.Declaration.Get<StatusEventData>().Reason == "Removed"
+                    || c.Declaration.Get<StatusEventData>().Reason == "Replaced"))));
     }
     private static bool Empty(string argument) => string.IsNullOrEmpty(argument);
     private static bool Melee(BattleEntity actor) => actor.WeaponType == 0 || actor.WeaponType == 1 || actor.WeaponType == 3;
@@ -161,7 +141,6 @@ public static class ChongyunScriptHooks
         var owner = RequireOwner(status,host); var cast = Casting.Value;
         if (cast?.Owner != owner || cast.Skill != "SK_Skill_Chongyun")
             throw new InvalidOperationException("重华叠霜缺少本次战技的原位置。");
-        Fields.Remove(owner); Fields.Add(owner,new FieldMemory{Root=status});
         FieldPositions.Add(status,new List<int>(cast.Positions));
     }
     private static bool IsNormal(ScriptHookContext context) => context?.Status?.StatusID2 == ThirdNormal
@@ -175,20 +154,6 @@ public static class ChongyunScriptHooks
         foreach (var action in actions) if (action.ActionType == "OnTrigger" && action.ScriptHook == hook)
             status.Caster.CharacterCtrl.TryExecuteEventStatusAction(status,action,status.Host,
                 new ScriptHookContext{Caster=status.Caster,Status=status,StatusHost=status.Host,Declaration=cause},()=>Active(status));
-    }
-    private static void StartEndListener(StatusInstance status,object host)
-    {
-        var owner = RequireOwner(status,host);
-        Listeners.Add(status,BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved,(_,fact)=>
-        {
-            var cause = BattleEventHub.Current;
-            if (fact.StatusId != Frost || fact.Host != owner || cause == null || !EndFacts.TryGetValue(cause,out var ticket)) return;
-            ticket.Guardian=status;
-            BattleExecution.Enqueue(async () =>
-            {
-                if (Active(status)) await owner.CharacterCtrl.ExecuteCommittedChongyunEnd(ticket);
-            });
-        },status.ApplyOrder,()=>Active(status)));
     }
     private static void StartC4(StatusInstance status,object host)
     {
@@ -215,39 +180,6 @@ public static class ChongyunScriptHooks
         var action = declaration.Get<ActionEventData>();
         if (declaration.Kind == BattleEventKind.ActionCompleted && action?.ActionType == "Normal" && cast?.Owner?.EntityID == 1025
             && action.Subject == cast.Owner && action.SkillId == cast.Skill) NormalFacts.Add(declaration,cast);
-        var removed = declaration.Get<StatusEventData>();
-        if (declaration.Kind == BattleEventKind.StatusRemoved && removed?.StatusId == Frost && removed.Host is BattleEntity owner
-            && owner.IsAlive && (removed.Reason == "Expired" || removed.Reason == "Replaced" || removed.Reason == "Removed")
-            && Fields.TryGetValue(owner,out var memory) && memory.Root.ApplyOrder == removed.InstanceId)
-        {
-            if(memory.Root.FormulaSnapshot!=null && DataManager.Instance.StatusActionDict.TryGetValue(Frost,out var actions))
-                EndFacts.Add(declaration,new EndTicket(memory.Root,declaration,actions));
-        }
-    }
-}
-
-public partial class CharacterBattleController
-{
-    /// <summary>仅执行原领域已提交的结束请求；保留具体场地状态的公式快照和来源，允许正常移除后收尾。</summary>
-    internal async Task ExecuteCommittedChongyunEnd(ChongyunScriptHooks.EndTicket ticket)
-    {
-        if (!ticket.TryBegin()) return;
-        using var trigger=BattleResolutionContext.EnterTrigger();
-        using var context=ScriptHookContext.EnterExecution(ticket.Context);
-        foreach(var action in ticket.Actions)
-        {
-            if(!ticket.CanExecute)return;
-            if(action.ActionType!="OnEnd" || !ScriptHookEvaluator.Evaluate(action.ScriptHook,ticket.Context)
-                || StatusActionLimitReached(ticket.Status,action)
-                || !BattleResolutionContext.TryCollect(ticket.Status,action,ticket.Context))continue;
-            await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Status,
-                ticket.Owner,action.Param1,statusID:ticket.Status.StatusID2),()=>
-            {
-                if(!ticket.CanExecute)return;
-                CountStatusActionTrigger(ticket.Status,action);
-                ExecuteStatusActionEffects(ticket.Status,action,ticket.Host,ticket.Context);
-            });
-        }
     }
 }
 

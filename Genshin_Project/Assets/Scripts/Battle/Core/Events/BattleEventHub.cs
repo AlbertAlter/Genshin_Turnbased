@@ -101,6 +101,7 @@ public abstract class BattleEventData
 
 public sealed class DamageEventData : BattleEventData
 {
+    public int SourceWeaponType { get; }
     private readonly DamageSourceInfo source;
     public DamageSourceInfo Source => source.Snapshot();
     public bool SourceWasPartyMember { get; }
@@ -125,9 +126,13 @@ public sealed class DamageEventData : BattleEventData
     public DamageProperties Properties { get; }
     public bool IsPneumaDamage => Properties.IsPneuma;
     public bool IsOusiaDamage => Properties.IsOusia;
+    public bool IsResonanceDamage => Properties.IsResonance;
+    public GeoResonanceEmission Resonance { get; }
+    public IReadOnlyList<OverallShieldProtection> OverallShieldProtections { get; }
     public DamageEventData(DamageResolvedEvent value) : base(BattleEventKind.DamageResolved, value.Target)
     {
         source = value.Source?.Snapshot() ?? DamageSourceInfo.CreateUnknown();
+        SourceWeaponType = source.SourceEntity != null ? source.SourceEntity.WeaponType : -1;
         SourceWasPartyMember = value.SourceWasPartyMember; SourceWasOnField = value.SourceWasOnField;
         HPBefore = value.HPBefore; HPAfter = value.HPAfter; RequestedDamage = value.RequestedHPDamage;
         ActualHPDamage = value.ActualHPDamage; HitLanded = value.HitLanded; CausedDeath = value.CausedDeath;
@@ -138,6 +143,8 @@ public sealed class DamageEventData : BattleEventData
         Element = value.Element; DamageType = value.DamageType;
         ElementAmount = value.ElementAmount; IsNightSoulDamage = value.IsNightSoulDamage;
         Properties = value.Properties;
+        Resonance = value.Resonance;
+        OverallShieldProtections = value.OverallShieldProtections ?? Array.Empty<OverallShieldProtection>();
     }
 }
 
@@ -251,7 +258,7 @@ public sealed class ActionEventData : BattleEventData
 }
 
 /// <summary>只标记已提交换人的原因；Unknown不推断为主动，免费不等于阵亡强制。</summary>
-public enum BattleSwitchReason { Unknown, Manual, DeathForced, SkillAutomatic, InitialEntry }
+public enum BattleSwitchReason { Unknown, Manual, DeathForced, SkillAutomatic, InitialEntry, ReturnAutomatic }
 
 public sealed class SwitchEventData : BattleEventData
 {

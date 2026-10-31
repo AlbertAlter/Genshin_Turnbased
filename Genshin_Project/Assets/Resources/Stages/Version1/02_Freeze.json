@@ -1,0 +1,83 @@
+{
+  "StageName": "02 冻结：封锁援军",
+  "BattleID": 1,
+  "Allies": [
+    {
+      "CharacterID": 1035,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1028,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1031,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1012,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  ],
+  "Enemies": [
+    {
+      "EnemyID": 2001,
+      "Level": 38,
+      "Slot": 1
+    },
+    {
+      "EnemyID": 2005,
+      "Level": 38,
+      "Slot": 2
+    },
+    {
+      "EnemyID": 2014,
+      "Level": 38,
+      "Slot": 3
+    },
+    {
+      "EnemyID": 2027,
+      "Level": 38,
+      "Slot": 4
+    },
+    {
+      "EnemyID": 2007,
+      "Level": 38,
+      "Slot": 5
+    }
+  ],
+  "InitialEnergyMode": "Percent",
+  "InitialEnergyValue": 100.0
+}

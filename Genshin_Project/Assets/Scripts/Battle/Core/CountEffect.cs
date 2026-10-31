@@ -97,7 +97,7 @@ public sealed class CountChangeRequest
 
 /// <summary>
 /// Param1=Count状态数字ID或ID2；Param2=增减数/full/clear。
-/// 只修改选中实体上已存在的唯一实例；不创建、不重施、不调用OnApply。
+/// 分别修改选中实体上指定ID的所有有效实例；不创建、不重施、不调用OnApply。
 /// 专用处理器须显式接入；夜魂及未适配的复杂Count不走通用数值修改。
 /// </summary>
 public static class CountEffect
@@ -156,31 +156,27 @@ public static class CountEffect
         foreach (var target in targets)
         {
             if (target == null || !target.IsAlive) continue;
-            StatusInstance selected = null;
             foreach (var status in target.GetStatusInstances(main.StatusID2))
             {
-                if (status == null || !status.IsActive) continue;
-                if (selected != null)
-                    throw new InvalidOperationException("Count效果无法定位同一实体上的多份同ID实例：" + main.StatusID2);
-                selected = status;
+                if (status == null || !status.IsActive || !EquipmentStatusLifetime.CanExecute(status)) continue;
+                if (!string.Equals(status.MainData?.StatusType, "Count", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("目标实例并非Count状态：" + main.StatusID2);
+                handler.ValidateEffectChange(status, target, request);
+                prepared.Add(new Prepared { Host = target, Status = status, Handler = handler });
             }
-            if (selected == null || !EquipmentStatusLifetime.CanExecute(selected)) continue;
-            if (!string.Equals(selected.MainData?.StatusType, "Count", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException("目标实例并非Count状态：" + main.StatusID2);
-            handler.ValidateEffectChange(selected, target, request);
-            prepared.Add(new Prepared { Host = target, Status = selected, Handler = handler });
         }
         using var resolution = BattleEventHub.BeginResolution();
         using var collection = BattleResolutionContext.BeginCollection();
         foreach (var item in prepared)
         {
-            // 绑定本次解析的实际实例；不能在旧实例耗尽后扣到同ID新一轮状态上。
+            // 固定本次选中的实例：移除的跳过，中途新建的同ID实例不追加处理。
             if (!item.Host.IsAlive || !item.Status.IsActive || !item.Host.HasStatusInstance(item.Status)
                 || !EquipmentStatusLifetime.CanExecute(item.Status)) continue;
             double before = ReadValue(item.Status);
             item.Handler.ChangeFromEffect(item.Status, item.Host, request);
             LogManager.Log(LogCategory.Effect, "Count " + effectID + " -> " + item.Host.EntityID
-                + " " + main.StatusID2 + " " + before + " -> " + ReadValue(item.Status));
+                + " " + main.StatusID2 + " instance#" + item.Status.ApplyOrder
+                + " " + before + " -> " + ReadValue(item.Status));
         }
     }
 

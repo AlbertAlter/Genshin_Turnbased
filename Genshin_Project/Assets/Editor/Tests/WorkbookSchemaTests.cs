@@ -48,7 +48,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             ValidateHeaders("StatusData.xlsx", "StatusData_Main", errors,
                 "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
-                "MultiplierPart1", "MultiplierPart2", "MultiplierPart3", "ApplyDamageType",
+                "MultiplierPart", "ApplyDamageType",
                 "ApplyReactionType", "ApplyElementType", "ApplyString", "ScriptHook",
                 "MaxCount", "MaxStack", "WhenMax");
             ValidateHeaders("StatusData.xlsx", "Status_Effect", errors, EffectHeaders("StatusEffectID", "StatusEffectID2", "TargetSelect"));
@@ -57,7 +57,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             ValidateHeaders("StatusData_Enemy.xlsx", "StatusData_Main_Enemy", errors,
                 "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
-                "MultiplierPart1", "MultiplierPart2", "MultiplierPart3", "ApplyDamageType",
+                "MultiplierPart", "ApplyDamageType",
                 "ApplyReactionType", "ApplyElementType", "ApplyString", "ScriptHook",
                 "MaxCount", "MaxStack", "WhenMax");
             ValidateHeaders("StatusData_Enemy.xlsx", "Status_Effect", errors, EffectHeaders("StatusEffectID", "StatusEffectID2", "TargetSelect"));
@@ -66,7 +66,7 @@ namespace GenshinTurnBased.Tests.EditMode
 
             ValidateHeaders("StatusData_Overall.xlsx", "StatusData_Overall_Main", errors,
                 "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
-                "MultiplierPart1", "MultiplierPart2", "MultiplierPart3", "ApplyDamageType",
+                "MultiplierPart", "ApplyDamageType",
                 "ApplyReactionType", "ApplyElementType", "ApplyString", "ScriptHook",
                 "MaxCount", "MaxStack", "WhenMax");
             ValidateHeaders("StatusData_Overall.xlsx", "StatusEffect_Overall", errors,

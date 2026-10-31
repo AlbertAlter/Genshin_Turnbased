@@ -57,6 +57,7 @@ public static class KillHookSystem
         if (damageEvent == null || !damageEvent.CausedDeath) return;
         using var cause = BattleEventHub.Enter(damageEvent.Declaration);
         using var declaration = BattleEventHub.Enter(BattleEventHub.Publish(new DeathEventData(damageEvent)));
+        BattleDeathResolution.NotifyDeathActions(damageEvent, BattleEventHub.Current);
         if (_entries.Count == 0) return;
 
         var snapshot = new List<KillHookEntry>(_entries);

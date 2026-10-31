@@ -10,7 +10,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int id, string part = null, string hook = null, string type = null)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = DataManager.WeaponStatusKey(id),
-                StatusName = "WeaponRosterTest", StatusType = "Buff", MultiplierPart1 = part, ScriptHook = hook,
+                StatusName = "WeaponRosterTest", StatusType = "Buff", MultiplierPart = part, ScriptHook = hook,
                 ApplyDamageType = type, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[main.StatusID2] = main;
             return main;

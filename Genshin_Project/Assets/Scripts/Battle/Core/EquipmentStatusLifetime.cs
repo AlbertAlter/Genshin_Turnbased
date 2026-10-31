@@ -25,9 +25,9 @@ public static class EquipmentStatusLifetime
     }
 
     public static bool CanExecute(StatusInstance status)
-        => status == null || status.EquipmentSource == null || status.EquipmentSource.IsAvailable;
+        => status == null || status.EquipmentSource == null || status.EquipmentSource.IsAvailable || StatusDeathActions.Allows(status);
     public static bool CanExecute(DamageSourceInfo source)
-        => source == null || source.EquipmentSource == null || source.EquipmentSource.IsAvailable;
+        => source == null || source.EquipmentSource == null || source.EquipmentSource.IsAvailable || StatusDeathActions.Allows(source.SourceStatus);
 
     internal static void OnDeath(BattleEntity owner)
     {
@@ -66,9 +66,8 @@ public static class EquipmentStatusLifetime
         }
         candidates.Sort((left, right) => left.status.ApplyOrder.CompareTo(right.status.ApplyOrder));
         foreach (var item in candidates)
-            if (item.entity != null) item.entity.RemoveStatusInstance(item.status, "EquipmentOwnerDied");
-            else if (item.field != null) item.field.RemoveStatusInstance(item.status, "EquipmentOwnerDied");
-            else StatusHostAccess.Remove(item.status.Host, item.status, "EquipmentOwnerDied");
+            BattleDeathResolution.RemoveAfterDeathActions(item.status.Host ?? (object)item.entity ?? item.field,
+                item.status, "EquipmentOwnerDied");
         // 正式移除会清理绑定、护盾、Count、阶段登记和订阅；绝不模拟OnEnd爆炸或转化。
     }
 }

@@ -15,7 +15,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv e, int n, string key, string part = "", int stack = 1, int cap = 1)
         {
             var main = new StatusMainData { StatusID = 4102800 + n, StatusID2 = S + key, StatusType = part == "" ? "" : "Buff",
-                MultiplierPart1 = part, MaxStack = stack, MaxCount = cap, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = stack, MaxCount = cap, WhenMax = "0" };
             e.DataManager.StatusMainDict[main.StatusID2] = main;
             if (!e.DataManager.CharacterStatusIDs.TryGetValue(1028, out var ids)) e.DataManager.CharacterStatusIDs[1028] = ids = new HashSet<string>();
             ids.Add(main.StatusID2); return main;
@@ -185,6 +185,35 @@ namespace GenshinTurnBased.Tests.EditMode
             await Tick(e, actor, state);
             Assert.That(values[0], Is.EqualTo(93.75f).Within(.001)); Assert.That(values[1], Is.EqualTo(93.75f).Within(.001));
             Assert.That(values[2], Is.EqualTo(50f).Within(.001)); Assert.That(e.Ally.Entity.HasStatus(S + "Glow"), Is.False);
+        }
+
+        [UnityTest] public IEnumerator Glow_NestedVapeCannotReuseLayersAwaitingRemoval() => HookTestEnv.AwaitTask(NestedGlow);
+        private async Task NestedGlow()
+        {
+            using var e = new BattleFlowTestEnv(); Setup(e); Add(e, "Hexerei"); Add(e, "Glow", duration: 2);
+            var actor = e.Manager.Allies[1]; var nested = e.Manager.Allies[2];
+            var first = Emitter(e, actor, element: "Pyro"); var next = Emitter(e, nested, element: "Pyro");
+            foreach (var enemy in e.Manager.Enemies) enemy.Entity.ApplyAura("Hydro", 10, e.Ally.Entity.EntityID);
+            bool started = false; var firstValues = new List<float>(); var nextValues = new List<float>();
+            // 早于魔导监听者执行，在辉光正常RemoveStatus之前产生另一名队友的嵌套蒸发。
+            using var response = BattleEventHub.Subscribe<ReactionEventData>(BattleEventKind.ReactionOccurred, (_, fact) =>
+            {
+                if (started || fact.Source != actor.Entity || fact.Reaction != ReactionType.Vaporize) return;
+                started = true;
+                Assert.That(e.Ally.Entity.HasStatus(S + "Glow"), Is.True);
+                BattleExecution.Enqueue(() => nested.ExecuteStatusActionsTask(next, e.DataManager.StatusActionDict[next.StatusID2], next.Host, "OnItsTurn"));
+            }, 0);
+            using var damage = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
+            {
+                if (fact.Source.SourceEffectID != "STE_MonaTest_Damage") return;
+                (fact.Source.SourceEntity == actor.Entity ? firstValues : nextValues).Add(fact.DamageBeforeShield);
+            }, 0);
+            await Tick(e, actor, first);
+            Assert.That(started, Is.True);
+            Assert.That(firstValues, Has.Count.EqualTo(3)); Assert.That(nextValues, Has.Count.EqualTo(3));
+            Assert.That(firstValues, Is.All.EqualTo(78.75f).Within(.001));
+            Assert.That(nextValues, Is.All.EqualTo(75f).Within(.001));
+            Assert.That(e.Ally.Entity.HasStatus(S + "Glow"), Is.False);
         }
 
         [UnityTest] public IEnumerator C2_GuaranteedAttackDoesNotRollProbability_AndAutomaticHeavyKeepsHitIdentityPerTarget() => HookTestEnv.AwaitTask(C2);

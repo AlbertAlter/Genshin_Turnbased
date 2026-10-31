@@ -340,8 +340,8 @@ public partial class DataManager
                         // ChangeControl 专属校验（2026-08-11）：技能效果表允许，填了Duration定时结束，没填=永久
                         if (data.EffectType == "ResetCooldown")
                             TryValidate(validationSource, () => TableValidator.ValidateResetCooldown("SkillsEffect", row, data.Param1));
-                        if (data.EffectType == "ReduceCooldown")
-                            TryValidate(validationSource, () => TableValidator.ValidateReduceCooldown("SkillsEffect", row, data.Param1, data.Param2));
+                        if (data.EffectType == "Cooldown")
+                            TryValidate(validationSource, () => TableValidator.ValidateCooldown("SkillsEffect", row, data.Param1, data.Param2));
                         if (data.EffectType == "BondOfLife")
                             TryValidate(validationSource, () => TableValidator.ValidateBondOfLife("SkillsEffect", row, data.Param1));
                         TryValidate(validationSource, () => TableValidator.ValidatePublicCountEffect(

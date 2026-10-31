@@ -60,6 +60,8 @@ public sealed class ScriptHookContext
     public string DamageType;
     /// <summary>属性查询的实际技能身份；状态独立伤害不得借用调用者技能。</summary>
     public string DamageSkillID;
+    /// <summary>AP费用查询的实际技能ID；不借用DamageType、ActionType或当前按钮绑定推断。</summary>
+    public string APCostSkillID;
 
     /// <summary>仅反应伤害数值收集入口填写；不能从引发响应的ReactionEvent推断当前伤害域。</summary>
     public ReactionType? DamageReaction;

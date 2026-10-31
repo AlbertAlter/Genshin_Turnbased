@@ -50,7 +50,7 @@ public sealed class ElementalResonanceHandler : IDisposable
     {
         if (!team.Contains(actor) || !Has("Geo")) return false;
         if (moonCageCreators.Contains(actor)) return true;
-        foreach (Shield shield in actor.Shields) if (shield != null && shield.Value > 0f) return true;
+        if (actor.HasShieldProtection()) return true;
         foreach (StatusInstance status in actor.GetEffectiveStatusList())
             if (status.IsActive && status.MainData?.StatusType == "Shield") return true;
         return false;

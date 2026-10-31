@@ -1,14 +1,13 @@
 using System;
 
-/// <summary>执行次数可由正整数或返回非负整数的角色专属处理器决定。</summary>
+/// <summary>执行次数可由正整数或已登记的非负整数处理器决定；处理器支持Name与Name()两种无参写法。</summary>
 public static class ExecuteCountEvaluator
 {
     public static bool IsSupportedHandler(string value)
     {
         if (string.IsNullOrWhiteSpace(value)) return false;
         string text = value.Trim();
-        if (text.IndexOf('(') < 0 || !text.EndsWith(")", StringComparison.Ordinal)
-            || !ScriptHookParser.TryParse(text, out string functionName, out string argument))
+        if (!ScriptHookParser.TryParse(text, out string functionName, out string argument))
             return false;
         return BattleSpecialRules.HasCountHandler(functionName) && string.IsNullOrEmpty(argument);
     }

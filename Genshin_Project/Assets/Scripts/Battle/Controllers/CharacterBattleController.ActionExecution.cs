@@ -112,6 +112,8 @@ public partial class CharacterBattleController
         if (eff.TargetType == "Self")
             return eff.TargetConsecutiveSet && eff.TargetConsecutive <= 1;
         if (eff.TargetNumber > 0) return true;
+        // -1 保持全体目标语义；显式 0/1 仅要求全体高亮确认，不转成单个目标。
+        if (eff.TargetNumber == -1 && eff.TargetConsecutiveSet && eff.TargetConsecutive <= 1) return true;
         return eff.TargetConsecutive >= 2 && eff.TargetConsecutive <= 4;
     }
 
@@ -223,6 +225,7 @@ public partial class CharacterBattleController
     {
         using var snapshotIsolation = StatusFormulaSnapshot.Suspend();
         if (!EquipmentStatusLifetime.CanExecute(_currentEffectSourceStatus)) return;
+        if (isPlayerInitiated && Entity?.IsOnField != true) return;
         if (string.IsNullOrEmpty(skillID2)) return;
         if (!_skillById2.TryGetValue(skillID2, out var sk)) return;
         using var actionExecution = BattleEventHub.BeginActionExecution(ActiveActionQuery.IsActiveAction(Entity, sk));
@@ -275,7 +278,10 @@ public partial class CharacterBattleController
                 $"{sk.SkillName} used (targetPos={string.Join(",", forcedPositions)}, player={isPlayerInitiated})");
             if (ActiveActionQuery.IsActiveAction(Entity, sk))
             {
-                BattleEventHub.Publish(new ActionEventData(Entity, sk.SkillID2, sk.ActionType, true));
+                var completed = BattleEventHub.Publish(new ActionEventData(Entity, sk.SkillID2, sk.ActionType, true));
+                await BattleExecution.Flush();
+                BattleExecution.ThrowIfCancelled();
+                BattleSpecialRules.CompleteSkillSettlement(Entity, sk, completed);
                 await BattleExecution.Flush();
             }
         }

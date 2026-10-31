@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public sealed class UIHitShakeController : MonoBehaviour
 {
     public bool AutomaticClock = true;
-    private sealed class Impulse { public long Playback; public uint Seed; public float Age; public HitShakeStyle.Profile Profile; }
+    private sealed class Impulse
+    { public long Playback; public uint Seed; public float Age; public HitShakeStyle.Profile Profile; public float MarkerTime; public System.Action Marker; }
+    private readonly List<System.Action> dueMarkers = new List<System.Action>();
     private sealed class Channel
     {
         public RectTransform Root;
@@ -35,13 +37,25 @@ public sealed class UIHitShakeController : MonoBehaviour
         if (profile == null || screen.Root == null || !screenHits.Add((playback, session, execution, effect ?? "", hit, profile.ID))) return;
         Add(screen, playback, profile, seed);
     }
-    private static void Add(Channel channel, long playback, HitShakeStyle.Profile profile, uint seed)
+    /// <summary>One marker on the same clock as the shake. Cancelled impulses never fire their marker.</summary>
+    public bool PulseCardWithMarker(long playback, RectTransform root, HitShakeStyle.Profile profile, uint seed,
+        float markerTime, System.Action marker)
+    {
+        if (!isActiveAndEnabled || root == null || !root.gameObject.activeInHierarchy || profile == null ||
+            profile.Duration <= 0 || marker == null || float.IsNaN(markerTime) || float.IsInfinity(markerTime)) return false;
+        RegisterCard(root);
+        var impulse = Add(cards[root], playback, profile, seed);
+        impulse.MarkerTime = Mathf.Clamp(markerTime, 0, profile.Duration); impulse.Marker = marker;
+        return true;
+    }
+    private static Impulse Add(Channel channel, long playback, HitShakeStyle.Profile profile, uint seed)
     {
         // Bound work for unusually dense effects. The oldest visual impulse may be replaced, never a damage result.
         if (channel.Impulses.Count >= 64) channel.Impulses.RemoveAt(0);
-        channel.Impulses.Add(new Impulse { Playback = playback, Profile = profile, Seed = seed });
+        var impulse = new Impulse { Playback = playback, Profile = profile, Seed = seed };
+        channel.Impulses.Add(impulse); return impulse;
     }
-    private static void Tick(Channel channel, float delta)
+    private void Tick(Channel channel, float delta)
     {
         channel.Delta = Matrix4x4.identity;
         if (channel.Root == null) { channel.Impulses.Clear(); return; }
@@ -50,6 +64,8 @@ public sealed class UIHitShakeController : MonoBehaviour
         for (int i = channel.Impulses.Count - 1; i >= 0; i--)
         {
             var impulse = channel.Impulses[i]; impulse.Age += delta;
+            if (impulse.Marker != null && impulse.Age >= impulse.MarkerTime)
+            { dueMarkers.Add(impulse.Marker); impulse.Marker = null; }
             if (impulse.Age >= impulse.Profile.Duration) { channel.Impulses.RemoveAt(i); continue; }
             var sample = HitShakeMath.Sample(impulse.Profile, size, impulse.Seed, impulse.Age);
             pose.Offset += sample.Offset; pose.Rotation += sample.Rotation;
@@ -81,6 +97,13 @@ public sealed class UIHitShakeController : MonoBehaviour
             if (entry.Key == null || entry.Value == null) { graphics.Remove(entry.Key); owners.Remove(entry.Key); continue; }
             Matrix4x4 card = owners.TryGetValue(entry.Key, out var owner) ? owner.Delta : Matrix4x4.identity;
             entry.Value.SetWorldDelta(screen.Delta * card);
+        }
+        // Invoke outside channel iteration: a marker may release a card or start/cancel another animation.
+        if (dueMarkers.Count > 0)
+        {
+            var callbacks = dueMarkers.ToArray(); dueMarkers.Clear();
+            foreach (var callback in callbacks)
+                try { callback(); } catch (System.Exception error) { Debug.LogException(error, this); }
         }
     }
     public void Cancel(long playback)

@@ -243,7 +243,7 @@ namespace GenshinTurnBased.Tests.EditMode
         public void ShieldStatusDamageReduction_AppliesToBreakingHit_AndEndsBeforeNextHit(float taken, float hpDamage)
         {
             var shieldStatus = Shield("Pyro", 1f);
-            shieldStatus.MainData.MultiplierPart1 = "DMGTaken";
+            shieldStatus.MainData.MultiplierPart = "DMGTaken";
             string effectID = "STE_Shield_Reduction";
             env.DataManager.StatusEffectDict[effectID] = new StatusEffectData
             {

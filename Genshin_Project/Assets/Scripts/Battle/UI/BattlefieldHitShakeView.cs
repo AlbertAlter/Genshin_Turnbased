@@ -7,6 +7,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class BattlefieldHitShakeView : MonoBehaviour, IBattlePresentationView
 {
+    public BattleUiLayout layout;
     private HitShakeStyle style;
     private UIHitShakeController motion;
     private readonly Dictionary<(BattleSide, int), RectTransform> cards = new Dictionary<(BattleSide, int), RectTransform>();
@@ -24,23 +25,10 @@ public sealed class BattlefieldHitShakeView : MonoBehaviour, IBattlePresentation
     }
     private void BindCards()
     {
-        var canvas = GetComponentInParent<Canvas>()?.rootCanvas ?? GetComponentInChildren<Canvas>(true)?.rootCanvas ??
-            FindObjectsOfType<Canvas>(true).FirstOrDefault(item => item.isRootCanvas && item.gameObject.scene == gameObject.scene);
-        if (canvas == null) return;
-        motion.BindScreen(canvas.transform as RectTransform);
-        var transforms = canvas.GetComponentsInChildren<Transform>(true);
-        void Bind(string name, string prefix, BattleSide side)
-        {
-            var container = transforms.FirstOrDefault(item => item.name == name); if (container == null) return;
-            var groups = Enumerable.Range(0, container.childCount).Select(container.GetChild)
-                .Where(item => item.name.StartsWith(prefix, StringComparison.Ordinal)).OrderBy(item => Slot(item.name));
-            int slot = 1; foreach (var group in groups) RegisterCard(side, slot++, group as RectTransform);
-        }
-        Bind("character", "CharacterCard", BattleSide.Ally); Bind("Enemy", "EnemyCard", BattleSide.Enemy);
-    }
-    private static int Slot(string name)
-    {
-        string digits = new string(name.Where(char.IsDigit).ToArray()); return int.TryParse(digits, out int number) ? number : int.MaxValue;
+        if (layout == null) return;
+        if (layout.Canvas != null) motion.BindScreen(layout.Canvas.transform as RectTransform);
+        foreach (var card in layout.Cards)
+            if (card != null) RegisterCard(card.side, card.slot, card.root);
     }
     public void RegisterCard(BattleSide side, int slot, RectTransform root)
     { if (root != null) { cards[(side, slot)] = root; motion?.RegisterCard(root); } }

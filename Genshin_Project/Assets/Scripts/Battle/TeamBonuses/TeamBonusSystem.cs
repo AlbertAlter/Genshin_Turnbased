@@ -119,6 +119,7 @@ public sealed class TeamBonusSystem : IDisposable
     }
     public void Dispose()
     {
+        using var teardown = StatusRemovalActions.SuppressForTeardown();
         if (IsDisposed) return;
         IsDisposed = true;
         VerdantDew.Reset();

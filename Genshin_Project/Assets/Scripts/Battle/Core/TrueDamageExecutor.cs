@@ -7,7 +7,7 @@ public static class TrueDamageExecutor
 {
     public static async Task ExecuteAsync(IReadOnlyList<BattleEntity> targets, IReadOnlyList<HitData> hits,
         Func<int, float> getBase, DamageSourceInfo source, string effectID, string damageType,
-        string element = "True", string splash = null, DamageProperties properties = default)
+        string element = "True", string splash = null, DamageProperties properties = default, BattleEntity boundStatusHost = null)
     {
         if (targets == null || hits == null) return;
         element = DamageProperties.NormalizeElement(element);
@@ -26,7 +26,7 @@ public static class TrueDamageExecutor
                 if (formulaMemory != null) LogManager.Log(LogCategory.StatusDamage,
                     $"[公式快照] {formulaMemory.Identity} 效果={effectID} hit#{hitIndex + 1} {element}基准伤害={amount:R}");
                 using var responses = BattleResolutionContext.BeginCollection();
-                var entries = DamageHitTargets.Expand(new List<BattleEntity>(targets), splash, element);
+                var entries = DamageHitTargets.Expand(new List<BattleEntity>(targets), splash, element, boundStatusHost);
                 var actualTargets = entries.ConvertAll(entry => entry.Target);
                 long logicalHitID = BattleEventHub.NextIdentity();
                 using var snapshot = BattleSpecialRules.BeginHit(logicalHitID, source?.SourceEntity,

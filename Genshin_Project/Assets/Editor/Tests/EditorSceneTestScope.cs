@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
-    /// <summary>只关闭本测试拥有的场景，不保存、卸载或重载用户已打开的场景。</summary>
+    /// <summary>使用独立预览场景，只关闭本测试拥有的场景，不保存、卸载或重载其他场景。</summary>
     internal sealed class EditorSceneTestScope : IDisposable
     {
         private readonly Scene _previousActiveScene;
@@ -24,9 +24,11 @@ namespace GenshinTurnBased.Tests.EditMode
             _previousSelection = Selection.objects;
             try
             {
-                TestScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-                if (!SceneManager.SetActiveScene(TestScene))
-                    throw new InvalidOperationException("无法激活测试专用场景。");
+                // EditMode Test Runner 自己会创建未保存场景，不能再NewScene(Additive)。
+                // 预览场景独立存在；对象由测试显式移入，不切换运行器或用户的活动场景。
+                TestScene = EditorSceneManager.NewPreviewScene();
+                if (!TestScene.IsValid() || !TestScene.isLoaded)
+                    throw new InvalidOperationException("无法创建测试专用预览场景。");
             }
             catch
             {
@@ -75,7 +77,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     if (_previousActiveScene.IsValid() && _previousActiveScene.isLoaded)
                         SceneManager.SetActiveScene(_previousActiveScene);
                     if (TestScene.IsValid() && TestScene.isLoaded)
-                        EditorSceneManager.CloseScene(TestScene, true);
+                        EditorSceneManager.ClosePreviewScene(TestScene);
                 }
                 finally
                 {

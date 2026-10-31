@@ -44,7 +44,7 @@ public static class APCostResolver
     public static int ForSkill(BattleEntity actor, SkillMainData skill, int skillType)
     {
         if (skill == null) return 0;
-        return Calculate(skill.APCost, ReadModifiers(actor, ResolveSkillOperation(skillType)));
+        return Calculate(skill.APCost, ReadModifiers(actor, ResolveSkillOperation(skillType), skill.SkillID2));
     }
 
     // 卡齐娜的特殊战技在普攻槽时仍吃Normal减费；蓄力起手在重击槽时吃Heavy减费但不因此声明行为。
@@ -75,7 +75,7 @@ public static class APCostResolver
         return ReadModifiers(actor, operation).Flat;
     }
 
-    private static Modifiers ReadModifiers(BattleEntity actor, string operation)
+    private static Modifiers ReadModifiers(BattleEntity actor, string operation, string skillID = null)
     {
         var result = new Modifiers();
         var data = DataManager.Instance;
@@ -93,7 +93,8 @@ public static class APCostResolver
                     || effect.StatusEffectID / 100 != status.MainData.StatusID
                     || !MatchesOperation(effect.Param2, operation)) continue;
                 if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
-                    { Caster = status.Caster ?? actor, Status = status, StatusHost = StatusHostAccess.FindHost(status, actor), Target = actor })) continue;
+                    { Caster = status.Caster ?? actor, Status = status, StatusHost = StatusHostAccess.FindHost(status, actor), Target = actor,
+                        APCostSkillID = skillID })) continue;
                 if (IsFreeValue(effect.Param1))
                 {
                     result.Free = true;

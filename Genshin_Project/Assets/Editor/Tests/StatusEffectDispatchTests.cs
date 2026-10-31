@@ -202,8 +202,10 @@ namespace GenshinTurnBased.Tests.EditMode
                     Duration = 1, ScriptHook = "Hook(4300501)"
                 };
                 var method = typeof(EnemyBattleController).GetMethod("ExecuteEnemyEffectAsync",
-                    BindingFlags.NonPublic | BindingFlags.Instance);
-                BattleExecution.Run(() => (Task)method.Invoke(env.Enemy, new object[] { effect }))
+                    BindingFlags.NonPublic | BindingFlags.Instance, null,
+                    new[] { typeof(EnemySkillEffectData), typeof(StatusInstance) }, null);
+                Assert.That(method, Is.Not.Null);
+                BattleExecution.Run(() => (Task)method.Invoke(env.Enemy, new object[] { effect, null }))
                     .GetAwaiter().GetResult();
                 Assert.That(env.Enemy.Entity.HasStatus("ST_EnemyConditional"), Is.EqualTo(expected));
                 Assert.That(random.FloatCallCount, Is.EqualTo(1));

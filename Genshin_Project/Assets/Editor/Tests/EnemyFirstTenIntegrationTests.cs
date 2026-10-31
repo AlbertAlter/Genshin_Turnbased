@@ -26,6 +26,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(env.DataManager.StatusEffectDict["STE_RockGuard_ShieldReduction"].Param1, Is.EqualTo("-0.8"));
             Assert.That(env.DataManager.StatusEffectDict["STE_WoodGuard_ShieldReduction"].Param1, Is.EqualTo("-0.8"));
             Assert.That(env.DataManager.StatusEffectDict["STE_Fighter_ChargeFreeze"].Param2, Is.EqualTo("Freeze"));
+            Assert.That(env.DataManager.StatusEffectDict["STE_Fighter_ChargeFreeze"].Param1, Is.EqualTo("Extra"));
             Assert.That(env.DataManager.EnemyAIDict[2005].Exists(p => p.PatternID == 2), Is.True);
             Assert.That(env.DataManager.EnemyAIRuleDict[2005].FindAll(r => r.PatternID == 2).Count, Is.EqualTo(1));
             Assert.That(env.DataManager.EnemySkillEffectDict["SE_Fighter_RestorePattern"].Param1, Is.EqualTo("1"));

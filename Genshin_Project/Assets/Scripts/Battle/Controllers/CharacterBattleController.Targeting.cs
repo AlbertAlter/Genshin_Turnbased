@@ -30,7 +30,8 @@ public partial class CharacterBattleController
             null,
             forced,
             _lastSkillTargetResult,
-            deadOnly: effect.EffectType == "Revive");
+            selfUsesOrigin: _currentEffectSourceStatus != null,
+            deadOnly: effect.EffectType == "Revive", respectTaunt: effect.EffectType == "Damage");
 
         LogTargetResult(effect.SkillEffectID2, result);
         if (result.IsValid)
@@ -104,7 +105,7 @@ public partial class CharacterBattleController
                 null,
                 null,
                 _lastStatusTargetResult,
-                selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive");
+                selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive", respectTaunt: effect.EffectType == "Damage");
 
             LogTargetResult(effect.StatusEffectID2, hookResult);
             if (hookResult.IsValid) _lastStatusTargetResult = hookResult;
@@ -143,7 +144,7 @@ public partial class CharacterBattleController
             effect.TargetSelect,
             null,
             _lastStatusTargetResult,
-            selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive");
+            selfUsesOrigin: true, deadOnly: effect.EffectType == "Revive", respectTaunt: effect.EffectType == "Damage");
 
         LogTargetResult(effect.StatusEffectID2, result);
         if (result.IsValid) _lastStatusTargetResult = result;

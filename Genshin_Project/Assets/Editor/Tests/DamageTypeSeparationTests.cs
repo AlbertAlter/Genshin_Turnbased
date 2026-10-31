@@ -12,7 +12,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             string key = "ST_TypeSplit_" + id, effect = "STE_TypeSplit_" + id;
             var main = new StatusMainData { StatusID = id, StatusID2 = key, StatusType = "Buff",
-                MultiplierPart1 = part, ApplyDamageType = type, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
+                MultiplierPart = part, ApplyDamageType = type, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[key] = main;
             env.DataManager.StatusEffectDict[effect] = new StatusEffectData
             { StatusEffectID = id * 100 + 1, StatusEffectID2 = effect, EffectType = "Buff", Param1 = value };

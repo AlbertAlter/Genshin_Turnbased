@@ -15,7 +15,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             var data = new StatusMainData { StatusID = id, StatusID2 = DataManager.WeaponStatusKey(id),
                 StatusName = "WeaponCompletionTest", StatusType = count ? "Count" : "Buff",
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[data.StatusID2] = data;
             return data;
         }

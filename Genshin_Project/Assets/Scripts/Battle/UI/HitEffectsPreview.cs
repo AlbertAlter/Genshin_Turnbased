@@ -12,12 +12,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
 {
     public Font controlsFont;
     public TMP_FontAsset numberFont;
-    public string[] allyCardPaths = { "art_assets/Character_Bare/1009_03.png", "art_assets/Character_Bare/1010_03.png",
-        "art_assets/Character_Bare/1011_03.png", "art_assets/Character_Bare/1012_03.png" };
-    public string enemyCardPath = "art_assets/Enemy/2001_01.png";
-    public string framePath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameOutline.png";
-    public string innerShadowPath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameInnerShadow.png";
-    public string outerShadowPath = "art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameShadow.png";
+    public int[] characterIds = { 1009, 1010, 1011, 1012 };
+    public int enemyId = 2001;
     // Same anchors, reference resolution, card bounds and sibling ordering as BattleField1. No battle HUD is instantiated.
     public Vector2 allyGroupOffset = new Vector2(-482.5f, 33.5f);
     public Vector2 enemyGroupOffset = new Vector2(509.5f, 33);
@@ -27,17 +23,21 @@ public sealed class HitEffectsPreview : MonoBehaviour
     public int fixedSeed = 12345;
     public bool newSeedEachPlay = true, autoReplay;
     public bool startWithShields = true;
+    public bool animatedFaces = true;
+    private UICardFactory cardFactory;
+    private readonly UICardView[] cardViews = new UICardView[9];
     private ShieldPreviewPanel shieldPanel;
+    private BattleUiLayout sceneLayout;
+    private BattleUiHitEffects hitModule;
     private int previewTab;
 
     private static readonly string[] Elements = { "Physical", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro" };
     private static readonly string[] ElementLabels = { "物理", "火", "水", "雷", "冰", "风", "岩", "草" };
     private static readonly string[] WeaponLabels = { "单手剑", "双手剑", "弓", "长柄", "法器" };
-    private static readonly string[] TargetLabels = { "敌方全体", "敌1", "敌2", "敌3", "敌4", "敌5", "我方全体", "我1", "我2", "我3", "我4", "全部九人" };
-    private readonly Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>(StringComparer.Ordinal);
+    private static readonly string[] TargetLabels = { "敌方全体", "敌1", "敌2", "敌3", "敌4", "敌5", "我方全体", "我1", "我2", "我3", "我4", "全部九人", "敌2～4" };
     private readonly RectTransform[] cards = new RectTransform[9], front = new RectTransform[9], behind = new RectTransform[9];
     private readonly List<Cue> cues = new List<Cue>();
-    private readonly List<Impact> impacts = new List<Impact>();
+    private readonly List<VisualCue> visualCues = new List<VisualCue>();
     private readonly List<Flight> flights = new List<Flight>();
     private readonly List<Popup> popups = new List<Popup>();
     private UIHitEffectStyle effects;
@@ -48,6 +48,9 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private ElementColorPalette palette;
     private BattlefieldDamagePopupStyle popupStyle;
     private BattlePresentationConfiguration timing;
+    private BattleSkillPresentationTemplates templates;
+    private bool useGenericTemplate = true;
+    private float playingFlightDuration;
     private HitShakeStyle shakeStyle;
     private UIHitShakeController shake;
     private HitShakeStyle.Selection playingShake;
@@ -55,34 +58,33 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private UIHitEffectStyle.Particles playingParticles;
     private BattlefieldDamagePopupStyle playingPopup;
     private Color playingColor;
-    private RectTransform popupLayer, flightLayer;
+    private RectTransform popupLayer, flightLayer, groupBehind, groupFront;
     private bool ready, running, paused, playingNumbers, showNumbers = true, fullTimeRandom = true;
     private int weapon, attack, element, target, nextCue, nextFlight, playIndex, playingSeed, source, playingSource;
+    private int playbackMode, nextVisual;
+    private bool playingGrouped;
     private float elapsed, endTime;
     private string hitsText = "3", critText = "50", amountText = "1234", error, inputError;
     private int playingHits;
     private bool cardShake = true, screenShake;
     private struct Cue { public float Time, DirectionDegrees; public int Hit, Target; public bool Critical; public uint Seed; public float Amount; }
-    private sealed class Impact { public UIHitTextureEffect Graphic; public float Start; }
+    private sealed class VisualCue { public Cue Cue; public bool Grouped; public Vector2 Center, Span; }
     private sealed class Flight { public UIHitProjectileEffect Graphic; public float Start; }
     private sealed class Popup { public TextMeshProUGUI Text; public Vector2 Origin; public float Start; public Color Color; }
 
     private IEnumerator Start()
     {
         if (!ReadSettings()) yield break;
-        if (allyCardPaths == null || allyCardPaths.Length != 4 || allyPositions.Length != 4 || enemyPositions.Length != 5)
+        if (characterIds == null || characterIds.Length != 4 || allyPositions.Length != 4 || enemyPositions.Length != 5 ||
+            Array.Exists(characterIds, id => id <= 0) || enemyId <= 0)
         { Fail("预览必须配置四名我方、五名敌方。"); yield break; }
-        var paths = new List<string>(allyCardPaths) { enemyCardPath, framePath, innerShadowPath, outerShadowPath };
-        foreach (string path in paths)
-        {
-            if (sprites.ContainsKey(path)) continue;
-            yield return StreamingAssetSpriteLoader.Load(path, sprite => sprites.Add(path, sprite), Fail);
-            if (error != null) yield break;
-        }
         textureLibrary = new HitTextureLibrary();
         yield return textureLibrary.Load(textures, Fail);
         if (error != null) yield break;
-        Build(); ready = true; previewTab = startWithShields ? 1 : 0;
+        cardFactory = gameObject.AddComponent<UICardFactory>();
+        yield return Build();
+        if (error != null) yield break;
+        ready = true; previewTab = startWithShields ? 1 : 0;
         if (!startWithShields) Replay();
     }
     private bool ReadSettings()
@@ -94,13 +96,14 @@ public sealed class HitEffectsPreview : MonoBehaviour
             var newShake = HitShakeStyle.Load();
             var newTextures = HitEffectTextureStyle.Load();
             var newPopup = BattlefieldDamagePopupStyle.Load();
+            var newTemplates = BattleSkillPresentationTemplates.Load();
             var newTiming = BattlePresentationConfiguration.Parse(BattlefieldDamagePopupStyle.ReadParameters(
                 Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattlefieldDamagePopupStyle.FileName)));
-            effects = newEffects; textures = newTextures; palette = newPalette; popupStyle = newPopup; timing = newTiming; shakeStyle = newShake; error = null; return true;
+            effects = newEffects; textures = newTextures; palette = newPalette; popupStyle = newPopup; timing = newTiming; templates = newTemplates; shakeStyle = newShake; error = null; return true;
         }
         catch (Exception exception) { Fail(exception.Message); return false; }
     }
-    private void Build()
+    private IEnumerator Build()
     {
         var cameraObject = new GameObject("HitPreviewCamera", typeof(Camera)); cameraObject.transform.SetParent(transform, false);
         var camera = cameraObject.GetComponent<Camera>(); camera.clearFlags = CameraClearFlags.SolidColor;
@@ -109,42 +112,51 @@ public sealed class HitEffectsPreview : MonoBehaviour
         canvasObject.transform.SetParent(transform, false); canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         var scaler = canvasObject.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
+        groupBehind = Rect("GroupImpactsBehind", canvasObject.transform, new Vector2(1920, 1080));
         var allies = Rect("character", canvasObject.transform, new Vector2(737, 541));
         allies.anchorMin = allies.anchorMax = new Vector2(1, .5f); allies.anchoredPosition = allyGroupOffset;
         var enemies = Rect("Enemy", canvasObject.transform, new Vector2(855, 542));
         enemies.anchorMin = enemies.anchorMax = new Vector2(0, .5f); enemies.anchoredPosition = enemyGroupOffset;
-        foreach (int index in new[] { 1, 3, 2, 0 }) BuildCard(index, allies, allyPositions[index], allyCardPaths[index]);
-        foreach (int index in new[] { 1, 3, 4, 2, 0 }) BuildCard(index + 4, enemies, enemyPositions[index], enemyCardPath);
+        foreach (int index in new[] { 1, 3, 2, 0 }) BuildCard(index, allies, allyPositions[index], characterIds[index]);
+        foreach (int index in new[] { 1, 3, 4, 2, 0 }) BuildCard(index + 4, enemies, enemyPositions[index], enemyId);
+        for (int i = 0; i < cardViews.Length; i++)
+        {
+            var view = cardViews[i];
+            while (!view.Ready && view.Error == null) yield return null;
+            if (view.Error != null) { Fail(view.Error); yield break; }
+            behind[i] = view.Appearance.BackEffects; front[i] = view.Appearance.FrontEffects;
+        }
+        groupFront = Rect("GroupImpactsFront", canvasObject.transform, new Vector2(1920, 1080));
         flightLayer = Rect("ProjectileLayer", canvasObject.transform, new Vector2(1920, 1080));
         popupLayer = Rect("IndependentDamagePopups", canvasObject.transform, new Vector2(1920, 1080));
+        sceneLayout = gameObject.AddComponent<BattleUiLayout>();
+        sceneLayout.canvas = canvasObject.GetComponent<Canvas>();
+        sceneLayout.groupHitsBehind = groupBehind; sceneLayout.groupHitsFront = groupFront; sceneLayout.projectiles = flightLayer;
+        sceneLayout.cards = new BattleUiCardBinding[cards.Length];
+        for (int i = 0; i < cards.Length; i++)
+            sceneLayout.cards[i] = new BattleUiCardBinding { side = i < 4 ? BattleSide.Ally : BattleSide.Enemy,
+                slot = i < 4 ? i + 1 : i - 3, root = cards[i], art = cards[i],
+                hitsBehind = behind[i], hitsFront = front[i] };
+        hitModule = gameObject.AddComponent<BattleUiHitEffects>();
+        hitModule.layout = sceneLayout; hitModule.loadOnStart = false; hitModule.automaticClock = false;
         shake = gameObject.AddComponent<UIHitShakeController>(); shake.AutomaticClock = false;
         shake.BindScreen(canvasObject.transform as RectTransform);
         foreach (var card in cards) shake.RegisterCard(card);
+        var shields = gameObject.AddComponent<BattleUiShields>();
+        shields.layout = sceneLayout; shields.loadOnStart = false; shields.automaticClock = false;
         shieldPanel = gameObject.AddComponent<ShieldPreviewPanel>();
-        shieldPanel.Bind(cards, numberFont);
+        shieldPanel.Bind(shields, numberFont);
     }
-    private void BuildCard(int index, RectTransform parent, Vector2 position, string artPath)
+    private void BuildCard(int index, RectTransform parent, Vector2 position, int id)
     {
         var card = Rect((index < 4 ? "CharacterCard" + (index + 1) : "EnemyCard" + (index - 3)), parent, cardSize);
         card.anchoredPosition = position; cards[index] = card;
-        var outer = sprites[outerShadowPath]; var inner = sprites[innerShadowPath];
-        ImageLayer("OuterShadow", card, outer, Vector2.Scale(cardSize, new Vector2(outer.rect.width / inner.rect.width, outer.rect.height / inner.rect.height)));
-        behind[index] = Rect("ImpactsBehind", card, cardSize);
-        ImageLayer("CardArt", card, sprites[artPath], cardSize);
-        ImageLayer("InnerShadow", card, inner, cardSize);
-        ImageLayer("Frame", card, sprites[framePath], cardSize);
-        front[index] = Rect("ImpactsFront", card, cardSize);
+        cardViews[index] = cardFactory.Request(card, index < 4 ? BattleSide.Ally : BattleSide.Enemy, id, animatedFaces);
     }
     private static RectTransform Rect(string name, Transform parent, Vector2 size)
     {
         var rect = new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>(); rect.SetParent(parent, false);
         rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.one * .5f; rect.sizeDelta = size; return rect;
-    }
-    private static void ImageLayer(string name, Transform parent, Sprite sprite, Vector2 size)
-    {
-        var rect = Rect(name, parent, size); rect.gameObject.AddComponent<CanvasRenderer>();
-        var image = rect.gameObject.AddComponent<Image>(); image.sprite = sprite; image.raycastTarget = false;
-        image.color = Color.white; // PSD static shadow opacity is already baked, do not multiply it again.
     }
     private bool TryInputs(out int hits, out float rate, out float amount)
     {
@@ -163,6 +175,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         else if (target >= 1 && target <= 5) yield return target + 3;
         else if (target == 6) { for (int i = 0; i < 4; i++) yield return i; }
         else if (target >= 7 && target <= 10) yield return target - 7;
+        else if (target == 12) { for (int i = 5; i <= 7; i++) yield return i; }
         else { for (int i = 0; i < 9; i++) yield return i; }
     }
     private void Replay()
@@ -171,12 +184,15 @@ public sealed class HitEffectsPreview : MonoBehaviour
         Stop();
         playingHits = count; playingNumbers = showNumbers; playingProfile = effects.Get((HitEffectWeapon)weapon, attack == 1);
         playingTextures = textures.Get((HitEffectWeapon)weapon, attack == 1); playingSource = source;
+        playingGrouped = playbackMode == 2 || (playbackMode == 0 && playingTextures.Mode == HitEffectTextureStyle.PlaybackMode.PerHitGroup);
         playingShake = shakeStyle.Resolve(attack == 1 ? "Heavy" : "Normal", "", -1);
         if (!cardShake) playingShake.Card = null;
         playingShake.Screen = screenShake ? shakeStyle.Get("ScreenDefault") : null;
         playingColor = palette.GetColor(Elements[element]); playingParticles = effects.GetParticles(Elements[element]); playingPopup = popupStyle;
         playingSeed = newSeedEachPlay ? unchecked((int)HitEffectMath.Mix((uint)fixedSeed ^ (uint)++playIndex)) : fixedSeed;
         float jitter = fullTimeRandom ? (float)timing.FullJitter : 0;
+        var template = useGenericTemplate ? templates.Get(weapon, attack == 1 ? "Heavy" : "Normal") : null;
+        playingFlightDuration = template != null ? (float)template.ProjectileSeconds : playingTextures.Number("FlightSeconds");
         var targetTimes = new float[9];
         var selectedTargets = new List<int>(Targets());
         for (int hit = 0; hit < count; hit++)
@@ -184,14 +200,40 @@ public sealed class HitEffectsPreview : MonoBehaviour
             {
                 uint seed = HitEffectMath.CueSeed(playingSeed, hit, index);
                 bool critical = HitEffectMath.Critical(seed, rate);
-                float time = playingTextures.Number("FlightSeconds") + HitEffectMath.CueTime(seed, hit, (float)timing.HitInterval, jitter, targetTimes[index]);
-                targetTimes[index] = time - playingTextures.Number("FlightSeconds"); // Keep original hit rhythm; flight adds one shared lead-in.
+                float time = template != null ? (float)template.HitTime(hit)
+                    : playingFlightDuration + HitEffectMath.CueTime(seed, hit, (float)timing.HitInterval, jitter, targetTimes[index]);
+                targetTimes[index] = time - playingFlightDuration;
                 cues.Add(new Cue { Hit = hit, Target = index, Seed = seed, Critical = critical,
                     Amount = amount * (critical ? 2 : 1),
                     Time = time });
             }
         cues.Sort((a, b) => { int time = a.Time.CompareTo(b.Time); if (time != 0) return time;
             int hit = a.Hit.CompareTo(b.Hit); return hit != 0 ? hit : a.Target.CompareTo(b.Target); });
+        // Replay is one action. Deduplicate only by hit within this action, never across subsequent replays.
+        // Visuals use the earliest target cue; independent per-target timing and damage numbers stay intact.
+        var seenHits = new HashSet<int>();
+        Vector2 min = Vector2.positiveInfinity, max = Vector2.negativeInfinity;
+        var corners = new Vector3[4];
+        foreach (int index in selectedTargets)
+        {
+            cards[index].GetWorldCorners(corners);
+            foreach (Vector3 corner in corners)
+            {
+                Vector2 point = groupFront.InverseTransformPoint(corner);
+                min = Vector2.Min(min, point); max = Vector2.Max(max, point);
+            }
+        }
+        foreach (var cue in cues)
+        {
+            if (playingGrouped && !seenHits.Add(cue.Hit)) continue;
+            var visual = new VisualCue { Cue = cue, Grouped = playingGrouped && selectedTargets.Count > 1,
+                Center = (min + max) * .5f, Span = max - min };
+            if (visual.Grouped)
+            {
+                var sample = visual.Cue; sample.Seed = HitEffectMath.CueSeed(playingSeed, cue.Hit, -1); visual.Cue = sample;
+            }
+            visualCues.Add(visual);
+        }
         float tail = Mathf.Max(playingTextures.Duration(playingProfile), playingNumbers ? playingPopup.Lifetime : 0);
         tail = Mathf.Max(tail, Mathf.Max(playingShake.Card?.Duration ?? 0, playingShake.Screen?.Duration ?? 0));
         endTime = cues[cues.Count - 1].Time + tail;
@@ -199,12 +241,12 @@ public sealed class HitEffectsPreview : MonoBehaviour
     }
     private void Stop()
     {
-        running = paused = false; elapsed = 0; nextCue = nextFlight = 0; cues.Clear();
+        running = paused = false; elapsed = 0; nextCue = nextFlight = nextVisual = 0; cues.Clear(); visualCues.Clear();
         if (shake != null) shake.Cancel(-1);
-        foreach (var impact in impacts) if (impact.Graphic != null) Destroy(impact.Graphic.gameObject);
+        hitModule?.Clear();
         foreach (var flight in flights) if (flight.Graphic != null) Destroy(flight.Graphic.gameObject);
         foreach (var popup in popups) if (popup.Text != null) Destroy(popup.Text.gameObject);
-        impacts.Clear(); flights.Clear(); popups.Clear();
+        flights.Clear(); popups.Clear();
     }
     private void Spawn(Cue cue)
     {
@@ -212,13 +254,6 @@ public sealed class HitEffectsPreview : MonoBehaviour
         shake.PulseCard(playIndex, cards[cue.Target], playingShake.Card, cue.Seed);
         shake.PulseScreen(playIndex, 0, playIndex, "Preview", cue.Hit, playingShake.Screen,
             HitEffectMath.CueSeed(playingSeed, cue.Hit, 0));
-        if (playingProfile.Enabled)
-        {
-            var parent = playingProfile.Text("DrawLayer") == "Behind" ? behind[cue.Target] : front[cue.Target];
-            var graphic = UIHitTextureEffect.Create(parent, textureLibrary, playingProfile, playingParticles, playingTextures,
-                playingColor, cardSize, cue.Seed, cue.Hit, playingHits, cue.DirectionDegrees);
-            impacts.Add(new Impact { Graphic = graphic, Start = cue.Time });
-        }
         if (!playingNumbers || !playingPopup.Enabled || (cue.Amount == 0 && !playingPopup.ShowZero)) return;
         if (popups.Count >= playingPopup.MaxVisible) { Destroy(popups[0].Text.gameObject); popups.RemoveAt(0); }
         Vector2 point = BattlefieldDamagePopupLayout.Sample(playingPopup, playingSeed, 1, cue.Hit, cue.Target);
@@ -230,9 +265,20 @@ public sealed class HitEffectsPreview : MonoBehaviour
         text.font = numberFont != null ? numberFont : TMP_Settings.defaultFontAsset;
         text.text = BattlefieldDamagePopupLayout.Format(cue.Amount, playingPopup.Decimals);
         text.fontSize = cardSize.y * playingPopup.FontHeightRatio * playingPopup.FontSizeMultiplier(cue.Critical);
+        DamagePopupOutline.Apply(text, playingPopup);
         text.alignment = TextAlignmentOptions.Center; text.enableWordWrapping = false; text.overflowMode = TextOverflowModes.Overflow;
         Color color = playingColor; color.a = playingPopup.Color.a; text.color = color;
         popups.Add(new Popup { Text = text, Origin = origin, Start = cue.Time, Color = color });
+    }
+    private void SpawnVisual(VisualCue visual)
+    {
+        if (!playingProfile.Enabled) return;
+        Cue cue = visual.Cue;
+        bool drawBehind = playingProfile.Text("DrawLayer") == "Behind";
+        var parent = visual.Grouped ? (drawBehind ? groupBehind : groupFront) : (drawBehind ? behind[cue.Target] : front[cue.Target]);
+        hitModule.PlayResolved(parent, textureLibrary, playingProfile, playingParticles, playingTextures,
+            playingColor, cardSize, cue.Seed, cue.Hit, playingHits, cue.DirectionDegrees, cue.Time,
+            visual.Grouped ? (Vector2?)visual.Center : null, visual.Grouped ? (Vector2?)visual.Span : null);
     }
     private void Update()
     {
@@ -241,19 +287,22 @@ public sealed class HitEffectsPreview : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && running) paused = !paused;
         if (!running || paused) return;
         elapsed += Time.unscaledDeltaTime;
-        float flightDuration = playingTextures.Number("FlightSeconds");
-        while (nextFlight < cues.Count && cues[nextFlight].Time - flightDuration <= elapsed)
+        float flightDuration = playingFlightDuration;
+        while (nextFlight < visualCues.Count && visualCues[nextFlight].Cue.Time - flightDuration <= elapsed)
         {
-            int cueIndex = nextFlight++; var cue = cues[cueIndex];
+            var visual = visualCues[nextFlight++]; var cue = visual.Cue;
             if (!playingProfile.Enabled || flightDuration <= 0 || elapsed >= cue.Time) continue;
-            var graphic = UIHitProjectileEffect.Create(flightLayer, cards[playingSource], cards[cue.Target],
-                HitEffectMath.Center(playingProfile, cue.Seed), playingTextures, textureLibrary, playingColor);
+            var graphic = visual.Grouped
+                ? UIHitProjectileEffect.Create(flightLayer, cards[playingSource], visual.Center, playingTextures, textureLibrary, playingColor, flightDuration)
+                : UIHitProjectileEffect.Create(flightLayer, cards[playingSource], cards[cue.Target],
+                    HitEffectMath.Center(playingProfile, cue.Seed), playingTextures, textureLibrary, playingColor, flightDuration);
             if (graphic != null)
             {
-                cue.DirectionDegrees = graphic.HeadingDegrees; cues[cueIndex] = cue;
+                cue.DirectionDegrees = graphic.HeadingDegrees; visual.Cue = cue;
                 flights.Add(new Flight { Graphic = graphic, Start = cue.Time - flightDuration });
             }
         }
+        while (nextVisual < visualCues.Count && visualCues[nextVisual].Cue.Time <= elapsed) SpawnVisual(visualCues[nextVisual++]);
         while (nextCue < cues.Count && cues[nextCue].Time <= elapsed) Spawn(cues[nextCue++]);
         shake.Advance(Time.unscaledDeltaTime);
         for (int i = flights.Count - 1; i >= 0; i--)
@@ -261,16 +310,12 @@ public sealed class HitEffectsPreview : MonoBehaviour
             var flight = flights[i]; flight.Graphic.SetElapsed(elapsed - flight.Start);
             if (flight.Graphic.Completed) { Destroy(flight.Graphic.gameObject); flights.RemoveAt(i); }
         }
-        for (int i = impacts.Count - 1; i >= 0; i--)
-        {
-            var impact = impacts[i]; impact.Graphic.SetElapsed(elapsed - impact.Start);
-            if (impact.Graphic.Completed) { Destroy(impact.Graphic.gameObject); impacts.RemoveAt(i); }
-        }
+        hitModule.SetTime(elapsed);
         for (int i = popups.Count - 1; i >= 0; i--)
         {
             var popup = popups[i]; float age = elapsed - popup.Start;
             if (age >= playingPopup.Lifetime) { Destroy(popup.Text.gameObject); popups.RemoveAt(i); continue; }
-            popup.Text.rectTransform.anchoredPosition = popup.Origin + Vector2.up * (cardSize.y * playingPopup.RiseHeightRatio * age / playingPopup.Lifetime);
+            popup.Text.rectTransform.anchoredPosition = popup.Origin + Vector2.up * (cardSize.y * playingPopup.RiseHeightRatio * playingPopup.RiseProgress(age));
             Color color = popup.Color; color.a *= playingPopup.Alpha(age); popup.Text.color = color;
         }
         if (elapsed >= endTime + .4f) { running = false; if (autoReplay) Replay(); }
@@ -285,7 +330,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         var button = new GUIStyle(skin.button) { fontSize = 21 };
         var toggle = new GUIStyle(skin.toggle) { fontSize = 21 };
         var field = new GUIStyle(skin.textField) { fontSize = 21 };
-        GUILayout.BeginArea(new UnityEngine.Rect(24, 12, 1872, 252), GUI.skin.box);
+        GUILayout.BeginArea(new UnityEngine.Rect(24, 12, 1872, previewTab == 0 ? 290 : 252), GUI.skin.box);
         previewTab = GUILayout.Toolbar(previewTab, new[] { "命中特效预览", "护盾与扫光预览" }, button);
         if (previewTab == 1)
         {
@@ -307,11 +352,13 @@ public sealed class HitEffectsPreview : MonoBehaviour
         GUILayout.Label("暴击率%", label); critText = GUILayout.TextField(critText, 8, field, GUILayout.Width(95));
         GUILayout.Label("示例伤害", label); amountText = GUILayout.TextField(amountText, 12, field, GUILayout.Width(110));
         showNumbers = GUILayout.Toggle(showNumbers, "跳字（完整空间范围）", toggle);
-        fullTimeRandom = GUILayout.Toggle(fullTimeRandom, "完整时间偏移", toggle);
+        useGenericTemplate = GUILayout.Toggle(useGenericTemplate, "通用命中模板", toggle);
+        if (!useGenericTemplate) fullTimeRandom = GUILayout.Toggle(fullTimeRandom, "旧节奏：完整时间偏移", toggle);
         cardShake = GUILayout.Toggle(cardShake, "卡牌微抖", toggle); screenShake = GUILayout.Toggle(screenShake, "全屏抖动", toggle);
         autoReplay = GUILayout.Toggle(autoReplay, "循环", toggle); newSeedEachPlay = GUILayout.Toggle(newSeedEachPlay, "新随机样式", toggle);
         GUILayout.EndHorizontal();
-        target = GUILayout.SelectionGrid(target, TargetLabels, 12, button);
+        target = GUILayout.SelectionGrid(target, TargetLabels, TargetLabels.Length, button);
+        playbackMode = GUILayout.Toolbar(playbackMode, new[] { "按配表模式", "每个目标分别播放", "每个总 hit 共用一次（含法器）" }, button);
         GUILayout.BeginHorizontal(); GUI.enabled = ready;
         if (GUILayout.Button("播放 / 重播 [R]", button)) Replay();
         if (GUILayout.Button(paused ? "继续 [空格]" : "暂停 [空格]", button) && running) paused = !paused;
@@ -323,7 +370,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         if (error != null || inputError != null)
             GUI.Label(new UnityEngine.Rect(24, 960, 1850, 100), error ?? inputError, label);
         else GUI.Label(new UnityEngine.Rect(24, 998, 1850, 60),
-            "选择物理查看未附魔普攻；选择元素查看对应附魔/元素伤害。配置变更在下次播放生效，命中与数字同刻触发、位置独立。", label);
+            $"当前播放：{(playingGrouped ? "总hit共用" : "逐目标")}，{visualCues.Count}组特效 / {cues.Count}次目标跳字。群体取该hit最早受击时点；配置变更下次播放生效。", label);
         skin.font = savedFont; GUI.matrix = oldMatrix;
     }
     private void Fail(string message) { error = message; Debug.LogError("HitEffectsPreview: " + message, this); }
@@ -340,8 +387,5 @@ public sealed class HitEffectsPreview : MonoBehaviour
         Stop();
         textureLibrary?.Dispose();
         pendingTextureLibrary?.Dispose();
-        foreach (var sprite in sprites.Values)
-        { if (sprite == null) continue; UICardDissolveSnapshot.Dispose(sprite.texture); UICardDissolveSnapshot.Dispose(sprite); }
-        sprites.Clear();
     }
 }

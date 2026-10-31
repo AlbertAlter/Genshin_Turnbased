@@ -10,7 +10,7 @@ public partial class CharacterBattleController
 {
     /// <summary>每段在开始执行时计算数值；段内所有目标统一提交，后续段可读取前段响应带来的变化。</summary>
     async Task ExecuteHealingSegmentsAsync(List<BattleEntity> targets, string effectID, string param,
-        int skillType, string element, BattleEntity source, StatusInstance sourceStatus)
+        int skillType, string element, BattleEntity source, StatusInstance sourceStatus, float? finalCap = null)
     {
         using var effectScope = BattleResolutionContext.BeginEffect();
         List<string> segments = GetHealingSegments(effectID, param, skillType);
@@ -40,7 +40,9 @@ public partial class CharacterBattleController
                         float incoming = target.BeHealedBonus + target.GetStatusHealingBonus(
                             "BeHealedBonus", effectID, skillID, skillType, element, target);
                         // 术语1.20：加成在同一个加法区，每段、每个目标只求值一次。
-                        batch.Add(target, targetAmount * Mathf.Max(0f, 1f + outgoing + incoming), source, effectID, index + 1);
+                        float finalAmount = targetAmount * Mathf.Max(0f, 1f + outgoing + incoming);
+                        if (finalCap.HasValue) finalAmount = Mathf.Min(finalAmount, finalCap.Value);
+                        batch.Add(target, finalAmount, source, effectID, index + 1);
                     }
                     batch.Flush();
                     foreach (HealResolvedEvent heal in batch.Results)
@@ -106,12 +108,20 @@ public partial class CharacterBattleController
             CultureInfo.InvariantCulture, out scalar) && !float.IsNaN(scalar) && !float.IsInfinity(scalar);
     }
 
-    private float ResolveShieldAmount(string formula, string effectID, int skillType, string element)
+    private float ResolveShieldAmount(string formula, string effectID, int skillType, string element, BattleEntity recipient)
     {
+        using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(recipient);
         var segments = GetHealingSegments(effectID, formula, skillType);
-        if (segments.Count == 0) return ResolveBaseValue(formula, effectID, skillType, element);
-        if (segments.Count != 1) throw new FormatException("护盾量只接受一段完整公式：" + effectID);
-        return ResolveHealingAmount(segments[0], effectID, skillType, element);
+        if (segments.Count > 1) throw new FormatException("护盾量只接受一段完整公式：" + effectID);
+        float basis = segments.Count == 0 ? ResolveBaseValue(formula, effectID, skillType, element)
+            : ResolveHealingAmount(segments[0], effectID, skillType, element, recipient);
+        basis = BattleSpecialRules.ResolveShieldBase(effectID, Entity, basis);
+        string skillID = GetExecutingSkillID2(skillType);
+        float bonus = SourceBonus("ShieldBonus", effectID, element, recipient,
+            () => Entity.GetStatusShieldBonus("ShieldBonus", effectID, skillID, element, recipient));
+        float flat = SourceBonus("ShieldBonusFlat", effectID, element, recipient,
+            () => Entity.GetStatusShieldBonus("ShieldBonusFlat", effectID, skillID, element, recipient));
+        return BattleEntity.CalculateShieldAmount(basis, bonus, flat);
     }
 
     // 治疗与护盾共用既有加法/乘法属性公式，例如 0.15*TotalHP+154，不引入脚本解释器。

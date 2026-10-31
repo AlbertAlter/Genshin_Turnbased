@@ -10,6 +10,7 @@ public struct DamageProperties
     public bool IsNightSoul;
     public bool IsPneuma;
     public bool IsOusia;
+    public bool IsResonance;
     public ReactionType Reaction;
     public bool UsesSpecialFormula => IsLunar || IsStellar;
 
@@ -43,12 +44,15 @@ public struct DamageProperties
                     case "nightsoul": case "夜魂": result.IsNightSoul = true; break;
                     case "pneuma": case "芒": result.IsPneuma = true; break;
                     case "ousia": case "荒": result.IsOusia = true; break;
-                    default: throw new FormatException("Damage.Param3 只允许 Lunar/月曜、Stellar/星烁、NightSoul/夜魂、Pneuma/芒、Ousia/荒，多个用分号分隔：" + param3);
+                    case "resonance": case "共鸣": result.IsResonance = true; break;
+                    default: throw new FormatException("Damage.Param3 只允许 Lunar/月曜、Stellar/星烁、NightSoul/夜魂、Pneuma/芒、Ousia/荒、Resonance/共鸣，多个用分号分隔：" + param3);
                 }
             }
         if (result.IsLunar && result.IsStellar)
             throw new FormatException("同一次 Damage 不可同时填写 Lunar 和 Stellar。");
         string token = element?.Trim().ToLowerInvariant();
+        if (result.IsResonance && token != "geo")
+            throw new FormatException("Resonance/共鸣只允许Geo岩伤；不改变DamageType或伤害公式。");
         if (token == "true" && (result.IsPneuma || result.IsOusia))
             throw new FormatException("True 沿用Param3留空规则，不使用芒/荒性质标签。");
         if (result.IsLunar)

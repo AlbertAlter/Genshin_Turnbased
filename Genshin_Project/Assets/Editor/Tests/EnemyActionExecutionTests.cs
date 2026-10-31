@@ -10,6 +10,33 @@ namespace GenshinTurnBased.Tests.EditMode
     public sealed class EnemyActionExecutionTests
     {
         [UnityTest]
+        public IEnumerator ZeroTotalAllyHitWeight_SkipsDamageWithoutChangingSkillWeightOrRetrying()
+            => HookTestEnv.AwaitTask(ZeroTotalAllyHitWeightAsync);
+
+        private async Task ZeroTotalAllyHitWeightAsync()
+        {
+            using var env = new BattleFlowTestEnv();
+            env.ConfigureEnemyDamageSkill();
+            env.DataManager.EnemySkillEffectDict["SE_Enemy_BattleFlow"].TargetConsecutive = 1;
+            env.CreateMinimalBattle();
+            env.Ally.Entity.HitWeight = 0f;
+            env.CreateAlly(2).Entity.HitWeight = 0f;
+            var rule = env.DataManager.EnemyAIRuleDict[BattleFlowTestEnv.EnemyID][0];
+            int originalWeight = rule.Weight;
+            Assert.That(originalWeight, Is.GreaterThan(0));
+            int hits = 0;
+            using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved,
+                (_, hit) => hits++, 0);
+            var random = new SequenceBattleRandomSource();
+            BattleRandom.SetSource(random);
+            await BattleExecution.Run(env.Enemy.TakeEnemyActionAsync);
+            Assert.That(hits, Is.Zero);
+            Assert.That(rule.Weight, Is.EqualTo(originalWeight));
+            Assert.That(random.IntCallCount, Is.EqualTo(1), "仅选择一次技能，不重抽技能或目标");
+            Assert.That(random.FloatCallCount, Is.Zero);
+        }
+
+        [UnityTest]
         public IEnumerator HilichurlTwoBasicSkills_EachHaveOneBoundaryAndOneIndependentIdentity()
             => HookTestEnv.AwaitTask(HilichurlAsync);
         private async Task HilichurlAsync()

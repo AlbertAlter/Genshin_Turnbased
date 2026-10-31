@@ -277,9 +277,7 @@ public class StatusMainData
     public string StatusType;            // Buff / Debuff / Shield 等
     public int Display;                  // 局内是否显示（0不显示，1显示）；不控制层数或数值的展示方式
     public string Description;           // 状态描述模板；{n}由StatusDescriptionResolver在显示时只读解析
-    public string MultiplierPart1;       // Buff/Debuff加成公式（属性分类之一）
-    public string MultiplierPart2;
-    public string MultiplierPart3;
+    public string MultiplierPart;        // Buff/Debuff的单个加成分类；包含ShieldBonus/ShieldBonusFlat。
     public string ApplyDamageType;       // 限定生效的伤害类型（空=全部）
     public string ApplyReactionType;     // 限定生效的反应类型（空=全部）
     public string ApplyElementType;      // 限定生效的元素类型（空=全部）
@@ -290,15 +288,36 @@ public class StatusMainData
     public string WhenMax;               // 超出时行为
 
     /// <summary>
-    /// 获取该状态填写的 MultiplierPart 类别（Part1/Part2/Part3 三列只填其一，
-    /// 术语表原文：“因为放不下所以多分了几列，只能填其中一个”）。
-    /// 返回三列中第一个非空值；全空返回空字符串。
+    /// 获取状态唯一的加成分类；空值不提供属性加成。
     /// </summary>
     public string GetMultiplierPart()
     {
-        if (!string.IsNullOrEmpty(MultiplierPart1)) return MultiplierPart1;
-        if (!string.IsNullOrEmpty(MultiplierPart2)) return MultiplierPart2;
-        return MultiplierPart3 ?? string.Empty;
+        return MultiplierPart ?? string.Empty;
+    }
+}
+
+// ============================================================
+// 状态属性分类的唯一集合；与源表隐藏选项页保持一致，分号只用于范围字段，不用于乘区。
+// ============================================================
+public static class StatusMultiplierParts
+{
+    public static readonly IReadOnlyList<string> Values = Array.AsReadOnly(new[]
+    {
+        "ExtraBaseATK", "ATKBonus", "ATKBonusFlat", "ExtraBaseHP", "HPBonus", "HPBonusFlat",
+        "ExtraBaseDEF", "DEFBonus", "DEFBonusFlat", "EMBonus", "RechargeBonus", "CritRate", "CritDMG",
+        "BaseDMGBonusFlat", "DMGBonus", "DMGTaken", "DEFReduction", "DEFIgnored", "ResBonus",
+        "ShieldStrength", "ShieldBonus", "ShieldBonusFlat", "HealBonus", "BeHealedBonus",
+        "Elevation", "BaseDMGBonus", "LunarDMGBonus", "StellarDMGBonus"
+    });
+    private static readonly HashSet<string> Known = new HashSet<string>(Values, StringComparer.Ordinal);
+
+    public static string Parse(string value, string location)
+    {
+        value = value?.Trim() ?? string.Empty;
+        if (value.Length == 0 || value == "0") return string.Empty;
+        if (!Known.Contains(value))
+            throw new TableValidationException(location + ": MultiplierPart必须填写一个有效分类，不能用分号并列；当前=[" + value + "]");
+        return value;
     }
 }
 
@@ -443,6 +462,8 @@ public class EnemyMainData
 {
     public List<string> InitiateStatuses = new List<string>();
     public string EnemyType;             // Enemy.xlsx的明确EnemyType；空表示未配置，不能猜为Minion。
+    public string EnemyFamily;           // Enemy.xlsx的生物种类；与Minion/Elite等等级类别独立。
+    public HashSet<string> StatusImmunities = new HashSet<string>(StringComparer.OrdinalIgnoreCase); // 总表第二子表Immune，状态名分号分隔。
     public int EnemyID;                  // 敌人唯一数字ID
     public string EnemyNameID;           // 敌人英文标识
     public string EnemyName;             // 敌人显示名
@@ -478,6 +499,7 @@ public class EnemySkillMainData
     public int EnemySkillID;             // 敌人技能唯一数字ID
     public string EnemySkillID2;         // 敌人技能字符串ID（SK_Hilichurl_Dance 等）
     public string EnemySkillName;        // 技能显示名
+    public List<string> SkillTags = new List<string>(); // SkillTags列，英文分号分隔
     public float Cooldown;               // 冷却回合数
     public int UsePerTurn;               // 每回合最多使用次数
     public int HighThreat;               // 是否为高威胁技能（AI优先判断用）

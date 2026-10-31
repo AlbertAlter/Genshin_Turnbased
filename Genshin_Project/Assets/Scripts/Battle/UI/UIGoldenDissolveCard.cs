@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// One visual death operation: freeze card/frame/inner shadow together, dissolve the snapshot,
+/// One visual death operation: compose card/frame/inner shadow together (optionally retaining live video), dissolve,
 /// emit one batched fragment mesh, fade outer shadows separately, then signal after the particle tail.
 /// No battle instance, damage events, source-transform edits, or automatic scene binding.
 /// </summary>
@@ -14,6 +14,9 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
     [Tooltip("Bottom-to-top Image order. Do not include external shadows or HUD.")]
     public Image[] bodyLayers = Array.Empty<Image>();
     public Image[] outerShadows = Array.Empty<Image>();
+    public UICardFrameView framedView;
+    [Tooltip("Refresh the composed card every frame; the owning video source must keep decoding while hidden.")]
+    public bool keepSourceAnimated;
     public bool Paused { get; set; }
     public bool IsPlaying { get; private set; }
     public float Elapsed { get; private set; }
@@ -21,6 +24,8 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
 
     private UIGoldenDissolveStyle style;
     private RenderTexture snapshot;
+    private UICardDissolveSnapshot.CaptureSession liveCapture;
+    private Graphic[] activeLayers;
     private GameObject output;
     private UIGoldenDissolve dissolve;
     private UIGoldenDissolveFragments fragments;
@@ -50,9 +55,15 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
             foreach (var shadow in outerShadows)
                 if (Array.IndexOf(bodyLayers, shadow) >= 0) throw new ArgumentException("External shadows cannot also be body layers.");
             style = settings; seed = visualSeed;
-            snapshot = UICardDissolveSnapshot.Capture(cardRoot, bodyLayers, settings.CaptureHeightPixels);
-            originalEnabled = new bool[bodyLayers.Length];
-            for (int i = 0; i < bodyLayers.Length; i++) originalEnabled[i] = bodyLayers[i].enabled;
+            activeLayers = framedView != null ? framedView.SnapshotLayers : bodyLayers;
+            foreach (var shadow in outerShadows)
+                if (Array.IndexOf(activeLayers, shadow) >= 0) throw new ArgumentException("External shadows cannot also be body layers.");
+            liveCapture = UICardDissolveSnapshot.BeginCapture(cardRoot, activeLayers, settings.CaptureHeightPixels,
+                framedView != null ? framedView.SnapshotClip : null, framedView != null ? framedView.SnapshotClippedLayers : null);
+            snapshot = liveCapture.Texture;
+            if (!keepSourceAnimated) { liveCapture.Detach(); liveCapture.Dispose(); liveCapture = null; }
+            originalEnabled = new bool[activeLayers.Length];
+            for (int i = 0; i < activeLayers.Length; i++) originalEnabled[i] = activeLayers[i].enabled;
             originalShadowColors = new Color[outerShadows.Length];
             for (int i = 0; i < outerShadows.Length; i++)
                 if (outerShadows[i] != null) originalShadowColors[i] = outerShadows[i].color;
@@ -77,7 +88,7 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
                 fragments = particles.AddComponent<UIGoldenDissolveFragments>();
                 fragments.Bind(snapshot, size, settings, visualSeed);
             }
-            foreach (var layer in bodyLayers) layer.enabled = false;
+            foreach (var layer in activeLayers) layer.enabled = false;
             Elapsed = 0; Paused = false; completed = onCompleted; IsPlaying = true;
             ApplyFrame();
             if (settings.TotalDuration == 0) Finish();
@@ -97,6 +108,10 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
         Elapsed = Mathf.Min(style.TotalDuration, Elapsed + Mathf.Max(0, style.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime));
         ApplyFrame();
         if (Elapsed >= style.TotalDuration) Finish();
+    }
+    private void LateUpdate()
+    {
+        if (IsPlaying && !Paused && liveCapture != null) liveCapture.Render();
     }
 
     private void ApplyFrame()
@@ -124,16 +139,17 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
     {
         IsPlaying = false; completed = null; Paused = false; Elapsed = 0;
         if (originalEnabled != null)
-            for (int i = 0; i < Mathf.Min(bodyLayers.Length, originalEnabled.Length); i++)
-                if (bodyLayers[i] != null) bodyLayers[i].enabled = originalEnabled[i];
+            for (int i = 0; i < Mathf.Min(activeLayers.Length, originalEnabled.Length); i++)
+                if (activeLayers[i] != null) activeLayers[i].enabled = originalEnabled[i];
         if (originalShadowColors != null)
             for (int i = 0; i < Mathf.Min(outerShadows.Length, originalShadowColors.Length); i++)
                 if (outerShadows[i] != null) outerShadows[i].color = originalShadowColors[i];
         originalEnabled = null; originalShadowColors = null;
         if (output != null) { output.SetActive(false); UICardDissolveSnapshot.Dispose(output); }
         output = null; dissolve = null; fragments = null;
-        if (snapshot != null) { snapshot.Release(); UICardDissolveSnapshot.Dispose(snapshot); }
-        snapshot = null; style = null;
+        if (liveCapture != null) { liveCapture.Dispose(); liveCapture = null; }
+        else if (snapshot != null) { snapshot.Release(); UICardDissolveSnapshot.Dispose(snapshot); }
+        snapshot = null; style = null; activeLayers = null;
     }
 
     private void OnDisable() => ResetEffect();

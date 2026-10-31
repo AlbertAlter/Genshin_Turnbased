@@ -28,6 +28,8 @@ public sealed class TargetResolutionRequest
     public List<int> OverridePositions;
     // 仅0/1读取；随机模式2/3/4忽略。不是配表新字段，也不改写已锁定目标。
     public List<int> TauntPositions;
+    // 仅提交手选前复核；已经开始结算的锁定范围不在后续hit中重选。
+    public bool ValidateForcedTaunt;
     public Func<int, bool> IsEligible;
     public Func<int, float> Score;
     public Func<int, float> SelectionWeight;
@@ -37,6 +39,8 @@ public sealed class TargetResolutionRequest
 /// <summary>统一目标解析结果。Positions 保留空位以及模式3产生的重复位置。</summary>
 public sealed class TargetResolutionResult
 {
+    // 既有状态的Self可继续作用于原宿主；不向新选目标传播此许可。
+    internal BattleEntity BoundStatusHost;
     public BattleSide Side;
     public BattleTargetDomain Domain;
     public List<int> Positions = new List<int>();
@@ -147,6 +151,24 @@ public static class TargetResolver
         if (request.ForcedPositions != null && request.ForcedPositions.Count > 0)
         {
             result.Positions = Sanitize(request.ForcedPositions, request.MaxPosition, true);
+            if (request.ValidateForcedTaunt && request.TargetNumber > 0)
+            {
+                var pool = new List<int>();
+                for (int p = 1; p <= request.MaxPosition; p++) pool.Add(p);
+                var taunts = EligibleTaunts(request, pool);
+                if (request.TargetConsecutive == 0)
+                {
+                    // 逐个选择：全部嘲讽者优先，名额不足时只选嘲讽者。
+                    var remaining = new HashSet<int>(taunts);
+                    foreach (int p in result.Positions)
+                    {
+                        if (remaining.Count > 0 && !remaining.Remove(p))
+                        { result.Error = BattleTipKeys.TauntTargetRestricted; break; }
+                    }
+                }
+                else if (taunts.Count > 0 && !result.Positions.Exists(taunts.Contains))
+                    result.Error = BattleTipKeys.TauntTargetRestricted;
+            }
             return ValidateNonEmpty(request, result, "手动选择范围内没有有效单位");
         }
 
@@ -305,8 +327,7 @@ public static class TargetResolver
     {
         var candidates = FilterEligible(request, pool);
         var taunts = EligibleTaunts(request, pool);
-        if (taunts.Count > 0) candidates.RemoveAll(p => !taunts.Contains(p));
-        if (candidates.Count <= 1) return candidates;
+        if (candidates.Count == 0) return candidates;
         double total = 0;
         var weights = new List<double>();
         foreach (int p in candidates)
@@ -316,7 +337,22 @@ public static class TargetResolver
                 throw new InvalidOperationException("HitWeight必须为非负有限值。");
             weights.Add(weight); total += weight;
         }
-        if (total <= 0) throw new InvalidOperationException("合法角色的HitWeight总和必须大于0。");
+        // 没有可分配的受击权重时跳过本次目标选择，不改敌方技能权重，也不抽随机数。
+        if (total <= 0) return new List<int>();
+        if (taunts.Count > 0)
+        {
+            for (int i = candidates.Count - 1; i >= 0; i--)
+            {
+                if (taunts.Contains(candidates[i])) continue;
+                candidates.RemoveAt(i);
+                weights.RemoveAt(i);
+            }
+            // 存在正权重合法目标时，保留单个嘲讽者强制承接的既有规则。
+            if (candidates.Count == 1) return candidates;
+            total = 0;
+            foreach (double weight in weights) total += weight;
+            if (total <= 0) return new List<int>();
+        }
         int positiveCount = 0, onlyPositive = 0;
         for (int i = 0; i < weights.Count; i++)
             if (weights[i] > 0) { positiveCount++; onlyPositive = candidates[i]; }
@@ -355,7 +391,8 @@ public static class TargetResolver
             {
                 if (!allowed.Contains(position)) insidePool = false;
                 if (allowed.Contains(position) && IsEligible(request, position)) coverage++;
-                if (request.Score != null) score += request.Score(position);
+                if (request.Score != null && allowed.Contains(position) && IsEligible(request, position))
+                    score += request.Score(position);
             }
             if (!insidePool) continue;
             if (request.Domain == BattleTargetDomain.Unit && coverage == 0) continue;
@@ -406,7 +443,7 @@ public static class TargetResolver
         {
             float bestScore = float.MinValue;
             var bestIndices = new List<int>();
-            bool requireTaunt = selected.Count == 0 && taunts.Count > 0;
+            bool requireTaunt = remaining.Exists(taunts.Contains);
             for (int i = 0; i < remaining.Count; i++)
             {
                 if (requireTaunt && !taunts.Contains(remaining[i])) continue;

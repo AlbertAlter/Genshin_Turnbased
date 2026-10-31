@@ -9,7 +9,7 @@ internal static class EyeOfPerceptionWeaponHooks
         => BattleSpecialRules.RegisterStatusDamage("Hook(431370101)", Execute);
 
     private static bool CanHit(BattleEntity target, BattleEntity owner, BattleManager battle)
-        => target != null && target.IsAlive && target.Side != owner.Side && target.SlotPosition > 0
+        => target != null && target.IsOnField && target.Side != owner.Side && target.SlotPosition > 0
             && ReferenceEquals(battle?.Field?.GetSlot(target.Side, target.SlotPosition)?.Occupant, target);
 
     private static async Task Execute(StatusDamageExecution context)

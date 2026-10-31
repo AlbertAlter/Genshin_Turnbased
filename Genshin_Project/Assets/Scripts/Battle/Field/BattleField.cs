@@ -29,7 +29,7 @@ public class BattleField
         foreach (var pos in positions)
         {
             var slot = GetSlot(side, pos);
-            if (slot != null && slot.IsOccupied) result.Add(slot.Occupant);
+            if (slot?.Occupant?.IsOnField == true) result.Add(slot.Occupant);
         }
         return result;
     }

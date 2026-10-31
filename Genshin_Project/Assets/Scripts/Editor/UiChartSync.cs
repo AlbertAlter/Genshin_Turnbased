@@ -45,6 +45,8 @@ public static class UiChartSync
         string colors = Path.Combine(sourceRoot, ElementColorPalette.FileName);
         string shake = Path.Combine(sourceRoot, HitShakeStyle.FileName);
         string textureTable = Path.Combine(sourceRoot, HitEffectTextureStyle.FileName);
+        string templates = Path.Combine(sourceRoot, BattleSkillPresentationTemplates.FileName);
+        BattleSkillPresentationTemplates.ReadFile(templates);
         UIHitEffectStyle.ReadFile(source);
         ElementColorPalette.ReadFile(colors);
         HitShakeStyle.ReadFile(shake);
@@ -55,7 +57,7 @@ public static class UiChartSync
             if (!File.Exists(Path.Combine(artSourceRoot, file))) throw new FileNotFoundException("缺少命中特效贴图：" + file);
         string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI");
         Directory.CreateDirectory(directory);
-        foreach (string file in new[] { source, colors, shake, textureTable })
+        foreach (string file in new[] { source, colors, shake, textureTable, templates })
         {
             string target = Path.Combine(directory, Path.GetFileName(file));
             File.Copy(file, target, true);
@@ -70,7 +72,28 @@ public static class UiChartSync
             File.SetLastWriteTimeUtc(artTarget, File.GetLastWriteTimeUtc(artSource));
         }
         SyncShieldEffects();
+        SyncCardTransitions();
         AssetDatabase.Refresh();
+    }
+
+    // Uses the existing UI publishing action; no new menu or scene regeneration.
+    public static void SyncCardTransitions()
+    {
+        string sourceRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI"));
+        string entrance = Path.Combine(sourceRoot, UICardEntranceStyle.FileName);
+        string exit = Path.Combine(sourceRoot, UIGoldenDissolveStyle.FileName);
+        string variant = Path.Combine(sourceRoot, UICardVariantStyle.FileName);
+        string appearance = Path.Combine(sourceRoot, EnemyAppearanceTable.FileName);
+        UICardEntranceStyle.ReadFile(entrance); UIGoldenDissolveStyle.ReadFile(exit);
+        UICardVariantStyle.ReadFile(variant);
+        EnemyAppearanceTable.ReadFile(appearance).ValidateRuntimeReferences(
+            Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets")));
+        string target = Path.Combine(Application.streamingAssetsPath, "Data", "UI"); Directory.CreateDirectory(target);
+        foreach (string source in new[] { entrance, exit, variant, appearance })
+        {
+            string destination = Path.Combine(target, Path.GetFileName(source));
+            File.Copy(source, destination, true); File.SetLastWriteTimeUtc(destination, File.GetLastWriteTimeUtc(source));
+        }
     }
 
     // Shared by the existing art/config/hit-effect menus; never changes scene transforms.

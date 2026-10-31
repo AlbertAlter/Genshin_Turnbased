@@ -32,6 +32,11 @@ public class TargetSelector
 
     // 内部：所有非全空的候选组合（按窗口滑动顺序）
     private List<List<int>> _validWindows = new List<List<int>>();
+    private readonly List<List<int>> _candidateWindows = new List<List<int>>();
+    private Func<int, bool> _tauntProvider;
+    private bool _allowEmptyWindows;
+    private bool _tauntRestricted;
+    public bool LastMoveBlockedByTaunt { get; private set; }
     private int _windowIndex = -1;
 
     /// <summary>
@@ -50,15 +55,20 @@ public class TargetSelector
         Func<int, bool> aliveProvider,
         List<int> excludePositions = null,
         bool allowEmptyWindows = false,
-        bool preferLowerScore = false)
+        bool preferLowerScore = false,
+        Func<int, bool> tauntProvider = null)
     {
         Side = side;
         MaxPosition = side == BattleSide.Enemy ? 5 : BattleField.ALLY_SLOTS;
         _hpProvider = hpProvider;
         _aliveProvider = aliveProvider;
+        _tauntProvider = !allowEmptyWindows && consecutive >= 0 && consecutive <= 1 ? tauntProvider : null;
+        _allowEmptyWindows = allowEmptyWindows;
+        LastMoveBlockedByTaunt = false;
 
         int count = Mathf.Max(1, targetCount);
         _validWindows.Clear();
+        _candidateWindows.Clear();
 
         // 生成滑动窗口：从位置1到位置 Max-count+1
         int maxStart = MaxPosition - count + 1;
@@ -75,8 +85,9 @@ public class TargetSelector
             if (containsExcluded) continue;
 
             // 单位目标：全空组合不参与切换；场地目标允许选择空位置。
-            if (allowEmptyWindows || !IsAllEmpty(win)) _validWindows.Add(win);
+            _candidateWindows.Add(win);
         }
+        RefreshWindows(false);
 
         // 全部全空（无目标可选）→ 留空，由调用方判断 IsSelectionValid()==false
         if (_validWindows.Count == 0)
@@ -118,6 +129,7 @@ public class TargetSelector
     /// <summary>是否有可选的合法组合（敌方全空=false）</summary>
     public bool IsSelectionValid()
     {
+        RefreshWindows(true);
         return _validWindows.Count > 0;
     }
 
@@ -126,6 +138,10 @@ public class TargetSelector
     {
         CurrentSelection.Clear();
         _validWindows.Clear();
+        _candidateWindows.Clear();
+        _tauntProvider = null;
+        _tauntRestricted = false;
+        LastMoveBlockedByTaunt = false;
         _windowIndex = -1;
         _hpProvider = null;
         _aliveProvider = null;
@@ -147,12 +163,17 @@ public class TargetSelector
         MaxPosition = side == BattleSide.Enemy ? 5 : BattleField.ALLY_SLOTS;
         _hpProvider = hpProvider;
         _aliveProvider = aliveProvider;
+        _tauntProvider = null;
+        _tauntRestricted = false;
+        LastMoveBlockedByTaunt = false;
+        _allowEmptyWindows = includeEmptyPositions;
 
         var all = new List<int>();
         for (int p = MinPosition; p <= MaxPosition; p++)
             if (includeEmptyPositions || (_aliveProvider != null && _aliveProvider(p))) all.Add(p);
 
         _validWindows.Clear();
+        _candidateWindows.Clear();
         if (all.Count == 0)
         {
             _windowIndex = -1;
@@ -160,6 +181,7 @@ public class TargetSelector
             return;
         }
         _validWindows.Add(all);
+        _candidateWindows.Add(all);
         _windowIndex = 0;
         ApplySelection("全体");
     }
@@ -167,7 +189,9 @@ public class TargetSelector
     /// <summary>向左切换（窗口索引-1，位置号变小，屏幕方向=向右）：跳到前一个非全空组合；到边界停</summary>
     public void MoveLeft()
     {
-        if (_windowIndex <= 0) { Log("已到最右"); return; }
+        RefreshWindows(true);
+        LastMoveBlockedByTaunt = false;
+        if (_windowIndex <= 0) { LastMoveBlockedByTaunt = _tauntRestricted; Log("已到最右"); return; }
         _windowIndex--;
         ApplySelection("手动");
     }
@@ -175,9 +199,73 @@ public class TargetSelector
     /// <summary>向右切换（窗口索引+1，位置号变大，屏幕方向=向左）：跳到下一个非全空组合；到边界停</summary>
     public void MoveRight()
     {
-        if (_windowIndex < 0 || _windowIndex >= _validWindows.Count - 1) { Log("已到最左"); return; }
+        RefreshWindows(true);
+        LastMoveBlockedByTaunt = false;
+        if (_windowIndex < 0 || _windowIndex >= _validWindows.Count - 1) { LastMoveBlockedByTaunt = _tauntRestricted; Log("已到最左"); return; }
         _windowIndex++;
         ApplySelection("手动");
+    }
+
+    /// <summary>Screen-space movement, independent of numeric slot order. Does not reroll targets.</summary>
+    public void MoveScreen(int direction, Func<int, float?> screenX = null)
+    {
+        if (direction == 0) return;
+        RefreshWindows(true);
+        LastMoveBlockedByTaunt = false;
+        if (_windowIndex < 0) return;
+        var centers = new float[_validWindows.Count];
+        bool completeLayout = screenX != null;
+        for (int i = 0; i < _validWindows.Count && completeLayout; i++)
+        {
+            foreach (int slot in _validWindows[i])
+            {
+                float? x = screenX(slot);
+                if (!x.HasValue || float.IsNaN(x.Value) || float.IsInfinity(x.Value)) { completeLayout = false; break; }
+                centers[i] += x.Value;
+            }
+            centers[i] /= _validWindows[i].Count;
+        }
+        // Legacy scenes without a layout keep their original enemy-right-to-left / ally-left-to-right convention.
+        if (!completeLayout)
+            for (int i = 0; i < _validWindows.Count; i++)
+            {
+                centers[i] = 0;
+                foreach (int slot in _validWindows[i]) centers[i] += Side == BattleSide.Enemy ? -slot : slot;
+                centers[i] /= _validWindows[i].Count;
+            }
+        int best = -1;
+        float distance = float.PositiveInfinity;
+        for (int i = 0; i < centers.Length; i++)
+        {
+            float delta = (centers[i] - centers[_windowIndex]) * (direction > 0 ? 1 : -1);
+            if (delta > .0001f && delta < distance) { best = i; distance = delta; }
+        }
+        if (best < 0)
+        {
+            LastMoveBlockedByTaunt = _tauntRestricted;
+            Log(direction < 0 ? "已到最左" : "已到最右");
+            return;
+        }
+        _windowIndex = best;
+        ApplySelection("手动");
+    }
+
+    private void RefreshWindows(bool preserveSelection)
+    {
+        var taunts = new HashSet<int>();
+        foreach (var window in _candidateWindows)
+            foreach (int p in window)
+                if (_aliveProvider?.Invoke(p) == true && _tauntProvider?.Invoke(p) == true) taunts.Add(p);
+        _tauntRestricted = taunts.Count > 0;
+        _validWindows.Clear();
+        foreach (var window in _candidateWindows)
+            if ((_allowEmptyWindows || !IsAllEmpty(window))
+                && (!_tauntRestricted || window.Exists(taunts.Contains))) _validWindows.Add(window);
+        if (!preserveSelection) return;
+        int previous = _validWindows.FindIndex(window => window.Count == CurrentSelection.Count
+            && window.TrueForAll(CurrentSelection.Contains));
+        _windowIndex = previous >= 0 ? previous : _validWindows.Count > 0 ? 0 : -1;
+        if (previous < 0) ApplySelection("目标状态更新");
     }
 
     private void ApplySelection(string source)

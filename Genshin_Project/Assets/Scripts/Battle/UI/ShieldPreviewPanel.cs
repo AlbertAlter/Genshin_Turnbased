@@ -12,11 +12,10 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
     private static readonly string[] Targets = { "敌方全体", "敌1", "敌2", "敌3", "敌4", "敌5", "我方全体", "我1", "我2", "我3", "我4", "全部九人" };
     private RectTransform[] cards;
     private TMP_FontAsset font;
-    private UICardShield[] shields;
+    private BattleUiShields module;
+    private IReadOnlyList<BattleUiCardBinding> bindings;
     private TextMeshProUGUI[] labels;
     private float[] fades;
-    private List<Sprite> ownedSprites = new List<Sprite>();
-    private readonly List<Sprite> pendingSprites = new List<Sprite>();
     private UIShieldStyle settings;
     private ElementColorPalette palette;
     private bool ready, loading, visible = true, sweep = true, loop = true, paused, compare, sweepOnHit;
@@ -27,49 +26,35 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
     private Vector2 membraneOffset, maskOffset;
     private string error;
 
-    public void Bind(RectTransform[] cardRoots, TMP_FontAsset labelFont) { cards = cardRoots; font = labelFont; }
+    public void Bind(BattleUiShields shieldModule, TMP_FontAsset labelFont)
+    {
+        module = shieldModule; bindings = module.layout.Cards; font = labelFont;
+        cards = new RectTransform[bindings.Count];
+        for (int i = 0; i < cards.Length; i++) cards[i] = bindings[i].art;
+    }
     private IEnumerator Start() { yield return Reload(); }
     public void RequestReload() { if (!loading) StartCoroutine(Reload()); }
 
     private IEnumerator Reload()
     {
         loading = true;
-        UIShieldStyle next = null; ElementColorPalette colors = null;
-        try { next = UIShieldStyle.Load(); colors = ElementColorPalette.Load(); error = null; }
-        catch (Exception ex) { error = ex.Message; }
-        if (next == null || colors == null) { loading = false; yield break; }
-        pendingSprites.Clear();
-        foreach (string path in next.ArtPaths)
-        {
-            yield return StreamingAssetSpriteLoader.Load(path, sprite => pendingSprites.Add(sprite), message => error = message);
-            if (error != null) { DisposeSprites(pendingSprites); loading = false; yield break; }
-        }
-        if (Resources.Load<Shader>("UI/CardShield") == null)
-        { error = "缺少 UI/CardShield Shader"; DisposeSprites(pendingSprites); loading = false; yield break; }
-        settings = next; palette = colors;
-        if (shields == null) Build();
-        for (int i = 0; i < shields.Length; i++)
-            shields[i].Initialize(pendingSprites[0].texture, pendingSprites[1].texture, pendingSprites[2].texture);
-        DisposeSprites(ownedSprites); ownedSprites.AddRange(pendingSprites); pendingSprites.Clear();
+        if (module == null) { error = "未绑定独立护盾模块。"; loading = false; yield break; }
+        yield return module.Reload();
+        error = module.Error;
+        if (!module.Ready || error != null) { loading = false; yield break; }
+        settings = module.Settings; palette = module.Palette;
+        if (labels == null) BuildLabels();
         ready = true; loading = false; ResetValues();
     }
-
-    private void Build()
+    private void BuildLabels()
     {
-        shields = new UICardShield[cards.Length]; labels = new TextMeshProUGUI[cards.Length]; fades = new float[cards.Length];
+        labels = new TextMeshProUGUI[cards.Length]; fades = new float[cards.Length];
         for (int i = 0; i < cards.Length; i++)
         {
-            var rect = new GameObject("Shield_Membrane_Mask_Tint_Sweep", typeof(RectTransform)).GetComponent<RectTransform>();
-            rect.SetParent(cards[i], false); rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
-            // Keep the existing card frame, inner shadow and front impacts above the shield.
-            var inner = cards[i].Find("InnerShadow");
-            if (inner != null) rect.SetSiblingIndex(inner.GetSiblingIndex());
-            shields[i] = rect.gameObject.AddComponent<UICardShield>();
-            var labelRect = new GameObject("ShieldElementLabel", typeof(RectTransform)).GetComponent<RectTransform>();
-            labelRect.SetParent(cards[i], false); labelRect.anchorMin = labelRect.anchorMax = new Vector2(.5f, 0);
-            labelRect.sizeDelta = new Vector2(cards[i].rect.width, 30); labelRect.anchoredPosition = new Vector2(0, -22);
-            labels[i] = labelRect.gameObject.AddComponent<TextMeshProUGUI>();
+            var rect = new GameObject("ShieldElementLabel", typeof(RectTransform)).GetComponent<RectTransform>();
+            rect.SetParent(cards[i], false); rect.anchorMin = rect.anchorMax = new Vector2(.5f, 0);
+            rect.sizeDelta = new Vector2(cards[i].rect.width, 30); rect.anchoredPosition = new Vector2(0, -22);
+            labels[i] = rect.gameObject.AddComponent<TextMeshProUGUI>();
             labels[i].font = font != null ? font : TMP_Settings.defaultFontAsset;
             labels[i].fontSize = 22; labels[i].alignment = TextAlignmentOptions.Center;
             labels[i].raycastTarget = false; labels[i].enableWordWrapping = false;
@@ -113,7 +98,7 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
             clock += dt;
             if (clock >= interval) ReplaySweep();
         }
-        for (int i = 0; i < shields.Length; i++)
+        for (int i = 0; i < cards.Length; i++)
         {
             bool selected = Selected(i), show = visible && selected;
             float fadeTime = settings.Number(show ? "FadeInSeconds" : "FadeOutSeconds");
@@ -121,7 +106,7 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
             int e = compare ? i % Elements.Length : element;
             Color tint = e == 8 ? settings.PsdTint : e == 0 ? Color.white : palette.GetColor(Elements[e]);
             float tintAlpha = e == 0 ? settings.Number("NeutralTintOpacity") : tintOpacity;
-            shields[i].Apply(settings, tint, membraneOpacity, tintAlpha, membraneOffset, maskOffset,
+            module.ApplyCard(bindings[i].side, bindings[i].slot, tint, membraneOpacity, tintAlpha, membraneOffset, maskOffset,
                 progress, sweep ? brightness * sweepAlpha : 0, width, angle, fades[i]);
             labels[i].text = selected ? Labels[e] + (visible ? "护盾" : "（原卡面）") : "";
         }
@@ -179,17 +164,9 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
         GUILayout.Label($"{title} {value:F2}", label, GUILayout.Width(265));
         value = GUILayout.HorizontalSlider(value, min, max, GUILayout.Width(290)); GUILayout.Space(35);
     }
-    private static void DisposeSprites(List<Sprite> list)
-    {
-        foreach (var sprite in list)
-        { if (sprite == null) continue; Destroy(sprite.texture); Destroy(sprite); }
-        list.Clear();
-    }
     private void OnDestroy()
     {
         StopAllCoroutines();
-        if (shields != null) foreach (var view in shields) if (view != null) Destroy(view.gameObject);
         if (labels != null) foreach (var text in labels) if (text != null) Destroy(text.gameObject);
-        DisposeSprites(ownedSprites); DisposeSprites(pendingSprites);
     }
 }

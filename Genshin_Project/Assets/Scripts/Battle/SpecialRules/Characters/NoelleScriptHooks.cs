@@ -7,7 +7,7 @@ using System.Threading;
 public static class NoelleScriptHooks
 {
     public const string Breastplate = "ST_Noelle_Breastplate", SweepingTime = "ST_Noelle_SweepingTime";
-    public const string Devotion = "ST_Noelle_Devotion", CleanActions = "ST_Noelle_CleanActions", C4 = "ST_Noelle_C4";
+    public const string Devotion = "ST_Noelle_Devotion", CleanActions = "ST_Noelle_CleanActions";
     private sealed class HitMemory
     {
         internal long ID;
@@ -42,17 +42,18 @@ public static class NoelleScriptHooks
         BattleSpecialRules.RegisterStatusLifecycle(Breastplate, StartBreastplate, Stop);
         BattleSpecialRules.RegisterStatusLifecycle("ST_Noelle_DevotionShield", StartDevotionShield, Stop);
         BattleSpecialRules.RegisterStatusLifecycle(Devotion, StartDevotion, Stop);
-        BattleSpecialRules.RegisterStatusLifecycle(C4, StartC4, Stop);
         BattleSpecialRules.RegisterActionCounterGroup(Devotion, _ => "Devotion");
         BattleSpecialRules.RegisterCondition("Noelle_HealingHit", (a, c) => Empty(a) && HealingHit(c));
         BattleSpecialRules.RegisterCondition("Noelle_Devotion", (a, c) => Empty(a)
             && c?.Caster?.EntityID == 1021 && c.Caster.IsAlive && LowHPAllies(c.Caster).Count > 0);
         BattleSpecialRules.RegisterCondition("Noelle_FourActions", (a, c) => Empty(a)
             && c?.Declaration != null && FourthActions.TryGetValue(c.Declaration, out var status) && status == c.Status);
-        BattleSpecialRules.RegisterCondition("Noelle_C4ShieldEnd", (a, c) => Empty(a)
-            && c?.Caster?.IsAlive == true && c.Status?.StatusID2 == C4
-            && c.Declaration?.Get<StatusEventData>() is StatusEventData fact
-            && fact.StatusId == Breastplate && fact.Host == c.Caster && ShieldEndReason(fact.Reason));
+        BattleSpecialRules.RegisterCondition("Noelle_ShieldDestroyed", (a, c) => Empty(a)
+            && c?.Caster?.IsAlive == true && c.Status?.StatusID2 == Breastplate && !c.Status.IsActive
+            && c.Declaration?.Kind == BattleEventKind.StatusRemoved
+            && c.Declaration.Get<StatusEventData>() is StatusEventData fact
+            && fact.InstanceId == c.Status.ApplyOrder && fact.Host == c.Caster
+            && (fact.Reason == "ShieldBroken" || fact.Reason == "Replaced"));
         BattleSpecialRules.RegisterTargets("Noelle_DevotionTarget()", (battle, owner) =>
         {
             var candidates = LowHPAllies(owner);
@@ -169,19 +170,6 @@ public static class NoelleScriptHooks
             if (!existed || remains) return;
             // 原伤害批次已经提交；走正式移除，停止治疗并保留护盾破碎的声明因果。
             owner.RemoveStatusInstance(status, "ShieldBroken");
-        }, status.ApplyOrder, () => Active(status, owner)));
-    }
-
-    private static bool ShieldEndReason(string reason)
-        => reason == "Expired" || reason == "ShieldBroken" || reason == "Replaced";
-    private static void StartC4(StatusInstance status, object host)
-    {
-        var owner = RequireOwner(status, host); status.IsPermanent = true; status.RemainingPhaseCount = 0;
-        var listeners = new List<IDisposable>(); Listeners.Add(status, listeners);
-        listeners.Add(BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved, (_, fact) =>
-        {
-            if (fact.StatusId == Breastplate && fact.Host == owner && ShieldEndReason(fact.Reason))
-                Dispatch(status, host, "Noelle_C4ShieldEnd()", BattleEventHub.Current);
         }, status.ApplyOrder, () => Active(status, owner)));
     }
 

@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             var data = new StatusMainData { StatusID = id, StatusID2 = Key(id), StatusName = "RemainingWeaponTest",
                 StatusType = count ? "Count" : "Buff", MaxCount = 1, MaxStack = 1, WhenMax = "0", ScriptHook = hook };
-            if (part == "DMGBonus") data.MultiplierPart2 = part; else data.MultiplierPart1 = part;
+            data.MultiplierPart = part;
             env.DataManager.StatusMainDict[data.StatusID2] = data; return data;
         }
         private static StatusEffectData Effect(BattleFlowTestEnv env, int id, string type, string parameter,
@@ -398,7 +398,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 Main(env, 4322101, true); Main(env, 4322102, part: "EMBonus"); Main(env, 4322103, part: "EMBonus");
                 Main(env, 4322104, part: "DMGBonus", hook: "Hook(432210105)").ApplyReactionType = "绽放";
                 Main(env, 4322105, part: "DMGBonus", hook: "Hook(432210105)").ApplyReactionType = "超绽放;烈绽放";
-                Main(env, 4322106, hook: "Hook(432210105)").MultiplierPart3 = "LunarDMGBonus";
+                Main(env, 4322106, hook: "Hook(432210105)").MultiplierPart = "LunarDMGBonus";
                 env.DataManager.StatusMainDict[Key(4322106)].ApplyReactionType = "月绽放";
                 Effect(env, 432210101, "ApplyStatus", Key(4322102), duration: 1);
                 Effect(env, 432210102, "ApplyStatus", Key(4322101));

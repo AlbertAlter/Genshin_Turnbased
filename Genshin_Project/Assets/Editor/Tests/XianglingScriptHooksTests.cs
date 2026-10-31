@@ -14,7 +14,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv e, int n, string key, string kind = "", string part = "")
         {
             var main = new StatusMainData { StatusID = 4102200+n, StatusID2 = S+key, StatusType = kind,
-                MultiplierPart2 = part, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
             e.DataManager.StatusMainDict[S+key] = main;
             if (!e.DataManager.CharacterStatusIDs.TryGetValue(1022, out var ids))
                 e.DataManager.CharacterStatusIDs[1022] = ids = new HashSet<string>();
@@ -38,7 +38,7 @@ namespace GenshinTurnBased.Tests.EditMode
             { [1] = new SkillLevelData { CharacterID = BattleFlowTestEnv.AllyID, SkillType = type, SkillLevel = 1,
                 ParamID = key, Hits1 = value } };
         }
-        private static void Setup(BattleFlowTestEnv e, int constellation = 0, bool t1 = true)
+        private static void Setup(BattleFlowTestEnv e, int constellation = 0, bool t1 = true, bool t2 = false)
         {
             e.ConfigureAllyAction(0, "SK_Normal_Xiangling", "SE_Normal_Xiangling", "Physical", ".7104*TotalATK,0", 20);
             e.ConfigureAllyAction(1, "SK_Heavy_Xiangling", "SE_Heavy_Xiangling", "Physical", "1.2169*TotalATK,0", 30);
@@ -50,7 +50,7 @@ namespace GenshinTurnBased.Tests.EditMode
             e.DataManager.SkillEffectDict["SE_Burst_XianglingState"] = new SkillEffectData
             { SkillEffectID2 = "SE_Burst_XianglingState", EffectIndex = 1, EffectType = "ApplyStatus", TargetType = "Self",
                 Param1 = S+"Pyronado", Duration = 2, AddInPhase = 2 };
-            Main(e, 1, "Guoba"); Main(e, 2, "Pyronado", "Count"); Main(e, 3, "Pepper");
+            Main(e, 1, "Guoba"); Main(e, 2, "Pyronado", "Count");
             Main(e, 4, "PepperATK", "Buff", "ATKBonus"); Main(e, 5, "FifthNormal", "Count"); Main(e, 6, "Implode");
             Main(e, 7, "C6Pyro", "Buff", "DMGBonus").ApplyElementType = "Pyro";
             Main(e, 8, "GuobaRes", "Debuff", "ResBonus").ApplyElementType = "Pyro";
@@ -69,7 +69,7 @@ namespace GenshinTurnBased.Tests.EditMode
             consume.Param2 = "-1"; consume.ScriptHook = "Xiangling_Pyronado()";
             Effect(e,2,4,"PyronadoEnd","RemoveStatus",S+"Pyronado").ScriptHook="Xiangling_PyronadoEmpty()";
             Effect(e, 2, 3, "C6Bind", "BindStatus", S+"C6Pyro", "AllyTeam").ScriptHook = "Check(1022_C6)";
-            var pepper = Effect(e, 3, 1, "PepperGrant", "ApplyStatus", S+"PepperATK"); pepper.Duration = 3; pepper.AddInPhase = 2;
+            var pepper = Effect(e, 1, 4, "PepperGrant", "ApplyStatus", S+"PepperATK"); pepper.Duration = 3; pepper.AddInPhase = 2;
             Effect(e, 4, 1, "PepperATK", "Buff", ".1");
             var mark = Effect(e, 5, 1, "ImplodeGrant", "ApplyStatus", S+"Implode", "Enemy");
             mark.Duration = 1; mark.AddInPhase = 6; mark.TargetOverride = "Xiangling_FifthTarget()";
@@ -81,17 +81,19 @@ namespace GenshinTurnBased.Tests.EditMode
             Effect(e, 7, 1, "C6Pyro", "Buff", ".15*min(1,Count(ST_Xiangling_Pyronado))"); Effect(e, 8, 1, "GuobaResBonus", "Buff", "-.15");
             Actions(e, "Guoba", new StatusActionData { ActionType = "OnItsTurn", Param1 = E+"GuobaDamage;"+E+"GuobaEnergy" },
                 new StatusActionData { ActionType = "OnTrigger", Param1 = E+"GuobaRes", OutgoingHit = "Skill",
-                    ScriptHook = "Xiangling_GuobaHit();Check(1022_C1)" });
+                    ScriptHook = "Xiangling_GuobaHit();Check(1022_C1)" },
+                new StatusActionData { ActionType = "OnEnd", Param1 = E+"PepperGrant", ScriptHook = "Check(1022_T2)" },
+                new StatusActionData { ActionType = "OnDestroy", Param1 = E+"PepperGrant", ScriptHook = "Check(1022_T2);Xiangling_GuobaReplaced()" });
             Actions(e, "Pyronado", new StatusActionData { ActionType = "OnTrigger", Param1 = E+"PyronadoDamage;"+E+"PyronadoConsume;"+E+"PyronadoEnd",
                 ScriptHook = "Xiangling_Pyronado()" });
-            Actions(e, "Pepper", new StatusActionData { ActionType = "OnTrigger", Param1 = E+"PepperGrant", ScriptHook = "Xiangling_Pepper()" });
             Actions(e, "FifthNormal", new StatusActionData { ActionType = "OnItsTurn",Param1=E+"FifthReset" },
                 new StatusActionData { ActionType = "OnTrigger", Param1 = E+"FifthGain;"+E+"ImplodeGrant", ScriptHook = "Xiangling_FifthNormal()" });
             Actions(e, "Implode", new StatusActionData { ActionType = "OnEnd", Param1 = E+"ImplodeDamage" });
             foreach (string key in new[] { "Guoba", "Pyronado" }) e.DataManager.StatusAttributesDict[S+key] =
                 new StatusAttributesData { StatusID = e.DataManager.StatusMainDict[S+key].StatusID, StatusID2 = S+key };
             e.DataManager.TalentDict[1022] = new List<TalentData>
-            { new TalentData { CharacterID = 1022, TalentIndex = 1, UnlockAfter = t1 ? 0 : 20 } };
+            { new TalentData { CharacterID = 1022, TalentIndex = 1, UnlockAfter = t1 ? 0 : 20 },
+              new TalentData { CharacterID = 1022, TalentIndex = 2, UnlockAfter = t2 ? 0 : 60 } };
             e.CreateMinimalBattle(); e.CreateAlly(2); e.CreateEnemy(2, 10000); e.CreateEnemy(3, 10000);
             e.Ally.Entity.EntityID = 1022; e.Ally.Entity.ConstellationLevel = constellation;
             e.Enemy.Entity.CurrentHP = e.Enemy.Entity.TotalHP = 10000;
@@ -156,15 +158,16 @@ namespace GenshinTurnBased.Tests.EditMode
             => HookTestEnv.AwaitTask(PepperAsync);
         private async Task PepperAsync()
         {
-            using var e = new BattleFlowTestEnv(); Setup(e); var owner = e.Ally.Entity;
+            using var e = new BattleFlowTestEnv(); Setup(e, t2:true); var owner = e.Ally.Entity;
             int grants = 0; using var listener = BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusAdded, (_, f) =>
             { if (f.StatusId == S+"PepperATK") grants++; }, 0);
             await BattleExecution.Run(async () =>
             {
-                Add(e, "Pepper"); var old = Add(e, "Guoba", 2, 2, 3); await BattleExecution.Flush();
+                var old = Add(e, "Guoba", 2, 2, 3); await BattleExecution.Flush();
                 var current = Add(e, "Guoba", 2, 2, 3); await BattleExecution.Flush();
                 Assert.That(old.IsActive, Is.False); Assert.That(grants, Is.EqualTo(1));
                 Assert.That(owner.GetFinalATK("", "", -1, "Physical"), Is.EqualTo(110f).Within(.001f));
+                await e.Ally.ExecuteStatusActionsTask(current, e.DataManager.StatusActionDict[S+"Guoba"], owner, "OnEnd");
                 owner.RemoveStatusInstance(current, "Expired"); await BattleExecution.Flush();
                 Assert.That(grants, Is.EqualTo(2)); Assert.That(owner.GetStatusInstances(S+"PepperATK").Count, Is.EqualTo(1));
                 Add(e, "Guoba", 2, 2, 3); owner.TakeDamage(100000, DamageSourceInfo.CreateUnknown()); await BattleExecution.Flush();
@@ -271,12 +274,32 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [UnityTest]
+        public IEnumerator GuobaReplacement_GrantsPepper_ButOrdinaryRemovalAndLockedTalentDoNot()
+            => HookTestEnv.AwaitTask(PepperReplacementAsync);
+        private async Task PepperReplacementAsync()
+        {
+            using var e = new BattleFlowTestEnv(); Setup(e, t2:true); var owner = e.Ally.Entity;
+            await BattleExecution.Run(async () =>
+            {
+                var first = Add(e, "Guoba", 2);
+                var second = Add(e, "Guoba", 2); await BattleExecution.Flush();
+                Assert.That(first.IsActive, Is.False);
+                Assert.That(owner.HasStatus(S+"PepperATK"), Is.True);
+                owner.RemoveStatus(S+"PepperATK"); owner.RemoveStatusInstance(second); await BattleExecution.Flush();
+                Assert.That(owner.HasStatus(S+"PepperATK"), Is.False);
+                e.DataManager.TalentDict[1022].Single(t => t.TalentIndex == 2).UnlockAfter = 60;
+                Add(e, "Guoba", 2); Add(e, "Guoba", 2); await BattleExecution.Flush();
+                Assert.That(owner.HasStatus(S+"PepperATK"), Is.False);
+            });
+        }
+
+        [UnityTest]
         public IEnumerator Guoba_TicksTwiceThenExpires_AndDeathClearsOffOwnerMarksAndTeamBuff()
             => HookTestEnv.AwaitTask(LifetimeAsync);
         private async Task LifetimeAsync()
         {
-            using var e = new BattleFlowTestEnv(); Setup(e, 6); var owner = e.Ally.Entity;
-            Add(e, "Pepper"); await Cast(e, "Skill", 2); var guoba = owner.GetStatus(S+"Guoba"); int sprays = 0;
+            using var e = new BattleFlowTestEnv(); Setup(e, 6, t2:true); var owner = e.Ally.Entity;
+            await Cast(e, "Skill", 2); var guoba = owner.GetStatus(S+"Guoba"); int sprays = 0;
             using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, f) =>
             { if (f.Source.SourceEffectID == E+"GuobaDamage") sprays++; }, 0);
             for (int i = 0; i < 2; i++) { e.Manager.EndAllyTurn(); e.Flow.AdvanceToPhase(e.Manager, TurnPhase.AllyAction); }

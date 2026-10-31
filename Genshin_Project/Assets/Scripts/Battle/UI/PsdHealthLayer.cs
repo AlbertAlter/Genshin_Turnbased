@@ -9,6 +9,7 @@ public sealed class PsdHealthLayer : MaskableGraphic
     public Vector4 layerBounds;
     public int blendMode;
     public bool clippedToBase;
+    public bool normalizeWithBase;
     public bool followsHealth;
     public RoundedHealthFill healthSource;
     public Vector2 canvasSize;
@@ -23,6 +24,15 @@ public sealed class PsdHealthLayer : MaskableGraphic
     private Sprite layerSprite;
     private Material ownedMaterial;
     private float lastFraction = -1;
+    private bool overrideBaseColor;
+    private Color baseColor;
+    public void SetBaseColor(Color value)
+    {
+        overrideBaseColor = true; baseColor = value;
+        if (ownedMaterial == null) return;
+        ownedMaterial.SetFloat("_OverrideBaseColor", 1);
+        ownedMaterial.SetColor("_BaseColor", value);
+    }
     public override Texture mainTexture => layerSprite != null ? layerSprite.texture : base.mainTexture;
 
     public void Bind(Sprite source, Texture baseTexture, Shader shader, Sprite underA, Sprite underB, Vector4 underBounds)
@@ -45,8 +55,10 @@ public sealed class PsdHealthLayer : MaskableGraphic
         ownedMaterial.SetFloat("_Mode", blendMode);
         ownedMaterial.SetFloat("_VectorBase", vectorBase ? 1 : 0);
         ownedMaterial.SetFloat("_Clipped", clippedToBase ? 1 : 0);
+        ownedMaterial.SetFloat("_NormalizeWithBase", normalizeWithBase ? 1 : 0);
         ownedMaterial.SetInt("_SrcBlend", (int)(blendMode == 1 ? BlendMode.DstColor : BlendMode.SrcAlpha));
         material = ownedMaterial;
+        if (overrideBaseColor) SetBaseColor(baseColor);
         SetAllDirty();
     }
 

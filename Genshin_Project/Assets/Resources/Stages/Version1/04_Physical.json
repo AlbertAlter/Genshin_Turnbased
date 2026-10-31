@@ -1,0 +1,83 @@
+{
+  "StageName": "04 物理：破阵重剑",
+  "BattleID": 1,
+  "Allies": [
+    {
+      "CharacterID": 1040,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1024,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1038,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1031,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  ],
+  "Enemies": [
+    {
+      "EnemyID": 2009,
+      "Level": 40,
+      "Slot": 1
+    },
+    {
+      "EnemyID": 2005,
+      "Level": 40,
+      "Slot": 2
+    },
+    {
+      "EnemyID": 2014,
+      "Level": 40,
+      "Slot": 3
+    },
+    {
+      "EnemyID": 2016,
+      "Level": 40,
+      "Slot": 4
+    },
+    {
+      "EnemyID": 2006,
+      "Level": 40,
+      "Slot": 5
+    }
+  ],
+  "InitialEnergyMode": "Percent",
+  "InitialEnergyValue": 100.0
+}

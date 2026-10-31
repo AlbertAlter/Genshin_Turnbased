@@ -17,6 +17,8 @@ public static class BattleDeathResolution
         public BattleDeclaration Declaration { get; internal set; }
         internal BattleResolutionContext.Snapshot Rules;
         internal long TargetDeathVersion;
+        internal List<StatusDeathActions.Candidate> Actions;
+        internal bool ActionsNotified;
     }
 
     public sealed class Revival
@@ -38,6 +40,7 @@ public static class BattleDeathResolution
         internal readonly Dictionary<long, long> Batches = new Dictionary<long, long>();
         internal readonly Dictionary<long, Death> Deaths = new Dictionary<long, Death>();
         internal readonly Dictionary<StatusInstance, Revival> Revivals = new Dictionary<StatusInstance, Revival>();
+        internal readonly List<Action> Cleanup = new List<Action>();
     }
 
     private sealed class Restore : IDisposable
@@ -86,7 +89,7 @@ public static class BattleDeathResolution
         finally
         {
             window.Closed = true;
-            window.Revivals.Clear(); window.Deaths.Clear();
+            window.Revivals.Clear(); window.Deaths.Clear(); window.Cleanup.Clear();
             Current.Value = previous;
         }
     }
@@ -114,8 +117,43 @@ public static class BattleDeathResolution
                 : value.HitBatchID != 0 ? -value.HitBatchID : fallback != 0 ? fallback : (fallback = BattleEventHub.NextIdentity());
             if (!window.Batches.TryGetValue(batch, out long order)) window.Batches.Add(batch, order = ++window.NextBatch);
             window.Deaths.Add(id, new Death { Target = value.Target, BatchOrder = order, DamageEventID = id,
-                Rules = BattleResolutionContext.Capture(), TargetDeathVersion = value.Target.EquipmentDeathVersion });
+                Rules = BattleResolutionContext.Capture(), TargetDeathVersion = value.Target.EquipmentDeathVersion,
+                Actions = StatusDeathActions.Capture(value.Target) });
         }
+    }
+
+    internal static void NotifyDeathActions(DamageResolvedEvent damage, BattleDeclaration declaration)
+    {
+        var window = Current.Value;
+        long id = damage.Declaration?.Header.EventId ?? 0;
+        if (!Valid(window) || !window.Deaths.TryGetValue(id, out var death) || death.ActionsNotified) return;
+        death.ActionsNotified = true;
+        death.Declaration = declaration;
+        StatusDeathActions.Notify(death.Actions, damage, declaration, death.TargetDeathVersion);
+    }
+
+    /// <summary>固定待清理实例；只延后死亡清理，不保护被主动移除或替换的状态。</summary>
+    internal static void RemoveAfterDeathActions(object host, StatusInstance status, string reason)
+    {
+        if (status == null || !status.IsActive || status.DeathCleanupPending) return;
+        var window = Current.Value;
+        if (!Valid(window)) { StatusHostAccess.Remove(host, status, reason); return; }
+        MarkPendingCleanup(status, new HashSet<StatusInstance>());
+        var cause = BattleEventHub.Current;
+        var rules = BattleResolutionContext.Capture();
+        window.Cleanup.Add(() => {
+            using (rules.Enter())
+            using (BattleEventHub.Enter(cause)) StatusHostAccess.Remove(host, status, reason);
+        });
+    }
+
+    private static void MarkPendingCleanup(StatusInstance status, HashSet<StatusInstance> seen)
+    {
+        if (status == null || !status.IsActive || !seen.Add(status)) return;
+        status.DeathCleanupPending = true;
+        // 子状态仍由原绑定移除路径清理；这里只阻止它在父死亡清理前继续执行普通候选。
+        if (status.BoundStatuses != null)
+            foreach (var child in status.BoundStatuses) MarkPendingCleanup(child, seen);
     }
 
     /// <summary>只接受本窗口已提交的死亡声明；同一来源合并候选，不按队友分别消耗次数。</summary>
@@ -165,8 +203,21 @@ public static class BattleDeathResolution
         window.Closing = true;
         try
         {
-            while (window.Revivals.Count > 0 && Valid(window) && !BattleExecution.IsCancelled)
+            while ((window.Cleanup.Count > 0 || window.Revivals.Count > 0) && Valid(window) && !BattleExecution.IsCancelled)
             {
+                // 所有死亡行动及其子响应已经Flush；先清旧实例，再接受正式复活。
+                // 清理响应如产生新的死亡，继续处理它的行动与清理，不能提前判胜负。
+                if (window.Cleanup.Count > 0)
+                {
+                    var cleanup = window.Cleanup.ToArray();
+                    window.Cleanup.Clear();
+                    await BattleExecution.RunInline(() => {
+                        using (BattleResolutionContext.BeginCollection())
+                            foreach (var remove in cleanup) remove();
+                        return Task.CompletedTask;
+                    });
+                    continue;
+                }
                 var requests = new List<Revival>(window.Revivals.Values);
                 window.Revivals.Clear();
                 requests.Sort((left, right) => left.Source.ApplyOrder.CompareTo(right.Source.ApplyOrder));
@@ -186,7 +237,7 @@ public static class BattleDeathResolution
         finally
         {
             window.Closed = true;
-            window.Revivals.Clear(); window.Deaths.Clear();
+            window.Revivals.Clear(); window.Deaths.Clear(); window.Cleanup.Clear();
         }
     }
 

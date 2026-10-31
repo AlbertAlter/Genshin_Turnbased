@@ -299,12 +299,12 @@ public sealed partial class BattlefieldStageViewLoader
         try
         {
             using var package = new ExcelPackage(new FileInfo(file));
-            var sheet = package.Workbook.Worksheets["Enemy_Main"];
+            var sheet = package.Workbook.Worksheets["Coeff"] ?? package.Workbook.Worksheets["Enemy_Main"];
             if (sheet?.Dimension == null) return names;
             for (int row = 2; row <= sheet.Dimension.End.Row; row++)
             {
                 if (int.TryParse(ExcelTableHeaders.For(sheet).Cell(row, "EnemyID").Text, out int id) && id > 0)
-                    names[id] = ExcelTableHeaders.For(sheet).Cell(row, "EnemyName").Text;
+                    names[id] = ExcelTableHeaders.For(sheet).Cell(row, sheet.Name == "Coeff" ? "中文名" : "EnemyName").Text;
             }
         }
         catch
@@ -365,6 +365,8 @@ public sealed partial class BattlefieldStageViewLoader
 
     private string FindEnemyPreviewArtPath(int enemyId)
     {
+        string direct = $"art_assets/Enemy/{enemyId}_01.png";
+        if (File.Exists(Path.Combine(Application.streamingAssetsPath, direct))) return direct;
         string manifestFile = Path.Combine(Application.streamingAssetsPath,
             EnemyArtResolver.ManifestPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(manifestFile)) return string.Empty;

@@ -64,7 +64,7 @@ public partial class CharacterBattleController
                             break;
                         case "ChangeControl": ExecuteChangeControl(eff); break;
                         case "ResetCooldown": ExecuteResetCooldown(eff.Param1, eff.SkillEffectID2); break;
-                        case "ReduceCooldown": ExecuteReduceCooldown(eff.Param1, eff.Param2, eff.SkillEffectID2); break;
+                        case "Cooldown": ExecuteCooldown(eff.Param1, eff.Param2, eff.SkillEffectID2); break;
                         case "BondOfLife":
                             BondOfLifeEffect.Execute(eff.Param1, CurrentDamageSourceEntity, ResolveTargets(eff),
                                 _currentEffectSourceStatus, eff.SkillEffectID2, skillType, eff.Element);
@@ -129,9 +129,19 @@ public partial class CharacterBattleController
                 reactionType);
     }
 
-    async Task ExecuteDamageAsync(SkillEffectData authoredEffect, int skillType, long effectExecutionID)
+    async Task ExecuteDamageAsync(SkillEffectData authoredEffect, int skillType, long effectExecutionID,
+        List<BattleEntity> resonanceTargets = null)
     {
         var eff = authoredEffect;
+        var properties = DamageProperties.Parse(eff.Element, eff.Param3);
+        if (properties.IsResonance && resonanceTargets == null
+            && await GeoConstructStatusSystem.TryExecuteAsync(_currentEffectSourceStatus, CurrentDamageSourceEntity,
+                async nodeTargets =>
+                {
+                    long nodeExecution = BattleEventHub.NextIdentity();
+                    using var execution = BattleEventHub.BeginEffectExecution(nodeExecution);
+                    await ExecuteDamageAsync(authoredEffect, skillType, nodeExecution, nodeTargets);
+                })) return;
         using var damageQuery = DamageQueryContext.Enter(eff.SkillEffectID2, eff.DamageType,
             GetCurrentDamageSourceSkillID(skillType));
         using var completion = BattleSpecialRules.BeginDamageEffect(CurrentDamageSourceEntity, eff.SkillEffectID2, effectExecutionID);
@@ -155,7 +165,7 @@ public partial class CharacterBattleController
         string[] directHits = GetDirectHitExpressions(eff.Param1);
 
         // 选目标（支持 TargetType/TargetNumber/TargetConsecutive/TargetOverride）
-        var targets = ResolveTargets(eff);
+        var targets = resonanceTargets ?? ResolveTargets(eff);
         if (targets == null || targets.Count == 0)
         {
             LogManager.Log(LogCategory.Damage, $"{Entity.EntityID} 无目标，攻击落空 ({eff.SkillEffectID2})");
@@ -197,7 +207,8 @@ public partial class CharacterBattleController
                 using var hitResponses = BattleResolutionContext.BeginCollection();
                 using var countDamage = new CountDamageBatch();
                 HitData hit = hits[hitIndex];
-                var hitTargets = DamageHitTargets.Expand(targets, eff.Param2, eff.Element);
+                var hitTargets = DamageHitTargets.Expand(targets, eff.Param2, eff.Element,
+                    eff.TargetType == "Self" && _currentEffectSourceStatus != null ? Entity : null);
                 long logicalHitID = BattleEventHub.NextIdentity();
                 using var hitSnapshot = BattleSpecialRules.BeginHit(logicalHitID, CurrentDamageSourceEntity,
                     hitTargets.Select(entry => entry.Target));
@@ -287,9 +298,9 @@ public partial class CharacterBattleController
                         resolvedHits.Add(targetHit);
 
                         if (entry.IsSplash)
-                            LogManager.Log(LogCategory.Splash,
-                                $"hit#{hitIndex + 1} -> {target.EntityID} : {primaryResolution.DamageAfterShield:F1} " +
-                                $"(暴击前{reaction.FinalDamage:F1}，倍率{entry.Rate}，元素量{targetHit.ElementAura})");
+                            batch.AfterCommit(primaryResolution, committed => LogManager.Log(LogCategory.Splash,
+                                $"hit#{hitIndex + 1} -> {target.EntityID} : {committed.DamageAfterShield:F1} " +
+                                $"(暴击前{reaction.FinalDamage:F1}，倍率{entry.Rate}，元素量{targetHit.ElementAura})"));
                     }
                     batch.Flush();
                 }
@@ -327,7 +338,8 @@ public partial class CharacterBattleController
                 using var hitResponses = BattleResolutionContext.BeginCollection();
                 using var countDamage = new CountDamageBatch();
                 HitData hit = hits[hitIndex];
-                var hitTargets = DamageHitTargets.Expand(targets, eff.Param2, eff.Element);
+                var hitTargets = DamageHitTargets.Expand(targets, eff.Param2, eff.Element,
+                    eff.TargetType == "Self" && _currentEffectSourceStatus != null ? Entity : null);
                 long logicalHitID = BattleEventHub.NextIdentity();
                 using var hitSnapshot = BattleSpecialRules.BeginHit(logicalHitID, CurrentDamageSourceEntity,
                     hitTargets.Select(entry => entry.Target));
@@ -1139,8 +1151,8 @@ public partial class CharacterBattleController
             SourceValue("CritRate", Entity.CritRate) + SourceValue("WeaponCritRate", Entity.WeaponCritRate) + statusCritRate,
             0f,
             1f);
-        // 信使只覆盖本次追加hit的判定率；仍使用统一入口与一次随机抽取，不修改角色面板。
-        if (forceCritical) critRate = 1f;
+        // 信使追加与辛焱二命只覆盖指定伤害的判定率；仍逐目标抽取一次，不修改面板。
+        if (forceCritical || XinyanScriptHooks.ForcesCritical(Entity, effectID2, element)) critRate = 1f;
         float statusCritDMG = memory != null ? memory.Bonus("CritDMG", effectID2, element, target, damageReaction)
             : Entity.GetStatusCritDMG(effectID2, skillID2, skillType, element, target, damageReaction);
         float critDMG = SourceValue("CritDMG", Entity.CritDMG) + SourceValue("WeaponCritDMG", Entity.WeaponCritDMG) + statusCritDMG;

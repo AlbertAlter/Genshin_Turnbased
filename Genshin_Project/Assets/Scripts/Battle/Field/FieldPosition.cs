@@ -26,6 +26,8 @@ public class FieldPosition
         HashSet<string> bindingAncestry = null, EquipmentEffectSource equipmentSource = null,
         string enchantElement = null, string enchantOverride = null)
     {
+        if (id == PublicControlStates.OffField)
+            throw new InvalidOperationException("OffField只能施加于角色或敌人实体。");
         if (id == TeamPublicStatuses.MoonCage)
             throw new InvalidOperationException("月笼须由月结晶公共处理器创建，不能直接施加空机制状态。");
         return Add(id, caster, duration, addPhase, triggerPhase, main, weaponContext, param2,
@@ -43,11 +45,14 @@ public class FieldPosition
     {
         using var declarationResolution = BattleEventHub.BeginResolution();
         using var declarations = BattleResolutionContext.BeginCollection();
+        if (id == PublicControlStates.EnemyStun)
+            throw new InvalidOperationException("敌人眩晕只能施加于敌人实体。");
         equipmentSource = EquipmentStatusLifetime.Resolve(id, caster, weaponContext, equipmentSource);
         if (equipmentSource != null && !equipmentSource.IsAvailable) return null;
         // 场地状态与实体状态保持一致：空施加阶段取本次实际施加阶段。
         if (addPhase == 0 && BattleManager.Instance != null)
             addPhase = (int)BattleManager.Instance.CurrentPhase;
+        OverallShieldSystem.ValidateHost(main, this, caster);
         CountStatusSystem.Validate(main);
         var enchant = EnchantStatusSystem.Parse(main, enchantElement, param2, enchantOverride);
         var matches = StatusList.FindAll(status => status != null && status.StatusID2 == id);
@@ -82,6 +87,7 @@ public class FieldPosition
         if (managed) return instance; // 专用处理器计时，不再登记通用阶段桶或执行配表行动。
         StatusBindingSystem.ApplyBindings(instance, this, bindingAncestry);
         caster?.CharacterCtrl?.OnStatusApplied(instance, this);
+        if (caster?.CharacterCtrl == null) caster?.EnemyCtrl?.OnStatusApplied(instance, this);
         if (!StatusList.Contains(instance)) return instance;
         BattleManager.Instance?.RegisterStatusTick(instance, null, this);
         PreDamageHookSystem.RegisterPreDamageHook(instance, this);
@@ -98,6 +104,7 @@ public class FieldPosition
         instance.IsActive = false;
         BattleSpecialRules.OnStatusRemoved(instance, this);
         using var removedDeclaration = BattleEventHub.Enter(BattleEventHub.Publish(new StatusEventData(instance, this, false, reason)));
+        StatusRemovalActions.OnRemoved(instance, this, reason);
         StatusBindingSystem.RemoveBindings(instance);
         instance.Caster?.CharacterCtrl?.OnStatusChangeControlRemoved(instance);
         BattleManager.Instance?.UnregisterStatusTick(instance);

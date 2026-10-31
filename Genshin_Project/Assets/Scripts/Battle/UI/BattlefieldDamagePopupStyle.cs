@@ -13,6 +13,8 @@ public class BattlefieldPopupStyle
     public int MaxVisible;
     public Color Color;
 
+    public virtual float RiseProgress(float age) => Mathf.Clamp01(age / Mathf.Max(.001f, Lifetime));
+
     public float Alpha(float age)
     {
         float alpha = FadeIn > 0 ? Mathf.Clamp01(age / FadeIn) : 1;
@@ -27,6 +29,11 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
     public bool ShowZero;
     public float XMin, XMax, YMin, YMax;
     public float CriticalFontSizeMultiplier = 1;
+    public float RiseDuration;
+    public float RiseEasePower = 1;
+    public float FastRiseDistanceRatio = 1;
+    public float OutlineWidthPixels;
+    public Color OutlineColor;
     public int Decimals, AmountMode;
 
     public static BattlefieldDamagePopupStyle Load()
@@ -62,7 +69,7 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
             "FontHeightRatio", "LifetimeSeconds", "FadeOutSeconds", "RiseHeightRatio", "MaxVisible", "Decimals",
             "AmountMode", "ShowZeroDamage", "Color" };
         if (values == null) throw new InvalidDataException("跳字参数缺少。");
-        var allowed = new HashSet<string>(keys, StringComparer.Ordinal) { "TimeBetweenHits", "HitTimeRandomVariant", "HitIntervalSeconds", "MediumTimeJitterSeconds", "FullTimeJitterSeconds", "MediumRandomScale", "CriticalFontSizeMultiplier" };
+        var allowed = new HashSet<string>(keys, StringComparer.Ordinal) { "TimeBetweenHits", "HitTimeRandomVariant", "HitIntervalSeconds", "MediumTimeJitterSeconds", "FullTimeJitterSeconds", "MediumRandomScale", "CriticalFontSizeMultiplier", "OutlineWidthPixels", "OutlineColor", "OutlineOpacity", "RiseDurationSeconds", "RiseEasePower", "FastRiseDistanceRatio" };
         foreach (string key in values.Keys)
             if (!allowed.Contains(key)) throw new InvalidDataException("未知跳字参数：" + key);
         foreach (string key in keys)
@@ -90,16 +97,49 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
             MaxVisible = Integer("MaxVisible", 1, 2048), Decimals = Integer("Decimals", 0, 3),
             AmountMode = Integer("AmountMode", 0, 1), ShowZero = Integer("ShowZeroDamage", 0, 1) == 1,
             CriticalFontSizeMultiplier = values.ContainsKey("CriticalFontSizeMultiplier") ? Number("CriticalFontSizeMultiplier") : 1,
+            RiseDuration = values.ContainsKey("RiseDurationSeconds") ? Number("RiseDurationSeconds") : Number("LifetimeSeconds"),
+            RiseEasePower = values.ContainsKey("RiseEasePower") ? Number("RiseEasePower") : 1,
+            FastRiseDistanceRatio = values.ContainsKey("FastRiseDistanceRatio") ? Number("FastRiseDistanceRatio") : 1,
         };
         if (style.XMin > style.XMax || style.YMin > style.YMax || style.FontHeightRatio <= 0 ||
             style.Lifetime <= 0 || style.FadeOut < 0 || style.FadeOut > style.Lifetime || style.CriticalFontSizeMultiplier <= 0)
             throw new InvalidDataException("跳字范围、字号或持续/淡出时长无效。");
+        if (style.RiseDuration <= 0 || style.RiseDuration > style.Lifetime || style.RiseEasePower < 1)
+            throw new InvalidDataException("上浮时长须大于0且不超过显示总时长；减速强度须至少为1。");
+        if (style.FastRiseDistanceRatio < style.RiseDuration / style.Lifetime || style.FastRiseDistanceRatio > 1 ||
+            (style.FastRiseDistanceRatio < 1 && style.RiseDuration >= style.Lifetime))
+            throw new InvalidDataException("快速上浮距离比例须在快速时长占比～1之间；保留慢速尾段时快速时长必须小于总时长。");
         if (!ColorUtility.TryParseHtmlString(values["Color"], out style.Color))
             throw new InvalidDataException("跳字 Color 必须为 HTML 颜色，例如 #FFFFFFFF。");
+        // Old published tables may omit the entire outline; partial configurations are errors.
+        if (values.ContainsKey("OutlineWidthPixels") || values.ContainsKey("OutlineColor") || values.ContainsKey("OutlineOpacity"))
+        {
+            foreach (string key in new[] { "OutlineWidthPixels", "OutlineColor", "OutlineOpacity" })
+                if (!values.ContainsKey(key)) throw new InvalidDataException("缺少跳字描边参数：" + key);
+            style.OutlineWidthPixels = Number("OutlineWidthPixels");
+            float opacity = Number("OutlineOpacity");
+            if (style.OutlineWidthPixels < 0 || opacity < 0 || opacity > 1 || values["OutlineColor"].Length != 7 ||
+                !ColorUtility.TryParseHtmlString(values["OutlineColor"], out style.OutlineColor))
+                throw new InvalidDataException("描边宽度须非负、颜色须为 #RRGGBB、不透明度须在 0～1。");
+            style.OutlineColor.a = opacity;
+        }
         return style;
     }
 
     public float FontSizeMultiplier(bool critical) => critical ? CriticalFontSizeMultiplier : 1;
+
+    public override float RiseProgress(float age)
+    {
+        float fastDuration = RiseDuration > 0 ? RiseDuration : Lifetime;
+        float t = Mathf.Clamp01(age / Mathf.Max(.001f, fastDuration));
+        float eased = 1 - Mathf.Pow(1 - t, Mathf.Max(1, RiseEasePower));
+        if (FastRiseDistanceRatio >= 1 || fastDuration >= Lifetime) return eased;
+        // Keep a constant slow drift through the fade. The fast component eases to zero velocity,
+        // so the transition does not stop or jump when the initial rise ends.
+        float slowSpeed = (1 - FastRiseDistanceRatio) / (Lifetime - fastDuration);
+        float extra = FastRiseDistanceRatio - slowSpeed * fastDuration;
+        return Mathf.Clamp01(slowSpeed * Mathf.Clamp(age, 0, Lifetime) + extra * eased);
+    }
 
     /// <summary>只有实际扣血才显示伤害数字；仅削盾、全部吸收或免伤仍保留原结算声明。</summary>
     public bool TryGetAmount(DamageEventData damage, out float amount)

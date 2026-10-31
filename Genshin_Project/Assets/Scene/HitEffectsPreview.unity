@@ -65,15 +65,8 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   controlsFont: {fileID: 12800000, guid: 450464c243909cd43b6b3c57a58ed5e1, type: 3}
   numberFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
-  allyCardPaths:
-  - art_assets/Character_Bare/1009_03.png
-  - art_assets/Character_Bare/1010_03.png
-  - art_assets/Character_Bare/1011_03.png
-  - art_assets/Character_Bare/1012_03.png
-  enemyCardPath: art_assets/Enemy/2001_01.png
-  framePath: art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameOutline.png
-  innerShadowPath: art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameInnerShadow.png
-  outerShadowPath: art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameShadow.png
+  characterIds: f1030000f2030000f3030000f4030000
+  enemyId: 2001
   allyGroupOffset: {x: -482.5, y: 33.5}
   enemyGroupOffset: {x: 509.5, y: 33}
   allyPositions:
@@ -92,6 +85,7 @@ MonoBehaviour:
   newSeedEachPlay: 1
   autoReplay: 0
   startWithShields: 1
+  animatedFaces: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

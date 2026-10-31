@@ -52,11 +52,14 @@ namespace GenshinTurnBased.Tests.EditMode
                 };
                 env.CreateMinimalBattle();
 
+                var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
                 object picked = typeof(EnemyBattleController)
                     .GetMethod("PickSkillByWeight", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(env.Enemy, null);
 
                 Assert.That(picked, Is.Null);
+                Assert.That(random.IntCallCount, Is.Zero);
+                Assert.That(random.FloatCallCount, Is.Zero);
             }
         }
 

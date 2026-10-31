@@ -147,7 +147,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Field(controller, "_cooldownRemaining", cooldowns);
             Field(controller, "_boundSkills", new[] { "", "", "SK_CURRENT", "" });
             HookTestEnv.InjectStatusEffect(data, ThunderingFuryCountHandler.PayoutEffectID,
-                "ReduceCooldown", "Skill", "1");
+                "Cooldown", "Skill", "-1");
             var main = new StatusMainData { StatusID2 = ThunderingFuryCountHandler.StatusID, StatusType = "Count" };
             var status = new StatusInstance { StatusID2 = main.StatusID2, MainData = main, IsActive = true };
             status.RecordSource(owner);

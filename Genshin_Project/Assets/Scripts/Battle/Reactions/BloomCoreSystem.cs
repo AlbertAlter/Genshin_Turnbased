@@ -210,7 +210,7 @@ public static class BloomCoreSystem
                      1))
         {
             FieldPosition slot = origin.OwnerField.GetSlot(BattleSide.Enemy, position);
-            if (slot != null && slot.IsOccupied && slot.Occupant != null)
+            if (slot != null && slot.Occupant?.IsOnField == true)
                 yield return slot.Occupant;
         }
     }

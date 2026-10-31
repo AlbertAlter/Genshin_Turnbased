@@ -12,7 +12,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int id, string part = null, bool independent = false)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = Key(id), StatusType = "Buff",
-                MultiplierPart1 = part, MaxStack = independent ? 0 : 1, MaxCount = independent ? 0 : 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = independent ? 0 : 1, MaxCount = independent ? 0 : 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[Key(id)] = main; return main;
         }
         private static StatusEffectData Effect(BattleFlowTestEnv env, int id, string type, string parameter)
@@ -249,7 +249,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Add(env, owner, root + 1, Weapon(owner, weapon, .24f));
             // 武器先挂载，圣遗物属性随后挂载；周期不能在前者的OnApply里提前采样。
             var mastery = new StatusMainData { StatusID = 990682, StatusID2 = "ST_OpeningArtifactEM",
-                StatusType = "Buff", MultiplierPart1 = "EMBonus", MaxStack = 1, MaxCount = 1 };
+                StatusType = "Buff", MultiplierPart = "EMBonus", MaxStack = 1, MaxCount = 1 };
             env.DataManager.StatusMainDict[mastery.StatusID2] = mastery;
             Effect(env, 99068201, "Buff", "80");
             owner.AddStatus(mastery.StatusID2, owner, 0, 2, 0, mastery);

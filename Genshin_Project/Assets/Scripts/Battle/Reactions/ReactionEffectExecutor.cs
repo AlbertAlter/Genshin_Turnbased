@@ -131,7 +131,7 @@ public static class ReactionEffectExecutor
                     HitIndex = 0,
                     TargetIndex = targetIndex++
                 });
-                hit.OnResolved?.Invoke(resolution); // 仅记本次已提交伤害结果，不发布第二份声明。
+                batch.AfterCommit(resolution, hit.OnResolved); // 场地盾须等本hit全部目标准备完，再读取实际扣盾/血结果。
             }
         }
         finally { batch?.Dispose(); }

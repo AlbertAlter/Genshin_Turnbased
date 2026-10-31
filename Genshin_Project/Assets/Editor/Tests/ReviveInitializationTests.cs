@@ -21,7 +21,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using var env = new BattleFlowTestEnv();
             env.ConfigureStatus(Passive); env.ConfigureStatus(Temporary); env.ConfigureStatus(Count); env.ConfigureStatus(Artifact);
             var main = env.DataManager.StatusMainDict[Passive];
-            main.StatusID = 9917101; main.StatusType = "Buff"; main.MultiplierPart1 = "HPBonusFlat";
+            main.StatusID = 9917101; main.StatusType = "Buff"; main.MultiplierPart = "HPBonusFlat";
             env.DataManager.StatusEffectDict["STE_ReviveInitialHP"] = new StatusEffectData
             { StatusEffectID = 991710101, StatusEffectID2 = "STE_ReviveInitialHP", EffectType = "Buff", Param1 = "200" };
             env.DataManager.StatusMainDict[Count].StatusType = "Count";

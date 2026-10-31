@@ -1,0 +1,83 @@
+{
+  "StageName": "01 蒸发：营地突袭",
+  "BattleID": 1,
+  "Allies": [
+    {
+      "CharacterID": 1015,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1023,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1020,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "CharacterID": 1026,
+      "Level": 70,
+      "Constellation": 0,
+      "IsAscended": true,
+      "SkillLevels": [
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  ],
+  "Enemies": [
+    {
+      "EnemyID": 2005,
+      "Level": 35,
+      "Slot": 1
+    },
+    {
+      "EnemyID": 2010,
+      "Level": 35,
+      "Slot": 2
+    },
+    {
+      "EnemyID": 2014,
+      "Level": 35,
+      "Slot": 3
+    },
+    {
+      "EnemyID": 2020,
+      "Level": 35,
+      "Slot": 4
+    },
+    {
+      "EnemyID": 2008,
+      "Level": 35,
+      "Slot": 5
+    }
+  ],
+  "InitialEnergyMode": "Percent",
+  "InitialEnergyValue": 100.0
+}

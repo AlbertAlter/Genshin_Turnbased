@@ -30,8 +30,12 @@ public static class TableValidator
             DamageProperties.TryReadFixedTrueBase(param1, out _);
             if (string.IsNullOrWhiteSpace(param1))
                 throw new FormatException("True/None 必须填写 Param1 固定基准或技能倍率表达式。");
-            if (!string.IsNullOrWhiteSpace(damageHook) || (DamageProperties.IsTrue(element) && !string.IsNullOrWhiteSpace(param2)))
-                throw new FormatException("True/None 不使用特殊 DamageHook；True 不使用 Splash，目标范围使用 Target 列配置。");
+            bool registeredAmount = DamageProperties.IsTrue(element) && table.IndexOf("Status", StringComparison.OrdinalIgnoreCase) >= 0
+                && BattleSpecialRules.HasFixedStatusAmount(damageHook);
+            if ((!string.IsNullOrWhiteSpace(damageHook) && !registeredAmount) || (DamageProperties.IsTrue(element) && !string.IsNullOrWhiteSpace(param2)))
+                throw new FormatException("True仅允许已登记的状态数值DamageHook；None不使用DamageHook；True不使用Splash。");
+            if (registeredAmount && (!DamageProperties.TryReadFixedTrueBase(param1, out float coefficient) || coefficient > 1f))
+                throw new FormatException("True状态数值钩子的Param1必须为0～1的有限系数。");
         }
         catch (FormatException error)
         {
@@ -117,10 +121,10 @@ public static class TableValidator
         bool noTarget = effectType == "ExecuteSkill" || effectType == "ExecuteEffect"
                      || effectType == "BindStatus" || effectType == "Buff" || effectType == "Debuff"
                      || effectType == "ChangeControl" || effectType == "APCost"
-                     || effectType == "ResetCooldown" || effectType == "ReduceCooldown" || effectType == "SwitchPattern";
-        if (effectType == "SwitchPattern" && !isEnemy)
-            throw new TableValidationException($"{tag}: SwitchPattern仅供敌人使用。");
-        if ((effectType == "ResetCooldown" || effectType == "ReduceCooldown") && isEnemy)
+                     || effectType == "ResetCooldown" || (effectType == "Cooldown" && !isEnemy) || effectType == "SwitchPattern" || effectType == "GrantAction";
+        if ((effectType == "SwitchPattern" || effectType == "GrantAction") && !isEnemy)
+            throw new TableValidationException($"{tag}: {effectType}仅供敌人使用。");
+        if (effectType == "ResetCooldown" && isEnemy)
             throw new TableValidationException($"{tag}: {effectType} 当前作用于角色技能；敌人没有对应的技能按钮绑定");
         // GainEnergy 的模式仍须合法；只有 Based 读取元素系数。
         // Flat 忽略 Element，允许留空或填 None/none。
@@ -165,9 +169,12 @@ public static class TableValidator
 
         // TargetOverride 非空时：忽略 TargetNumber/TargetConsecutive（L139/L141，不额外校验）
 
-        // 敌人模式1按HitWeight，2/3/4真随机；覆盖或固定目标不使用此参数。
-        // 例外：TargetType=Self 的效果（如跳舞给自己加buff）不需要选目标，跳过此校验
-        if (isEnemy && targetType != "Self" && string.IsNullOrWhiteSpace(targetOverride)
+        // 全体选取在解析器中直接返回，不读取TargetConsecutive。
+        // 技能用TargetNumber，状态效果用TargetSelect，不能把两套数量列混用。
+        bool selectsAllTargets = checkTargetNumber ? targetNumber == -1
+            : int.TryParse(targetSelect, out int selectedCount) && selectedCount == -1;
+        // 敌人模式1按HitWeight，2/3/4真随机；自身、全体及覆盖目标不使用此参数。
+        if (isEnemy && targetType != "Self" && !selectsAllTargets && string.IsNullOrWhiteSpace(targetOverride)
             && (targetConsecutive < 1 || targetConsecutive > 4))
         {
             throw new TableValidationException($"{tag}: 敌人技能TargetConsecutive只能填1,2,3,4（当前{targetConsecutive}）");
@@ -181,6 +188,16 @@ public static class TableValidator
             || !string.IsNullOrWhiteSpace(damageType) || !string.IsNullOrWhiteSpace(damageHook)
             || addInPhase != 0 || triggerPhase != 0)
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (SwitchIn): Param1/Param3、DamageType/DamageHook、AddInPhase/TriggerPhase必须留空。");
+    }
+
+    public static void ValidateGrantAction(string table, int row, string param1, string param2, string param3,
+        string element, string damageType, string damageHook, int duration, int addPhase, int triggerPhase)
+    {
+        if (!int.TryParse(param1, out _) || !string.IsNullOrWhiteSpace(param2)
+            || !string.IsNullOrWhiteSpace(param3) || !string.IsNullOrWhiteSpace(element)
+            || !string.IsNullOrWhiteSpace(damageType) || !string.IsNullOrWhiteSpace(damageHook)
+            || duration != 0 || addPhase != 0 || triggerPhase != 0)
+            throw new TableValidationException($"{table}第{row}行：GrantAction只填写整数Param1变动值（正数增加、负数减少、0无变动）；其他效果参数留空。");
     }
 
     public static void ValidateSwitchPattern(string table, int row, string param1, string param2, string param3,
@@ -214,13 +231,13 @@ public static class TableValidator
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ResetCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
     }
 
-    public static void ValidateReduceCooldown(string tableName, int row, string param1, string param2)
+    public static void ValidateCooldown(string tableName, int row, string param1, string param2, bool isEnemy = false)
     {
-        if (!ResetCooldownTarget.IsValid(param1))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ReduceCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
+        if (isEnemy ? !EnemySkillTags.IsValidReference(param1) : !ResetCooldownTarget.IsValid(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param1 必须为技能ID；角色还支持按钮名，敌人还支持Tag(标签)，当前=[{param1}]");
         int rounds;
-        if (!ReduceCooldownParameters.TryParseAmount(param2, out rounds))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ReduceCooldown): Param2 必须为非负int回合数，不接受空值、小数或公式，当前=[{param2}]");
+        if (!CooldownParameters.TryParseAmount(param2, out rounds))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param2 必须为有符号int增减量（正数增加、负数减少），不接受空值、小数或公式，当前=[{param2}]");
     }
 
     public static void ValidateBondOfLife(string tableName, int row, string param1)
@@ -294,9 +311,9 @@ public static class TableValidator
 
         if (isEnemy)
         {
-            if (!isStatusEffectTable || param1 != "All" || param2 != "Freeze"
+            if (!isStatusEffectTable || (param1 != "All" && param1 != "Extra") || param2 != "Freeze"
                 || !string.IsNullOrEmpty(param3) || duration != 0)
-                throw new TableValidationException($"{tag}: 敌人ChangeControl仅支持状态效果All/Freeze，跟随状态持续时间，Param3留空。");
+                throw new TableValidationException($"{tag}: 敌人ChangeControl仅支持状态效果All或Extra/Freeze，均保留贡献；All禁止全部分配，Extra仅禁止额外随机分配，跟随状态持续时间，Param3留空。");
             return;
         }
 

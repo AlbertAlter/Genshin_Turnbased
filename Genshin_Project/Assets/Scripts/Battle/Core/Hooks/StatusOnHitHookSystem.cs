@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -81,10 +81,19 @@ public static class StatusOnHitHookSystem
         DataManager dm = DataManager.Instance;
         if (dm == null) return;
 
+        var visited = new HashSet<StatusInstance>();
         StatusHostAccess.VisitEntity(actor, (statuses, host) =>
         {
-            foreach (var status in statuses) NotifyPlayerActionForStatus(status, host, actor, skill, dm);
+            foreach (var status in statuses)
+                if (visited.Add(status)) NotifyPlayerActionForStatus(status, host, actor, skill, dm);
         });
+        // 荆棘监听任意玩家主动行动，复用本次声明与响应集合；本地访问过的实例不重复收集。
+        var fields = BattleManager.Instance?.Field?.AllySlots;
+        if (fields != null)
+            foreach (var field in fields)
+                foreach (var status in field.StatusList)
+                    if (Enemy2011To2020Hooks.IsGlobalPlayerActionStatus(status) && visited.Add(status))
+                        NotifyPlayerActionForStatus(status, field, actor, skill, dm);
     }
 
     /// <summary>换人正式提交后，收集双方进出场声明；响应仍按全局 ApplyOrder 执行。</summary>

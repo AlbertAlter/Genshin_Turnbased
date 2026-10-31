@@ -138,7 +138,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 int id = 451905 + index;
                 var main = new StatusMainData { StatusID = id, StatusID2 = "ST_Artifact_" + id,
-                    StatusType = "Debuff", MultiplierPart2 = "ResBonus", ApplyElementType = elements[index],
+                    StatusType = "Debuff", MultiplierPart = "ResBonus", ApplyElementType = elements[index],
                     MaxCount = 1, MaxStack = 1, WhenMax = "0" };
                 env.DataManager.StatusMainDict[main.StatusID2] = main;
                 string applyID = "STE_Artifact_4519040" + (index + 1);

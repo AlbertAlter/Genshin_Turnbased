@@ -13,7 +13,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv env, int id, string part = null, bool count = false)
         {
             var main = new StatusMainData { StatusID = id, StatusID2 = Key(id), StatusType = count ? "Count" : "Buff",
-                MultiplierPart1 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             env.DataManager.StatusMainDict[Key(id)] = main; return main;
         }
         private static StatusEffectData Effect(BattleFlowTestEnv env, int id, string type, string formula, bool hook = false)

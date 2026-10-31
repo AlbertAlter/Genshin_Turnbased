@@ -14,13 +14,15 @@ public sealed class BattlePresentationConfiguration
         public double? HitInterval;
     }
     private readonly Dictionary<string, EffectOverride> effects;
+    private readonly BattleSkillPresentationTemplates templates;
     public double HitInterval { get; }
     public double MediumJitter { get; }
     public double FullJitter { get; }
     public float MediumRandomScale { get; }
 
     public BattlePresentationConfiguration(Dictionary<string, EffectOverride> effects = null,
-        double hitInterval = 0, double mediumJitter = 0, double fullJitter = 0, float mediumRandomScale = .5f)
+        double hitInterval = 0, double mediumJitter = 0, double fullJitter = 0, float mediumRandomScale = .5f,
+        BattleSkillPresentationTemplates templates = null)
     {
         new BattlePresentationTiming(hitInterval, mediumJitter);
         new BattlePresentationTiming(hitInterval, fullJitter);
@@ -37,17 +39,18 @@ public sealed class BattlePresentationConfiguration
                 this.effects.Add(entry.Key, new EffectOverride { X = value.X, Y = value.Y, Time = value.Time, HitInterval = value.HitInterval });
             }
         HitInterval = hitInterval; MediumJitter = mediumJitter; FullJitter = fullJitter; MediumRandomScale = mediumRandomScale;
+        this.templates = templates;
     }
 
     public static BattlePresentationConfiguration Load()
     {
         string data = Path.Combine(UnityEngine.Application.streamingAssetsPath, "Data");
         var values = BattlefieldDamagePopupStyle.ReadParameters(Path.Combine(data, "UI", BattlefieldDamagePopupStyle.FileName));
-        return Parse(values, ReadEffects(Path.Combine(data, EffectFileName)));
+        return Parse(values, ReadEffects(Path.Combine(data, EffectFileName)), BattleSkillPresentationTemplates.Load());
     }
 
     public static BattlePresentationConfiguration Parse(IReadOnlyDictionary<string, string> values,
-        Dictionary<string, EffectOverride> effects = null)
+        Dictionary<string, EffectOverride> effects = null, BattleSkillPresentationTemplates templates = null)
     {
         if (values == null) throw new InvalidDataException("缺少UI表现参数。");
         double Optional(string key, double fallback)
@@ -59,15 +62,20 @@ public sealed class BattlePresentationConfiguration
         double interval = Has("TimeBetweenHits") ? Optional("TimeBetweenHits", 0) : Optional("HitIntervalSeconds", 0);
         double full = Has("HitTimeRandomVariant") ? Optional("HitTimeRandomVariant", 0) : Optional("FullTimeJitterSeconds", 0);
         double medium = Has("HitTimeRandomVariant") ? full * scale : Optional("MediumTimeJitterSeconds", full * scale);
-        return new BattlePresentationConfiguration(effects, interval, medium, full, (float)scale);
+        return new BattlePresentationConfiguration(effects, interval, medium, full, (float)scale, templates);
     }
 
     public BattlePresentationTiming For(BattlePresentationResult result)
     {
         effects.TryGetValue(result.EffectID ?? string.Empty, out var item);
-        int time = item?.Time ?? 0;
+        int time = item?.Time ?? 2;
+        BattleHitTemplate template = null;
+        if (result.Data is DamageEventData damage && damage.Source.SourceSide == BattleSide.Ally)
+            template = templates?.Get(damage.SourceWeaponType, damage.DamageType);
+        if (template != null && item?.HitInterval != null) template = template.WithUniformInterval(item.HitInterval.Value);
         return new BattlePresentationTiming(item?.HitInterval ?? HitInterval,
-            time == 1 ? MediumJitter : time == 2 ? FullJitter : 0, item?.X ?? 2, item?.Y ?? 2, MediumRandomScale);
+            template != null ? 0 : time == 1 ? MediumJitter : time == 2 ? FullJitter : 0,
+            item?.X ?? 2, item?.Y ?? 2, MediumRandomScale, template);
     }
 
     public static Dictionary<string, EffectOverride> ReadEffects(string path)

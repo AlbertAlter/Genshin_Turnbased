@@ -18,7 +18,9 @@ public partial class CharacterBattleController
         object host,
         ScriptHookContext context, Func<bool> isStillValid = null)
     {
-        if (status == null || action == null || !EquipmentStatusLifetime.CanExecute(status)) return false;
+        if (status == null || action == null || action.ActionType == "OnDestroy" || action.ActionType == "OnDeath"
+            || status.DeathCleanupPending
+            || !EquipmentStatusLifetime.CanExecute(status)) return false;
         if (context != null && context.Declaration == null)
             context.Declaration = context.DamageEvent?.Declaration
                 ?? BattleEventHub.Find(context.HealEvent) ?? BattleEventHub.Find(context.ReactionEvent)
@@ -29,14 +31,26 @@ public partial class CharacterBattleController
             () => PrepareEventStatusAction(status, action, host, context, isStillValid));
     }
 
+    internal bool TryExecuteRemovedStatusAction(StatusRemovalActions.Request request, StatusActionData action)
+        => BattleResolutionContext.Submit(request.Status.ApplyOrder,
+            () => PrepareEventStatusAction(request.Status, action, request.Host, request.Context, null, request));
+
+    internal bool TryExecuteDeathStatusAction(StatusDeathActions.Request request, StatusActionData action)
+        => BattleResolutionContext.Submit(request.Status.ApplyOrder,
+            () => PrepareEventStatusAction(request.Status, action, request.Host, request.Context, null, null, request));
+
     BattleResolutionContext.PreparedTrigger PrepareEventStatusAction(
-        StatusInstance status, StatusActionData action, object host, ScriptHookContext context, Func<bool> isStillValid)
+        StatusInstance status, StatusActionData action, object host, ScriptHookContext context, Func<bool> isStillValid,
+        StatusRemovalActions.Request removal = null, StatusDeathActions.Request death = null)
     {
+        using var deathScope = death?.Enter();
+        bool Valid() => (death != null ? death.CanExecute
+            : (removal != null ? removal.CanExecute : status.IsActive && !status.DeathCleanupPending)
+                && EquipmentStatusLifetime.CanExecute(status)) && (isStillValid == null || isStillValid());
         string key = $"{status.GetHashCode()}:{BattleResolutionContext.ActionKey(action)}";
         bool limited = BattleResolutionContext.HasApplicableLimit(action);
         // 未配置新限制的旧行保留重入保护；配置 N 次的行使用整条连锁额度。
-        if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status)
-            || (isStillValid != null && !isStillValid()) || (!limited && ExecutingStatusActions.Contains(key))) return null;
+        if (!Valid() || (!limited && ExecutingStatusActions.Contains(key))) return null;
         if (StatusActionLimitReached(status, action)
             || BattleResolutionContext.LimitReached(status, action, context)) return null;
         // 治疗候选只能在整段正式提交后确认，不能把预计算数据当作已经发生的事件。
@@ -54,8 +68,9 @@ public partial class CharacterBattleController
         };
         return new BattleResolutionContext.PreparedTrigger(async () =>
         {
+            using var deathExecution = death?.Enter();
             // 不重复判断触发条件/概率；状态移除后取消请求，释放总次数预留。
-            if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status) || (isStillValid != null && !isStillValid())) return;
+            if (!Valid()) return;
             using var triggerDepth = BattleResolutionContext.EnterTrigger();
             bool ownsGuard = ExecutingStatusActions.Add(key);
             try
@@ -63,7 +78,7 @@ public partial class CharacterBattleController
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Status,
                     status.Caster, action.Param1, statusID: status.StatusID2), () =>
                 {
-                    if (!status.IsActive || !EquipmentStatusLifetime.CanExecute(status) || (isStillValid != null && !isStillValid())) return;
+                    if (!Valid()) return;
                     release();
                     CountStatusActionTrigger(status, action);
                     if (context != null && !string.IsNullOrEmpty(context.EventHookArgument)
@@ -71,7 +86,16 @@ public partial class CharacterBattleController
                         && context.ActionTargetPositions != null)
                         PostDamageHookSystem.SetPositions(context.EventHookArgument,
                             new List<int>(context.ActionTargetPositions));
-                    ExecuteStatusActionEffects(status, action, host, context);
+                    if (death != null) BattleExecution.Enqueue(async () =>
+                    {
+                        using var dying = death.Enter();
+                        if (death.CanExecute) await ExecuteStatusActionEffectsAsync(status, action, host, context);
+                    });
+                    else if (removal == null) ExecuteStatusActionEffects(status, action, host, context);
+                    else BattleExecution.Enqueue(async () =>
+                    {
+                        if (removal.CanExecute) await ExecuteStatusActionEffectsAsync(status, action, host, context);
+                    });
                 });
                 LogManager.Log(LogCategory.StatusAction,
                     $"事件状态行动执行 {status.StatusID2} {action.ActionType} (hook={action.ScriptHook})");

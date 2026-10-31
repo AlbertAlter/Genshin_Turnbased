@@ -215,7 +215,7 @@ public sealed class LunarElectroChargedReactionHandler : IDisposable
             foreach (var enemy in battle.Enemies)
             {
                 BattleEntity target = enemy != null ? enemy.Entity : null;
-                if (target == null || !target.IsAlive || !ElementQuery.HasAura(target, "Hydro") || !ElementQuery.HasAura(target, "Electro")) continue;
+                if (target == null || !target.IsOnField || !ElementQuery.HasAura(target, "Hydro") || !ElementQuery.HasAura(target, "Electro")) continue;
                 using var elements = ElementEventScope.Begin("LunarConductConsumption", target);
                 foreach (long id in state.Causes) elements.AddCause(id);
                 if (ElementQuery.ReadIntrinsic(target, "Hydro") == null) target.ConsumeAura("Hydro", Consumption);

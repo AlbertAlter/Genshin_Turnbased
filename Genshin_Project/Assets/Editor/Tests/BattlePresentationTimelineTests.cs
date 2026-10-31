@@ -59,6 +59,86 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void GenericTemplate_AllTargetsShareMarkers_AndExtraMarkersNeverCreateHits()
+        {
+            var sequence = new BattlePresentationSequence(); var a = Target(1); var b = Target(2);
+            for (int hit = 1; hit <= 4; hit++)
+                foreach (var target in new[] { a, b }) Add(sequence, Damage(target, 100, hit));
+            Seal(sequence);
+            var template = new BattleHitTemplate("Sword_Normal", new[] { .12, .32 }, .2);
+            var cues = BattlePresentationTimeline.Build(sequence, _ => new BattlePresentationTiming(.9, .8, hitTemplate: template));
+            Assert.That(cues.Count, Is.EqualTo(8));
+            foreach (var cue in cues) Assert.That(cue.Time, Is.EqualTo(.12 + (cue.Result.Header.HitId - 1) * .2).Within(1e-9));
+            var simultaneous = BattlePresentationTimeline.Build(sequence,
+                _ => new BattlePresentationTiming(hitTemplate: template.WithUniformInterval(0)));
+            Assert.That(simultaneous.All(c => Math.Abs(c.Time - .12) < 1e-9), Is.True);
+        }
+
+        [Test]
+        public void GenericTemplate_DoesNotRestartAfterStatusBarrier()
+        {
+            var sequence = new BattlePresentationSequence(); var target = Target(1);
+            Add(sequence, Damage(target, 100, 1));
+            Add(sequence, BattleEventHub.Record(new object(), new StatusEventData(new StatusInstance(), target, true, "Applied")));
+            Add(sequence, Damage(target, 100, 2)); Seal(sequence);
+            var template = new BattleHitTemplate("Sword_Normal", new[] { .12, .32 }, .2);
+            var cues = BattlePresentationTimeline.Build(sequence,
+                r => new BattlePresentationTiming(hitTemplate: r.Data is DamageEventData ? template : null));
+            Assert.That(cues[0].Time, Is.EqualTo(.12).Within(1e-9));
+            Assert.That(cues[1].Time, Is.EqualTo(.12).Within(1e-9));
+            Assert.That(cues[2].Time, Is.EqualTo(.32).Within(1e-9));
+        }
+
+        [Test]
+        public void GenericProjectile_LaunchIsSeparateFromTheOnlyDamageResult()
+        {
+            var sequence = new BattlePresentationSequence(); var target = Target(1);
+            using (BattleEventHub.BeginEffectExecution(42))
+                Add(sequence, BattleEventHub.Record(new object(), new DamageEventData(new DamageResolvedEvent {
+                    Target = target, HitLanded = true, Source = new DamageSourceInfo { SourceEffectID = "Normal" }, ActualHPDamage = 10,
+                }), hit: 1));
+            Seal(sequence);
+            var template = new BattleHitTemplate("Bow_Normal", new[] { .34, .54, .74 }, .2, .22);
+            var cues = BattlePresentationTimeline.Build(sequence, _ => new BattlePresentationTiming(hitTemplate: template));
+            Assert.That(cues.Count, Is.EqualTo(2));
+            Assert.That(cues[0].IsAnticipation, Is.True);
+            Assert.That(cues[0].Time, Is.EqualTo(.12).Within(1e-9));
+            Assert.That(cues[0].ProjectileSeconds, Is.EqualTo(.22).Within(1e-9));
+            Assert.That(cues[1].IsAnticipation, Is.False);
+            Assert.That(cues[1].Time, Is.EqualTo(.34).Within(1e-9));
+            Assert.That(cues[0].Result, Is.SameAs(cues[1].Result));
+        }
+
+        [Test]
+        public void VisualGroups_KeepAllTargets_AndOnlyOneLeaderForEachHit()
+        {
+            var a = Target(1); var b = Target(2); var sequence = new BattlePresentationSequence();
+            for (int hit = 1; hit <= 3; hit++)
+                foreach (var target in new[] { a, b })
+                    using (BattleEventHub.BeginEffectExecution(42))
+                        Add(sequence, BattleEventHub.Record(new object(), new DamageEventData(new DamageResolvedEvent
+                        {
+                            Target = target, HitLanded = true,
+                            Source = new DamageSourceInfo { SourceEffectID = "Normal" },
+                            ActualHPDamage = 10,
+                        }), hit: hit));
+            Seal(sequence);
+            var cues = BattlePresentationTimeline.Build(sequence, _ => new BattlePresentationTiming(.2, .1));
+            Assert.That(cues.Count, Is.EqualTo(6));
+            foreach (var hit in cues.GroupBy(c => c.Result.Header.HitId))
+            {
+                Assert.That(hit.Count(c => c.LeadsHit), Is.EqualTo(1));
+                foreach (var cue in hit)
+                {
+                    Assert.That(cue.VisualHitCount, Is.EqualTo(3));
+                    CollectionAssert.AreEquivalent(new[] { 1, 2 }, cue.HitResults.Select(r => r.TargetSlot));
+                    Assert.That(cue.VisualHitIndex, Is.EqualTo(hit.First().VisualHitIndex));
+                }
+                Assert.That(hit.First().LeadsHit, Is.True);
+            }
+        }
+
+        [Test]
         public void UIParameters_UseSharedMediumScale_AndEffectIntervalCanOverrideZero()
         {
             var target = Target(1); var sequence = new BattlePresentationSequence();
@@ -69,6 +149,10 @@ namespace GenshinTurnBased.Tests.EditMode
                 ["TimeBetweenHits"] = ".2", ["HitTimeRandomVariant"] = ".1", ["MediumRandomScale"] = ".5",
                 ["HitIntervalSeconds"] = "9", ["FullTimeJitterSeconds"] = "9", ["MediumTimeJitterSeconds"] = "8",
             };
+            var defaults = BattlePresentationConfiguration.Parse(values).For(result);
+            Assert.That(defaults.JitterSeconds, Is.EqualTo(.1).Within(1e-9));
+            Assert.That(defaults.XRandomMode, Is.EqualTo(2));
+            Assert.That(defaults.YRandomMode, Is.EqualTo(2));
             foreach (int mode in new[] { 0, 1, 2 })
             {
                 var effects = new Dictionary<string, BattlePresentationConfiguration.EffectOverride>

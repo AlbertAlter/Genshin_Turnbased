@@ -9,7 +9,9 @@ public sealed class BattlePresentationTiming
     public int XRandomMode { get; }
     public int YRandomMode { get; }
     public float MediumRandomScale { get; }
-    public BattlePresentationTiming(double interval = 0, double jitter = 0, int x = 2, int y = 2, float mediumScale = .5f)
+    public BattleHitTemplate HitTemplate { get; }
+    public BattlePresentationTiming(double interval = 0, double jitter = 0, int x = 2, int y = 2, float mediumScale = .5f,
+        BattleHitTemplate hitTemplate = null)
     {
         if (double.IsNaN(interval) || double.IsInfinity(interval) || interval < 0 ||
             double.IsNaN(jitter) || double.IsInfinity(jitter) || jitter < 0 || x < 0 || x > 2 || y < 0 || y > 2 ||
@@ -17,6 +19,7 @@ public sealed class BattlePresentationTiming
             throw new ArgumentOutOfRangeException(nameof(interval));
         HitIntervalSeconds = interval; JitterSeconds = jitter; XRandomMode = x; YRandomMode = y;
         MediumRandomScale = mediumScale;
+        HitTemplate = hitTemplate;
     }
 }
 
@@ -26,6 +29,14 @@ public sealed class BattlePresentationCue
     public double Time { get; internal set; }
     public BattlePresentationTiming Timing { get; }
     public int Block { get; }
+    // Visual grouping only: resolved targets of one logical hit, without changing cue order/times.
+    public IReadOnlyList<BattlePresentationResult> HitResults { get; internal set; }
+    public bool LeadsHit { get; internal set; }
+    public int VisualHitIndex { get; internal set; }
+    public int VisualHitCount { get; internal set; } = 1;
+    // Cosmetic launch only. Ordinary result views must never consume this stage.
+    public bool IsAnticipation { get; internal set; }
+    public double ProjectileSeconds { get; internal set; }
     internal BattlePresentationCue(BattlePresentationResult result, double time, BattlePresentationTiming timing, int block = 0)
     { Result = result; Time = time; Timing = timing; Block = block; }
 }
@@ -36,6 +47,16 @@ public sealed class BattlePresentationCue
 /// </summary>
 public static class BattlePresentationTimeline
 {
+    private sealed class TemplatePlan
+    {
+        public BattleHitTemplate Template;
+        public double? Start;
+        public readonly Dictionary<long, int> Hits = new Dictionary<long, int>();
+    }
+    private static long HitKey(BattlePresentationResult r) => r.Header.HitId != 0 ? r.Header.HitId
+        : r.RequestID != 0 ? r.RequestID : r.Header.EventId;
+    private static (long, long, string) ExecutionKey(BattlePresentationResult r) =>
+        (r.Header.SessionId, r.Header.EffectExecutionId != 0 ? r.Header.EffectExecutionId : HitKey(r), r.EffectID);
     private sealed class Group
     {
         public long Session, Execution, Request;
@@ -54,7 +75,38 @@ public static class BattlePresentationTimeline
         double cursor = 0;
         int block = 0;
         Group group = null;
-        BattlePresentationTiming Settings(BattlePresentationResult result) => settings?.Invoke(result) ?? new BattlePresentationTiming();
+        var settingsCache = new Dictionary<(long, long), BattlePresentationTiming>();
+        var plans = new Dictionary<(long, long, string), TemplatePlan>();
+        var linkedPlans = new Dictionary<(long, long, long), TemplatePlan>();
+        foreach (var r in sequence.Results)
+        {
+            var eventKey = (r.Header.SessionId, r.Header.EventId);
+            if (settingsCache.ContainsKey(eventKey)) continue;
+            var timing = settings?.Invoke(r) ?? new BattlePresentationTiming();
+            settingsCache.Add(eventKey, timing);
+            if (!(r.Data is DamageEventData) || timing.HitTemplate == null) continue;
+            var key = ExecutionKey(r);
+            if (!plans.TryGetValue(key, out var plan))
+                plans.Add(key, plan = new TemplatePlan { Template = timing.HitTemplate });
+            long hit = HitKey(r);
+            if (!plan.Hits.ContainsKey(hit)) plan.Hits.Add(hit, plan.Hits.Count);
+            if (r.Header.EffectExecutionId != 0 && r.Header.HitId != 0)
+                linkedPlans[(r.Header.SessionId, r.Header.EffectExecutionId, r.Header.HitId)] = plan;
+        }
+        BattlePresentationTiming Settings(BattlePresentationResult result) => settingsCache[(result.Header.SessionId, result.Header.EventId)];
+        TemplatePlan Plan(BattlePresentationResult r)
+        {
+            if (r.Data is DamageEventData && Settings(r).HitTemplate != null)
+                return plans[ExecutionKey(r)];
+            return linkedPlans.TryGetValue((r.Header.SessionId, r.Header.EffectExecutionId, r.Header.HitId), out var p) ? p : null;
+        }
+        double Marker(BattlePresentationResult r, double floor)
+        {
+            var plan = Plan(r);
+            if (plan == null) return floor;
+            if (!plan.Start.HasValue) plan.Start = floor;
+            return Math.Max(floor, plan.Start.Value + plan.Template.HitTime(plan.Hits[HitKey(r)]));
+        }
         double CauseFloor(BattlePresentationResult result, double time)
         {
             foreach (long cause in result.Header.CauseEventIds)
@@ -80,7 +132,8 @@ public static class BattlePresentationTimeline
                 if (!hits.TryGetValue(hit, out int index)) { index = hits.Count; hits.Add(hit, index); }
                 var timing = Settings(result);
                 // 时间偏移围绕命中基准前后对称，但不得提前到本效果/因果屏障之前。
-                double time = Math.Max(start, start + index * timing.HitIntervalSeconds + (Unit(result) * 2 - 1) * timing.JitterSeconds);
+                double time = timing.HitTemplate != null ? Marker(result, start)
+                    : Math.Max(start, start + index * timing.HitIntervalSeconds + (Unit(result) * 2 - 1) * timing.JitterSeconds);
                 var target = (result.TargetSide, result.TargetSlot);
                 if (targetTimes.TryGetValue(target, out double previous)) time = Math.Max(time, previous);
                 time = CauseFloor(result, time);
@@ -113,7 +166,7 @@ public static class BattlePresentationTimeline
             }
             else if (result.Data is HPChangedEventData && group != null && HasDamageCause(result, group.Damage))
                 group.AttachedHP.Add(result);
-            else { Flush(); Add(result, cursor, Settings(result)); block++; }
+            else { Flush(); Add(result, Marker(result, cursor), Settings(result)); block++; }
         }
         Flush();
         // 先按实际提交轨迹补全直接因果约束（HP附属项是在完整Damage组计算后才取得命中时间）。
@@ -126,7 +179,66 @@ public static class BattlePresentationTimeline
         }
         cues.Sort((left, right) => left.Block != right.Block ? left.Block.CompareTo(right.Block)
             : left.Time != right.Time ? left.Time.CompareTo(right.Time) : left.Result.Order.CompareTo(right.Result.Order));
+        AttachHitGroups(cues);
+        // Launch before the first related record, including a reaction recorded before its damage.
+        // Causal barriers remain intact: shorten a flight if an earlier block leaves less room.
+        var launches = new List<BattlePresentationCue>();
+        foreach (var cue in cues)
+        {
+            if (!(cue.Result.Data is DamageEventData damage) || !damage.HitLanded ||
+                cue.Timing.HitTemplate == null || cue.Timing.HitTemplate.ProjectileSeconds <= 0) continue;
+            var plan = Plan(cue.Result); long hit = HitKey(cue.Result);
+            int firstBlock = cue.Block;
+            foreach (var related in cues)
+                if (Plan(related.Result) == plan && HitKey(related.Result) == hit) firstBlock = Math.Min(firstBlock, related.Block);
+            double floor = plan.Start ?? 0;
+            foreach (var previous in cues) if (previous.Block < firstBlock) floor = Math.Max(floor, previous.Time);
+            double launchTime = Math.Max(floor, cue.Time - cue.Timing.HitTemplate.ProjectileSeconds);
+            if (launchTime >= cue.Time) continue;
+            launches.Add(new BattlePresentationCue(cue.Result, launchTime, cue.Timing, firstBlock) {
+                IsAnticipation = true, ProjectileSeconds = cue.Time - launchTime,
+                HitResults = cue.HitResults, LeadsHit = cue.LeadsHit,
+                VisualHitIndex = cue.VisualHitIndex, VisualHitCount = cue.VisualHitCount });
+        }
+        cues.AddRange(launches);
+        cues.Sort((a, b) => a.Block != b.Block ? a.Block.CompareTo(b.Block) : a.Time != b.Time ? a.Time.CompareTo(b.Time)
+            : a.IsAnticipation != b.IsAnticipation ? (a.IsAnticipation ? -1 : 1) : a.Result.Order.CompareTo(b.Result.Order));
         return cues.AsReadOnly();
+    }
+
+    private static void AttachHitGroups(List<BattlePresentationCue> cues)
+    {
+        var groups = new Dictionary<(long, long, long, string), List<BattlePresentationCue>>();
+        var effects = new Dictionary<(long, long, string), List<List<BattlePresentationCue>>>();
+        foreach (var cue in cues)
+        {
+            if (!(cue.Result.Data is DamageEventData damage) || !damage.HitLanded) continue;
+            var r = cue.Result; var h = r.Header;
+            long hit = h.HitId != 0 ? h.HitId : h.EventId;
+            long execution = h.EffectExecutionId != 0 ? h.EffectExecutionId : r.RequestID;
+            var key = (h.SessionId, execution, hit, r.EffectID);
+            if (!groups.TryGetValue(key, out var group))
+            {
+                group = new List<BattlePresentationCue>(); groups.Add(key, group);
+                var effectKey = (h.SessionId, execution, r.EffectID);
+                if (!effects.TryGetValue(effectKey, out var effectHits))
+                    effects.Add(effectKey, effectHits = new List<List<BattlePresentationCue>>());
+                effectHits.Add(group);
+            }
+            group.Add(cue);
+        }
+        foreach (var effect in effects.Values)
+            for (int i = 0; i < effect.Count; i++)
+            {
+                var group = effect[i]; var results = new List<BattlePresentationResult>();
+                foreach (var cue in group) results.Add(cue.Result);
+                var shared = results.AsReadOnly();
+                for (int j = 0; j < group.Count; j++)
+                {
+                    group[j].HitResults = shared; group[j].LeadsHit = j == 0;
+                    group[j].VisualHitIndex = i; group[j].VisualHitCount = effect.Count;
+                }
+            }
     }
 
     private static bool HasDamageCause(BattlePresentationResult hp, List<BattlePresentationResult> damage)

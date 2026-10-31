@@ -14,7 +14,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData Main(BattleFlowTestEnv e, int index, string key, string kind = "", string part = "")
         {
             var m = new StatusMainData { StatusID = 4102100 + index, StatusID2 = key, StatusType = kind,
-                MultiplierPart2 = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
+                MultiplierPart = part, MaxStack = 1, MaxCount = 1, WhenMax = "0" };
             e.DataManager.StatusMainDict[key] = m;
             if (!e.DataManager.CharacterStatusIDs.TryGetValue(1021, out var ids))
                 e.DataManager.CharacterStatusIDs[1021] = ids = new HashSet<string>();
@@ -67,7 +67,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Main(e, 3, NoelleScriptHooks.Devotion); Main(e, 4, NoelleScriptHooks.CleanActions, "Count");
             Main(e, 5, S + "C2", "Buff", "DMGBonus").ApplyDamageType = "Heavy";
             Main(e, 6, S + "BurstCost"); Main(e, 7, S + "Enchant", "Enchant");
-            Main(e, 8, S + "DevotionShield", "Shield"); Main(e, 9, NoelleScriptHooks.C4);
+            Main(e, 8, S + "DevotionShield", "Shield");
             var shield = Effect(e, 1, 1, "STE_Noelle_Shield", "Shield"); shield.Element = "Geo"; shield.Duration = 3;
             Effect(e, 1, 2, "STE_Noelle_Heal", "Heal", target: "Allies").TargetSelect = "-1";
             Level(e, "STE_Noelle_Shield", 2, "1.6*TotalDEF+769", "2*TotalDEF+1020");
@@ -86,26 +86,27 @@ namespace GenshinTurnBased.Tests.EditMode
             Effect(e, 2, 6, "STE_Noelle_Extend", "AddTurn", NoelleScriptHooks.SweepingTime).Param2 = "1";
             var grant = Effect(e, 3, 1, "STE_Noelle_DevotionShield", "ApplyStatus", S + "DevotionShield", "Allies");
             grant.TargetOverride = "Noelle_DevotionTarget()"; grant.Duration = 5; grant.AddInPhase = 2;
-            Effect(e, 4, 1, "STE_Noelle_ReduceCooldown", "ReduceCooldown", "Skill").Param2 = "1";
+            Effect(e, 4, 1, "STE_Noelle_Cooldown", "Cooldown", "Skill").Param2 = "-1";
             Effect(e, 5, 1, "STE_Noelle_C2Damage", "Buff", ".15");
             Effect(e, 5, 2, "STE_Noelle_C2Cost", "APCost", "-5").Param2 = "Heavy";
             Effect(e, 6, 1, "STE_Noelle_BurstCost", "APCost", "-5").Param2 = "Normal;Heavy";
             var devotionShield = Effect(e, 8, 1, "STE_Noelle_CreateDevotionShield", "Shield", "4*TotalDEF");
             devotionShield.Element = "Geo"; devotionShield.Duration = 5;
-            var c4 = Effect(e, 9, 1, "STE_Noelle_C4Damage", "Damage", "4*TotalATK,2", "Enemy");
+            var c4 = Effect(e, 1, 3, "STE_Noelle_C4Damage", "Damage", "4*TotalATK,2", "Enemy");
             c4.Element = "Geo"; c4.DamageType = "Skill"; c4.TargetSelect = "-1";
             Actions(e, NoelleScriptHooks.Breastplate,
                 new StatusActionData { ActionType = "OnApply", Param1 = "STE_Noelle_Shield" },
                 new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_Heal", OutgoingHit = "Normal;Heavy",
-                    ScriptHook = "Noelle_HealingHit()", MaxTimePerHit = 1 });
+                    ScriptHook = "Noelle_HealingHit()", MaxTimePerHit = 1 },
+                new StatusActionData { ActionType = "OnEnd", Param1 = "STE_Noelle_C4Damage", ScriptHook = "Check(1021_C4)" },
+                new StatusActionData { ActionType = "OnDestroy", Param1 = "STE_Noelle_C4Damage", ScriptHook = "Check(1021_C4);Noelle_ShieldDestroyed()" });
             Actions(e, NoelleScriptHooks.SweepingTime, new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_Extend",
                 ScriptHook = "Kill(Self);Check(1021_C6)", MaxTimePerLife = 2 });
             Actions(e, NoelleScriptHooks.Devotion,
                 new StatusActionData { ActionType = "OnItsTurn", Param1 = "STE_Noelle_DevotionShield", ScriptHook = "Noelle_Devotion()", Cooldown = 15 },
                 new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_DevotionShield", ScriptHook = "Noelle_Devotion()", Cooldown = 15 });
-            Actions(e, NoelleScriptHooks.CleanActions, new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_ReduceCooldown", ScriptHook = "Noelle_FourActions()" });
+            Actions(e, NoelleScriptHooks.CleanActions, new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_Cooldown", ScriptHook = "Noelle_FourActions()" });
             Actions(e, S + "DevotionShield", new StatusActionData { ActionType = "OnApply", Param1 = "STE_Noelle_CreateDevotionShield" });
-            Actions(e, NoelleScriptHooks.C4, new StatusActionData { ActionType = "OnTrigger", Param1 = "STE_Noelle_C4Damage", ScriptHook = "Noelle_C4ShieldEnd()" });
             e.CreateMinimalBattle(); e.Ally.Entity.EntityID = 1021; e.Ally.Entity.ConstellationLevel = constellation;
             e.Ally.Entity.TotalDEF = e.Ally.Entity.TotalATK = 100; e.Ally.Entity.CritRate = 0;
             e.CreateAlly(2); e.CreateEnemy(2); e.CreateEnemy(3);
@@ -237,7 +238,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private async Task C4Async()
         {
             using var e = new BattleFlowTestEnv(); Setup(e, 4); var owner = e.Ally.Entity;
-            Add(e, NoelleScriptHooks.C4); int hits = 0;
+            int hits = 0;
             using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
             { if (fact.Source.SourceEffectID == "STE_Noelle_C4Damage") hits++; }, 0);
             await BattleExecution.Run(async () =>
@@ -245,15 +246,38 @@ namespace GenshinTurnBased.Tests.EditMode
                 var old = Add(e, NoelleScriptHooks.Breastplate, 3); await BattleExecution.Flush();
                 Add(e, NoelleScriptHooks.Breastplate, 3); await BattleExecution.Flush();
                 Assert.That(old.IsActive, Is.False); Assert.That(hits, Is.EqualTo(3));
-                owner.RemoveStatusInstance(owner.GetStatus(NoelleScriptHooks.Breastplate), "Expired"); await BattleExecution.Flush();
+                var ending = owner.GetStatus(NoelleScriptHooks.Breastplate);
+                await e.Ally.ExecuteStatusActionsTask(ending, e.DataManager.StatusActionDict[NoelleScriptHooks.Breastplate], owner, "OnEnd");
+                owner.RemoveStatusInstance(ending, "Expired"); await BattleExecution.Flush();
                 Assert.That(hits, Is.EqualTo(6));
                 Add(e, NoelleScriptHooks.Breastplate, 3); await BattleExecution.Flush();
                 owner.TakeDamage(2500, DamageSourceInfo.CreateUnknown()); await BattleExecution.Flush();
                 Assert.That(hits, Is.EqualTo(9));
+                var removed = Add(e, NoelleScriptHooks.Breastplate, 3); await BattleExecution.Flush();
+                owner.RemoveStatusInstance(removed); await BattleExecution.Flush();
+                Assert.That(hits, Is.EqualTo(9), "普通主动删除不冒充破盾或重施替换。");
                 Add(e, NoelleScriptHooks.Breastplate, 3); await BattleExecution.Flush();
                 owner.TakeDamage(100000, DamageSourceInfo.CreateUnknown()); await BattleExecution.Flush();
                 Assert.That(hits, Is.EqualTo(9));
             });
+        }
+
+        [Test]
+        public void C4_NaturalEndDamageRunsWhileOwnShieldStillExists()
+        {
+            using var e = new BattleFlowTestEnv(); Setup(e, 4); var owner = e.Ally.Entity;
+            var root = owner.AddStatus(NoelleScriptHooks.Breastplate, owner, 1, 3, 0,
+                e.DataManager.StatusMainDict[NoelleScriptHooks.Breastplate]);
+            var protectedHits = new List<bool>();
+            using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
+            {
+                if (fact.Source.SourceEffectID == "STE_Noelle_C4Damage")
+                    protectedHits.Add(root.IsActive && owner.Shields.Any(s => s.SourceStatus == root && s.Value > 0));
+            }, 0);
+            e.Manager.EndAllyTurn(); e.Flow.AdvanceToPhase(e.Manager, TurnPhase.EnemyPreTurn);
+            Assert.That(protectedHits, Is.EqualTo(new[] { true, true, true }));
+            Assert.That(root.IsActive, Is.False);
+            Assert.That(owner.Shields.Any(s => s.SourceStatus == root), Is.False);
         }
 
         [UnityTest]

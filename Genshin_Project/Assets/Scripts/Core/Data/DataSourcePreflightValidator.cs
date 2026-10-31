@@ -22,6 +22,7 @@ public static class DataSourcePreflightValidator
             return errors;
         }
 
+        ValidateWorkbook(dataRoot, "lang.xlsx", errors, "lang");
         ValidateWorkbook(dataRoot, "Characters.xlsx", errors, "Sheet1");
         ValidateWorkbook(dataRoot, "Character_Growth_Curve.xlsx", errors, "GrowthCurve_1", "GrowthCurve_2");
         ValidateWorkbook(dataRoot, "WeaponAttributes.xlsx", errors,

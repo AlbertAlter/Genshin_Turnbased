@@ -7,7 +7,7 @@ using System.Threading;
 public static class XianglingScriptHooks
 {
     public const string Guoba = "ST_Xiangling_Guoba", Pyronado = "ST_Xiangling_Pyronado";
-    public const string Pepper = "ST_Xiangling_Pepper", FifthNormal = "ST_Xiangling_FifthNormal";
+    public const string FifthNormal = "ST_Xiangling_FifthNormal";
     private sealed class SkillFrame : IDisposable
     {
         internal readonly BattleEntity Owner;
@@ -32,15 +32,12 @@ public static class XianglingScriptHooks
         = new ConditionalWeakTable<BattleDeclaration, SkillFrame>();
     private static readonly ConditionalWeakTable<BattleDeclaration, HashSet<StatusInstance>> Requests
         = new ConditionalWeakTable<BattleDeclaration, HashSet<StatusInstance>>();
-    private static readonly ConditionalWeakTable<StatusInstance, IDisposable> PepperListeners
-        = new ConditionalWeakTable<StatusInstance, IDisposable>();
 
     internal static void Register()
     {
         BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new SkillFrame(owner, skill));
         BattleSpecialRules.RegisterStatusActionScope(status => new SprayFrame(status));
         BattleSpecialRules.RegisterDeclarationObserver(Index);
-        BattleSpecialRules.RegisterStatusLifecycle(Pepper, StartPepper, StopPepper);
         BattleSpecialRules.RegisterCondition("Xiangling_GuobaHit", (a, c) => Empty(a)
             && c?.Caster?.EntityID == 1022 && c.Status?.StatusID2 == Guoba
             && c.DamageEvent?.HitLanded == true && c.DamageEvent.Source?.SourceStatus == c.Status
@@ -48,10 +45,11 @@ public static class XianglingScriptHooks
         BattleSpecialRules.RegisterCondition("Xiangling_GuobaEnergy", (a, c) => Empty(a)
             && Active(c?.Status, c?.Caster) && c.Status.StatusID2 == Guoba
             && Spray.Value?.Status == c.Status && Spray.Value.Hit);
-        BattleSpecialRules.RegisterCondition("Xiangling_Pepper", (a, c) => Empty(a)
-            && c?.Status?.StatusID2 == Pepper && c.Caster?.IsAlive == true
-            && c.Declaration?.Get<StatusEventData>() is StatusEventData fact
-            && fact.Host == c.Caster && fact.StatusId == Guoba && PepperEnd(fact.Reason));
+        BattleSpecialRules.RegisterCondition("Xiangling_GuobaReplaced", (a, c) => Empty(a)
+            && c?.Status?.StatusID2 == Guoba && !c.Status.IsActive && c.Caster?.IsAlive == true
+            && c.Declaration?.Kind == BattleEventKind.StatusRemoved
+            && c.Declaration.Get<StatusEventData>() is StatusEventData fact
+            && fact.Host == c.Caster && fact.InstanceId == c.Status.ApplyOrder && fact.Reason == "Replaced");
         BattleSpecialRules.RegisterCondition("Xiangling_Pyronado", (a, c) => Empty(a) && Requested(c, Pyronado));
         BattleSpecialRules.RegisterCondition("Xiangling_PyronadoEmpty", (a, c) => Empty(a)
             && c?.Status?.StatusID2==Pyronado && c.Status.RuntimeIntValue==0);
@@ -122,19 +120,6 @@ public static class XianglingScriptHooks
             && current?.Owner?.EntityID == 1022 && action.Subject == current.Owner && action.SkillId == current.SkillID)
             NormalFacts.Add(declaration, current);
     }
-
-    private static bool PepperEnd(string reason) => reason == "Expired" || reason == "Replaced";
-    private static void StartPepper(StatusInstance status, object host)
-    {
-        var owner = RequireOwner(status, host); status.IsPermanent = true; status.RemainingPhaseCount = 0;
-        PepperListeners.Add(status, BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved, (_, fact) =>
-        {
-            if (fact.Host == owner && fact.StatusId == Guoba && PepperEnd(fact.Reason))
-                Dispatch(status, "Xiangling_Pepper()", BattleEventHub.Current);
-        }, status.ApplyOrder, () => Active(status, owner)));
-    }
-    private static void StopPepper(StatusInstance status, object host)
-    { if (PepperListeners.TryGetValue(status, out var listener)) listener.Dispose(); PepperListeners.Remove(status); }
 
     private static bool Requested(ScriptHookContext context, string id)
         => context?.Status?.StatusID2 == id && context.Declaration != null

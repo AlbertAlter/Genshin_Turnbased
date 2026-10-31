@@ -178,7 +178,7 @@ public static class BloomSecondaryReactionHandler
                      1))
         {
             FieldPosition slot = origin.OwnerField.GetSlot(BattleSide.Enemy, slotIndex);
-            if (slot != null && slot.IsOccupied && slot.Occupant != null)
+            if (slot != null && slot.Occupant?.IsOnField == true)
                 targets.Add(slot.Occupant);
         }
         return targets;

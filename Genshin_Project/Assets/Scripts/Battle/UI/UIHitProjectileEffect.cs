@@ -10,20 +10,36 @@ public sealed class UIHitProjectileEffect : MonoBehaviour
     public bool Completed => age >= duration;
     public float HeadingDegrees => Mathf.Atan2(end.y - start.y, end.x - start.x) * Mathf.Rad2Deg;
     public static UIHitProjectileEffect Create(RectTransform layer, RectTransform source, RectTransform target,
-        Vector2 hitPoint, HitEffectTextureStyle.Profile style, HitTextureLibrary library, Color color)
+        Vector2 hitPoint, HitEffectTextureStyle.Profile style, HitTextureLibrary library, Color color, float? durationOverride = null)
     {
-        if (source == null || target == null || source == target || style.Number("FlightSeconds") <= 0) return null;
+        if (source == null || target == null || source == target) return null;
+        return Create(layer, source, Destination(layer, target, hitPoint), style, library, color, durationOverride);
+    }
+    public static Vector2 Destination(RectTransform layer, RectTransform target, Vector2 hitPoint)
+        => layer.InverseTransformPoint(target.TransformPoint(target.rect.center + Vector2.Scale(hitPoint - Vector2.one * .5f, target.rect.size)));
+    private static Vector2 Origin(RectTransform layer, RectTransform source, Vector2 destination, HitEffectTextureStyle.Profile style)
+    {
+        Vector2 sourceCenter = layer.InverseTransformPoint(source.TransformPoint(source.rect.center));
+        float facing = destination.x >= sourceCenter.x ? 1 : -1;
+        return layer.InverseTransformPoint(source.TransformPoint(source.rect.center +
+            new Vector2(source.rect.width * style.Number("SourceForwardRatio") * facing, source.rect.height * style.Number("SourceHeightRatio"))));
+    }
+    public static float Heading(RectTransform layer, RectTransform source, Vector2 destination, HitEffectTextureStyle.Profile style)
+    {
+        Vector2 direction = destination - Origin(layer, source, destination, style);
+        return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+    public static UIHitProjectileEffect Create(RectTransform layer, RectTransform source, Vector2 destination,
+        HitEffectTextureStyle.Profile style, HitTextureLibrary library, Color color, float? durationOverride = null)
+    {
+        float flightDuration = durationOverride ?? style.Number("FlightSeconds");
+        if (source == null || flightDuration <= 0) return null;
         var sprite = library.Get(style.Text("ProjectileTexture")); if (sprite == null) return null;
         var go = new GameObject("CosmeticProjectile", typeof(RectTransform)); go.transform.SetParent(layer, false);
         var effect = go.AddComponent<UIHitProjectileEffect>();
-        Vector2 sourceCenter = layer.InverseTransformPoint(source.TransformPoint(source.rect.center));
-        Vector2 targetCenter = layer.InverseTransformPoint(target.TransformPoint(target.rect.center));
-        float facing = targetCenter.x >= sourceCenter.x ? 1 : -1;
-        Vector2 sourceOffset = source.rect.center + new Vector2(source.rect.width * style.Number("SourceForwardRatio") * facing,
-            source.rect.height * style.Number("SourceHeightRatio"));
-        effect.start = layer.InverseTransformPoint(source.TransformPoint(sourceOffset));
-        effect.end = layer.InverseTransformPoint(target.TransformPoint(target.rect.center + Vector2.Scale(hitPoint - Vector2.one * .5f, target.rect.size)));
-        effect.duration = style.Number("FlightSeconds"); effect.tint = color;
+        effect.start = Origin(layer, source, destination, style);
+        effect.end = destination;
+        effect.duration = flightDuration; effect.tint = color;
         float width = source.rect.width * style.Number("ProjectileWidthRatio");
         Vector2 size = new Vector2(width, width * sprite.rect.height / sprite.rect.width);
         effect.glow = Make("ProjectileGlow", go.transform, sprite, library.LightMaterial, size * 1.3f);
