@@ -11,6 +11,7 @@ public sealed class UICardFrameView : MonoBehaviour
     public RectTransform FrontEffects { get; private set; }
     public RectTransform BackEffects { get; private set; }
     public RectTransform FreezeLayer { get; private set; }
+    public RectTransform ShieldLayer { get; private set; }
     public RectTransform Root => (RectTransform)transform;
     public Image OuterShadow { get; private set; }
     public Graphic[] SnapshotLayers => new Graphic[] { Surface, frameImage, innerImage };
@@ -57,8 +58,8 @@ public sealed class UICardFrameView : MonoBehaviour
         // Keep the frame's original antialiased outside edge, then put the clipped inner shadow above it.
         RectTransform shade = AddMask("CardInnerShadowMask", visuals, silhouette);
         innerImage = AddImage("InnerShadow", shade, innerShadow);
-        // Shield membranes are children of Surface. This sibling is always above shields and the frame.
         FreezeLayer = Stretch("FreezeOverlay", visuals);
+        ShieldLayer = Stretch("ShieldOverlay", visuals);
         FrontEffects = Stretch("EffectsFront", visuals);
         RefreshCrop();
     }
@@ -196,7 +197,7 @@ public sealed class UICardFrameView : MonoBehaviour
     {
         if (visuals != null) { visuals.gameObject.SetActive(false); Destroy(visuals.gameObject); visuals = null; }
         Surface = null; frameImage = glowImage = innerImage = OuterShadow = null;
-        FrontEffects = BackEffects = FreezeLayer = null; frame = null;
+        FrontEffects = BackEffects = FreezeLayer = ShieldLayer = null; frame = null;
         if (maskKey != 0 && Masks.TryGetValue(maskKey, out var mask) && --mask.Users == 0)
         {
             Destroy(mask.Sprite.texture); Destroy(mask.Sprite);

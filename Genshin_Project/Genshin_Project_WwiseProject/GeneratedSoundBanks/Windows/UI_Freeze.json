@@ -1,0 +1,154 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "2196884311",
+    "Type": "User",
+    "GUID": "{1427F3D3-6A17-4FAB-A2C3-4B017EA835A4}",
+    "Language": "SFX",
+    "Hash": "{CDFFDADB-9942-98FA-8137-14C89BA2071B}",
+    "ObjectPath": "\\SoundBanks\\Default Work Unit\\UI_Freeze",
+    "ShortName": "UI_Freeze",
+    "Path": "UI_Freeze.bnk",
+    "Media": [
+     {
+      "Id": "440609607",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Freeze\\Freeze_02_Crack.wav",
+      "CachePath": "A2/{A2378D5E-590E-4AEF-4C50-ED97013637AC}.wem"
+     },
+     {
+      "Id": "844053020",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Freeze\\Freeze_03_Shatter.wav",
+      "CachePath": "37/{3730689A-B10C-3989-3A01-94948DA8BDDC}.wem"
+     },
+     {
+      "Id": "978535683",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Memory",
+      "ShortName": "Freeze\\Freeze_01_Dull.wav",
+      "CachePath": "C4/{C40E3BB3-49D3-B515-0EFD-88D05A826125}.wem"
+     }
+    ],
+    "Plugins": {
+     "Custom": [
+      {
+       "Id": "341110469",
+       "Name": "FreezeDurationPreservingPitch",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Freeze\\Freeze_02_Crack\\[Effect Slot [0]: (Pitch Shifter)]\\FreezeDurationPreservingPitch",
+       "GUID": "{5FFABAEF-586D-4662-AD04-1762007E2DC6}",
+       "LibName": "Wwise Pitch Shifter",
+       "LibId": "8912899"
+      },
+      {
+       "Id": "585997252",
+       "Name": "FreezeDurationPreservingPitch",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Freeze\\Freeze_01_Dull\\[Effect Slot [0]: (Pitch Shifter)]\\FreezeDurationPreservingPitch",
+       "GUID": "{DBAD4C10-739F-4384-95AE-CB0C3CC99F5A}",
+       "LibName": "Wwise Pitch Shifter",
+       "LibId": "8912899"
+      },
+      {
+       "Id": "712053188",
+       "Name": "FreezeDurationPreservingPitch",
+       "ObjectPath": "\\Containers\\Default Work Unit\\Freeze\\Freeze_03_Shatter\\[Effect Slot [0]: (Pitch Shifter)]\\FreezeDurationPreservingPitch",
+       "GUID": "{698E16C2-E0DE-4CB1-85BB-19F40DE9ED7A}",
+       "LibName": "Wwise Pitch Shifter",
+       "LibId": "8912899"
+      }
+     ]
+    },
+    "Events": [
+     {
+      "Id": "2926730840",
+      "Name": "Play_Freeze_Crack",
+      "ObjectPath": "\\Events\\Default Work Unit\\Freeze\\Play_Freeze_Crack",
+      "GUID": "{347CC862-37F3-4F8E-9B92-0E79186C566C}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.3",
+      "DurationMax": "0.3",
+      "MediaRefs": [
+       {
+        "Id": "440609607"
+       }
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "341110469"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2442151923",
+      "Name": "Play_Freeze_Dull",
+      "ObjectPath": "\\Events\\Default Work Unit\\Freeze\\Play_Freeze_Dull",
+      "GUID": "{05B8D2EF-D406-4A03-86CE-5BE8CBDB29DA}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.3",
+      "DurationMax": "0.3",
+      "MediaRefs": [
+       {
+        "Id": "978535683"
+       }
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "585997252"
+        }
+       ]
+      }
+     },
+     {
+      "Id": "2294954385",
+      "Name": "Play_Freeze_Shatter",
+      "ObjectPath": "\\Events\\Default Work Unit\\Freeze\\Play_Freeze_Shatter",
+      "GUID": "{CCB52540-4A13-4188-80E8-9DC78E0ABD07}",
+      "DurationType": "OneShot",
+      "DurationMin": "1",
+      "DurationMax": "1",
+      "MediaRefs": [
+       {
+        "Id": "844053020"
+       }
+      ],
+      "PluginRefs": {
+       "Custom": [
+        {
+         "Id": "712053188"
+        }
+       ]
+      }
+     }
+    ],
+    "GameParameters": [
+     {
+      "Id": "1339533979",
+      "Name": "Freeze_VolumeDb",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Freeze_VolumeDb",
+      "GUID": "{F1339CA2-205D-4017-818D-CB53B9675D41}"
+     },
+     {
+      "Id": "3051847888",
+      "Name": "Freeze_PitchSemitones",
+      "ObjectPath": "\\Game Parameters\\Default Work Unit\\Freeze_PitchSemitones",
+      "GUID": "{E3FD995D-EA30-495A-9871-DD4A77FE337C}"
+     }
+    ]
+   }
+  ],
+  "FileHash": "{E9835F5A-FE5F-AEDC-73D5-FFB7E3D47756}"
+ }
+}

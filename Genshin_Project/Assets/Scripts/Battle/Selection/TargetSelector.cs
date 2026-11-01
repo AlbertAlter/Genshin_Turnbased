@@ -35,6 +35,12 @@ public class TargetSelector
     private readonly List<List<int>> _candidateWindows = new List<List<int>>();
     private Func<int, bool> _tauntProvider;
     private bool _allowEmptyWindows;
+    // Windows retain their geometry for A/D and confirmation. Unit previews use live occupants only.
+    public bool TargetsField => _allowEmptyWindows;
+    public bool HasOccupant(int position) => _aliveProvider?.Invoke(position) == true;
+    public bool ShowsPosition(int position) =>
+        CurrentSelection.Contains(position) && (TargetsField || HasOccupant(position));
+    public List<int> SelectedTargets() => CurrentSelection.FindAll(p => TargetsField || HasOccupant(p));
     private bool _tauntRestricted;
     public bool LastMoveBlockedByTaunt { get; private set; }
     private int _windowIndex = -1;

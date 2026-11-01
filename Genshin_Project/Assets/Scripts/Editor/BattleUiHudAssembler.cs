@@ -45,6 +45,8 @@ public static class BattleUiHudAssembler
 
     private static void ConfigureShield(BattleUiCardBinding card, RectTransform group, BattleUiCombatHudSource source)
     {
+        if (group.GetSiblingIndex() < card.art.GetSiblingIndex())
+            group.SetSiblingIndex(card.art.GetSiblingIndex());
         foreach (Transform child in group) child.gameObject.SetActive(false);
         var model = Child(group, "ShieldAmountModel").gameObject.AddComponent<RoundedHealthFill>();
         model.enabled = false; model.raycastTarget = false;

@@ -117,7 +117,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         allies.anchorMin = allies.anchorMax = new Vector2(1, .5f); allies.anchoredPosition = allyGroupOffset;
         var enemies = Rect("Enemy", canvasObject.transform, new Vector2(855, 542));
         enemies.anchorMin = enemies.anchorMax = new Vector2(0, .5f); enemies.anchoredPosition = enemyGroupOffset;
-        foreach (int index in new[] { 1, 3, 2, 0 }) BuildCard(index, allies, allyPositions[index], characterIds[index]);
+        foreach (int index in new[] { 3, 1, 2, 0 }) BuildCard(index, allies, allyPositions[index], characterIds[index]);
         foreach (int index in new[] { 1, 3, 4, 2, 0 }) BuildCard(index + 4, enemies, enemyPositions[index], enemyId);
         for (int i = 0; i < cardViews.Length; i++)
         {
@@ -136,7 +136,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         for (int i = 0; i < cards.Length; i++)
             sceneLayout.cards[i] = new BattleUiCardBinding { side = i < 4 ? BattleSide.Ally : BattleSide.Enemy,
                 slot = i < 4 ? i + 1 : i - 3, root = cards[i], art = cards[i],
-                hitsBehind = behind[i], hitsFront = front[i] };
+                hitsBehind = behind[i], hitsFront = front[i], shieldLayer = cardViews[i].Appearance.ShieldLayer };
         hitModule = gameObject.AddComponent<BattleUiHitEffects>();
         hitModule.layout = sceneLayout; hitModule.loadOnStart = false; hitModule.automaticClock = false;
         shake = gameObject.AddComponent<UIHitShakeController>(); shake.AutomaticClock = false;

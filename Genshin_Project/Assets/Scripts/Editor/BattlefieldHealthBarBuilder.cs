@@ -30,6 +30,7 @@ public static class BattlefieldHealthBarBuilder
                 }
                 var boss=binding.GetComponent<BattlefieldHealthBar>() ?? binding.gameObject.AddComponent<BattlefieldHealthBar>();
                 boss.side=BattleSide.Enemy; boss.slot=1; boss.fill=modelObject.GetComponent<RoundedHealthFill>();
+                BindEnemyPips(boss);
                 var stack=binding.GetComponent<PsdHealthLayers>() ?? binding.gameObject.AddComponent<PsdHealthLayers>();
                 stack.bar=boss; stack.bossStyle=true;
                 var legacy=binding.GetComponent<UnityEngine.UI.Image>();
@@ -62,6 +63,7 @@ public static class BattlefieldHealthBarBuilder
             var view = binding.GetComponent<BattlefieldHealthBar>() ?? binding.gameObject.AddComponent<BattlefieldHealthBar>();
             view.side = ally ? BattleSide.Ally : BattleSide.Enemy;
             view.slot = slot; view.fill = fill;
+            if (!ally) BindEnemyPips(view);
             if (created) view.ApplyStyle(style);
             var frame = binding.GetComponent<PsdHealthBarFrame>();
             if (created && frame != null && frame.psdCompositeFill)
@@ -97,6 +99,20 @@ public static class BattlefieldHealthBarBuilder
                 }
             }
         }
+    }
+
+    private static void BindEnemyPips(BattlefieldHealthBar bar)
+    {
+        var group = bar.transform.parent;
+        var row = bar.enemyPips;
+        row.outline = group.Find("血槽1_Circle0") as RectTransform;
+        row.core = group.Find("血槽1_Circle1") as RectTransform;
+        row.empty = group.Find("血槽2（空") as RectTransform;
+        if (row.outline == null || row.core == null || row.empty == null)
+            throw new InvalidOperationException($"Missing enemy health pip artwork under {group.name}.");
+        row.outline.gameObject.SetActive(false);
+        row.core.gameObject.SetActive(false);
+        row.empty.gameObject.SetActive(false);
     }
 
     public static void ConfigurePsdLayers(Canvas canvas)

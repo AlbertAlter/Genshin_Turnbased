@@ -122,6 +122,56 @@ namespace GenshinTurnBased.Tests.EditMode
             }
         }
 
+        [TestCase(5)]
+        [TestCase(10)]
+        public void LisaBurst_RepeatsDistinctHits_ReselectsAfterDeath_AndSettlesDebuffBetweenHits(int count)
+        {
+            using var env = new BattleFlowTestEnv();
+            env.ConfigureAllyAction(3, "SK_BurstAttack_Lisa", "SE_BurstAttack_Lisa", "Electro", "0.1*TotalATK,1", 0);
+            env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID]
+                .Find(skill => skill.SkillID2 == "SK_BurstAttack_Lisa").ActionType = null;
+            var effect = env.DataManager.SkillEffectDict["SE_BurstAttack_Lisa"];
+            effect.TargetNumber = 1; effect.TargetConsecutive = 3; effect.ExecuteCount = count;
+            env.ConfigureStatus("ST_Lisa_T2", actionType: "OnTrigger", actionEffectID2: "STE_Lisa_T2");
+            env.DataManager.StatusActionDict["ST_Lisa_T2"][0].OutgoingHit = "SE_BurstAttack_Lisa";
+            env.ConfigureStatus("ST_Lisa_T2Debuff", maxStack: 2);
+            env.DataManager.StatusEffectDict["STE_Lisa_T2"] = new StatusEffectData
+            {
+                StatusEffectID2 = "STE_Lisa_T2", EffectType = "ApplyStatus", Param1 = "ST_Lisa_T2Debuff",
+                Duration = 2, TargetType = "Enemy", TargetOverride = "ST_Lisa_T2()"
+            };
+            env.CreateMinimalBattle();
+            var owner = env.Ally.Entity; owner.EntityID = 1011;
+            var first = env.Enemy.Entity;
+            var remaining = env.CreateEnemy(2).Entity;
+            owner.AddStatus("ST_Lisa_T2", owner, 0, 2, 0, env.DataManager.StatusMainDict["ST_Lisa_T2"]);
+            env.Manager.StartBattle(); env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+            first.CurrentHP = 1;
+            var targets = new List<BattleEntity>();
+            var stacksBeforeHitResponse = new List<int>();
+            var hits = new HashSet<long>();
+            var random = new SequenceBattleRandomSource(new float[count], new[] { 0 });
+            BattleRandom.SetSource(random);
+            using var observer = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (header, damage) =>
+            {
+                if (damage.Source?.SourceEntity != owner || damage.Source.SourceEffectID != effect.SkillEffectID2) return;
+                targets.Add(damage.Subject); hits.Add(header.HitId);
+                if (damage.Subject == remaining) stacksBeforeHitResponse.Add(remaining.GetStatusStackCount("ST_Lisa_T2Debuff"));
+            }, 0);
+
+            BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_BurstAttack_Lisa", 3, false)).GetAwaiter().GetResult();
+
+            Assert.That(targets, Has.Count.EqualTo(count));
+            Assert.That(hits, Has.Count.EqualTo(count), "每次轰击有独立hit身份");
+            Assert.That(targets[0], Is.SameAs(first));
+            for (int i = 1; i < count; i++) Assert.That(targets[i], Is.SameAs(remaining));
+            for (int i = 0; i < count - 1; i++) Assert.That(stacksBeforeHitResponse[i], Is.EqualTo(Math.Min(i, 2)),
+                "前一次伤害的减防响应应在下一次轰击前结清");
+            Assert.That(remaining.GetStatusStackCount("ST_Lisa_T2Debuff"), Is.EqualTo(2));
+            Assert.That(random.FloatCallCount, Is.EqualTo(count), "每次实际命中独立判定暴击");
+            Assert.That(random.IntCallCount, Is.EqualTo(1), "只有首击在两名候选中抽取；之后只剩一名");
+        }
+
         private static StatusInstance Source(BattleFlowTestEnv env, string id)
         {
             var status = new StatusInstance { StatusID2 = id, IsActive = true,

@@ -23,7 +23,7 @@ public static class UiConfigurationSyncWindow
     {
         foreach (var binding in root.GetComponentsInChildren<PsdUiBinding>(true))
         {
-            if (binding.bindingKey != "CharacterAvatar" && binding.bindingKey != "EnemyAvatar") continue;
+            if (binding.bindingKey != "EnemyAvatar") continue;
             var image=binding.GetComponentInChildren<UnityEngine.UI.Image>(true);
             if (image != null && image.GetComponent<AvatarAlphaEffects>() == null)
                 image.gameObject.AddComponent<AvatarAlphaEffects>();

@@ -39,7 +39,7 @@ public static class ReferencedArtAssetsSync
         // Card overlays can be serialized in existing scenes without UI-table rows.
         required.Add("UI/BattleField1/UI_components/card/CardShadow.png");
         required.Add("UI/BattleField1/UI_components/card/CardInnerShadow.png");
-        required.Add("UI/BattleField1/UI_components/card/CardOverGlow.png");
+        required.Add("UI/BattleField1/UI_components/card/CardSelectionBorder.png");
         foreach (string file in UICardFreeze.TextureFiles)
             required.Add(UICardFreeze.ArtFolder + file);
         foreach (var file in new[] { "01_DropShadow", "02_BaseShape", "03_UpperSoftLight", "04_LowerSoftLight", "05_InnerShadow" })
@@ -341,7 +341,7 @@ public static class ReferencedArtAssetsSync
             }
 
             result.Add(relativeCardPath);
-            string avatar = $"Character_Icon/{characterId}_02.png";
+            string avatar = CharacterCardArtManifest.PortraitFile(characterId);
             if (File.Exists(SafeCombine(sourceRoot, avatar))) result.Add(avatar);
             entries.Add(new CharacterCardArtEntry
             {

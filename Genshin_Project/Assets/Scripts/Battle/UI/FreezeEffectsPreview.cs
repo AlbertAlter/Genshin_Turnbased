@@ -9,11 +9,17 @@ public sealed class FreezeEffectsPreview : MonoBehaviour, IBattleUiFreezeSource,
     public UICardFactory cardFactory;
     public RectTransform cardMount;
     public UICardFreeze freeze;
+    public BattleUiShields shields;
     public BattleUiFreezeInteraction interaction;
     public BattlefieldApView apView;
     public BattleEntity previewEntity;
     private ActionPointManager ap;
     private UICardView card;
+    private BattleUiCardBinding shieldCard;
+    private bool showShield = true;
+    private int shieldElement;
+    private static readonly string[] ShieldKeys = { "None", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro" };
+    private static readonly string[] ShieldLabels = { "无元素", "火", "水", "雷", "冰", "风", "岩", "草" };
     private bool started, ready;
     private string error;
 
@@ -33,6 +39,9 @@ public sealed class FreezeEffectsPreview : MonoBehaviour, IBattleUiFreezeSource,
         if (!freeze.Bound) freeze.Bind(card);
         apView.Bind(this); ready = true;
         ResetFreeze(); interaction.Refresh();
+        if (shields == null || shields.layout == null || !shields.layout.TryGetCard(BattleSide.Ally, 1, out shieldCard))
+        { Fail("护盾预览缺少卡牌布局绑定。"); yield break; }
+        shieldCard.shieldLayer = card.Appearance.ShieldLayer;
     }
     public BattleUiFreezeState GetFreeze()
     {
@@ -48,6 +57,8 @@ public sealed class FreezeEffectsPreview : MonoBehaviour, IBattleUiFreezeSource,
     {
         if (card != null && !card.Released)
             card.SetAnimationFrozen(this, FrozenReactionHandler.IsFrozen(previewEntity));
+        if (ready && shieldCard != null && shields.Ready)
+            shields.SetShield(shieldCard.side, shieldCard.slot, showShield, ShieldKeys[shieldElement]);
     }
     public void ResetFreeze()
     {
@@ -83,12 +94,20 @@ public sealed class FreezeEffectsPreview : MonoBehaviour, IBattleUiFreezeSource,
         if (interaction != null && interaction.LastResult == FrozenThawClickResult.InsufficientAP
             && ap.CurrentAP < FrozenReactionHandler.ThawAPCost)
             GUILayout.Label("AP不足，保留第二阶段裂纹。恢复AP后可再次点击完成解冻。", label);
+        GUI.enabled = enabledBefore && ready && shieldCard != null && shields.Ready;
+        GUILayout.BeginHorizontal();
+        showShield = GUILayout.Toggle(showShield, showShield ? "护盾：开" : "护盾：关", button, GUILayout.Width(160));
+        shieldElement = GUILayout.Toolbar(shieldElement, ShieldLabels, button, GUILayout.Width(700));
+        GUILayout.EndHorizontal();
+        if (shields != null && shields.Error != null) GUILayout.Label(shields.Error, label);
         GUILayout.EndArea();
         GUI.enabled = enabledBefore; GUI.skin.font = font; GUI.matrix = matrix;
     }
     private void OnDisable()
     {
         StopAllCoroutines(); ready = false;
+        if (shieldCard != null && shields != null) shields.SetShield(shieldCard.side, shieldCard.slot, false);
+        shieldCard = null;
         card?.SetAnimationFrozen(this, false);
         if (previewEntity != null) ReactionStateSystem.RemoveEntityState(previewEntity, ReactionType.Frozen);
     }

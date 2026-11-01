@@ -23,6 +23,8 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
     private int loadVersion;
     private sealed class View
     {
+        public BattleUiCardBinding Card;
+        public object Occupant;
         public UICardShield Graphic;
         public bool Visible, Sweep, Loop;
         public string Element = "None";
@@ -61,16 +63,10 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
         {
             if (card?.art == null) continue;
             var key = (card.side, card.slot);
-            if (!views.TryGetValue(key, out var view))
-            {
-                var rect = new GameObject("Shield_Membrane_Mask_Tint_Sweep", typeof(RectTransform)).GetComponent<RectTransform>();
-                rect.SetParent(card.art, false); rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
-                rect.offsetMin = rect.offsetMax = Vector2.zero;
-                // Child of art: naturally below the scene's sibling frame and inner shadow.
-                view = new View { Graphic = rect.gameObject.AddComponent<UICardShield>() }; views.Add(key, view);
-            }
-            view.Graphic.Initialize(pending[0].texture, pending[1].texture, pending[2].texture);
-            view.Graphic.gameObject.SetActive(false);
+            if (!views.TryGetValue(key, out var view)) views.Add(key, view = new View());
+            view.Card = card;
+            if (view.Graphic != null)
+                view.Graphic.Initialize(pending[0].texture, pending[1].texture, pending[2].texture, palette.ProjectWhite);
         }
         Settings = next; Palette = palette; Release(sprites); sprites.AddRange(pending); pending.Clear();
         Ready = true; Loading = false;
@@ -83,6 +79,16 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
         view.Visible = visible; view.Element = element;
         return true;
     }
+    public void SetOccupantShield(BattleUiCardBinding card, object occupant, bool visible, string element)
+    {
+        if (!SetShield(card.side, card.slot, visible, element)) return;
+        var view = views[(card.side, card.slot)];
+        if (ReferenceEquals(view.Occupant, occupant)) return;
+        view.Occupant = occupant;
+        view.Alpha = view.Clock = 0;
+        view.Sweep = view.Loop = false;
+        if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+    }
     public bool PlaySweep(BattleSide side, int slot, bool loop = false)
     {
         if (!isActiveAndEnabled || !Ready || !views.TryGetValue((side, slot), out var view)) return false;
@@ -93,7 +99,22 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
         Vector2 membraneOffset, Vector2 maskOffset, float progress, float sweepOpacity, float width, float angle, float alpha)
     {
         if (!Ready || !views.TryGetValue((side, slot), out var view)) return;
-        view.Graphic.gameObject.SetActive(isActiveAndEnabled && alpha > 0);
+        var parent = view.Card.shieldLayer;
+        if (parent == null && view.Occupant == null) parent = view.Card.art;
+        if (parent == null || !isActiveAndEnabled || alpha <= 0)
+        {
+            if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+            return;
+        }
+        if (view.Graphic == null)
+        {
+            var rect = new GameObject("PersonalShield", typeof(RectTransform)).GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            view.Graphic = rect.gameObject.AddComponent<UICardShield>();
+            view.Graphic.Initialize(sprites[0].texture, sprites[1].texture, sprites[2].texture, Palette.ProjectWhite);
+        }
+        else if (view.Graphic.transform.parent != parent) view.Graphic.transform.SetParent(parent, false);
+        view.Graphic.gameObject.SetActive(true);
         view.Graphic.Apply(Settings, tint, membraneOpacity, tintOpacity, membraneOffset, maskOffset, progress, sweepOpacity, width, angle, alpha);
     }
     private void Update() { if (automaticClock && !paused) Advance(Time.unscaledDeltaTime); }
@@ -104,6 +125,11 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
         {
             var v = pair.Value; float fade = Settings.Number(v.Visible ? "FadeInSeconds" : "FadeOutSeconds");
             v.Alpha = fade <= 0 ? (v.Visible ? 1 : 0) : Mathf.MoveTowards(v.Alpha, v.Visible ? 1 : 0, Mathf.Max(0, deltaTime) / fade);
+            if (!v.Visible && v.Alpha <= 0)
+            {
+                if (v.Graphic != null && v.Graphic.gameObject.activeSelf) v.Graphic.gameObject.SetActive(false);
+                continue;
+            }
             float duration = Settings.Number("SweepDuration"), progress = 0, alpha = 0;
             if (v.Sweep)
             {
@@ -115,7 +141,7 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
                 { v.Clock = 0; v.Sweep = v.Loop; }
             }
             bool neutral = v.Element == "None";
-            ApplyCard(pair.Key.Item1, pair.Key.Item2, neutral ? Color.white : Palette.GetColor(v.Element),
+            ApplyCard(pair.Key.Item1, pair.Key.Item2, Palette.GetColor(v.Element),
                 Settings.Number("MembraneOpacity"), Settings.Number(neutral ? "NeutralTintOpacity" : "TintOpacity"),
                 Vector2.zero, Vector2.zero, progress, Settings.Number("SweepOpacity") * alpha,
                 Settings.Number("SweepWidth"), Settings.Number("SweepAngle"), v.Alpha);

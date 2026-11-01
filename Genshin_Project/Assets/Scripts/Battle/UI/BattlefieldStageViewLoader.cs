@@ -87,7 +87,7 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
         {
             StageAllySetup ally = allies[index];
-            BindImage(group, "CharacterAvatar", $"art_assets/Character_Icon/{ally.CharacterID}_02.png");
+            BindImage(group, "CharacterAvatar", "art_assets/" + CharacterCardArtManifest.PortraitFile(ally.CharacterID));
         });
     }
 
@@ -108,9 +108,11 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
             TMP_Text levelAndName = labelBinding != null
                 ? labelBinding.GetComponent<TMP_Text>()
                 : group.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(text => text.text.StartsWith("Lv."));
-            if (levelAndName != null) levelAndName.text = $"Lv.{enemy.Level} {displayName}";
+            if (levelAndName != null) levelAndName.text = FormatEnemyLabel(enemy.Level, displayName);
         });
     }
+
+    private static string FormatEnemyLabel(int level, string name) => $"Lv.{level}  {name}";
 
     private void BindOrderedGroups(
         string containerName,

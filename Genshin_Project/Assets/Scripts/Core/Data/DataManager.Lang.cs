@@ -14,6 +14,7 @@ public static class BattleTipKeys
     public const string NoValidTarget = "tip_no_valid_target";
     public const string NoActiveCharacter = "tip_no_active_character";
     public const string TauntTargetRestricted = "tip_taunt_target_restricted";
+    public const string ThawInsufficientAP = "tip_thaw_insufficient_ap";
 }
 
 public partial class DataManager

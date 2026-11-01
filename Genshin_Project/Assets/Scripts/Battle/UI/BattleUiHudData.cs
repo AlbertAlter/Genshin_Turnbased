@@ -4,6 +4,7 @@ public struct BattleUiMeterState
     public object Identity;
     public bool Visible;
     public float Current, Maximum;
+    public EnemyHealthPhases HealthPhases;
     public string Element;
     public float Fraction => Maximum > 0 && !float.IsInfinity(Maximum) && !float.IsNaN(Current) && !float.IsInfinity(Current)
         ? UnityEngine.Mathf.Clamp01(Current / Maximum) : 0;

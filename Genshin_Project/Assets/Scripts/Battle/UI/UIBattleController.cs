@@ -93,6 +93,7 @@ public class UIBattleController : MonoBehaviour
     private int _switchIndex = 0;
     private string _skillIconBindingKey = string.Empty;
     private Coroutine _skillIconLoadRoutine;
+    private Sprite _fieldBorderSprite;
     /// <summary>是否处于换人界面（BattleInputController 空格过回合的禁用判断用，2026-08-14）。</summary>
 
 
@@ -103,6 +104,13 @@ public class UIBattleController : MonoBehaviour
     void Start()
     {
         if (input == null) input = FindObjectOfType<BattleInputController>();
+        if (enemyFieldBorders != null && enemyFieldBorders.Length > 0)
+            StartCoroutine(StreamingAssetSpriteLoader.Load(UICardFactory.GlowPath, sprite =>
+            {
+                _fieldBorderSprite = sprite;
+                foreach (var border in enemyFieldBorders)
+                    if (border != null) border.sprite = sprite;
+            }, message => Debug.LogWarning(message, this)));
         for (int i = 0; i < 4; i++) _allyStatusIcons.Add(new List<Image>());
         for (int i = 0; i < 5; i++) _enemyStatusIcons.Add(new List<Image>());
 
@@ -253,7 +261,7 @@ public class UIBattleController : MonoBehaviour
             // 目标选择且技能目标为我方：选中的我方槽位=第一种高亮（黄，覆盖出战绿）
             //2026-08-15：选择中施放者槽位恒黄高亮（任何技能方向；1234爆发施放者可为非出战角色）
             bool allySelected = selectDirAlly && input.IsSelecting
-                && input.Selector.CurrentSelection != null && input.Selector.CurrentSelection.Contains(i + 1);
+                && input.Selector.ShowsPosition(i + 1);
             bool isCaster = input != null && input.IsSelecting && casterPos == i + 1;
             if (slot.highlight != null)
             {
@@ -480,7 +488,8 @@ public class UIBattleController : MonoBehaviour
             for (int i = 0; i < enemyHighlights.Length; i++)
             {
                 if (enemyHighlights[i] == null) continue;
-                bool on = sel != null && sel.Contains(enemyHighlights.Length - i);
+                int slot = enemyHighlights.Length - i;
+                bool on = sel != null && sel.Contains(slot) && bm.IsEnemyAliveAt(slot);
                 enemyHighlights[i].enabled = on;
                 if (on) enemyHighlights[i].color = Color.yellow;
             }
@@ -493,9 +502,16 @@ public class UIBattleController : MonoBehaviour
             for (int i = 0; i < enemyFieldBorders.Length; i++)
             {
                 if (enemyFieldBorders[i] == null) continue;
-                enemyFieldBorders[i].enabled = sel != null && sel.Contains(i + 1);
+                enemyFieldBorders[i].enabled = _fieldBorderSprite != null && sel != null && sel.Contains(i + 1);
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (_fieldBorderSprite == null) return;
+        Destroy(_fieldBorderSprite.texture);
+        Destroy(_fieldBorderSprite);
     }
 
     /// <summary>实际命中位置 = 当前选择组合 + 溅射扩展位（有敌人），2026-08-14。</summary>
@@ -503,7 +519,8 @@ public class UIBattleController : MonoBehaviour
     {
         var list = new List<int>();
         if (selected == null) return list;
-        list.AddRange(selected);
+        foreach (int position in selected)
+            if (input.Selector.ShowsPosition(position)) list.Add(position);
         CharacterBattleController ally = null;
         if (input != null && input.PendingAlly != null) ally = input.PendingAlly;
         if (ally == null && BattleManager.Instance != null) ally = BattleManager.Instance.GetActiveAlly();
@@ -512,7 +529,7 @@ public class UIBattleController : MonoBehaviour
         if (splash == null) return list;
         var bm = BattleManager.Instance;
         var added = new HashSet<int>(selected);
-        foreach (var pos in selected)
+        foreach (var pos in list.ToArray())
         {
             int left = Mathf.Max(1, pos - splash.Value.Left);
             int right = Mathf.Min(5, pos + splash.Value.Right);

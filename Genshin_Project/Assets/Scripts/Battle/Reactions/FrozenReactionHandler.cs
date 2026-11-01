@@ -106,7 +106,7 @@ public static class FrozenReactionHandler
             && (context.DamageType == "Normal" || context.DamageType == "Heavy");
     }
 
-    /// <summary>当前出战的我方角色消耗10 AP主动解除冻结。</summary>
+    /// <summary>我方角色消耗10 AP主动解除冻结，前后台均可；战斗与输入限制由调用入口校验。</summary>
     public static bool TryThaw(BattleEntity target, ActionPointManager actionPoints)
     {
         if (target == null

@@ -14,7 +14,8 @@ public sealed class BattleUiCombatHudSource : MonoBehaviour, IBattleUiHealthSour
     {
         var entity = isActiveAndEnabled && battle != null ? battle.GetEntityByPosition(side, slot) : null;
         return entity == null ? default : new BattleUiMeterState {
-            Identity = entity, Visible = entity.IsOnField, Current = entity.CurrentHP, Maximum = entity.TotalHP
+            Identity = entity, Visible = entity.IsOnField, Current = entity.CurrentHP, Maximum = entity.TotalHP,
+            HealthPhases = entity.EnemyCtrl != null ? entity.EnemyCtrl.HealthPhases : default
         };
     }
 

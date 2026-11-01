@@ -14,6 +14,118 @@ if ([string]::IsNullOrWhiteSpace($ScriptDirectory)) {
 $repoRoot = (Resolve-Path $ScriptDirectory).Path
 Set-Location $repoRoot
 
+# 上传范围只在这里设置；目录包含全部子目录，文件必须精确匹配。
+$syncDirectories = @('Genshin_Project', 'Docs', 'Charts', 'PSDfiles')
+$syncFiles = @('.gitignore', '.gitattributes', 'GitDaily.cmd', 'GitDaily.ps1')
+$excludedPaths = @(
+    ':(top,icase,literal)Genshin_Project/Assets/StreamingAssets',
+    ':(top,icase,literal)Genshin_Project/Assets/StreamingAssets.meta'
+)
+foreach ($directory in @('Library','Temp','Obj','Build','Builds','Logs','UserSettings','MemoryCaptures','.vs','.idea','.svn')) {
+    $excludedPaths += ":(top,icase,literal)Genshin_Project/$directory"
+}
+foreach ($extension in @('csproj','sln','suo','user','userprefs')) {
+    $excludedPaths += ":(top,icase,glob)Genshin_Project/*.$extension"
+}
+$excludedPaths += @(':(top,glob)**/~$*', ':(top,glob)**/.DS_Store', ':(top,glob)**/Thumbs.db')
+$allowedPaths = @($syncDirectories + $syncFiles | ForEach-Object { ":(top,literal)$_" })
+$savePaths = $allowedPaths + @($excludedPaths -replace '^:\(', ':(exclude,')
+$directorySavePaths = @($syncDirectories | ForEach-Object { ":(top,literal)$_" }) + @($excludedPaths -replace '^:\(', ':(exclude,')
+$outsidePaths = @('.') + @($allowedPaths -replace '^:\(', ':(exclude,')
+
+function Add-SyncChanges {
+    # Git 枚举实际文件，避免 add 的目录遍历再次触发忽略目录提示。
+    # NUL 字节流保留中文、空格、换行等文件名，literal 模式防止文件名被当成通配符。
+    $listing = Invoke-GitBytes -Arguments (@('ls-files', '-z', '--cached', '--others', '--exclude-standard', '--') + $savePaths)
+    if ($listing.ExitCode -ne 0) { throw "枚举暂存文件失败：$($listing.ErrorText)" }
+    $paths = New-Object System.IO.MemoryStream
+    try {
+        $paths.Write($listing.Bytes, 0, $listing.Bytes.Length)
+        # 仅这些明确配置的根文件允许绕过 .gitignore。
+        foreach ($file in $syncFiles) {
+            if (Test-Path -LiteralPath $file -PathType Leaf) {
+                $bytes = [Text.Encoding]::UTF8.GetBytes($file + [char]0)
+                $paths.Write($bytes, 0, $bytes.Length)
+            }
+        }
+        if ($paths.Length -gt 0) {
+            $result = Invoke-GitBytes -Arguments @('--literal-pathspecs', 'add', '-A', '-f', '--pathspec-from-file=-', '--pathspec-file-nul') -InputBytes $paths.ToArray()
+            if ($result.ErrorText) { Write-Host $result.ErrorText }
+            if ($result.ExitCode -ne 0) { throw "暂存文件失败（Git 退出码 $($result.ExitCode)）：`n$($result.ErrorText)" }
+        }
+    }
+    finally { $paths.Dispose() }
+    Remove-OutsideSyncIndex
+}
+
+function Invoke-GitBytes {
+    param([string[]]$Arguments, [byte[]]$InputBytes)
+    $info = New-Object System.Diagnostics.ProcessStartInfo
+    $info.FileName = 'git'
+    $info.WorkingDirectory = (Get-Location).Path
+    $info.Arguments = ($Arguments | ForEach-Object { '"' + ($_ -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"' }) -join ' '
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardInput = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.StandardErrorEncoding = [Text.Encoding]::UTF8
+    $process = New-Object System.Diagnostics.Process
+    $process.StartInfo = $info
+    $buffer = New-Object System.IO.MemoryStream
+    try {
+        [void]$process.Start()
+        $stdout = $process.StandardOutput.BaseStream.CopyToAsync($buffer)
+        $stderr = $process.StandardError.ReadToEndAsync()
+        if ($InputBytes) { $process.StandardInput.BaseStream.Write($InputBytes, 0, $InputBytes.Length) }
+        $process.StandardInput.Close()
+        $process.WaitForExit()
+        $stdout.GetAwaiter().GetResult()
+        return [pscustomobject]@{ ExitCode = $process.ExitCode; Bytes = $buffer.ToArray(); ErrorText = $stderr.GetAwaiter().GetResult() }
+    }
+    finally { $buffer.Dispose(); $process.Dispose() }
+}
+
+function Remove-OutsideSyncIndex {
+    # --cached 只清理 Git 索引，保留清单外的本地文件。
+    & git rm -q -r -f --cached --ignore-unmatch -- @outsidePaths
+    if ($LASTEXITCODE -ne 0) { throw '移除上传范围外的跟踪失败。' }
+    & git rm -q -r -f --cached --ignore-unmatch -- @excludedPaths
+    if ($LASTEXITCODE -ne 0) { throw '移除排除目录的跟踪失败。' }
+}
+
+function Get-OutsideSyncHistory {
+    param([string]$Revision = 'main')
+    # 排除型 pathspec 会影响同次调用内的所有正向匹配，必须分开检查。
+    & git log --full-history -m --format= --name-only $Revision -- @outsidePaths
+    if ($LASTEXITCODE -ne 0) { throw '无法检查范围外历史。' }
+    & git log --full-history -m --format= --name-only $Revision -- @excludedPaths
+    if ($LASTEXITCODE -ne 0) { throw '无法检查排除路径历史。' }
+}
+
+function Clear-OutsideSyncHistory {
+    $outside = @(Get-OutsideSyncHistory)
+    if (-not ($outside | Where-Object { $_ })) { return }
+
+    # filter-branch 的 index-filter 不检出历史素材；当前版本已先取消其跟踪。
+    $quote = { param($value) "'" + $value.Replace("'", "'\''") + "'" }
+    $removeOutside = ($outsidePaths | ForEach-Object { & $quote $_ }) -join ' '
+    $removeExcluded = ($excludedPaths | ForEach-Object { & $quote $_ }) -join ' '
+    $filter = "git rm -q -r -f --cached --ignore-unmatch -- $removeOutside && git rm -q -r -f --cached --ignore-unmatch -- $removeExcluded"
+    Write-Host '清理 main 全部历史中上传范围外的文件（保留本地文件）...' -ForegroundColor Yellow
+    $previousWarning = $env:FILTER_BRANCH_SQUELCH_WARNING
+    try {
+        $env:FILTER_BRANCH_SQUELCH_WARNING = '1'
+        & git filter-branch --index-filter $filter -- main
+        if ($LASTEXITCODE -ne 0) { throw '历史清理失败，未上传。请保留错误输出。' }
+    }
+    finally { $env:FILTER_BRANCH_SQUELCH_WARNING = $previousWarning }
+    $remaining = @(Get-OutsideSyncHistory)
+    if ($remaining | Where-Object { $_ }) { throw '历史清理验证失败，未上传。' }
+    & git update-ref -d refs/original/refs/heads/main
+    if ($LASTEXITCODE -ne 0) { throw '清理旧历史备份引用失败，未上传。' }
+}
+
 
 function Assert-GitRepository {
     & git rev-parse --show-toplevel *> $null
@@ -33,14 +145,14 @@ function Show-GitStatus {
     Write-Host "当前修改：" -ForegroundColor Cyan
     Write-Host "----------------------------------------------"
 
-    & git status --short
+    & git status --short -- @savePaths
 
     if ($LASTEXITCODE -ne 0) {
         throw "git status 执行失败。"
     }
 
     Write-Host "----------------------------------------------"
-    Write-Host "如果上方没有内容，表示工作区干净。"
+    Write-Host "如果上方没有内容，表示同步范围内没有修改（已排除 StreamingAssets）。"
 }
 
 
@@ -66,20 +178,13 @@ function Assert-PsdSyncConfiguration {
         }
     }
 
-    $trackedArtAssets = @(& git ls-files -- art_assets)
-    if ($LASTEXITCODE -ne 0) {
-        throw "无法检查 art_assets 的 Git 跟踪状态。"
-    }
-    if ($trackedArtAssets.Count -gt 0) {
-        throw "art_assets 仍有 $($trackedArtAssets.Count) 个文件被 Git 跟踪，请先执行 git rm -r --cached -- art_assets。"
-    }
 }
 
 
 function Start-Work {
     Write-Host "[1/2] 检查当前修改..." -ForegroundColor Cyan
 
-    $changes = @(& git status --porcelain)
+    $changes = @(& git status --porcelain -- @savePaths)
 
     if ($LASTEXITCODE -ne 0) {
         throw "git status 执行失败。"
@@ -89,7 +194,7 @@ function Start-Work {
         Write-Host ""
         Write-Host "[停止] 当前存在尚未提交的修改，暂不拉取，以免发生冲突。" -ForegroundColor Yellow
 
-        & git status --short
+        & git status --short -- @savePaths
 
         Write-Host "请先使用菜单 [2] 保存上传，或确认这些修改该如何处理。"
         return
@@ -131,6 +236,17 @@ function Get-PushFailureReason {
 
 
 function Push-LocalMain {
+    # 当前脚本只发布 main。其他远程分支/标签可能仍保留旧历史，不能悄悄漏过。
+    $otherRefs = @(& git ls-remote --heads --tags origin | Where-Object { $_ -notmatch '\srefs/heads/main$' })
+    if ($LASTEXITCODE -ne 0 -or $otherRefs.Count) { throw '远端含其他分支/标签或无法检查；请明确其处理范围，未上传。' }
+    $remoteRef = @(& git ls-remote --refs origin refs/heads/main)
+    if ($LASTEXITCODE -ne 0) { throw '无法确认远程 main，未推送。' }
+    $remoteTip = if ($remoteRef.Count) { ($remoteRef[0] -split '\s+')[0] } else { '' }
+    $localTip = & git rev-parse --verify refs/heads/main
+    if ($LASTEXITCODE -ne 0) { throw '无法确认本地 main，未推送。' }
+    $unsafeHistory = @(Get-OutsideSyncHistory -Revision $localTip)
+    if ($unsafeHistory | Where-Object { $_ }) { throw '待上传历史仍有范围外文件，未推送。' }
+
     $messages = New-Object 'System.Collections.Generic.List[string]'
     $pushExitCode = $null
     $previousErrorAction = $ErrorActionPreference
@@ -138,7 +254,7 @@ function Push-LocalMain {
         # Windows PowerShell 会将重定向的原生命令 stderr 包装为 ErrorRecord。
         # Git 进度也写在 stderr；必须显示完整输出并按退出码判断，不能提前当异常中断。
         $ErrorActionPreference = "Continue"
-        & git push --force --progress origin refs/heads/main:refs/heads/main 2>&1 | ForEach-Object {
+        & git push "--force-with-lease=refs/heads/main:${remoteTip}" --progress origin "${localTip}:refs/heads/main" 2>&1 | ForEach-Object {
             $line = $_.ToString()
             [void]$messages.Add($line)
             Write-Host $line
@@ -168,21 +284,7 @@ function Save-Work {
 
     Write-Host "[2/4] 自动暂存项目修改（包含 PSDfiles 的完整子目录结构）..." -ForegroundColor Cyan
 
-    # .gitignore 会排除 art_assets 和本地缓存；PSDfiles 及其内部相对路径会递归暂存。
-    & git add -A -- .
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "暂存文件失败，请查看上方错误。"
-    }
-
-
-    # 根目录默认可能被 .gitignore 的 /* 规则忽略。
-    # 只强制加入这两个 Git 日常脚本，不放行其他根目录文件。
-    & git add -f -- GitDaily.cmd GitDaily.ps1
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "暂存 Git 日常脚本失败，请确认两个文件都在仓库根目录。"
-    }
+    Add-SyncChanges
 
 
     # 检查暂存区是否真的有变化。
@@ -207,7 +309,8 @@ function Save-Work {
         Write-Host "[3/4] 没有新的本地修改，继续检查待上传提交..." -ForegroundColor Cyan
     }
 
-    Write-Host "[4/4] 以本地 main 为准强推 GitHub（覆盖远程 main；PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
+    Clear-OutsideSyncHistory
+    Write-Host "[4/4] 上传符合路径设置的 main（含清理后的历史；PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
 
     Push-LocalMain
 

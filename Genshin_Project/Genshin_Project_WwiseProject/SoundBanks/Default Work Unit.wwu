@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{14B6F395-A164-4079-9CE2-6F9A1D2C3E36}" SchemaVersion="133">
+	<SoundBanks>
+		<WorkUnit Name="Default Work Unit" ID="{14B6F395-A164-4079-9CE2-6F9A1D2C3E36}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="UI_Freeze" ID="{1427F3D3-6A17-4FAB-A2C3-4B017EA835A4}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Play_Freeze_Shatter" ID="{CCB52540-4A13-4188-80E8-9DC78E0ABD07}" WorkUnitID="{42CC83FC-8855-4E28-93F2-A9F4098DFB77}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_Freeze_Dull" ID="{05B8D2EF-D406-4A03-86CE-5BE8CBDB29DA}" WorkUnitID="{42CC83FC-8855-4E28-93F2-A9F4098DFB77}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_Freeze_Crack" ID="{347CC862-37F3-4F8E-9B92-0E79186C566C}" WorkUnitID="{42CC83FC-8855-4E28-93F2-A9F4098DFB77}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

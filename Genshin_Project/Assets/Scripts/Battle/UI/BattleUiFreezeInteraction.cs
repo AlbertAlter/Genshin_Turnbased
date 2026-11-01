@@ -16,10 +16,11 @@ public interface IBattleUiFreezeSource
 
 /// <summary>Reusable click/keyboard adapter. Reads real progress and calls shared thaw + existing hit-shake modules.</summary>
 [DisallowMultipleComponent]
-public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHandler
+public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     public MonoBehaviour dataSource;
     public UICardFreeze effect;
+    public UICardFreezeAudio clickAudio;
     public UIHitShakeController shake;
     public RectTransform shakeRoot;
     public Graphic hitArea;
@@ -46,6 +47,11 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
     }
     public void OnPointerClick(PointerEventData eventData)
     { if (eventData.button == PointerEventData.InputButton.Left) { RequestClick(); eventData.Use(); } }
+    // Capture the press on this hit area; an ancestor target/switch Button must not steal the thaw click.
+    public void OnPointerDown(PointerEventData eventData)
+    { if (eventData.button == PointerEventData.InputButton.Left) eventData.Use(); }
+    public void OnPointerUp(PointerEventData eventData)
+    { if (eventData.button == PointerEventData.InputButton.Left) eventData.Use(); }
 
     public bool RequestClick()
     {
@@ -68,7 +74,7 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
         if (state.Instance == null)
         {
             if (observed != null && observed.ThawClicks == FrozenThawInteraction.RequiredClicks)
-            { effect.Shatter(); Pulse(); }
+            { effect.Shatter(); Pulse(); clickAudio?.PlayClick(FrozenThawInteraction.RequiredClicks); }
             else if (!effect.IsShattering) effect.Hide();
             observed = null; return;
         }
@@ -80,6 +86,7 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
         if (renderedProgress != observed.ThawClicks)
         {
             renderedProgress = observed.ThawClicks; effect.ShowStage(renderedProgress); Pulse();
+            clickAudio?.PlayClick(renderedProgress);
         }
         else if (effect.CurrentStage != Mathf.Clamp(renderedProgress, 0, 2) && !effect.IsShattering)
             effect.ShowStage(renderedProgress, false);

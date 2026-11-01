@@ -1,0 +1,19 @@
+Event	ID	Name			Wwise Object Path	Notes
+	2294954385	Play_Freeze_Shatter			\Default Work Unit\Freeze\Play_Freeze_Shatter	
+	2442151923	Play_Freeze_Dull			\Default Work Unit\Freeze\Play_Freeze_Dull	
+	2926730840	Play_Freeze_Crack			\Default Work Unit\Freeze\Play_Freeze_Crack	
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	1339533979	Freeze_VolumeDb			\Default Work Unit\Freeze_VolumeDb	
+	3051847888	Freeze_PitchSemitones			\Default Work Unit\Freeze_PitchSemitones	
+
+Effect plug-ins	ID	Name	Type				Notes
+	341110469	FreezeDurationPreservingPitch	Wwise Pitch Shifter			
+	585997252	FreezeDurationPreservingPitch	Wwise Pitch Shifter			
+	712053188	FreezeDurationPreservingPitch	Wwise Pitch Shifter			
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	440609607	Freeze_02_Crack	.cache\A2\{A2378D5E-590E-4AEF-4C50-ED97013637AC}.wem		\Containers\Default Work Unit\Freeze\Freeze_02_Crack		57696
+	844053020	Freeze_03_Shatter	.cache\37\{3730689A-B10C-3989-3A01-94948DA8BDDC}.wem		\Containers\Default Work Unit\Freeze\Freeze_03_Shatter		192096
+	978535683	Freeze_01_Dull	.cache\C4\{C40E3BB3-49D3-B515-0EFD-88D05A826125}.wem		\Containers\Default Work Unit\Freeze\Freeze_01_Dull		57696
+

@@ -19,6 +19,9 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     private readonly List<ViewTicket> tickets = new List<ViewTicket>();
     private BattlePresentationPlayback playback;
     private BattlePresentationConfiguration configuration;
+    [Tooltip("留空使用 Resources/UI/DefaultSkillTimeline。命中时点沿用运行时 Excel。")]
+    public BattleSkillTimelineTemplate skillTimeline;
+    public bool VoicesEnabled => skillTimeline == null || (skillTimeline.tracks & BattleSkillTracks.Voice) != 0;
 
     public static void EnsureOn(GameObject host)
     {
@@ -35,6 +38,8 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
         }
         runtimeOwner = this;
         playback = new BattlePresentationPlayback(Present, CancelViews);
+        if (skillTimeline == null) skillTimeline = Resources.Load<BattleSkillTimelineTemplate>(BattleSkillTimelineTemplate.DefaultResource);
+        if (skillTimeline == null) Debug.LogError("缺少默认技能时间轴模板，临时使用公共默认轨道。", this);
         ReloadConfiguration();
         // Scenes explicitly opt in to views; do not install unrelated UI modules.
         foreach (var component in GetComponents<MonoBehaviour>())
@@ -79,7 +84,22 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     public Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
     {
         if (!isActiveAndEnabled || playback == null) return Task.CompletedTask;
-        return playback.Enqueue(BattlePresentationTimeline.Build(sequence, configuration.For), cancellation);
+        var cues = skillTimeline != null ? skillTimeline.Build(sequence, configuration.For)
+            : BattleSkillTimeline.Build(sequence, configuration.For, BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
+        bool voicePrepared = false;
+        if (VoicesEnabled)
+            foreach (var view in views)
+                if (view is ICharacterVoiceSequenceView voice && (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled))
+                {
+                    voicePrepared = true;
+                    voice.PrepareVoices(cues);
+                }
+        if (!voicePrepared && LogManager.IsEnabled(LogCategory.Voice))
+            foreach (var cue in cues)
+                if (cue.SkillMarker == BattleSkillMarker.CastStart && cue.Result.TargetSide == BattleSide.Ally && cue.Result.Data is ActionEventData action)
+                    LogManager.Log(LogCategory.Voice, $"跳过 {action.SubjectId} {action.SkillId}，" +
+                        (VoicesEnabled ? "场景没有启用并注册的角色语音组件。" : "时间轴关闭了语音轨道。"));
+        return playback.Enqueue(cues, cancellation);
     }
     public void SkipResults() => playback?.Skip();
     public void CancelResults() => playback?.Cancel();
@@ -102,7 +122,8 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
 
     private void Present(long id, BattlePresentationCue cue, Action<Exception> completed)
     {
-        var targets = views.FindAll(view => !cue.IsAnticipation || view is IBattlePresentationAnticipationView).ToArray();
+        var targets = views.FindAll(view => BattleSkillTimeline.Receives(view, cue)
+            && (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled)).ToArray();
         if (targets.Length == 0) { completed(null); return; }
         int remaining = targets.Length;
         bool closed = false;

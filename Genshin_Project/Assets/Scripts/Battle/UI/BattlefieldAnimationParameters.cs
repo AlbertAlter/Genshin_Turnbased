@@ -12,7 +12,7 @@ public sealed class BattlefieldAnimationParameters
     private static readonly HashSet<string> Allowed = new HashSet<string>
     {
         "AP.CountDuration","AP.FloatDuration","AP.FloatDistance","AP.PulsePeriod","AP.PulseMinAlpha",
-        "Health.TransitionDuration","Selection.DimmerFadeInDuration","Selection.TargetTransitionDuration",
+        "Health.TransitionDuration","Selection.DimmerFadeInDuration","Selection.DimmerFadeOutDuration","Selection.TargetTransitionDuration",
         "ActionIndicator.FadeInDuration","ActionIndicator.FadeOutDuration",
         "Normal.IconOpacity","Normal.SkillBackgroundOpacity","Normal.BurstBackgroundOpacity",
         "Freeze.IconOpacity","Freeze.SkillBackgroundOpacity","Freeze.BurstBackgroundOpacity",

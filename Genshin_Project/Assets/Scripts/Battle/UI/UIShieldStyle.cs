@@ -9,7 +9,7 @@ public sealed class UIShieldStyle
 {
     public const string FileName = "ShieldEffects.xlsx";
     private readonly Dictionary<string, string> values;
-    public static readonly string[] ArtKeys = { "MembranePath", "MaskPath", "CardClipPath" };
+    public static readonly string[] ArtKeys = { "MembranePath", "MaskPath", "BorderPath" };
     private static readonly string[] Numbers = {
         "ReferenceWidth", "ReferenceHeight", "MembraneWidth", "MembraneHeight", "MembraneOffsetX", "MembraneOffsetY",
         "MaskWidth", "MaskHeight", "MaskOffsetX", "MaskOffsetY", "TintWidth", "TintHeight", "TintOffsetX", "TintOffsetY",

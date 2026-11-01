@@ -6,18 +6,14 @@ using UnityEngine;
 /// <summary>Adapts scheduled real hit results to the independent hit renderer. Never deals damage.</summary>
 [DisallowMultipleComponent]
 [AddComponentMenu("Battle UI/Hit Result Adapter")]
-public sealed class BattleUiHitResultView : MonoBehaviour, IBattlePresentationView, IBattlePresentationAnticipationView
+public sealed class BattleUiHitResultView : BattleSkillTrackBehaviour, IBattleSkillHitEffectTrack
 {
-    public BattlefieldPresentationPlayer player;
     public BattleUiLayout layout;
     public BattleUiHitEffects effects;
     private sealed class Pending { public long Id; public Coroutine Routine; public Action<Exception> Finish; }
     private readonly List<Pending> pending = new List<Pending>();
 
-    private void OnEnable() { if (player != null) player.RegisterView(this); }
-    private void Start() { if (player != null) player.RegisterView(this); }
-
-    public void Present(long playbackID, BattlePresentationCue cue, Action<Exception> completed)
+    public override void Present(long playbackID, BattlePresentationCue cue, Action<Exception> completed)
     {
         if (!isActiveAndEnabled || !(cue.Result.Data is DamageEventData damage) || !damage.HitLanded ||
             (damage.DamageType != "Normal" && damage.DamageType != "Heavy") ||
@@ -75,7 +71,7 @@ public sealed class BattleUiHitResultView : MonoBehaviour, IBattlePresentationVi
         catch (Exception error) { completed(error); return; }
         completed(null);
     }
-    public void Cancel(long playbackID)
+    public override void Cancel(long playbackID)
     {
         foreach (var item in pending.ToArray())
             if (playbackID < 0 || item.Id == playbackID)
@@ -85,5 +81,4 @@ public sealed class BattleUiHitResultView : MonoBehaviour, IBattlePresentationVi
             }
         effects?.Clear();
     }
-    private void OnDisable() { if (player != null) player.UnregisterView(this); Cancel(-1); }
 }

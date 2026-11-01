@@ -10,7 +10,7 @@ public sealed class UICardFactory : MonoBehaviour
     public const string FramePath = "art_assets/Character_Bare/Frame/01.png";
     public const string InnerShadowPath = "art_assets/UI/BattleField1/UI_components/card/CardInnerShadow.png";
     public const string OuterShadowPath = "art_assets/UI/BattleField1/UI_components/card/CardShadow.png";
-    public const string GlowPath = "art_assets/UI/BattleField1/UI_components/card/CardOverGlow.png";
+    public const string GlowPath = "art_assets/UI/BattleField1/UI_components/card/CardSelectionBorder.png";
     public const float Aspect = 420f / 720f;
     private readonly Dictionary<string, Sprite> assets = new Dictionary<string, Sprite>();
     private readonly HashSet<string> pending = new HashSet<string>(), failed = new HashSet<string>();

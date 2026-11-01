@@ -337,9 +337,8 @@ public class BattleInputController : MonoBehaviour
         if (ally?.Entity?.IsOnField != true) return true;
 
         bool selectionValid = _selector.IsSelectionValid();
-        var sel = _selector.CurrentSelection;
-        if (!selectionValid || !ally.AreConfirmedTargetsValid() || sel == null || sel.Count == 0 || (!_selectionAllowsEmpty
-            && !sel.Exists(position => _selectionAlive != null && _selectionAlive(position))))
+        var sel = _selector.SelectedTargets();
+        if (!selectionValid || !ally.AreConfirmedTargetsValid() || sel.Count == 0)
         {
             NotifyNoValidTarget();
             return true;
@@ -511,16 +510,22 @@ public class BattleInputController : MonoBehaviour
     }
 
 
-    public bool CanThaw => CanAcceptAction(BattleManager.Instance) && !_selecting
-        && BattleManager.Instance.CanClickThawActiveAlly;
+    public bool CanThaw => CanThawAlly(BattleManager.Instance?.GetActiveAlly()?.Entity);
+
+    public bool CanThawAlly(BattleEntity target) => CanAcceptAction(BattleManager.Instance) && !_selecting
+        && BattleManager.Instance.CanClickThawAlly(target);
 
     /// <summary>鼠标与快捷键共用三次点击解冻，第三下成功才扣10 AP。</summary>
     public bool UIThaw() => UIThaw(out _);
 
-    public bool UIThaw(out FrozenThawClickResult result)
+    public bool UIThaw(out FrozenThawClickResult result) =>
+        UIThaw(BattleManager.Instance?.GetActiveAlly()?.Entity, out result);
+
+    /// <summary>点击指定我方卡牌解冻，不切换出战角色；沿用结算、目标选择和模态输入锁。</summary>
+    public bool UIThaw(BattleEntity target, out FrozenThawClickResult result)
     {
         result = FrozenThawClickResult.Ignored;
-        return CanThaw && BattleManager.Instance.TryThawActiveAlly(out result);
+        return CanThawAlly(target) && BattleManager.Instance.TryThawAlly(target, out result);
     }
 
     /// <summary>UI：直接切换到指定槽位（slot=0~3），仍遵守普通换人 AP/阵亡免费规则。</summary>

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{1A252852-7C93-4F9E-9DD5-733F1A13835B}" SchemaVersion="133">
+	<Containers>
+		<WorkUnit Name="Default Work Unit" ID="{1A252852-7C93-4F9E-9DD5-733F1A13835B}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Freeze" ID="{64884FAD-E52B-450D-B5C8-8DD08E5C4B7F}" ShortID="636518649">
+					<ChildrenList>
+						<Sound Name="Freeze_01_Dull" ID="{548BF699-57BE-40EA-822E-5AB95A4DE057}" ShortID="759768369">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5EF7E44-1A2A-4805-9AC4-5E67D160CF23}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{2F980B06-2C18-4239-BE46-D9C92E453159}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Freeze_01_Dull" ID="{8A0837FE-0BE9-4212-923A-DF0F080E14BC}">
+									<Language>SFX</Language>
+									<AudioFile>Freeze\Freeze_01_Dull.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="978535683"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{61084FBC-507E-4019-B549-EAD6C6768F12}" ShortID="1002972204">
+										<ReferenceList>
+											<Reference Name="Effect">
+												<Custom>
+													<Effect Name="FreezeDurationPreservingPitch" ID="{DBAD4C10-739F-4384-95AE-CB0C3CC99F5A}" ShortID="585997252" PluginName="Wwise Pitch Shifter" CompanyID="0" PluginID="136" PluginType="3">
+														<PropertyList>
+															<Property Name="DelayTime" Type="Real32" Value="10"/>
+														</PropertyList>
+														<ObjectLists>
+															<ObjectList Name="RTPC">
+																<RTPC Name="" ID="{A4484E98-A55D-42BD-9726-212996ABF8FF}" ShortID="243318918">
+																	<PropertyList>
+																		<Property Name="PropertyName" Type="string" Value="Pitch"/>
+																	</PropertyList>
+																	<ReferenceList>
+																		<Reference Name="ControlInput">
+																			<ObjectRef Name="Freeze_PitchSemitones" ID="{E3FD995D-EA30-495A-9871-DD4A77FE337C}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+																		</Reference>
+																		<Reference Name="Curve">
+																			<Custom>
+																				<Curve Name="" ID="{C7A65278-918C-401D-AEFD-B4CF4C1CB378}">
+																					<PropertyList>
+																						<Property Name="Flags" Type="int32" Value="1"/>
+																					</PropertyList>
+																					<PointList>
+																						<Point>
+																							<XPos>-12</XPos>
+																							<YPos>-1200</YPos>
+																							<Flags>5</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>0</XPos>
+																							<YPos>0</YPos>
+																							<Flags>0</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>12</XPos>
+																							<YPos>1200</YPos>
+																							<Flags>37</Flags>
+																						</Point>
+																					</PointList>
+																				</Curve>
+																			</Custom>
+																		</Reference>
+																	</ReferenceList>
+																</RTPC>
+															</ObjectList>
+														</ObjectLists>
+													</Effect>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+								<ObjectList Name="RTPC">
+									<RTPC Name="" ID="{0F489753-FBAE-477E-80C7-166184D7B7A3}" ShortID="1046346644">
+										<PropertyList>
+											<Property Name="PropertyName" Type="string" Value="Volume"/>
+										</PropertyList>
+										<ReferenceList>
+											<Reference Name="ControlInput">
+												<ObjectRef Name="Freeze_VolumeDb" ID="{F1339CA2-205D-4017-818D-CB53B9675D41}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+											</Reference>
+											<Reference Name="Curve">
+												<Custom>
+													<Curve Name="" ID="{28EF09D6-3881-4E9A-A756-29FD7BE44262}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>-96</XPos>
+																<YPos>-96</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>0</YPos>
+																<Flags>0</Flags>
+															</Point>
+															<Point>
+																<XPos>6.0206</XPos>
+																<YPos>6.0206</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</RTPC>
+								</ObjectList>
+							</ObjectLists>
+							<ActiveSourceList>
+								<ActiveSource Name="Freeze_01_Dull" ID="{8A0837FE-0BE9-4212-923A-DF0F080E14BC}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Freeze_02_Crack" ID="{54012BE0-C768-4B99-9647-58D6BE3894F2}" ShortID="362894988">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5EF7E44-1A2A-4805-9AC4-5E67D160CF23}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{2F980B06-2C18-4239-BE46-D9C92E453159}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Freeze_02_Crack" ID="{F1CA4935-B7E6-461B-B762-09D29AEF44D0}">
+									<Language>SFX</Language>
+									<AudioFile>Freeze\Freeze_02_Crack.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="440609607"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{311A098E-AB49-49D2-9E72-C2CF6C89D049}" ShortID="122720527">
+										<ReferenceList>
+											<Reference Name="Effect">
+												<Custom>
+													<Effect Name="FreezeDurationPreservingPitch" ID="{5FFABAEF-586D-4662-AD04-1762007E2DC6}" ShortID="341110469" PluginName="Wwise Pitch Shifter" CompanyID="0" PluginID="136" PluginType="3">
+														<PropertyList>
+															<Property Name="DelayTime" Type="Real32" Value="10"/>
+														</PropertyList>
+														<ObjectLists>
+															<ObjectList Name="RTPC">
+																<RTPC Name="" ID="{88EA2FF2-C9FF-4ADB-84FA-30E7583F125D}" ShortID="243587656">
+																	<PropertyList>
+																		<Property Name="PropertyName" Type="string" Value="Pitch"/>
+																	</PropertyList>
+																	<ReferenceList>
+																		<Reference Name="ControlInput">
+																			<ObjectRef Name="Freeze_PitchSemitones" ID="{E3FD995D-EA30-495A-9871-DD4A77FE337C}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+																		</Reference>
+																		<Reference Name="Curve">
+																			<Custom>
+																				<Curve Name="" ID="{1CB00BD8-32FE-4154-83CA-4A385EAE0645}">
+																					<PropertyList>
+																						<Property Name="Flags" Type="int32" Value="1"/>
+																					</PropertyList>
+																					<PointList>
+																						<Point>
+																							<XPos>-12</XPos>
+																							<YPos>-1200</YPos>
+																							<Flags>5</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>0</XPos>
+																							<YPos>0</YPos>
+																							<Flags>0</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>12</XPos>
+																							<YPos>1200</YPos>
+																							<Flags>37</Flags>
+																						</Point>
+																					</PointList>
+																				</Curve>
+																			</Custom>
+																		</Reference>
+																	</ReferenceList>
+																</RTPC>
+															</ObjectList>
+														</ObjectLists>
+													</Effect>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+								<ObjectList Name="RTPC">
+									<RTPC Name="" ID="{5F537C74-9708-41EF-8C78-773CC7F791DB}" ShortID="263600902">
+										<PropertyList>
+											<Property Name="PropertyName" Type="string" Value="Volume"/>
+										</PropertyList>
+										<ReferenceList>
+											<Reference Name="ControlInput">
+												<ObjectRef Name="Freeze_VolumeDb" ID="{F1339CA2-205D-4017-818D-CB53B9675D41}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+											</Reference>
+											<Reference Name="Curve">
+												<Custom>
+													<Curve Name="" ID="{D431A3CE-7E46-4D93-848A-1067734C86F7}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>-96</XPos>
+																<YPos>-96</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>0</YPos>
+																<Flags>0</Flags>
+															</Point>
+															<Point>
+																<XPos>6.0206</XPos>
+																<YPos>6.0206</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</RTPC>
+								</ObjectList>
+							</ObjectLists>
+							<ActiveSourceList>
+								<ActiveSource Name="Freeze_02_Crack" ID="{F1CA4935-B7E6-461B-B762-09D29AEF44D0}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Freeze_03_Shatter" ID="{3AA1278C-1290-478E-A7C4-7AB3088D318A}" ShortID="120965083">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{A5EF7E44-1A2A-4805-9AC4-5E67D160CF23}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{2F980B06-2C18-4239-BE46-D9C92E453159}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Freeze_03_Shatter" ID="{EDFF6A92-F4BE-448B-B5D7-461A050A5B0B}">
+									<Language>SFX</Language>
+									<AudioFile>Freeze\Freeze_03_Shatter.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="844053020"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Effects">
+									<EffectSlot Name="" ID="{942DA62D-ECA3-4089-B206-651849D65331}" ShortID="425738071">
+										<ReferenceList>
+											<Reference Name="Effect">
+												<Custom>
+													<Effect Name="FreezeDurationPreservingPitch" ID="{698E16C2-E0DE-4CB1-85BB-19F40DE9ED7A}" ShortID="712053188" PluginName="Wwise Pitch Shifter" CompanyID="0" PluginID="136" PluginType="3">
+														<PropertyList>
+															<Property Name="DelayTime" Type="Real32" Value="10"/>
+														</PropertyList>
+														<ObjectLists>
+															<ObjectList Name="RTPC">
+																<RTPC Name="" ID="{972A1291-2585-4A62-B577-56542543F262}" ShortID="820182607">
+																	<PropertyList>
+																		<Property Name="PropertyName" Type="string" Value="Pitch"/>
+																	</PropertyList>
+																	<ReferenceList>
+																		<Reference Name="ControlInput">
+																			<ObjectRef Name="Freeze_PitchSemitones" ID="{E3FD995D-EA30-495A-9871-DD4A77FE337C}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+																		</Reference>
+																		<Reference Name="Curve">
+																			<Custom>
+																				<Curve Name="" ID="{3F3C7985-C642-4910-B9C4-C84E57E3AA16}">
+																					<PropertyList>
+																						<Property Name="Flags" Type="int32" Value="1"/>
+																					</PropertyList>
+																					<PointList>
+																						<Point>
+																							<XPos>-12</XPos>
+																							<YPos>-1200</YPos>
+																							<Flags>5</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>0</XPos>
+																							<YPos>0</YPos>
+																							<Flags>0</Flags>
+																						</Point>
+																						<Point>
+																							<XPos>12</XPos>
+																							<YPos>1200</YPos>
+																							<Flags>37</Flags>
+																						</Point>
+																					</PointList>
+																				</Curve>
+																			</Custom>
+																		</Reference>
+																	</ReferenceList>
+																</RTPC>
+															</ObjectList>
+														</ObjectLists>
+													</Effect>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</EffectSlot>
+								</ObjectList>
+								<ObjectList Name="RTPC">
+									<RTPC Name="" ID="{BC9ED0D7-6680-4B33-BD7E-9F96D781AEC8}" ShortID="901606773">
+										<PropertyList>
+											<Property Name="PropertyName" Type="string" Value="Volume"/>
+										</PropertyList>
+										<ReferenceList>
+											<Reference Name="ControlInput">
+												<ObjectRef Name="Freeze_VolumeDb" ID="{F1339CA2-205D-4017-818D-CB53B9675D41}" WorkUnitID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}"/>
+											</Reference>
+											<Reference Name="Curve">
+												<Custom>
+													<Curve Name="" ID="{A9D2B3D3-A0F1-4FFD-8F54-3276869C59FC}">
+														<PropertyList>
+															<Property Name="Flags" Type="int32" Value="3"/>
+														</PropertyList>
+														<PointList>
+															<Point>
+																<XPos>-96</XPos>
+																<YPos>-96</YPos>
+																<Flags>5</Flags>
+															</Point>
+															<Point>
+																<XPos>0</XPos>
+																<YPos>0</YPos>
+																<Flags>0</Flags>
+															</Point>
+															<Point>
+																<XPos>6.0206</XPos>
+																<YPos>6.0206</YPos>
+																<Flags>37</Flags>
+															</Point>
+														</PointList>
+													</Curve>
+												</Custom>
+											</Reference>
+										</ReferenceList>
+									</RTPC>
+								</ObjectList>
+							</ObjectLists>
+							<ActiveSourceList>
+								<ActiveSource Name="Freeze_03_Shatter" ID="{EDFF6A92-F4BE-448B-B5D7-461A050A5B0B}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Containers>
+</WwiseDocument>

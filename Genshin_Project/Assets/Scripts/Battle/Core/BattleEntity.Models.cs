@@ -47,6 +47,8 @@ public class Shield
 [Serializable]
 public class StatusInstance
 {
+    // Optional presentation identity for a charged attack released by this instance instead of a Skill action.
+    [NonSerialized] public string ReleaseVoiceSkillId;
     [NonSerialized] internal bool DeathCleanupPending; // 保留供OnDeath读取，普通待执行行动停止。
     [NonSerialized] public object Host;              // 真实宿主；不是Buff受益者，也不改变Caster/self语义。
     public string StatusID2;                        // 对应 StatusMainData.StatusID2

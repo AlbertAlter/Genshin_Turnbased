@@ -11,6 +11,14 @@ public sealed class PsdApTextOutline : MonoBehaviour
     [SerializeField] private Color outlineColor = new Color32(113,103,88,255);
     [SerializeField, Min(0)] private float outlinePixels = 3f;
 
+    public void Configure(Color color, float pixels)
+    {
+        if (owned != null) OnDisable();
+        outlineColor = color;
+        outlinePixels = pixels;
+        if (isActiveAndEnabled) OnEnable();
+    }
+
     private void OnEnable()
     {
         label = GetComponent<TMP_Text>();
@@ -18,7 +26,7 @@ public sealed class PsdApTextOutline : MonoBehaviour
         original = label.fontSharedMaterial;
         if (original == null) original = label.font.material;
         if (original == null) return;
-        owned = new Material(original) { name = "AP PSD outer stroke", hideFlags = HideFlags.HideAndDontSave };
+        owned = new Material(original) { name = "PSD text outer stroke", hideFlags = HideFlags.HideAndDontSave };
         float gradient = owned.GetFloat(ShaderUtilities.ID_GradientScale);
         float width = Mathf.Clamp01(outlinePixels * label.font.faceInfo.pointSize /
                                      Mathf.Max(.01f, 2f * gradient * label.fontSize));

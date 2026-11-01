@@ -46,6 +46,7 @@ namespace GenshinTurnBased.Tests.EditMode
             _kaeya = _kaeyaObject.AddComponent<BattleEntity>();
             _kaeya.EntityID = 1010;
             _kaeya.Type = BattleEntity.EntityType.Character;
+            _kaeya.ConstellationLevel = 1;
             HookTestEnv.AttachStatus(_kaeya, "ST_Kaeya_C1", _kaeya, 3);
 
             _icyObject = new GameObject("KaeyaC1_IcyTarget");
@@ -123,6 +124,17 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(skillBonus, Is.Zero, "战技不享受 C1 暴击率加成");
             Assert.That(burstBonus, Is.Zero, "爆发不享受 C1 暴击率加成");
+        }
+
+        [Test]
+        public void LockedConstellation_DoesNotBenefitEvenWithStatusAttached()
+        {
+            _kaeya.ConstellationLevel = 0;
+            _icyTarget.ApplyAura("Cryo", 1f, 1010);
+
+            float bonus = _kaeya.GetStatusCritRate("SE_Normal_Kaeya", "SK_Normal_Kaeya", 0, "Physical", _icyTarget);
+
+            Assert.That(bonus, Is.Zero);
         }
 
         [Test]

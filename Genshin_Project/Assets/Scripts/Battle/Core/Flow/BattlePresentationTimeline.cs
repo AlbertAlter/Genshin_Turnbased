@@ -25,6 +25,11 @@ public sealed class BattlePresentationTiming
 
 public sealed class BattlePresentationCue
 {
+    public string CharacterVoicePath { get; internal set; }
+    public string CharacterVoiceKey { get; internal set; }
+    public BattleSkillMarker SkillMarker { get; internal set; }
+    public BattleSkillTracks SkillTracks { get; internal set; }
+    public BattlePresentationResult CastStart { get; internal set; }
     public BattlePresentationResult Result { get; }
     public double Time { get; internal set; }
     public BattlePresentationTiming Timing { get; }

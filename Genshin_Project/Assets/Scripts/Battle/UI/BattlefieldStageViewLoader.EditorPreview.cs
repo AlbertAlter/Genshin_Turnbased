@@ -146,7 +146,7 @@ public sealed partial class BattlefieldStageViewLoader
             {
                 StageAllySetup ally = allies[index];
                 PreviewBoundImage(group, "CharacterAvatar",
-                    $"art_assets/Character_Icon/{ally.CharacterID}_02.png");
+                    "art_assets/" + CharacterCardArtManifest.PortraitFile(ally.CharacterID));
                 List<string> icons = LoadCharacterSkillIcons(ally.CharacterID);
                 if (icons.Count > 0 && CharacterSkillIconResolver.TryGetRelativePath(icons[icons.Count - 1], out string burstPath))
                     PreviewBoundImage(group, "BurstIcon", burstPath);
@@ -288,7 +288,7 @@ public sealed partial class BattlefieldStageViewLoader
                       !string.IsNullOrWhiteSpace(displayName)
             ? displayName
             : "Enemy " + enemy.EnemyID;
-        label.text = $"Lv.{enemy.Level} {name}";
+        label.text = FormatEnemyLabel(enemy.Level, name);
     }
 
     private static Dictionary<int, string> LoadEnemyPreviewNames()

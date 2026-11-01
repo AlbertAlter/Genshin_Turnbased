@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{42CC83FC-8855-4E28-93F2-A9F4098DFB77}" SchemaVersion="133">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{42CC83FC-8855-4E28-93F2-A9F4098DFB77}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Freeze" ID="{AC6446CA-3589-4C51-8281-F0FFB79256FA}" ShortID="261313652">
+					<ChildrenList>
+						<Event Name="Play_Freeze_Dull" ID="{05B8D2EF-D406-4A03-86CE-5BE8CBDB29DA}">
+							<ChildrenList>
+								<Action Name="" ID="{D836E805-AC39-496C-9F59-CD533F76F4EC}" ShortID="883882859">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Freeze_01_Dull" ID="{548BF699-57BE-40EA-822E-5AB95A4DE057}" WorkUnitID="{1A252852-7C93-4F9E-9DD5-733F1A13835B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Play_Freeze_Crack" ID="{347CC862-37F3-4F8E-9B92-0E79186C566C}">
+							<ChildrenList>
+								<Action Name="" ID="{6D0983F2-74F7-488E-A006-E8C0787A93CE}" ShortID="710372306">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Freeze_02_Crack" ID="{54012BE0-C768-4B99-9647-58D6BE3894F2}" WorkUnitID="{1A252852-7C93-4F9E-9DD5-733F1A13835B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Play_Freeze_Shatter" ID="{CCB52540-4A13-4188-80E8-9DC78E0ABD07}">
+							<ChildrenList>
+								<Action Name="" ID="{693497CB-579D-436D-9CAE-C35C5AEBC63A}" ShortID="259978479">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Freeze_03_Shatter" ID="{3AA1278C-1290-478E-A7C4-7AB3088D318A}" WorkUnitID="{1A252852-7C93-4F9E-9DD5-733F1A13835B}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

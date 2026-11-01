@@ -3,6 +3,7 @@ using System;
 [Serializable]
 public sealed class CharacterCardArtManifest
 {
+    public static string PortraitFile(int characterId) => $"Character_Icon/{characterId}_04.png";
     public string framePath = string.Empty;
     public CharacterCardArtEntry[] characters = Array.Empty<CharacterCardArtEntry>();
 

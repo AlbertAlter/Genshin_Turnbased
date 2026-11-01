@@ -104,7 +104,7 @@ public sealed class ShieldPreviewPanel : MonoBehaviour
             float fadeTime = settings.Number(show ? "FadeInSeconds" : "FadeOutSeconds");
             fades[i] = fadeTime <= 0 ? (show ? 1 : 0) : Mathf.MoveTowards(fades[i], show ? 1 : 0, dt / fadeTime);
             int e = compare ? i % Elements.Length : element;
-            Color tint = e == 8 ? settings.PsdTint : e == 0 ? Color.white : palette.GetColor(Elements[e]);
+            Color tint = e == 8 ? settings.PsdTint : palette.GetColor(Elements[e]);
             float tintAlpha = e == 0 ? settings.Number("NeutralTintOpacity") : tintOpacity;
             module.ApplyCard(bindings[i].side, bindings[i].slot, tint, membraneOpacity, tintAlpha, membraneOffset, maskOffset,
                 progress, sweep ? brightness * sweepAlpha : 0, width, angle, fades[i]);

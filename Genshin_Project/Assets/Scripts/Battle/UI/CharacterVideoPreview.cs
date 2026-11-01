@@ -80,7 +80,7 @@ public sealed class CharacterVideoPreview : MonoBehaviour
                 root.gameObject.SetActive(i == 1);
             }
             bindings.Add(new BattleUiCardBinding { side = BattleSide.Ally, slot = i + 1, root = root, art = surface.rectTransform,
-                hitsBehind = view.BackEffects, hitsFront = view.FrontEffects });
+                hitsBehind = view.BackEffects, hitsFront = view.FrontEffects, shieldLayer = view.ShieldLayer });
         }
         layout.cards = bindings.ToArray();
         shields = gameObject.AddComponent<BattleUiShields>(); shields.loadOnStart = false; shields.layout = layout;

@@ -3,6 +3,14 @@ Shader "UI/AvatarAlphaEffects"
     Properties
     {
         [PerRendererData] _MainTex ("Avatar", 2D) = "white" {}
+        [HideInInspector] _SpriteUV ("Sprite bounds", Vector) = (0,0,1,1)
+        [HideInInspector] _UvPerUnit ("UV per design pixel", Vector) = (0,0,0,0)
+        [HideInInspector] _ShadowOffset ("Shadow offset", Vector) = (0,0,0,0)
+        [HideInInspector] _ShadowSize ("Shadow size", Float) = 0
+        [HideInInspector] _Spread ("Shadow spread", Float) = 0
+        [HideInInspector] _OutlineWidth ("Outline width", Float) = 0
+        [HideInInspector] _ShadowColor ("Shadow color", Color) = (0,0,0,0)
+        [HideInInspector] _OutlineColor ("Outline color", Color) = (0,0,0,0)
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
         _StencilOp ("Stencil Operation", Float) = 0
@@ -55,6 +63,7 @@ Shader "UI/AvatarAlphaEffects"
                     }
                 }
                 float shadow=0,weight=0;
+                float2 gradient=0;
                 float2 center=i.uv-_ShadowOffset.xy*_UvPerUnit.xy;
                 // Bounded Gaussian approximation of Photoshop size/spread, in UI units.
                 [loop] for (int y=-4;y<=4;y++)
@@ -62,10 +71,14 @@ Shader "UI/AvatarAlphaEffects"
                 {
                     float w=exp(-(x*x+y*y)/8.0);
                     float alpha=sampleAvatar(center+float2(x,y)*(_ShadowSize/4)*_UvPerUnit.xy).a;
-                    shadow+=saturate(alpha/max(.001,1-_Spread))*w;weight+=w;
+                    shadow+=alpha*w; weight+=w;
+                    gradient+=float2(x,y)*alpha*w;
                 }
-                float sa=shadow/max(weight,.001)*_ShadowColor.a;
-                float oa=max(0,dilation-original.a)*_OutlineColor.a;
+                // Expand the blurred silhouette along its normal. Scaling each unblurred
+                // alpha tap would leave fully opaque/transparent portrait pixels unchanged.
+                float sa=saturate((shadow+_Spread*length(gradient))/weight)*_ShadowColor.a;
+                // The original sits over the stroke. Account for its AA coverage only once.
+                float oa=saturate((dilation-original.a)/max(.0001,1-original.a))*_OutlineColor.a;
                 float4 effect=over(float4(_OutlineColor.rgb*oa,oa),float4(_ShadowColor.rgb*sa,sa));
                 float4 result=over(float4(original.rgb*original.a,original.a),effect);
                 result.rgb*=i.color.rgb*i.color.a;result.a*=i.color.a;

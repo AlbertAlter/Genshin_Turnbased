@@ -101,6 +101,10 @@ public abstract class BattleEventData
 
 public sealed class DamageEventData : BattleEventData
 {
+    public float TargetMaxHP { get; }
+    public int ActiveAllyIdAtHit { get; }
+    public bool FromIndependentEnemyStatus { get; }
+    public string ReleaseVoiceSkillId { get; }
     public int SourceWeaponType { get; }
     private readonly DamageSourceInfo source;
     public DamageSourceInfo Source => source.Snapshot();
@@ -132,7 +136,16 @@ public sealed class DamageEventData : BattleEventData
     public DamageEventData(DamageResolvedEvent value) : base(BattleEventKind.DamageResolved, value.Target)
     {
         source = value.Source?.Snapshot() ?? DamageSourceInfo.CreateUnknown();
+        if (value.Target != null && value.Target.Side == BattleSide.Ally)
+        {
+            TargetMaxHP = value.Target.GetFinalHP();
+            var active = BattleManager.Instance?.GetActiveAlly()?.Entity;
+            ActiveAllyIdAtHit = active != null && active.IsAlive ? active.EntityID : 0;
+            var status = BattleResolutionContext.CurrentAction?.IndependentStatus;
+            FromIndependentEnemyStatus = status != null && status.HasSourceEntity && status.SourceSide == BattleSide.Enemy;
+        }
         SourceWeaponType = source.SourceEntity != null ? source.SourceEntity.WeaponType : -1;
+        if (source.SourceKind == ReactionSourceKind.StatusEffect) ReleaseVoiceSkillId = source.SourceStatus?.ReleaseVoiceSkillId;
         SourceWasPartyMember = value.SourceWasPartyMember; SourceWasOnField = value.SourceWasOnField;
         HPBefore = value.HPBefore; HPAfter = value.HPAfter; RequestedDamage = value.RequestedHPDamage;
         ActualHPDamage = value.ActualHPDamage; HitLanded = value.HitLanded; CausedDeath = value.CausedDeath;

@@ -35,13 +35,15 @@ public sealed class BattleUiOverallShields : MonoBehaviour, IBattleUiOverallShie
             if (card?.art == null || !current.Add(card.art)) continue;
             if (!group.TryGetValue(card.art, out var visual) || visual == null)
             {
-                visual = Instantiate(effectPrefab, card.art, false);
+                visual = Instantiate(effectPrefab, card.shieldLayer != null ? card.shieldLayer : card.art, false);
                 visual.name = "OverallShield_" + instanceId;
                 group[card.art] = visual;
                 foreach (var component in visual.GetComponentsInChildren<MonoBehaviour>(true))
                     if (component is IOverallShieldVisual sink) sink.SetElement(element);
                 visual.SetActive(true);
             }
+            else if (card.shieldLayer != null && visual.transform.parent != card.shieldLayer)
+                visual.transform.SetParent(card.shieldLayer, false);
         }
         foreach (var card in new List<RectTransform>(group.Keys))
             if (card == null || !current.Contains(card)) { Release(group[card]); group.Remove(card); }

@@ -4,7 +4,7 @@ Shader "UI/CardShield"
     {
         [PerRendererData] _MainTex ("PSD membrane", 2D) = "white" {}
         _MaskTex ("PSD elliptical mask in alpha", 2D) = "white" {}
-        _CardMask ("Card silhouette", 2D) = "white" {}
+        _BorderTex ("PSD shieldbar", 2D) = "white" {}
         _StencilComp ("Stencil Comparison", Float) = 8
         _Stencil ("Stencil ID", Float) = 0
         _StencilOp ("Stencil Operation", Float) = 0
@@ -32,7 +32,8 @@ Shader "UI/CardShield"
             #include "UnityUI.cginc"
             struct appdata { float4 vertex:POSITION; float4 color:COLOR; float2 uv:TEXCOORD0; UNITY_VERTEX_INPUT_INSTANCE_ID };
             struct v2f { float4 vertex:SV_POSITION; float4 color:COLOR; float2 uv:TEXCOORD0; float4 local:TEXCOORD1; UNITY_VERTEX_OUTPUT_STEREO };
-            sampler2D _MainTex, _MaskTex, _CardMask;
+            sampler2D _MainTex, _MaskTex, _BorderTex;
+            float4 _ProjectWhite;
             float4 _ReferenceSize, _MembraneRect, _MaskRect, _TintRect, _TintColor, _SweepColor, _ClipRect;
             float _MembraneOpacity, _TintOpacity, _SweepProgress, _SweepAngle, _SweepWidth, _SweepSoftness, _SweepOpacity;
             v2f vert(appdata v)
@@ -49,20 +50,20 @@ Shader "UI/CardShield"
                 float4 membrane=tex2D(_MainTex,uv);
                 // Outside the saved mask bounds Photoshop's mask background is white (255).
                 float mask=lerp(1,tex2D(_MaskTex,maskUV).a,inside(maskUV));
-                float a=membrane.a*inside(uv)*mask*_MembraneOpacity;
-                float3 premul=membrane.rgb*a;
-                // PSD stack: normal membrane, then the independent normal colour rectangle.
+                float face=membrane.a*mask;
+                float border=tex2D(_BorderTex,uv).a;
+                float a=(face+(1-face)*border)*inside(uv)*_MembraneOpacity;
+                // Photoshop clips the element colour to the combined shield alpha.
                 float tint=inside(layerUV(p,_TintRect))*_TintOpacity;
-                premul=premul*(1-tint)+_TintColor.rgb*tint; a=a*(1-tint)+tint;
+                float3 rgb=lerp(_ProjectWhite.rgb,_TintColor.rgb,tint);
                 float slope=tan(radians(_SweepAngle))*_ReferenceSize.x/_ReferenceSize.y;
                 float reach=.5+.5*abs(slope)+_SweepWidth;
                 float center=lerp(reach,-reach,_SweepProgress);
                 float distance=abs((i.uv.y-.5)-slope*(i.uv.x-.5)-center);
                 float halfWidth=_SweepWidth*.5;
                 float light=(1-smoothstep(halfWidth*(1-_SweepSoftness),halfWidth+.0001,distance))*_SweepOpacity;
-                premul=premul*(1-light)+_SweepColor.rgb*light; a=a*(1-light)+light;
-                float3 rgb=premul/max(a,.00001);
-                a*=tex2D(_CardMask,i.uv).a*i.color.a;
+                rgb=lerp(rgb,_SweepColor.rgb,light);
+                a=saturate(a*(1+light))*i.color.a;
                 #ifdef UNITY_UI_CLIP_RECT
                 a*=UnityGet2DClipping(i.local.xy,_ClipRect);
                 #endif

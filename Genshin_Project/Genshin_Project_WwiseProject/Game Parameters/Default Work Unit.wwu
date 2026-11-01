@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}" SchemaVersion="133">
+	<GameParameters>
+		<WorkUnit Name="Default Work Unit" ID="{670D6F46-C84E-4F9C-ABFD-5763C74B52A6}" PersistMode="Standalone">
+			<ChildrenList>
+				<GameParameter Name="Freeze_VolumeDb" ID="{F1339CA2-205D-4017-818D-CB53B9675D41}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="Max" Type="Real64" Value="6.0206"/>
+						<Property Name="Min" Type="Real64" Value="-96"/>
+					</PropertyList>
+				</GameParameter>
+				<GameParameter Name="Freeze_PitchSemitones" ID="{E3FD995D-EA30-495A-9871-DD4A77FE337C}">
+					<PropertyList>
+						<Property Name="InitialValue" Type="Real64" Value="0"/>
+						<Property Name="Max" Type="Real64" Value="12"/>
+						<Property Name="Min" Type="Real64" Value="-12"/>
+					</PropertyList>
+				</GameParameter>
+			</ChildrenList>
+		</WorkUnit>
+	</GameParameters>
+</WwiseDocument>

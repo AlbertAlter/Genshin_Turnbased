@@ -6,6 +6,7 @@ AP.PulsePeriod,1.2
 AP.PulseMinAlpha,0.65
 Health.TransitionDuration,0.2
 Selection.DimmerFadeInDuration,0.15
+Selection.DimmerFadeOutDuration,0.15
 Selection.TargetTransitionDuration,0.15
 ActionIndicator.FadeInDuration,0.12
 ActionIndicator.FadeOutDuration,0.1

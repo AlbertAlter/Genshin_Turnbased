@@ -4365,6 +4365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StageConfigJson: {fileID: 0}
+  characterVoice: {fileID: 8912300001}
 --- !u!4 &552209065
 Transform:
   m_ObjectHideFlags: 0
@@ -10787,6 +10788,7 @@ GameObject:
   - component: {fileID: 8901000003}
   - component: {fileID: 8901000004}
   - component: {fileID: 8901000005}
+  - component: {fileID: 8912300001}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -13863,6 +13865,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0352630db13d42e5b9152985af4822d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8912300001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c35e2e32c5441d9a274ae944be8e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8901000001}
+  battle: {fileID: 0}
+  voiceVolume: 1
+  output: {fileID: 0}
 --- !u!114 &8901000002
 MonoBehaviour:
   m_ObjectHideFlags: 0

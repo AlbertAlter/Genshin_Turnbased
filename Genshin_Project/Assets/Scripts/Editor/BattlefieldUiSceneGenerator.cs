@@ -97,7 +97,11 @@ public static class BattlefieldUiSceneGenerator
 
             // Include original template cards as well as clones in the explicit layout registry.
             foreach (var row in rows.Where(row => Equals(row.LayoutVariant, "Top") || Equals(row.LayoutVariant, "Bottom")))
-                if (byPath.TryGetValue(row.Path, out var card)) AdjustElementAuras(card, row.LayoutVariant);
+                if (byPath.TryGetValue(row.Path, out var card))
+                {
+                    card.transform.SetAsLastSibling();
+                    AdjustElementAuras(card, row.LayoutVariant);
+                }
 
             // Keycap artwork comes from the component PSD, while the table keeps
             // each variant aligned to its glyph position in the battlefield PSD.
@@ -256,6 +260,16 @@ public static class BattlefieldUiSceneGenerator
             }
             AttachBinding(textObject, row);
             if (Enum.TryParse(row.TextAlignment, out TextAlignmentOptions alignment)) label.alignment = alignment;
+            if (row.BindingKey == "EnemyLevelName" || row.BindingKey == "CurrentHPText" || row.BindingKey == "RosterStatusCount")
+            {
+                bool name = row.BindingKey == "EnemyLevelName", hp = row.BindingKey == "CurrentHPText";
+                label.font = ProjectUiFont.LoadOrCreateOutlined();
+                label.color = name ? new Color32(218, 218, 218, 255) : Color.white;
+                label.enableKerning = name;
+                label.overflowMode = name ? TextOverflowModes.Ellipsis : TextOverflowModes.Overflow;
+                textObject.AddComponent<PsdApTextOutline>().Configure(name ? new Color32(113,103,88,214) :
+                    hp ? new Color32(0,0,0,120) : new Color32(113,103,88,255), name ? 2 : 1);
+            }
             if (row.BindingKey == "APValue" || row.BindingKey == "APSpendHint" || row.BindingKey == "APGainHint")
             {
                 var apStyle = BattlefieldApView.LoadStyle();
@@ -291,7 +305,8 @@ public static class BattlefieldUiSceneGenerator
             if (avatar)
             {
                 UnityEngine.Object.DestroyImmediate(imageObject.GetComponent<AspectRatioFitter>());
-                ApplyRect(imageObject.GetComponent<RectTransform>(), row, parentRow);
+                if (row.BindingKey == "CharacterAvatar") StretchToParent(imageObject.GetComponent<RectTransform>());
+                else ApplyRect(imageObject.GetComponent<RectTransform>(), row, parentRow);
             }
             else
             {
@@ -324,8 +339,12 @@ public static class BattlefieldUiSceneGenerator
         }
 
         Image image = imageObject.GetComponent<Image>();
+        if (row.StreamingAssetPath != null && (row.StreamingAssetPath.Contains("/AvatarFrame/Ally/") ||
+            row.StreamingAssetPath.Contains("/AvatarFrame/Enemy/")) &&
+            (row.BindingKey == "FrameShadow" || row.BindingKey == "FrameInnerShadow"))
+            image.material = Resources.Load<Material>("UI/RosterFrameMultiply");
         image.raycastTarget = false;
-        image.preserveAspect = Equals(row.SizeMode, "Uniform") && !row.AllowCrop;
+        image.preserveAspect = Equals(row.SizeMode, "Uniform") && (!row.AllowCrop || row.BindingKey == "CharacterAvatar");
         image.color = GeneratedColor(row);
         if (row.BindingKey == "ScreenDimmer" || row.BindingKey == "CardOverGlow" ||
             row.BindingKey == "DisabledOverlay" || row.BindingKey == "BloodBond" ||
@@ -335,7 +354,7 @@ public static class BattlefieldUiSceneGenerator
         {
             StreamingSpriteReference reference = imageObject.AddComponent<StreamingSpriteReference>();
             reference.relativePath = row.StreamingAssetPath;
-            reference.allowCrop = row.AllowCrop;
+            reference.allowCrop = row.AllowCrop && row.BindingKey != "CharacterAvatar";
             reference.loadOnEnable = Equals(row.AssetMode, "Streaming");
             reference.revealOnLoad = row.BindingKey != "DisabledOverlay" &&
                                      row.BindingKey != "BloodBond" &&
@@ -411,6 +430,8 @@ public static class BattlefieldUiSceneGenerator
             BattlefieldHealthBarBuilder.Configure(canvas);
             BattlefieldHealthBarBuilder.ConfigurePsdLayers(canvas);
             UiConfigurationSyncWindow.ConfigureInitialVectorRendering(canvas.gameObject);
+            foreach (var row in rows.Where(r => Equals(r.LayoutVariant, "Top") || Equals(r.LayoutVariant, "Bottom")))
+                if (nodes.TryGetValue(row.Path, out var card)) card.transform.SetAsLastSibling();
             EnsureTargetSelectionGlows(canvas);
             return canvas;
         }
@@ -537,7 +558,7 @@ public static class BattlefieldUiSceneGenerator
             var binding = node.AddComponent<PsdUiBinding>();
             binding.bindingKey = "CardOverGlow"; binding.sourcePath = art.sourcePath + "/component:CardOverGlow";
             var reference = node.AddComponent<StreamingSpriteReference>();
-            reference.relativePath = "art_assets/UI/BattleField1/UI_components/card/CardOverGlow.png";
+            reference.relativePath = "art_assets/UI/BattleField1/UI_components/card/CardSelectionBorder.png";
             reference.loadOnEnable = true; reference.revealOnLoad = false; reference.allowCrop = true;
             node.SetActive(true);
         }
@@ -578,14 +599,16 @@ public static class BattlefieldUiSceneGenerator
         float artY = DesignCoordinate(artRect.anchorMin.y, artRect.anchoredPosition.y, DesignHeight);
         bool enemy = art.bindingKey == "EnemyCardArt";
         float direction = Equals(variant, "Top") ? 1f : -1f;
-        float edge = artY + direction * artRect.rect.height * 0.5f;
+        // CharacterCard1 in the current PSD: 8px beside the first card, bottom icon extends 1px.
+        float sideGap = FirstNumber(instance.name) == 1 ? 8f : 9f;
+        float edge = artY + direction * (artRect.rect.height * .5f + (direction < 0 ? 1f : 0f));
         for (int index = 0; index < auras.Length; index++)
         {
             float inward = auras[index].rect.height * 0.5f + index * (auras[index].rect.height + 4f);
             Vector2 position = auras[index].anchoredPosition;
             float desiredY = edge - direction * inward;
             float desiredX = artX + (enemy ? -1f : 1f) *
-                (artRect.rect.width * 0.5f + 9f + auras[index].rect.width * 0.5f);
+                (artRect.rect.width * 0.5f + sideGap + auras[index].rect.width * 0.5f);
             position.x = desiredX - (auras[index].anchorMin.x - 0.5f) * DesignWidth;
             position.y = desiredY - (auras[index].anchorMin.y - 0.5f) * DesignHeight;
             auras[index].anchoredPosition = position;

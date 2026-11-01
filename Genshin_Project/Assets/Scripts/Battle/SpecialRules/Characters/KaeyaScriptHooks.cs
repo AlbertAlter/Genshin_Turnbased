@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using System.Threading;
 
 /// <summary>
 /// 凯亚专属钩子（2026-08-19，状态钩子任务）：Kaeya_T2 / Kaeya_C1 / Kaeya_C4。
@@ -7,8 +8,29 @@ using System.Collections.Generic;
 /// </summary>
 public static class KaeyaScriptHooks
 {
+    private sealed class SkillFrame : IDisposable
+    {
+        internal readonly BattleEntity Owner;
+        internal readonly string SkillID;
+        internal bool TriggeredFrozen;
+        private readonly SkillFrame previous = CurrentSkill.Value;
+
+        internal SkillFrame(BattleEntity owner, SkillMainData skill)
+        {
+            Owner = owner;
+            SkillID = skill?.SkillID2;
+            CurrentSkill.Value = this;
+        }
+
+        public void Dispose() => CurrentSkill.Value = previous;
+    }
+
+    private static readonly AsyncLocal<SkillFrame> CurrentSkill = new AsyncLocal<SkillFrame>();
+
     internal static void Register()
     {
+        BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new SkillFrame(owner, skill));
+        BattleSpecialRules.RegisterDeclarationObserver(RecordFrozen);
         BattleSpecialRules.RegisterCondition("Kaeya_T2", (argument, context) => EvalKaeyaT2(context));
         BattleSpecialRules.RegisterCondition("Kaeya_C1", (argument, context) => EvalKaeyaC1(context));
         BattleSpecialRules.RegisterCondition("Kaeya_C4", (argument, context) => EvalKaeyaC4(context));
@@ -28,34 +50,28 @@ public static class KaeyaScriptHooks
     }
 
     /// <summary>
-    /// Kaeya_T2（元素战技使敌人冻结时额外产生能量）：
-    /// 本次主动行为目标（ActionTargetPositions，回退到 BattleManager 预解析缓存）中
-    /// 任一处于冻结状态即返回真值。
+    /// 只索引原反应入口已经提交的事实，不执行回能、不新增反应声明。
+    /// 嵌套技能有独立帧，退出后恢复调用者；不从当前冻结状态反推本次反应。
     /// </summary>
+    private static void RecordFrozen(BattleDeclaration declaration)
+    {
+        var frame = CurrentSkill.Value;
+        if (frame?.Owner?.EntityID != 1010 || frame.SkillID != "SK_Skill_Kaeya") return;
+        var reaction = declaration?.Get<ReactionEventData>();
+        if (reaction?.Reaction == ReactionType.Frozen && reaction.Source == frame.Owner
+            && reaction.EffectId == "SE_Skill_Kaeya1" && reaction.Subject != null
+            && reaction.Subject.Side != frame.Owner.Side)
+            frame.TriggeredFrozen = true;
+    }
+
+    /// <summary>本次霜袭实际触发冻结才返回真值；回能量和执行时机仍由原InsertEffect控制。</summary>
     static bool EvalKaeyaT2(ScriptHookContext context)
     {
-        IReadOnlyList<int> positions = context != null && context.ActionTargetPositions != null
-            ? context.ActionTargetPositions
-            : (BattleManager.Instance != null ? BattleManager.Instance.PendingActionTargetPositions : null);
-        if (positions == null || positions.Count == 0)
-        {
-            LogManager.Log(LogCategory.ScriptHook, "Kaeya_T2：本次行动无目标，未处于冻结状态，视为不触发");
-            return false;
-        }
-        foreach (int pos in positions)
-        {
-            var e = BattleManager.Instance != null
-                ? BattleManager.Instance.GetEntityByPosition(BattleSide.Enemy, pos)
-                : null;
-            if (e == null) continue;
-            if (ReactionStateSystem.TryGetEntityState(e, ReactionType.Frozen, out _))
-            {
-                LogManager.Log(LogCategory.ScriptHook, $"Kaeya_T2：目标 {e.EntityID}（位置{pos}）处于冻结状态，触发");
-                return true;
-            }
-        }
-        LogManager.Log(LogCategory.ScriptHook, "Kaeya_T2：本次行动目标未处于冻结状态，视为不触发");
-        return false;
+        var frame = CurrentSkill.Value;
+        bool triggered = context?.Caster?.EntityID == 1010 && frame?.Owner == context.Caster
+            && frame.SkillID == "SK_Skill_Kaeya" && frame.TriggeredFrozen;
+        LogManager.Log(LogCategory.ScriptHook, $"Kaeya_T2：本次霜袭实际触发冻结 → {triggered}");
+        return triggered;
     }
 
     /// <summary>

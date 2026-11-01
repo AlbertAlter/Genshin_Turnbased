@@ -11,6 +11,7 @@ public sealed class BattleUiCardBinding
     public RectTransform art;
     public RectTransform hitsBehind;
     public RectTransform hitsFront;
+    public RectTransform shieldLayer;
     public BattlefieldElementAuraBar auraBar;
 }
 

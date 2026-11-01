@@ -328,7 +328,7 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [UnityTest]
-        public IEnumerator Infusion_ReferencesCurrentLevels_OverridesPhysicalZeroGauge_AndRestoresBothButtons()
+        public IEnumerator Infusion_UsesEnchantWithCurrentLevels_OverridesPhysicalZeroGauge_AndKeepsBothButtons()
             => HookTestEnv.AwaitTask(InfusionAsync);
         private async Task InfusionAsync()
         {
@@ -339,37 +339,46 @@ namespace GenshinTurnBased.Tests.EditMode
             { CharacterID = BattleFlowTestEnv.AllyID, SkillType = 0, SkillLevel = 11, ParamID = "SE_Normal_Diluc", Hits1 = "2.8628" };
             env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_1"][11] = new SkillLevelData
             { CharacterID = BattleFlowTestEnv.AllyID, SkillType = 1, SkillLevel = 11, ParamID = "SE_Heavy_Diluc", Hits1 = "1.47" };
-            env.ConfigureAllyAction(0, "SK_NormalPyro_Diluc", "SE_NormalPyro_Diluc", "Pyro", "", 25,
-                param1: "%SE_Normal_Diluc.Hits1.M,1");
-            env.ConfigureAllyAction(1, "SK_HeavyPyro_Diluc", "SE_HeavyPyro_Diluc", "Pyro", "", 35,
-                param1: "%SE_Heavy_Diluc.Hits1.M,1");
-            env.DataManager.SkillEffectDict["SE_HeavyPyro_Diluc"].TargetNumber = 3;
+            env.DataManager.SkillEffectDict["SE_Heavy_Diluc"].TargetNumber = 3;
             var attr = env.DataManager.CharacterAttributesDict[BattleFlowTestEnv.AllyID];
             attr.NormalAttackID = "SK_Normal_Diluc"; attr.HeavyAttackID = "SK_Heavy_Diluc";
             var infusion = Main(env, 4101502, "ST_Diluc_PyroInfusion");
-            StatusEffect(env, 410150201, "STE_Diluc_InfuseNormal", "ChangeControl", "Normal", "SK_NormalPyro_Diluc");
-            StatusEffect(env, 410150202, "STE_Diluc_InfuseHeavy", "ChangeControl", "Heavy", "SK_HeavyPyro_Diluc");
+            infusion.StatusType = "Enchant";
+            env.ConfigureAllyAction(3, "SK_Burst_Diluc", "SE_Burst_DilucInfusion", "Pyro", null, 0,
+                effectType: "ApplyStatus", param1: infusion.StatusID2, duration: 2, targetType: "Self");
+            var application = env.DataManager.SkillEffectDict["SE_Burst_DilucInfusion"];
+            application.Param2 = "1"; application.Param3 = "0"; application.AddInPhase = 2;
             var owner = Start(env); env.CreateEnemy(2); env.CreateEnemy(3);
             env.Ally.SkillLevels[0] = env.Ally.SkillLevels[1] = 11;
-            owner.AddStatus(infusion.StatusID2, owner, 2, 2, 0, infusion);
-            Assert.That(env.Ally.GetBoundSkillID(0), Is.EqualTo("SK_NormalPyro_Diluc"));
-            Assert.That(env.Ally.GetBoundSkillID(1), Is.EqualTo("SK_HeavyPyro_Diluc"));
+            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_Burst_Diluc", 3, true));
+            var status = owner.GetStatus(infusion.StatusID2);
+            Assert.That(status.Enchant.Element, Is.EqualTo("Pyro"));
+            Assert.That(status.Enchant.ElementAmount, Is.EqualTo(1f));
+            Assert.That(status.Enchant.CanBeOverridden, Is.True);
+            Assert.That(env.Ally.GetBoundSkillID(0), Is.EqualTo("SK_Normal_Diluc"));
+            Assert.That(env.Ally.GetBoundSkillID(1), Is.EqualTo("SK_Heavy_Diluc"));
             Assert.That(env.Ally.GetBoundSkillAPCost(0), Is.EqualTo(25)); Assert.That(env.Ally.GetBoundSkillAPCost(1), Is.EqualTo(35));
             var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random); int hits = 0;
             using var observer = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, hit) =>
             {
                 if (hit.Source.SourceEntity != owner) return;
-                hits++; Assert.That(hit.ElementAmount, Is.EqualTo(1f)); Assert.That(hit.Element, Is.EqualTo("Pyro"));
+                hits++; Assert.That(hit.ElementAmount, Is.EqualTo(hits <= 4 ? 1f : 0f));
+                Assert.That(hit.Element, Is.EqualTo(hits <= 4 ? "Pyro" : "Physical"));
+                Assert.That(hit.Source.SourceEffectID, Is.EqualTo(hit.DamageType == "Normal" ? "SE_Normal_Diluc" : "SE_Heavy_Diluc"));
                 Assert.That(hit.ActualHPDamage, Is.EqualTo(hit.DamageType == "Normal" ? 143.14f : 73.5f).Within(.01f));
             }, 0);
             env.Ally.ForcedTargetPositions.Add(1);
-            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_NormalPyro_Diluc", 0, true));
+            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_Normal_Diluc", 0, true));
             env.Ally.ForcedTargetPositions.AddRange(new[] { 1, 2, 3 });
-            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_HeavyPyro_Diluc", 1, true));
+            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_Heavy_Diluc", 1, true));
             Assert.That(hits, Is.EqualTo(4)); Assert.That(random.FloatCallCount, Is.EqualTo(4)); Assert.That(random.IntCallCount, Is.Zero);
             owner.RemoveStatus(infusion.StatusID2, -1);
             Assert.That(env.Ally.GetBoundSkillID(0), Is.EqualTo("SK_Normal_Diluc"));
             Assert.That(env.Ally.GetBoundSkillID(1), Is.EqualTo("SK_Heavy_Diluc"));
+            Assert.That(EnchantStatusSystem.GetActive(owner), Is.Null);
+            env.Ally.ForcedTargetPositions.Add(1);
+            await BattleExecution.Run(() => env.Ally.ExecuteSkillByIDAsync("SK_Normal_Diluc", 0, true));
+            Assert.That(hits, Is.EqualTo(5)); Assert.That(random.FloatCallCount, Is.EqualTo(5));
         }
 
         private static StatusMainData ConfigureC6(BattleFlowTestEnv env)

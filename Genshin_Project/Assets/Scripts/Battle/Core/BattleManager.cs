@@ -62,6 +62,8 @@ public partial class BattleManager : MonoBehaviour
     public ActionPointManager APManager { get; private set; }
     public bool IsBattleRunning { get; private set; }
     public bool IsCurrentPhaseReady { get; private set; }
+    public bool IsAwaitingAllyInput => IsBattleRunning && !IsBattleOver && CurrentPhase == TurnPhase.AllyAction
+        && IsCurrentPhaseReady && !_allyTurnEnded;
     public bool IsResolving => BattleExecution.IsBusy;
 
     private IBattleFlowScheduler _flowScheduler;
@@ -624,21 +626,28 @@ public partial class BattleManager : MonoBehaviour
     }
 
 
-    public bool CanClickThawActiveAlly => !BattleExecution.IsBusy && IsBattleRunning && !IsBattleOver
-        && CurrentPhase == TurnPhase.AllyAction && GetActiveAlly()?.Entity != null
-        && GetActiveAlly().Entity.CurrentHP > 0 && FrozenReactionHandler.IsFrozen(GetActiveAlly().Entity);
+    public bool CanClickThawActiveAlly => CanClickThawAlly(GetActiveAlly()?.Entity);
+
+    /// <summary>场上任一我方冻结角色均可点击解冻，前后台不影响；必须是当前编队中的实际实体。</summary>
+    public bool CanClickThawAlly(BattleEntity target) => !BattleExecution.IsBusy && IsBattleRunning && !IsBattleOver
+        && CurrentPhase == TurnPhase.AllyAction && target != null && target.IsOnField
+        && target.Type == BattleEntity.EntityType.Character && target.Side == BattleSide.Ally
+        && GetEntityByPosition(BattleSide.Ally, target.SlotPosition) == target && FrozenReactionHandler.IsFrozen(target);
 
     /// <summary>主动解冻共三次点击，只有最后一次成功时花费10 AP。</summary>
     public bool TryThawActiveAlly() => TryThawActiveAlly(out _);
 
-    public bool TryThawActiveAlly(out FrozenThawClickResult result)
+    public bool TryThawActiveAlly(out FrozenThawClickResult result) => TryThawAlly(GetActiveAlly()?.Entity, out result);
+
+    public bool TryThawAlly(BattleEntity target, out FrozenThawClickResult result)
     {
         result = FrozenThawClickResult.Ignored;
-        if (!CanClickThawActiveAlly) return false;
-        var ally = GetActiveAlly();
-        result = FrozenThawInteraction.Click(ally.Entity, APManager);
+        if (!CanClickThawAlly(target)) return false;
+        result = FrozenThawInteraction.Click(target, APManager);
+        if (result == FrozenThawClickResult.InsufficientAP)
+            RequestTip(BattleTipKeys.ThawInsufficientAP);
         if (result == FrozenThawClickResult.Thawed)
-            StatusOnHitHookSystem.NotifyAPUsed(ally.Entity, FrozenReactionHandler.ThawAPCost, APSpendKind.Thaw);
+            StatusOnHitHookSystem.NotifyAPUsed(target, FrozenReactionHandler.ThawAPCost, APSpendKind.Thaw);
         return result == FrozenThawClickResult.Cracked || result == FrozenThawClickResult.Thawed;
     }
 

@@ -48,7 +48,8 @@ public enum LogCategory{
     PreDamageHook,// [PreDamageHook] 主动伤害钩子
     // 数据
     Data,        // [DataManager] 数据加载/校验
-    TeamBonus    // [TeamBonus] 队伍增益触发、覆盖和计数
+    TeamBonus,   // [TeamBonus] 队伍增益触发、覆盖和计数
+    Voice        // [角色语音] 选取、播放及跳过原因
 }
 
 /// <summary>
@@ -71,6 +72,7 @@ public static class LogManager{
 
     static readonly Dictionary<LogCategory, string> Tags = new Dictionary<LogCategory, string>{
         { LogCategory.TeamBonus,     "[TeamBonus] " },
+        { LogCategory.Voice,         "[角色语音] " },
         { LogCategory.Turn,          "[Turn] " },
         { LogCategory.AP,            "[AP] " },
         { LogCategory.Battle,        "[战斗] " },

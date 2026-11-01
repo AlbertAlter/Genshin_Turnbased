@@ -106,6 +106,7 @@ public static class NingguangScriptHooks
     {
         var frame = Skill.Value;
         if (frame == null || frame.Owner != parent.Caster) return;
+        if (parent.StatusID2 == ChargeID) parent.ReleaseVoiceSkillId = frame.SkillID;
         for (int i = frame.Fields.Count - 1; i >= 0; i--)
         {
             var field = frame.Fields[i];

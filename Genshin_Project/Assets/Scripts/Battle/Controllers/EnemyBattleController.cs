@@ -2,6 +2,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>敌人的生命阶段。每个阶段对应一管独立血量。</summary>
+public readonly struct EnemyHealthPhases
+{
+    public static readonly EnemyHealthPhases Single = new EnemyHealthPhases(1, 1);
+    public readonly int Current, Count;
+
+    public EnemyHealthPhases(int currentPhase, int phaseCount)
+    {
+        if (phaseCount < 1) throw new System.ArgumentOutOfRangeException(nameof(phaseCount));
+        if (currentPhase < 1 || currentPhase > phaseCount)
+            throw new System.ArgumentOutOfRangeException(nameof(currentPhase));
+        Current = currentPhase;
+        Count = phaseCount;
+    }
+
+    public int Remaining(float currentHP) => Count - Current + (Count > 0 && currentHP > 0 ? 1 : 0);
+}
+
 /// <summary>
 /// 敌人战斗控制器。
 /// 职责：
@@ -14,6 +32,14 @@ public partial class EnemyBattleController : MonoBehaviour
     public BattleEntity Entity { get; private set; }
 
     public int EnemyID { get; private set; }
+
+    public EnemyHealthPhases HealthPhases { get; private set; } = EnemyHealthPhases.Single;
+
+    // 由敌人的阶段机制在初始化和切阶段时调用，阶段从 1 开始。
+    public void SetHealthPhase(int currentPhase, int phaseCount)
+    {
+        HealthPhases = new EnemyHealthPhases(currentPhase, phaseCount);
+    }
 
     public const string AirborneStatusID = AirborneStatusHandler.EnemyStatusID;
 
@@ -760,6 +786,7 @@ public partial class EnemyBattleController : MonoBehaviour
 
     private void ResetRuntimeState()
     {
+        HealthPhases = EnemyHealthPhases.Single;
         _currentPatternID = 0;
         _currentRules.Clear();
         _skillCooldownLeft.Clear();
