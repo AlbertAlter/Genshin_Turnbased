@@ -236,25 +236,96 @@ function Get-PushFailureReason {
 
 
 function Push-LocalMain {
-    # 当前脚本只发布 main。其他远程分支/标签可能仍保留旧历史，不能悄悄漏过。
-    $otherRefs = @(& git ls-remote --heads --tags origin | Where-Object { $_ -notmatch '\srefs/heads/main$' })
-    if ($LASTEXITCODE -ne 0 -or $otherRefs.Count) { throw '远端含其他分支/标签或无法检查；请明确其处理范围，未上传。' }
-    $remoteRef = @(& git ls-remote --refs origin refs/heads/main)
-    if ($LASTEXITCODE -ne 0) { throw '无法确认远程 main，未推送。' }
-    $remoteTip = if ($remoteRef.Count) { ($remoteRef[0] -split '\s+')[0] } else { '' }
+    $query = Invoke-GitBytes -Arguments @('ls-remote', '--refs', '--heads', '--tags', 'origin')
+    if ($query.ExitCode -ne 0) { throw "查询远端失败（Git $($query.ExitCode)）：`n$($query.ErrorText)" }
+    $remoteRefs = @{}
+    foreach ($line in ([Text.Encoding]::UTF8.GetString($query.Bytes) -split '\r?\n')) {
+        if (-not $line.Trim()) { continue }
+        if ($line -notmatch '^([0-9a-f]{40,64})\s+(refs/(?:heads|tags)/\S+)$') { throw "无法识别远端引用：$line" }
+        $remoteRefs[$Matches[2]] = $Matches[1]
+    }
+    $remoteTip = if ($remoteRefs.ContainsKey('refs/heads/main')) { $remoteRefs['refs/heads/main'] } else { '' }
     $localTip = & git rev-parse --verify refs/heads/main
     if ($LASTEXITCODE -ne 0) { throw '无法确认本地 main，未推送。' }
     $unsafeHistory = @(Get-OutsideSyncHistory -Revision $localTip)
     if ($unsafeHistory | Where-Object { $_ }) { throw '待上传历史仍有范围外文件，未推送。' }
 
-    $messages = New-Object 'System.Collections.Generic.List[string]'
-    $pushExitCode = $null
+    $leases = @("--force-with-lease=refs/heads/main:${remoteTip}")
+    $updates = @("${localTip}:refs/heads/main")
+    $temporaryRefs = @()
+    $cleanupRoot = $null
+    $otherRefs = @($remoteRefs.Keys | Where-Object { $_ -ne 'refs/heads/main' })
     $previousErrorAction = $ErrorActionPreference
     try {
+    if ($otherRefs.Count) {
+        $urlResult = Invoke-GitBytes -Arguments @('remote', 'get-url', 'origin')
+        if ($urlResult.ExitCode -ne 0) { throw $urlResult.ErrorText }
+        $remoteUrl = [Text.Encoding]::UTF8.GetString($urlResult.Bytes).Trim()
+        $objectsResult = Invoke-GitBytes -Arguments @('rev-parse', '--git-path', 'objects')
+        if ($objectsResult.ExitCode -ne 0) { throw $objectsResult.ErrorText }
+        $objects = [IO.Path]::GetFullPath((Join-Path (Get-Location).Path ([Text.Encoding]::UTF8.GetString($objectsResult.Bytes).Trim())))
+        $cleanupRoot = Join-Path $repoRoot ('codex_worktable/git-remote-clean-' + [guid]::NewGuid().ToString('N'))
+        $token = [guid]::NewGuid().ToString('N')
+        $init = Invoke-GitBytes -Arguments @('init', '--bare', $cleanupRoot)
+        if ($init.ExitCode -ne 0) { throw $init.ErrorText }
+        # 复用本地只读对象，避免为清理额外复制整份素材历史。
+        [IO.File]::WriteAllText((Join-Path $cleanupRoot 'objects/info/alternates'), ($objects -replace '\\','/') + "`n", (New-Object Text.UTF8Encoding($false)))
+        Push-Location $cleanupRoot
+        try {
+            foreach ($ref in $otherRefs) {
+                Write-Host "按路径清单检查远端引用：$ref" -ForegroundColor Cyan
+                $fetch = Invoke-GitBytes -Arguments @('fetch', '--no-tags', $remoteUrl, "${ref}:${ref}")
+                if ($fetch.ExitCode -ne 0) { throw "读取远端引用 $ref 失败：$($fetch.ErrorText)" }
+                $tip = Invoke-GitBytes -Arguments @('rev-parse', '--verify', $ref)
+                if ($tip.ExitCode -ne 0 -or [Text.Encoding]::UTF8.GetString($tip.Bytes).Trim() -ne $remoteRefs[$ref]) {
+                    throw "远端 $ref 已变化，请重新运行脚本。"
+                }
+            }
+            # filter-branch 需要一个有效 HEAD，临时仓库用已抓取的分支或标签指向提交。
+            $head = Invoke-GitBytes -Arguments @('rev-parse', "$($otherRefs[0])^{commit}")
+            if ($head.ExitCode -ne 0) { throw '远端标签未指向提交，无法自动清理。' }
+            $setHead = Invoke-GitBytes -Arguments @('update-ref', 'refs/heads/gitdaily-filter-head', [Text.Encoding]::UTF8.GetString($head.Bytes).Trim())
+            if ($setHead.ExitCode -ne 0) { throw $setHead.ErrorText }
+            $setHead = Invoke-GitBytes -Arguments @('symbolic-ref', 'HEAD', 'refs/heads/gitdaily-filter-head')
+            if ($setHead.ExitCode -ne 0) { throw $setHead.ErrorText }
+            $needsCleanup = $false
+            foreach ($ref in $otherRefs) {
+                if (@(Get-OutsideSyncHistory -Revision $ref | Where-Object { $_ }).Count) { $needsCleanup = $true }
+            }
+            if ($needsCleanup) {
+                $quote = { param($value) "'" + $value.Replace("'", "'\''") + "'" }
+                $outside = ($outsidePaths | ForEach-Object { & $quote $_ }) -join ' '
+                $excluded = ($excludedPaths | ForEach-Object { & $quote $_ }) -join ' '
+                $filter = "git rm -q -r -f --cached --ignore-unmatch -- $outside && git rm -q -r -f --cached --ignore-unmatch -- $excluded"
+                $oldWarning = $env:FILTER_BRANCH_SQUELCH_WARNING
+                try {
+                    $env:FILTER_BRANCH_SQUELCH_WARNING = '1'
+                    $filtered = Invoke-GitBytes -Arguments @('filter-branch', '--tag-name-filter', 'cat', '--index-filter', $filter, '--', '--branches', '--tags')
+                    if ($filtered.ExitCode -ne 0) { throw "其他分支/标签清理失败：$($filtered.ErrorText)" }
+                }
+                finally { $env:FILTER_BRANCH_SQUELCH_WARNING = $oldWarning }
+            }
+            foreach ($ref in $otherRefs) {
+                if (@(Get-OutsideSyncHistory -Revision $ref | Where-Object { $_ }).Count) { throw "$ref 历史清理验证失败。" }
+            }
+        }
+        finally { Pop-Location }
+        foreach ($ref in $otherRefs) {
+            $tempRef = 'refs/gitdaily-publish/' + $token + '/' + $ref.Substring(5)
+            $temporaryRefs += $tempRef
+            $fetch = Invoke-GitBytes -Arguments @('fetch', '--no-tags', $cleanupRoot, "${ref}:${tempRef}")
+            if ($fetch.ExitCode -ne 0) { throw $fetch.ErrorText }
+            $leases += "--force-with-lease=${ref}:$($remoteRefs[$ref])"
+            $updates += "${tempRef}:${ref}"
+        }
+    }
+
+    $messages = New-Object 'System.Collections.Generic.List[string]'
+    $pushExitCode = $null
         # Windows PowerShell 会将重定向的原生命令 stderr 包装为 ErrorRecord。
         # Git 进度也写在 stderr；必须显示完整输出并按退出码判断，不能提前当异常中断。
         $ErrorActionPreference = "Continue"
-        & git push "--force-with-lease=refs/heads/main:${remoteTip}" --progress origin "${localTip}:refs/heads/main" 2>&1 | ForEach-Object {
+        & git push --atomic --progress @leases origin @updates 2>&1 | ForEach-Object {
             $line = $_.ToString()
             [void]$messages.Add($line)
             Write-Host $line
@@ -263,6 +334,13 @@ function Push-LocalMain {
     }
     finally {
         $ErrorActionPreference = $previousErrorAction
+        foreach ($ref in $temporaryRefs) { & git update-ref -d $ref }
+        if ($cleanupRoot -and (Test-Path -LiteralPath $cleanupRoot)) {
+            $resolved = (Resolve-Path -LiteralPath $cleanupRoot).Path
+            $expectedParent = [IO.Path]::GetFullPath((Join-Path $repoRoot 'codex_worktable'))
+            if ([IO.Path]::GetDirectoryName($resolved) -ne $expectedParent) { throw '临时仓库清理路径异常。' }
+            Remove-Item -LiteralPath $resolved -Recurse -Force
+        }
     }
 
     if ($pushExitCode -ne 0) {
