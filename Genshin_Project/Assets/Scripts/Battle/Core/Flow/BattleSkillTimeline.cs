@@ -9,7 +9,7 @@ public enum BattleSkillTracks
 }
 
 public enum BattleVoiceAnchor { CastStart, FirstLaunch, FirstImpact }
-public enum BattleSkillMarker { None, CastStart, Launch, Impact, ElementContact, Reaction, AuraChange, CastEnd }
+public enum BattleSkillMarker { None, CastStart, Launch, Impact, ElementContact, Reaction, AuraChange, CastEnd, ActionPrompt }
 
 // All tracks share the player's Present/Cancel lifecycle. The contracts select which cues reach each module.
 public interface IBattleSkillTrack : IBattlePresentationView { }
@@ -49,6 +49,9 @@ public static class BattleSkillTimeline
             cue.CastStart = cast?.Start.Result;
             switch (cue.SkillMarker)
             {
+                case BattleSkillMarker.ActionPrompt:
+                    cue.SkillTracks = enabled & BattleSkillTracks.Animation;
+                    break;
                 case BattleSkillMarker.CastStart:
                 case BattleSkillMarker.CastEnd:
                     if (cast != null) cue.SkillTracks = enabled & BattleSkillTracks.Animation;
@@ -92,6 +95,7 @@ public static class BattleSkillTimeline
         if (cue.IsAnticipation) return BattleSkillMarker.Launch;
         switch (cue.Result.Data.Kind)
         {
+            case BattleEventKind.ActionPrompt: return BattleSkillMarker.ActionPrompt;
             case BattleEventKind.ActionStarted: return BattleSkillMarker.CastStart;
             case BattleEventKind.ActionCompleted: return BattleSkillMarker.CastEnd;
             case BattleEventKind.DamageResolved:

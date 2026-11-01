@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>真实战斗到独立场地盾显示接口的适配器；场景显式绑定，不访问个人盾显示接口。</summary>
 [DisallowMultipleComponent]
+[DefaultExecutionOrder(270)]
 [AddComponentMenu("Battle UI/Overall Shield Source")]
 public sealed class BattleUiOverallShieldSource : MonoBehaviour
 {
@@ -11,8 +12,10 @@ public sealed class BattleUiOverallShieldSource : MonoBehaviour
     public MonoBehaviour view;
     private IBattleUiOverallShields boundView;
     private readonly HashSet<long> shown = new HashSet<long>();
-    private readonly Dictionary<Shield, long> identities = new Dictionary<Shield, long>();
-    private long nextIdentity;
+    private readonly HashSet<long> active = new HashSet<long>();
+    private readonly List<long> stale = new List<long>();
+    private readonly List<BattleEntity> members = new List<BattleEntity>();
+    private readonly List<BattleUiCardBinding> targets = new List<BattleUiCardBinding>();
 
     // hit提交是同步操作，LateUpdate只读该帧已完成的批量结果，不显示逐目标的中间盾量。
     private void LateUpdate() => Refresh();
@@ -23,34 +26,35 @@ public sealed class BattleUiOverallShieldSource : MonoBehaviour
         if (boundView == null) return;
         if (battle == null || layout == null || !battle.IsBattleRunning || battle.IsBattleOver)
         { Clear(); return; }
-        var active = new HashSet<long>();
-        var activeShields = new HashSet<Shield>();
-        foreach (var side in new[] { BattleSide.Ally, BattleSide.Enemy })
-        {
-            var members = OverallShieldSystem.Members(battle, side);
-            var targets = new List<BattleUiCardBinding>();
-            foreach (var member in members)
-                if (layout.TryGetCard(side, member.SlotPosition, out var card)) targets.Add(card);
-            foreach (var owner in OverallShieldSystem.Members(battle, side, includeOffField: true))
-                foreach (var shield in owner.Shields)
-                {
-                    if (!OverallShieldSystem.IsActive(owner, shield)) continue;
-                    activeShields.Add(shield);
-                    if (!identities.TryGetValue(shield, out long id)) identities.Add(shield, id = ++nextIdentity);
-                    active.Add(id);
-                    if (boundView.SetOverallShield(id, shield.Element, targets)) shown.Add(id);
-                }
-        }
-        foreach (long id in new List<long>(shown))
-            if (!active.Contains(id)) { boundView.RemoveOverallShield(id); shown.Remove(id); }
-        foreach (var shield in new List<Shield>(identities.Keys))
-            if (!activeShields.Contains(shield)) identities.Remove(shield);
+        active.Clear();
+        RefreshSide(BattleSide.Ally);
+        RefreshSide(BattleSide.Enemy);
+        stale.Clear();
+        foreach (long id in shown)
+            if (!active.Contains(id)) stale.Add(id);
+        foreach (long id in stale) { boundView.RemoveOverallShield(id); shown.Remove(id); }
+    }
+
+    private void RefreshSide(BattleSide side)
+    {
+        OverallShieldSystem.CollectMembers(battle, side, members, includeOffField: true);
+        targets.Clear();
+        foreach (var member in members)
+            if (member.IsOnField && layout.TryGetCard(side, member.SlotPosition, out var card)) targets.Add(card);
+        foreach (var owner in members)
+            foreach (var shield in owner.Shields)
+            {
+                if (!OverallShieldSystem.IsActive(owner, shield)) continue;
+                long id = shield.SourceStatusApplyOrder;
+                active.Add(id);
+                if (boundView.SetOverallShield(id, shield.Element, targets)) shown.Add(id);
+            }
     }
     private void Clear()
     {
         foreach (long id in shown) boundView?.RemoveOverallShield(id);
         shown.Clear();
-        identities.Clear();
+        members.Clear(); targets.Clear(); active.Clear(); stale.Clear();
     }
     private void OnDisable() => Clear();
     private void OnDestroy() => Clear();

@@ -251,6 +251,7 @@ public partial class CharacterBattleController
         if (string.IsNullOrEmpty(act.Param1)) return;
         int count = ExecuteCountEvaluator.Evaluate(act.ExecuteCount, act.ExecuteCountHandler,
             sourceStatus?.Caster ?? Entity);
+        if (count > 0) BattleExecution.RecordStatusPrompt(sourceStatus, act.ActionType);
         for (int repeat = 0; repeat < count; repeat++)
             await ExecuteStatusActionEffectsOnceAsync(sourceStatus, act, host);
     }

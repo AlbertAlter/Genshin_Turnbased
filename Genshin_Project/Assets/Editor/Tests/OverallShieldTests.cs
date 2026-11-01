@@ -6,6 +6,69 @@ namespace GenshinTurnBased.Tests.EditMode
 {
     public sealed class OverallShieldTests
     {
+        [TestCase(-0.1, 0f)]
+        [TestCase(0, 0f)]
+        [TestCase(0.125, 0.5f)]
+        [TestCase(0.25, 1f)]
+        [TestCase(1, 1f)]
+        public void ShieldRevealClampsAndSmooths(double elapsed, float expected)
+        {
+            Assert.That(UIShieldStyle.SampleReveal(elapsed, .25f), Is.EqualTo(expected).Within(.00001));
+            Assert.That(UIShieldStyle.SampleReveal(elapsed, 0), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ShieldFadePreservesCurrentAlphaWhenPausedAndStopsAtZero()
+        {
+            float alpha = UIShieldStyle.StepAlpha(1, false, .09f, .18f);
+            Assert.That(alpha, Is.EqualTo(.5f).Within(.00001));
+            Assert.That(UIShieldStyle.StepAlpha(alpha, false, 0, .18f), Is.EqualTo(alpha));
+            Assert.That(UIShieldStyle.StepAlpha(alpha, false, -.1f, .18f), Is.EqualTo(alpha));
+            Assert.That(UIShieldStyle.StepAlpha(alpha, false, 1, .18f), Is.Zero);
+            Assert.That(UIShieldStyle.StepAlpha(alpha, true, .03f, .15f), Is.EqualTo(.7f).Within(.00001));
+            Assert.That(UIShieldStyle.StepAlpha(alpha, false, 0, 0), Is.Zero);
+        }
+
+        [Test]
+        public void FirstSweepWaitsForRevealWithoutRollingVisualRandomEarly()
+        {
+            var rolls = new SequenceBattleRandomSource(new[] { .5f });
+            var clock = new ShieldSweepClock(rolls);
+            clock.Restart(10.25);
+            Assert.That(clock.Sample(10.1, .8f, 4, .4f, 0, true, out float before), Is.Zero);
+            Assert.That(before, Is.Zero);
+            Assert.That(rolls.FloatCallCount, Is.Zero);
+            Assert.That(clock.Sample(10.65, .8f, 4, .4f, .15f, true, out float half), Is.EqualTo(1).Within(.00001));
+            Assert.That(half, Is.EqualTo(.5f).Within(.00001));
+            clock.Sample(11.1, .8f, 4, .4f, .15f, true, out _);
+            Assert.That(rolls.FloatCallCount, Is.EqualTo(1));
+        }
+
+        [Test] public void CardSweepsDrawOncePerWaitAndDriftIndependently()
+        {
+            var rolls = new SequenceBattleRandomSource(new[] { 0f, .75f, .5f });
+            var a = new ShieldSweepClock(rolls);
+            var b = new ShieldSweepClock(rolls);
+            float Progress(ShieldSweepClock card, double now)
+            {
+                card.Sample(now, 1, 4, .5f, .15f, true, out float progress);
+                return progress;
+            }
+            Assert.That(Progress(a, .5), Is.EqualTo(Progress(b, .5)));
+            Assert.That(rolls.FloatCallCount, Is.Zero);
+            Progress(a, 1); Progress(b, 1); Progress(a, 2); Progress(b, 3);
+            Assert.That(rolls.FloatCallCount, Is.EqualTo(2));
+            Assert.That(Progress(a, 4.75), Is.EqualTo(.25f));
+            Assert.That(Progress(b, 4.75), Is.EqualTo(1f));
+            Assert.That(Progress(a, 5.5), Is.EqualTo(1f));
+            Assert.That(Progress(b, 5.5), Is.EqualTo(.25f));
+            Assert.That(rolls.FloatCallCount, Is.EqualTo(3));
+            a.Restart(6);
+            a.Sample(7, 1, 4, 0, .15f, true, out _);
+            b.Sample(7, 1, 4, .5f, .15f, false, out _);
+            Assert.That(rolls.FloatCallCount, Is.EqualTo(3));
+        }
+
         private static StatusInstance Add(BattleFlowTestEnv env, BattleEntity owner, string id, float amount, string element = "None")
         {
             var main = new StatusMainData { StatusID2 = id, StatusType = "OverallShield", MaxStack = 1, WhenMax = "0" };

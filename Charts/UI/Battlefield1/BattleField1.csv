@@ -142,21 +142,21 @@
 0362:取消选择/component:椭圆 22,Cancel_BG_Circle2,Layer,BottomRight,-88.0,67.5,65,65,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/DeepBrownCircle.png,,,,DeepCircle,False,,,,,
 0362:取消选择/0363:椭圆 2,椭圆 2,Layer,BottomRight,-88.0,67.5,64,65,Uniform,Ignore,,art_assets/UI/BattleField1/UI_components/LightBrownCircle.png,,,,LightCircle,False,,,,,
 0362:取消选择/0364:直线 1,直线 1,Layer,BottomRight,-88.0,67.0,26,26,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Cancel.png,,,,CancelIcon,False,,,,,
-0362:取消选择/component:KeycapX,KeycapX,Layer,BottomRight,-86.0,27.5,32,33,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Button/Keycaps/X_BG.png,,,ComponentText,KeycapX,False,,,,,
-0362:取消选择/0365:X,X,Layer,BottomRight,-86.0,27.5,16,17,Fixed,Text,,-,,,ComponentText,,False,,X,,,
+0362:取消选择/component:KeycapX,KeycapX,Layer,BottomRight,-88,27.5,32,33,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Button/Keycaps/X_BG.png,,,ComponentText,KeycapX,False,,,,,
+0362:取消选择/0365:X,X,Layer,BottomRight,-88,27.5,16,17,Fixed,Text,,-,,,ComponentText,,False,,X,,,
 0366:换人,换人,Group,BottomRight,-208.0,59.5,64,81,Fixed,Group,,-,,,,,False,,,,,
 0366:换人/component:椭圆 20,Cancel_BG_Circle0,Layer,BottomRight,-208.0,67.0,82,82,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/DeepBrownCircle.png,,,,DeepCircle,False,,,,,
 0366:换人/component:椭圆 21,Cancel_BG_Circle1,Layer,BottomRight,-208.0,67.0,72,72,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/LightBrownCircle.png,,,,LightCircle,False,,,,,
 0366:换人/component:椭圆 22,Cancel_BG_Circle2,Layer,BottomRight,-208.0,67.5,65,65,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/DeepBrownCircle.png,,,,DeepCircle,False,,,,,
 0366:换人/0367:椭圆 2,椭圆 2,Layer,BottomRight,-208.0,67.5,64,65,Uniform,Ignore,,art_assets/UI/BattleField1/UI_components/LightBrownCircle.png,,,,LightCircle,False,,,,,
-0366:换人/0368:Switch_Btn,Switch_Btn,Layer,BottomRight,-208.5,67.5,51,49,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Switch.png,,,,SwitchIcon,False,,,,,
+0366:换人/0368:Switch_Btn,Switch_Btn,Layer,BottomRight,-207.5,67.5,53,53,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Switch.png,,,,SwitchIcon,False,,,,,
 0366:换人/0369:Invalid_Normal,Invalid_Normal,Layer,BottomRight,-208.5,68.0,41,42,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/invalid.png,,,,DisabledOverlay,False,,,,,
-0366:换人/component:KeycapF,KeycapF,Layer,BottomRight,-207.5,27.5,29,33,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Button/Keycaps/F_BG.png,,,ComponentText,KeycapF,False,,,,,
-0366:换人/0370:F,F,Layer,BottomRight,-207.5,27.5,13,17,Fixed,Text,,-,,,ComponentText,,False,,F,,,
-0371:AP_Panel,AP_Panel,Group,BottomRight,-109.0,221.0,166,60,Fixed,Group,,-,,,,,False,,,,,
-0371:AP_Panel/0372:AP: 80/100,AP: 80/100,Layer,BottomRight,-109.0,203.0,166,24,Fixed,Text,,-,,,,APValue,False,,AP: 80/100,29.16667,,MidlineLeft
-0371:AP_Panel/0373:-20,-20,Layer,BottomRight,-120.5,239.0,53,24,Fixed,Text,,-,,,,APSpendHint,False,,-20,29.16667,,MidlineRight
-0371:AP_Panel/0374:+5,+5,Layer,BottomRight,-120.5,239.0,53,24,Fixed,Text,,-,,,,APGainHint,False,,+5,29.16667,,MidlineRight
+0366:换人/component:KeycapF,KeycapF,Layer,BottomRight,-208,27.5,29,33,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/Button/Keycaps/F_BG.png,,,ComponentText,KeycapF,False,,,,,
+0366:换人/0370:F,F,Layer,BottomRight,-208,27.5,13,17,Fixed,Text,,-,,,ComponentText,,False,,F,,,
+0371:AP_Panel,AP_Panel,Group,BottomRight,-109,325,166,60,Fixed,Group,,-,,,,,False,,,,,
+0371:AP_Panel/0372:AP: 80/100,AP: 80/100,Layer,BottomRight,-109.0,307,166,24,Fixed,Text,,-,,,,APValue,False,,AP: 80/100,29.16667,,MidlineGeoAligned
+0371:AP_Panel/0373:-20,-20,Layer,BottomRight,-109.0,343,53,24,Fixed,Text,,-,,,,APSpendHint,False,,-20,29.16667,,MidlineGeoAligned
+0371:AP_Panel/0374:+5,+5,Layer,BottomRight,-109.0,343,35,24,Fixed,Text,,-,,,,APGainHint,False,,+5,29.16667,,MidlineGeoAligned
 0008:character/0018:CharacterCard1/0019:元素附着,元素附着,Layer,BottomRight,-626.5,322.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
 0008:character/0018:CharacterCard1/0020:元素附着,元素附着,Layer,MiddleRight,-626.5,-172.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
 0022:Enemy/0031:EnemyCard1/virtual:EnemyElementAura1,EnemyElementAura1,Layer,BottomCenter,-247.5,321.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,

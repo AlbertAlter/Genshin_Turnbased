@@ -35,129 +35,95 @@ public sealed class BattlefieldSelectionPresentationTests
     }
 
     [Test]
-    public void TargetSelection_LiftsCompleteTargetAndRestoresOriginalHierarchy()
+    public void ReserveShadeSurvivesFocusCancelAndSwitch_SkillBrightnessFollowsNextPhase()
     {
-        GameObject canvasObject = NewRoot("BattleField1Canvas", typeof(RectTransform), typeof(Canvas));
-        Transform canvas = canvasObject.transform;
-        NewChild(canvas, "Background", typeof(Image));
-        GameObject dimmerObject = NewChild(canvas, "Blackfold", typeof(Image), typeof(PsdUiBinding));
-        dimmerObject.GetComponent<PsdUiBinding>().bindingKey = "ScreenDimmer";
-        Image dimmer = dimmerObject.GetComponent<Image>();
-        dimmer.enabled = false;
+        var canvas = NewRoot("Canvas", typeof(RectTransform), typeof(Canvas)).GetComponent<Canvas>();
+        var dimmer = NewChild(canvas.transform, "Dimmer", typeof(Image), typeof(PsdUiBinding));
+        dimmer.GetComponent<PsdUiBinding>().bindingKey = "ScreenDimmer";
+        dimmer.GetComponent<Image>().color = new Color(0, 0, 0, .5f);
+        var runtime = NewRoot("Battle");
+        var battle = runtime.AddComponent<BattleManager>();
+        var input = runtime.AddComponent<BattleInputController>();
+        var switcher = runtime.AddComponent<BattlefieldSwitchController>();
+        var layout = input.selectionLayout = runtime.AddComponent<BattleUiLayout>();
+        layout.canvas = canvas;
+        var allies = new CharacterBattleController[2];
+        var cards = new Image[2];
+        layout.cards = new BattleUiCardBinding[2];
+        for (int i = 0; i < allies.Length; i++)
+        {
+            var unit = NewRoot("Unit" + i);
+            var ally = allies[i] = unit.AddComponent<CharacterBattleController>();
+            ally.Entity = unit.AddComponent<BattleEntity>();
+            ally.Entity.CurrentHP = 100;
+            ally.Entity.SlotPosition = i + 1;
+            ally.IsActive = i == 0;
+            battle.RegisterAlly(ally);
+            var card = cards[i] = NewChild(canvas.transform, "Card" + i, typeof(Image)).GetComponent<Image>();
+            layout.cards[i] = new BattleUiCardBinding { side = BattleSide.Ally, slot = i + 1, root = card.rectTransform, art = card.rectTransform };
+        }
 
-        Transform allyCards = NewChild(canvas, "character").transform;
-        Transform enemyCards = NewChild(canvas, "Enemy").transform;
-        Transform allyInfo = NewChild(canvas, "角色栏").transform;
-        Transform enemyInfo = NewChild(canvas, "敌人栏").transform;
-        Transform controls = NewChild(canvas, "技能").transform;
-        Transform allyCard = CreateCard(allyCards, "CharacterCard1", out Image allyGlow);
-        Transform enemyCard1 = CreateCard(enemyCards, "EnemyCard1", out Image enemyGlow1);
-        Transform enemyCard2 = CreateCard(enemyCards, "EnemyCard2", out Image enemyGlow2);
-        Transform allyPanel = NewChild(allyInfo, "角色1").transform;
-        Transform enemyPanel1 = NewChild(enemyInfo, "敌人1").transform;
-        Transform enemyPanel2 = NewChild(enemyInfo, "敌人2").transform;
-        var originalOrder = new List<Transform>();
-        for (int index = 0; index < canvas.childCount; index++) originalOrder.Add(canvas.GetChild(index));
+        var actions = runtime.AddComponent<BattlefieldActionStateView>();
+        actions.actions = new BattlefieldActionStateView.ActionVisual[3];
+        for (int i = 0; i < actions.actions.Length; i++)
+            actions.actions[i] = new BattlefieldActionStateView.ActionVisual
+            {
+                Root = NewChild(canvas.transform, "Key" + i, typeof(Image)), skillType = i
+            };
+        var first = new SkillMainData { SkillID = 1, SkillID2 = "First", SkillPhase = 1 };
+        var second = new SkillMainData { SkillID = 2, SkillID2 = "Second", SkillPhase = 1 };
+        SetPrivateField(allies[0], "_boundSkills", new[] { null, first.SkillID2, null, null });
+        SetPrivateField(allies[0], "_skillById2", new Dictionary<string, SkillMainData> { { "First", first }, { "Second", second } });
+        SetPrivateField(battle, "<CurrentPhase>k__BackingField", TurnPhase.AllyAction);
+        var view = runtime.AddComponent<BattlefieldSelectionPresentation>();
+        InvokeLifecycle(view, "Start");
+        foreach (string key in new[] { "_inSeconds", "_outSeconds", "_targetSeconds" }) SetPrivateField(view, key, 0f);
+        void Refresh() => InvokeLifecycle(view, "LateUpdate");
+        void Expect(Graphic graphic, float brightness) =>
+            Assert.That(graphic.canvasRenderer.GetColor().r, Is.EqualTo(brightness).Within(.005f), graphic.name);
+        void Keys(float q, float w, float e)
+        {
+            Expect(actions.actions[0].Root.GetComponent<Image>(), q);
+            Expect(actions.actions[1].Root.GetComponent<Image>(), w);
+            Expect(actions.actions[2].Root.GetComponent<Image>(), e);
+        }
 
-        GameObject runtime = NewRoot("BattleRuntime");
-        BattleInputController input = runtime.AddComponent<BattleInputController>();
-        BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
-        CharacterBattleController caster = runtime.AddComponent<CharacterBattleController>();
-        caster.Entity = runtime.AddComponent<BattleEntity>();
-        caster.Entity.Side = BattleSide.Ally;
-        caster.Entity.SlotPosition = 1;
-        BattlefieldSelectionPresentation presentation = runtime.AddComponent<BattlefieldSelectionPresentation>();
-        SetSelecting(input, true);
-        SetPrivateField(input, "_pendingAlly", caster);
-        input.Selector.Side = BattleSide.Enemy;
+        const float reserve = 217f / 255f;
+        Refresh(); Expect(cards[0], 1); Expect(cards[1], reserve); Keys(1, 1, 1);
+        SetPrivateField(input, "_pendingSkill", 1);
+        SetPrivateField(input, "_pendingAlly", allies[0]);
+        SetPrivateField(input, "_selecting", true);
+        SetPrivateField(input.Selector, "_aliveProvider", (Func<int, bool>)(pos => true));
+        input.Selector.Side = BattleSide.Ally;
         input.Selector.CurrentSelection = new List<int> { 1 };
-
-        BindTestHierarchy(presentation, canvasObject.GetComponent<Canvas>(), dimmer, input, switcher);
-        InvokeLifecycle(presentation, "LateUpdate");
-
-        Assert.That(dimmer.enabled, Is.True);
-        Assert.That(enemyCards.GetSiblingIndex(), Is.LessThan(dimmer.transform.GetSiblingIndex()));
-        Assert.That(allyCards.GetSiblingIndex(), Is.LessThan(dimmer.transform.GetSiblingIndex()));
-        Assert.That(enemyCard1.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(enemyPanel1.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(enemyCard2.parent, Is.EqualTo(enemyCards));
-        Assert.That(enemyPanel2.parent, Is.EqualTo(enemyInfo));
-        Assert.That(enemyGlow1.enabled, Is.True);
-        Assert.That(enemyGlow2.enabled, Is.False);
-        Assert.That(allyGlow.enabled, Is.False);
-        Assert.That(allyCard.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(allyPanel.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(controls.GetSiblingIndex(), Is.GreaterThan(dimmer.transform.GetSiblingIndex()));
-
+        Refresh(); Expect(cards[0], 1); Expect(cards[1], reserve * .5f); Keys(.5f, 1, .5f);
+        Assert.That(allies[0].GetBoundSkillID(1), Is.EqualTo("First"));
         input.Selector.CurrentSelection = new List<int> { 2 };
-        SetPrivateField(presentation, "_dimmerFadingIn", false);
-        Color settledDimmer = dimmer.color;
-        settledDimmer.a = 0.5f;
-        dimmer.color = settledDimmer;
-        InvokeLifecycle(presentation, "LateUpdate");
-        Assert.That(enemyCard1.parent.name, Is.EqualTo("SelectionForeground"),
-            "旧目标应留在前景中完成淡入遮罩动画。");
-        Assert.That(enemyCard2.parent.name, Is.EqualTo("SelectionForeground"),
-            "新目标应先抬到前景，再从遮罩亮度淡出。");
+        var aura = NewChild(cards[1].transform, "Aura", typeof(Image)).GetComponent<Image>();
+        Refresh(); Expect(cards[0], .5f); Expect(cards[1], reserve); Expect(aura, reserve);
+        Assert.That(cards[1].transform.parent, Is.EqualTo(canvas.transform));
+        allies[0].AdvanceSkillPhase(1);
+        Refresh(); Keys(.5f, .5f, .5f);
+        SetPrivateField(input, "_waitingForResolution", true);
+        var exit = view.WaitForSelectionExit(0, System.Threading.CancellationToken.None);
+        Assert.That(exit.IsCompleted, Is.False, "正式时间轴须等待选择画面实际复原");
+        Assert.That(input.IsSelecting, Is.True, "退出显示不撤销已确认的选择数据");
+        Assert.That(input.IsSelectionVisible, Is.False);
+        Refresh();
+        Assert.That(exit.IsCompleted, Is.True);
+        Expect(cards[0], 1); Expect(cards[1], reserve); Keys(1, 1, 1);
+        SetPrivateField(input, "_waitingForResolution", false);
+        input.UICancelSelection();
+        Refresh(); Expect(cards[1], reserve); Keys(1, 1, 1);
 
-        InvokeEntityTransition(presentation, 0.15f);
-        Assert.That(enemyCard1.parent, Is.EqualTo(enemyCards));
-        Assert.That(enemyPanel1.parent, Is.EqualTo(enemyInfo));
-        Assert.That(enemyCard2.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(enemyPanel2.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(enemyGlow1.enabled, Is.False);
-        Assert.That(enemyGlow2.enabled, Is.True);
-        Assert.That(allyCard.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(allyPanel.parent.name, Is.EqualTo("SelectionForeground"));
-
-        SetSelecting(input, false);
-        InvokeLifecycle(presentation, "LateUpdate");
-
-        Assert.That(dimmer.enabled, Is.False);
-        Assert.That(enemyCard1.parent, Is.EqualTo(enemyCards));
-        Assert.That(enemyPanel1.parent, Is.EqualTo(enemyInfo));
-        Assert.That(enemyGlow1.enabled, Is.False);
-        for (int index = 0; index < originalOrder.Count; index++)
-            Assert.That(canvas.GetChild(index), Is.EqualTo(originalOrder[index]));
-    }
-
-    [Test]
-    public void SwitchSelection_LiftsOnlyCandidateWithWhiteGlow()
-    {
-        GameObject canvasObject = NewRoot("BattleField1Canvas", typeof(RectTransform), typeof(Canvas));
-        Transform canvas = canvasObject.transform;
-        NewChild(canvas, "Background", typeof(Image));
-        GameObject dimmerObject = NewChild(canvas, "Blackfold", typeof(Image), typeof(PsdUiBinding));
-        dimmerObject.GetComponent<PsdUiBinding>().bindingKey = "ScreenDimmer";
-        Image dimmer = dimmerObject.GetComponent<Image>();
-        dimmer.enabled = false;
-
-        Transform allyCards = NewChild(canvas, "character").transform;
-        NewChild(canvas, "Enemy");
-        Transform allyInfo = NewChild(canvas, "角色栏").transform;
-        NewChild(canvas, "敌人栏");
-        Transform allyCard1 = CreateCard(allyCards, "CharacterCard1", out Image allyGlow1);
-        Transform allyCard2 = CreateCard(allyCards, "CharacterCard2", out Image allyGlow2);
-        Transform allyPanel1 = NewChild(allyInfo, "角色1").transform;
-        Transform allyPanel2 = NewChild(allyInfo, "角色2").transform;
-
-        GameObject runtime = NewRoot("BattleRuntime");
-        BattleInputController input = runtime.AddComponent<BattleInputController>();
-        BattlefieldSwitchController switcher = runtime.AddComponent<BattlefieldSwitchController>();
-        BattlefieldSelectionPresentation presentation = runtime.AddComponent<BattlefieldSelectionPresentation>();
-        SetPrivateField(switcher, "_switching", true);
         SetPrivateField(switcher, "_selectedSlot", 1);
-
-        BindTestHierarchy(presentation, canvasObject.GetComponent<Canvas>(), dimmer, input, switcher);
-        InvokeLifecycle(presentation, "LateUpdate");
-
-        Assert.That(dimmer.enabled, Is.True);
-        Assert.That(allyCard1.parent, Is.EqualTo(allyCards));
-        Assert.That(allyPanel1.parent, Is.EqualTo(allyInfo));
-        Assert.That(allyGlow1.enabled, Is.False);
-        Assert.That(allyCard2.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(allyPanel2.parent.name, Is.EqualTo("SelectionForeground"));
-        Assert.That(allyGlow2.enabled, Is.True);
+        SetPrivateField(switcher, "_switching", true);
+        Refresh(); Expect(cards[0], .5f); Expect(cards[1], reserve);
+        SetPrivateField(switcher, "_switching", false);
+        allies[0].IsActive = false; allies[1].IsActive = true;
+        Refresh(); Expect(cards[0], reserve); Expect(cards[1], 1); Expect(aura, 1);
+        view.enabled = false;
+        Expect(cards[0], 1);
     }
 
     [Test]
@@ -226,35 +192,6 @@ public sealed class BattlefieldSelectionPresentationTests
         Assert.That(nestedRoot == null, Is.True, "内层场景拥有的对象随场景清理");
     }
 
-    private static void BindTestHierarchy(BattlefieldSelectionPresentation presentation, Canvas canvas,
-        Image dimmer, BattleInputController input, BattlefieldSwitchController switcher)
-    {
-        // 行为单元测试显式绑定自身界面，不调用包含全局查找和资源读取的 Start。
-        // 正式场景的组件及绑定结构由独立预览场景测试检查。
-        SetPrivateField(presentation, "_canvas", canvas);
-        SetPrivateField(presentation, "_dimmer", dimmer);
-        SetPrivateField(presentation, "_input", input);
-        SetPrivateField(presentation, "_switch", switcher);
-        Transform allyCards = canvas.transform.Find("character");
-        Transform enemyCards = canvas.transform.Find("Enemy");
-        Transform allyInfo = canvas.transform.Find("角色栏");
-        Transform enemyInfo = canvas.transform.Find("敌人栏");
-        foreach (Transform container in new[] { allyCards, enemyCards, allyInfo, enemyInfo })
-            InvokePrivate(presentation, "AddContainer", container);
-        InvokePrivate(presentation, "AddSide", BattleSide.Ally, allyCards, "CharacterCard", allyInfo, "角色");
-        InvokePrivate(presentation, "AddSide", BattleSide.Enemy, enemyCards, "EnemyCard", enemyInfo, "敌人");
-        InvokePrivate(presentation, "SetAllGlows", false);
-    }
-
-    private static void InvokePrivate(BattlefieldSelectionPresentation presentation, string methodName,
-        params object[] arguments)
-    {
-        MethodInfo method = typeof(BattlefieldSelectionPresentation).GetMethod(methodName,
-            BindingFlags.Instance | BindingFlags.NonPublic);
-        Assert.That(method, Is.Not.Null);
-        method.Invoke(presentation, arguments);
-    }
-
     private static GameObject NewChild(Transform parent, string name, params Type[] components)
     {
         var requested = new List<Type> { typeof(RectTransform) };
@@ -265,21 +202,6 @@ public sealed class BattlefieldSelectionPresentationTests
             SceneManager.MoveGameObjectToScene(child, parent.gameObject.scene);
         child.transform.SetParent(parent, false);
         return child;
-    }
-
-    private static Transform CreateCard(Transform parent, string name, out Image glow)
-    {
-        Transform card = NewChild(parent, name, typeof(Image)).transform;
-        GameObject glowObject = NewChild(card, "CardOverGlow", typeof(RectTransform), typeof(Image), typeof(PsdUiBinding));
-        glowObject.GetComponent<PsdUiBinding>().bindingKey = "CardOverGlow";
-        glow = glowObject.GetComponent<Image>();
-        glow.enabled = true;
-        return card;
-    }
-
-    private static void SetSelecting(BattleInputController input, bool value)
-    {
-        SetPrivateField(input, "_selecting", value);
     }
 
     private static void SetPrivateField(object target, string fieldName, object value)
@@ -296,17 +218,5 @@ public sealed class BattlefieldSelectionPresentationTests
             BindingFlags.Instance | BindingFlags.NonPublic);
         Assert.That(method, Is.Not.Null);
         method.Invoke(presentation, null);
-    }
-
-    private static void InvokeEntityTransition(BattlefieldSelectionPresentation presentation, float deltaTime)
-    {
-        MethodInfo method = typeof(BattlefieldSelectionPresentation).GetMethod(
-            "UpdateEntityTransitions",
-            BindingFlags.Instance | BindingFlags.NonPublic,
-            null,
-            new[] { typeof(float) },
-            null);
-        Assert.That(method, Is.Not.Null);
-        method.Invoke(presentation, new object[] { deltaTime });
     }
 }

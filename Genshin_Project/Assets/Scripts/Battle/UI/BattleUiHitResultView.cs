@@ -16,7 +16,7 @@ public sealed class BattleUiHitResultView : BattleSkillTrackBehaviour, IBattleSk
     public override void Present(long playbackID, BattlePresentationCue cue, Action<Exception> completed)
     {
         if (!isActiveAndEnabled || !(cue.Result.Data is DamageEventData damage) || !damage.HitLanded ||
-            (damage.DamageType != "Normal" && damage.DamageType != "Heavy") ||
+            (cue.Timing.HitTemplate == null && damage.DamageType != "Normal" && damage.DamageType != "Heavy") ||
             effects == null || !effects.isActiveAndEnabled || layout == null)
         { completed(null); return; }
         if (effects.Ready) { Draw(cue, completed); return; }
@@ -42,12 +42,12 @@ public sealed class BattleUiHitResultView : BattleSkillTrackBehaviour, IBattleSk
         {
             var damage = (DamageEventData)cue.Result.Data;
             var source = damage.Source;
-            // Current art profiles are weapon normal/heavy attacks. Skills keep independent effect slots.
-            if (damage.DamageType != "Normal" && damage.DamageType != "Heavy") { completed(null); return; }
-            if (source.SourceSide != BattleSide.Ally) { completed(null); return; }
-            int weaponValue = damage.SourceWeaponType;
+            var template = cue.Timing.HitTemplate;
+            bool enemy = source.SourceSide == BattleSide.Enemy;
+            if (enemy && (source.SourceKind != ReactionSourceKind.EnemySkill || template == null)) { completed(null); return; }
+            int weaponValue = enemy ? template.WeaponType : damage.SourceWeaponType;
             if (weaponValue < 0 || weaponValue > 4) { completed(null); return; }
-            var weapon = (HitEffectWeapon)weaponValue; bool heavy = damage.DamageType == "Heavy";
+            var weapon = (HitEffectWeapon)weaponValue; bool heavy = (enemy ? template.AttackType : damage.DamageType) == "Heavy";
             bool grouped = effects.GetPlaybackMode(weapon, heavy) == HitEffectTextureStyle.PlaybackMode.PerHitGroup;
             if (grouped && cue.HitResults != null && !cue.LeadsHit) { completed(null); return; }
             var targets = new List<BattleUiCardBinding>();

@@ -266,6 +266,16 @@ public static class BattleExecution
     }
 
     public static void Record(DamageResolvedEvent result) => CurrentPresentation.Value?.Record(result);
+    internal static void RecordSkillPrompt(BattleEntity actor, string name, string skillId)
+        => CurrentSession.Value?.Results.RecordPrompt(actor, name, null, skillId);
+
+    internal static void RecordStatusPrompt(StatusInstance status, string actionType)
+    {
+        if (status != null && (actionType == "OnItsTurn" || actionType == "OnTrigger" || actionType == "OnEnd")
+            && BattleResolutionContext.CurrentAction?.IndependentStatus == status
+            && BattleManager.Instance != null && BattleManager.Instance.IsBattleRunning && !BattleManager.Instance.IsAwaitingAllyInput)
+            CurrentSession.Value?.Results.RecordPrompt(status.Caster, status.MainData?.StatusName, status);
+    }
     public static void Record(HealResolvedEvent result) => CurrentPresentation.Value?.Record(result);
     public static void Record(ReactionOccurrence result) => CurrentPresentation.Value?.Record(result);
     /// <summary>仅由正式Dispatch入口调用。保存结果，不产生第二条业务响应队列。</summary>

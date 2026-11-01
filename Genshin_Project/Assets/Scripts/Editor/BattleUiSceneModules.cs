@@ -8,6 +8,11 @@ public static class BattleUiSceneModules
     {
         T Module<T>() where T : Component => runtime.GetComponent<T>() ?? runtime.AddComponent<T>();
         var player = Module<BattlefieldPresentationPlayer>();
+        player.selectionPresentation = runtime.GetComponent<BattlefieldSelectionPresentation>();
+        var prompt = Module<BattleActionPromptView>();
+        prompt.player = player; prompt.layout = layout; prompt.font = ProjectUiFont.LoadOrCreateOutlined();
+        prompt.framePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/AdaptiveCharacterFrame.prefab").GetComponent<UIAdaptiveFrame>();
+        var rise = Module<BattleUiStatusRiseView>(); rise.player = player; rise.layout = layout; rise.battle = runtime.GetComponent<BattleManager>();
         var voice = Module<CharacterBattleVoice>();
         voice.player = player; voice.battle = runtime.GetComponent<BattleManager>();
         var popups = Module<BattlefieldDamagePopupController>(); popups.layout = layout;
@@ -19,6 +24,9 @@ public static class BattleUiSceneModules
         cards.factory = Module<UICardFactory>();
         var shields = Module<BattleUiShields>(); shields.layout = layout;
         var personal = Module<BattleUiPersonalShieldSource>(); personal.battle = cards.battle; personal.view = shields;
+        var overall = Module<BattleUiOverallShields>(); overall.membraneStyle = shields;
+        var overallSource = Module<BattleUiOverallShieldSource>();
+        overallSource.battle = cards.battle; overallSource.layout = layout; overallSource.view = overall;
         var frozen = Module<BattleUiFrozenCards>();
         frozen.cards = cards; frozen.input = runtime.GetComponent<BattleInputController>();
         frozen.resources = Module<UICardFreeze>(); frozen.resources.loadOnStart = true;
@@ -35,6 +43,20 @@ public static class BattleUiSceneModules
         var buttons = Module<BattleUiActionButtons>();
         buttons.view = runtime.GetComponent<BattlefieldActionStateView>();
         buttons.input = runtime.GetComponent<BattleInputController>();
+        buttons.switcher = runtime.GetComponent<BattlefieldSwitchController>();
+        buttons.canvas = layout.canvas; buttons.projectFrame = prompt.framePrefab;
+        buttons.hintFont = ProjectUiFont.LoadOrCreate();
+        var controls = layout.canvas.GetComponentsInChildren<PsdUiBinding>(true);
+        buttons.switchRoot = controls.FirstOrDefault(b => b.bindingKey == "SwitchIcon")?.transform.parent as RectTransform;
+        buttons.cancelRoot = controls.FirstOrDefault(b => b.bindingKey == "CancelIcon")?.transform.parent as RectTransform;
+        var endPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/BattleEndTurnButton.prefab");
+        if (buttons.endTurnRoot == null)
+            buttons.endTurnRoot = (RectTransform)((GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(endPrefab, layout.canvas.transform)).transform;
+        RectTransform Disc(RectTransform root) => root?.GetComponentsInChildren<PsdUiBinding>(true)
+            .FirstOrDefault(b => b.bindingKey == "DeepCircle")?.transform as RectTransform;
+        buttons.switchDisc = Disc(buttons.switchRoot);
+        buttons.cancelDisc = Disc(buttons.cancelRoot);
+        buttons.endTurnDisc = buttons.endTurnRoot.Find("OuterStroke") as RectTransform;
     }
 
     private static void ConfigureAudio(GameObject runtime)

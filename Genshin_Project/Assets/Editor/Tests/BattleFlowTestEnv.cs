@@ -159,11 +159,11 @@ namespace GenshinTurnBased.Tests.EditMode
             }
         }
 
-        public EnemyBattleController CreateEnemy(int position, float hp = 1000f)
+        public EnemyBattleController CreateEnemy(int position, float hp = 1000f, int enemyId = EnemyID)
         {
             var enemy = CreateObject($"BattleFlow_Enemy_{position}")
                 .AddComponent<EnemyBattleController>();
-            enemy.InitEnemy(EnemyID, 1);
+            enemy.InitEnemy(enemyId, 1);
             enemy.Entity.Side = BattleSide.Enemy;
             enemy.Entity.SlotPosition = position;
             enemy.Entity.TotalHP = hp;

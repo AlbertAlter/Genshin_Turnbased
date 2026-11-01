@@ -29,7 +29,7 @@ public sealed class UIHitEffectStyle
     private readonly Dictionary<string, Particles> particles = new Dictionary<string, Particles>(StringComparer.Ordinal);
     public Profile Get(HitEffectWeapon weapon, bool heavy) => profiles[(int)weapon, heavy ? 1 : 0];
     public Particles GetParticles(string element) => particles[element];
-    public static UIHitEffectStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static UIHitEffectStyle Load() => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
 
     private static readonly string[] NumericKeys = {
         "Enabled", "CenterXMinRatio", "CenterXMaxRatio", "CenterYMinRatio", "CenterYMaxRatio",

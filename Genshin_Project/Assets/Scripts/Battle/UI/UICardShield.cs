@@ -20,7 +20,7 @@ public sealed class UICardShield : MonoBehaviour
     }
     public void Apply(UIShieldStyle style, Color tint, float membraneOpacity, float tintOpacity,
         Vector2 membraneOffset, Vector2 maskOffset, float sweepProgress, float sweepOpacity,
-        float sweepWidth, float sweepAngle, float alpha)
+        float sweepWidth, float sweepAngle, float alpha, float revealProgress = 1)
     {
         var membrane = style.Rect("Membrane"); membrane.x += membraneOffset.x; membrane.y += membraneOffset.y;
         var mask = style.Rect("Mask"); mask.x += maskOffset.x; mask.y += maskOffset.y;
@@ -35,12 +35,29 @@ public sealed class UICardShield : MonoBehaviour
         ownedMaterial.SetColor("_TintColor", tint);
         ownedMaterial.SetFloat("_MembraneOpacity", membraneOpacity * style.Number("MembraneFillOpacity"));
         ownedMaterial.SetFloat("_TintOpacity", tintOpacity * style.Number("TintFillOpacity"));
-        ownedMaterial.SetFloat("_SweepProgress", sweepProgress);
-        ownedMaterial.SetFloat("_SweepOpacity", sweepOpacity);
+        SetSweep(sweepProgress, sweepOpacity);
         ownedMaterial.SetFloat("_SweepWidth", sweepWidth); ownedMaterial.SetFloat("_SweepAngle", sweepAngle);
         ownedMaterial.SetFloat("_SweepSoftness", style.Number("SweepSoftness"));
         ownedMaterial.SetColor("_SweepColor", Color.Lerp(Color.white, tint, style.Number("SweepElementTint")));
+        SetReveal(revealProgress, style.Number("RevealSoftness"), style.Number("RevealEdgeWidth"), style.Number("RevealEdgeOpacity"));
         image.color = new Color(1, 1, 1, alpha);
+    }
+    internal void SetReveal(float progress, float softness, float edgeWidth, float edgeOpacity)
+    {
+        if (ownedMaterial == null) return;
+        ownedMaterial.SetFloat("_RevealProgress", Mathf.Clamp01(progress));
+        ownedMaterial.SetFloat("_RevealSoftness", softness);
+        ownedMaterial.SetFloat("_RevealEdgeWidth", edgeWidth);
+        ownedMaterial.SetFloat("_RevealEdgeOpacity", edgeOpacity);
+    }
+    internal void SetSweep(float progress, float opacity)
+    {
+        ownedMaterial.SetFloat("_SweepProgress", progress);
+        ownedMaterial.SetFloat("_SweepOpacity", opacity);
+    }
+    internal void SetAlpha(float alpha)
+    {
+        if (image != null) image.color = new Color(1, 1, 1, Mathf.Clamp01(alpha));
     }
     private void OnDestroy() { if (ownedMaterial != null) Destroy(ownedMaterial); }
 }

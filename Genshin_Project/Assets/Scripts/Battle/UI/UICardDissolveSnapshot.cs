@@ -34,7 +34,7 @@ public static class UICardDissolveSnapshot
         using (var session = BeginCapture(basis, layers, heightPixels)) return session.Detach();
     }
     public static CaptureSession BeginCapture(RectTransform basis, IReadOnlyList<Graphic> layers, int heightPixels,
-        Texture clipTexture = null, IReadOnlyList<Graphic> clippedLayers = null)
+        Texture clipTexture = null, IReadOnlyList<Graphic> clippedLayers = null, bool includeRendererBrightness = true)
     {
         if (basis == null || layers == null || layers.Count == 0) throw new ArgumentException("Card snapshot needs a basis and Image layers.");
         Rect rect = basis.rect;
@@ -96,6 +96,8 @@ public static class UICardDissolveSnapshot
                 material.SetVector("_CardRect", new Vector4(rect.xMin, rect.yMin, rect.width, rect.height));
                 material.SetMatrix("_CompositeLocal", Matrix4x4.identity);
                 Color tint = image.canvasRenderer.GetColor();
+                // An effect drawn inside the same dimmed card group receives its brightness at display time.
+                if (!includeRendererBrightness) tint = new Color(1, 1, 1, tint.a);
                 if (original != null && original.HasProperty("_Color")) tint *= original.GetColor("_Color");
                 material.SetColor("_Tint", tint);
                 material.SetMatrix("_CompositeMVP", projection);

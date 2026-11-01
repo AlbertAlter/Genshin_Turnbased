@@ -85,17 +85,10 @@ public class BattleInputController : MonoBehaviour
                 else if (Input.GetKeyDown(KeyCode.D))
                     MoveSelection(1);
             }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                // 确认本处目标；最后一处确认后才提交整条技能链。
-                bool done = ConfirmAndExecute(bm);
-                if (done) ExitSelecting();
-                // 还有待选效果：保持选择状态（InitSelectorForEffect 已在 ConfirmAndExecute 内完成）
-            }
+            else if (Input.GetKeyDown(KeyCode.Space)) UIConfirmSelection();
             else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
             {
-                LogManager.Log(LogCategory.Select, "取消目标选择");
-                ExitSelecting();
+                UICancelSelection();
             }
             // 键盘与鼠标共用入口；数字键始终代表角色槽位，不代表当前待施放者。
             else if (Input.GetKeyDown(KeyCode.Q)) UIEnterSelectSkill(0);
@@ -125,6 +118,8 @@ public class BattleInputController : MonoBehaviour
         // 空格 = 结束回合（2026-08-14）：换人界面等 UI 拦截状态已在 Update 开头屏蔽，此处无需再判断
         if (Input.GetKeyDown(KeyCode.Space))
             UIEndTurn();
+        else if (Input.GetKeyDown(KeyCode.X))
+            UICancelSelection();
     }
 
     // 检查技能是否可用：不可用直接打原因日志并返回false（不进目标选择）
@@ -286,6 +281,15 @@ public class BattleInputController : MonoBehaviour
         _selector.Reset();
     }
 
+    private static bool CanChooseSkillPhase(CharacterBattleController ally, int skill)
+        => ally?.Entity?.IsOnField == true && !FrozenReactionHandler.IsFrozen(ally.Entity)
+            && !ally.IsButtonFrozen(skill);
+
+    public bool CanAdvancePendingSkill(BattleManager battle, int skill)
+        => _selecting && skill == _pendingSkill && CanAcceptAction(battle)
+            && battle.GetActiveAlly() == _pendingAlly && CanChooseSkillPhase(_pendingAlly, skill)
+            && _pendingAlly.GetNextSkillPhaseID(skill) != null;
+
     // 选择中按技能键：同一按钮 = 多段推进（SkillPhase），不同按钮 = 切换技能
     private void HandleSelectSkillKey(BattleManager bm, int skill, CharacterBattleController ally)
     {
@@ -293,8 +297,7 @@ public class BattleInputController : MonoBehaviour
 
         if (skill == _pendingSkill && ally == _pendingAlly)
         {
-            if (ally.Entity?.IsOnField != true || FrozenReactionHandler.IsFrozen(ally.Entity)
-                || ally.IsButtonFrozen(skill)) return;
+            if (!CanChooseSkillPhase(ally, skill)) return;
             // 多段推进：按钮临时绑定到下一段（同SkillPhase、SkillID更大的技能）
             string next = ally.AdvanceSkillPhase(skill);
             if (next == null)
@@ -498,6 +501,7 @@ public class BattleInputController : MonoBehaviour
     public void UICancelSelection()
     {
         if (BattleExecution.IsBusy || _waitingForResolution) return;
+        LogManager.Log(LogCategory.Select, _selecting ? "取消目标选择" : "当前没有待取消的目标选择");
         if (_selecting) ExitSelecting();
     }
 
@@ -505,7 +509,11 @@ public class BattleInputController : MonoBehaviour
     public void UIEndTurn()
     {
         var bm = BattleManager.Instance;
-        if (!CanAcceptAction(bm) || _selecting) return;
+        if (!CanAcceptAction(bm) || !bm.IsAwaitingAllyInput || _selecting)
+        {
+            LogManager.Log(LogCategory.UI, $"结束回合未执行，阶段={bm?.CurrentPhase}，等待我方操作={bm?.IsAwaitingAllyInput}，结算中={BattleExecution.IsBusy}");
+            return;
+        }
         bm.EndAllyTurn();
     }
 
@@ -543,8 +551,10 @@ public class BattleInputController : MonoBehaviour
             LogManager.LogWarning(LogCategory.UI, $"切换出战角色失败 -> {slot}");
     }
 
-    /// <summary>是否处于目标选择阶段（UI遮罩/特效用）。</summary>
+    /// <summary>选择流程尚持有目标数据，包含已提交后等待表现结束的阶段。</summary>
     public bool IsSelecting => _selecting;
+    /// <summary>尚未提交的选择画面。提交后由表现模块淡出，目标数据继续保留。</summary>
+    public bool IsSelectionVisible => _selecting && !_waitingForResolution && !BattleExecution.IsBusy;
 
     /// <summary>当前选择的技能按钮类型（-1=无）。</summary>
     public int PendingSkill => _pendingSkill;

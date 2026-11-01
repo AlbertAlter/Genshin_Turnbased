@@ -21,7 +21,10 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     private BattlePresentationConfiguration configuration;
     [Tooltip("留空使用 Resources/UI/DefaultSkillTimeline。命中时点沿用运行时 Excel。")]
     public BattleSkillTimelineTemplate skillTimeline;
+    public BattlefieldSelectionPresentation selectionPresentation;
+    private int playbackGeneration;
     public bool VoicesEnabled => skillTimeline == null || (skillTimeline.tracks & BattleSkillTracks.Voice) != 0;
+    public BattleActionStyle ActionStyle => configuration?.ActionStyle;
 
     public static void EnsureOn(GameObject host)
     {
@@ -81,9 +84,14 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     public void ShowResult(BattlePresentationRequest request, Action readyToContinue) => readyToContinue();
     public void Cancel(BattlePresentationRequest request) => CancelResults();
 
-    public Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
+    public async Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
     {
-        if (!isActiveAndEnabled || playback == null) return Task.CompletedTask;
+        if (!isActiveAndEnabled || playback == null) return;
+        int generation = playbackGeneration;
+        if (selectionPresentation != null)
+            await selectionPresentation.WaitForSelectionExit(configuration.SelectionExitSeconds, cancellation);
+        cancellation.ThrowIfCancellationRequested();
+        if (generation != playbackGeneration || !isActiveAndEnabled || playback == null) return;
         var cues = skillTimeline != null ? skillTimeline.Build(sequence, configuration.For)
             : BattleSkillTimeline.Build(sequence, configuration.For, BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
         bool voicePrepared = false;
@@ -99,10 +107,20 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
                 if (cue.SkillMarker == BattleSkillMarker.CastStart && cue.Result.TargetSide == BattleSide.Ally && cue.Result.Data is ActionEventData action)
                     LogManager.Log(LogCategory.Voice, $"跳过 {action.SubjectId} {action.SkillId}，" +
                         (VoicesEnabled ? "场景没有启用并注册的角色语音组件。" : "时间轴关闭了语音轨道。"));
-        return playback.Enqueue(cues, cancellation);
+        await playback.Enqueue(cues, cancellation);
     }
-    public void SkipResults() => playback?.Skip();
-    public void CancelResults() => playback?.Cancel();
+    public void SkipResults()
+    {
+        playbackGeneration++;
+        selectionPresentation?.SkipSelectionExit();
+        playback?.Skip();
+    }
+    public void CancelResults()
+    {
+        playbackGeneration++;
+        selectionPresentation?.SkipSelectionExit();
+        playback?.Cancel();
+    }
 
     private void OnUnsequenced(BattlePresentationSequence sequence)
         => BattleExecution.Observe(PlayResultsAsync(sequence, CancellationToken.None));

@@ -28,9 +28,12 @@ public sealed class UICardView : MonoBehaviour
     }
     internal void PlayVideo(string path)
     {
-        Video = gameObject.AddComponent<UICardVideoPlayer>(); Video.playOnStart = true;
+        if (Video == null) Video = gameObject.AddComponent<UICardVideoPlayer>();
+        else Video.Unload();
+        Video.playOnStart = false;
         Video.videoPath = path; Video.targets = new[] { Appearance.Surface };
         Video.SetFrozen(AnimationFrozen);
+        Video.enabled = true;
         if (Video.isActiveAndEnabled) Video.Load();
     }
     public void SetTint(Color color) { tint = color; if (Appearance != null) Appearance.SetTint(color); }

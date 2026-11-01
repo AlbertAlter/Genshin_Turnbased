@@ -124,6 +124,7 @@ public partial class EnemyBattleController
         try
         {
             int repeats = ExecuteCountEvaluator.Evaluate(action.ExecuteCount, action.ExecuteCountHandler, Entity);
+            if (repeats > 0 && !string.IsNullOrWhiteSpace(action.Param1)) BattleExecution.RecordStatusPrompt(status, action.ActionType);
             for (int repeat = 0; repeat < repeats; repeat++)
             foreach (string raw in (action.Param1 ?? string.Empty).Split(';'))
             {

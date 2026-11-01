@@ -102,6 +102,16 @@ public partial class CharacterBattleController
     /// </summary>
     public string AdvanceSkillPhase(int skillType)
     {
+        string next = GetNextSkillPhaseID(skillType);
+        if (next == null) return null;
+        _boundSkills[skillType] = next;
+        OnControlChanged?.Invoke();
+        return next;
+    }
+
+    /// <summary>查询当前绑定还能推进到哪一档；显示按钮时不会修改绑定或触发事件。</summary>
+    public string GetNextSkillPhaseID(int skillType)
+    {
         if (skillType < 0 || skillType > 3) return null;
         string cur = _boundSkills[skillType];
         if (string.IsNullOrEmpty(cur) || _skillById2 == null || !_skillById2.TryGetValue(cur, out var sk) || sk.SkillPhase <= 0) return null;
@@ -114,11 +124,7 @@ public partial class CharacterBattleController
                 if (next == null || s.SkillID < next.SkillID) next = s;
             }
         }
-        if (next == null) return null;
-
-        _boundSkills[skillType] = next.SkillID2;
-        OnControlChanged?.Invoke();
-        return next.SkillID2;
+        return next?.SkillID2;
     }
 
     /// <summary>目标选择阶段结束/切换技能：恢复按钮原绑定（多段推进前的技能）。</summary>

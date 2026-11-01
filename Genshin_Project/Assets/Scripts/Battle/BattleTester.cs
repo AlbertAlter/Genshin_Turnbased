@@ -16,6 +16,7 @@ public class BattleTester : MonoBehaviour
 {
     // Legacy test scene creates its manager at startup; bind the explicitly selected voice module then.
     public CharacterBattleVoice characterVoice;
+    public BattleUiStatusRiseView statusRise;
     /// <summary>编辑器热加载请求：StageBuilder 置 true 后本组件下一帧重建战斗</summary>
     public static bool ReloadRequest = false;
 
@@ -51,6 +52,7 @@ public class BattleTester : MonoBehaviour
 
         var bm = BattleManager.Instance;
         if (characterVoice != null) characterVoice.battle = bm;
+        if (statusRise != null) statusRise.battle = bm;
         bm.UnregisterAll();
 
         // ---- 读取关卡配置（编辑器工具生成的 JSON，无则用默认） ----

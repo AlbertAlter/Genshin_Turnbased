@@ -10,7 +10,7 @@ public enum BattleEventKind
     ActionStarted, ActionCompleted, DamageResolved, HPChanged, HealResolved,
     ReactionOccurred, ResourceChanged, SwitchResolved, ElementContactResolved,
     AuraChanged, StatusAdded, StatusRemoved, ShieldChanged, Death, APSpent, NightSoulBurst, BattleEnded, ShieldGranted,
-    MoonCageConcerto
+    MoonCageConcerto, ActionPrompt
 }
 
 /// <summary>胜负已正式确定；不用于手动StopBattle、取消或重置，不借状态OnEnd替代。</summary>
@@ -263,11 +263,12 @@ public sealed class ResourceEventData : BattleEventData
 
 public sealed class ActionEventData : BattleEventData
 {
+    public int SubjectWeaponType { get; }
     public string SkillId { get; }
     public string ActionType { get; }
     public ActionEventData(BattleEntity actor, string skillId, string actionType, bool completed)
         : base(completed ? BattleEventKind.ActionCompleted : BattleEventKind.ActionStarted, actor)
-    { SkillId = skillId; ActionType = actionType; }
+    { SkillId = skillId; ActionType = actionType; SubjectWeaponType = actor != null ? actor.WeaponType : -1; }
 }
 
 /// <summary>只标记已提交换人的原因；Unknown不推断为主动，免费不等于阵亡强制。</summary>
@@ -362,6 +363,13 @@ public static class BattleEventHub
     /// <summary>会话清理后的生命周期通知；表现层在此清空旧显示并重新订阅，不是战斗内事实声明。</summary>
     public static event Action SessionReset;
     public static long NextIdentity() => Interlocked.Increment(ref sequence);
+    private static long presentationIdentity;
+    internal static BattleEventHeader PresentationHeader()
+    {
+        var frame = FrameSlot.Value;
+        return new BattleEventHeader(session, Interlocked.Decrement(ref presentationIdentity), frame?.Resolution ?? 0,
+            BattleResolutionContext.CurrentAction?.ScopeId ?? 0, 0, 0, 0, 0, null, frame?.ActionExecution ?? 0);
+    }
     public static BattleDeclaration Current
     {
         get

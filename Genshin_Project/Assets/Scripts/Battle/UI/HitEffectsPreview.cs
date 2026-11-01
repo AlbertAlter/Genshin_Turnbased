@@ -23,6 +23,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
     public int fixedSeed = 12345;
     public bool newSeedEachPlay = true, autoReplay;
     public bool startWithShields = true;
+    public bool previewShieldReveal = true;
+    public bool loopShieldAppearance;
     public bool animatedFaces = true;
     private UICardFactory cardFactory;
     private readonly UICardView[] cardViews = new UICardView[9];
@@ -97,8 +99,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
             var newTextures = HitEffectTextureStyle.Load();
             var newPopup = BattlefieldDamagePopupStyle.Load();
             var newTemplates = BattleSkillPresentationTemplates.Load();
-            var newTiming = BattlePresentationConfiguration.Parse(BattlefieldDamagePopupStyle.ReadParameters(
-                Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattlefieldDamagePopupStyle.FileName)));
+            var newTiming = BattlePresentationConfiguration.Parse(BattleTimelineSettings.Load().Parameters);
             effects = newEffects; textures = newTextures; palette = newPalette; popupStyle = newPopup; timing = newTiming; templates = newTemplates; shakeStyle = newShake; error = null; return true;
         }
         catch (Exception exception) { Fail(exception.Message); return false; }
@@ -146,6 +147,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
         shields.layout = sceneLayout; shields.loadOnStart = false; shields.automaticClock = false;
         shieldPanel = gameObject.AddComponent<ShieldPreviewPanel>();
         shieldPanel.Bind(shields, numberFont);
+        shieldPanel.revealEnabled = previewShieldReveal;
+        shieldPanel.loopAppearance = loopShieldAppearance;
     }
     private void BuildCard(int index, RectTransform parent, Vector2 position, int id)
     {

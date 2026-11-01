@@ -41,12 +41,20 @@ public static class UiChartSync
     public static void SyncHitEffects()
     {
         string sourceRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI"));
-        string source = Path.Combine(sourceRoot, UIHitEffectStyle.FileName);
+        string timelineRoot = Path.Combine(sourceRoot, BattleTimelineSettings.Folder);
+        string main = Path.Combine(timelineRoot, BattleTimelineSettings.FileName);
+        BattleTimelineSettings.ReadFile(main);
+        string source = Path.Combine(timelineRoot, UIHitEffectStyle.FileName);
         string colors = Path.Combine(sourceRoot, ElementColorPalette.FileName);
-        string shake = Path.Combine(sourceRoot, HitShakeStyle.FileName);
-        string textureTable = Path.Combine(sourceRoot, HitEffectTextureStyle.FileName);
-        string templates = Path.Combine(sourceRoot, BattleSkillPresentationTemplates.FileName);
-        BattleSkillPresentationTemplates.ReadFile(templates);
+        string shake = Path.Combine(timelineRoot, HitShakeStyle.FileName);
+        string textureTable = Path.Combine(timelineRoot, HitEffectTextureStyle.FileName);
+        string templates = Path.Combine(timelineRoot, BattleSkillPresentationTemplates.FileName);
+        string prompt = Path.Combine(timelineRoot, BattleActionStyle.FileName);
+        string enemyActions = Path.Combine(timelineRoot, EnemyActionTemplates.FileName);
+        string effects = Path.Combine(timelineRoot, BattlePresentationConfiguration.EffectFileName);
+        BattleActionStyle.ReadFile(prompt);
+        BattlePresentationConfiguration.ReadEffects(effects);
+        EnemyActionTemplates.ReadFile(enemyActions, BattleSkillPresentationTemplates.ReadFile(templates));
         UIHitEffectStyle.ReadFile(source);
         ElementColorPalette.ReadFile(colors);
         HitShakeStyle.ReadFile(shake);
@@ -55,14 +63,15 @@ public static class UiChartSync
         // Validate every reference before publishing any new table or art.
         foreach (string file in textureStyle.Files)
             if (!File.Exists(Path.Combine(artSourceRoot, file))) throw new FileNotFoundException("缺少命中特效贴图：" + file);
-        string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI");
+        string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattleTimelineSettings.Folder);
         Directory.CreateDirectory(directory);
-        foreach (string file in new[] { source, colors, shake, textureTable, templates })
+        foreach (string file in new[] { main, source, shake, textureTable, templates, enemyActions, prompt, effects })
         {
             string target = Path.Combine(directory, Path.GetFileName(file));
             File.Copy(file, target, true);
             File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(file));
         }
+        File.Copy(colors, Path.Combine(Application.streamingAssetsPath, "Data", "UI", ElementColorPalette.FileName), true);
         string artTargetRoot = Path.Combine(Application.streamingAssetsPath, "art_assets", "UI", "SlashComponents");
         Directory.CreateDirectory(artTargetRoot);
         foreach (string file in textureStyle.Files)
@@ -124,26 +133,29 @@ public static class UiChartSync
     public static void SyncDamagePopup()
     {
         string source = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI",
-            BattlefieldDamagePopupStyle.FileName));
+            BattleTimelineSettings.Folder, BattlefieldDamagePopupStyle.FileName));
         BattlefieldDamagePopupStyle.ReadFile(source);
+        string main = Path.Combine(Path.GetDirectoryName(source), BattleTimelineSettings.FileName);
+        BattleTimelineSettings.ReadFile(main);
         string statusSource = Path.Combine(Path.GetDirectoryName(source), BattlefieldStatusPopupStyle.FileName);
         BattlefieldStatusPopupStyle.ReadFile(statusSource);
-        string colorSource = Path.Combine(Path.GetDirectoryName(source), ElementColorPalette.FileName);
+        string colorSource = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source), "..", ElementColorPalette.FileName));
         ElementColorPalette.ReadFile(colorSource);
-        string effectSource = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source), "..", BattlePresentationConfiguration.EffectFileName));
+        string effectSource = Path.Combine(Path.GetDirectoryName(source), BattlePresentationConfiguration.EffectFileName);
         BattlePresentationConfiguration.ReadEffects(effectSource);
-        string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI");
+        string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattleTimelineSettings.Folder);
         Directory.CreateDirectory(directory);
+        File.Copy(main, Path.Combine(directory, BattleTimelineSettings.FileName), true);
         string target = Path.Combine(directory, BattlefieldDamagePopupStyle.FileName);
         File.Copy(source, target, true);
         File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(source));
         string statusTarget = Path.Combine(directory, BattlefieldStatusPopupStyle.FileName);
         File.Copy(statusSource, statusTarget, true);
         File.SetLastWriteTimeUtc(statusTarget, File.GetLastWriteTimeUtc(statusSource));
-        string colorTarget = Path.Combine(directory, ElementColorPalette.FileName);
+        string colorTarget = Path.Combine(Application.streamingAssetsPath, "Data", "UI", ElementColorPalette.FileName);
         File.Copy(colorSource, colorTarget, true);
         File.SetLastWriteTimeUtc(colorTarget, File.GetLastWriteTimeUtc(colorSource));
-        string effectTarget = Path.Combine(Application.streamingAssetsPath, "Data", BattlePresentationConfiguration.EffectFileName);
+        string effectTarget = BattleTimelineSettings.RuntimePath(BattlePresentationConfiguration.EffectFileName);
         File.Copy(effectSource, effectTarget, true);
         File.SetLastWriteTimeUtc(effectTarget, File.GetLastWriteTimeUtc(effectSource));
         AssetDatabase.Refresh();

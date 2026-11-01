@@ -15,6 +15,9 @@ public sealed class BattlePresentationConfiguration
     }
     private readonly Dictionary<string, EffectOverride> effects;
     private readonly BattleSkillPresentationTemplates templates;
+    public BattleActionStyle ActionStyle { get; private set; }
+    public float SelectionExitSeconds { get; private set; } = .15f;
+    private EnemyActionTemplates enemyActions;
     public double HitInterval { get; }
     public double MediumJitter { get; }
     public double FullJitter { get; }
@@ -44,9 +47,12 @@ public sealed class BattlePresentationConfiguration
 
     public static BattlePresentationConfiguration Load()
     {
-        string data = Path.Combine(UnityEngine.Application.streamingAssetsPath, "Data");
-        var values = BattlefieldDamagePopupStyle.ReadParameters(Path.Combine(data, "UI", BattlefieldDamagePopupStyle.FileName));
-        return Parse(values, ReadEffects(Path.Combine(data, EffectFileName)), BattleSkillPresentationTemplates.Load());
+        var main = BattleTimelineSettings.Load();
+        var config = Parse(main.Parameters, ReadEffects(BattleTimelineSettings.RuntimePath(EffectFileName)), BattleSkillPresentationTemplates.Load());
+        config.SelectionExitSeconds = main.SelectionExitSeconds;
+        config.ActionStyle = BattleActionStyle.ReadFile(BattleTimelineSettings.RuntimePath(BattleActionStyle.FileName));
+        config.enemyActions = EnemyActionTemplates.ReadFile(BattleTimelineSettings.RuntimePath(EnemyActionTemplates.FileName), config.templates);
+        return config;
     }
 
     public static BattlePresentationConfiguration Parse(IReadOnlyDictionary<string, string> values,
@@ -72,10 +78,21 @@ public sealed class BattlePresentationConfiguration
         BattleHitTemplate template = null;
         if (result.Data is DamageEventData damage && damage.Source.SourceSide == BattleSide.Ally)
             template = templates?.Get(damage.SourceWeaponType, damage.DamageType);
+        else if (result.Data is DamageEventData enemyHit && enemyHit.Source.SourceKind == ReactionSourceKind.EnemySkill
+            && enemyActions?.Find(enemyHit.Source.SourceSkillID) is BattleHitTemplate enemyTemplate
+            && enemyTemplate.AttackType != "Support")
+            template = enemyTemplate;
         if (template != null && item?.HitInterval != null) template = template.WithUniformInterval(item.HitInterval.Value);
+        double animationSeconds = 0;
+        if (result.Data.Kind == BattleEventKind.ActionStarted && result.Data is ActionEventData cast)
+        {
+            var animation = result.TargetSide == BattleSide.Enemy ? enemyActions?.Find(cast.SkillId)
+                : templates?.Get(cast.SubjectWeaponType, cast.ActionType);
+            animationSeconds = animation?.AnimationSeconds ?? 0;
+        }
         return new BattlePresentationTiming(item?.HitInterval ?? HitInterval,
             template != null ? 0 : time == 1 ? MediumJitter : time == 2 ? FullJitter : 0,
-            item?.X ?? 2, item?.Y ?? 2, MediumRandomScale, template);
+            item?.X ?? 2, item?.Y ?? 2, MediumRandomScale, template, animationSeconds);
     }
 
     public static Dictionary<string, EffectOverride> ReadEffects(string path)

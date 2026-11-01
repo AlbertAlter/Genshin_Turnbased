@@ -3,7 +3,17 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-/// <summary>正式Dispatch后的表现快照。顺序取实际提交顺序，不按EventId或配表ID重新排序。</summary>
+/// <summary>Accepted action label recorded on the presentation sequence only; never dispatched to gameplay.</summary>
+public sealed class BattleActionPromptData : BattleEventData
+{
+    public readonly string Name;
+    public readonly string SkillId;
+    public readonly bool IsStatus;
+    public BattleActionPromptData(BattleEntity source, string name, bool isStatus, string skillId) : base(BattleEventKind.ActionPrompt, source)
+    { Name = name; IsStatus = isStatus; SkillId = skillId; }
+}
+
+/// <summary>Snapshots in actual submission order, including display-only action labels.</summary>
 public sealed class BattlePresentationResult
 {
     public int Order { get; }
@@ -39,6 +49,14 @@ public sealed class BattlePresentationSequence
     private static long nextID;
     private readonly List<BattlePresentationResult> results = new List<BattlePresentationResult>();
     private readonly HashSet<(long, long)> identities = new HashSet<(long, long)>();
+    private readonly HashSet<(long, long)> announcedStatuses = new HashSet<(long, long)>();
+    internal void RecordPrompt(BattleEntity actor, string name, StatusInstance status, string skillId = null)
+    {
+        if (actor == null || string.IsNullOrWhiteSpace(name)) return;
+        var header = BattleEventHub.PresentationHeader();
+        if (status != null && !announcedStatuses.Add((status.ApplyOrder, header.ActionScopeId))) return;
+        Record(new BattleDeclaration(header, new BattleActionPromptData(actor, name, status != null, skillId)));
+    }
     public long ID { get; } = Interlocked.Increment(ref nextID);
     public IReadOnlyList<BattlePresentationResult> Results => results.AsReadOnly();
     public bool IsSealed { get; private set; }

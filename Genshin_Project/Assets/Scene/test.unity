@@ -4366,6 +4366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StageConfigJson: {fileID: 0}
   characterVoice: {fileID: 8912300001}
+  statusRise: {fileID: 1940000501}
 --- !u!4 &552209065
 Transform:
   m_ObjectHideFlags: 0
@@ -10788,6 +10789,9 @@ GameObject:
   - component: {fileID: 8901000003}
   - component: {fileID: 8901000004}
   - component: {fileID: 8901000005}
+  - component: {fileID: 1940000500}
+  - component: {fileID: 1940000510}
+  - component: {fileID: 1940000501}
   - component: {fileID: 8912300001}
   m_Layer: 5
   m_Name: Canvas
@@ -10884,7 +10888,7 @@ MonoBehaviour:
   btnHeavy: {fileID: 804196151}
   btnSkill: {fileID: 282654838}
   btnBurst: {fileID: 0}
-  btnSwitch: {fileID: 0}
+  btnSwitch: {fileID: 1172043064}
   btnEndTurn: {fileID: 469923612}
   btnSkillNames:
   - {fileID: 1281515655}
@@ -13924,6 +13928,39 @@ MonoBehaviour:
   loadOnStart: 1
   automaticClock: 1
   paused: 0
+--- !u!114 &1940000500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d78c5708f56242648f57680de30f9960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8901000001}
+  layout: {fileID: 8901000000}
+  framePrefab: {fileID: 114001, guid: 2f4765a0fbaa452c9801f16950a43fa6, type: 3}
+  font: {fileID: 11400000, guid: 695a3ca424f566d4596c8507b2707a6d, type: 2}
+  allyInset: {x: 48, y: 191}
+  enemyInset: {x: 49, y: 191}
+--- !u!114 &1940000501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c109a25fe348d8986fb00af523e27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8901000001}
+  layout: {fileID: 8901000000}
+  battle: {fileID: 0}
 --- !u!114 &8901000005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13939,3 +13976,22 @@ MonoBehaviour:
   player: {fileID: 8901000001}
   layout: {fileID: 8901000000}
   effects: {fileID: 8901000004}
+--- !u!114 &1940000510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7612251c2d3462498798f3091e0505a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  legacy: {fileID: 1777433680}
+  switchRoot: {fileID: 1172043063}
+  endTurnRoot: {fileID: 469923615}
+  canvas: {fileID: 1777433683}
+  projectFrame: {fileID: 114001, guid: 2f4765a0fbaa452c9801f16950a43fa6, type: 3}
+  hintFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  holdSeconds: 0.45

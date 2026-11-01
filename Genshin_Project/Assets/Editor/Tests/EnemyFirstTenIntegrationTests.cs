@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -8,6 +9,50 @@ namespace GenshinTurnBased.Tests.EditMode
 {
     public sealed class EnemyFirstTenIntegrationTests
     {
+        private sealed class OpeningPlayer : IBattlePresentationPlayer
+        {
+            public Action Finish;
+            private bool held;
+            public void Begin(BattlePresentationRequest request, Action impact) => impact();
+            public void ShowResult(BattlePresentationRequest request, Action done)
+            {
+                if (held) { done(); return; }
+                held = true;
+                Finish = done;
+            }
+            public void Cancel(BattlePresentationRequest request) { }
+        }
+
+        [UnityTest]
+        public IEnumerator WoodGuardOpening_CompletesBeforeFirstPhaseAndAcceptsEndTurn()
+        {
+            using var env = new BattleFlowTestEnv();
+            env.CreateAlly(1, true);
+            env.DataManager.ReloadAllData();
+            var guard = env.CreateEnemy(1, enemyId: 2010);
+            var player = new OpeningPlayer();
+            BattleExecution.SetPlayer(player);
+            try
+            {
+                env.Manager.StartBattle();
+                Assert.That(player.Finish, Is.Not.Null);
+                Assert.That(env.Scheduler.Step(), Is.True);
+                Assert.That(env.Manager.IsCurrentPhaseReady, Is.False);
+                Assert.That(env.Manager.IsAwaitingAllyInput, Is.False);
+                player.Finish();
+                for (int frame = 0; frame < 60 && !env.Manager.IsAwaitingAllyInput; frame++)
+                {
+                    env.Scheduler.Step();
+                    yield return null;
+                }
+                Assert.That(guard.Entity.HasStatus("ST_WoodGuard_Shield"), Is.True);
+                Assert.That(env.Manager.IsAwaitingAllyInput, Is.True);
+                env.Manager.EndAllyTurn();
+                Assert.That(env.Manager.IsAwaitingAllyInput, Is.False);
+            }
+            finally { BattleExecution.ReleasePlayer(player); }
+        }
+
         [Test]
         public void RuntimeWorkbooks_LoadFirstTenAndTheirStatusDefinitions()
         {

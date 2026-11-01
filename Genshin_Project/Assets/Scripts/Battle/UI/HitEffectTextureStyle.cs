@@ -30,7 +30,7 @@ public sealed class HitEffectTextureStyle
         "ParticleSpeedMultiplier", "MirrorChance", "StretchMin", "StretchMax", "SecondSlashAngleDegrees", "SecondSlashDelaySeconds",
         "FlightSeconds", "ProjectileWidthRatio", "SourceForwardRatio", "SourceHeightRatio",
         "GroupPaddingCardWidthRatio", "GroupHeightSpanRatio", "GroupMaxHeightCardHeightRatio", "GroupAngleDegrees" };
-    public static HitEffectTextureStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static HitEffectTextureStyle Load() => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
     public static HitEffectTextureStyle ReadFile(string path)
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);

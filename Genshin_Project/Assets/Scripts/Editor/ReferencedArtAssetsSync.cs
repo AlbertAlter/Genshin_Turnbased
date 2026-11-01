@@ -40,6 +40,9 @@ public static class ReferencedArtAssetsSync
         required.Add("UI/BattleField1/UI_components/card/CardShadow.png");
         required.Add("UI/BattleField1/UI_components/card/CardInnerShadow.png");
         required.Add("UI/BattleField1/UI_components/card/CardSelectionBorder.png");
+        required.Add("UI/BattleField1/UI_components/NextTurn.png");
+        required.Add("UI/BattleField1/UI_components/Button/Keycaps/SPACE_BG.png");
+        foreach (string file in BattleActionPromptView.LayerFiles) required.Add("UI/ActionPrompt/" + file);
         foreach (string file in UICardFreeze.TextureFiles)
             required.Add(UICardFreeze.ArtFolder + file);
         foreach (var file in new[] { "01_DropShadow", "02_BaseShape", "03_UpperSoftLight", "04_LowerSoftLight", "05_InnerShadow" })
@@ -48,6 +51,7 @@ public static class ReferencedArtAssetsSync
         CollectCardAnimations(sourceRoot, required, warnings);
         CollectCardVideos(sourceRoot, required, warnings);
         CollectAnimatedCharacters(sourceRoot, required, warnings);
+        CollectAnimatedEnemies(sourceRoot, required, warnings);
         CollectRouteNodeIcons(required, warnings);
         CharacterCardArtManifest cardManifest = CollectCharacterCards(dataRoot, sourceRoot, required, warnings);
         EnemyArtManifest enemyManifest = CollectEnemyArt(dataRoot, sourceRoot, required, warnings);
@@ -163,6 +167,31 @@ public static class ReferencedArtAssetsSync
             result.UnionWith(paths);
         }
         catch (Exception error) { warnings.Add("角色动态清单未加载：" + error.Message); }
+    }
+
+    internal static void CollectAnimatedEnemies(string sourceRoot, HashSet<string> result, List<string> warnings)
+    {
+        string manifest = AnimationArtPath(UICardVideoCatalog.EnemyManifestPath);
+        if (!File.Exists(SafeCombine(sourceRoot, manifest))) return;
+        try
+        {
+            var data = JsonUtility.FromJson<UICardVideoCatalog.EnemyCatalog>(File.ReadAllText(SafeCombine(sourceRoot, manifest)));
+            if (data?.enemies == null) throw new InvalidDataException("Enemy_Animated manifest is empty.");
+            var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { manifest };
+            foreach (var entry in data.enemies)
+            {
+                if (entry == null || entry.status != "exported") continue;
+                if (!UICardVideoCatalog.TryGetEnemyIdentity(entry, out int enemyId, out int variant))
+                    throw new InvalidDataException("敌人动态清单编号、形态或路径无效：" + entry.video);
+                string video = AnimationArtPath(UICardVideoPlayer.VideoPathForEnemy(enemyId, variant));
+                string poster = AnimationArtPath(UICardVideoPlayer.PosterPathForEnemy(enemyId, variant));
+                if (!File.Exists(SafeCombine(sourceRoot, video)) || !File.Exists(SafeCombine(sourceRoot, poster)))
+                    throw new FileNotFoundException($"敌人动态素材不完整：{enemyId}/{variant:D2}");
+                paths.Add(video); paths.Add(poster);
+            }
+            result.UnionWith(paths);
+        }
+        catch (Exception error) { warnings.Add("敌人动态清单未加载：" + error.Message); }
     }
 
     private static void CollectCardVideos(string sourceRoot, HashSet<string> result, List<string> warnings)

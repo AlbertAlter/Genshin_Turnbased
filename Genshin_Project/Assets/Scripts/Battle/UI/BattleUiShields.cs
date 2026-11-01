@@ -15,6 +15,9 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
     public UIShieldStyle Settings { get; private set; }
     public ElementColorPalette Palette { get; private set; }
     public bool Ready { get; private set; }
+    internal double ElapsedSeconds { get; private set; }
+    internal void InitializeMembrane(UICardShield graphic)
+        => graphic.Initialize(sprites[0].texture, sprites[1].texture, sprites[2].texture, Palette.ProjectWhite);
     public bool Loading { get; private set; }
     public string Error { get; private set; }
     private readonly List<Sprite> sprites = new List<Sprite>();
@@ -25,10 +28,14 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
     {
         public BattleUiCardBinding Card;
         public object Occupant;
+        public object ShieldIdentity;
         public UICardShield Graphic;
         public bool Visible, Sweep, Loop;
         public string Element = "None";
-        public float Alpha, Clock;
+        public float Alpha;
+        public double RevealStart;
+        public float RevealProgress = 1;
+        public readonly ShieldSweepClock Clock = new ShieldSweepClock();
     }
     private readonly Dictionary<(BattleSide, int), View> views = new Dictionary<(BattleSide, int), View>();
 
@@ -76,27 +83,46 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
     {
         if (!isActiveAndEnabled || !Ready || !views.TryGetValue((side, slot), out var view)) return false;
         if (element != "None" && !Palette.TryGetColor(element, out _)) throw new ArgumentException("未知护盾元素：" + element);
-        view.Visible = visible; view.Element = element;
+        if (visible && !view.Visible)
+        {
+            view.RevealStart = ElapsedSeconds;
+            view.RevealProgress = UIShieldStyle.SampleReveal(0, Settings.Number("RevealDuration"));
+            view.Clock.Restart(ElapsedSeconds + Settings.Number("RevealDuration"));
+            view.Sweep = view.Loop = true;
+        }
+        if (!visible) view.Sweep = false;
+        view.Visible = visible;
+        // 保留消失前的元素色，不能在淡出第一帧变成无元素盾。
+        if (visible) view.Element = element;
         return true;
     }
-    public void SetOccupantShield(BattleUiCardBinding card, object occupant, bool visible, string element)
+    public void SetOccupantShield(BattleUiCardBinding card, object occupant, bool visible, string element, object shieldIdentity = null)
     {
-        if (!SetShield(card.side, card.slot, visible, element)) return;
-        var view = views[(card.side, card.slot)];
-        if (ReferenceEquals(view.Occupant, occupant)) return;
-        view.Occupant = occupant;
-        view.Alpha = view.Clock = 0;
-        view.Sweep = view.Loop = false;
-        if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+        if (!views.TryGetValue((card.side, card.slot), out var view)) return;
+        if (!ReferenceEquals(view.Occupant, occupant))
+        {
+            view.Occupant = occupant;
+            view.Alpha = 0; view.Visible = false;
+            if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+        }
+        else if (visible && shieldIdentity != null && !ReferenceEquals(view.ShieldIdentity, shieldIdentity))
+        {
+            // 新盾接替旧盾时重新形成；同一盾逐帧刷新或扣量不重播。
+            view.Alpha = 0; view.Visible = false;
+        }
+        view.ShieldIdentity = shieldIdentity;
+        SetShield(card.side, card.slot, visible, element);
     }
     public bool PlaySweep(BattleSide side, int slot, bool loop = false)
     {
         if (!isActiveAndEnabled || !Ready || !views.TryGetValue((side, slot), out var view)) return false;
-        view.Clock = 0; view.Sweep = true; view.Loop = loop;
+        double revealEnd = view.Visible ? view.RevealStart + Settings.Number("RevealDuration") : ElapsedSeconds;
+        view.Clock.Restart(System.Math.Max(ElapsedSeconds, revealEnd)); view.Sweep = true; view.Loop = loop;
         return true;
     }
     public void ApplyCard(BattleSide side, int slot, Color tint, float membraneOpacity, float tintOpacity,
-        Vector2 membraneOffset, Vector2 maskOffset, float progress, float sweepOpacity, float width, float angle, float alpha)
+        Vector2 membraneOffset, Vector2 maskOffset, float progress, float sweepOpacity, float width, float angle, float alpha,
+        float revealProgress = 1, float revealSoftness = -1, float revealEdgeOpacity = -1, float revealEdgeWidth = -1)
     {
         if (!Ready || !views.TryGetValue((side, slot), out var view)) return;
         var parent = view.Card.shieldLayer;
@@ -111,46 +137,50 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
             var rect = new GameObject("PersonalShield", typeof(RectTransform)).GetComponent<RectTransform>();
             rect.SetParent(parent, false);
             view.Graphic = rect.gameObject.AddComponent<UICardShield>();
-            view.Graphic.Initialize(sprites[0].texture, sprites[1].texture, sprites[2].texture, Palette.ProjectWhite);
+            InitializeMembrane(view.Graphic);
         }
         else if (view.Graphic.transform.parent != parent) view.Graphic.transform.SetParent(parent, false);
         view.Graphic.gameObject.SetActive(true);
-        view.Graphic.Apply(Settings, tint, membraneOpacity, tintOpacity, membraneOffset, maskOffset, progress, sweepOpacity, width, angle, alpha);
+        view.Graphic.Apply(Settings, tint, membraneOpacity, tintOpacity, membraneOffset, maskOffset, progress, sweepOpacity, width, angle, alpha, revealProgress);
+        if (revealSoftness >= 0 || revealEdgeOpacity >= 0 || revealEdgeWidth >= 0)
+            view.Graphic.SetReveal(revealProgress, revealSoftness >= 0 ? revealSoftness : Settings.Number("RevealSoftness"),
+                revealEdgeWidth >= 0 ? revealEdgeWidth : Settings.Number("RevealEdgeWidth"),
+                revealEdgeOpacity >= 0 ? revealEdgeOpacity : Settings.Number("RevealEdgeOpacity"));
     }
     private void Update() { if (automaticClock && !paused) Advance(Time.unscaledDeltaTime); }
     public void Advance(float deltaTime)
     {
         if (!Ready) return;
+        ElapsedSeconds += Mathf.Max(0, deltaTime);
         foreach (var pair in views)
         {
             var v = pair.Value; float fade = Settings.Number(v.Visible ? "FadeInSeconds" : "FadeOutSeconds");
-            v.Alpha = fade <= 0 ? (v.Visible ? 1 : 0) : Mathf.MoveTowards(v.Alpha, v.Visible ? 1 : 0, Mathf.Max(0, deltaTime) / fade);
+            if (v.Visible) v.RevealProgress = UIShieldStyle.SampleReveal(ElapsedSeconds - v.RevealStart, Settings.Number("RevealDuration"));
+            v.Alpha = UIShieldStyle.StepAlpha(v.Alpha, v.Visible, deltaTime, fade);
             if (!v.Visible && v.Alpha <= 0)
             {
                 if (v.Graphic != null && v.Graphic.gameObject.activeSelf) v.Graphic.gameObject.SetActive(false);
                 continue;
             }
-            float duration = Settings.Number("SweepDuration"), progress = 0, alpha = 0;
-            if (v.Sweep)
-            {
-                v.Clock += Mathf.Max(0, deltaTime); progress = Mathf.Clamp01(v.Clock / duration);
-                float fraction = Settings.Number("SweepFadeFraction");
-                alpha = v.Clock >= duration ? 0 : fraction <= 0 ? 1 :
-                    Mathf.SmoothStep(0, 1, Mathf.Clamp01(progress / fraction)) * Mathf.SmoothStep(0, 1, Mathf.Clamp01((1 - progress) / fraction));
-                if (v.Clock >= duration + Settings.Number("SweepInterval"))
-                { v.Clock = 0; v.Sweep = v.Loop; }
-            }
+            float progress = 0;
+            float alpha = v.Sweep ? v.Clock.Sample(ElapsedSeconds, Settings.Number("SweepDuration"),
+                Settings.Number("SweepInterval"), Settings.Number("SweepIntervalJitter"), Settings.Number("SweepFadeFraction"), v.Loop, out progress) : 0;
             bool neutral = v.Element == "None";
             ApplyCard(pair.Key.Item1, pair.Key.Item2, Palette.GetColor(v.Element),
                 Settings.Number("MembraneOpacity"), Settings.Number(neutral ? "NeutralTintOpacity" : "TintOpacity"),
                 Vector2.zero, Vector2.zero, progress, Settings.Number("SweepOpacity") * alpha,
-                Settings.Number("SweepWidth"), Settings.Number("SweepAngle"), v.Alpha);
+                Settings.Number("SweepWidth"), Settings.Number("SweepAngle"), v.Alpha, v.RevealProgress);
         }
     }
     private void OnDisable()
     {
         ++loadVersion; StopAllCoroutines(); Release(pending); Loading = false;
-        foreach (var view in views.Values) if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+        foreach (var view in views.Values)
+        {
+            if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+            view.Visible = view.Sweep = false; view.Alpha = 0; view.RevealProgress = 1;
+            view.Occupant = view.ShieldIdentity = null;
+        }
     }
     private static void Release(List<Sprite> list)
     {

@@ -28,6 +28,102 @@ namespace GenshinTurnBased.Tests.EditMode
                 .Invoke(sequence, new object[] { declaration, null });
         private static void Seal(BattlePresentationSequence sequence)
             => typeof(BattlePresentationSequence).GetMethod("Seal", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(sequence, null);
+
+        [Test]
+        public void MultiTargetStatus_StartsTogetherAndNextEffectWaitsForBoth()
+        {
+            var sequence = new BattlePresentationSequence();
+            var targets = new[] { Target(1), Target(2), Target(3) };
+            using (BattleEventHub.BeginActionExecution())
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    using var effect = BattleEventHub.BeginEffectExecution(i < 2 ? 701 : 702);
+                    var status = new StatusInstance { StatusID2 = "Buff", Caster = targets[0] };
+                    Add(sequence, BattleEventHub.Record(new object(), new StatusEventData(status, targets[i], true, "Apply")));
+                }
+            Seal(sequence);
+            var cues = BattlePresentationTimeline.Build(sequence);
+            Assert.That(cues[0].Block, Is.EqualTo(cues[1].Block));
+            Assert.That(cues[2].Block, Is.Not.EqualTo(cues[1].Block));
+            var ends = new List<Action<Exception>>();
+            var player = new BattlePresentationPlayback((id, cue, done) => ends.Add(done), null);
+            var task = player.Enqueue(cues);
+            Assert.That(ends.Count, Is.EqualTo(2));
+            ends[0](null);
+            Assert.That(ends.Count, Is.EqualTo(2));
+            ends[1](null);
+            Assert.That(ends.Count, Is.EqualTo(3));
+            ends[2](null);
+            Assert.That(task.IsCompleted, Is.True);
+        }
+
+        [Test]
+        public void AcceptedPromptSharesCastStartBeforeInitialStatusEffects()
+        {
+            var actor = Target(1);
+            var sequence = new BattlePresentationSequence();
+            using (BattleEventHub.BeginActionExecution())
+            {
+                Add(sequence, BattleEventHub.Record(new object(), new ActionEventData(actor, "Skill", "Normal", false)));
+                Add(sequence, BattleEventHub.Record(new object(), new StatusEventData(
+                    new StatusInstance { StatusID2 = "BeforeSkill", Caster = actor }, actor, true, "Apply")));
+                typeof(BattlePresentationSequence).GetMethod("RecordPrompt", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(sequence, new object[] { actor, "Skill", null, "Skill" });
+            }
+            Seal(sequence);
+            var cues = BattleSkillTimeline.Build(sequence, null, BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
+            Assert.That(cues[0].SkillMarker, Is.EqualTo(BattleSkillMarker.CastStart));
+            Assert.That(cues[1].SkillMarker, Is.EqualTo(BattleSkillMarker.ActionPrompt));
+            Assert.That(cues[1].Block, Is.EqualTo(cues[0].Block));
+            Assert.That(cues[1].Time, Is.EqualTo(0));
+        }
+
+        [TestCase(.1, .3)]
+        [TestCase(1.5, 1.5)]
+        public void CastEndHonorsAnimationFloorWithoutMovingImpact(double duration, double expectedEnd)
+        {
+            var target = Target(1);
+            var sequence = new BattlePresentationSequence();
+            using (BattleEventHub.BeginActionExecution())
+            {
+                Add(sequence, BattleEventHub.Record(new object(), new ActionEventData(target, "SkillA", "EnemySkill", false)));
+                Add(sequence, Damage(target, 100, 101));
+                Add(sequence, BattleEventHub.Record(new object(), new ActionEventData(target, "SkillA", "EnemySkill", true)));
+            }
+            Seal(sequence);
+            var hit = new BattleHitTemplate("Test", new[] { .3 }, 0);
+            var cues = BattlePresentationTimeline.Build(sequence, r => new BattlePresentationTiming(
+                hitTemplate: r.Data is DamageEventData ? hit : null,
+                animationSeconds: r.Data.Kind == BattleEventKind.ActionStarted ? duration : 0));
+            Assert.That(cues.Select(c => c.Time), Is.EqualTo(new[] { 0d, .3, expectedEnd }));
+        }
+
+        [Test] public void PromptLetsHitRunButHoldsTheNextActionUntilFadeOrSkip()
+        {
+            var target = Target(1);
+            var sequence = new BattlePresentationSequence();
+            typeof(BattlePresentationSequence).GetMethod("RecordPrompt", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(sequence, new object[] { target, "挥棒", null, "SK_Fighter_Hit" });
+            Add(sequence, Damage(target, 100, 101)); Seal(sequence);
+            var cues = BattleSkillTimeline.Build(sequence, _ => new BattlePresentationTiming(), BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
+            Assert.That(cues[0].SkillMarker, Is.EqualTo(BattleSkillMarker.ActionPrompt));
+            Assert.That(cues[0].SkillTracks, Is.EqualTo(BattleSkillTracks.Animation));
+            Action<Exception> fade = null;
+            int hits = 0;
+            var playback = new BattlePresentationPlayback((id, cue, done) => {
+                if (cue.SkillMarker == BattleSkillMarker.ActionPrompt) fade = done;
+                else { hits++; done(null); }
+            }, null);
+            var first = playback.Enqueue(cues); var second = playback.Enqueue(cues);
+            Assert.That(hits, Is.EqualTo(1));
+            Assert.That(first.IsCompleted || second.IsCompleted, Is.False);
+            fade(null);
+            Assert.That(first.IsCompleted, Is.True);
+            Assert.That(hits, Is.EqualTo(2));
+            Assert.That(second.IsCompleted, Is.False);
+            playback.Skip(); fade(null);
+            Assert.That(second.IsCompleted, Is.True);
+        }
         private static BattleDeclaration Damage(BattleEntity target, long execution, long hit, string effect = "SE_Test", long[] causes = null)
         {
             using (BattleEventHub.BeginEffectExecution(execution))

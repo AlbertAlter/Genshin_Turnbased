@@ -15,10 +15,12 @@ public sealed class UICardFactory : MonoBehaviour
     private readonly Dictionary<string, Sprite> assets = new Dictionary<string, Sprite>();
     private readonly HashSet<string> pending = new HashSet<string>(), failed = new HashSet<string>();
     private readonly HashSet<int> videos = new HashSet<int>();
+    private readonly HashSet<string> enemyVideos = new HashSet<string>(StringComparer.Ordinal);
     private sealed class RequestState
-    { public UICardView View; public BattleSide Side; public int Id; public bool Animated, Poster, Active = true; }
+    { public UICardView View; public BattleSide Side; public int Id, Variant; public bool Animated, Poster, Active = true; }
     private readonly List<RequestState> cards = new List<RequestState>();
     private bool catalogStarted, catalogReady;
+    private bool enemyCatalogStarted, enemyCatalogReady;
 
     public UICardView Request(RectTransform mount, BattleSide side, int id, bool animated = true, bool useVideoPoster = false)
     {
@@ -28,44 +30,68 @@ public sealed class UICardFactory : MonoBehaviour
         var rect = root.GetComponent<RectTransform>(); rect.SetParent(mount, false); rect.SetAsFirstSibling();
         rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one; rect.offsetMin = rect.offsetMax = Vector2.zero;
         var view = root.AddComponent<UICardView>();
-        var request = new RequestState { View = view, Side = side, Id = id, Animated = animated, Poster = useVideoPoster };
+        var request = new RequestState { View = view, Side = side, Id = id,
+            Variant = side == BattleSide.Ally ? 3 : 1, Animated = animated, Poster = useVideoPoster };
         cards.Add(request); StartCoroutine(Prepare(request));
         return view;
     }
-    private IEnumerator Catalog()
+    private IEnumerator Catalog(BattleSide side)
     {
-        catalogStarted = true;
-        yield return UICardVideoCatalog.Load(videos,
-            error => Debug.LogWarning("卡牌视频清单读取失败，使用静态卡面：" + error, this));
-        catalogReady = true;
+        if (side == BattleSide.Enemy)
+        {
+            enemyCatalogStarted = true;
+            yield return UICardVideoCatalog.LoadEnemies(enemyVideos,
+                error => Debug.LogWarning("敌人视频清单读取失败，使用静态卡面：" + error, this));
+            enemyCatalogReady = true;
+        }
+        else
+        {
+            catalogStarted = true;
+            yield return UICardVideoCatalog.Load(videos,
+                error => Debug.LogWarning("卡牌视频清单读取失败，使用静态卡面：" + error, this));
+            catalogReady = true;
+        }
+    }
+    private IEnumerator EnsureCatalog(RequestState request)
+    {
+        if (!request.Animated) yield break;
+        bool enemy = request.Side == BattleSide.Enemy;
+        if (!(enemy ? enemyCatalogStarted : catalogStarted)) StartCoroutine(Catalog(request.Side));
+        while (!(enemy ? enemyCatalogReady : catalogReady))
+        {
+            if (request.View == null || request.View.Released) yield break;
+            yield return null;
+        }
     }
     private IEnumerator Prepare(RequestState request)
     {
-        var view = request.View; var side = request.Side; int id = request.Id; bool animated = request.Animated;
-        if (animated && side == BattleSide.Ally && !catalogStarted) StartCoroutine(Catalog());
-        string art = side == BattleSide.Ally ? request.Poster ? UICardVideoPlayer.PosterPathForCharacter(id)
-            : $"art_assets/Character_Bare/{id}_03.png" : $"art_assets/Enemy/{id}_01.png";
-        foreach (string path in new[] { FramePath, InnerShadowPath, OuterShadowPath, GlowPath, art })
+        var view = request.View;
+        yield return EnsureCatalog(request);
+        if (view == null || view.Released) yield break;
+        foreach (string path in new[] { FramePath, InnerShadowPath, OuterShadowPath, GlowPath })
         {
-            if (!assets.ContainsKey(path) && !pending.Contains(path) && !failed.Contains(path))
-            { pending.Add(path); StartCoroutine(LoadAsset(path)); }
-            while (pending.Contains(path)) yield return null;
+            yield return EnsureAsset(path);
             if (view == null || view.Released) yield break;
             if (!assets.ContainsKey(path)) { view.Fail("卡牌资源缺失：" + path); yield break; }
         }
+        yield return LoadVariant(request, request.Variant);
+        if (view == null || view.Released) yield break;
+        if (!TryGetVariantSprite(request, request.Variant, out var sprite))
+        { view.Fail("卡牌资源缺失：" + VariantPath(request, request.Variant)); yield break; }
         try
         {
-            if (!view.Ready) view.Initialize(assets[FramePath], assets[InnerShadowPath], assets[OuterShadowPath], assets[GlowPath], assets[art].texture);
+            if (!view.Ready) view.Initialize(assets[FramePath], assets[InnerShadowPath], assets[OuterShadowPath], assets[GlowPath], sprite.texture);
+            ApplyVariant(request, request.Variant, sprite);
         }
         catch (Exception error) { view.Fail(error.Message); }
-        if (view.Error != null) yield break;
-        if (side != BattleSide.Ally || !request.Animated) { view.MediaResolved = true; yield break; }
-        while (!catalogReady) { if (view == null || view.Released) yield break; yield return null; }
-        if (view != null && !view.Released)
-        {
-            if (request.Animated && videos.Contains(id) && view.Video == null) view.PlayVideo(UICardVideoPlayer.VideoPathForCharacter(id));
-            view.MediaResolved = true;
-        }
+        view.MediaResolved = true;
+    }
+    private IEnumerator EnsureAsset(string path, bool retry = false)
+    {
+        if (retry) failed.Remove(path);
+        if (!assets.ContainsKey(path) && !pending.Contains(path) && !failed.Contains(path))
+        { pending.Add(path); StartCoroutine(LoadAsset(path)); }
+        while (pending.Contains(path)) yield return null;
     }
     private IEnumerator LoadAsset(string path)
     {
@@ -77,31 +103,72 @@ public sealed class UICardFactory : MonoBehaviour
     private static string VariantPath(RequestState request, int variant) =>
         $"art_assets/{(request.Side == BattleSide.Ally ? "Character_Bare" : "Enemy")}/{request.Id}_{variant:D2}.png";
 
-    /// <summary>Preload a static variant into this factory's shared cache, without changing the visible card.</summary>
+    private string VideoPath(RequestState request, int variant)
+    {
+        if (!request.Animated) return null;
+        if (request.Side == BattleSide.Enemy)
+        {
+            string path = UICardVideoPlayer.VideoPathForEnemy(request.Id, variant);
+            return enemyVideos.Contains(path) ? path : null;
+        }
+        return videos.Contains(request.Id) ? UICardVideoPlayer.VideoPathForCharacter(request.Id) : null;
+    }
+    private string PreferredVariantPath(RequestState request, int variant) =>
+        request.Side == BattleSide.Enemy && VideoPath(request, variant) != null
+            ? UICardVideoPlayer.PosterPathForEnemy(request.Id, variant)
+            : request.Side == BattleSide.Ally && request.Poster && variant == 3
+                ? UICardVideoPlayer.PosterPathForCharacter(request.Id) : VariantPath(request, variant);
+
+    private bool TryGetVariantSprite(RequestState request, int variant, out Sprite sprite) =>
+        assets.TryGetValue(PreferredVariantPath(request, variant), out sprite) ||
+        assets.TryGetValue(VariantPath(request, variant), out sprite);
+
+    private IEnumerator LoadVariant(RequestState request, int variant, bool retry = false)
+    {
+        yield return EnsureCatalog(request);
+        if (request.View == null || request.View.Released) yield break;
+        string preferred = PreferredVariantPath(request, variant);
+        yield return EnsureAsset(preferred, retry);
+        if (!assets.ContainsKey(preferred) && preferred != VariantPath(request, variant))
+            yield return EnsureAsset(VariantPath(request, variant), retry);
+    }
+    private void ApplyVariant(RequestState request, int variant, Sprite sprite)
+    {
+        var view = request.View;
+        string video = VideoPath(request, variant);
+        request.Variant = variant;
+        // Initial mode resolution must not restart an already preparing/playing video.
+        if (video != null && view.Video != null && view.Video.enabled && view.Video.videoPath == video) return;
+        view.SetStaticVariant(sprite.texture);
+        if (video != null) view.PlayVideo(video);
+    }
+
+    /// <summary>Preload the preferred poster or static variant without changing the visible card.</summary>
     public IEnumerator PreloadVariant(UICardView view, int variant)
     {
         var request = Find(view);
         if (!isActiveAndEnabled || request == null || view == null || view.Released || variant <= 0) yield break;
-        string path = VariantPath(request, variant);
-        if (!assets.ContainsKey(path) && !pending.Contains(path))
-        { failed.Remove(path); pending.Add(path); StartCoroutine(LoadAsset(path)); }
-        while (isActiveAndEnabled && pending.Contains(path) && view != null && !view.Released) yield return null;
+        yield return LoadVariant(request, variant, true);
     }
     public bool HasVariant(UICardView view, int variant)
     {
         var request = Find(view);
         return isActiveAndEnabled && request != null && view != null && !view.Released && view.Ready &&
-            view.isActiveAndEnabled && variant > 0 && assets.ContainsKey(VariantPath(request, variant));
+            view.isActiveAndEnabled && variant > 0 && TryGetVariantSprite(request, variant, out _);
     }
     internal Texture GetVariantTexture(UICardView view, int variant) => HasVariant(view, variant)
-        ? assets[VariantPath(Find(view), variant)].texture : null;
-    /// <summary>Atomic texture-only change. Keeps mask, frame, tint and effect mounts; an explicit static variant stops video.</summary>
+        ? VariantTexture(Find(view), variant) : null;
+    private Texture VariantTexture(RequestState request, int variant) =>
+        TryGetVariantSprite(request, variant, out var sprite) ? sprite.texture : null;
+    /// <summary>Keep card layers; animated enemy requests prefer the exact form's video, otherwise use static art.</summary>
     public bool TrySetVariant(UICardView view, int variant)
     {
         if (!HasVariant(view, variant)) return false;
         var request = Find(view);
-        request.Animated = false; view.MediaResolved = true;
-        view.SetStaticVariant(assets[VariantPath(request, variant)].texture);
+        if (request.Side == BattleSide.Ally) request.Animated = false;
+        view.MediaResolved = true;
+        TryGetVariantSprite(request, variant, out var sprite);
+        ApplyVariant(request, variant, sprite);
         return true;
     }
     public void Release(UICardView view)
@@ -114,6 +181,7 @@ public sealed class UICardFactory : MonoBehaviour
     {
         StopAllCoroutines();
         pending.Clear(); if (!catalogReady) catalogStarted = false;
+        if (!enemyCatalogReady) enemyCatalogStarted = false;
         foreach (var request in cards)
             if (request.View != null)
             { request.Active = request.View.gameObject.activeSelf; request.View.gameObject.SetActive(false); }
@@ -133,7 +201,8 @@ public sealed class UICardFactory : MonoBehaviour
         foreach (var request in cards.ToArray()) Release(request.View);
         foreach (var sprite in assets.Values)
             if (sprite != null) { Destroy(sprite.texture); Destroy(sprite); }
-        assets.Clear(); pending.Clear(); failed.Clear(); videos.Clear();
+        assets.Clear(); pending.Clear(); failed.Clear(); videos.Clear(); enemyVideos.Clear();
         catalogStarted = catalogReady = false;
+        enemyCatalogStarted = enemyCatalogReady = false;
     }
 }

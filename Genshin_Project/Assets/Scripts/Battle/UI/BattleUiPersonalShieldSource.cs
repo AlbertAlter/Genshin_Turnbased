@@ -28,7 +28,7 @@ public sealed class BattleUiPersonalShieldSource : MonoBehaviour
                     break;
                 }
             }
-            view.SetOccupantShield(card, entity, shield != null, shield?.Element ?? "None");
+            view.SetOccupantShield(card, entity, shield != null, shield?.Element ?? "None", shield);
         }
     }
 

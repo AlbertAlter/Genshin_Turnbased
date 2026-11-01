@@ -38,7 +38,7 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
 
     public static BattlefieldDamagePopupStyle Load()
     {
-        return ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+        return ReadFile(BattleTimelineSettings.RuntimePath(FileName));
     }
 
     // 编辑器同步时也使用同一解析器校验，字段错误不能静默忽略或改用另一份参数。

@@ -29,7 +29,14 @@ public static class OverallShieldSystem
     public static List<BattleEntity> Members(BattleManager battle, BattleSide side, bool includeOffField = false)
     {
         var result = new List<BattleEntity>();
-        if (battle == null) return result;
+        CollectMembers(battle, side, result, includeOffField);
+        return result;
+    }
+
+    internal static void CollectMembers(BattleManager battle, BattleSide side, List<BattleEntity> result, bool includeOffField)
+    {
+        result.Clear();
+        if (battle == null) return;
         if (side == BattleSide.Ally)
         {
             foreach (var controller in battle.Allies)
@@ -40,7 +47,6 @@ public static class OverallShieldSystem
             foreach (var controller in battle.Enemies)
                 if (controller?.Entity?.IsAlive == true && (includeOffField || controller.Entity.IsOnField)) result.Add(controller.Entity);
         }
-        return result;
     }
 
     public static bool IsActive(BattleEntity owner, Shield shield)

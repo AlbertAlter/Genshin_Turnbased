@@ -95,6 +95,8 @@ public class UIBattleController : MonoBehaviour
     private Coroutine _skillIconLoadRoutine;
     private Sprite _fieldBorderSprite;
     /// <summary>是否处于换人界面（BattleInputController 空格过回合的禁用判断用，2026-08-14）。</summary>
+    public bool IsSwitching => _switching;
+    public void UICancelSwitch() { if (_switching) CancelSwitch(); }
 
 
     // 每个槽位的状态图标缓存（数量变化时重建）
@@ -219,7 +221,7 @@ public class UIBattleController : MonoBehaviour
         //            任意技能选择中施放者槽位恒黄高亮（文档：被选目标及施放技能者此时高亮）
         bool selectDirAlly = false;
         int casterPos = -1;
-        if (input != null && input.IsSelecting && input.PendingSkill >= 0)
+        if (input != null && input.IsSelectionVisible && input.PendingSkill >= 0)
         {
             var castAlly = input.PendingAlly != null ? input.PendingAlly : bm.GetActiveAlly();
             if (castAlly != null)
@@ -260,9 +262,9 @@ public class UIBattleController : MonoBehaviour
             //  - 换人界面选中角色：黄色高亮（原样式）
             // 目标选择且技能目标为我方：选中的我方槽位=第一种高亮（黄，覆盖出战绿）
             //2026-08-15：选择中施放者槽位恒黄高亮（任何技能方向；1234爆发施放者可为非出战角色）
-            bool allySelected = selectDirAlly && input.IsSelecting
+            bool allySelected = selectDirAlly && input.IsSelectionVisible
                 && input.Selector.ShowsPosition(i + 1);
-            bool isCaster = input != null && input.IsSelecting && casterPos == i + 1;
+            bool isCaster = input != null && input.IsSelectionVisible && casterPos == i + 1;
             if (slot.highlight != null)
             {
                 if (_switching)
@@ -325,7 +327,7 @@ public class UIBattleController : MonoBehaviour
         if (apBar != null) apBar.fillAmount = ap.MaxAP > 0 ? Mathf.Clamp01((float)ap.CurrentAP / ap.MaxAP) : 0;
         if (apCostHint != null)
         {
-            bool selecting = _switching || (input != null && input.IsSelecting && input.PendingSkill >= 0);
+            bool selecting = _switching || (input != null && input.IsSelectionVisible && input.PendingSkill >= 0);
             if (selecting)
             {
                 var caster = input != null && input.PendingAlly != null ? input.PendingAlly : ally;
@@ -463,7 +465,7 @@ public class UIBattleController : MonoBehaviour
 
     void RefreshOverlay(BattleManager bm)
     {
-        bool selecting = input != null && input.IsSelecting;
+        bool selecting = input != null && input.IsSelectionVisible;
         if (dimOverlay != null) dimOverlay.enabled = selecting || _switching;
 
         // 2026-08-14：技能目标为我方（治疗/增益单选）时，不高亮敌方——我方选中高亮在 RefreshAllies

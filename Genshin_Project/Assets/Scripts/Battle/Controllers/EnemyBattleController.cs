@@ -268,6 +268,7 @@ public partial class EnemyBattleController : MonoBehaviour
         // 此时不能继续写技能使用/冷却、执行原效果或伪造ActionCompleted。
         if (!(fromStatus ? CanActIgnoringPresence : CanAct) || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
         LogManager.Log(LogCategory.Enemy, $"{EnemyID} uses skill {skill.EnemySkillID2} ({skill.EnemySkillName})");
+        if (!fromStatus) BattleExecution.RecordSkillPrompt(Entity, skill.EnemySkillName, skill.EnemySkillID2);
 
         // 标记本回合使用次数
         _skillUsedThisTurn[skill.EnemySkillID] = (_skillUsedThisTurn.TryGetValue(skill.EnemySkillID, out int u) ? u : 0) + 1;

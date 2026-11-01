@@ -341,12 +341,22 @@ public partial class BattleManager : MonoBehaviour
             foreach (var enemy in _enemies)
                 if (enemy?.Entity != null) openingHealth.Add(BattleAttributeInitialization.Capture(enemy.Entity));
             DataManager data = DataManager.Instance;
-            TeamBonuses = new TeamBonusSystem(roster, data != null ? data.TeamBonusRules : new TeamBonusRules(),
-                actor => data != null && data.CharacterAttributesDict.TryGetValue(actor.EntityID, out var attr)
-                    ? attr.Element : string.Empty, AllyTeam, EnemyTeam);
-            BattleSpecialRules.OnBattleReady(this);
-            BattleAttributeInitialization.Complete(openingHealth);
-            _flowScheduler.Start(PhaseLoop());
+            Task OpenBattle() => BattleExecution.Run(async () =>
+            {
+                TeamBonuses = new TeamBonusSystem(roster, data != null ? data.TeamBonusRules : new TeamBonusRules(),
+                    actor => data != null && data.CharacterAttributesDict.TryGetValue(actor.EntityID, out var attr)
+                        ? attr.Element : string.Empty, AllyTeam, EnemyTeam);
+                BattleSpecialRules.OnBattleReady(this);
+                await BattleExecution.Flush();
+                BattleExecution.ThrowIfCancelled();
+                BattleAttributeInitialization.Complete(openingHealth);
+            });
+
+            // Keep immediate initialization for tools. A real player's opening shield animation
+            // and its queued declarations must finish before the phase loop opens another resolution.
+            Task opening = BattleExecution.IsBusy ? null : OpenBattle();
+            if (opening != null && opening.IsCompleted) opening.GetAwaiter().GetResult();
+            _flowScheduler.Start(PhaseLoop(opening, OpenBattle));
         }
         catch
         {
@@ -761,8 +771,23 @@ public partial class BattleManager : MonoBehaviour
     // ================================================================
     //  阶段循环
     // ================================================================
-    private IEnumerator PhaseLoop()
+    private IEnumerator PhaseLoop(Task opening, Func<Task> openBattle)
     {
+        if (opening == null)
+        {
+            while (BattleExecution.IsBusy) yield return null;
+            opening = openBattle();
+        }
+        while (!opening.IsCompleted) yield return null;
+        if (opening.IsFaulted || opening.IsCanceled)
+        {
+            IsBattleRunning = false;
+            TeamBonuses?.Dispose();
+            TeamBonuses = null;
+            DisposeTeamHosts();
+            if (opening.IsFaulted) opening.GetAwaiter().GetResult();
+            yield break;
+        }
         while (IsBattleRunning)
         {
             // 战斗结束（胜利/失败）：停止阶段推进（2026-08-13）
@@ -813,7 +838,7 @@ public partial class BattleManager : MonoBehaviour
             // 2.5 敌方行动阶段：驱动所有存活敌人行动
             if (CurrentPhase == TurnPhase.EnemyAction)
             {
-                yield return BattleExecution.Wait(BattleExecution.Run(ExecuteEnemyTurnAsync));
+                yield return ExecuteEnemyTurn();
             }
 
             // 3. 推进到下一阶段
@@ -1038,7 +1063,7 @@ public partial class BattleManager : MonoBehaviour
     }
 
     /// <summary>敌方行动阶段：逐轮固定分配名单，整轮执行完才进行下一轮分配。</summary>
-    private async Task ExecuteEnemyTurnAsync()
+    private IEnumerator ExecuteEnemyTurn()
     {
         foreach (var enemy in _enemies)
             if (enemy != null) enemy.BeginEnemyTurn();
@@ -1048,16 +1073,18 @@ public partial class BattleManager : MonoBehaviour
         try
         {
             LogManager.Log(LogCategory.Enemy, $"敌方本回合可分配行动次数={pool.RemainingActions}");
-            while (!IsBattleOver && pool.TryTakeNext(out var actor))
+            while (IsBattleRunning && !IsBattleOver && pool.TryTakeNext(out var actor))
             {
                 LogManager.Log(LogCategory.Enemy,
                     $"敌方行动分配：{actor.EnemyID} 位置={actor.Entity.SlotPosition}，剩余次数={pool.RemainingActions}");
-                await actor.TakeEnemyActionAsync(pool.LastSelectionIsLastGuaranteedAction);
+                var action = BattleExecution.Run(() => actor.TakeEnemyActionAsync(pool.LastSelectionIsLastGuaranteedAction));
+                yield return BattleExecution.Wait(action);
+                if (action.IsCanceled) yield break;
             }
         }
         finally
         {
-            _enemyTurnActionPool = null;
+            if (ReferenceEquals(_enemyTurnActionPool, pool)) _enemyTurnActionPool = null;
         }
     }
 

@@ -50,7 +50,7 @@ public sealed class BattleUiCombatHudSource : MonoBehaviour, IBattleUiHealthSour
         if (switcher != null && switcher.isActiveAndEnabled && switcher.IsSwitching)
             return battle.CanSwitchActiveAllyTo(switcher.SelectedSlot)
                 ? battle.GetSwitchAPCost(switcher.SelectedSlot) : 0;
-        if (input == null || !input.IsSelecting || input.PendingSkill < 0) return null;
+        if (input == null || !input.IsSelectionVisible || input.PendingSkill < 0) return null;
         var caster = input.PendingAlly != null ? input.PendingAlly : battle.GetActiveAlly();
         // 多处目标仍属于同一次未提交施放，费用预览要一直保留到最终确认。
         if (caster == null || battle.IsResolving) return null;

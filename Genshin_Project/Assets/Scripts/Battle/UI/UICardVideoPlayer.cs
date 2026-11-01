@@ -9,6 +9,17 @@ public sealed class UICardVideoPlayer : MonoBehaviour
 {
     public static string VideoPathForCharacter(int characterId) => CharacterAssetPath(characterId, "idle_60fps.mp4");
     public static string PosterPathForCharacter(int characterId) => CharacterAssetPath(characterId, "poster.png");
+    public static string EnemyFolder(int enemyId, int variant = 1)
+    {
+        if (enemyId <= 0) throw new System.ArgumentOutOfRangeException(nameof(enemyId));
+        if (variant <= 0) throw new System.ArgumentOutOfRangeException(nameof(variant));
+        string id = enemyId.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return variant == 1 ? id : id + "_" + variant.ToString("D2", System.Globalization.CultureInfo.InvariantCulture);
+    }
+    public static string VideoPathForEnemy(int enemyId, int variant = 1) =>
+        "art_assets/Enemy_Animated/" + EnemyFolder(enemyId, variant) + "/idle_60fps.mp4";
+    public static string PosterPathForEnemy(int enemyId, int variant = 1) =>
+        "art_assets/Enemy_Animated/" + EnemyFolder(enemyId, variant) + "/poster.png";
     private static string CharacterAssetPath(int characterId, string file)
     {
         if (characterId <= 0) throw new System.ArgumentOutOfRangeException(nameof(characterId));

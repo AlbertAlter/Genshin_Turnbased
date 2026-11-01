@@ -26,7 +26,7 @@ public sealed class BattlePresentationPlayback
         public double Elapsed;
         public double TimeShift;
         public int Block = -1;
-        public int Next, Waiting;
+        public int Next, Waiting, Tails;
         public bool Closed;
     }
     private readonly Queue<Job> jobs = new Queue<Job>();
@@ -89,14 +89,16 @@ public sealed class BattlePresentationPlayback
                     }
                     if (cue.Time + job.TimeShift > job.Elapsed) break;
                     job.Next++;
-                    job.Waiting++;
+                    // The banner runs over hits/voice. Only the next action waits for it to finish.
+                    bool tail = cue.Result.Data.Kind == BattleEventKind.ActionPrompt;
+                    if (tail) job.Tails++; else job.Waiting++;
                     bool signalled = false;
                     void Completed(Exception error)
                     {
                         CheckThread();
                         if (signalled || job.Closed) return;
                         signalled = true;
-                        job.Waiting--;
+                        if (tail) job.Tails--; else job.Waiting--;
                         if (error != null) Close(job, error, false);
                         else if (!pumping) Advance(0);
                     }
@@ -105,7 +107,7 @@ public sealed class BattlePresentationPlayback
                 }
                 if (job.Closed) continue;
                 if (job.CancelRequested) { Close(job, null, true); continue; }
-                if (job.Next == job.Cues.Count && job.Waiting == 0) { Close(job, null, false); continue; }
+                if (job.Next == job.Cues.Count && job.Waiting == 0 && job.Tails == 0) { Close(job, null, false); continue; }
                 break;
             }
         }

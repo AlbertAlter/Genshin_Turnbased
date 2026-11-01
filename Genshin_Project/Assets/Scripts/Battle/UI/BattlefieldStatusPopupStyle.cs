@@ -10,7 +10,7 @@ public sealed class BattlefieldStatusPopupStyle : BattlefieldPopupStyle
     public float CardGapHeightRatio, StackGapHeightRatio;
 
     public static BattlefieldStatusPopupStyle Load()
-        => ReadFile(Path.Combine(UnityEngine.Application.streamingAssetsPath, "Data", "UI", FileName));
+        => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
 
     public static BattlefieldStatusPopupStyle ReadFile(string path)
         => Parse(BattlefieldDamagePopupStyle.ReadParameters(path));

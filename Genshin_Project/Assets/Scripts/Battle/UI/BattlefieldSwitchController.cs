@@ -11,7 +11,9 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
 {
     private BattleInputController _input;
     private Button _button;
+    private Image _switchIcon;
     private Image _disabledOverlay;
+    private float _disabledProgress, _fadeIn, _fadeOut;
     private bool _switching;
     private bool _forcedDeathSwitch;
     private bool _restoreInputInLateUpdate;
@@ -24,6 +26,9 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
 
     private void Start()
     {
+        var parameters = BattlefieldAnimationParameters.Load();
+        _fadeIn = parameters.Get("ActionIndicator.FadeInDuration", .12f);
+        _fadeOut = parameters.Get("ActionIndicator.FadeOutDuration", .1f);
         CacheControls();
     }
 
@@ -73,6 +78,10 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     {
         if (_switching) CloseSwitch();
         RestoreInputImmediately();
+        if (_button != null) _button.interactable = false;
+        _disabledProgress = 0;
+        if (_disabledOverlay != null) _disabledOverlay.enabled = false;
+        if (_switchIcon != null) _switchIcon.canvasRenderer.SetAlpha(1f);
     }
 
     /// <summary>UI/F：进入换人；已经在换人时等同确认。</summary>
@@ -123,16 +132,25 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     /// <summary>UI/X/Esc：取消普通换人；阵亡强制换人不可取消。</summary>
     public void UICancelSwitch()
     {
-        if (!_switching || _forcedDeathSwitch ||
-            (BattleManager.Instance != null && BattleManager.Instance.IsFreeDeathSwitchPending))
+        if (!_switching) return;
+        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeDeathSwitchPending))
+        {
+            LogManager.Log(LogCategory.UI, "出战角色已阵亡，必须确认换人");
             return;
+        }
+        LogManager.Log(LogCategory.UI, "取消换人");
         CloseSwitch();
     }
 
     private bool BeginSwitch(bool forcedDeathSwitch)
     {
         BattleManager battle = BattleManager.Instance;
-        if (battle == null || !battle.CanSwitchActiveAlly()) return false;
+        if (!isActiveAndEnabled || battle == null || !battle.CanSwitchActiveAlly())
+        {
+            if (!forcedDeathSwitch)
+                LogManager.Log(LogCategory.UI, $"当前不能换人，阶段={battle?.CurrentPhase}，结算中={BattleExecution.IsBusy}，AP={battle?.APManager?.CurrentAP}");
+            return false;
+        }
 
         if (_restoreInputInLateUpdate) RestoreInputImmediately();
         CacheInput();
@@ -187,6 +205,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         PsdUiBinding icon = FindObjectsOfType<PsdUiBinding>(true)
             .FirstOrDefault(binding => binding.bindingKey == "SwitchIcon");
         if (icon == null || icon.transform.parent == null) return;
+        _switchIcon = icon.GetComponent<Image>() ?? icon.GetComponentInChildren<Image>(true);
 
         GameObject hitArea = icon.transform.parent.gameObject;
         Image hitGraphic = hitArea.GetComponent<Image>() ?? hitArea.AddComponent<Image>();
@@ -206,8 +225,19 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     private void RefreshButton(BattleManager battle)
     {
         if (_button == null) return;
+        bool acceptingInput = battle != null && battle.IsAwaitingAllyInput && !BattleExecution.IsBusy;
         bool usable = _switching || (battle != null && battle.CanSwitchActiveAlly());
         _button.interactable = usable;
-        if (_disabledOverlay != null) _disabledOverlay.enabled = !usable;
+        if (_disabledOverlay == null) return;
+        bool showDisabled = acceptingInput && !usable && _disabledOverlay.sprite != null;
+        float target = showDisabled ? 1f : 0f;
+        float duration = showDisabled ? _fadeIn : _fadeOut;
+        _disabledProgress = !acceptingInput ? 0f : duration <= 0 ? target
+            : Mathf.MoveTowards(_disabledProgress, target, Time.unscaledDeltaTime / duration);
+        // Fade through transparent so the arrows and prohibition mark never share a visible frame.
+        float disabledAlpha = Mathf.Clamp01(2f * _disabledProgress - 1f);
+        _disabledOverlay.enabled = disabledAlpha > 0 && _disabledOverlay.sprite != null;
+        _disabledOverlay.canvasRenderer.SetAlpha(disabledAlpha);
+        if (_switchIcon != null) _switchIcon.canvasRenderer.SetAlpha(Mathf.Clamp01(1f - 2f * _disabledProgress));
     }
 }

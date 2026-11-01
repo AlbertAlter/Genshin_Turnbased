@@ -10,16 +10,20 @@ public sealed class BattlePresentationTiming
     public int YRandomMode { get; }
     public float MediumRandomScale { get; }
     public BattleHitTemplate HitTemplate { get; }
+    public double AnimationSeconds { get; }
     public BattlePresentationTiming(double interval = 0, double jitter = 0, int x = 2, int y = 2, float mediumScale = .5f,
-        BattleHitTemplate hitTemplate = null)
+        BattleHitTemplate hitTemplate = null, double animationSeconds = 0)
     {
         if (double.IsNaN(interval) || double.IsInfinity(interval) || interval < 0 ||
             double.IsNaN(jitter) || double.IsInfinity(jitter) || jitter < 0 || x < 0 || x > 2 || y < 0 || y > 2 ||
             float.IsNaN(mediumScale) || mediumScale < 0 || mediumScale > 1)
             throw new ArgumentOutOfRangeException(nameof(interval));
+        if (double.IsNaN(animationSeconds) || double.IsInfinity(animationSeconds) || animationSeconds < 0)
+            throw new ArgumentOutOfRangeException(nameof(animationSeconds));
         HitIntervalSeconds = interval; JitterSeconds = jitter; XRandomMode = x; YRandomMode = y;
         MediumRandomScale = mediumScale;
         HitTemplate = hitTemplate;
+        AnimationSeconds = animationSeconds;
     }
 }
 
@@ -33,7 +37,7 @@ public sealed class BattlePresentationCue
     public BattlePresentationResult Result { get; }
     public double Time { get; internal set; }
     public BattlePresentationTiming Timing { get; }
-    public int Block { get; }
+    public int Block { get; internal set; }
     // Visual grouping only: resolved targets of one logical hit, without changing cue order/times.
     public IReadOnlyList<BattlePresentationResult> HitResults { get; internal set; }
     public bool LeadsHit { get; internal set; }
@@ -76,6 +80,7 @@ public static class BattlePresentationTimeline
         if (sequence == null || !sequence.IsSealed) throw new InvalidOperationException("仅播放已关闭的正式结果序列。");
         var cues = new List<BattlePresentationCue>();
         var times = new Dictionary<(long, long), double>();
+        var earliestCastEnd = new Dictionary<(long, long), double>();
         var seen = new HashSet<(long, long)>();
         double cursor = 0;
         int block = 0;
@@ -121,6 +126,11 @@ public static class BattlePresentationTimeline
         void Add(BattlePresentationResult result, double time, BattlePresentationTiming timing)
         {
             time = CauseFloor(result, time);
+            var cast = (result.Header.SessionId, result.Header.ActionExecutionId);
+            if (cast.Item2 != 0 && result.Data.Kind == BattleEventKind.ActionStarted && timing.AnimationSeconds > 0)
+                earliestCastEnd[cast] = time + timing.AnimationSeconds;
+            if (result.Data.Kind == BattleEventKind.ActionCompleted && earliestCastEnd.TryGetValue(cast, out double end))
+                time = Math.Max(time, end);
             cues.Add(new BattlePresentationCue(result, time, timing, block));
             times[(result.Header.SessionId, result.Header.EventId)] = time;
             cursor = Math.Max(cursor, time);
@@ -182,6 +192,8 @@ public static class BattlePresentationTimeline
             cue.Time = CauseFloor(cue.Result, cue.Time);
             times[(cue.Result.Header.SessionId, cue.Result.Header.EventId)] = cue.Time;
         }
+        BatchEffectTargets(cues);
+        AlignActionPrompts(cues);
         cues.Sort((left, right) => left.Block != right.Block ? left.Block.CompareTo(right.Block)
             : left.Time != right.Time ? left.Time.CompareTo(right.Time) : left.Result.Order.CompareTo(right.Result.Order));
         AttachHitGroups(cues);
@@ -209,6 +221,52 @@ public static class BattlePresentationTimeline
         cues.Sort((a, b) => a.Block != b.Block ? a.Block.CompareTo(b.Block) : a.Time != b.Time ? a.Time.CompareTo(b.Time)
             : a.IsAnticipation != b.IsAnticipation ? (a.IsAnticipation ? -1 : 1) : a.Result.Order.CompareTo(b.Result.Order));
         return cues.AsReadOnly();
+    }
+
+    private static bool CanShareEffect(BattlePresentationResult result)
+        => result.Data.Kind == BattleEventKind.StatusAdded || result.Data.Kind == BattleEventKind.StatusRemoved
+            || result.Data is HealEventData || result.Data is HPChangedEventData || result.Data is ResourceEventData;
+
+    private static void BatchEffectTargets(List<BattlePresentationCue> cues)
+    {
+        BattlePresentationCue previous = null;
+        var events = new HashSet<long>();
+        foreach (var cue in cues)
+        {
+            var current = cue.Result;
+            var a = previous?.Result;
+            bool same = a != null && CanShareEffect(a) && CanShareEffect(current) && cue.Time == previous.Time
+                && current.Header.SessionId == a.Header.SessionId
+                && current.Header.ActionExecutionId == a.Header.ActionExecutionId
+                && current.Header.EffectExecutionId == a.Header.EffectExecutionId
+                && current.Header.HitId == a.Header.HitId && current.RequestID == a.RequestID
+                && current.EffectID == a.EffectID
+                && (current.Header.EffectExecutionId != 0 || current.RequestID != 0);
+            // A dependent child result starts a later block even inside the same effect.
+            if (same)
+                foreach (long cause in current.Header.CauseEventIds)
+                    if (events.Contains(cause)) { same = false; break; }
+            if (same) cue.Block = previous.Block;
+            else events.Clear();
+            events.Add(current.Header.EventId);
+            previous = cue;
+        }
+    }
+
+    private static void AlignActionPrompts(List<BattlePresentationCue> cues)
+    {
+        var starts = new Dictionary<(long, long), BattlePresentationCue>();
+        foreach (var cue in cues)
+        {
+            var key = (cue.Result.Header.SessionId, cue.Result.Header.ActionExecutionId);
+            if (key.Item2 == 0) continue;
+            if (cue.Result.Data.Kind == BattleEventKind.ActionStarted) starts[key] = cue;
+            else if (cue.Result.Data is BattleActionPromptData prompt && !prompt.IsStatus && starts.TryGetValue(key, out var start))
+            {
+                cue.Time = start.Time;
+                cue.Block = start.Block;
+            }
+        }
     }
 
     private static void AttachHitGroups(List<BattlePresentationCue> cues)

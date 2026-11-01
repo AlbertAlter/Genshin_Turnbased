@@ -19,7 +19,7 @@ public sealed class HitShakeStyle
     private readonly Dictionary<string, Profile> profiles = new Dictionary<string, Profile>(StringComparer.Ordinal);
     private readonly Dictionary<(string, int), Rule> rules = new Dictionary<(string, int), Rule>();
     public Profile Get(string id) => id == "None" ? null : profiles[id];
-    public static HitShakeStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static HitShakeStyle Load() => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
 
     public Selection Resolve(string damageType, string effectID, int hitIndex)
     {

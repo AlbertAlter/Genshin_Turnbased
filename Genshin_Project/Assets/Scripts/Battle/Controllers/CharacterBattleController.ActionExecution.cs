@@ -262,6 +262,7 @@ public partial class CharacterBattleController
                     out var effects, out var forcedPositions, plan)) return;
 
             using var skillExecution = BattleSpecialRules.BeginSkillExecution(Entity, sk);
+            if (isPlayerInitiated) BattleExecution.RecordSkillPrompt(Entity, sk.SkillName, sk.SkillID2);
             await BattleExecution.Flush();
             if (plan != null)
             {

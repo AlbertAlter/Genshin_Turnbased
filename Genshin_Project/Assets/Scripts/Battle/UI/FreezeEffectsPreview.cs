@@ -98,6 +98,8 @@ public sealed class FreezeEffectsPreview : MonoBehaviour, IBattleUiFreezeSource,
         GUILayout.BeginHorizontal();
         showShield = GUILayout.Toggle(showShield, showShield ? "护盾：开" : "护盾：关", button, GUILayout.Width(160));
         shieldElement = GUILayout.Toolbar(shieldElement, ShieldLabels, button, GUILayout.Width(700));
+        if (showShield && GUILayout.Button("重播填充扫光", button, GUILayout.Width(210)))
+            shields.PlaySweep(shieldCard.side, shieldCard.slot, true);
         GUILayout.EndHorizontal();
         if (shields != null && shields.Error != null) GUILayout.Label(shields.Error, label);
         GUILayout.EndArea();

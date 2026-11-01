@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// <summary>Shared static art crossfade only. Hit shake and enemy/state rules belong to their own modules.</summary>
+/// <summary>Shared art crossfade. Enemy video freezes on its current frame, then resumes the target form after commit.</summary>
 [DisallowMultipleComponent]
 public sealed class UICardVariantSwitcher : MonoBehaviour
 {
@@ -40,11 +40,12 @@ public sealed class UICardVariantSwitcher : MonoBehaviour
             style.Duration <= 0 || float.IsNaN(style.Duration) || float.IsInfinity(style.Duration))
         { Error = "渐变需要已预加载的差分与有效参数。"; return false; }
         if (Pending) { Error = "正在切换，请等待完成或先取消。"; return false; }
-        if (!card.MediaResolved || (card.Video != null && card.Video.enabled))
-        { Error = "静态差分渐变需要先停止动态卡面并选择静态差分。"; return false; }
+        if (!card.MediaResolved || (card.Video != null && card.Video.enabled && !card.Video.Ready && card.Video.Error == null))
+        { Error = "卡面媒体仍在准备，请等待首帧后切换差分。"; return false; }
         var shader = Resources.Load<Shader>("UI/CardVariantCrossfade");
         if (shader == null) { Error = "缺少 UI/CardVariantCrossfade Shader。"; return false; }
         Cancel(); Error = null;
+        card.SetAnimationFrozen(this, true);
         surface = card.Appearance.Surface; previousMaterial = surface.material;
         fadeSource = surface.texture;
         fadeTarget = factory.GetVariantTexture(card, variant);
@@ -91,6 +92,7 @@ public sealed class UICardVariantSwitcher : MonoBehaviour
         if (surface != null && surface.material == fadeMaterial) surface.material = previousMaterial;
         if (fadeMaterial != null) Destroy(fadeMaterial);
         fadeMaterial = previousMaterial = null; surface = null; fadeTarget = fadeSource = null;
+        if (card != null) card.SetAnimationFrozen(this, false);
     }
     public void Cancel()
     {

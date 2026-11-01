@@ -59,7 +59,8 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
             foreach (var shadow in outerShadows)
                 if (Array.IndexOf(activeLayers, shadow) >= 0) throw new ArgumentException("External shadows cannot also be body layers.");
             liveCapture = UICardDissolveSnapshot.BeginCapture(cardRoot, activeLayers, settings.CaptureHeightPixels,
-                framedView != null ? framedView.SnapshotClip : null, framedView != null ? framedView.SnapshotClippedLayers : null);
+                framedView != null ? framedView.SnapshotClip : null, framedView != null ? framedView.SnapshotClippedLayers : null,
+                includeRendererBrightness: framedView == null);
             snapshot = liveCapture.Texture;
             if (!keepSourceAnimated) { liveCapture.Detach(); liveCapture.Dispose(); liveCapture = null; }
             originalEnabled = new bool[activeLayers.Length];
