@@ -13,7 +13,7 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "WeaponAttributes.xlsx");
         if (!File.Exists(path)) { Debug.LogWarning("WeaponAttributes.xlsx not found"); return; }
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
 
         var attributes = pkg.Workbook.Worksheets["Attributes"];
         if (attributes != null)
@@ -94,11 +94,12 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "StatusData_Weapon.xlsx");
         if (!File.Exists(path)) { Debug.LogWarning("StatusData_Weapon.xlsx not found"); return; }
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
 
         var main = pkg.Workbook.Worksheets["StatusWeapon_Main"];
         if (main != null)
         {
+            int iconColumn = ExcelTableHeaders.For(main).Optional("Icon");
             for (int row = GetDataStartRow(main); row <= GetSheetMaxRow(main); row++)
             {
                 int id = SafeGetInt(main.Cells[row, FindColumnByHeader(main, "StatusID")].Value);
@@ -110,6 +111,7 @@ public partial class DataManager
                 {
                     StatusID = id, StatusID2 = id2,
                     StatusName = main.Cells[row, FindColumnByHeader(main, "StatusName")].Text, StatusType = main.Cells[row, FindColumnByHeader(main, "StatusType")].Text,
+                    Icon = iconColumn > 0 ? main.Cells[row, iconColumn].Text.Trim() : string.Empty,
                     Display = SafeGetInt(main.Cells[row, FindColumnByHeader(main, "Display")].Value), Description = main.Cells[row, FindColumnByHeader(main, "Description")].Text,
                     MultiplierPart = StatusMultiplierParts.Parse(main.Cells[row, FindColumnByHeader(main, "MultiplierPart")].Text,
                         $"{path}/{main.Name} 第{row}行 ({id2})"), ApplyDamageType = main.Cells[row, FindColumnByHeader(main, "ApplyDamageType")].Text,
@@ -132,6 +134,7 @@ public partial class DataManager
                 if (StatusEffectDict.ContainsKey(id2))
                     throw new InvalidDataException($"[StatusWeapon_Effect] row {row}: duplicate runtime key {id2}");
                 string effectType = effects.Cells[row, FindColumnByHeader(effects, "EffectType")].Text;
+                TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateEffectType(effects.Name, row, effectType));
                 TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateDamageProperties("StatusWeapon_Effect", row,
                     effectType, effects.Cells[row, FindColumnByHeader(effects, "Element")].Text,
                     effects.Cells[row, FindColumnByHeader(effects, "Param1")].Text,
@@ -181,9 +184,6 @@ public partial class DataManager
                         SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "AddInPhase")].Value),
                         SafeGetInt(effects.Cells[row, FindColumnByHeader(effects, "TriggerPhase")].Value)));
                 }
-                if (effectType == "ResetCooldown")
-                    TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateResetCooldown(
-                        "StatusWeapon_Effect", row, effects.Cells[row, FindColumnByHeader(effects, "Param1")].Text));
                 if (effectType == "Cooldown")
                     TryValidate("StatusWeapon_Effect", () => TableValidator.ValidateCooldown(
                         "StatusWeapon_Effect", row,
@@ -257,7 +257,7 @@ public partial class DataManager
     public static string WeaponStatusKey(int statusID) => $"ST_Weapon_{statusID}";
     public static string WeaponEffectKey(int effectID) => $"STE_Weapon_{effectID}";
 
-    static string NormalizeWeaponEffectParam(string effectType, string value)
+    public static string NormalizeWeaponEffectParam(string effectType, string value)
     {
         if (effectType != "ApplyStatus" && effectType != "BindStatus" && effectType != "RemoveStatus") return value;
         value = CountStatusSystem.ResolvePublicStatusReference(value);

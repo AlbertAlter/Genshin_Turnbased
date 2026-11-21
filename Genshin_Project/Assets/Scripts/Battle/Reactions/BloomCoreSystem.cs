@@ -101,7 +101,7 @@ public static class BloomCoreSystem
 
     public static List<ReactionDerivedHit> Detonate(BloomCoreInstance core)
     {
-        using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        using var resolutionEffect = ReactionEffectExecutor.BeginDamageEffect();
         List<ReactionDerivedHit> hits = RemoveCoreAndBuildHits(core);
         var result = new ReactionResult();
         result.DerivedHits.AddRange(hits);

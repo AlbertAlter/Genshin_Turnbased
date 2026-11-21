@@ -2,19 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 
 public static class CharacterVoiceSync
 {
-    [MenuItem("Tools/Audio/同步角色战斗语音")]
-    public static void Sync()
-    {
-        string root = Path.GetFullPath(Path.Combine(Application.dataPath, "../.."));
-        Debug.Log(Publish(root, Application.streamingAssetsPath));
-        AssetDatabase.Refresh();
-    }
-
     public static string Publish(string root, string streaming)
     {
         string sourceTable = Path.Combine(root, "Charts", CharacterVoiceTable.FileName);

@@ -97,8 +97,34 @@ MonoBehaviour:
   previewShieldReveal: 1
   loopShieldAppearance: 1
   animatedFaces: 1
+  sharedCanvas: {fileID: 9101000003}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1001}
+  - {fileID: 9101000001}
+--- !u!1001 &9101000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+--- !u!114 &9101000003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 104, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+  m_PrefabInstance: {fileID: 9101000001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d26d9ecc3dc4d60804b7e2eae1bda64, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:

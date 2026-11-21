@@ -154,6 +154,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
 
         if (_restoreInputInLateUpdate) RestoreInputImmediately();
         CacheInput();
+        if (!forcedDeathSwitch && _input != null && _input.IsUiInputBlocked) return false;
         _inputWasEnabled = _input != null && _input.enabled;
         if (_input != null) _input.enabled = false;
         _restoreInputInLateUpdate = false;

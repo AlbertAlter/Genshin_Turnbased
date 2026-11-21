@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public sealed class CharacterVideoPreview : MonoBehaviour
 {
     public Font controlsFont;
+    [SerializeField] private ProjectUiCanvas sharedCanvas;
     public int characterId = 1009;
     private static readonly string[] Elements = { "None", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro" };
     private static readonly string[] ElementNames = { "无", "火", "水", "雷", "冰", "风", "岩", "草" };
     private UICardFactory cardFactory;
     private readonly List<UICardView> requestedCards = new List<UICardView>();
     private Canvas previewCanvas;
+    private static readonly Vector2 DesignSize = new Vector2(1440f, 900f);
     private Camera previewCamera;
     private readonly List<RawImage> surfaces = new List<RawImage>();
     private readonly List<UICardVideoPlayer> players = new List<UICardVideoPlayer>();
@@ -31,6 +33,7 @@ public sealed class CharacterVideoPreview : MonoBehaviour
     {
         started = true;
         error = null;
+        if (sharedCanvas == null) { Fail("动态卡面预览缺少公共画布。"); yield break; }
         if (characterId <= 0) { Fail("动态卡面预览需要有效角色编号。"); yield break; }
         cardFactory = GetComponent<UICardFactory>() ?? gameObject.AddComponent<UICardFactory>();
         yield return Build();
@@ -46,11 +49,8 @@ public sealed class CharacterVideoPreview : MonoBehaviour
         previewCamera = camera;
         camera.transform.SetParent(transform, false); camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = new Color(.13f, .15f, .15f); camera.cullingMask = 0;
-        var canvas = new GameObject("VideoPreviewCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler)).GetComponent<Canvas>();
-        previewCanvas = canvas;
-        canvas.transform.SetParent(transform, false); canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvas.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1440, 900); scaler.matchWidthOrHeight = .5f;
+        sharedCanvas.SetDesignSize(DesignSize);
+        var canvas = previewCanvas = sharedCanvas.CreateContentCanvas("VideoPreviewCanvas");
         var cards = Rect("Cards", canvas.transform, Vector2.zero, Vector2.zero);
         cardsGroup = cards.gameObject.AddComponent<CanvasGroup>();
         layout = gameObject.AddComponent<BattleUiLayout>(); layout.canvas = canvas;
@@ -123,7 +123,7 @@ public sealed class CharacterVideoPreview : MonoBehaviour
     private void OnGUI()
     {
         var matrix = GUI.matrix; var font = GUI.skin.font; bool wasEnabled = GUI.enabled;
-        GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1440f, Screen.height / 900f, 1));
+        GUI.matrix = ProjectUiCanvas.GetGuiMatrix(previewCanvas, DesignSize);
         if (controlsFont != null) GUI.skin.font = controlsFont;
         var label = new GUIStyle(GUI.skin.label) { fontSize = 19 };
         var button = new GUIStyle(GUI.skin.button) { fontSize = 18 };
@@ -220,5 +220,6 @@ public sealed class CharacterVideoPreview : MonoBehaviour
     {
         foreach (var player in players) if (player != null) player.Unload();
         foreach (var view in cardViews) if (view != null) view.Clear();
+        if (previewCanvas != null) Destroy(previewCanvas.gameObject);
     }
 }

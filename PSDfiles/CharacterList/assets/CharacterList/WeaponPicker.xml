@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <controller name="selection" pages="0,1,1,2,2,3,3,4,4,5" selected="0" />
+  <displayList>
+    <image id="n1_c0013" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c0013" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="更换武器" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c0013" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择要装备的武器" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c0013" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c0013" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c0013" name="inventoryPanel" xy="31,128" size="449,306" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c0013" name="selectionPanel" xy="494,128" size="410,306" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <component id="n8_c0013" name="item0" xy="45,140" size="421,44" src="c0014" fileName="WeaponInventoryRow.xml">
+      <Button title="鸦羽弓" controller="selection" page="0" checked="true" />
+    </component>
+    <loader id="n9_c0013" name="itemIcon0" xy="56,145" size="34,34" url="ui://chrlist1i002b" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n10_c0013" name="item1" xy="45,195" size="421,44" src="c0014" fileName="WeaponInventoryRow.xml">
+      <Button title="甲级宝珏" controller="selection" page="1" checked="false" />
+    </component>
+    <loader id="n11_c0013" name="itemIcon1" xy="56,200" size="34,34" url="ui://chrlist1i0032" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n12_c0013" name="item2" xy="45,250" size="421,44" src="c0014" fileName="WeaponInventoryRow.xml">
+      <Button title="西福斯的月光" controller="selection" page="2" checked="false" />
+    </component>
+    <loader id="n13_c0013" name="itemIcon2" xy="56,255" size="34,34" url="ui://chrlist1i0256" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n14_c0013" name="item3" xy="45,305" size="421,44" src="c0014" fileName="WeaponInventoryRow.xml">
+      <Button title="风花之颂" controller="selection" page="3" checked="false" />
+    </component>
+    <loader id="n15_c0013" name="itemIcon3" xy="56,310" size="34,34" url="ui://chrlist1i0257" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n16_c0013" name="item4" xy="45,360" size="421,44" src="c0014" fileName="WeaponInventoryRow.xml">
+      <Button title="试作星镰" controller="selection" page="4" checked="false" />
+    </component>
+    <loader id="n17_c0013" name="itemIcon4" xy="56,365" size="34,34" url="ui://chrlist1i0258" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <loader id="n18_c0013" name="selectedIcon" xy="512,144" size="79,79" url="ui://chrlist1i002b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearIcon controller="selection" pages="0,1,2,3,4" values="ui://chrlist1i002b|ui://chrlist1i0032|ui://chrlist1i0256|ui://chrlist1i0257|ui://chrlist1i0258" />
+    </loader>
+    <text id="n19_c0013" name="selectedName" xy="606,148" size="272,43" font="Microsoft YaHei" fontSize="24" color="#342B24" text="鸦羽弓" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="selection" pages="0,1,2,3,4" values="鸦羽弓|甲级宝珏|西福斯的月光|风花之颂|试作星镰" />
+    </text>
+    <richtext id="n20_c0013" name="selectedDetails" xy="514,248" size="371,150" font="Microsoft YaHei" fontSize="18" color="#342B24" text="对处于[color=#08E4FF]水元素[/color]或[color=#FFA971]火元素[/color]影响下的敌人，造成的伤害提高12%。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearText controller="selection" pages="0,1,2,3,4" values="对处于[color=#08E4FF]水元素[/color]或[color=#FFA971]火元素[/color]影响下的敌人，造成的伤害提高12%。|击败敌人后，攻击力提升12%，持续4回合。|每3回合，产生如下效果：装备者的每点元素精通，都会为该角色提升0.036%元素充能效率，并基于该提升的30%为队伍中附近的其他角色提升元素充能效率，持续3回合。多件同名武器产生的此效果可以叠加。角色处于队伍后台时也能触发效果。|施放元素战技时，获得风之花的悠古愿望加持，攻击力提升16%，持续2回合。|施放元素战技后，普通攻击和重击造成的伤害提高8%。该效果持续3回合，最多叠加2层。" />
+    </richtext>
+    <text id="n21_c0013" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="更换后，原装备将返回背包。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

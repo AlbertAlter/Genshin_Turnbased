@@ -33,6 +33,8 @@ public static class DamageQueryContext
     public static IDisposable Enter(string effectID, string damageType, string skillID = "")
         => new Frame(effectID, damageType, skillID);
 
+    internal static string CurrentSkillID => Current.Value?.SkillID;
+
     public static string ResolveType(string effectID)
     {
         var frame = Current.Value;

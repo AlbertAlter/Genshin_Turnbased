@@ -27,6 +27,7 @@ public static class RoguelikeItemIds
 public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
 {
     public const string WorkbookName = "Items.xlsx";
+    internal const string ArtifactReliquaryCategory = "ArtifactReliquary";
     private readonly Dictionary<string, RoguelikeItemDefinition> definitions =
         new Dictionary<string, RoguelikeItemDefinition>(StringComparer.Ordinal);
     private readonly Dictionary<int, string> talentMaterials = new Dictionary<int, string>();
@@ -99,9 +100,13 @@ public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
             LoadSheet(package, "Constellation", RoguelikeItemType.Stack, "Constellation", result);
             LoadSheet(package, "Weapon", RoguelikeItemType.Weapon, "Weapon", result);
             LoadSheet(package, "Artifact", RoguelikeItemType.Artifact, "Artifact", result);
-            // 兼容原有只包含装备/命座的物品表；存在材料子表时严格读取并验证，不能忽略错误。
+            // 旧版物品表可以缺少这些子表；只要存在就按对应类别校验。
             if (package.Workbook.Worksheets["UpgradeMaterial"] != null)
                 LoadSheet(package, "UpgradeMaterial", RoguelikeItemType.Stack, null, result);
+            if (package.Workbook.Worksheets["WishItem"] != null)
+                LoadSheet(package, "WishItem", RoguelikeItemType.Stack, "WishItem", result);
+            if (package.Workbook.Worksheets["ExchangeCurrency"] != null)
+                LoadSheet(package, "ExchangeCurrency", RoguelikeItemType.Stack, "ExchangeCurrency", result);
         }
         return new RoguelikeItemCatalog(result);
     }
@@ -125,6 +130,9 @@ public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
             string location = WorkbookName + "/" + name + " 第 " + row + " 行：";
             int stack = Integer(headers, row, "Stackable", location);
             if (stack != 0 && stack != 1) throw new InvalidDataException(location + "Stackable 必须为 0 或 1。");
+            string icon = headers.Cell(row, "Icon").Text.Trim().Replace('\\', '/');
+            if (icon.Length != 0 && !icon.StartsWith("art_assets/", StringComparison.Ordinal))
+                icon = "art_assets/" + icon;
             var definition = new RoguelikeItemDefinition
             {
                 ItemId = headers.Cell(row, "ItemID").Text.Trim(),
@@ -136,15 +144,16 @@ public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
                 Stackable = stack == 1,
                 Rarity = Integer(headers, row, "Rarity", location),
                 Description = headers.Cell(row, "Description").Text,
-                Icon = headers.Cell(row, "Icon").Text.Trim(),
+                Icon = icon,
                 ExperienceValue = materialSheet ? Integer(headers, row, "ExperienceValue", location) : 0,
                 TalentMaterialType = materialSheet ? Integer(headers, row, "TalentMaterialType", location) : 0,
             };
             if (definition.ItemType != type || category != null && definition.Category != category ||
-                materialSheet && !IsExperienceCategory(definition.Category) && definition.Category != "TalentMaterial")
+                materialSheet && !IsExperienceCategory(definition.Category) && definition.Category != "TalentMaterial" &&
+                definition.Category != ArtifactReliquaryCategory)
                 throw new InvalidDataException(location + "ItemType / Category 与所在子表不符。");
-            definition.UsageType = materialSheet ? definition.Category :
-                category == "Constellation" ? "ActivateConstellation" : "Equipment";
+            definition.UsageType = category == "Constellation" ? "ActivateConstellation" :
+                type == RoguelikeItemType.Stack ? definition.Category : "Equipment";
             definition.UsageReference = materialSheet
                 ? definition.TalentMaterialType.ToString(CultureInfo.InvariantCulture)
                 : definition.ReferenceID.ToString(CultureInfo.InvariantCulture);
@@ -195,7 +204,8 @@ public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
         if (!item.ItemId.StartsWith("6", StringComparison.Ordinal)) throw new ArgumentException("ItemID 必须以 6 开头。");
         bool experience = IsExperienceCategory(item.Category);
         bool talent = item.Category == "TalentMaterial";
-        if (experience || talent)
+        bool reliquary = item.Category == ArtifactReliquaryCategory;
+        if (experience || talent || reliquary)
         {
             if (item.ItemType != RoguelikeItemType.Stack || !item.Stackable || item.ReferenceID != 0 ||
                 item.Slot != 0 || !item.ItemId.StartsWith("66", StringComparison.Ordinal))
@@ -204,6 +214,8 @@ public sealed class RoguelikeItemCatalog : IRoguelikeItemCatalog
                 throw new ArgumentException("经验材料必须有正经验值，TalentMaterialType 为 0。");
             if (talent && (item.ExperienceValue != 0 || item.TalentMaterialType < 1 || item.TalentMaterialType > 4))
                 throw new ArgumentException("天赋材料按 1～4 种类计件，ExperienceValue 必须为 0。");
+            if (reliquary && (item.Rarity < 3 || item.ExperienceValue != 0 || item.TalentMaterialType != 0))
+                throw new ArgumentException("圣物匣为 3～5 星，ExperienceValue 和 TalentMaterialType 必须为 0。");
         }
         else if (item.ExperienceValue != 0 || item.TalentMaterialType != 0)
             throw new ArgumentException("非养成材料不能配置经验或天赋材料种类。");

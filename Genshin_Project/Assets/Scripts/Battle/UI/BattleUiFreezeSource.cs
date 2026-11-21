@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>Formal battle adapter; thaw targets its bound entity and uses the shared input/modal gate.</summary>
-public sealed class BattleUiFreezeSource : MonoBehaviour, IBattleUiFreezeSource
+public sealed class BattleUiFreezeSource : MonoBehaviour, IBattleUiFreezeSource, IBattleUiControlReleaseSource
 {
     public BattleManager battle;
     public BattleInputController input;
@@ -15,6 +15,16 @@ public sealed class BattleUiFreezeSource : MonoBehaviour, IBattleUiFreezeSource
         return new BattleUiFreezeState { Instance = state, CanInteract = state != null &&
             Entity.Side == BattleSide.Ally && input != null && input.CanThawAlly(Entity) };
     }
+    public AllyControlState GetControl() => isActiveAndEnabled && battle != null
+        ? AllyControlRelease.GetOldest(Entity) : default;
+    public bool CanClickControl => isActiveAndEnabled && input != null && input.CanClickControlAlly(Entity);
+    public AllyControlClickResult ClickControl()
+    {
+        if (!CanClickControl) return AllyControlClickResult.Ignored;
+        input.UIClickControlAlly(Entity, out var result);
+        return result;
+    }
+
     public FrozenThawClickResult ClickThaw()
     {
         if (!GetFreeze().CanInteract) return FrozenThawClickResult.Ignored;

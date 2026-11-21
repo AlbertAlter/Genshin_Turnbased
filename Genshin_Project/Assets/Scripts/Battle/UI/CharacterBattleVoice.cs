@@ -26,7 +26,7 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
     protected override void OnEnable()
     {
         base.OnEnable();
-        try { table = CharacterVoiceTable.Read(Path.Combine(Application.streamingAssetsPath, "Data", CharacterVoiceTable.FileName)); }
+        try { table = CharacterVoiceTable.Load(); }
         catch (Exception e) { LogManager.LogError(LogCategory.Voice, "语音表加载失败：" + e.Message); }
         previousMouse = Input.mousePosition;
         idleTimer.Reset();

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="940,308" overflow="scroll" scroll="vertical" scrollBar="hidden" opaque="true">
+  <displayList>
+    <richtext id="n1_desc3" name="description" xy="0,0" size="940,40" font="Microsoft YaHei" fontSize="25" color="#F2E7D6" text="对三名相邻敌人造成三段[color=#FFA971]火元素伤害[/color]（47.7%攻击力 × 3），并留下持续1回合的[color=#FEFEFE]箭雨[/color]。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]箭雨[/color][/b]&#10;在原选定位置持续1回合。敌方回合结束时，对这些位置的敌人造成三段[color=#FFA971]火元素[/color]爆发伤害（47.7%攻击力 × 3）。" align="left" vAlign="top" autoSize="height" touchable="false" ubb="true" leading="9" />
+  </displayList>
+</component>

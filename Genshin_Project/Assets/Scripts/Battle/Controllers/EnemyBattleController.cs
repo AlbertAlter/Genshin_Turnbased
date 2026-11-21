@@ -32,8 +32,93 @@ public partial class EnemyBattleController : MonoBehaviour
     public BattleEntity Entity { get; private set; }
 
     public int EnemyID { get; private set; }
+    public bool HasWithdrawn { get => Entity?.HasWithdrawn == true; internal set { if (Entity != null) Entity.HasWithdrawn = value; } }
+    public EnemyMainData CurrentPhaseData
+    {
+        get
+        {
+            if (dm == null || !dm.EnemyMainDict.TryGetValue(EnemyID, out var initial)) return null;
+            return initial.Phase > 0 && dm.TryGetEnemyPhaseData(EnemyID, HealthPhases.Current, out var phase) ? phase : initial;
+        }
+    }
+
+    /// <summary>切换同一实体的生命阶段并重新初始化该阶段。</summary>
+    public bool EnterHealthPhase(int phase)
+    {
+        if (Entity == null || Entity.HasWithdrawn || (!Entity.IsAlive && !HasDepletedHealthPhase)
+            || phase <= HealthPhases.Current || dm == null
+            || !dm.TryGetEnemyPhaseData(EnemyID, phase, out var data)) return false;
+        using var responses = BattleResolutionContext.BeginCollection();
+        int oldActs = ActionContribution;
+        float before = Entity.CurrentHP;
+        using (StatusRemovalActions.SuppressForCleanup())
+        {
+            ClearPhaseStatuses();
+            HealthPhaseExited?.Invoke();
+        }
+        _skillCooldownLeft.Clear();
+        _skillUsedThisTurn.Clear();
+        Entity.TotalHP = dm.GetEnemyBaseHP(Entity.Level) * data.HP_coeff;
+        Entity.TotalATK = dm.GetEnemyBaseATK(data.ATK_Curve, Entity.Level) * data.ATK_coeff;
+        Entity.Threat = data.Threat;
+        Entity.PhysicalRes = data.PhysicalRes; Entity.PyroRes = data.PyroRes; Entity.HydroRes = data.HydroRes;
+        Entity.ElectroRes = data.ElectroRes; Entity.CryoRes = data.CryoRes; Entity.AnemoRes = data.AnemoRes;
+        Entity.DendroRes = data.DendroRes; Entity.GeoRes = data.GeoRes;
+        Entity.PhysicalDmgBonus = data.PhysicalDmgBonus; Entity.PyroDmgBonus = data.PyroDmgBonus;
+        Entity.HydroDmgBonus = data.HydroDmgBonus; Entity.ElectroDmgBonus = data.ElectroDmgBonus;
+        Entity.CryoDmgBonus = data.CryoDmgBonus; Entity.AnemoDmgBonus = data.AnemoDmgBonus;
+        Entity.DendroDmgBonus = data.DendroDmgBonus; Entity.GeoDmgBonus = data.GeoDmgBonus;
+        SetHealthPhase(phase, dm.GetEnemyPhaseCount(EnemyID));
+        _depletedHealthPhase = 0;
+        LoadDefaultPattern(phase);
+        Entity.CurrentHP = Entity.TotalHP;
+        ApplyHealthPhaseStatuses(data);
+        Entity.CurrentHP = Entity.GetFinalHP();
+        BattleEventHub.Publish(new HPChangedEventData(Entity, before, Entity.CurrentHP, "EnemyPhaseChanged"));
+        if (ActionContribution != oldActs) BattleManager.Instance?.TryGrantEnemyActions(ActionContribution - oldActs);
+        return true;
+    }
 
     public EnemyHealthPhases HealthPhases { get; private set; } = EnemyHealthPhases.Single;
+
+    private int _depletedHealthPhase;
+    private int _initializedHealthPhase;
+    private readonly HashSet<StatusInstance> _phaseStatuses = new HashSet<StatusInstance>();
+    internal bool HasDepletedHealthPhase => _depletedHealthPhase != 0;
+    internal event System.Action HealthPhaseExited;
+
+    internal bool TryDepleteHealthPhase()
+    {
+        int phase = HealthPhases.Current;
+        if (phase >= HealthPhases.Count || HasDepletedHealthPhase
+            || dm == null || !dm.TryGetEnemyPhaseData(EnemyID, phase + 1, out _)) return false;
+        _depletedHealthPhase = phase;
+        return true;
+    }
+
+    internal void FinishDepletedHealthPhase(int phase)
+    {
+        if (_depletedHealthPhase == phase && HealthPhases.Current == phase
+            && !BattleExecution.IsCancelled && !BattleExecution.GameplayEffectsStopped) EnterHealthPhase(phase + 1);
+    }
+
+    internal void TrackPhaseStatus(StatusInstance status)
+    {
+        if (HealthPhases.Count <= 1) return;
+        status.EnemyHealthPhase = HealthPhases.Current;
+        _phaseStatuses.Add(status);
+    }
+
+    internal void UntrackPhaseStatus(StatusInstance status) => _phaseStatuses.Remove(status);
+
+    private void ClearPhaseStatuses()
+    {
+        var statuses = new List<StatusInstance>(_phaseStatuses);
+        statuses.Sort((left, right) => left.ApplyOrder.CompareTo(right.ApplyOrder));
+        _phaseStatuses.Clear();
+        foreach (var status in statuses)
+            if (status.IsActive) StatusHostAccess.Remove(status.Host, status, "PhaseChanged");
+    }
 
     // 由敌人的阶段机制在初始化和切阶段时调用，阶段从 1 开始。
     public void SetHealthPhase(int currentPhase, int phaseCount)
@@ -44,23 +129,20 @@ public partial class EnemyBattleController : MonoBehaviour
     public const string AirborneStatusID = AirborneStatusHandler.EnemyStatusID;
 
     /// <summary>击飞由普通状态控制；状态失效/移除前禁止所有行动。</summary>
-    private bool CanActIgnoringPresence => Entity != null && Entity.IsAlive
+    private bool CanActIgnoringPresence => Entity != null && Entity.IsAlive && !HasWithdrawn
         && !BattleSpecialRules.BlocksEnemyAction(Entity) && !FrozenReactionHandler.IsFrozen(Entity);
     public bool CanAct => CanActIgnoringPresence && !Entity.IsOffField;
     public bool CanContributeActions => CanActIgnoringPresence; // 离场保留总池贡献，只取消分配资格。
     private bool _statusCalledSkill;
 
     /// <summary>提供给全队的次数，不是该敌人自己的行动配额。</summary>
-    public int ActionContribution => dm != null && dm.EnemyMainDict.TryGetValue(EnemyID, out var main)
-        ? Mathf.Max(0, main.ActsGiven) : 0;
+    public int ActionContribution => Mathf.Max(0, CurrentPhaseData?.ActsGiven ?? 0);
 
     // ========== AI 运行时状态 ==========
-    private int _currentPatternID = 0;
-    private List<EnemyAIRuleData> _currentRules = new List<EnemyAIRuleData>();
+    private readonly EnemySkillSelector _skillSelector = new EnemySkillSelector();
     private Dictionary<int, int> _skillCooldownLeft = new Dictionary<int, int>(); // 技能ID -> 剩余冷却回合
     private Dictionary<int, int> _skillUsedThisTurn = new Dictionary<int, int>(); // 技能ID -> 本回合已用次数
     private string _currentSkillID2 = string.Empty; // 当前执行技能ID2（伤害来源声明用，2026-08-19）
-    private readonly List<EnemyAIRuleData> _weightedCandidates = new List<EnemyAIRuleData>();
     private readonly List<int> _cooldownKeyBuffer = new List<int>();
 
     // ================================================================
@@ -103,7 +185,8 @@ public partial class EnemyBattleController : MonoBehaviour
             entity.TotalHP = baseHP * main.HP_coeff;
             entity.TotalATK = baseATK * main.ATK_coeff;
             entity.CurrentHP = entity.TotalHP;
-
+            int phaseCount = dm.GetEnemyPhaseCount(enemyID);
+            if (phaseCount > 0) SetHealthPhase(main.Phase, phaseCount);
 
             entity.Threat = main.Threat;
 
@@ -126,12 +209,7 @@ public partial class EnemyBattleController : MonoBehaviour
             entity.GeoDmgBonus = main.GeoDmgBonus;
             BattleAttributeInitialization.Prepare(entity);
 
-            // AI：加载第一个行为模式
-            if (dm.EnemyAIDict.TryGetValue(enemyID, out var aiList) && aiList.Count > 0)
-            {
-                _currentPatternID = aiList[0].PatternID;
-                LoadPatternRules(_currentPatternID);
-            }
+            LoadDefaultPattern(main.Phase);
 
             LogManager.Log(LogCategory.Enemy, $"{enemyID} lv{level} initialized: HP={entity.TotalHP} (cur {entity.CurrentHP}) ATK={entity.TotalATK}");
             if (BattleManager.Instance?.IsBattleRunning == true) ApplyInitiateStatuses();
@@ -170,17 +248,31 @@ public partial class EnemyBattleController : MonoBehaviour
     }
 
     public bool IsLastGuaranteedAction { get; private set; } = true;
-    public int CurrentPatternID => _currentPatternID;
+    public int CurrentPatternID => _skillSelector.CurrentPatternID;
+    private int CurrentConfigPhase => CurrentPhaseData?.Phase ?? 0;
+
+    private void LoadDefaultPattern(int phase)
+    {
+        var mode = dm.EnemyAIDict.TryGetValue(EnemyID, out var modes) ? modes.Find(p => p.Phase == phase) : null;
+        if (mode == null)
+        {
+            _skillSelector.Clear();
+            return;
+        }
+        dm.EnemyAIRuleDict.TryGetValue(EnemyID, out var rules);
+        _skillSelector.LoadPattern(EnemyID, phase, mode.PatternID, rules);
+    }
 
     public void SwitchPattern(int patternID)
     {
+        int phase = CurrentConfigPhase;
         if (patternID <= 0 || dm == null || !dm.EnemyAIDict.TryGetValue(EnemyID, out var patterns)
-            || !patterns.Exists(p => p.PatternID == patternID))
-            throw new System.InvalidOperationException($"敌人{EnemyID}没有定义模式{patternID}。");
+            || !patterns.Exists(p => p.Phase == phase && p.PatternID == patternID))
+            throw new System.InvalidOperationException($"敌人{EnemyID}的Phase={phase}没有定义模式{patternID}。");
         if (!dm.EnemyAIRuleDict.TryGetValue(EnemyID, out var rules)
-            || !rules.Exists(r => r.PatternID == patternID && r.Weight > 0))
-            throw new System.InvalidOperationException($"敌人{EnemyID}的模式{patternID}没有可抽选的技能。");
-        LoadPatternRules(patternID);
+            || !rules.Exists(r => r.Phase == phase && r.PatternID == patternID && r.Weight > 0))
+            throw new System.InvalidOperationException($"敌人{EnemyID}的Phase={phase}模式{patternID}没有可抽选的技能。");
+        _skillSelector.LoadPattern(EnemyID, phase, patternID, rules);
     }
 
     public bool CanReceiveOrdinaryAction => CanAct && !EnemyChangeControl.IsFrozen(Entity);
@@ -196,55 +288,27 @@ public partial class EnemyBattleController : MonoBehaviour
         if (!CanReceiveOrdinaryAction) return;
 
         // 无可用技能时本次机会空过；不把机会无限转移，也不清空本回合使用记录。
-        var rule = PickSkillByWeight();
-        if (rule != null && dm.EnemySkillMainDict.TryGetValue(rule.SkillID, out var skill))
+        int? skillID = BattleSpecialRules.SelectReservedEnemySkill(this);
+        if (!skillID.HasValue || !dm.EnemySkillMainDict.TryGetValue(skillID.Value, out var reserved) || !IsCurrentPhaseSkill(reserved))
+            skillID = _skillSelector.PickSkill(Entity, MeetsSkillLimits);
+        if (!skillID.HasValue)
+        {
+            if (LogManager.IsEnabled(LogCategory.AI))
+                LogManager.Log(LogCategory.AI, $"无可用候选技能。冷却={string.Join(",", _skillCooldownLeft)}");
+            return;
+        }
+        if (dm.EnemySkillMainDict.TryGetValue(skillID.Value, out var skill))
             await ExecuteEnemySkillAsync(skill);
     }
 
     private DataManager dm => DataManager.Instance;
+    private bool IsCurrentPhaseSkill(EnemySkillMainData skill)
+        => skill.Phase == CurrentConfigPhase && (skill.Phase == 0 || skill.EnemySkillID / 100 == EnemyID);
 
-    /// <summary>
-    /// 按权重挑选当前模式下的可用技能。
-    /// 处于冷却或已达每回合使用上限的技能不参与权重求和。
-    /// </summary>
-    private EnemyAIRuleData PickSkillByWeight()
-    {
-        _weightedCandidates.Clear();
-        int totalWeight = 0;
-        foreach (var rule in _currentRules)
-        {
-            if (rule == null || rule.Weight <= 0) continue;
-            if (!MeetsSkillLimits(rule.SkillID)) continue;
-            if (!ScriptHookEvaluator.Evaluate(rule.ScriptHook, new ScriptHookContext { Caster = Entity })) continue;
-
-            _weightedCandidates.Add(rule);
-            totalWeight += rule.Weight;
-        }
-
-        if (_weightedCandidates.Count == 0 || totalWeight <= 0)
-        {
-            if (LogManager.IsEnabled(LogCategory.AI))
-                LogManager.Log(LogCategory.AI, $"无可用候选技能。冷却={string.Join(",", _skillCooldownLeft)}");
-            return null;
-        }
-
-        int roll = BattleRandom.NextInt(0, totalWeight);
-        int acc = 0;
-        // [AI调试] 打印候选与随机数，确认跳舞是否进入候选
-        if (LogManager.IsEnabled(LogCategory.AI))
-            LogManager.Log(LogCategory.AI, $"候选技能: {string.Join(",", _weightedCandidates.ConvertAll(c => c.SkillID))} (总权重{totalWeight}) roll={roll}");
-        foreach (var rule in _weightedCandidates)
-        {
-            acc += rule.Weight;
-            if (roll < acc) return rule;
-        }
-        return _weightedCandidates[_weightedCandidates.Count - 1];
-    }
-
-    /// <summary>只查询配置存在、剩余冷却及回合次数，不求值资格钩子，供互斥必放规则复用。</summary>
+    /// <summary>查询当前阶段的技能配置、剩余冷却及回合次数，不求值资格钩子。</summary>
     public bool MeetsSkillLimits(int skillID)
     {
-        if (dm == null || !dm.EnemySkillMainDict.TryGetValue(skillID, out var skill)) return false;
+        if (dm == null || !dm.EnemySkillMainDict.TryGetValue(skillID, out var skill) || !IsCurrentPhaseSkill(skill)) return false;
         if (_skillCooldownLeft.TryGetValue(skillID, out int remaining) && remaining > 0) return false;
         _skillUsedThisTurn.TryGetValue(skillID, out int used);
         return skill.UsePerTurn <= 0 || used < skill.UsePerTurn;
@@ -259,6 +323,7 @@ public partial class EnemyBattleController : MonoBehaviour
 
     private async Task ExecuteEnemySkillCoreAsync(EnemySkillMainData skill, bool fromStatus)
     {
+        if (!IsCurrentPhaseSkill(skill)) return;
         // 同一敌方行动的全部效果、hit及响应共享额度，不把每个hit误当一次行动。
         using var resolutionAction = BattleResolutionContext.EnterAction(new BattleResolutionContext.CounterScope());
         using var actionExecution = BattleEventHub.BeginActionExecution();
@@ -266,7 +331,8 @@ public partial class EnemyBattleController : MonoBehaviour
         await BattleExecution.Flush();
         // 行动前的正式状态伤害（例如风之眼）可能已经击杀/限制该单位或结束战斗。
         // 此时不能继续写技能使用/冷却、执行原效果或伪造ActionCompleted。
-        if (!(fromStatus ? CanActIgnoringPresence : CanAct) || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
+        if (!(fromStatus ? CanActIgnoringPresence : CanAct) || !IsCurrentPhaseSkill(skill)
+            || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
         LogManager.Log(LogCategory.Enemy, $"{EnemyID} uses skill {skill.EnemySkillID2} ({skill.EnemySkillName})");
         if (!fromStatus) BattleExecution.RecordSkillPrompt(Entity, skill.EnemySkillName, skill.EnemySkillID2);
 
@@ -300,11 +366,12 @@ public partial class EnemyBattleController : MonoBehaviour
         {
             foreach (var eff in effects)
             {
-                if (!Entity.IsAlive || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
+                if (!Entity.IsAlive || !IsCurrentPhaseSkill(skill) || BattleExecution.IsCancelled
+                    || BattleManager.Instance?.IsBattleOver == true) return;
                 await ExecuteEnemyEffectAsync(eff);
             }
             // 中途取消/战斗已结束不冒充完整行动；异常同样直接退出而不提交Completed。
-            if (BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
+            if (Entity.HasWithdrawn || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
             BattleEventHub.Publish(new ActionEventData(Entity, skill.EnemySkillID2, "EnemySkill", true));
             await BattleExecution.Flush();
         }
@@ -314,16 +381,26 @@ public partial class EnemyBattleController : MonoBehaviour
     /// <summary>
     /// 执行单个敌人效果，复用公共伤害、状态和元素施加入口。
     /// </summary>
-    private Task ExecuteEnemyEffectAsync(EnemySkillEffectData eff, StatusInstance sourceStatus = null)
+    private async Task ExecuteEnemyEffectAsync(EnemySkillEffectData eff, StatusInstance sourceStatus = null)
     {
+        BattleResolutionContext.ContinueStatusExecution(sourceStatus);
+        await BattleResolutionContext.FlushExecutionStart();
         int count = ExecuteCountEvaluator.Evaluate(eff.ExecuteCount, eff.ExecuteCountHandler, Entity);
-        string repeatHook = Enemy2011To2020Hooks.HandlesHealHook(eff) ? null : eff.DamageHook;
-        return count == 0 ? Task.CompletedTask : BattleExecution.RepeatEffect(count, repeatHook,
-            executionID => ExecuteEnemyEffectOnceAsync(eff, executionID, sourceStatus), Entity, eff.SkillEffectID2);
+        bool handledAmount = Enemy2011To2020Hooks.HandlesHealHook(eff)
+            || (eff.EffectType == "Heal" && BattleSpecialRules.HasStatusHealHandler(eff.DamageHook))
+            || BattleSpecialRules.HasDamageModifier(eff.DamageHook)
+            || BattleSpecialRules.HasEnemyTargetDamageScale(eff.DamageHook)
+            || (sourceStatus != null && DamageProperties.IsTrue(eff.Element) && BattleSpecialRules.HasFixedStatusAmount(eff.DamageHook));
+        string repeatHook = handledAmount ? null : eff.DamageHook;
+        if (count > 0)
+            await BattleExecution.RepeatEffect(count, repeatHook,
+                executionID => ExecuteEnemyEffectOnceAsync(eff, executionID, sourceStatus), Entity, eff.SkillEffectID2);
     }
 
     private async Task ExecuteEnemyEffectOnceAsync(EnemySkillEffectData eff, long executionID, StatusInstance sourceStatus)
     {
+        using var effectSource = BattleResolutionContext.BeginStatusEffectSource(sourceStatus);
+        if (BattleExecution.GameplayEffectsStopped) return;
         using var resolutionEffect = BattleResolutionContext.BeginEffect();
         BattleExecution.ThrowIfCancelled();
         if (!ScriptHookEvaluator.Evaluate(eff.ScriptHook, Entity)) return;
@@ -331,7 +408,7 @@ public partial class EnemyBattleController : MonoBehaviour
         {
             case "Summon":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect, Entity, eff.SkillEffectID2),
-                    () => Enemy2021To2030Hooks.Summon(Entity, sourceStatus, eff.Param1));
+                    () => Enemy2021To2030Hooks.Summon(Entity, sourceStatus, eff.Param1, eff.TargetOverride));
                 break;
             case "ClearAura":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect, Entity, eff.SkillEffectID2), () => {
@@ -339,6 +416,18 @@ public partial class EnemyBattleController : MonoBehaviour
                 });
                 break;
             case "Damage":
+                if (BattleSpecialRules.TryGetEnemyDamageParticipants(eff.SkillEffectID2, BattleManager.Instance, Entity, out var participants))
+                {
+                    // 技能只选一次目标，登记的实际参与单位按各自面板命中，不另开行动或消耗次数。
+                    var recipients = ResolveEnemyTargets(eff);
+                    foreach (var fly in participants)
+                    {
+                        if (!Entity.IsAlive || BattleManager.Instance.IsBattleOver || !recipients.Exists(t => t.IsOnField)) break;
+                        if (fly.Entity.IsOnField)
+                            await fly.ExecuteEnemyDamageAsync(eff, executionID, null, recipients, _currentSkillID2);
+                    }
+                    break;
+                }
                 await ExecuteEnemyDamageAsync(eff, executionID, sourceStatus);
                 break;
             case "Heal":
@@ -355,6 +444,17 @@ public partial class EnemyBattleController : MonoBehaviour
             case "Cooldown":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
                     Entity, eff.SkillEffectID2), () => ExecuteEnemyCooldown(eff, sourceStatus));
+                break;
+            case "DrainEnergy":
+                await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
+                    Entity, eff.SkillEffectID2), () => {
+                        if (!float.TryParse(eff.Param1, System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out float loss)
+                            || float.IsNaN(loss) || float.IsInfinity(loss) || loss < 0f)
+                            throw new System.FormatException("DrainEnergy.Param1 必须为有限非负数。");
+                        foreach (var target in ResolveEnemyTargets(eff, sourceStatus))
+                            CharacterBattleController.ApplyEnergyLoss(target, loss, Entity);
+                    });
                 break;
             case "GrantAction":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
@@ -394,6 +494,10 @@ public partial class EnemyBattleController : MonoBehaviour
                         Entity, ResolveEnemyTargets(eff, sourceStatus), sourceStatus == null ? ReactionSourceKind.EnemySkill : ReactionSourceKind.StatusEffect,
                         sourceStatus == null ? _currentSkillID2 : null, eff.SkillEffectID2, executionID, sourceStatus));
                 break;
+            case "Withdrawn":
+                await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect, Entity, eff.SkillEffectID2),
+                    () => WithdrawnEffect.Execute(ResolveEnemyTargets(eff, sourceStatus), Entity));
+                break;
             case "Revive":
                 await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Effect,
                     Entity, eff.SkillEffectID2), () => ReviveEffect.Execute(eff.Param1, Entity, ResolveEnemyTargets(eff, sourceStatus)));
@@ -418,64 +522,45 @@ public partial class EnemyBattleController : MonoBehaviour
         }
 
         int addPhase = eff.AddInPhase > 0 ? eff.AddInPhase : 5; // 敌方行动阶段=5
-        if (BattleTargetResolver.IsTeamTarget(eff.TargetType))
+        var hosts = BattleTargetResolver.ResolveStatusEffectHosts(eff.TargetType, () => ResolveEnemyTargetResult(eff, sourceStatus));
+        foreach (var host in hosts)
         {
-            foreach (var team in BattleTargetResolver.GetTeams(BattleManager.Instance, ResolveEnemyTargetResult(eff, sourceStatus)))
-                team.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain, null, eff.Param2,
-                    enchantElement: eff.Element, enchantOverride: eff.Param3);
-            return;
-        }
-        if (!string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", System.StringComparison.Ordinal))
-        {
-            foreach (var field in ResolveEnemyTargetFields(eff, sourceStatus))
-            {
-                field.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase,
-                    statusMain, null, eff.Param2, enchantElement: eff.Element, enchantOverride: eff.Param3);
-                LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {field} (dur={eff.Duration}, phase={addPhase})");
-            }
-            return;
-        }
-
-        foreach (var target in ResolveEnemyTargets(eff, sourceStatus))
-        {
-            target.AddStatus(statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase, statusMain, null, eff.Param2,
-                enchantElement: eff.Element, enchantOverride: eff.Param3);
-            LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {target.EntityID} (dur={eff.Duration}, phase={addPhase})");
+            StatusHostAccess.Apply(host, statusID2, Entity, eff.Duration, addPhase, eff.TriggerPhase,
+                statusMain, null, eff.Param2, eff.Element, eff.Param3);
+            if (host is BattleTeamStatusHost) continue;
+            string recipient = host is BattleEntity target ? target.EntityID.ToString() : host.ToString();
+            LogManager.Log(LogCategory.Enemy, $"ApplyStatus {statusID2} -> {recipient} (dur={eff.Duration}, phase={addPhase})");
         }
     }
 
     private void ExecuteEnemyRemoveStatus(EnemySkillEffectData effect, StatusInstance sourceStatus)
     {
         if (string.IsNullOrWhiteSpace(effect.Param1)) return;
-        if (BattleTargetResolver.IsTeamTarget(effect.TargetType))
-        {
-            foreach (var team in BattleTargetResolver.GetTeams(BattleManager.Instance, ResolveEnemyTargetResult(effect, sourceStatus)))
-                team.RemoveStatus(effect.Param1);
-        }
-        else if (effect.TargetType != null && effect.TargetType.EndsWith("Field", System.StringComparison.Ordinal))
-        {
-            foreach (var field in ResolveEnemyTargetFields(effect, sourceStatus)) field.RemoveStatus(effect.Param1);
-        }
-        else foreach (var target in ResolveEnemyTargets(effect, sourceStatus)) target.RemoveStatus(effect.Param1);
+        var hosts = BattleTargetResolver.ResolveStatusEffectHosts(effect.TargetType, () => ResolveEnemyTargetResult(effect, sourceStatus));
+        foreach (var host in hosts)
+            StatusHostAccess.RemoveByID(host, effect.Param1);
     }
 
     /// <summary>
     /// 敌人伤害：倍率×攻击×增伤×防御承伤×抗性承伤；属性范围按实际DamageType过滤，不使用倍率分类推断。
     /// 目标由 EnemySkill_Effect 的 TargetType/TargetNumber/TargetConsecutive/TargetOverride 统一解析。
     /// </summary>
-    private async Task ExecuteEnemyDamageAsync(EnemySkillEffectData authoredEffect, long effectExecutionID, StatusInstance sourceStatus)
+    private async Task ExecuteEnemyDamageAsync(EnemySkillEffectData authoredEffect, long effectExecutionID, StatusInstance sourceStatus,
+        List<BattleEntity> commandedTargets = null, string commandingSkill = null)
     {
         var eff = authoredEffect;
-        string skillID = sourceStatus == null ? _currentSkillID2 : null;
+        string skillID = commandingSkill ?? (sourceStatus == null ? _currentSkillID2 : null);
         var sourceKind = sourceStatus == null ? ReactionSourceKind.EnemySkill : ReactionSourceKind.StatusEffect;
         using var damageQuery = DamageQueryContext.Enter(eff.SkillEffectID2, eff.DamageType, skillID);
         DamageProperties properties = DamageProperties.Parse(eff.Element, eff.Param3);
         properties.RequireImplementedFormula();
         if (DamageProperties.IsFixed(eff.Element))
         {
-            TableValidator.ValidateDamageProperties("EnemySkill_Effect", 0, "Damage", eff.Element,
+            TableValidator.ValidateDamageProperties(sourceStatus == null ? "EnemySkill_Effect" : "Status_Effect", 0, "Damage", eff.Element,
                 eff.Param1, eff.Param2, eff.Param3, eff.DamageHook);
             bool fixedBase = DamageProperties.TryReadFixedTrueBase(eff.Param1, out float basis);
+            if (sourceStatus != null && BattleSpecialRules.HasFixedStatusAmount(eff.DamageHook))
+                basis = BattleSpecialRules.ResolveFixedStatusAmount(dm.StatusEffectDict[eff.SkillEffectID2], sourceStatus, sourceStatus.Host);
             if (!fixedBase && eff.Param1 != "M*ATK" && eff.Param1 != "M*TotalATK")
                 throw new System.FormatException("敌人 True/None 的 Param1 支持固定数值或 M*ATK：" + eff.SkillEffectID2);
             dm.EnemySkillParamDict.TryGetValue(eff.SkillEffectID2, out var trueParam);
@@ -483,7 +568,8 @@ public partial class EnemyBattleController : MonoBehaviour
             if (fixedBase && trueHits.Count == 0) trueHits.Add(new HitData(1f, 0f));
             await TrueDamageExecutor.ExecuteAsync(ResolveEnemyTargets(eff, sourceStatus), trueHits,
                 index => fixedBase ? basis : Entity.GetFinalATK(eff.SkillEffectID2, skillID, -1, eff.Element),
-                EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2),
+                Enemy2081To2085Hooks.RebirthDefeatSource(eff, sourceStatus)
+                    ?? EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2),
                 eff.SkillEffectID2, eff.DamageType, eff.Element, eff.Param2, properties,
                 eff.TargetType == "Self" ? sourceStatus?.Host as BattleEntity ?? (_statusCalledSkill ? Entity : null) : null);
             return;
@@ -498,7 +584,7 @@ public partial class EnemyBattleController : MonoBehaviour
         }
         if (hits.Count == 0) throw new System.FormatException("敌人伤害没有有效hit：" + eff.SkillEffectID2);
 
-        var targets = ResolveEnemyTargets(eff, sourceStatus);
+        var targets = commandedTargets ?? ResolveEnemyTargets(eff, sourceStatus);
         if (targets.Count == 0) return;
 
         // 增伤区（配表术语 1.16）：TotalDMG = TotalATK × SkillMultiplier × (1+DMGBonus) × DEFRes × Res
@@ -508,6 +594,8 @@ public partial class EnemyBattleController : MonoBehaviour
             LogManager.Log(LogCategory.DmgBonus, $"{Entity.EntityID} 行动前身上状态数={allStatuses.Count}");
         for (int hitIndex = 0; hitIndex < hits.Count; hitIndex++)
         {
+            if (BattleSpecialRules.HasDamageModifier(authoredEffect.DamageHook))
+                hits[hitIndex] = BattleSpecialRules.ModifyHit(authoredEffect.DamageHook, Entity, null, hits[hitIndex], Entity.Level);
             var enchant = EnchantStatusSystem.Resolve(Entity, authoredEffect.DamageType, authoredEffect.Element);
             eff = enchant.HasValue ? authoredEffect.WithDamageElement(enchant.Value.Element) : authoredEffect;
             if (enchant.HasValue) hits[hitIndex] = new HitData(hits[hitIndex].Multiplier, enchant.Value.ElementAmount);
@@ -538,7 +626,8 @@ public partial class EnemyBattleController : MonoBehaviour
                     {
                         var entry = hitTargets[targetIndex];
                         BattleEntity target = entry.Target;
-                        float targetBase = baseDmg * entry.Rate;
+                        float targetBase = baseDmg * entry.Rate
+                            * BattleSpecialRules.ResolveEnemyTargetDamageScale(eff, target);
                         float damage;
                         ReactionDamageComponents components;
                         if (properties.UsesSpecialFormula)
@@ -546,27 +635,11 @@ public partial class EnemyBattleController : MonoBehaviour
                                 properties, eff.Element, eff.SkillEffectID2, skillID,
                                 eff.DamageType, out components);
                         else
-                        {
-                            targetBase += Entity.BaseDMGBonusFlat + Entity.GetStatusBaseDMGBonusFlat(
-                                eff.SkillEffectID2, skillID, -1, eff.Element, target);
-                            float dmgBonusFactor = Mathf.Max(0f, 1f + Entity.GetStatusDMGBonus(
-                                eff.SkillEffectID2, skillID, -1, eff.Element, target));
-                            float res = GetTargetResistance(target, eff.Element);
-                            float resFactor = res < 0f ? 1f - res / 2f
-                                : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
-                            float targetDEF = target.GetFinalDEF();
-                            float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
-                            if (defRes < 0f) defRes = 0f;
-                            damage = targetBase * dmgBonusFactor * resFactor * defRes;
-                            components = new ReactionDamageComponents
-                            {
-                                SkillBaseDamage = targetBase, DamageBonusMultiplier = dmgBonusFactor,
-                                DefenseMultiplier = defRes, ResistanceMultiplier = resFactor
-                            };
-                        }
+                            damage = CalculateEnemyOrdinaryDamage(targetBase, target, eff.SkillEffectID2,
+                                skillID, eff.Element, out components);
                         DMGTakenSnapshot taken = target.PrepareDMGTaken(
-                            eff.SkillEffectID2, skillID, eff.DamageType, eff.Element);
-                        ReactionResult reaction = ReactionResolver.Resolve(new ReactionContext
+                            eff.SkillEffectID2, skillID, eff.DamageType, eff.Element, Entity);
+                        var preparedTarget = new PreparedDirectHit(new ReactionContext
                         {
                             SourceEntity = Entity,
                             Target = target,
@@ -581,40 +654,19 @@ public partial class EnemyBattleController : MonoBehaviour
                             PreReactionDamage = damage,
                             DamageComponents = components,
                             DamageType = eff.DamageType,
-                        });
-                        StatusOnHitHookSystem.NotifyReactions(reaction.TriggeredReactions);
+                        }, taken);
+                        ReactionResult reaction = preparedTarget.ResolveReaction();
                         reactions.Add(reaction);
-                        resolutions.Add(batch.Resolve(new HitRequest
-                        {
-                            Properties = properties,
-                            Target = target,
-                            DamageBeforeShield = reaction.FinalDamage,
-                            Element = eff.Element,
-                            ElementAmount = hit.ElementAura,
-                            DamageType = eff.DamageType,
-                            EnemyShieldHit = reaction.EnemyShieldHit,
-                            DMGTaken = taken,
-                            Source = EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2, reaction.PrimaryDamageReactionType),
-                            HitIndex = hitIndex,
-                            TargetIndex = targetIndex
-                        }));
+                        resolutions.Add(preparedTarget.Submit(batch, reaction, properties,
+                            EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2, reaction.PrimaryDamageReactionType),
+                            hitIndex));
                     }
                     batch.Flush();
                 }
-                ReactionResult sharedReactions = ReactionEffectExecutor.PrepareLunarBatch(reactions);
-                for (int index = 0; index < reactions.Count; index++)
-                {
-                    HitResolution resolution = resolutions[index];
-                    float actualHPDamage = resolution?.DamageEvent != null
-                        ? resolution.DamageEvent.ActualHPDamage
-                        : 0f;
-                    ReactionEffectExecutor.FinalizePrimaryHit(reactions[index], actualHPDamage);
-                    ReactionEffectExecutor.ExecuteDerivedHits(reactions[index]);
+                ReactionEffectExecutor.CompleteDirectHit(reactions, resolutions, (_, resolution) =>
                     LogManager.Log(LogCategory.Enemy,
                         $"hit#{hitIndex + 1} {eff.SkillEffectID2} deals {resolution.DamageAfterShield:F1} dmg " +
-                        $"to {resolution.Request.Target.gameObject.name} (hp left {resolution.Request.Target.CurrentHP:F1})");
-                }
-                ReactionEffectExecutor.ExecuteDerivedHits(sharedReactions);
+                        $"to {resolution.Request.Target.gameObject.name} (hp left {resolution.Request.Target.CurrentHP:F1})"));
             });
         }
     }
@@ -653,83 +705,61 @@ public partial class EnemyBattleController : MonoBehaviour
     {
         string skillID = sourceStatus == null ? _currentSkillID2 : null;
         var sourceKind = sourceStatus == null ? ReactionSourceKind.EnemySkill : ReactionSourceKind.StatusEffect;
-        var contexts = new List<ReactionContext>();
-        var takenSnapshots = new List<DMGTakenSnapshot>();
+        var preparedTargets = new List<PreparedDirectHit>(targets.Count);
         foreach (var entry in targets)
         {
             BattleEntity target = entry.Target;
-            float targetBase = baseDmg * entry.Rate;
-            targetBase += Entity.BaseDMGBonusFlat + Entity.GetStatusBaseDMGBonusFlat(
-                eff.SkillEffectID2, skillID, -1, "Anemo", target);
-            float dmgBonusFactor = Mathf.Max(0f, 1f + Entity.GetStatusDMGBonus(
-                eff.SkillEffectID2, skillID, -1, "Anemo", target));
-            float res = GetTargetResistance(target, "Anemo");
-            float resFactor = res < 0f ? 1f - res / 2f
-                : (res < 0.75f ? 1f - res : 1f / (1f + 4f * res));
-            float targetDEF = target.GetFinalDEF();
-            float defRes = 1f - targetDEF / (targetDEF + 5f * Entity.Level + 500f);
-            if (defRes < 0f) defRes = 0f;
-            float damage = targetBase * dmgBonusFactor * resFactor * defRes;
-            takenSnapshots.Add(target.PrepareDMGTaken(
-                eff.SkillEffectID2, skillID, eff.DamageType, "Anemo"));
-            contexts.Add(new ReactionContext
+            float damage = CalculateEnemyOrdinaryDamage(baseDmg * entry.Rate, target, eff.SkillEffectID2,
+                skillID, "Anemo", out ReactionDamageComponents components);
+            DMGTakenSnapshot taken = target.PrepareDMGTaken(
+                eff.SkillEffectID2, skillID, eff.DamageType, "Anemo", Entity);
+            preparedTargets.Add(new PreparedDirectHit(new ReactionContext
             {
                 SourceEntity = Entity, Target = target, SourceKind = sourceKind,
                 SourceSkillID = skillID, SourceEffectID = eff.SkillEffectID2,
                 EffectExecutionID = effectExecutionID, AttackElement = "Anemo",
-                LogicalHitID = logicalHitID, TargetIndex = contexts.Count + 1,
+                LogicalHitID = logicalHitID, TargetIndex = preparedTargets.Count + 1,
                 AttackAmount = hit.ElementAura, PreReactionDamage = damage,
-                DamageComponents = new ReactionDamageComponents
-                { SkillBaseDamage = targetBase,
-                  DamageBonusMultiplier = dmgBonusFactor, DefenseMultiplier = defRes,
-                  ResistanceMultiplier = resFactor },
+                DamageComponents = components,
                 DamageType = eff.DamageType
-            });
+            }, taken));
         }
-        var primaryReactions = new List<ReactionResult>(contexts.Count);
-        foreach (ReactionContext context in contexts)
-        {
-            ReactionResult primaryReaction = ReactionResolver.Resolve(context);
-            StatusOnHitHookSystem.NotifyReactions(primaryReaction.TriggeredReactions);
-            primaryReactions.Add(primaryReaction);
-        }
-
-        SwirlPreparedBatch prepared = SwirlReactionHandler.PrepareBatch(contexts);
-        var resolutions = new List<HitResolution>(contexts.Count);
+        var primaryReactions = preparedTargets.ConvertAll(target => target.ResolveReaction());
+        SwirlPreparedBatch prepared = SwirlReactionHandler.PrepareBatch(preparedTargets.ConvertAll(target => target.Context));
+        var resolutions = new List<HitResolution>(preparedTargets.Count);
         using (var batch = new HitBatch(logicalHitID))
         {
-            for (int index = 0; index < contexts.Count; index++)
+            for (int index = 0; index < preparedTargets.Count; index++)
             {
-                resolutions.Add(batch.Resolve(new HitRequest
-                {
-                    Properties = DamageProperties.Parse(eff.Element, eff.Param3),
-                    Target = contexts[index].Target,
-                    DamageBeforeShield = primaryReactions[index].FinalDamage,
-                    EnemyShieldHit = primaryReactions[index].EnemyShieldHit,
-                    Element = "Anemo",
-                    ElementAmount = hit.ElementAura,
-                    DamageType = eff.DamageType,
-                    DMGTaken = takenSnapshots[index],
-                    Source = EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2),
-                    HitIndex = hitIndex,
-                    TargetIndex = index
-                }));
+                resolutions.Add(preparedTargets[index].Submit(batch, primaryReactions[index],
+                    DamageProperties.Parse(eff.Element, eff.Param3),
+                    EnemyDamageSource(sourceStatus, skillID, eff.SkillEffectID2), hitIndex));
             }
             batch.Flush();
         }
-        for (int index = 0; index < primaryReactions.Count; index++)
-        {
-            HitResolution resolution = resolutions[index];
-            float actualHPDamage = resolution?.DamageEvent != null
-                ? resolution.DamageEvent.ActualHPDamage
-                : 0f;
-            ReactionEffectExecutor.FinalizePrimaryHit(primaryReactions[index], actualHPDamage);
-            ReactionEffectExecutor.ExecuteDerivedHits(primaryReactions[index]);
-        }
+        ReactionEffectExecutor.CompletePrimaryHits(primaryReactions, resolutions);
         SwirlBatchResult swirl = SwirlReactionHandler.ResolvePreparedBatch(prepared);
         StatusOnHitHookSystem.NotifyReactions(swirl.Reaction.TriggeredReactions);
         ReactionEffectExecutor.ExecuteDerivedHits(swirl.Reaction);
     }
+
+    private float CalculateEnemyOrdinaryDamage(float targetBase, BattleEntity target, string effectID, string skillID,
+        string element, out ReactionDamageComponents components)
+    {
+        targetBase += Entity.BaseDMGBonusFlat + Entity.GetStatusBaseDMGBonusFlat(effectID, skillID, -1, element, target);
+        float dmgBonusFactor = Mathf.Max(0f, 1f + Entity.GetStatusDMGBonus(effectID, skillID, -1, element, target));
+        float resFactor = ReactionDamageCalculator.GetResistanceMultiplier(GetTargetResistance(target, element));
+        float defRes = DirectDamageMath.EnemyDefenseMultiplier(target.GetFinalDEF(), Entity.Level);
+        components = new ReactionDamageComponents
+        {
+            SkillBaseDamage = targetBase,
+            DamageBonusMultiplier = dmgBonusFactor,
+            DefenseMultiplier = defRes,
+            ResistanceMultiplier = resFactor
+        };
+        return targetBase * dmgBonusFactor * resFactor * defRes;
+    }
+
     /// <summary>
     /// 获取目标实体对应元素的抗性。
     /// </summary>
@@ -750,27 +780,6 @@ public partial class EnemyBattleController : MonoBehaviour
         }
     }
 
-    // ================================================================
-    //  AI 辅助
-    // ================================================================
-    private void LoadPatternRules(int patternID)
-    {
-        _currentRules.Clear();
-        if (dm == null || dm.EnemyAIRuleDict == null ||
-            !dm.EnemyAIRuleDict.TryGetValue(EnemyID, out var rules) || rules == null)
-            return;
-
-        foreach (var rule in rules)
-        {
-            if (rule != null && rule.PatternID == patternID) _currentRules.Add(rule);
-        }
-        if (_currentRules.Count > 0)
-        {
-            _currentPatternID = patternID;
-            LogManager.Log(LogCategory.Enemy, $"{EnemyID} loaded pattern {patternID}: {_currentRules.Count} rules");
-        }
-    }
-
     /// <summary>
     /// 技能冷却全局递减（由 BattleManager 在全局跨回合时统一调用）。
     /// </summary>
@@ -787,12 +796,15 @@ public partial class EnemyBattleController : MonoBehaviour
 
     private void ResetRuntimeState()
     {
+        HasWithdrawn = false;
         HealthPhases = EnemyHealthPhases.Single;
-        _currentPatternID = 0;
-        _currentRules.Clear();
+        _depletedHealthPhase = 0;
+        _initializedHealthPhase = 0;
+        _phaseStatuses.Clear();
+        HealthPhaseExited = null;
+        _skillSelector.Clear();
         _skillCooldownLeft.Clear();
         _skillUsedThisTurn.Clear();
-        _weightedCandidates.Clear();
         _cooldownKeyBuffer.Clear();
         _currentSkillID2 = string.Empty;
         _lastEnemyTargetResult = null;

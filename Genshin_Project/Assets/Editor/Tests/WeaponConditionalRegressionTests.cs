@@ -41,6 +41,63 @@ namespace GenshinTurnBased.Tests.EditMode
             var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random); return random;
         }
 
+        [TestCase(3, 2, true, false, true)]
+        [TestCase(3, 0, false, false, true)]
+        [TestCase(3, 2, false, false, false)]
+        [TestCase(3, 3, false, true, true)]
+        [TestCase(0, 0, false, false, false)]
+        public void SacrificialCooldown_UsesHitTimeBindingOrUniqueSlotCooldown(int entryRounds, int otherRounds,
+            bool entryBoundAtHit, bool sharedPhase, bool resets)
+        {
+            const string entry = "SK_SacrificialEntry", other = "SK_SacrificialOther", shown = "SK_SacrificialExit";
+            const string unbound = "SK_SacrificialInternal";
+            using var env = new BattleFlowTestEnv();
+            env.ConfigureAllyAction(2, entry, "SE_SacrificialEntry", "Physical", "", 0);
+            var skills = env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID];
+            var entryData = skills.Find(s => s.SkillID2 == entry);
+            entryData.SkillID = 99001;
+            entryData.ActionType = "";
+            entryData.SkillPhase = sharedPhase ? 1 : 0;
+            skills.Add(new SkillMainData { SkillID = 99002, SkillID2 = other, SkillPhase = entryData.SkillPhase });
+            skills.Add(new SkillMainData { SkillID = 99003, SkillID2 = shown });
+            skills.Add(new SkillMainData { SkillID = 99004, SkillID2 = unbound, ActionType = "Skill" });
+
+            var main = Main(env, 4307901);
+            var effect = Effect(env, 430790101, "Cooldown", "Skill");
+            effect.Param2 = "Reset";
+            effect.DamageHook = "Hook(430790101)";
+            env.DataManager.StatusActionDict[main.StatusID2] = new List<StatusActionData>
+            {
+                new StatusActionData { StatusID = main.StatusID, StatusID2 = main.StatusID2, ActionType = "OnTrigger",
+                    Param1 = effect.StatusEffectID2, ScriptHook = "Hook(430790101)", OutgoingDamage = "Skill", Cooldown = 8 }
+            };
+            env.CreateMinimalBattle();
+            Equip(env, main.StatusID, Context(env.Ally.Entity, 3079, 1f));
+            var random = Start(env);
+            env.Ally.RevertSkillPhase(2, other);
+            env.Ally.RevertSkillPhase(2, entryBoundAtHit ? entry : shown);
+            env.Ally.ChangeSkillCooldown(entry, entryRounds);
+            if (!sharedPhase) env.Ally.ChangeSkillCooldown(other, otherRounds);
+            env.Ally.ChangeSkillCooldown(unbound, 5);
+
+            using (var hit = new HitBatch())
+            {
+                var result = hit.Resolve(new HitRequest { Target = env.Enemy.Entity, DamageBeforeShield = 10f,
+                    DamageType = "Skill", Source = DamageSourceInfo.Create(env.Ally.Entity,
+                        ReactionSourceKind.StatusEffect, "", "SE_SacrificialDelayedDamage") });
+                Assert.That(result.DamageEvent.SourceSkillSlotCooldownID, Is.EqualTo(resets ? entry : null));
+                // 命中提交后，响应执行前换到另一个有冷却的技能。
+                if (entryBoundAtHit) env.Ally.RevertSkillPhase(2, other);
+            }
+            Assert.That(random.FloatCallCount, Is.EqualTo(resets ? 1 : 0));
+            env.Ally.RevertSkillPhase(2, entry);
+            Assert.That(env.Ally.GetCooldownRemaining(2), Is.EqualTo(resets ? 0 : entryRounds));
+            env.Ally.RevertSkillPhase(2, other);
+            Assert.That(env.Ally.GetCooldownRemaining(2), Is.EqualTo(sharedPhase ? 0 : otherRounds));
+            env.Ally.RevertSkillPhase(2, unbound);
+            Assert.That(env.Ally.GetCooldownRemaining(2), Is.EqualTo(5));
+        }
+
         [TestCase(15, "0", "Normal", .36f, 15)]
         [TestCase(16, "0", "Normal", -.10f, 16)]
         [TestCase(20, "-5", "Normal", .36f, 15)]

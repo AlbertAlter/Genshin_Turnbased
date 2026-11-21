@@ -12,6 +12,7 @@ public interface IBattlePresentationView
 
 /// <summary>Opt in to cosmetic launch cues. These are not additional battle results.</summary>
 public interface IBattlePresentationAnticipationView : IBattlePresentationView { }
+public interface IBattleAttackAnimationView : IBattlePresentationView { }
 
 /// <summary>纯时间调度器；只展示快照，不调用战斗效果。FIFO批次、稳定同刻顺序、代次隔离迟到回调。</summary>
 public sealed class BattlePresentationPlayback
@@ -32,14 +33,20 @@ public sealed class BattlePresentationPlayback
     private readonly Queue<Job> jobs = new Queue<Job>();
     private readonly Action<long, BattlePresentationCue, Action<Exception>> present;
     private readonly Action<long> cancel;
+    private readonly Func<BattlePresentationCue, bool> hasPendingHits;
     private readonly int threadID = Thread.CurrentThread.ManagedThreadId;
     private Job active;
     private bool pumping;
     private long nextID;
     public bool IsBusy => active != null || jobs.Count != 0;
 
-    public BattlePresentationPlayback(Action<long, BattlePresentationCue, Action<Exception>> present, Action<long> cancel)
-    { this.present = present ?? throw new ArgumentNullException(nameof(present)); this.cancel = cancel; }
+    public BattlePresentationPlayback(Action<long, BattlePresentationCue, Action<Exception>> present, Action<long> cancel,
+        Func<BattlePresentationCue, bool> hasPendingHits = null)
+    {
+        this.present = present ?? throw new ArgumentNullException(nameof(present));
+        this.cancel = cancel;
+        this.hasPendingHits = hasPendingHits;
+    }
 
     public Task Enqueue(IReadOnlyList<BattlePresentationCue> cues, CancellationToken token = default)
     {
@@ -88,6 +95,7 @@ public sealed class BattlePresentationPlayback
                         job.Block = cue.Block;
                     }
                     if (cue.Time + job.TimeShift > job.Elapsed) break;
+                    if (cue.IsEnemyExit && hasPendingHits?.Invoke(cue) == true) break;
                     job.Next++;
                     // The banner runs over hits/voice. Only the next action waits for it to finish.
                     bool tail = cue.Result.Data.Kind == BattleEventKind.ActionPrompt;

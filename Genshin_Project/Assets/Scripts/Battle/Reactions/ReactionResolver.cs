@@ -44,17 +44,27 @@ public static class ReactionResolver
     }
 
     public static ReactionResult Resolve(ReactionContext context)
+        => Resolve(context, null);
+
+    internal static ReactionResult ResolveResidual(ReactionContext context, ReactionPoolKind incomingPool)
+        => Resolve(context, incomingPool);
+
+    private static ReactionResult Resolve(ReactionContext context, ReactionPoolKind? residualIncomingPool)
     {
         if (context == null) throw new ArgumentNullException(nameof(context));
+        if (context.Target?.EnemyCtrl?.HasDepletedHealthPhase == true) return ReactionResult.Unchanged(context);
+        using var effectSource = BattleResolutionContext.BeginEquipmentEffectSource(context.EffectiveEquipmentSource != null);
         using var resolution = BattleEventHub.BeginResolution();
         using var collection = BattleResolutionContext.BeginCollection();
         using var execution = BattleEventHub.BeginEffectExecution(context.EffectExecutionID);
         using var hit = BattleEventHub.BeginHit(context.LogicalHitID != 0 ? context.LogicalHitID : BattleEventHub.CurrentHitId,
             context.TargetIndex);
-        using var elements = ElementEventScope.Begin("ElementInteraction", context.Target);
+        using var elements = ElementEventScope.Begin(residualIncomingPool.HasValue ? "ResidualReaction" : "ElementInteraction", context.Target);
         context.EnemyShieldHit = EnemyElementShieldSystem.PrepareHit(
             context.Target, context.AttackElement, context.AttackAmount);
-        ReactionResult result = ResolveCore(context);
+        context.EnemyShieldHit.CaptureSource(context);
+        context.EnemyShieldHit.CaptureDamageImmunity(context);
+        ReactionResult result = ResolveCore(context, residualIncomingPool);
         // 风先保存扩散源，随后由主命中或纯元素扩散批次扣盾；其余接触在反应完成后统一提交。
         if (context.AttackElement != "Anemo")
         {
@@ -70,6 +80,13 @@ public static class ReactionResolver
         result.RuntimeHitID = BattleEventHub.CurrentHitId;
         result.EffectExecutionID = context.EffectExecutionID;
         result.TargetIndex = context.TargetIndex;
+        if (residualIncomingPool.HasValue)
+        {
+            result.DerivedHits.Clear();
+            foreach (ReactionOccurrence occurrence in result.TriggeredReactions)
+                RecordResidualReaction(occurrence, context.CauseEventIds, elements);
+            return result;
+        }
         if (result.PendingReverseSwirl == null && context.Target != null && context.AttackAmount > 0f && context.AttackElement != "Anemo"
             && context.AttackElement != "None" && context.AttackElement != "Physical"
             && !string.IsNullOrEmpty(context.AttackElement) && (context.CanApplyAura || context.CanTriggerReaction))
@@ -78,11 +95,7 @@ public static class ReactionResolver
                 causes: context.CauseEventIds);
             elements.AddCause(result.ContactDeclaration.Header.EventId);
             foreach (ReactionOccurrence occurrence in result.TriggeredReactions)
-            {
-                occurrence.Declaration = BattleEventHub.Record(occurrence, new ReactionEventData(occurrence),
-                    causes: new[] { result.ContactDeclaration.Header.EventId });
-                StellarTeamBonusHandler.Commit(occurrence);
-            }
+                RecordReaction(occurrence, new[] { result.ContactDeclaration.Header.EventId });
             foreach (ReactionDerivedHit derived in result.DerivedHits)
                 if (derived.CauseEventIds == null)
                 {
@@ -93,11 +106,31 @@ public static class ReactionResolver
                     derived.CauseEventIds = ids.AsReadOnly();
                 }
             BattleEventHub.Dispatch(result.ContactDeclaration);
+            if (context.CanTriggerReaction && context.CanApplyAura && !context.EnemyShieldHit.HadShieldAtStart)
+            {
+                var causes = new List<long> { result.ContactDeclaration.Header.EventId };
+                foreach (var occurrence in result.TriggeredReactions) causes.Add(occurrence.Declaration.Header.EventId);
+                using var cause = BattleEventHub.Enter(result.ContactDeclaration);
+                ResidualReactionResolver.Resolve(context.Target, context, result, causes);
+            }
         }
         return result;
     }
 
-    private static ReactionResult ResolveCore(ReactionContext context)
+    private static void RecordReaction(ReactionOccurrence occurrence, IReadOnlyList<long> causes)
+    {
+        occurrence.Declaration = BattleEventHub.Record(occurrence, new ReactionEventData(occurrence), causes: causes);
+        StellarTeamBonusHandler.Commit(occurrence);
+    }
+
+    internal static void RecordResidualReaction(ReactionOccurrence occurrence, IReadOnlyList<long> causes, ElementEventScope elements)
+    {
+        if (occurrence.PendingLunarConduct != null) occurrence.PendingLunarConduct.SuppressImmediateDamage = true;
+        RecordReaction(occurrence, causes);
+        elements.AddCause(occurrence.Declaration.Header.EventId, occurrence.Target);
+    }
+
+    private static ReactionResult ResolveCore(ReactionContext context, ReactionPoolKind? residualIncomingPool)
     {
 
         var result = ReactionResult.Unchanged(context);
@@ -132,7 +165,7 @@ public static class ReactionResolver
             return result;
         }
 
-        if (SwirlReactionHandler.CanReverseSwirl(context))
+        if (!residualIncomingPool.HasValue && SwirlReactionHandler.CanReverseSwirl(context))
         {
             ElementAuraSystem.PrepareIncomingAura(context);
             result.PendingReverseSwirl = SwirlReactionHandler.PrepareBatch(new[] { context });
@@ -171,7 +204,7 @@ public static class ReactionResolver
             ResolvePlannedPools(context, result);
 
         ReactionType coreBlockingReaction = FindCoreBlockingReaction(result);
-        if (context.CanTriggerReaction
+        if (!residualIncomingPool.HasValue && context.CanTriggerReaction
             && BloomSecondaryReactionHandler.TryResolve(
                 context,
                 coreBlockingReaction,
@@ -190,7 +223,12 @@ public static class ReactionResolver
             });
         }
 
-        ElementAuraSystem.CommitIncomingAura(context, result.RemainingAttackAmount);
+        float consumed = context.AttackAmount - result.RemainingAttackAmount;
+        if (residualIncomingPool == ReactionPoolKind.Frozen)
+            FrozenReactionHandler.ConsumeFrozenAura(context.Target, consumed);
+        else if (residualIncomingPool == ReactionPoolKind.Burning)
+            BurningReactionHandler.ConsumeBurningAura(context.Target, consumed);
+        else ElementAuraSystem.CommitIncomingAura(context, result.RemainingAttackAmount);
         ElectroChargedReactionHandler.CleanupInvalidStates();
 
         return result;

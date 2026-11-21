@@ -11,13 +11,17 @@ public static class BattleUiSceneModules
         player.selectionPresentation = runtime.GetComponent<BattlefieldSelectionPresentation>();
         var prompt = Module<BattleActionPromptView>();
         prompt.player = player; prompt.layout = layout; prompt.font = ProjectUiFont.LoadOrCreateOutlined();
+        prompt.selectionInput = runtime.GetComponent<BattleInputController>();
         prompt.framePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/AdaptiveCharacterFrame.prefab").GetComponent<UIAdaptiveFrame>();
         var rise = Module<BattleUiStatusRiseView>(); rise.player = player; rise.layout = layout; rise.battle = runtime.GetComponent<BattleManager>();
+        rise.arrowPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/StatusArrows.prefab").GetComponent<UICardOrbitArrows>();
         var voice = Module<CharacterBattleVoice>();
         voice.player = player; voice.battle = runtime.GetComponent<BattleManager>();
         var popups = Module<BattlefieldDamagePopupController>(); popups.layout = layout;
         if (popups.numberFont == null) popups.numberFont = ProjectUiFont.LoadOrCreate();
-        Module<BattlefieldHitShakeView>().layout = layout;
+        var statusNames = Module<UIStatusNamePopup>(); statusNames.canvas = layout.canvas;
+        statusNames.font = ProjectUiFont.LoadOrCreate(); popups.statusNames = statusNames;
+        Module<BattlefieldAttackAnimationView>().layout = layout;
         var effects = Module<BattleUiHitEffects>(); effects.layout = layout;
         var hits = Module<BattleUiHitResultView>(); hits.player = player; hits.layout = layout; hits.effects = effects;
         var cards = Module<BattleUiAnimatedCards>(); cards.layout = layout; cards.battle = runtime.GetComponent<BattleManager>();
@@ -35,6 +39,7 @@ public static class BattleUiSceneModules
             ?.GetComponent<BattleUiFreezeInteraction>();
         ConfigureAudio(runtime);
         Module<BattleUiEnemyAppearance>().cards = cards;
+        Module<BattleUiCharacterAppearance>().cards = cards;
         cards.legacySkinObjects = layout.cards.Where(c => c?.root != null)
             .SelectMany(c => c.root.GetComponentsInChildren<StreamingSpriteReference>(true))
             .Where(a => a.relativePath == UICardFactory.FramePath || a.relativePath == UICardFactory.InnerShadowPath ||
@@ -46,7 +51,12 @@ public static class BattleUiSceneModules
         buttons.switcher = runtime.GetComponent<BattlefieldSwitchController>();
         buttons.canvas = layout.canvas; buttons.projectFrame = prompt.framePrefab;
         buttons.hintFont = ProjectUiFont.LoadOrCreate();
+        var skillInfo = Module<BattleUiSkillInfo>();
+        skillInfo.Bind(buttons, buttons.input, runtime.GetComponent<BattleManager>(), layout.canvas,
+            UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/BattleSkillInfo.prefab")
+                ?.GetComponent<BattleSkillInfoView>());
         var controls = layout.canvas.GetComponentsInChildren<PsdUiBinding>(true);
+        ConfigureCharacterDetails(runtime, layout, cards.factory, prompt.framePrefab);
         buttons.switchRoot = controls.FirstOrDefault(b => b.bindingKey == "SwitchIcon")?.transform.parent as RectTransform;
         buttons.cancelRoot = controls.FirstOrDefault(b => b.bindingKey == "CancelIcon")?.transform.parent as RectTransform;
         var endPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/UI/BattleEndTurnButton.prefab");
@@ -57,6 +67,35 @@ public static class BattleUiSceneModules
         buttons.switchDisc = Disc(buttons.switchRoot);
         buttons.cancelDisc = Disc(buttons.cancelRoot);
         buttons.endTurnDisc = buttons.endTurnRoot.Find("OuterStroke") as RectTransform;
+    }
+
+    private static void ConfigureCharacterDetails(GameObject runtime, BattleUiLayout layout, UICardFactory cards, UIAdaptiveFrame frame)
+    {
+        var details = runtime.GetComponent<BattleUiCharacterDetails>() ?? runtime.AddComponent<BattleUiCharacterDetails>();
+        var serialized = new UnityEditor.SerializedObject(details);
+        void Bind(string field, Object value) => serialized.FindProperty(field).objectReferenceValue = value;
+        Bind("canvas", layout.canvas);
+        Bind("battle", runtime.GetComponent<BattleManager>());
+        Bind("input", runtime.GetComponent<BattleInputController>());
+        Bind("switcher", runtime.GetComponent<BattlefieldSwitchController>());
+        Bind("cardFactory", cards);
+        Bind("framePrefab", frame);
+        Bind("font", ProjectUiFont.LoadOrCreate());
+        var slots = serialized.FindProperty("portraits");
+        slots.arraySize = layout.cards.Where(card => card != null && card.side == BattleSide.Ally).Select(card => card.slot).DefaultIfEmpty(0).Max();
+        for (int index = 0; index < slots.arraySize; index++) slots.GetArrayElementAtIndex(index).objectReferenceValue = null;
+        var roster = runtime.GetComponent<BattlefieldStageViewLoader>()?.characterRoster;
+        if (roster != null)
+            foreach (Transform group in roster)
+            {
+                var health = group.GetComponentsInChildren<BattlefieldHealthBar>(true).FirstOrDefault(bar => bar.side == BattleSide.Ally);
+                var portrait = group.GetComponentsInChildren<PsdUiBinding>(true).FirstOrDefault(binding => binding.bindingKey == "CharacterAvatar");
+                if (health != null && portrait != null && health.slot > 0 && health.slot <= slots.arraySize)
+                    slots.GetArrayElementAtIndex(health.slot - 1).objectReferenceValue = portrait.transform;
+            }
+        serialized.ApplyModifiedPropertiesWithoutUndo();
+        var entry = runtime.GetComponent<BattleSceneRuntime>();
+        if (entry != null) entry.characterDetails = details;
     }
 
     private static void ConfigureAudio(GameObject runtime)

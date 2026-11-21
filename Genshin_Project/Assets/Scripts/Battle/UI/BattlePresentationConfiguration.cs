@@ -16,6 +16,7 @@ public sealed class BattlePresentationConfiguration
     private readonly Dictionary<string, EffectOverride> effects;
     private readonly BattleSkillPresentationTemplates templates;
     public BattleActionStyle ActionStyle { get; private set; }
+    public BattleAttackAnimationTable Attacks { get; private set; }
     public float SelectionExitSeconds { get; private set; } = .15f;
     private EnemyActionTemplates enemyActions;
     public double HitInterval { get; }
@@ -45,12 +46,14 @@ public sealed class BattlePresentationConfiguration
         this.templates = templates;
     }
 
-    public static BattlePresentationConfiguration Load()
+    public static BattlePresentationConfiguration Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattlePresentationConfiguration ReadPublished()
     {
         var main = BattleTimelineSettings.Load();
         var config = Parse(main.Parameters, ReadEffects(BattleTimelineSettings.RuntimePath(EffectFileName)), BattleSkillPresentationTemplates.Load());
         config.SelectionExitSeconds = main.SelectionExitSeconds;
         config.ActionStyle = BattleActionStyle.ReadFile(BattleTimelineSettings.RuntimePath(BattleActionStyle.FileName));
+        config.Attacks = BattleAttackAnimationTable.Load();
         config.enemyActions = EnemyActionTemplates.ReadFile(BattleTimelineSettings.RuntimePath(EnemyActionTemplates.FileName), config.templates);
         return config;
     }
@@ -83,6 +86,13 @@ public sealed class BattlePresentationConfiguration
             && enemyTemplate.AttackType != "Support")
             template = enemyTemplate;
         if (template != null && item?.HitInterval != null) template = template.WithUniformInterval(item.HitInterval.Value);
+        var attack = BattleAttackAnimationHooks.Resolve(result, Attacks?.Find(result.EffectID));
+        if (result.Data is DamageEventData actual && attack != null && attack.SelfAnimation != 1)
+        {
+            if (template == null) template = new BattleHitTemplate("Attack/" + result.EffectID, new[] { (double)attack.Windup },
+                item?.HitInterval ?? HitInterval, 0, actual.SourceWeaponType, actual.DamageType, attack.Duration);
+            else template = template.WithMinimumFirstHit(attack.Windup);
+        }
         double animationSeconds = 0;
         if (result.Data.Kind == BattleEventKind.ActionStarted && result.Data is ActionEventData cast)
         {
@@ -92,7 +102,8 @@ public sealed class BattlePresentationConfiguration
         }
         return new BattlePresentationTiming(item?.HitInterval ?? HitInterval,
             template != null ? 0 : time == 1 ? MediumJitter : time == 2 ? FullJitter : 0,
-            item?.X ?? 2, item?.Y ?? 2, MediumRandomScale, template, animationSeconds);
+            item?.X ?? 2, item?.Y ?? 2, MediumRandomScale, template, animationSeconds)
+        { AttackAnimation = attack, HasAttackAnimationSnapshot = true };
     }
 
     public static Dictionary<string, EffectOverride> ReadEffects(string path)

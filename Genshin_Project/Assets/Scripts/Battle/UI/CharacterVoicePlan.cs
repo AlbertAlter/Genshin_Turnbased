@@ -40,13 +40,14 @@ public static class CharacterVoicePlan
             var cast = (ActionEventData)cue.CastStart.Data;
             Assign(cue, cast.SubjectId, cast.SkillId, table.Skill(cast.SubjectId, cast.SkillId));
         }
-        foreach (var cue in cues.Where(c => !c.IsAnticipation).OrderBy(c => c.Result.Order))
+        foreach (var cue in cues.Where(c => !c.IsAnticipation && !c.IsEnemyExit).OrderBy(c => c.Result.Order))
         {
             var r = cue.Result; var h = r.Header; var data = r.Data;
             long group = 0;
             foreach (var cause in h.CauseEventIds)
                 if (causes.TryGetValue((h.SessionId, cause), out group)) break;
-            long scope = h.ActionScopeId != 0 ? h.ActionScopeId : h.ActionExecutionId;
+            long scope = h.ChainScopeId != 0 ? h.ChainScopeId
+                : h.ActionScopeId != 0 ? h.ActionScopeId : h.ActionExecutionId;
             if (group == 0 && scope != 0) scopes.TryGetValue((h.SessionId, scope), out group);
             if (data.Kind == BattleEventKind.ActionStarted && r.TargetSide == BattleSide.Enemy && scope != 0)
             {

@@ -107,6 +107,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private static async Task TeamLimit()
         {
             using var env = new BattleFlowTestEnv(); Configure(env);
+            env.CreateEnemy(3); // 本例验证共享限次，保留存活敌人以免触发立即胜利。
             env.DataManager.StatusActionDict[ID][0].MaxTimePerTurn = 1;
             var team = env.Manager.EnemyTeam.AddStatus(ID, env.Enemy.Entity, 0, 5, 0, env.DataManager.StatusMainDict[ID]);
             await KillBatch(env, env.Enemy.Entity, env.Manager.GetEntityByPosition(BattleSide.Enemy, 2));
@@ -129,7 +130,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 if (fact.Source.SourceEffectID != Effect || fact.Source.SourceEntity != env.Ally.Entity) return;
                 chainHits++;
                 Assert.That(dependency.IsActive && enemyAction.IsActive && allyAction.IsActive, Is.True);
-                Assert.That(env.Manager.IsBattleOver, Is.False);
+                Assert.That(env.Manager.IsBattleOver, Is.EqualTo(env.Manager.Enemies.All(c => !c.Entity.IsAlive)));
             }, 0);
             await BattleExecution.Run(async () => { Kill(env.Enemy.Entity, env.Ally.Entity); await BattleExecution.Flush(); });
             Assert.That(chainHits, Is.GreaterThan(0));

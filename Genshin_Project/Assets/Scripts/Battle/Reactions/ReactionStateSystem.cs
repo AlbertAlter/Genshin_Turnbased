@@ -85,6 +85,7 @@ public sealed class ReactionStateInstance
     public long ApplyOrder;
     /// <summary>该次冻结的主动解冻点击进度。前两次不扣AP，不消耗冻元素量。</summary>
     public int ThawClicks { get; internal set; }
+    internal bool InterruptsCharges;
     public ReactionSourceSnapshot SourceSnapshot;
     public bool UsesRoundDuration = true;
     /// <summary>冻元素、燃元素等随反应状态保存的精确元素量。</summary>
@@ -137,6 +138,7 @@ public static class ReactionStateSystem
     {
         if (target == null || type == ReactionType.None || duration <= 0) return null;
         if (EnemyTraits.IsReactionStateImmune(target, type)) return null;
+        if (type == ReactionType.Frozen && FrozenReactionHandler.IsTemporarilyImmune(target)) return null;
         using var declarations = ElementEventScope.Begin("ReactionStateSet", target);
         if (type == ReactionType.Frozen || type == ReactionType.Burning)
             declarations.Refresh(target, type == ReactionType.Frozen ? ReactionPoolKind.Frozen : ReactionPoolKind.Burning,
@@ -147,6 +149,7 @@ public static class ReactionStateSystem
         var state = new ReactionStateInstance
         {
             Type = type,
+            InterruptsCharges = PublicControlStates.IsControl(StatusDataReactionStateDisplayAdapter.GetMainData(type)),
             Target = target,
             RemainingRounds = duration,
             OriginPhase = originPhase > 0
@@ -160,6 +163,7 @@ public static class ReactionStateSystem
         };
         States.Add(state);
         _displayAdapter.ApplyOrRefresh(state);
+        if (state.InterruptsCharges) PublicControlStates.InterruptCharges(target);
         return state;
     }
 
@@ -176,6 +180,7 @@ public static class ReactionStateSystem
         if (index < 0) return false;
         States.RemoveAt(index);
         _displayAdapter.Remove(target, type);
+        if (type == ReactionType.Frozen) FrozenReactionHandler.NotifyRemoved(target);
         return true;
     }
 

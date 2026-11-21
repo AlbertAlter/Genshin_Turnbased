@@ -7,24 +7,21 @@ using UnityEngine.Video;
 [DisallowMultipleComponent]
 public sealed class UICardVideoPlayer : MonoBehaviour
 {
-    public static string VideoPathForCharacter(int characterId) => CharacterAssetPath(characterId, "idle_60fps.mp4");
-    public static string PosterPathForCharacter(int characterId) => CharacterAssetPath(characterId, "poster.png");
-    public static string EnemyFolder(int enemyId, int variant = 1)
+    public static string VideoPathForCharacter(int characterId, int variant = 1) =>
+        UICardVideoCatalog.CharacterVideoRoot + MediaKey(characterId, variant) + ".mp4";
+    public static string PosterPathForCharacter(int characterId) =>
+        "art_assets/Character_Bare/" + MediaKey(characterId) + "_01.png";
+    public static string MediaKey(int id, int variant = 1)
     {
-        if (enemyId <= 0) throw new System.ArgumentOutOfRangeException(nameof(enemyId));
+        if (id <= 0) throw new System.ArgumentOutOfRangeException(nameof(id));
         if (variant <= 0) throw new System.ArgumentOutOfRangeException(nameof(variant));
-        string id = enemyId.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        return variant == 1 ? id : id + "_" + variant.ToString("D2", System.Globalization.CultureInfo.InvariantCulture);
+        string key = id.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return variant == 1 ? key : key + "_" + variant.ToString("D2", System.Globalization.CultureInfo.InvariantCulture);
     }
     public static string VideoPathForEnemy(int enemyId, int variant = 1) =>
-        "art_assets/Enemy_Animated/" + EnemyFolder(enemyId, variant) + "/idle_60fps.mp4";
+        "art_assets/Enemy_Animated/" + MediaKey(enemyId, variant) + ".mp4";
     public static string PosterPathForEnemy(int enemyId, int variant = 1) =>
-        "art_assets/Enemy_Animated/" + EnemyFolder(enemyId, variant) + "/poster.png";
-    private static string CharacterAssetPath(int characterId, string file)
-    {
-        if (characterId <= 0) throw new System.ArgumentOutOfRangeException(nameof(characterId));
-        return "art_assets/Character_Animated/" + characterId.ToString(System.Globalization.CultureInfo.InvariantCulture) + "/" + file;
-    }
+        "art_assets/Enemy/" + (variant == 1 ? MediaKey(enemyId) + "_01" : MediaKey(enemyId, variant)) + ".png";
 
     public string videoPath;
     public RawImage[] targets = new RawImage[0];
@@ -46,14 +43,17 @@ public sealed class UICardVideoPlayer : MonoBehaviour
     private RenderTexture texture;
     private RawImage[] bound;
     private Texture[] previous;
-    private bool started, loaded;
+    private bool loaded;
 
-    private void Start() { started = true; if (playOnStart && !loaded) Load(); }
+    private void Start() { if (playOnStart && !loaded) Load(); }
     public void Load()
     {
         Unload();
+        // Requests may arrive while a result card is hidden behind its back.
+        // Remember the request so activation starts decoding even with playOnStart disabled.
+        loaded = true;
         if (!isActiveAndEnabled) return;
-        loaded = true; Error = null; Loops = 0;
+        Error = null; Loops = 0;
         StartCoroutine(Prepare());
     }
     private IEnumerator Prepare()
@@ -152,6 +152,6 @@ public sealed class UICardVideoPlayer : MonoBehaviour
         if (texture != null) { texture.Release(); Destroy(texture); texture = null; }
     }
     private void OnDisable() { bool resume = loaded; Unload(); loaded = resume; }
-    private void OnEnable() { if (started && loaded) Load(); }
+    private void OnEnable() { if (loaded) Load(); }
     private void OnDestroy() => Unload();
 }

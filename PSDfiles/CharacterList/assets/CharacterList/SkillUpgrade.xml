@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <controller name="target" pages="2,Lv.2,3,Lv.3" selected="0" />
+  <displayList>
+    <image id="n1_c000e" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c000e" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="技能升级" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c000e" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择目标等级和技能材料" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c000e" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c000e" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c000e" name="materialPanel" xy="31,128" size="449,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c000e" name="outcomePanel" xy="495,128" size="410,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <text id="n8_c000e" name="materialTitle" xy="45,139" size="422,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="选择材料" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n9_c000e" name="resultTitle" xy="512,139" size="370,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="等级与技能变化" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <component id="n10_c000e" name="level2" xy="46,178" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="Lv.2" controller="target" page="2" checked="true" />
+    </component>
+    <component id="n11_c000e" name="level3" xy="168,178" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="Lv.3" controller="target" page="3" />
+    </component>
+    <graph id="n12_c000e" name="lowSkillBookPlate" xy="45,232" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n13_c000e" name="lowSkillBookIconPlate" xy="55,243" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <text id="n14_c000e" name="lowSkillBookIcon" xy="55,243" size="42,42" font="Microsoft YaHei" fontSize="14" color="#FEFEFE" text="天赋" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n15_c000e" name="lowSkillBookTitle" xy="106,239" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="低级天赋书" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n16_c000e" name="lowSkillBookDetail" xy="106,266" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="持有 18 本" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n17_c000e" name="lowSkillBookQuantity" xy="340,246" size="116,35" src="c000b" fileName="Quantity9.xml" />
+    <text id="n18_c000e" name="requiredBooks" xy="48,311" size="410,31" font="Microsoft YaHei" fontSize="16" color="#55493D" text="需要 3 本低级天赋书" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearText controller="target" pages="2,3" values="需要 3 本低级天赋书|需要 9 本低级天赋书" />
+    </text>
+    <text id="n19_c000e" name="changeLabel0" xy="513,184" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="培养等级" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n20_c000e" name="changeValue0" xy="658,184" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="Lv.1 → Lv.2" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="target" pages="2,3" values="Lv.1 → Lv.2|Lv.1 → Lv.3" />
+    </text>
+    <graph id="n21_c000e" name="changeLine0" xy="514,230" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n22_c000e" name="changeLabel1" xy="513,246" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="生效等级" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n23_c000e" name="changeValue1" xy="658,246" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="Lv.1 → Lv.2" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="target" pages="2,3" values="Lv.1 → Lv.2|Lv.1 → Lv.3" />
+    </text>
+    <graph id="n24_c000e" name="changeLine1" xy="514,292" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n25_c000e" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="确认后消耗已选材料。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

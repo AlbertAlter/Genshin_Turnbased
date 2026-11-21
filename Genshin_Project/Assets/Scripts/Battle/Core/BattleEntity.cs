@@ -16,6 +16,7 @@ public partial class BattleEntity : MonoBehaviour
     // ========== 身份 ==========
     public EntityType Type;
     public int EntityID;
+    [NonSerialized] public BattleEntity Summoner; // 同配置召唤物仍区分实际召唤者。
     [NonSerialized] internal long EquipmentDeathVersion;
     /// <summary>角色固有武器类型：0单手剑、1双手剑、2弓、3长柄、4法器；非角色/未初始化为-1。</summary>
     public int WeaponType = -1;
@@ -43,6 +44,7 @@ public partial class BattleEntity : MonoBehaviour
     public float TotalATK;
     /// <summary>角色已生效的突破攻击百分比，与武器副属性、状态ATKBonus同区加算。</summary>
     public float CharacterATKBonus;
+    internal float ArtifactFlatATK;
     public float TotalDEF;
     // HP/DEF旧面板已包含的百分比。仅记录乘区，不把ExtraBase或固定加数混入；重建面板时覆盖。
     [NonSerialized] internal float BakedHPBonus;
@@ -148,11 +150,12 @@ public partial class BattleEntity : MonoBehaviour
     public FieldPosition Position;
 
     // ========== 生死判断 ==========
-    public bool IsDead => CurrentHP <= 0;
+    public bool HasWithdrawn { get; internal set; }
+    public bool IsDead => CurrentHP <= 0 && EnemyCtrl?.HasDepletedHealthPhase != true;
     public bool IsAlive => CurrentHP > 0;
     // 离场独立于生死和角色前后台；原实体、位置及状态仍保留。
     public bool IsOffField => HasStatus(PublicControlStates.OffField);
-    public bool IsOnField => IsAlive && !IsOffField;
+    public bool IsOnField => IsAlive && !IsOffField && !HasWithdrawn;
 
     // ========== 初始化（子类覆写） ==========
 }

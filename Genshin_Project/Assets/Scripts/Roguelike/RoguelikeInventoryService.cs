@@ -49,6 +49,11 @@ public sealed class RoguelikeInventoryService
         => Commit(stepId, operation, RoguelikeSaveReason.InventoryChanged);
 
     public RoguelikeSaveResult Commit(string stepId, Action<RoguelikeInventoryTransaction> operation, RoguelikeSaveReason reason)
+        => CommitWithContext(stepId, operation, reason);
+
+    internal RoguelikeSaveResult<RoguelikeFlowContext> CommitWithContext(string stepId,
+        Action<RoguelikeInventoryTransaction> operation, RoguelikeSaveReason reason,
+        Func<RoguelikeProgressSnapshot, RoguelikeSaveResult> validate = null)
     {
         using var transaction = flow.BeginSaveTransaction();
         if (reason != RoguelikeSaveReason.InventoryChanged && reason != RoguelikeSaveReason.EquipmentChanged && reason != RoguelikeSaveReason.GachaCompleted)
@@ -66,23 +71,33 @@ public sealed class RoguelikeInventoryService
         RoguelikeInventoryTransaction draft = null;
         try
         {
+            var validation = validate?.Invoke(current.Data.Snapshot);
+            if (validation != null && !validation.Succeeded)
+                return RoguelikeSaveResult<RoguelikeFlowContext>.Failure(validation.ErrorCode, validation.Message, validation.Exception);
             draft = CreateDraft(current.Data.Snapshot);
             operation(draft);
             var snapshot = draft.ExportSnapshot();
-            var view = new RoguelikeInventoryView(snapshot, equipment, items);
-            var result = flow.CommitProgressAction(stepId, snapshot, reason);
+            var result = flow.CommitProgressActionWithContext(stepId, snapshot, reason);
             if (!result.Succeeded) return result;
             draft.Close();
             // 单个界面订阅者异常不能将已成功落盘的操作伪装成失败，也不妨碍其他订阅者刷新。
-            if (Changed != null)
-                foreach (Action<RoguelikeInventoryView> listener in Changed.GetInvocationList())
-                    try { listener(view); }
-                    catch (Exception exception) { Debug.LogException(exception); }
+            var listeners = Changed;
+            if (listeners != null)
+            {
+                try
+                {
+                    var view = new RoguelikeInventoryView(result.Data.Snapshot, equipment, items);
+                    foreach (Action<RoguelikeInventoryView> listener in listeners.GetInvocationList())
+                        try { listener(view); }
+                        catch (Exception exception) { Debug.LogException(exception); }
+                }
+                catch (Exception exception) { Debug.LogException(exception); }
+            }
             return result;
         }
         catch (Exception exception)
         {
-            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation,
+            return RoguelikeSaveResult<RoguelikeFlowContext>.Failure(RoguelikeSaveErrorCode.InvalidOperation,
                 "背包操作未提交：" + exception.Message, exception);
         }
         finally
@@ -92,8 +107,8 @@ public sealed class RoguelikeInventoryService
         }
     }
 
-    private static RoguelikeSaveResult Invalid(string message)
+    private static RoguelikeSaveResult<RoguelikeFlowContext> Invalid(string message)
     {
-        return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, message);
+        return RoguelikeSaveResult<RoguelikeFlowContext>.Failure(RoguelikeSaveErrorCode.InvalidOperation, message);
     }
 }

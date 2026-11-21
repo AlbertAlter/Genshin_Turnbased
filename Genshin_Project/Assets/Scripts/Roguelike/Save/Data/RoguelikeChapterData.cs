@@ -50,6 +50,7 @@ public sealed class RoguelikeWeaponInstanceData
 {
     public string InstanceId;
     public int Experience;
+    public bool IsLocked;
     public WeaponLoadout Weapon = new WeaponLoadout();
 }
 
@@ -60,12 +61,20 @@ public sealed class RoguelikeArtifactInstanceData
     // 0 只用于旧档中尚未指定套装的实例；不按词条猜测套装。
     public int ArtifactSetID;
     public int Experience;
+    public bool IsLocked;
     public GeneratedArtifact Artifact = new GeneratedArtifact();
 }
 
 [Serializable]
 public sealed class RoguelikeInventoryData
 {
+    public const int MaxStackQuantity = 9999;
+    public const string MoraItemId = "680103";
+    // 摩拉按货币计数，不受材料的 9999 件限制；仍受存档整数范围约束。
+    public static int StackLimit(string itemId) => itemId == MoraItemId ? int.MaxValue : MaxStackQuantity;
+    public const int MaxWeapons = 3000;
+    public const int MaxArtifacts = 5000;
+
     public List<RoguelikeItemStackData> Items = new List<RoguelikeItemStackData>();
     public List<RoguelikeWeaponInstanceData> Weapons = new List<RoguelikeWeaponInstanceData>();
     public List<RoguelikeArtifactInstanceData> Artifacts = new List<RoguelikeArtifactInstanceData>();

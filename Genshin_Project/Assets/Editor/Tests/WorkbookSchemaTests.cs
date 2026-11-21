@@ -46,23 +46,8 @@ namespace GenshinTurnBased.Tests.EditMode
             ValidateAllSheetHeaders("Character_Growth_Curve.xlsx", errors,
                 "Level", "Multiplier");
 
-            ValidateHeaders("StatusData.xlsx", "StatusData_Main", errors,
-                "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
-                "MultiplierPart", "ApplyDamageType",
-                "ApplyReactionType", "ApplyElementType", "ApplyString", "ScriptHook",
-                "MaxCount", "MaxStack", "WhenMax");
-            ValidateHeaders("StatusData.xlsx", "Status_Effect", errors, EffectHeaders("StatusEffectID", "StatusEffectID2", "TargetSelect"));
-            ValidateHeaders("StatusData.xlsx", "Status_Action", errors, StatusActionHeaders());
-            ValidateHeaders("StatusData.xlsx", "Status_Attributes", errors, StatusAttributeHeaders());
-
-            ValidateHeaders("StatusData_Enemy.xlsx", "StatusData_Main_Enemy", errors,
-                "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
-                "MultiplierPart", "ApplyDamageType",
-                "ApplyReactionType", "ApplyElementType", "ApplyString", "ScriptHook",
-                "MaxCount", "MaxStack", "WhenMax");
-            ValidateHeaders("StatusData_Enemy.xlsx", "Status_Effect", errors, EffectHeaders("StatusEffectID", "StatusEffectID2", "TargetSelect"));
-            ValidateHeaders("StatusData_Enemy.xlsx", "Status_Action_Enemy", errors, StatusActionHeaders());
-            ValidateHeaders("StatusData_Enemy.xlsx", "Status_Attributes", errors, StatusAttributeHeaders());
+            ValidateStatusWorkbooks("CharacterStatus", errors);
+            ValidateStatusWorkbooks("EnemyStatus", errors);
 
             ValidateHeaders("StatusData_Overall.xlsx", "StatusData_Overall_Main", errors,
                 "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
@@ -74,27 +59,31 @@ namespace GenshinTurnBased.Tests.EditMode
             ValidateHeaders("StatusData_Overall.xlsx", "StatusAction_Overall", errors, StatusActionHeaders());
             ValidateHeaders("StatusData_Overall.xlsx", "StatusAttributes_Overall", errors, StatusAttributeHeaders());
 
-            ValidateHeaders("EnemyAttributes.xlsx", "Enemy_Main", errors,
-                "EnemyID", "EnemyNameID", "EnemyName", "Threat", "ActsGiven", "ATK_Curve",
-                "HP_coeff", "ATK_coeff", "PhysicalRes", "PyroRes", "HydroRes", "ElectroRes",
-                "CryoRes", "AnemoRes", "DendroRes", "GeoRes", "PhysicalDmgBonus", "PyroDmgBonus",
-                "HydroDmgBonus", "ElectroDmgBonus", "CryoDmgBonus", "AnemoDmgBonus",
-                "DendroDmgBonus", "GeoDmgBonus");
+            ValidateHeaders("EnemyAttributes.xlsx", "Coeff", errors, "EnemyID", "HP_coeff", "ATK_coeff", "ATK_Curve");
             ValidateHeaders("EnemyAttributes.xlsx", "Base_HP", errors, "lv", "hp");
             ValidateHeaders("EnemyAttributes.xlsx", "Base_ATK1", errors, "lv", "atk1");
             ValidateHeaders("EnemyAttributes.xlsx", "Base_ATK2", errors, "lv", "atk2");
 
-            ValidateHeaders("EnemySkill.xlsx", "EnemySkill_Main", errors,
-                "EnemySkillID", "EnemySkillID2", "EnemySkillName", "Cooldown", "UsePerTurn", "HighThreat", "Description");
-            ValidateHeaders("EnemySkill.xlsx", "EnemySkill_Effect", errors, EffectHeaders("SkillEffectID", "SkillEffectID2", "TargetNumber"));
-            ValidateHeaders("EnemySkill.xlsx", "EnemySkill_Param", errors,
-                "SkillEffectID", "SkillEffectID2", "EffectType", "Hits1", "Hits2", "Hits3",
-                "Hits4", "Hits5", "Hits6", "Hits7", "Hits8");
-            ValidateHeaders("EnemySkill.xlsx", "EnemyAI", errors,
-                "EnemyID", "EnemyNameID", "EnemyName", "PatternID", "PatternType", "NextPatternID",
-                "ConditionType", "ConditionParam");
-            ValidateHeaders("EnemySkill.xlsx", "EnemyAI_Rule", errors,
-                "EnemyID", "PatternID", "PatternType", "SkillID", "SkillIndex", "Weight");
+            CheckPackages("Enemies", errors, (package, source) =>
+            {
+                ValidateHeaders(package, source, "Enemy_Main", errors,
+                    "EnemyID", "EnemyNameID", "EnemyName", "Threat", "ActsGiven",
+                    "PhysicalRes", "PyroRes", "HydroRes", "ElectroRes", "CryoRes", "AnemoRes", "DendroRes", "GeoRes",
+                    "PhysicalDmgBonus", "PyroDmgBonus", "HydroDmgBonus", "ElectroDmgBonus", "CryoDmgBonus", "AnemoDmgBonus",
+                    "DendroDmgBonus", "GeoDmgBonus");
+                ValidateHeaders(package, source, "EnemySkill_Main", errors,
+                    "EnemySkillID", "EnemySkillID2", "EnemySkillName", "Cooldown", "UsePerTurn", "HighThreat", "Description");
+                ValidateHeaders(package, source, "EnemySkill_Effect", errors, EffectHeaders("SkillEffectID", "SkillEffectID2", "TargetNumber"));
+                ValidateHeaders(package, source, "EnemySkill_Param", errors,
+                    "SkillEffectID", "SkillEffectID2", "EffectType", "Hits1", "Hits2", "Hits3",
+                    "Hits4", "Hits5", "Hits6", "Hits7", "Hits8");
+                ValidateHeaders(package, source, "EnemyAI", errors,
+                    "EnemyID", "EnemyNameID", "EnemyName", "PatternID", "PatternType", "NextPatternID",
+                    "ConditionType", "ConditionParam");
+                ValidateHeaders(package, source, "EnemyAI_Rule", errors,
+                    "EnemyID", "PatternID", "PatternType", "SkillID", "SkillIndex", "Weight");
+                ValidateHeaders(package, source, "BattleInitiate", errors, "EnemyID");
+            });
 
             ValidateHeaders("ReactionLevelCoefficient.xlsx", "Sheet1", errors, "lv", "coefficient");
             ValidateHeaders("EnemyShield.xlsx", "Type1", errors,
@@ -156,6 +145,40 @@ namespace GenshinTurnBased.Tests.EditMode
             }
 
             AssertNoErrors(errors);
+        }
+
+        private static void ValidateStatusWorkbooks(string folder, List<string> errors)
+            => CheckPackages(folder, errors, (package, source) =>
+            {
+                ValidateHeaders(package, source, "StatusData_Main", errors,
+                    "StatusID", "StatusID2", "StatusName", "StatusType", "Display", "Description",
+                    "MultiplierPart", "ApplyDamageType", "ApplyReactionType", "ApplyElementType",
+                    "ApplyString", "ScriptHook", "MaxCount", "MaxStack", "WhenMax");
+                ValidateHeaders(package, source, "Status_Effect", errors, EffectHeaders("StatusEffectID", "StatusEffectID2", "TargetSelect"));
+                ValidateHeaders(package, source, "Status_Action", errors, StatusActionHeaders());
+                ValidateHeaders(package, source, "Status_Attributes", errors, StatusAttributeHeaders());
+            });
+
+        private static void CheckPackages(string folder, List<string> errors, Action<ExcelPackage, string> check)
+        {
+            string directory = Path.Combine(RuntimeDataRoot, folder);
+            if (!Directory.Exists(directory))
+            {
+                errors.Add($"缺少配表目录：{folder}");
+                return;
+            }
+
+            bool found = false;
+            foreach (string path in Directory.EnumerateFiles(directory, "*.xlsx"))
+            {
+                string name = Path.GetFileName(path);
+                if (name.StartsWith("~$", StringComparison.Ordinal) || name.StartsWith("#", StringComparison.Ordinal)
+                    || name.StartsWith("0_", StringComparison.Ordinal)) continue;
+                found = true;
+                using var package = new ExcelPackage(new FileInfo(path));
+                check(package, folder + "/" + name);
+            }
+            if (!found) errors.Add($"{folder} 目录没有正式工作簿。");
         }
 
         private static string[] EffectHeaders(string idHeader, string id2Header, string targetColumn)

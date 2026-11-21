@@ -46,7 +46,7 @@ public static class CharacterBuildApplier
     }
 
     /// <summary>
-    /// 对出战角色应用档案对应的天赋/命座/突破及武器效果。
+    /// 对出战角色应用开战状态、档案对应的天赋/命座/突破及武器效果。
     /// 裸面板先由InitializePanel读取profile的整数突破阶段（旧配置兼容布尔标记），不能事后补字段。
     /// 战斗开始前、双方完整编队已设定SlotPosition并注册后调用；初始化OnApply/BindStatus沿正常目标入口解析。
     /// 所有角色构筑完成后才调用StartBattle，由统一入口完成队伍效果与初始属性收尾。
@@ -60,7 +60,10 @@ public static class CharacterBuildApplier
         InitializePanel(ctrl, profile);
         BattleAttributeInitialization.BeginBuild(ctrl.Entity);
 
-        // 1. 自身技能等级已由InitializePanel从角色实例侧查询并加载，不再临时执行SkillLevelUp。
+        // 裸面板和自身技能等级已就绪。基础机制监听先于依赖养成档案的天赋和命座挂载。
+        if (dm.CharacterInitiateStatusDict.TryGetValue(profile.CharacterID, out var initialStatuses))
+            foreach (string status in initialStatuses)
+                ApplyInitiateStatus(ctrl, status);
 
         // 2. 天赋：必须完成UnlockAfter指定等级的突破；空白/0默认解锁。
         if (dm.TalentDict.TryGetValue(profile.CharacterID, out var talents))

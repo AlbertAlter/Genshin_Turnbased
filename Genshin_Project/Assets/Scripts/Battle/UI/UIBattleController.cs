@@ -69,7 +69,7 @@ public class UIBattleController : MonoBehaviour
         public TMP_Text nameText;        // 角色名（暂显示 CharacterID）
         public Image hpBar;              // 血条（Filled Horizontal）
         public TMP_Text hpText;          // CurrentHP/TotalHP（向上取整）
-        public Image energyBall;         // 能量球（Filled Radial360）
+        public Image energyBall;         // 能量球（由公共战斗 UI 从下往上填充）
         public TMP_Text energyText;      // 能量数值
         public Transform statusContainer;// 状态图标容器（一行）
         public Button burstButton;       // 爆发按钮（可=能量球上的 Button）
@@ -99,10 +99,6 @@ public class UIBattleController : MonoBehaviour
     public void UICancelSwitch() { if (_switching) CancelSwitch(); }
 
 
-    // 每个槽位的状态图标缓存（数量变化时重建）
-    private readonly List<List<Image>> _allyStatusIcons = new List<List<Image>>();
-    private readonly List<List<Image>> _enemyStatusIcons = new List<List<Image>>();
-
     void Start()
     {
         if (input == null) input = FindObjectOfType<BattleInputController>();
@@ -113,8 +109,6 @@ public class UIBattleController : MonoBehaviour
                 foreach (var border in enemyFieldBorders)
                     if (border != null) border.sprite = sprite;
             }, message => Debug.LogWarning(message, this)));
-        for (int i = 0; i < 4; i++) _allyStatusIcons.Add(new List<Image>());
-        for (int i = 0; i < 5; i++) _enemyStatusIcons.Add(new List<Image>());
 
         if (btnAttack != null) btnAttack.onClick.AddListener(() => input?.UIEnterSelectSkill(0));
         if (btnHeavy != null) btnHeavy.onClick.AddListener(() => input?.UIEnterSelectSkill(1));
@@ -255,7 +249,7 @@ public class UIBattleController : MonoBehaviour
             if (slot.hpBar != null) slot.hpBar.fillAmount = maxHp > 0 ? Mathf.Clamp01(ent.CurrentHP / maxHp) : 0;
             if (slot.hpText != null) slot.hpText.text = $"{Mathf.CeilToInt(ent.CurrentHP)}/{Mathf.CeilToInt(maxHp)}";
             float maxE = ent.MaxEnergy;
-            if (slot.energyBall != null) slot.energyBall.fillAmount = maxE > 0 ? Mathf.Clamp01(ent.CurrentEnergy / maxE) : 0;
+            BattleUiEnergyFill.Apply(slot.energyBall, ent.CurrentEnergy, maxE);
             if (slot.energyText != null) slot.energyText.text = $"{Mathf.CeilToInt(ent.CurrentEnergy)}/{Mathf.CeilToInt(maxE)}";
             //高亮（2026-08-14）：
             //  - 当前出战角色：常态化【第二种高亮（绿色）】，目标选择阶段=施放角色（同一高亮）
@@ -283,7 +277,7 @@ public class UIBattleController : MonoBehaviour
                     slot.highlight.color = ActiveAllyHighlightColor;
                 }
             }
-            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _allyStatusIcons[i], ent);
+            BattleRosterStatusBar.Bind(slot.statusContainer, BattleSide.Ally, ent.SlotPosition, input: input);
         }
     }
 
@@ -314,7 +308,7 @@ public class UIBattleController : MonoBehaviour
             float maxHp = ent.TotalHP;
             if (slot.hpBar != null) slot.hpBar.fillAmount = maxHp > 0 ? Mathf.Clamp01(ent.CurrentHP / maxHp) : 0;
             if (slot.hpText != null) slot.hpText.text = $"{Mathf.CeilToInt(ent.CurrentHP)}/{Mathf.CeilToInt(maxHp)}";
-            RefreshStatusBar(slot.statusContainer, ent.GetStatusList(), _enemyStatusIcons[i], ent);
+            BattleRosterStatusBar.Bind(slot.statusContainer, BattleSide.Enemy, pos, input: input);
         }
     }
 
@@ -374,7 +368,7 @@ public class UIBattleController : MonoBehaviour
         {
             for (int i = 0; i < btnSkillNames.Length && i < 4; i++)
                 if (btnSkillNames[i] != null)
-                    btnSkillNames[i].text = ally.GetBoundSkillName(i);
+                    btnSkillNames[i].text = ally.GetUiSkillName(i);
         }
 
         // 冷却数字：普攻/重击/战技按钮（右上角红字，冷却中显示剩余回合）
@@ -544,45 +538,6 @@ public class UIBattleController : MonoBehaviour
         return list;
     }
 
-    /// <summary>状态栏刷新：最新10条（新到旧），纯色占位图标，剩1回合闪烁。</summary>
-    void RefreshStatusBar(Transform container, List<StatusInstance> statuses, List<Image> icons, object host)
-    {
-        if (container == null) return;
-        var sorted = statuses.FindAll(item => item != null && item.IsActive
-            && item.MainData != null && item.MainData.Display == 1);
-        sorted.Sort((a, b) => b.ApplyOrder.CompareTo(a.ApplyOrder));
-        int show = Mathf.Min(sorted.Count, 10);
-        while (icons.Count < show) icons.Add(CreateStatusIcon(container));
-        for (int i = 0; i < icons.Count; i++)
-        {
-            if (i < show)
-            {
-                var inst = sorted[i];
-                icons[i].gameObject.SetActive(true);
-                var view = icons[i].GetComponent<BattleStatusDescriptionView>();
-                if (view == null) view = icons[i].gameObject.AddComponent<BattleStatusDescriptionView>();
-                view.Bind(inst, host);
-                var c = statusColor;
-                if (!inst.IsPermanent && inst.RemainingPhaseCount <= 1)
-                    c.a = 0.35f + 0.65f * Mathf.Abs(Mathf.Sin(Time.time * 6f)); // 剩1回合淡入淡出闪烁
-                icons[i].color = c;
-            }
-            else icons[i].gameObject.SetActive(false);
-        }
-    }
-
-    Image CreateStatusIcon(Transform parent)
-    {
-        var go = new GameObject("StatusIcon", typeof(RectTransform), typeof(Image));
-        go.transform.SetParent(parent, false);
-        var img = go.GetComponent<Image>();
-        img.color = statusColor;
-        img.raycastTarget = true; // 状态说明悬停；弹出的说明面板本身不拦截射线。
-        var rt = go.GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(24, 24);
-        return img;
-    }
-
     void SetButtonState(Button b, bool usable)
     {
         if (b != null) b.interactable = usable;
@@ -599,6 +554,7 @@ public class UIBattleController : MonoBehaviour
 
     void BeginSwitch(bool forcedDeathSwitch)
     {
+        if (!forcedDeathSwitch && input != null && input.IsUiInputBlocked) return;
         var bm = BattleManager.Instance;
         if (bm == null) return;
         //换人界面为模态界面：停用战斗输入组件（BattleInputController 的 Update 停止执行，2026-08-14）

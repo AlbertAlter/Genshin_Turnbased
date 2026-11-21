@@ -111,18 +111,22 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(loaded.Data.Snapshot.CurrentStageIndex, Is.EqualTo(0));
         }
 
-        [Test]
-        public void NewerSchemaFile_IsNotMisreadByOlderCode()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NewerSchemaFile_IsNotMisreadByOlderCode(bool backupOnly)
         {
             var save = RoguelikeSaveTestFactory.ChapterEntry(2, 1);
             save.Metadata.SchemaVersion = RoguelikeSaveValidator.CurrentSchemaVersion + 1;
             Directory.CreateDirectory(paths.GetChapterDirectory(2));
-            File.WriteAllText(paths.GetChapterSlotPath(2, 1), RoguelikeSaveJson.Serialize(save));
+            var formalPath = paths.GetChapterSlotPath(2, 1);
+            File.WriteAllText(backupOnly ? RoguelikeSavePaths.GetBackupPath(formalPath) : formalPath,
+                RoguelikeSaveJson.Serialize(save));
 
             var result = repository.LoadChapterSlot(2, 1);
 
             Assert.That(result.Succeeded, Is.False);
             Assert.That(result.ErrorCode, Is.EqualTo(RoguelikeSaveErrorCode.UnsupportedSchema));
+            Assert.That(File.Exists(formalPath), Is.EqualTo(!backupOnly));
         }
     }
 }

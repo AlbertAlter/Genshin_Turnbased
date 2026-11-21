@@ -34,6 +34,9 @@ public sealed class DataManagerRoguelikeCharacterAcquisitionCatalog : IRoguelike
 public interface IRoguelikeGameService
 {
     event Action Changed;
+    PlayerAppearanceService Appearance { get; }
+    RoguelikeWishService Wishes { get; }
+    RoguelikeShopService Shop { get; }
     RoguelikeSaveResult<RoguelikeFlowContext> Continue();
     RoguelikeSaveResult<RoguelikeInventoryView> ReadInventory();
     RoguelikeSaveResult<RoguelikeSaveSummary> ReadActiveSummary();
@@ -61,6 +64,7 @@ public interface IRoguelikeGameService
     RoguelikeSaveResult RecordBattleVictory(string stepId);
     RoguelikeSaveResult SavePendingReward(string stepId, PendingRewardData pending);
     RoguelikeSaveResult CompleteNode(string stepId, RoguelikeAcquisition outcome);
+    RoguelikeSaveResult ReturnToRoute(string stepId);
     RoguelikeSaveResult CompleteEvent(string stepId, RoguelikeAcquisition outcome);
     RoguelikeSaveResult CompleteChapter(string stepId);
     RoguelikeSaveResult SaveCompletedChapterToSlot(string stepId, int slot, bool overwriteConfirmed = false);

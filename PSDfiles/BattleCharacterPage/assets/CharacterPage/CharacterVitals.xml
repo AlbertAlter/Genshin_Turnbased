@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1008,264">
+  <controller name="shield" pages="0,无护盾,1,有护盾" selected="1" />
+  <displayList>
+    <graph id="n0_vital" name="panel" xy="0,0" size="1008,264" type="rect" fillColor="#DAD2C1" lineSize="1" lineColor="#B5AA96" corner="12,12,12,12" touchable="false" />
+    <text id="n1_vital" name="heading" xy="24,12" size="500,40" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="当前资源" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n2_vital" name="sampleLabel" xy="794,12" size="190,40" font="Microsoft YaHei" fontSize="19" color="#6C6255" text="布局示例" align="right" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n3_vital" name="headingRule" xy="24,59" size="960,1" type="rect" fillColor="#B8AC97" lineSize="0" touchable="false" />
+
+    <graph id="n10_vital" name="energyTrack" xy="75,84" size="98,98" type="rect" fillColor="#A99D86" lineSize="0" corner="49,49,49,49" touchable="false" />
+    <image id="n11_vital" name="energyFill" xy="75,84" size="98,98" src="vitnr" fileName="EnergyChargeFill.png" touchable="false" fillMethod="radial360" fillOrigin="0" fillClockwise="true" fillAmount="65" />
+    <image id="n12_vital" name="energyIconBackground" xy="82,91" size="84,84" src="circd" fileName="DeepBrownCircle.png" touchable="false" />
+    <image id="n13_vital" name="energyIcon" xy="93,102" size="62,62" src="icbur" fileName="1009_S02.png" touchable="false" />
+    <text id="n15_vital" name="energyValue" xy="24,187" size="200,40" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="26 / 40" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n21_vital" name="columnRule" xy="230,84" size="1,144" type="rect" fillColor="#B8AC97" lineSize="0" touchable="false" />
+
+    <image id="n4_vital" name="hpIconBackground" xy="272,88" size="36,36" src="circd" fileName="DeepBrownCircle.png" touchable="false" />
+    <image id="n5_vital" name="hpIcon" xy="278,94" size="24,24" src="vithp" fileName="HealthValueIcon.png" touchable="false" />
+    <text id="n6_vital" name="hpLabel" xy="320,86" size="300,40" font="Microsoft YaHei" fontSize="23" color="#5F5447" text="生命值" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n7_vital" name="hpValue" xy="624,86" size="360,40" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="1,730 / 2,380" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n8_vital" name="hpTrack" xy="272,137" size="712,8" type="rect" fillColor="#B7AC98" lineSize="0" corner="4,4,4,4" touchable="false" />
+    <graph id="n9_vital" name="hpFill" xy="272,137" size="518,8" type="rect" fillColor="#4B743F" lineSize="0" corner="4,4,4,4" touchable="false" />
+
+    <graph id="n16_vital" name="shieldRule" xy="272,167" size="712,1" type="rect" fillColor="#B8AC97" lineSize="0" touchable="false">
+      <gearDisplay controller="shield" pages="1" />
+    </graph>
+    <image id="n17_vital" name="shieldIconBackground" xy="272,189" size="36,36" src="circd" fileName="DeepBrownCircle.png" touchable="false">
+      <gearDisplay controller="shield" pages="1" />
+    </image>
+    <image id="n18_vital" name="shieldIcon" xy="278,195" size="24,24" src="vitsh" fileName="ShieldValueIcon.png" touchable="false">
+      <gearDisplay controller="shield" pages="1" />
+    </image>
+    <text id="n19_vital" name="shieldLabel" xy="320,187" size="300,40" font="Microsoft YaHei" fontSize="23" color="#5F5447" text="护盾" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="shield" pages="1" />
+    </text>
+    <text id="n20_vital" name="shieldValue" xy="624,187" size="360,40" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="520" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="shield" pages="1" />
+    </text>
+  </displayList>
+</component>

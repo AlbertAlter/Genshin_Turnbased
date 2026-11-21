@@ -7,7 +7,7 @@ using System.Threading;
 /// </summary>
 public static class StatusRemovalActions
 {
-    private static readonly AsyncLocal<int> TeardownDepth = new AsyncLocal<int>();
+    private static readonly AsyncLocal<int> CleanupDepth = new AsyncLocal<int>();
 
     internal sealed class Request
     {
@@ -27,9 +27,10 @@ public static class StatusRemovalActions
                 StatusHost = host, Target = host as BattleEntity, Declaration = cause };
         }
         internal bool CanExecute => sourceAvailableAtRemoval && !Status.IsActive && Status.Caster?.IsAlive == true
+            && BattleManager.Instance?.IsBattleOver != true
             && Status.Caster.EquipmentDeathVersion == sourceDeathVersion
             && BattleDeathResolution.SessionVersion == sessionVersion
-            && EquipmentStatusLifetime.CanExecute(Status) && TeardownDepth.Value == 0;
+            && EquipmentStatusLifetime.CanExecute(Status) && CleanupDepth.Value == 0;
     }
 
     private sealed class Scope : IDisposable
@@ -46,24 +47,25 @@ public static class StatusRemovalActions
         return new Scope(() => status.NaturalEndDepth--);
     }
 
-    /// <summary>场景退出/重开是容器释放，不产生游戏内的销毁行动，包含绑定子状态。</summary>
-    internal static IDisposable SuppressForTeardown()
+    /// <summary>容器释放及阶段退出仅清理实例和绑定，跳过游戏内的销毁行动。</summary>
+    internal static IDisposable SuppressForCleanup()
     {
-        TeardownDepth.Value++;
-        return new Scope(() => TeardownDepth.Value--);
+        CleanupDepth.Value++;
+        return new Scope(() => CleanupDepth.Value--);
     }
 
     internal static void OnRemoved(StatusInstance status, object host, string reason)
     {
         if (status == null || status.IsActive || status.RemovalActionCollected) return;
         status.RemovalActionCollected = true;
-        if (reason == "Expired" || status.NaturalEndDepth > 0 || TeardownDepth.Value > 0) return;
+        if (reason == "Expired" || status.NaturalEndDepth > 0 || CleanupDepth.Value > 0) return;
         var cause = BattleEventHub.Current;
         if (cause?.Kind != BattleEventKind.StatusRemoved
             || cause.Get<StatusEventData>()?.InstanceId != status.ApplyOrder) return;
         var dm = DataManager.Instance;
         if (dm == null || !dm.StatusActionDict.TryGetValue(status.StatusID2, out var actions)) return;
         var request = new Request(status, host, cause);
+        using var collection = BattleResolutionContext.BeginCollection();
         foreach (var action in actions)
         {
             if (action.ActionType != "OnDestroy") continue;

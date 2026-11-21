@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using UnityEngine;
 
-[NonParallelizable]
 public sealed class HitShakeTests
 {
     private sealed class CountingRandom : IBattleRandomSource
@@ -12,13 +11,11 @@ public sealed class HitShakeTests
         public float NextFloat01() { Draws++; return .5f; }
     }
     [Test]
-    public void DefaultsAreLocalOnlyAndNonBasicDamageDoesNotShake()
+    public void ControlClickProfilesRemainSeparateFromAttackAnimations()
     {
         var style = HitShakeStyle.Load();
-        Assert.AreEqual("CardNormal", style.Resolve("Normal", "", 1).Card.ID);
-        Assert.AreEqual("CardHeavy", style.Resolve("Heavy", "", 1).Card.ID);
-        Assert.IsNull(style.Resolve("Normal", "", 1).Screen);
-        Assert.IsNull(style.Resolve("Burst", "", 1).Card);
+        Assert.AreEqual("Card", style.Get("FreezeClick1").Space);
+        Assert.AreEqual("Card", style.Get("AirborneClick3").Space);
     }
     [Test]
     public void VisualSeedRepeatsStaysBoundedAndExpiresWithoutBusinessRandom()
@@ -26,7 +23,7 @@ public sealed class HitShakeTests
         var previous = BattleRandom.Source; var random = new CountingRandom(); BattleRandom.SetSource(random);
         try
         {
-            var p = HitShakeStyle.Load().Get("CardNormal"); var size = new Vector2(197, 338);
+            var p = HitShakeStyle.Load().Get("FreezeClick1"); var size = new Vector2(197, 338);
             for (int i = 0; i < 100; i++)
             {
                 float age = p.Duration * i / 100;
@@ -42,7 +39,7 @@ public sealed class HitShakeTests
     [Test]
     public void DenseHitsClampTheirCombinedOffset()
     {
-        var p = HitShakeStyle.Load().Get("CardHeavy"); var size = new Vector2(197, 338);
+        var p = HitShakeStyle.Load().Get("FreezeClick3"); var size = new Vector2(197, 338);
         var sum = new HitShakePose();
         for (int i = 0; i < 50; i++)
         { var pose = HitShakeMath.Sample(p, size, (uint)i, i * .001f); sum.Offset += pose.Offset; sum.Rotation += pose.Rotation; }
@@ -59,7 +56,7 @@ public sealed class HitShakeTests
             var root = (RectTransform)go.transform; root.sizeDelta = new Vector2(1920, 1080);
             root.anchoredPosition = new Vector2(10, 20);
             var controller = go.AddComponent<UIHitShakeController>(); controller.AutomaticClock = false; controller.BindScreen(root);
-            var p = HitShakeStyle.Load().Get("ScreenDefault");
+            var p = new HitShakeStyle.Profile { ID = "ScreenTest", Space = "Screen", Duration = 0.2f, X = 0.004f, Y = 0.003f, Frequency = 25, Decay = 2, MaxTranslation = 0.008f };
             for (int target = 0; target < 5; target++) controller.PulseScreen(1, 1, 1, "Effect", 1, p, (uint)target);
             Assert.AreEqual(1, controller.ActiveScreenImpulses);
             controller.PulseScreen(1, 1, 1, "Effect", 2, p, 123);

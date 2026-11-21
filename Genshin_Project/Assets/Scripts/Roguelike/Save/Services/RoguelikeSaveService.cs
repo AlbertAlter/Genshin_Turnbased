@@ -6,23 +6,30 @@ using UnityEngine;
 public sealed class RoguelikeSaveService
 {
     internal IDisposable BeginTransaction() => repository.BeginTransaction();
+    internal RoguelikeSaveRepository Repository => repository;
     private readonly RoguelikeSaveRepository repository;
     private readonly RoguelikeSaveValidator validator;
     private readonly string gameVersion;
     private readonly Func<DateTimeOffset> nowProvider;
     private readonly Func<string> idProvider;
+    private readonly RoguelikeWishRules wishRules;
+    private readonly IBattleRandomSource wishRandom;
 
     public RoguelikeSaveService(
         RoguelikeSaveRepository repository,
         string gameVersion = null,
         Func<DateTimeOffset> nowProvider = null,
-        Func<string> idProvider = null)
+        Func<string> idProvider = null,
+        RoguelikeWishRules wishRules = null,
+        IBattleRandomSource wishRandom = null)
     {
         this.repository = repository ?? throw new ArgumentNullException("repository");
         validator = new RoguelikeSaveValidator();
         this.gameVersion = gameVersion ?? Application.version ?? string.Empty;
         this.nowProvider = nowProvider ?? (() => DateTimeOffset.Now);
         this.idProvider = idProvider ?? (() => Guid.NewGuid().ToString("N"));
+        this.wishRules = wishRules;
+        this.wishRandom = wishRandom;
     }
 
     public bool HasActiveRun()
@@ -97,21 +104,45 @@ public sealed class RoguelikeSaveService
         }
     }
 
-    public RoguelikeSaveResult StartNewGame(RoguelikeProgressSnapshot initialSnapshot)
+    // Replacing a confirmed run writes through the normal atomic repository operation.
+    // Never delete the old run before the new snapshot has passed validation and been saved.
+    private RoguelikeSaveResult ValidateRunReplacement(string expectedRunId)
+    {
+        if (!HasActiveRun()) return string.IsNullOrEmpty(expectedRunId) ? RoguelikeSaveResult.Success()
+            : RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "存档已变化，请重新确认。");
+        if (string.IsNullOrEmpty(expectedRunId)) return RoguelikeSaveResult.Failure(
+            RoguelikeSaveErrorCode.ActiveRunAlreadyExists, "已有临时档，需要明确确认后再开始。");
+        var current = LoadActiveRun();
+        if (!current.Succeeded) return current;
+        return current.Data.RunId == expectedRunId ? RoguelikeSaveResult.Success()
+            : RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "存档已变化，请重新确认。");
+    }
+
+    public RoguelikeSaveResult StartNewGame(RoguelikeProgressSnapshot initialSnapshot, string replaceRunId = null)
     {
         using var transaction = BeginTransaction();
-        if (HasActiveRun())
-            return RoguelikeSaveResult.Failure(
-                RoguelikeSaveErrorCode.ActiveRunAlreadyExists,
-                "已有临时档，只能继续或明确放弃后再开始新游戏。");
+        var replace = ValidateRunReplacement(replaceRunId);
+        if (!replace.Succeeded) return replace;
         if (initialSnapshot == null || initialSnapshot.CurrentChapterId != 1)
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.ValidationFailed,
                 "新游戏必须从第一章开始。");
 
         var snapshot = RoguelikeSaveJson.DeepClone(initialSnapshot);
+        snapshot.WishProgress = new RoguelikeWishProgress();
+        snapshot.ShopPurchaseCounts = null;
+        snapshot.CompletedChapterNodeCounts = null;
+        snapshot.UsedNodeContentIds = null;
         var snapshotValidation = validator.Validate(snapshot);
         if (!snapshotValidation.Succeeded) return snapshotValidation;
+        if (wishRules != null)
+        {
+            var planned = repository.GetOrCreateWishPlanning(wishRules, wishRandom);
+            if (!planned.Succeeded) return planned;
+            snapshot.WishProgress.FivePlanSeed = planned.Data.Seed;
+            snapshot.WishProgress.CharacterFivePlan = planned.Data.Character;
+            snapshot.WishProgress.WeaponFivePlan = planned.Data.Weapon;
+        }
 
         var activeRun = new ActiveRunSaveData
         {
@@ -129,13 +160,11 @@ public sealed class RoguelikeSaveService
         return repository.SaveActiveRun(activeRun);
     }
 
-    public RoguelikeSaveResult StartFromChapterSlot(int entryChapterId, int slotIndex)
+    public RoguelikeSaveResult StartFromChapterSlot(int entryChapterId, int slotIndex, string replaceRunId = null)
     {
         using var transaction = BeginTransaction();
-        if (HasActiveRun())
-            return RoguelikeSaveResult.Failure(
-                RoguelikeSaveErrorCode.ActiveRunAlreadyExists,
-                "已有临时档，不能直接读取另一个永久入口档。");
+        var replace = ValidateRunReplacement(replaceRunId);
+        if (!replace.Succeeded) return replace;
 
         var entryResult = repository.LoadChapterSlot(entryChapterId, slotIndex);
         if (!entryResult.Succeeded)
@@ -143,9 +172,10 @@ public sealed class RoguelikeSaveService
 
         var snapshot = RoguelikeSaveJson.DeepClone(entryResult.Data.Snapshot);
         snapshot.CurrentChapterId = entryChapterId;
+        snapshot.UsedNodeContentIds = null;
         if (snapshot.Flow != null)
         {
-            // 新流程入口继承养成/背包，但不能继承上一章的完成步骤和路线访问记录。
+            // 新流程入口沿用存档的养成、背包、祈愿历史和保底，并建立本章的路线步骤。
             snapshot.Flow = new RoguelikeFlowData
             {
                 Step = RoguelikeFlowStep.Route,
@@ -187,13 +217,20 @@ public sealed class RoguelikeSaveService
         var activeResult = repository.LoadActiveRun();
         if (!activeResult.Succeeded)
             return ActiveRunFailure(activeResult);
+        return SaveActiveRun(activeResult.Data, snapshot, resumePoint, saveReason);
+    }
+
+    // The caller must hold the save transaction and supply the active run read within it.
+    internal RoguelikeSaveResult SaveActiveRun(ActiveRunSaveData activeRun, RoguelikeProgressSnapshot snapshot,
+        RoguelikeResumePoint resumePoint, RoguelikeSaveReason saveReason)
+    {
         if (snapshot == null)
             return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.ValidationFailed, "进度快照不能为空。");
-        if (snapshot.CurrentChapterId != activeResult.Data.CurrentChapterId)
+        if (snapshot.CurrentChapterId != activeRun.CurrentChapterId)
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.InvalidOperation,
                 "普通临时保存不能直接切换当前章节。");
-        if (activeResult.Data.ResumePoint == RoguelikeResumePoint.BeforeBattle &&
+        if (activeRun.ResumePoint == RoguelikeResumePoint.BeforeBattle &&
             (resumePoint != RoguelikeResumePoint.BeforeBattle || saveReason != RoguelikeSaveReason.BeforeBattle))
         {
             return RoguelikeSaveResult.Failure(
@@ -201,7 +238,6 @@ public sealed class RoguelikeSaveService
                 "战斗过程中不能用普通临时保存覆盖战前恢复点。");
         }
 
-        var activeRun = activeResult.Data;
         activeRun.Snapshot = RoguelikeSaveJson.DeepClone(snapshot);
         activeRun.CurrentChapterId = activeRun.Snapshot.CurrentChapterId;
         activeRun.ResumePoint = resumePoint;
@@ -373,7 +409,7 @@ public sealed class RoguelikeSaveService
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.ValidationFailed,
                 "通关快照必须对应 completedChapterId。");
-        if (completedSnapshot.PendingRewardData != null)
+        if (completedSnapshot.PendingRewardData != null || completedSnapshot.PendingNodeReward != null)
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.InvalidOperation,
                 "章节全部奖励结算完成后才能写入下一章永久入口档。");
@@ -494,6 +530,7 @@ public sealed class RoguelikeSaveService
                reason == RoguelikeSaveReason.CharacterUpgraded ||
                reason == RoguelikeSaveReason.EquipmentChanged ||
                reason == RoguelikeSaveReason.InventoryChanged ||
+               reason == RoguelikeSaveReason.ShopPurchased ||
                reason == RoguelikeSaveReason.RouteChosen ||
                reason == RoguelikeSaveReason.EventCompleted;
     }

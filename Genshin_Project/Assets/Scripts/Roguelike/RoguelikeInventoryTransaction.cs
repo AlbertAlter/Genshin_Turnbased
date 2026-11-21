@@ -48,14 +48,14 @@ public sealed class RoguelikeInventoryTransaction
         });
     }
 
-    public void SetParty(IReadOnlyList<int> characterIds) { Mutate(() => runtime.SetParty(characterIds)); }
+    public void SetParty(IReadOnlyList<int> characterIds, int? preset = null) { Mutate(() => runtime.SetParty(characterIds, preset)); }
 
     /// <summary>明确确认后才从他人卸下；目标原装备留在背包，不销毁也不自动交换。</summary>
     public void TransferWeapon(int characterId, string instanceId)
     {
         Mutate(() =>
         {
-            int owner = Read().GetWeaponOwner(instanceId);
+            int owner = runtime.WeaponOwner(instanceId);
             if (owner != 0 && owner != characterId) runtime.UnequipWeapon(owner);
             EquipWeapon(characterId, instanceId);
         });
@@ -65,10 +65,9 @@ public sealed class RoguelikeInventoryTransaction
     {
         Mutate(() =>
         {
-            var view = Read(); var artifact = view.FindArtifact(instanceId);
-            if (artifact == null) throw new InvalidOperationException("找不到圣遗物实例：" + instanceId);
-            int owner = view.GetArtifactOwner(instanceId);
-            if (owner != 0 && owner != characterId) runtime.UnequipArtifact(owner, artifact.Artifact.Slot);
+            var slot = runtime.ArtifactSlotOf(instanceId);
+            int owner = runtime.ArtifactOwner(instanceId);
+            if (owner != 0 && owner != characterId) runtime.UnequipArtifact(owner, slot);
             runtime.EquipArtifact(characterId, instanceId);
         });
     }
@@ -79,10 +78,6 @@ public sealed class RoguelikeInventoryTransaction
         {
             var totals = SumQuantities(additions);
             foreach (var item in totals) RequireStackDefinition(item.Key);
-            var view = Read();
-            foreach (var item in totals)
-                if ((long)view.GetItemCount(item.Key) + item.Value > int.MaxValue)
-                    throw new InvalidOperationException("物品数量超过可存储范围：" + item.Key);
             foreach (var item in totals) runtime.AdjustItem(item.Key, item.Value);
         });
     }
@@ -93,21 +88,27 @@ public sealed class RoguelikeInventoryTransaction
         {
             var totals = SumQuantities(costs);
             foreach (var item in totals) RequireStackDefinition(item.Key);
-            var view = Read();
             // 重复 ID 合并后一次检查；任意材料不足都不扣除其他材料。
             foreach (var item in totals)
-                if (view.GetItemCount(item.Key) < item.Value)
+                if (runtime.ItemCount(item.Key) < item.Value)
                     throw new InvalidOperationException("物品数量不足：" + item.Key);
             foreach (var item in totals) runtime.AdjustItem(item.Key, -item.Value);
         });
     }
 
     /// <summary>按现有武器模板创建 1 级、未突破、精炼 1 的独立实例。</summary>
-    public string AddWeapon(int weaponId)
+    public string AddWeapon(int weaponId) => AddWeapons(weaponId, 1)[0];
+
+    internal string[] AddWeapons(int weaponId, int quantity)
     {
-        string instanceId = Guid.NewGuid().ToString("N");
-        AddWeapon(instanceId, new WeaponLoadout { WeaponID = weaponId });
-        return instanceId;
+        string[] ids = null;
+        Mutate(() =>
+        {
+            RequireWeaponDefinition(weaponId);
+            RequireEquipmentItem(RoguelikeItemIds.Weapon(weaponId), RoguelikeItemType.Weapon);
+            ids = runtime.AddDefaultWeapons(weaponId, quantity);
+        });
+        return ids;
     }
 
     public void AddWeapon(string instanceId, WeaponLoadout weapon, int experience = 0)
@@ -152,13 +153,23 @@ public sealed class RoguelikeInventoryTransaction
         });
     }
 
+    internal void AddArtifacts(int artifactSetId, IReadOnlyList<GeneratedArtifact> artifacts)
+    {
+        Mutate(() =>
+        {
+            var slots = new HashSet<ArtifactSlot>();
+            foreach (var artifact in artifacts)
+                if (slots.Add(artifact.Slot))
+                    RequireEquipmentItem(RoguelikeItemIds.Artifact(artifactSetId, artifact.Slot), RoguelikeItemType.Artifact);
+            runtime.AddArtifacts(artifactSetId, artifacts);
+        });
+    }
+
     public void EquipWeapon(int characterId, string instanceId)
     {
         Mutate(() =>
         {
-            var weapon = Read().FindWeapon(instanceId);
-            if (weapon == null) throw new InvalidOperationException("找不到武器实例：" + instanceId);
-            var definition = RequireWeaponDefinition(weapon.Weapon.WeaponID);
+            var definition = RequireWeaponDefinition(runtime.WeaponTemplateId(instanceId));
             if (!equipment.TryGetCharacterWeaponType(characterId, out int weaponType) ||
                 weaponType != definition.WeaponType)
                 throw new InvalidOperationException("角色与武器类型不匹配，或角色武器类型未配置。");
@@ -171,12 +182,31 @@ public sealed class RoguelikeInventoryTransaction
     public void UnequipArtifact(int characterId, ArtifactSlot slot) { Mutate(() => runtime.UnequipArtifact(characterId, slot)); }
     public void RemoveWeapon(string instanceId) { Mutate(() => runtime.RemoveWeapon(instanceId)); }
     public void RemoveArtifact(string instanceId) { Mutate(() => runtime.RemoveArtifact(instanceId)); }
+    public void SetEquipmentLocked(string instanceId, bool locked) { Mutate(() => runtime.SetEquipmentLocked(instanceId, locked)); }
 
     /// <summary>只导出独立结果，不落盘；由对应业务步骤统一提交。服务的 Commit 会自动结束草稿。</summary>
     public RoguelikeProgressSnapshot ExportSnapshot()
     {
         EnsureOpen();
         return runtime.ExportSnapshot();
+    }
+
+    internal RoguelikeCharacterProgressData PreviewCharacter(int characterId)
+    {
+        EnsureOpen();
+        return runtime.GetCharacterProgress(characterId);
+    }
+
+    internal bool TryGetCharacterProgress(int characterId, out RoguelikeCharacterProgressData character)
+    {
+        EnsureOpen();
+        return runtime.TryGetCharacterProgress(characterId, out character);
+    }
+
+    internal int GetItemCount(string itemId)
+    {
+        EnsureOpen();
+        return runtime.ItemCount(itemId);
     }
 
     public void Close() { closed = true; }

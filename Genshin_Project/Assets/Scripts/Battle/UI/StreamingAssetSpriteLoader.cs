@@ -11,7 +11,8 @@ public static class StreamingAssetSpriteLoader
     public static IEnumerator Load(
         string relativePath,
         Action<Sprite> onLoaded,
-        Action<string> onError = null)
+        Action<string> onError = null,
+        Vector4 border = default)
     {
         if (!TryBuildRequestUrl(relativePath, out string requestUrl))
         {
@@ -41,7 +42,8 @@ public static class StreamingAssetSpriteLoader
             new Vector2(0.5f, 0.5f),
             100f,
             0u,
-            SpriteMeshType.FullRect);
+            SpriteMeshType.FullRect,
+            border);
         sprite.name = texture.name;
         onLoaded?.Invoke(sprite);
     }

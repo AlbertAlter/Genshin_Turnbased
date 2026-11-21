@@ -24,7 +24,6 @@ public static class NingguangScriptHooks
         BattleSpecialRules.RegisterStatusActionScope(status => new ChargeFrame(status));
         BattleSpecialRules.RegisterStatusLifecycle(ChargeTargetID, CaptureField, null);
         BattleSpecialRules.RegisterStatusLifecycle(ScreenFieldID, CaptureField, null);
-        BattleSpecialRules.RegisterStatusLifecycle(ChargeID, (status, host) => AdoptFields(status, ChargeTargetID), null);
         BattleSpecialRules.RegisterStatusLifecycle(C2ID, StartC2, StopC2);
         BattleSpecialRules.RegisterCondition("Ningguang_NormalHit", (arg, c) => Empty(arg)
             && c?.Caster?.EntityID == 1017 && Skill.Value?.Owner == c.Caster
@@ -98,15 +97,15 @@ public static class NingguangScriptHooks
     {
         var frame = Skill.Value;
         if (frame == null || frame.Owner != status.Caster || frame.Owner?.EntityID != 1017 || !(host is FieldPosition)) return;
-        if ((status.StatusID2 == ChargeTargetID && frame.SkillID == "SK_Heavy_Ningguang")
-            || (status.StatusID2 == ScreenFieldID && frame.SkillID == "SK_Skill_Ningguang")) frame.Fields.Add(status);
+        if (status.StatusID2 == ChargeTargetID && frame.SkillID == "SK_Heavy_Ningguang")
+            status.ReleaseVoiceSkillId = frame.SkillID;
+        if (status.StatusID2 == ScreenFieldID && frame.SkillID == "SK_Skill_Ningguang") frame.Fields.Add(status);
     }
 
     internal static void AdoptFields(StatusInstance parent, string fieldID)
     {
         var frame = Skill.Value;
         if (frame == null || frame.Owner != parent.Caster) return;
-        if (parent.StatusID2 == ChargeID) parent.ReleaseVoiceSkillId = frame.SkillID;
         for (int i = frame.Fields.Count - 1; i >= 0; i--)
         {
             var field = frame.Fields[i];
@@ -125,14 +124,13 @@ public static class NingguangScriptHooks
         internal ChargeFrame(StatusInstance status)
         {
             Status = status; Charge.Value = this;
-            if (status?.StatusID2 != ChargeID || status.RemainingPhaseCount > 0 || !status.Caster.IsAlive) return;
+            if (status?.StatusID2 != ChargeTargetID || status.RemainingPhaseCount > 0 || !status.Caster.IsAlive) return;
             var battle = BattleManager.Instance;
-            foreach (var child in status.BoundStatuses)
-                if (child.IsActive && child.StatusID2 == ChargeTargetID && child.Host is FieldPosition field)
-                {
-                    TargetSlot = field.SlotIndex;
-                    Target = battle?.GetEntityByPosition(field.Side, TargetSlot);
-                }
+            if (status.Host is FieldPosition field)
+            {
+                TargetSlot = field.SlotIndex;
+                Target = battle?.GetEntityByPosition(field.Side, TargetSlot);
+            }
             if (!Valid(battle, status.Caster, Target)) return;
             var stars = status.Caster.GetStatus(NingguangStarJadeCount.ID);
             Jades = stars?.RuntimeIntValue ?? 0;

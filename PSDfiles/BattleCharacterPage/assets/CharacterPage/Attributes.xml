@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1008,665">
+  <displayList>
+    <component id="n30_attr1" name="vitals" xy="0,0" size="1008,264" src="vital" fileName="CharacterVitals.xml" />
+    <text id="n0_attr1" name="heading" xy="0,288" size="680,48" font="Microsoft YaHei" fontSize="32" color="#4C4236" text="详细属性" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+
+    <graph id="n2_attr1" name="basePanel" xy="0,350" size="490,285" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <text id="n3_attr1" name="baseHeading" xy="24,368" size="442,38" font="Microsoft YaHei" fontSize="24" color="#716758" text="基础属性" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n4_attr1" name="baseRule" xy="24,415" size="442,1" type="rect" fillColor="#ADA28E" lineSize="0" touchable="false" />
+    <text id="n8_attr1" name="baseLabel1" xy="24,422" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="攻击力" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n9_attr1" name="baseValue1" xy="245,422" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="318" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n10_attr1" name="baseRule1" xy="24,482" size="442,1" type="rect" fillColor="#BDB29E" lineSize="0" touchable="false" />
+    <text id="n11_attr1" name="baseLabel2" xy="24,488" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="防御力" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n12_attr1" name="baseValue2" xy="245,488" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="246" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n13_attr1" name="baseRule2" xy="24,548" size="442,1" type="rect" fillColor="#BDB29E" lineSize="0" touchable="false" />
+    <text id="n14_attr1" name="baseLabel3" xy="24,554" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="元素精通" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n15_attr1" name="baseValue3" xy="245,554" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="116" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+
+    <graph id="n16_attr1" name="combatPanel" xy="518,350" size="490,285" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <text id="n17_attr1" name="combatHeading" xy="542,368" size="442,38" font="Microsoft YaHei" fontSize="24" color="#716758" text="战斗属性" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n18_attr1" name="combatRule" xy="542,415" size="442,1" type="rect" fillColor="#ADA28E" lineSize="0" touchable="false" />
+    <text id="n22_attr1" name="combatLabel1" xy="542,422" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="暴击率" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n23_attr1" name="combatValue1" xy="763,422" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="25.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n24_attr1" name="combatRule1" xy="542,482" size="442,1" type="rect" fillColor="#BDB29E" lineSize="0" touchable="false" />
+    <text id="n25_attr1" name="combatLabel2" xy="542,488" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="暴击伤害" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n26_attr1" name="combatValue2" xy="763,488" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="75.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n27_attr1" name="combatRule2" xy="542,548" size="442,1" type="rect" fillColor="#BDB29E" lineSize="0" touchable="false" />
+    <text id="n28_attr1" name="combatLabel3" xy="542,554" size="220,58" font="Microsoft YaHei" fontSize="23" color="#6C6255" text="火元素伤害加成" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n29_attr1" name="combatValue3" xy="763,554" size="220,58" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="15.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+  </displayList>
+</component>

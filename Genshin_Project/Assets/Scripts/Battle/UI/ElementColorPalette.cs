@@ -19,7 +19,8 @@ public sealed class ElementColorPalette
     /// <summary>Project white and Physical share one authoritative table entry.</summary>
     public Color ProjectWhite => colors["Physical"];
 
-    public static ElementColorPalette Load()
+    public static ElementColorPalette Load() => CampaignUiTables.Read(ReadPublished);
+    private static ElementColorPalette ReadPublished()
         => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
 
     /// <summary>同步工具可校验显式源文件；正式运行入口只用 Load。</summary>

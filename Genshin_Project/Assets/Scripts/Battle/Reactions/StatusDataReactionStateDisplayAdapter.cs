@@ -124,6 +124,7 @@ public sealed class StatusDataReactionStateDisplayAdapter : IReactionStateDispla
         {
             StatusID = 40003,
             StatusID2 = statusID,
+            StatusType = "Control",
             StatusName = "冻结",
             Display = 1
         };

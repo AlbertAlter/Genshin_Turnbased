@@ -7,7 +7,8 @@ public sealed class UICardEntranceStyle
     public const string FileName = "CardEntrance.xlsx";
     public float Duration, OffsetWidthRatio, StartScale, StartAlpha, Stagger, EasePower, PreviewHold;
     public bool Unscaled;
-    public static UICardEntranceStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static UICardEntranceStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static UICardEntranceStyle ReadPublished() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
     public static UICardEntranceStyle ReadFile(string path)
     {
         var values = BattlefieldDamagePopupStyle.ReadParameters(path);

@@ -47,9 +47,12 @@ public class Shield
 [Serializable]
 public class StatusInstance
 {
+    [NonSerialized] public int ControlReleaseClicks;
+    [NonSerialized] internal DamageSourceInfo ShieldBreakSource;
     // Optional presentation identity for a charged attack released by this instance instead of a Skill action.
     [NonSerialized] public string ReleaseVoiceSkillId;
     [NonSerialized] internal bool DeathCleanupPending; // 保留供OnDeath读取，普通待执行行动停止。
+    [NonSerialized] internal int EnemyHealthPhase;     // 同一来源的阶段绑定，0表示全场状态。
     [NonSerialized] public object Host;              // 真实宿主；不是Buff受益者，也不改变Caster/self语义。
     public string StatusID2;                        // 对应 StatusMainData.StatusID2
     public int StackCount;                          // 普通状态每份实例固定1；兼容旧脚本数据，Count点数不放这里
@@ -140,9 +143,12 @@ public class StatusInstance
     public int LastTriggerPhase;                    // 上次成功触发的阶段（1～6；0为旧记录未提供）
     public int LastActionTurn = -1;                 // 上次计数回合（懒重置对比用）
     public long ApplyOrder;                         // 施加顺序序号（全局递增，同阶段结算时先施加的先触发）
+    public long SourceEffectExecutionId { get; } = BattleEventHub.CurrentEffectExecutionId;
     public Dictionary<string, StatusActionRuntimeState> ActionRuntime = new Dictionary<string, StatusActionRuntimeState>();
     /// <summary>BindStatus 绑定关系：父状态存在期间，这些子状态挂在目标身上；父状态移除时连带移除（2026-08-06）</summary>
     public List<StatusInstance> BoundStatuses = new List<StatusInstance>();
+    /// <summary>BindStatus创建本实例时记录的具体父状态；仅Charge受控打断会反向取消父状态。</summary>
+    [NonSerialized] public StatusInstance BindingParent;
 
     /// <summary>记录状态来源。角色、敌人、武器和圣遗物状态均记录所属实体；全局反应状态不调用本方法。</summary>
     public void RecordSource(BattleEntity source)
@@ -168,6 +174,30 @@ public sealed class StatusActionRuntimeState
     public int LastTriggerTurn = -1;
     public int LastTriggerPhase;
     public int LastActionTurn = -1;
+
+    internal bool LimitReached(StatusActionData action, int turn, int phase)
+    {
+        int turnCount = LastActionTurn == turn ? TurnTriggerCount : 0;
+        return (action.MaxTimePerTurn > 0 && turnCount + PendingTriggerCount >= action.MaxTimePerTurn)
+            || (action.MaxTimePerLife > 0 && LifeTriggerCount + PendingTriggerCount >= action.MaxTimePerLife)
+            || (action.Cooldown > 0 && (PendingTriggerCount > 0 || IsCoolingDown(action.Cooldown, turn, phase)));
+    }
+
+    internal void RecordTrigger(StatusActionData action, int turn, int phase)
+    {
+        if (LastActionTurn != turn)
+        {
+            LastActionTurn = turn;
+            TurnTriggerCount = 0;
+        }
+        TurnTriggerCount++;
+        LifeTriggerCount++;
+        if (action.Cooldown > 0)
+        {
+            LastTriggerTurn = turn;
+            LastTriggerPhase = phase;
+        }
+    }
 
     /// <summary>冷却N回合须到上次成功触发后第N轮的同一阶段；不影响每回合次数分桶。</summary>
     public bool IsCoolingDown(int cooldown, int turn, int phase)

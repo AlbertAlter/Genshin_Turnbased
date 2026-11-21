@@ -10,6 +10,7 @@ public sealed class UICardView : MonoBehaviour
     public bool Released { get; private set; }
     public bool MediaResolved { get; internal set; }
     public string Error { get; private set; }
+    public int FrameLevel { get; internal set; }
     private Color tint = Color.white;
     private readonly HashSet<object> freezeOwners = new HashSet<object>();
     public bool AnimationFrozen => freezeOwners.Count != 0;
@@ -34,7 +35,7 @@ public sealed class UICardView : MonoBehaviour
         Video.videoPath = path; Video.targets = new[] { Appearance.Surface };
         Video.SetFrozen(AnimationFrozen);
         Video.enabled = true;
-        if (Video.isActiveAndEnabled) Video.Load();
+        Video.Load();
     }
     public void SetTint(Color color) { tint = color; if (Appearance != null) Appearance.SetTint(color); }
     internal void SetStaticVariant(Texture texture)

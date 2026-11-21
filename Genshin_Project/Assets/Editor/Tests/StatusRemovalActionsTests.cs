@@ -23,6 +23,71 @@ namespace GenshinTurnBased.Tests.EditMode
         private static Task Remove(BattleEntity host, StatusInstance status, string reason = "Removed")
             => BattleExecution.Run(async () => { host.RemoveStatusInstance(status, reason); await BattleExecution.Flush(); });
 
+        private static StatusInstance Aim(BattleFlowTestEnv env, BattleEntity owner, int position, string type = "Charge")
+        {
+            const string aim = "ST_AimProbe", charge = "ST_ChargeProbe";
+            env.ConfigureStatus(aim); env.ConfigureStatus(charge);
+            var main = env.DataManager.StatusMainDict[aim]; main.StatusID = 4900101;
+            var child = env.DataManager.StatusMainDict[charge]; child.StatusID = 4900102;
+            child.StatusType = type; child.MaxStack = 1; child.WhenMax = "1";
+            env.DataManager.StatusEffectDict["STE_AimBind"] = new StatusEffectData {
+                StatusEffectID = 490010101, StatusEffectID2 = "STE_AimBind", EffectType = "BindStatus",
+                Param1 = charge, TargetType = "Allies", TargetOverride = "ChargeCaster()" };
+            env.DataManager.StatusActionDict[aim] = new List<StatusActionData> {
+                new StatusActionData { StatusID2 = aim, ActionType = "OnEnd", Param1 = Energy } };
+            return env.Manager.Field.GetSlot(BattleTargetResolver.Opposite(owner.Side), position)
+                .AddStatus(aim, owner, 1, 3, 0, main);
+        }
+
+        private static void Control(BattleFlowTestEnv env, BattleEntity owner)
+        {
+            const string id = "ST_ControlProbe"; env.ConfigureStatus(id);
+            var main = env.DataManager.StatusMainDict[id]; main.StatusType = "Control";
+            owner.AddStatus(id, owner, 1, 3, 0, main);
+        }
+
+        [UnityTest] public IEnumerator Control_CancelsOnlyItsChargeAndExactAim_ForBothSides()
+            => HookTestEnv.AwaitTask(CancelAim);
+        private static async Task CancelAim()
+        {
+            foreach (bool enemy in new[] { false, true })
+            {
+                using var env = new BattleFlowTestEnv(); Setup(env);
+                var owner = enemy ? env.Enemy.Entity : env.Ally.Entity;
+                var other = enemy ? env.CreateEnemy(2).Entity : env.CreateAlly(2).Entity;
+                var aim = Aim(env, owner, 1); var otherAim = Aim(env, other, 2);
+                var charge = owner.GetStatus("ST_ChargeProbe");
+                Assert.That(charge.BindingParent, Is.SameAs(aim));
+                await BattleExecution.Run(async () => { Control(env, owner); await BattleExecution.Flush(); });
+                Assert.That(charge.IsActive || aim.IsActive, Is.False);
+                Assert.That(otherAim.IsActive && other.HasStatus("ST_ChargeProbe"), Is.True);
+                Assert.That(env.Ally.Entity.CurrentEnergy, Is.Zero, "打断不执行瞄准标记OnEnd。");
+            }
+        }
+
+        [Test] public void RemovingChildNormally_DoesNotCancelParent_AndControlIgnoresOrdinaryBindings()
+        {
+            using var env = new BattleFlowTestEnv(); Setup(env);
+            var aim = Aim(env, env.Ally.Entity, 1);
+            env.Ally.Entity.RemoveStatusInstance(env.Ally.Entity.GetStatus("ST_ChargeProbe"));
+            Assert.That(aim.IsActive, Is.True);
+            var ordinary = Aim(env, env.Ally.Entity, 2, "");
+            Control(env, env.Ally.Entity);
+            Assert.That(ordinary.IsActive && env.Ally.Entity.HasStatus("ST_ChargeProbe"), Is.True);
+        }
+
+        [TestCase(false), TestCase(true)] public void Control_CancelsStandaloneChargeWithoutParent(bool enemy)
+        {
+            using var env = new BattleFlowTestEnv(); Setup(env);
+            const string id = "ST_StandaloneCharge"; env.ConfigureStatus(id);
+            var main = env.DataManager.StatusMainDict[id]; main.StatusType = "Charge";
+            var owner = enemy ? env.Enemy.Entity : env.Ally.Entity;
+            var charge = owner.AddStatus(id, owner, 1, 3, 0, main);
+            Assert.That(charge.BindingParent, Is.Null);
+            Control(env, owner);
+            Assert.That(charge.IsActive, Is.False);
+        }
+
         [UnityTest] public IEnumerator RemovedInstance_RunsOnce_AndDoesNotRunNaturalEnd()
             => HookTestEnv.AwaitTask(Removed);
         private static async Task Removed()

@@ -13,8 +13,20 @@ using UnityEngine;
 public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
 {
     public TextAsset stageConfigJson;
+    internal StageSetupData RuntimeStage { get; set; }
     public Canvas canvas;
     public Transform characterCards, characterRoster, enemyCards, enemyRoster;
+    public bool showRosterStatuses;
+    public Transform bossPanel;
+    private sealed class RuntimeEnemySlot
+    {
+        internal int Slot;
+        internal Transform Card, Roster;
+        internal BattleEntity Entity;
+    }
+    private readonly Dictionary<int, RuntimeEnemySlot> runtimeEnemySlots = new();
+    private BattleUiCombatHudSource runtimeHud;
+    private bool runtimeEnemiesBound;
 
     private IEnumerator Start()
     {
@@ -25,13 +37,13 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
 
         SetDeferredSectionsVisible(false);
         SetRosterSlotsVisible(false);
-        if (stageConfigJson == null)
+        if (RuntimeStage == null && stageConfigJson == null)
         {
             Debug.LogError("BattleField1 没有关卡编辑器 Stage 引用。", this);
             yield break;
         }
 
-        StageSetupData stage = JsonUtility.FromJson<StageSetupData>(stageConfigJson.text);
+        StageSetupData stage = RuntimeStage ?? JsonUtility.FromJson<StageSetupData>(stageConfigJson.text);
         if (stage == null)
         {
             Debug.LogError("BattleField1 无法解析 Stage：" + stageConfigJson.name, this);
@@ -81,13 +93,15 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
         {
             StageAllySetup ally = allies[index];
-            if (!UsesSharedCards()) BindImage(group, "CharacterCardArt", $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
+            if (!UsesSharedCards()) BindImage(group, "CharacterCardArt", $"art_assets/Character_Bare/{ally.CharacterID}_01.png");
         });
         BindOrderedGroups("角色栏", "角色", allies.Count,
             index => allies[index] != null && allies[index].CharacterID > 0, (group, index) =>
         {
             StageAllySetup ally = allies[index];
             BindImage(group, "CharacterAvatar", "art_assets/" + CharacterCardArtManifest.PortraitFile(ally.CharacterID));
+            if (showRosterStatuses) BattleRosterStatusBar.Bind(group.Find("状态栏"), BattleSide.Ally, index + 1,
+                input: GetComponent<BattleInputController>());
         });
     }
 
@@ -99,17 +113,79 @@ public sealed partial class BattlefieldStageViewLoader : MonoBehaviour
         });
         BindSlottedEnemyGroups("敌人栏", "敌人", enemies, (group, enemy) =>
         {
-            BindImage(group, "EnemyAvatar", $"art_assets/Enemy_Icon/{enemy.EnemyID}_01.png");
-            string displayName = DataManager.Instance.EnemyMainDict.TryGetValue(enemy.EnemyID, out EnemyMainData data)
-                ? data.EnemyName
-                : $"敌人 {enemy.EnemyID}";
-            PsdUiBinding labelBinding = group.GetComponentsInChildren<PsdUiBinding>(true)
-                .FirstOrDefault(binding => binding.bindingKey == "EnemyLevelName");
-            TMP_Text levelAndName = labelBinding != null
-                ? labelBinding.GetComponent<TMP_Text>()
-                : group.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(text => text.text.StartsWith("Lv."));
-            if (levelAndName != null) levelAndName.text = FormatEnemyLabel(enemy.Level, displayName);
+            BindEnemyRoster(group, enemy.EnemyID, enemy.Level, enemy.Slot);
         });
+        runtimeHud = GetComponent<BattleUiCombatHudSource>();
+        CacheRuntimeEnemyGroups();
+        runtimeEnemiesBound = true;
+        if (bossPanel != null && enemyRoster != null)
+        {
+            var bossView = gameObject.AddComponent<BattleBossRosterView>();
+            bossView.Bind(bossPanel, enemyRoster, GetComponent<BattleUiCombatHudSource>(), GetComponent<BattleUiLayout>(), showRosterStatuses);
+        }
+    }
+
+    private void BindEnemyRoster(Transform group, int id, int level, int slot)
+    {
+        BindImage(group, "EnemyAvatar", $"art_assets/Enemy_Icon/{id}_01.png");
+        if (showRosterStatuses) BattleRosterStatusBar.Bind(group.Find("敌人状态区"), BattleSide.Enemy, slot,
+            input: GetComponent<BattleInputController>());
+        var dataManager = DataManager.Instance;
+        string fallbackName = dataManager.EnemyMainDict.TryGetValue(id, out EnemyMainData data) ? data.EnemyName : $"敌人 {id}";
+        string displayName = dataManager.GetUiName(UiNameKind.Enemy, id, fallbackName);
+        var labelBinding = group.GetComponentsInChildren<PsdUiBinding>(true)
+            .FirstOrDefault(binding => binding.bindingKey == "EnemyLevelName");
+        TMP_Text label = labelBinding != null ? labelBinding.GetComponent<TMP_Text>()
+            : group.GetComponentsInChildren<TMP_Text>(true).FirstOrDefault(text => text.text.StartsWith("Lv."));
+        if (label != null) label.text = FormatEnemyLabel(level, displayName);
+    }
+
+    private void CacheRuntimeEnemyGroups()
+    {
+        runtimeEnemySlots.Clear();
+        RuntimeEnemySlot Slot(int slot)
+        {
+            if (!runtimeEnemySlots.TryGetValue(slot, out var entry))
+                runtimeEnemySlots.Add(slot, entry = new RuntimeEnemySlot { Slot = slot });
+            return entry;
+        }
+        var layout = GetComponent<BattleUiLayout>();
+        if (layout != null)
+            foreach (var binding in layout.Cards)
+                if (binding != null && binding.side == BattleSide.Enemy && binding.slot > 0)
+                    Slot(binding.slot).Card = binding.root;
+        if (enemyRoster == null) return;
+        for (int index = 0; index < enemyRoster.childCount; index++)
+        {
+            var group = enemyRoster.GetChild(index);
+            var health = group.GetComponentInChildren<BattlefieldHealthBar>(true);
+            if (health != null && health.side == BattleSide.Enemy && health.slot > 0)
+                Slot(health.slot).Roster = group;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (!Application.isPlaying || !runtimeEnemiesBound || runtimeHud?.battle == null) return;
+        var battle = runtimeHud.battle;
+        foreach (var entry in runtimeEnemySlots.Values)
+        {
+            var entity = battle.GetEntityByPosition(BattleSide.Enemy, entry.Slot);
+            bool visible = battle.IsBattleRunning && !battle.IsBattleOver && entity?.IsAlive == true && entity.IsOnField;
+            if (entry.Roster != null && entry.Roster.gameObject.activeSelf != visible)
+                entry.Roster.gameObject.SetActive(visible);
+            if (!visible || entry.Entity == entity) continue;
+            entry.Entity = entity;
+            if (entry.Card != null)
+            {
+                entry.Card.gameObject.SetActive(true);
+                if (!UsesSharedCards()) BindEnemyImage(entry.Card, "EnemyCardArt", entity.EntityID);
+            }
+            if (entry.Roster != null)
+            {
+                BindEnemyRoster(entry.Roster, entity.EntityID, entity.Level, entry.Slot);
+            }
+        }
     }
 
     private static string FormatEnemyLabel(int level, string name) => $"Lv.{level}  {name}";

@@ -13,6 +13,7 @@ public enum RoguelikeSaveErrorCode
     InvalidOperation,
     OverwriteConfirmationRequired,
     IoFailure,
+    InventoryFull,
 }
 
 public class RoguelikeSaveResult
@@ -81,6 +82,8 @@ public sealed class RoguelikeSaveResult<T> : RoguelikeSaveResult
 
 public sealed class RoguelikeChapterSlotInfo
 {
+    public bool CanLoad => Exists && ReadError == RoguelikeSaveErrorCode.None && Summary != null;
+    public bool CanRestoreBackup => ReadError == RoguelikeSaveErrorCode.BackupAvailable;
     public int EntryChapterId { get; set; }
     public int SlotIndex { get; set; }
     public bool Exists { get; set; }

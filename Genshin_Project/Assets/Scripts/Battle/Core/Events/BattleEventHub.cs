@@ -10,7 +10,7 @@ public enum BattleEventKind
     ActionStarted, ActionCompleted, DamageResolved, HPChanged, HealResolved,
     ReactionOccurred, ResourceChanged, SwitchResolved, ElementContactResolved,
     AuraChanged, StatusAdded, StatusRemoved, ShieldChanged, Death, APSpent, NightSoulBurst, BattleEnded, ShieldGranted,
-    MoonCageConcerto, ActionPrompt
+    MoonCageConcerto, ActionPrompt, ShieldResistedStatus, Withdrawn
 }
 
 /// <summary>胜负已正式确定；不用于手动StopBattle、取消或重置，不借状态OnEnd替代。</summary>
@@ -24,7 +24,15 @@ public sealed class BattleEndedEventData : BattleEventData
 public enum ResourceChangeReason { Gain, Spend, Decay, Clear, HealingAbsorption, Adjustment }
 
 /// <summary>实际AP付款的用途；不由技能等级分类、DamageType或响应时的当前按钮倒推。</summary>
-public enum APSpendKind { Unspecified, Skill, Switch, Thaw }
+public enum APSpendKind { Unspecified, Skill, Switch, Thaw, RecoverFromAirborne }
+
+/// <summary>护盾挡住了本次状态施加。不会触发 StatusAdded，也不代表伤害免疫。</summary>
+public sealed class ShieldResistedStatusEventData : BattleEventData
+{
+    public string StatusId { get; }
+    public ShieldResistedStatusEventData(BattleEntity target, string statusId)
+        : base(BattleEventKind.ShieldResistedStatus, target) { StatusId = statusId; }
+}
 
 public sealed class APSpentEventData : BattleEventData
 {
@@ -60,6 +68,10 @@ public sealed class BattleEventHeader
     public long EventId { get; }
     public long ResolutionId { get; }
     public long ActionScopeId { get; }
+    /// <summary>本次主动技能或状态连续调用段的Execution限次身份；打断后再调用/独立重触发使用新身份。</summary>
+    public long ExecutionScopeId { get; }
+    /// <summary>整条因果链的临时分组身份，不作为额外配表限次类型。</summary>
+    public long ChainScopeId { get; }
     /// <summary>一次真实技能行动的执行身份；不同于连锁共享的限次ActionScopeId，嵌套行动也各自唯一。</summary>
     public long ActionExecutionId { get; }
     public long EffectScopeId { get; }
@@ -69,10 +81,12 @@ public sealed class BattleEventHeader
     public IReadOnlyList<long> CauseEventIds { get; }
 
     internal BattleEventHeader(long session, long id, long resolution, long action, long effect,
-        long execution, long hit, int targetIndex, IEnumerable<long> causes, long actionExecution = 0)
+        long execution, long hit, int targetIndex, IEnumerable<long> causes, long actionExecution = 0,
+        long executionScope = 0, long chainScope = 0)
     {
         SessionId = session; EventId = id; ResolutionId = resolution; ActionScopeId = action;
         ActionExecutionId = actionExecution;
+        ExecutionScopeId = executionScope; ChainScopeId = chainScope;
         EffectScopeId = effect; EffectExecutionId = execution; HitId = hit; TargetIndex = targetIndex;
         var ids = new List<long>();
         if (causes != null) foreach (long cause in causes) if (cause > 0 && !ids.Contains(cause)) ids.Add(cause);
@@ -110,6 +124,7 @@ public sealed class DamageEventData : BattleEventData
     public DamageSourceInfo Source => source.Snapshot();
     public bool SourceWasPartyMember { get; }
     public bool SourceWasOnField { get; }
+    public string SourceSkillSlotCooldownID { get; }
     public float HPBefore { get; }
     public float HPAfter { get; }
     public float RequestedDamage { get; }
@@ -141,12 +156,13 @@ public sealed class DamageEventData : BattleEventData
             TargetMaxHP = value.Target.GetFinalHP();
             var active = BattleManager.Instance?.GetActiveAlly()?.Entity;
             ActiveAllyIdAtHit = active != null && active.IsAlive ? active.EntityID : 0;
-            var status = BattleResolutionContext.CurrentAction?.IndependentStatus;
+            var status = BattleResolutionContext.CurrentChain?.IndependentStatus;
             FromIndependentEnemyStatus = status != null && status.HasSourceEntity && status.SourceSide == BattleSide.Enemy;
         }
         SourceWeaponType = source.SourceEntity != null ? source.SourceEntity.WeaponType : -1;
         if (source.SourceKind == ReactionSourceKind.StatusEffect) ReleaseVoiceSkillId = source.SourceStatus?.ReleaseVoiceSkillId;
         SourceWasPartyMember = value.SourceWasPartyMember; SourceWasOnField = value.SourceWasOnField;
+        SourceSkillSlotCooldownID = value.SourceSkillSlotCooldownID;
         HPBefore = value.HPBefore; HPAfter = value.HPAfter; RequestedDamage = value.RequestedHPDamage;
         ActualHPDamage = value.ActualHPDamage; HitLanded = value.HitLanded; CausedDeath = value.CausedDeath;
         HitIndex = value.HitIndex; DamageBeforeShield = value.DamageBeforeShield;
@@ -285,14 +301,23 @@ public sealed class SwitchEventData : BattleEventData
     { Outgoing = outgoing; OutgoingId = outgoing != null ? outgoing.EntityID : 0; IncomingId = SubjectId; Reason = reason; }
 }
 
+public sealed class WithdrawnEventData : BattleEventData
+{
+    public BattleEntity Source { get; }
+    public WithdrawnEventData(BattleEntity entity, BattleEntity source = null) : base(BattleEventKind.Withdrawn, entity)
+    { Source = source; }
+}
+
 public sealed class StatusEventData : BattleEventData
 {
     public string StatusId { get; }
     public long InstanceId { get; }
+    public long SourceEffectExecutionId { get; }
     public object Host { get; }
     public string Reason { get; }
     // 赋予时的显示快照：延迟显示不能反查已被移除/替换的状态，也不能把施加者当成格子宿主。
     public string StatusName { get; }
+    public string StatusType { get; }
     public int Display { get; }
     public BattleSide? HostSide { get; }
     public int HostSlot { get; }
@@ -301,7 +326,9 @@ public sealed class StatusEventData : BattleEventData
             host is BattleTeamStatusHost ? null : host as BattleEntity ?? status.Caster)
     {
         StatusId = status.StatusID2; InstanceId = status.ApplyOrder; Host = host; Reason = reason;
+        SourceEffectExecutionId = status.SourceEffectExecutionId;
         StatusName = status.MainData?.StatusName ?? string.Empty;
+        StatusType = status.MainData?.StatusType ?? string.Empty;
         Display = status.MainData?.Display ?? 0;
         if (host is BattleEntity entity) { HostSide = entity.Side; HostSlot = entity.SlotPosition; }
         else if (host is FieldPosition field) { HostSide = field.Side; HostSlot = field.SlotIndex; }
@@ -324,7 +351,9 @@ public sealed class BattleDeclaration
     public BattleEventKind Kind => Data.Kind;
     internal bool Dispatched;
     internal Action CollectResponses;
-    internal BattleDeclaration(BattleEventHeader header, BattleEventData data) { Header = header; Data = data; }
+    internal readonly BattleResolutionContext.Snapshot ResolutionContext;
+    internal BattleDeclaration(BattleEventHeader header, BattleEventData data)
+    { Header = header; Data = data; ResolutionContext = BattleResolutionContext.Capture(); }
     public T Get<T>() where T : BattleEventData => Data as T;
 }
 
@@ -368,7 +397,8 @@ public static class BattleEventHub
     {
         var frame = FrameSlot.Value;
         return new BattleEventHeader(session, Interlocked.Decrement(ref presentationIdentity), frame?.Resolution ?? 0,
-            BattleResolutionContext.CurrentAction?.ScopeId ?? 0, 0, 0, 0, 0, null, frame?.ActionExecution ?? 0);
+            BattleResolutionContext.CurrentAction?.ScopeId ?? 0, 0, 0, 0, 0, null, frame?.ActionExecution ?? 0,
+            BattleResolutionContext.CurrentExecution?.ScopeId ?? 0, BattleResolutionContext.CurrentChain?.ScopeId ?? 0);
     }
     public static BattleDeclaration Current
     {
@@ -461,7 +491,8 @@ public static class BattleEventHub
             var result = new BattleDeclaration(new BattleEventHeader(session, NextIdentity(), frame.Resolution,
                 BattleResolutionContext.CurrentAction?.ScopeId ?? 0, BattleResolutionContext.CurrentEffect?.ScopeId ?? 0,
                 frame.Execution, hit != 0 ? hit : frame.Hit, targetIndex != 0 ? targetIndex : frame.Target, ids,
-                frame.ActionExecution), data);
+                frame.ActionExecution, BattleResolutionContext.CurrentExecution?.ScopeId ?? 0,
+                BattleResolutionContext.CurrentChain?.ScopeId ?? 0), data);
             // 冻结发生时的订阅者/状态实例。延后Dispatch不能让后来创建的监听者追溯旧事件。
             Listener[] listeners = Listeners.FindAll(listener => listener.Kind == result.Kind && !listener.Removed).ToArray();
             Action hooks = StatusOnHitHookSystem.CaptureDeclaration(result);
@@ -491,6 +522,7 @@ public static class BattleEventHub
         result.Dispatched = true;
         // 只复制已正式提交的结果；Record阶段的治疗计划等不能进入动画队列。
         BattleExecution.RecordCommittedDeclaration(result);
+        using (result.ResolutionContext.Enter())
         using (BattleResolutionContext.BeginCollection())
         using (Enter(result))
         {
@@ -510,7 +542,7 @@ public static class BattleEventHub
                 using (BattleResolutionContext.EnterTrigger())
                 using (Enter(result))
                 {
-                    listener.Receive(result);
+                    using (BattleResolutionContext.BeginCollection()) listener.Receive(result);
                     await BattleExecution.Flush();
                 }
             }, null);

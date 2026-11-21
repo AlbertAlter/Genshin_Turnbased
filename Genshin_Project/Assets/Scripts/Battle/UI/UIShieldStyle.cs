@@ -47,7 +47,8 @@ public sealed class UIShieldStyle
     public Vector4 Rect(string prefix) => new Vector4(Number(prefix + "OffsetX"), Number(prefix + "OffsetY"),
         Number(prefix + "Width"), Number(prefix + "Height"));
     public IEnumerable<string> ArtPaths { get { foreach (string key in ArtKeys) yield return Text(key); } }
-    public static UIShieldStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static UIShieldStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static UIShieldStyle ReadPublished() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
     public static UIShieldStyle ReadFile(string path) => Parse(BattlefieldDamagePopupStyle.ReadParameters(path));
 
     public static UIShieldStyle Parse(IReadOnlyDictionary<string, string> input)

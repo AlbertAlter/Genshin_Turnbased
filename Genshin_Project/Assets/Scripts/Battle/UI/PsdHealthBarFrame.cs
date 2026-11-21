@@ -65,7 +65,7 @@ public sealed class PsdHealthBarFrame : Image
     {
         mesh.Clear();
         Rect rect = rectTransform.rect;
-        float scale = canvas != null ? canvas.scaleFactor : 1;
+        float scale = canvas != null ? canvas.rootCanvas.scaleFactor : 1;
         Color outer=outerStrokeColor, inner=innerStrokeColor;
         outer.a *= color.a; inner.a *= color.a;
         if (psdCompositeFill)

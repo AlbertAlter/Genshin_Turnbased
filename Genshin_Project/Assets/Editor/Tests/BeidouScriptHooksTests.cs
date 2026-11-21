@@ -61,7 +61,7 @@ namespace GenshinTurnBased.Tests.EditMode
             }
             Effect(env,1,11,"STE_Test_BeidouEnd","RemoveStatus",BeidouScriptHooks.GuardID);counter.Add("STE_Test_BeidouEnd");
             Actions(env,1,BeidouScriptHooks.GuardID,
-                new StatusActionData { ActionType="OnTrigger",Param1=stack.StatusEffectID2,ScriptHook="Beidou_EnemyHit()",OnHit="All",MaxTimePerAction=1 },
+                new StatusActionData { ActionType="OnTrigger",Param1=stack.StatusEffectID2,ScriptHook="Beidou_EnemyHit()",OnHit="All",MaxTimePerExecution=1 },
                 new StatusActionData { ActionType="OnTrigger",Param1=string.Join(";",counter),ScriptHook=BeidouScriptHooks.BrokenHook },
                 new StatusActionData { ActionType="OnItsTurn",Param1=string.Join(";",counter),ScriptHook="Beidou_GuardReady()" });
             var shieldEffect=Effect(env,2,1,"STE_Test_BeidouShield","Shield",shield);shieldEffect.Element="Electro";
@@ -93,6 +93,34 @@ namespace GenshinTurnBased.Tests.EditMode
                 Assert.That(guard.RemainingPhaseCount,Is.EqualTo(1));
                 Assert.That(guard.BoundStatuses,Is.EqualTo(bindings),"叠层不能重施盾或重绑Taunt");
             }
+        }
+
+        [UnityTest]
+        public IEnumerator Guard_IndependentEnemyStatusAndExtension_EachGainOneStack()
+            => HookTestEnv.AwaitTask(StatusExecutionsAsync);
+        private async Task StatusExecutionsAsync()
+        {
+            using var env = new BattleFlowTestEnv(); var owner = Setup(env);
+            Assert.That(env.Manager.UseSkillBySlot(0), Is.True);
+            var guard = owner.GetStatus(BeidouScriptHooks.GuardID);
+            await BattleExecution.Run(async () => {
+                void Hit()
+                {
+                    using var batch = new HitBatch();
+                    batch.Resolve(new HitRequest { Target = owner, Element = "Physical", DamageBeforeShield = 1,
+                        Source = DamageSourceInfo.Create(env.Enemy.Entity, ReactionSourceKind.StatusEffect, "", "STE_EnemyTick") });
+                }
+                using var root = BattleResolutionContext.BeginStatusExecution(new StatusInstance());
+                Hit(); await BattleExecution.Flush(); Hit(); await BattleExecution.Flush();
+                Assert.That(guard.RuntimeIntValue, Is.EqualTo(1), "同一状态的多hit只计一次");
+                using (var child = BattleResolutionContext.BeginStatusExecution(new StatusInstance()))
+                {
+                    Hit(); await BattleExecution.Flush();
+                    Assert.That(guard.RuntimeIntValue, Is.EqualTo(2), "延伸状态另有一次额度");
+                    child.Complete();
+                }
+                root.Complete();
+            });
         }
 
         [UnityTest]
@@ -195,12 +223,15 @@ namespace GenshinTurnBased.Tests.EditMode
             bounce.Element="Electro";bounce.DamageType="Burst";bounce.TargetSelect="1";bounce.TargetConsecutive=3;
             bounce.ExecuteCountHandler="Beidou_BurstBounces";
             Actions(env,3,burst.StatusID2,new StatusActionData {ActionType="OnTrigger",Param1=bounce.StatusEffectID2,
-                ScriptHook="Beidou_BurstHit()",OutgoingHit="Normal;Heavy",MaxTimePerHit=1});
+                OnAction="Normal;Heavy",MaxTimePerAction=1});
             var follow=Main(env,7,"ST_Beidou_C4Follow");
             var extra=Effect(env,7,1,"STE_Test_BeidouC4Damage","Damage","%SE_Normal_Beidou.Hits1.M*0.2,1","Enemy");
             extra.Element="Electro";extra.TargetOverride="Beidou_HitTarget()";
             Actions(env,7,follow.StatusID2,new StatusActionData {ActionType="OnTrigger",Param1=extra.StatusEffectID2,
                 ScriptHook="Beidou_NormalHit()",OutgoingHit="Normal"});
+            env.ConfigureAllyAction(1, "SK_Heavy_Beidou", "SE_Heavy_Beidou", "Physical", "1*TotalATK,0", 35);
+            env.DataManager.SkillEffectDict["SE_Heavy_Beidou"].DamageType = "Burst";
+            env.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_1"][1].Hits2 = ".2*TotalATK,0";
             var owner=Setup(env);owner.ConstellationLevel=constellation;
             owner.AddStatus(burst.StatusID2,owner,4,2,0,burst);owner.AddStatus(follow.StatusID2,owner,2,2,0,follow);
             var damage=new List<DamageEventData>();int actions=0;
@@ -213,6 +244,14 @@ namespace GenshinTurnBased.Tests.EditMode
             var c4=damage.Single(d=>d.Source.SourceEffectID==extra.StatusEffectID2);
             Assert.That(c4.DamageType,Is.Null.Or.Empty);Assert.That(c4.DamageBeforeShield,Is.EqualTo(11.214f).Within(.002));
             Assert.That(actions,Is.EqualTo(1));Assert.That(random.IntCallCount,Is.Zero);Assert.That(random.FloatCallCount,Is.EqualTo(bounces+2));
+
+            damage.Clear();
+            Assert.That(env.Manager.UseHeavyAttackBySlot(0), Is.True);
+            await BattleExecution.Flush();
+            Assert.That(damage.Count(d => d.Source.SourceEffectID == "SE_Heavy_Beidou"), Is.EqualTo(2));
+            Assert.That(damage.Count(d => d.Source.SourceEffectID == bounce.StatusEffectID2), Is.EqualTo(bounces));
+            Assert.That(damage[0].Source.SourceEffectID, Is.EqualTo(bounce.StatusEffectID2));
+            Assert.That(actions, Is.EqualTo(2));
         }
     }
 }

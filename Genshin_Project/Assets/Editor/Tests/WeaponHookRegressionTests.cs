@@ -31,6 +31,16 @@ namespace GenshinTurnBased.Tests.EditMode
             HookTestEnv.ResetStaticState();
             HookTestEnv.DestroyDataManager(data);
         }
+        [Test]
+        public void MessengerForcesCriticalOnlyForItsRegisteredDamageHook()
+        {
+            var effect = new StatusEffectData { EffectType = "Damage", StatusEffectID = 430150101, DamageHook = "Hook(430150101)" };
+            var owner = Owner();
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, effect.StatusEffectID2, "Physical", effect), Is.True);
+            effect.DamageHook = null;
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, effect.StatusEffectID2, "Physical", effect), Is.False);
+        }
+
         private BattleEntity Owner()
         {
             var obj = new GameObject("WeaponHookOwner"); objects.Add(obj);

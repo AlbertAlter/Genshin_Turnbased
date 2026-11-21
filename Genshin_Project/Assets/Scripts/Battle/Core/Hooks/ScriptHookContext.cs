@@ -17,6 +17,7 @@ public sealed class ScriptHookContext
     public static ScriptHookContext Current => Execution.Value;
     /// <summary>本次响应对应的不可变声明，不是全局最近一次事件。</summary>
     public BattleDeclaration Declaration;
+    internal BattleStatusPromptOccurrence ActionPrompts;
 
     // 每个状态响应保留自己的事件；嵌套响应结束后恢复父事件，不依赖全局“最后命中”。
     public static IDisposable EnterExecution(ScriptHookContext context) => new ExecutionScope(context);
@@ -56,6 +57,8 @@ public sealed class ScriptHookContext
 
     /// <summary>本次属性查询对应的实际伤害元素；空表示没有伤害上下文，不能以角色固有元素代替。</summary>
     public string DamageElement;
+    /// <summary>本次承伤快照的实际伤害来源；属性查询不借用状态施放者。</summary>
+    public BattleEntity DamageAttacker;
     /// <summary>本次实际DamageType；与倍率所属SkillType、主动行为ActionType独立。</summary>
     public string DamageType;
     /// <summary>属性查询的实际技能身份；状态独立伤害不得借用调用者技能。</summary>
@@ -84,6 +87,7 @@ public sealed class ScriptHookContext
     public ScriptHookContext Snapshot()
     {
         var copy = (ScriptHookContext)MemberwiseClone();
+        copy.ActionPrompts = null;
         copy.DamageEvent = DamageEvent?.Snapshot();
         if (ReactionEvent != null)
             copy.ReactionEvent = new ReactionOccurrence
@@ -99,6 +103,20 @@ public sealed class ScriptHookContext
             };
         if (ActionTargetPositions != null)
             copy.ActionTargetPositions = new List<int>(ActionTargetPositions).AsReadOnly();
+        return copy;
+    }
+
+    internal ScriptHookContext SnapshotForStatusAction(StatusInstance status, StatusActionData action)
+    {
+        var copy = Snapshot();
+        if (action.ActionType == "OnTrigger" && status.SourceEffectExecutionId != 0)
+        {
+            // Damage and reaction snapshots can be separate copies of the same triggering fact.
+            object fact = Declaration ?? DamageEvent?.Declaration ?? ReactionEvent?.Declaration
+                ?? BattleResolutionContext.StatusActionOccurrence(this);
+            copy.ActionPrompts = fact == null ? null : BattleStatusPromptOccurrence.ForEvent(fact);
+        }
+        else copy.ActionPrompts = ActionPrompts;
         return copy;
     }
 

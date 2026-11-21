@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <controller name="selection" pages="0,1,1,2,2,3,3,4,4,5" selected="0" />
+  <displayList>
+    <image id="n1_c0015" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c0015" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="更换圣遗物" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c0015" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择要装备的圣遗物" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c0015" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c0015" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c0015" name="inventoryPanel" xy="31,128" size="449,306" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c0015" name="selectionPanel" xy="494,128" size="410,306" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <component id="n8_c0015" name="item0" xy="45,140" size="421,44" src="c0016" fileName="ArtifactInventoryRow.xml">
+      <Button title="行者之心" controller="selection" page="0" checked="true" />
+    </component>
+    <loader id="n9_c0015" name="itemIcon0" xy="56,145" size="34,34" url="ui://chrlist1i004b" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n10_c0015" name="item1" xy="45,195" size="421,44" src="c0016" fileName="ArtifactInventoryRow.xml">
+      <Button title="勇士之心" controller="selection" page="1" checked="false" />
+    </component>
+    <loader id="n11_c0015" name="itemIcon1" xy="56,200" size="34,34" url="ui://chrlist1i004c" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n12_c0015" name="item2" xy="45,250" size="421,44" src="c0016" fileName="ArtifactInventoryRow.xml">
+      <Button title="守护之心" controller="selection" page="2" checked="false" />
+    </component>
+    <loader id="n13_c0015" name="itemIcon2" xy="56,255" size="34,34" url="ui://chrlist1i004d" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n14_c0015" name="item3" xy="45,305" size="421,44" src="c0016" fileName="ArtifactInventoryRow.xml">
+      <Button title="奇迹" controller="selection" page="3" checked="false" />
+    </component>
+    <loader id="n15_c0015" name="itemIcon3" xy="56,310" size="34,34" url="ui://chrlist1i004e" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <component id="n16_c0015" name="item4" xy="45,360" size="421,44" src="c0016" fileName="ArtifactInventoryRow.xml">
+      <Button title="战狂" controller="selection" page="4" checked="false" />
+    </component>
+    <loader id="n17_c0015" name="itemIcon4" xy="56,365" size="34,34" url="ui://chrlist1i004f" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <loader id="n18_c0015" name="selectedIcon" xy="512,144" size="79,79" url="ui://chrlist1i004b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearIcon controller="selection" pages="0,1,2,3,4" values="ui://chrlist1i004b|ui://chrlist1i004c|ui://chrlist1i004d|ui://chrlist1i004e|ui://chrlist1i004f" />
+    </loader>
+    <text id="n19_c0015" name="selectedName" xy="606,148" size="272,43" font="Microsoft YaHei" fontSize="24" color="#342B24" text="行者之心" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="selection" pages="0,1,2,3,4" values="行者之心|勇士之心|守护之心|奇迹|战狂" />
+    </text>
+    <richtext id="n20_c0015" name="selectedDetails" xy="514,248" size="371,150" font="Microsoft YaHei" fontSize="18" color="#342B24" text="2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearText controller="selection" pages="0,1,2,3,4" values="2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。" />
+    </richtext>
+    <text id="n21_c0015" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="更换后，原装备将返回背包。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

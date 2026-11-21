@@ -15,6 +15,7 @@ public sealed class RoguelikeItemDefinition
     public string ItemId;
     public string Name;
     public string Description;
+    /// <summary>可交给 StreamingAssetSpriteLoader 的相对路径，空白表示未配置图标。</summary>
     public string Icon;
     public string Category;
     public RoguelikeItemType ItemType = RoguelikeItemType.Stack;

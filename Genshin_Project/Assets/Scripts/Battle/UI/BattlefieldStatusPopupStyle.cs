@@ -9,7 +9,8 @@ public sealed class BattlefieldStatusPopupStyle : BattlefieldPopupStyle
     public const string FileName = "StatusPopup.xlsx";
     public float CardGapHeightRatio, StackGapHeightRatio;
 
-    public static BattlefieldStatusPopupStyle Load()
+    public static BattlefieldStatusPopupStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattlefieldStatusPopupStyle ReadPublished()
         => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
 
     public static BattlefieldStatusPopupStyle ReadFile(string path)
@@ -51,8 +52,14 @@ public sealed class BattlefieldStatusPopupStyle : BattlefieldPopupStyle
     }
 
     public static string TextFor(StatusEventData fact)
-        => fact != null && fact.Kind == BattleEventKind.StatusAdded && fact.Display == 1 &&
-            !string.IsNullOrWhiteSpace(fact.StatusName) ? fact.StatusName : string.Empty;
+    {
+        if (fact == null || fact.Kind != BattleEventKind.StatusAdded || fact.Display != 1
+            || string.IsNullOrWhiteSpace(fact.StatusName)) return string.Empty;
+        if (fact.StatusId == AirborneStatusHandler.CharacterStatusID
+            && DataManager.Instance?.LangDict.ContainsKey("status_airborne") == true)
+            return DataManager.Instance.GetLangText("status_airborne");
+        return fact.StatusName;
+    }
 
     // 输入输出都在弹字层坐标系：文字矩形底边始终在卡面顶边之外。
     public float CenterAbove(float cardTop, float cardHeight, float textHeight, float? previousTop = null)

@@ -1,5 +1,8 @@
 #if ROGUELIKE_SAVE_TESTS
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
+using OfficeOpenXml;
 
 namespace GenshinTurnBased.Tests.EditMode
 {
@@ -63,6 +66,87 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(restarted.BattleId, Is.EqualTo("elite-1"));
             Assert.That(restarted.Snapshot.CharacterVitals[0].CurrentHealth, Is.EqualTo(800));
             Assert.That(restarted.Snapshot.Inventory.Items[0].Quantity, Is.EqualTo(1000));
+        }
+
+        [Test]
+        public void EnterNode_FiltersByRangeAndRemembersUsedContentAfterLocalFallback()
+        {
+            var catalog = CreateNodeCatalog();
+            flow = new RoguelikeFlowService(saves, routes, catalog);
+            int firstStep = Current().Snapshot.RandomStep;
+
+            Assert.That(EnterConfiguredBattle(0), Is.EqualTo("RB101"));
+            flow = new RoguelikeFlowService(saves, routes, catalog);
+            Assert.That(EnterConfiguredBattle(1), Is.EqualTo("RB102"));
+            Assert.That(Current().Snapshot.RandomStep, Is.EqualTo(firstStep));
+
+            Assert.That(EnterConfiguredBattle(2), Is.EqualTo("RB101").Or.EqualTo("RB102"));
+            Assert.That(Current().Snapshot.RandomStep, Is.EqualTo(firstStep + 1));
+            Assert.That(EnterConfiguredBattle(3), Is.EqualTo("RB103"));
+            Assert.That(Current().Snapshot.RandomStep, Is.EqualTo(firstStep + 1));
+            Assert.That(Current().Snapshot.UsedNodeContentIds, Is.EqualTo(new[] { "RB101", "RB102", "RB103" }));
+        }
+
+        [TestCase(5, "Event")]
+        [TestCase(6, "Elite")]
+        [TestCase(7, "Boss")]
+        public void ReadConfig_RejectsStageTypeWithoutCandidates(int weightColumn, string kind)
+        {
+            var error = Assert.Throws<InvalidDataException>(() => CreateNodeCatalog(weightColumn));
+            Assert.That(error.Message, Does.Contain("R102").And.Contain(kind));
+        }
+
+        private string EnterConfiguredBattle(int stageIndex)
+        {
+            var node = new RoguelikeNodeSelection
+            {
+                NodeId = "configured-" + stageIndex, StageIndex = stageIndex, Kind = RoguelikeNodeKind.Battle,
+            };
+            var entered = flow.EnterNode(Current().Flow.StepId, node);
+            Assert.That(entered.Succeeded, Is.True, entered.Message);
+            string contentId = Current().Flow.Node.ContentId;
+            Assert.That(flow.BeginBattle(Current().Flow.StepId, node.NodeId).Succeeded, Is.True);
+            Assert.That(flow.RecordBattleVictory(Current().Flow.StepId).Succeeded, Is.True);
+            var settlement = Current();
+            Assert.That(flow.CompleteNode(settlement.Flow.StepId, settlement.Snapshot).Succeeded, Is.True);
+            return contentId;
+        }
+
+        private RoguelikeNodeContentCatalog CreateNodeCatalog(int unassignedWeightColumn = 0)
+        {
+            string battleFolder = Path.Combine(root, "Battle");
+            Directory.CreateDirectory(battleFolder);
+            using (var stages = new ExcelPackage())
+            {
+                var sheet = stages.Workbook.Worksheets.Add("Chapter1");
+                sheet.Cells["A1:J1"].LoadFromArrays(new[] { new object[]
+                    { "StageID", "MinEncounter", "MaxEncounter", "Battle", "Event", "Elite", "Boss", "EnemyLevel", "HPMultiplier", "ATKMultiplier" } });
+                for (int i = 1; i <= 4; i++)
+                    sheet.Cells[i + 1, 1].LoadFromArrays(new[] { new object[] { "R10" + i, 1, 1, 100, 0, 0, 0, i, 1, 1 } });
+                if (unassignedWeightColumn > 0) sheet.Cells[3, unassignedWeightColumn].Value = 10;
+                stages.SaveAs(new FileInfo(Path.Combine(root, "StageConfig.xlsx")));
+            }
+            using (var battles = new ExcelPackage())
+            {
+                var main = battles.Workbook.Worksheets.Add("Main");
+                main.Cells["A1"].LoadFromArrays(new object[][]
+                {
+                    new object[] { "BattleID", "BattleType", "AvailableStageFrom", "AvailableStageTo", "BattleBG" },
+                    new object[] { "RB101", "Battle", "R101", "R104" },
+                    new object[] { "RB102", "Battle", "R102", "R103" },
+                    new object[] { "RB103", "Battle", "R104", "R104" },
+                });
+                var enemies = battles.Workbook.Worksheets.Add("Battle_Enemy");
+                enemies.Cells["A1"].LoadFromArrays(new object[][]
+                {
+                    new object[] { "BattleID", "Wave", "Slot5", "Slot4", "Slot3", "Slot2", "Slot1", "Slot5", "Slot4", "Slot3", "Slot2", "Slot1" },
+                    new object[] { "RB101", 1, null, null, 2001 },
+                    new object[] { "RB102", 1, null, null, 2002 },
+                    new object[] { "RB103", 1, null, null, 2003 },
+                });
+                battles.SaveAs(new FileInfo(Path.Combine(battleFolder, "BattleConfig1.xlsx")));
+            }
+            return RoguelikeNodeContentCatalog.Load(root);
         }
 
         [Test]
@@ -138,6 +222,33 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(next.Snapshot.ClearedNodeIds, Is.Empty);
             Assert.That(next.Snapshot.SelectedRouteNodeIds, Is.Empty);
             Assert.That(next.Snapshot.Inventory.Weapons.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void EventSettlement_PreservesShopPurchasesAndPriorChapterCountsOnReload()
+        {
+            routes.AllowCompletion = true;
+            int firstChapterNodes = Current().Snapshot.CurrentStageIndex + 1;
+            Assert.That(flow.CompleteChapter(Current().Flow.StepId).Succeeded, Is.True);
+            Assert.That(flow.SaveCompletedChapterToSlot(Current().Flow.StepId, 1).Succeeded, Is.True);
+            Assert.That(flow.StartFromChapterSlot(2, 1).Succeeded, Is.True);
+
+            var purchase = Current();
+            purchase.Snapshot.ShopPurchaseCounts = new Dictionary<string, int> { ["limited-item"] = 2 };
+            Assert.That(flow.CommitProgressAction(purchase.Flow.StepId, purchase.Snapshot,
+                RoguelikeSaveReason.ShopPurchased).Succeeded, Is.True);
+            Enter(RoguelikeNodeKind.Event);
+            var node = Current();
+            node.Snapshot.ShopPurchaseCounts = null;
+            node.Snapshot.CompletedChapterNodeCounts = null;
+            Assert.That(flow.CompleteEvent(node.Flow.StepId, node.Snapshot).Succeeded, Is.True);
+            var settlement = Current();
+            Assert.That(flow.CompleteNode(settlement.Flow.StepId, settlement.Snapshot).Succeeded, Is.True);
+
+            var loaded = RoguelikeSaveTestFactory.CreateService(root).LoadActiveRun();
+            Assert.That(loaded.Succeeded, Is.True, loaded.Message);
+            Assert.That(loaded.Data.Snapshot.ShopPurchaseCounts["limited-item"], Is.EqualTo(2));
+            Assert.That(loaded.Data.Snapshot.CompletedChapterNodeCounts[1], Is.EqualTo(firstChapterNodes));
         }
 
         [Test]

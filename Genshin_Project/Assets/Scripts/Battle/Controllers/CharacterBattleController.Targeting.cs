@@ -51,14 +51,6 @@ public partial class CharacterBattleController
             : new List<BattleEntity>();
     }
 
-    private List<FieldPosition> ResolveTargetFields(SkillEffectData effect)
-    {
-        var result = ResolveSkillTargetResult(effect);
-        return result.IsValid
-            ? BattleTargetResolver.GetFields(BattleManager.Instance, result)
-            : new List<FieldPosition>();
-    }
-
     private void BeginStatusTargetSequence()
     {
         _lastStatusTargetResult = null;
@@ -160,17 +152,6 @@ public partial class CharacterBattleController
         return result.IsValid
             ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
-    }
-
-    private List<FieldPosition> ResolveStatusTargetFields(
-        StatusEffectData effect,
-        StatusInstance sourceStatus,
-        object host)
-    {
-        var result = ResolveStatusTargetResult(effect, sourceStatus, host);
-        return result.IsValid
-            ? BattleTargetResolver.GetFields(BattleManager.Instance, result)
-            : new List<FieldPosition>();
     }
 
     private static TargetResolutionResult InvalidTargetResult(string error)

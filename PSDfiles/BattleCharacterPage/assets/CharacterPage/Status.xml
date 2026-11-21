@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1008,665">
+  <displayList>
+    <text id="n0_stat1" name="heading" xy="0,0" size="680,51" font="Microsoft YaHei" fontSize="36" color="#4C4236" text="当前状态" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n1_stat1" name="sampleLabel" xy="818,7" size="190,38" font="Microsoft YaHei" fontSize="19" color="#6C6255" text="布局示例" align="right" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n2_stat1" name="row0" xy="0,80" size="1008,102" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <graph id="n3_stat1" name="iconWell0" xy="20,99" size="64,64" type="rect" fillColor="#A99B83" lineSize="0" touchable="false" corner="9,9,9,9" />
+    <text id="n4_stat1" name="iconLabel0" xy="20,99" size="64,64" font="Microsoft YaHei" fontSize="26" color="#F1E7D5" text="盾" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n5_stat1" name="name0" xy="106,92" size="620,35" font="Microsoft YaHei" fontSize="26" color="#4C4236" text="护盾状态" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n6_stat1" name="info0" xy="106,133" size="650,35" font="Microsoft YaHei" fontSize="21" color="#6C6255" text="显示护盾来源、剩余盾量和持续回合。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n7_stat1" name="value0" xy="755,110" size="229,39" font="Microsoft YaHei" fontSize="22" color="#716758" text="剩余 2 回合" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n8_stat1" name="row1" xy="0,200" size="1008,102" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <graph id="n9_stat1" name="iconWell1" xy="20,219" size="64,64" type="rect" fillColor="#A99B83" lineSize="0" touchable="false" corner="9,9,9,9" />
+    <text id="n10_stat1" name="iconLabel1" xy="20,219" size="64,64" font="Microsoft YaHei" fontSize="26" color="#F1E7D5" text="增" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n11_stat1" name="name1" xy="106,212" size="620,35" font="Microsoft YaHei" fontSize="26" color="#4C4236" text="增益状态" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n12_stat1" name="info1" xy="106,253" size="650,35" font="Microsoft YaHei" fontSize="21" color="#6C6255" text="显示状态效果；可计数的状态显示层数。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n13_stat1" name="value1" xy="755,230" size="229,39" font="Microsoft YaHei" fontSize="22" color="#716758" text="3 层" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+  </displayList>
+</component>

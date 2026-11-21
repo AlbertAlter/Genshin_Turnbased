@@ -12,7 +12,7 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "Hexerei.xlsx");
         if (!File.Exists(path)) return; // 兼容尚未发布新规则表的旧数据包。
-        using var package = new ExcelPackage(new FileInfo(path));
+        using var package = OpenDataWorkbook(path);
         LoadHexereiStatusSheet(package.Workbook.Worksheets["Status"]);
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-public sealed class RoguelikeSaveRepository
+public sealed partial class RoguelikeSaveRepository
 {
     private readonly RoguelikeSavePaths paths;
     private readonly RoguelikeSaveValidator validator;
@@ -51,7 +51,14 @@ public sealed class RoguelikeSaveRepository
     public RoguelikeSaveResult<ActiveRunSaveData> LoadActiveRun()
     {
         using var transaction = BeginTransaction();
-        return LoadWithBackup<ActiveRunSaveData>(paths.ActiveRunPath, validator.Validate);
+        var result = LoadWithBackup<ActiveRunSaveData>(paths.ActiveRunPath, validator.Validate);
+        if (!result.Succeeded) return result;
+        var wish = ApplyWishPlans(result.Data.Snapshot.WishProgress);
+        if (!wish.Succeeded) return RoguelikeSaveResult<ActiveRunSaveData>.Failure(wish.ErrorCode,
+            "祈愿结果已保存，公共五星预定尚未提交：" + wish.Message, wish.Exception, result.Data);
+        var delivery = ApplyAppearanceAwards(result.Data.Snapshot.AppearanceAwards);
+        return delivery.Succeeded ? result : RoguelikeSaveResult<ActiveRunSaveData>.Failure(delivery.ErrorCode,
+            "通关记录已保存，外观奖励尚未提交：" + delivery.Message, delivery.Exception, result.Data);
     }
 
     public RoguelikeSaveResult<ChapterEntrySaveData> LoadChapterSlot(int entryChapterId, int slotIndex)
@@ -74,7 +81,14 @@ public sealed class RoguelikeSaveRepository
     public RoguelikeSaveResult SaveActiveRun(ActiveRunSaveData save)
     {
         using var transaction = BeginTransaction();
-        return SaveAtomically(paths.ActiveRunPath, save, validator.Validate);
+        var result = SaveAtomically(paths.ActiveRunPath, save, validator.Validate);
+        if (!result.Succeeded) return result;
+        var wish = ApplyWishPlans(save.Snapshot.WishProgress);
+        var delivery = ApplyAppearanceAwards(save.Snapshot.AppearanceAwards);
+        // The active snapshot is the durable outbox. Retry its public update on load or before deleting it.
+        if (!wish.Succeeded) return RoguelikeSaveResult.Success("存档已保存；公共五星预定等待重试：" + wish.Message);
+        // The victory checkpoint is already committed. Keep its outbox for restart/retry, never pretend the victory rolled back.
+        return delivery.Succeeded ? result : RoguelikeSaveResult.Success("通关记录已保存；外观奖励等待重试：" + delivery.Message);
     }
 
     public RoguelikeSaveResult SaveChapterSlot(ChapterEntrySaveData save)
@@ -97,6 +111,17 @@ public sealed class RoguelikeSaveRepository
         using var transaction = BeginTransaction();
         try
         {
+            if (HasAnyVersion(paths.ActiveRunPath))
+            {
+                var current = LoadWithBackup<ActiveRunSaveData>(paths.ActiveRunPath, validator.Validate);
+                if (current.Succeeded)
+                {
+                    var wish = ApplyWishPlans(current.Data.Snapshot.WishProgress);
+                    if (!wish.Succeeded) return wish;
+                    var delivery = ApplyAppearanceAwards(current.Data.Snapshot.AppearanceAwards);
+                    if (!delivery.Succeeded) return delivery; // Do not erase a known undelivered cosmetic reward.
+                }
+            }
             DeleteIfPresent(paths.ActiveRunPath);
             DeleteIfPresent(RoguelikeSavePaths.GetBackupPath(paths.ActiveRunPath));
             DeleteIfPresent(RoguelikeSavePaths.GetTemporaryPath(paths.ActiveRunPath));
@@ -113,6 +138,51 @@ public sealed class RoguelikeSaveRepository
 
     public RoguelikeSaveResult RestoreActiveRunBackup(bool confirmed)
         => RestoreBackup<ActiveRunSaveData>(paths.ActiveRunPath, validator.Validate, confirmed);
+
+    internal RoguelikeSaveResult<RoguelikeWishPlanningData> GetOrCreateWishPlanning(RoguelikeWishRules rules, IBattleRandomSource random)
+    {
+        using var transaction = BeginTransaction();
+        var read = ReadWishPlanning();
+        if (read.ErrorCode != RoguelikeSaveErrorCode.NotFound) return read;
+        int seed = (random ?? BattleRandom.Source).NextInt(1, int.MaxValue);
+        var data = new RoguelikeWishPlanningData
+        {
+            Seed = seed,
+            Character = rules.PlanFive(seed, RoguelikeWishKind.Character, 0),
+            Weapon = rules.PlanFive(seed, RoguelikeWishKind.Weapon, 0),
+        };
+        var saved = SaveAtomically(paths.WishPlanningPath, data, ValidateWishPlanning);
+        return saved.Succeeded ? RoguelikeSaveResult<RoguelikeWishPlanningData>.Success(data)
+            : RoguelikeSaveResult<RoguelikeWishPlanningData>.Failure(saved.ErrorCode, saved.Message, saved.Exception);
+    }
+
+    private RoguelikeSaveResult<RoguelikeWishPlanningData> ReadWishPlanning()
+        => LoadWithBackup<RoguelikeWishPlanningData>(paths.WishPlanningPath, ValidateWishPlanning);
+
+    private static RoguelikeSaveResult ValidateWishPlanning(RoguelikeWishPlanningData data)
+        => data?.IsValid == true ? RoguelikeSaveResult.Success()
+            : RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.ValidationFailed, "公共五星预定数据无效。");
+
+    private RoguelikeSaveResult ApplyWishPlans(RoguelikeWishProgress progress)
+    {
+        if (progress == null || progress.FivePlanSeed == 0) return RoguelikeSaveResult.Success();
+        var read = ReadWishPlanning();
+        if (read.ErrorCode == RoguelikeSaveErrorCode.NotFound)
+            return SaveAtomically(paths.WishPlanningPath, new RoguelikeWishPlanningData
+            {
+                Seed = progress.FivePlanSeed, Character = progress.CharacterFivePlan, Weapon = progress.WeaponFivePlan,
+            }, ValidateWishPlanning);
+        if (!read.Succeeded) return read;
+        var data = read.Data;
+        if (data.Seed != progress.FivePlanSeed)
+            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.ValidationFailed, "存档与公共五星预定的种子不一致。");
+        bool characterAdvanced = progress.CharacterFivePlan.Sequence > data.Character.Sequence;
+        bool weaponAdvanced = progress.WeaponFivePlan.Sequence > data.Weapon.Sequence;
+        if (!characterAdvanced && !weaponAdvanced) return RoguelikeSaveResult.Success();
+        if (characterAdvanced) data.Character = progress.CharacterFivePlan;
+        if (weaponAdvanced) data.Weapon = progress.WeaponFivePlan;
+        return SaveAtomically(paths.WishPlanningPath, data, ValidateWishPlanning);
+    }
 
     public RoguelikeSaveResult RestoreChapterSlotBackup(int chapter, int slot, bool confirmed)
     {
@@ -198,7 +268,7 @@ public sealed class RoguelikeSaveRepository
                 RoguelikeSaveErrorCode.BothCopiesCorrupted,
                 "正式档和备份档都无法读取，原文件已保留。");
         }
-        return formalResult;
+        return formalExists ? formalResult : backupResult;
     }
 
     private RoguelikeSaveResult<T> ReadSingle<T>(string path, Func<T, RoguelikeSaveResult> validate)

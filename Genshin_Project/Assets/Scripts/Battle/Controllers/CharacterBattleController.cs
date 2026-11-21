@@ -90,6 +90,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         Level = level;
         Ascension = ascension;
         _initialStatuses.Clear();
+        EquippedArtifactSetCounts = new Dictionary<int, int>();
 
         var dm = DataManager.Instance;
 
@@ -169,6 +170,7 @@ public List<int> ForcedTargetPositions = new List<int>();
         // Entity
         if (Entity == null) Entity = GetComponent<BattleEntity>();
         if (Entity == null) Entity = gameObject.AddComponent<BattleEntity>();
+        Entity.HasWithdrawn = false;
         Entity.CharacterCtrl = this;
         Entity.Side = BattleSide.Ally;   // 位置系统：角色属于我方阵营（2026-08-06）
         Entity.IsAscended = isAscended;
@@ -277,7 +279,8 @@ public List<int> ForcedTargetPositions = new List<int>();
         // 按钮绑定技能（ChangeControl 可替换）
         _boundSkills[0] = _attrData.NormalAttackID;
         _boundSkills[1] = _attrData.HeavyAttackID;
-        _boundSkills[2] = _attrData.ElementalSkillID;
+        _skillSlotBindings.Clear();
+        SetBoundSkillID(ElementalSkillSlot, _attrData.ElementalSkillID);
         _boundSkills[3] = _attrData.ElementalBurstID;
         _ccRecords.Clear();
         BattleAttributeInitialization.Prepare(Entity);

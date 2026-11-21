@@ -49,7 +49,7 @@ namespace Roguelike.Tests.RouteGeneration
                 _randomLog?.BeginAttempt(attempt);
                 _nextNodeId = 1;
                 RouteMapData map = BuildAttempt(configs, attempt);
-                if (Validate(map, out lastError) && ValidateGeometry(map, out lastError))
+                if (Validate(map, out lastError, configs) && ValidateGeometry(map, out lastError))
                     return RouteGenerationResult.Succeeded(map);
                 _randomLog?.RecordRejectedAttempt(lastError);
             }
@@ -109,6 +109,7 @@ namespace Roguelike.Tests.RouteGeneration
             AddExtraEdges(map);
             RepairNarrowAngles(map);
             RepairNodeTypes(map, configs);
+            RepairRemainingTypeConstraints(map, configs);
             AdjustLongEdges(map);
             return map;
         }
@@ -194,6 +195,25 @@ namespace Roguelike.Tests.RouteGeneration
                         AddEdgeIfMissing(map, node.Id, FindNearest(node, current.Nodes).Id);
                 }
             }
+            // Jitter also changes X, so independently choosing nearest neighbours can cross.
+            // Uncrossing shortens the pair and preserves every node's incoming/outgoing coverage.
+            var nodes = AllNodes(map);
+            int remaining = map.Edges.Count * map.Edges.Count;
+            bool changed;
+            do
+            {
+                changed = false;
+                for (int first = 0; first < map.Edges.Count && !changed; first++)
+                for (int second = first + 1; second < map.Edges.Count; second++)
+                {
+                    var a = map.Edges[first]; var b = map.Edges[second];
+                    if (nodes[a.FromNodeId].StageIndex != nodes[b.FromNodeId].StageIndex || !EdgesCross(a, b, nodes)) continue;
+                    map.Edges.RemoveAt(second); map.Edges.RemoveAt(first);
+                    AddEdgeIfMissing(map, a.FromNodeId, b.ToNodeId);
+                    AddEdgeIfMissing(map, b.FromNodeId, a.ToNodeId);
+                    changed = true; break;
+                }
+            } while (changed && --remaining > 0);
         }
 
         private void AddExtraEdges(RouteMapData map)
@@ -380,19 +400,20 @@ namespace Roguelike.Tests.RouteGeneration
 
             for (int repair = 0; repair < maximumRepairs; repair++)
             {
-                if (!TryFindLongTypeRun(map, out List<RouteNodeData> run))
+                if (!TryFindLongTypeRun(map, out List<RouteNodeData> run, configs))
                     break;
-                List<RouteNodeData> candidates = run
+                var rerollable = run.Where(node => CanChangeType(node, configs[node.StageIndex])).ToList();
+                List<RouteNodeData> candidates = rerollable
                     .Where(node => GetInDegree(node.Id, map.Edges) > 1 || GetOutDegree(node.Id, map.Edges) > 1)
                     .ToList();
                 if (candidates.Count == 0)
-                    candidates.AddRange(run);
+                    candidates.AddRange(rerollable);
                 Shuffle(candidates);
 
                 bool changed = false;
                 foreach (RouteNodeData node in candidates)
                 {
-                    if (!TryRerollNodeType(map, node, configs[node.StageIndex], node.Type, false,
+                    if (!TryRerollNodeType(map, node, configs, node.Type, false,
                             "four-or-more consecutive nodes"))
                         continue;
                     changed = true;
@@ -428,7 +449,7 @@ namespace Roguelike.Tests.RouteGeneration
                 bool changed = false;
                 foreach (RouteNodeData node in candidates)
                 {
-                    if (!TryRerollNodeType(map, node, configs[node.StageIndex], RouteNodeType.Elite, true,
+                    if (!TryRerollNodeType(map, node, configs, RouteNodeType.Elite, true,
                             "adjacent elite nodes"))
                         continue;
                     changed = true;
@@ -439,9 +460,69 @@ namespace Roguelike.Tests.RouteGeneration
             }
         }
 
-        private bool TryRerollNodeType(RouteMapData map, RouteNodeData node, RouteStageConfig config,
+        private void RepairRemainingTypeConstraints(RouteMapData map, IReadOnlyList<RouteStageConfig> configs)
+        {
+            var ordered = map.Stages.SelectMany(stage => stage.Nodes).ToArray();
+            var indices = ordered.Select((node, index) => (node.Id, index)).ToDictionary(pair => pair.Id, pair => pair.index);
+            if (!TryFindLongTypeRun(map, out _, configs) && !map.Edges.Any(edge =>
+                    ordered[indices[edge.FromNodeId]].Type == RouteNodeType.Elite && ordered[indices[edge.ToNodeId]].Type == RouteNodeType.Elite)) return;
+
+            // Greedy rerolls can alternate between a long battle run and adjacent elites.
+            // Solve both constraints together, keeping table-fixed types and all graph geometry.
+            var original = ordered.Select(node => node.Type).ToArray();
+            var incoming = ordered.Select(node => map.Edges.Where(edge => edge.ToNodeId == node.Id)
+                .Select(edge => indices[edge.FromNodeId]).ToArray()).ToArray();
+            var longest = new int[ordered.Length];
+            var longestMutable = new int[ordered.Length];
+            int remaining = ordered.Length * 4096;
+            bool Assign(int index)
+            {
+                if (index == ordered.Length) return true;
+                if (--remaining <= 0) return false;
+                var node = ordered[index]; var config = configs[node.StageIndex];
+                var candidates = Enum.GetValues(typeof(RouteNodeType)).Cast<RouteNodeType>()
+                    .Where(type => GetTypeWeight(config, type) > 0).ToList();
+                // Preserve the existing draw first; alternative choices retain their table weights.
+                var choices = new List<RouteNodeType>();
+                if (candidates.Remove(original[index])) choices.Add(original[index]);
+                while (candidates.Count > 0)
+                {
+                    int roll = _random.NextInt(0, candidates.Sum(type => GetTypeWeight(config, type)));
+                    int selected = 0;
+                    for (; selected < candidates.Count - 1; selected++)
+                    {
+                        roll -= GetTypeWeight(config, candidates[selected]);
+                        if (roll < 0) break;
+                    }
+                    choices.Add(candidates[selected]); candidates.RemoveAt(selected);
+                }
+                foreach (var type in choices)
+                {
+                    bool mutable = config.TotalWeight > GetTypeWeight(config, type);
+                    int length = 1, mutableLength = mutable ? 1 : 0;
+                    bool valid = true;
+                    foreach (int previous in incoming[index])
+                    {
+                        if (ordered[previous].Type != type) continue;
+                        if (type == RouteNodeType.Elite) { valid = false; break; }
+                        length = Math.Max(length, longest[previous] + 1);
+                        if (mutable) mutableLength = Math.Max(mutableLength, longest[previous] + 1);
+                        else if (longestMutable[previous] > 0) mutableLength = Math.Max(mutableLength, longestMutable[previous] + 1);
+                    }
+                    if (!valid || mutableLength >= 4) continue;
+                    node.Type = type; longest[index] = length; longestMutable[index] = mutableLength;
+                    if (Assign(index + 1)) return true;
+                }
+                node.Type = original[index]; return false;
+            }
+            if (Assign(0)) return;
+            for (int index = 0; index < ordered.Length; index++) ordered[index].Type = original[index];
+        }
+
+        private bool TryRerollNodeType(RouteMapData map, RouteNodeData node, IReadOnlyList<RouteStageConfig> configs,
             RouteNodeType excludedType, bool requireNoLongRun, string reason)
         {
+            RouteStageConfig config = configs[node.StageIndex];
             List<RouteNodeType> candidates = new List<RouteNodeType>();
             List<int> weights = new List<int>();
             int totalWeight = 0;
@@ -457,7 +538,7 @@ namespace Roguelike.Tests.RouteGeneration
                 if (requireNoLongRun)
                 {
                     node.Type = candidate;
-                    bool createsLongRun = TryFindLongTypeRun(map, out _);
+                    bool createsLongRun = TryFindLongTypeRun(map, out _, configs);
                     node.Type = originalType;
                     if (createsLongRun)
                         continue;
@@ -499,7 +580,11 @@ namespace Roguelike.Tests.RouteGeneration
             }
         }
 
-        public static bool TryFindLongTypeRun(RouteMapData map, out List<RouteNodeData> run)
+        private static bool CanChangeType(RouteNodeData node, RouteStageConfig config)
+            => config.TotalWeight > GetTypeWeight(config, node.Type);
+
+        public static bool TryFindLongTypeRun(RouteMapData map, out List<RouteNodeData> run,
+            IReadOnlyList<RouteStageConfig> configs = null)
         {
             Dictionary<int, RouteNodeData> nodes = AllNodes(map);
             Dictionary<int, int> lengths = new Dictionary<int, int>();
@@ -533,6 +618,9 @@ namespace Roguelike.Tests.RouteGeneration
                     run.Add(nodes[current]);
                     current = previous[current];
                 }
+                // 唯一类型由配表固定的连续段可保留。后续可变节点仍不能继续延长该段。
+                if (configs != null && !run.Any(item => CanChangeType(item, configs[item.StageIndex])))
+                    continue;
                 run.Reverse();
                 return true;
             }
@@ -776,7 +864,7 @@ namespace Roguelike.Tests.RouteGeneration
             }
         }
 
-        public static bool Validate(RouteMapData map, out string error)
+        public static bool Validate(RouteMapData map, out string error, IReadOnlyList<RouteStageConfig> configs = null)
         {
             Dictionary<int, RouteNodeData> nodes = AllNodes(map);
             HashSet<string> uniqueEdges = new HashSet<string>();
@@ -831,7 +919,7 @@ namespace Roguelike.Tests.RouteGeneration
                 return false;
             }
 
-            if (TryFindLongTypeRun(map, out _))
+            if (TryFindLongTypeRun(map, out _, configs))
             {
                 error = "A route contains four or more consecutive nodes of the same type.";
                 return false;

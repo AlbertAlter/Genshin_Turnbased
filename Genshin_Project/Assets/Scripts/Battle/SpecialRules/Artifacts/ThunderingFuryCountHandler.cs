@@ -33,12 +33,12 @@ public sealed class ThunderingFuryCountHandler : CountStatusHandler
             return status;
         }
 
-        // 读取 Cooldown 配表的有符号增减量，通过公共冷却入口执行，不另改字典。
+        // 解析 Cooldown 配表参数，再通过公共冷却入口执行。
         var dm = DataManager.Instance;
         if (dm == null || !dm.StatusEffectDict.TryGetValue(PayoutEffectID, out var payout)
             || payout.EffectType != "Cooldown" || payout.TargetType != "Self"
-            || !ResetCooldownTarget.IsValid(payout.Param1)
-            || !CooldownParameters.TryParseAmount(payout.Param2, out int rounds))
+            || !CooldownTarget.IsValid(payout.Param1)
+            || !CooldownParameters.TryParse(payout.Param2, out int? rounds))
             throw new InvalidOperationException("如雷缺少合法的Cooldown配置：" + PayoutEffectID);
         status.RuntimeValue = next - Threshold; // 先扣4，再提交冷却变化，子响应不能重复消费。
         if (!owner.CharacterCtrl.ChangeSkillCooldown(payout.Param1, rounds))

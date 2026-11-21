@@ -29,7 +29,7 @@ namespace GenshinTurnBased.Tests.EditMode
             env.ConfigureAllyAction(1,"SK_Heavy_Xiao2","SE_Heavy_Xiao2Damage","Physical","1*TotalATK,0", 0);
             env.DataManager.SkillEffectDict["SE_Heavy_Xiao2Damage"].TargetNumber = -1;
             env.DataManager.SkillEffectDict["SE_Heavy_Xiao2Charge"] = new SkillEffectData
-            { SkillEffectID2 = "SE_Heavy_Xiao2Charge", EffectIndex = 1, EffectType = "ResetCooldown", Param1 = "SK_Skill_Xiao", ScriptHook = "Xiao_C6Hit()" };
+            { SkillEffectID2 = "SE_Heavy_Xiao2Charge", EffectIndex = 1, EffectType = "Cooldown", Param1 = "SK_Skill_Xiao", Param2 = "Reset", ScriptHook = "Xiao_C6Hit()" };
             env.DataManager.SkillEffectDict["SE_Heavy_Xiao2Free"] = new SkillEffectData
             { SkillEffectID2 = "SE_Heavy_Xiao2Free", EffectIndex = 2, EffectType = "ApplyStatus", Param1 = XiaoScriptHooks.Free, TargetType = "Self", ScriptHook = "Xiao_C6Hit()" };
             env.ConfigureAllyAction(2,"SK_Skill_Xiao","SE_Skill_XiaoConsume","", "", 30, 2,

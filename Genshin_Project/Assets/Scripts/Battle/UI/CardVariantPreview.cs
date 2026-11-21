@@ -6,12 +6,12 @@ public sealed class CardVariantPreview : MonoBehaviour
 {
     public Font controlsFont;
     public UICardFactory cardFactory;
-    public UIHitShakeController shake;
+    public UICardAttackMotion shake;
     public UICardVariantSwitcher switcher;
     public RectTransform directMount, shakeMount;
+    [SerializeField] private Canvas previewCanvas;
     public int enemyId = 2004, firstVariant = 1, secondVariant = 2;
     private UICardView directCard, shakenCard;
-    private HitShakeStyle settings;
     private UICardVariantStyle fadeSettings;
     private bool started, ready, heavy = true, paused;
     private float speed = 1;
@@ -24,7 +24,7 @@ public sealed class CardVariantPreview : MonoBehaviour
         ready = false; error = null;
         if (cardFactory == null || shake == null || switcher == null || directMount == null || shakeMount == null)
         { Fail("缺少显式绑定的公共组件或卡牌挂载点。"); yield break; }
-        try { settings = HitShakeStyle.Load(); fadeSettings = UICardVariantStyle.Load(); }
+        try { fadeSettings = UICardVariantStyle.Load(); }
         catch (System.Exception exception) { Fail(exception.Message); yield break; }
         shake.AutomaticClock = false;
         switcher.AutomaticClock = false;
@@ -45,7 +45,6 @@ public sealed class CardVariantPreview : MonoBehaviour
         switcher.Bind(cardFactory, shakenCard, firstVariant);
         ready = true; ResetCards();
     }
-    private HitShakeStyle.Profile Profile => settings.Get(heavy ? "CardHeavy" : "CardNormal");
     private void Play()
     {
         if (!ready || paused || switcher.Pending) return;
@@ -71,8 +70,8 @@ public sealed class CardVariantPreview : MonoBehaviour
     {
         if (!ready || paused) return;
         uint seed = ++sequence;
-        shake.PulseCard(1, directCard.Appearance.Root, Profile, seed);
-        shake.PulseCard(1, shakenCard.Appearance.Root, Profile, seed);
+        shake.PlayHit(1, directCard.Appearance.Root, heavy ? 3 : 2, -1, seed, 1);
+        shake.PlayHit(1, shakenCard.Appearance.Root, heavy ? 3 : 2, -1, seed, 1);
     }
     private void LateUpdate()
     {
@@ -84,7 +83,7 @@ public sealed class CardVariantPreview : MonoBehaviour
     private void OnGUI()
     {
         var matrix = GUI.matrix; var font = GUI.skin.font; bool enabledBefore = GUI.enabled;
-        GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1));
+        GUI.matrix = ProjectUiCanvas.GetGuiMatrix(previewCanvas);
         if (controlsFont != null) GUI.skin.font = controlsFont;
         var label = new GUIStyle(GUI.skin.label) { fontSize = 25 };
         var button = new GUIStyle(GUI.skin.button) { fontSize = 24 };
@@ -97,7 +96,7 @@ public sealed class CardVariantPreview : MonoBehaviour
         GUI.enabled = ready;
         if (GUILayout.Button("重置为点燃", button, GUILayout.Width(230))) ResetCards();
         if (GUILayout.Button("模拟受击（H）", button, GUILayout.Width(230))) SimulateHit();
-        if (GUILayout.Button(heavy ? "重击抖动" : "普攻抖动", button, GUILayout.Width(220))) heavy = !heavy;
+        if (GUILayout.Button(heavy ? "重受击" : "轻受击", button, GUILayout.Width(220))) heavy = !heavy;
         if (GUILayout.Button(paused ? "继续" : "暂停", button, GUILayout.Width(180))) paused = !paused;
         if (GUILayout.Button(speed == 1 ? "速度：1×" : "速度：0.25×", button, GUILayout.Width(230))) speed = speed == 1 ? .25f : 1;
         GUILayout.EndHorizontal();

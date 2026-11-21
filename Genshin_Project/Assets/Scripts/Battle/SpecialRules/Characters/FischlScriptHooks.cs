@@ -25,7 +25,6 @@ public static class FischlScriptHooks
         internal readonly bool HadOz;
         internal BattleEntity Primary;
         internal readonly HashSet<BattleEntity> Hits = new HashSet<BattleEntity>();
-        internal readonly List<StatusInstance> Markers = new List<StatusInstance>();
         private readonly Cast previous = Casting.Value;
         internal Cast(BattleEntity owner, SkillMainData skill)
         { Owner = owner; Skill = skill?.SkillID2; Action = skill?.ActionType; HadOz = FindOz(owner) != null; Casting.Value = this; }
@@ -97,17 +96,6 @@ public static class FischlScriptHooks
             || effect?.SkillEffectID2 == "SE_Burst_FischlC4Damage");
         BattleSpecialRules.RegisterStatusLifecycle(Oz, StartOz, Stop);
         BattleSpecialRules.RegisterStatusLifecycle(C1, StartC1, Stop);
-        BattleSpecialRules.RegisterStatusLifecycle(ChargeTarget, (status, host) =>
-        {
-            if (Casting.Value?.Owner == status.Caster && Casting.Value.Skill == "SK_Heavy_Fischl") Casting.Value.Markers.Add(status);
-        }, null);
-        BattleSpecialRules.RegisterStatusLifecycle(Charge, (status, host) =>
-        {
-            var cast = Casting.Value;
-            if (cast?.Owner != status.Caster || cast.Skill != "SK_Heavy_Fischl")
-                throw new InvalidOperationException("菲谢尔蓄力必须保留本次手选的场地标记。");
-            foreach (var marker in cast.Markers) if (StatusHostAccess.Contains(marker.Host, marker)) status.BoundStatuses.Add(marker);
-        }, null);
         foreach (string kind in new[] { "A1", "A4", "C1", "C6", "HexereiATK", "HexereiEM" })
         {
             string captured = kind;

@@ -5,6 +5,7 @@ public partial class CharacterBattleController
 {
     private readonly Dictionary<string, StatusInstance> _artifactInitiateStatuses =
         new Dictionary<string, StatusInstance>();
+    public IReadOnlyDictionary<int, int> EquippedArtifactSetCounts { get; private set; } = new Dictionary<int, int>();
 
     /// <summary>
     /// 完整编队注册后的战斗构筑阶段调用，参数为每个套装的实际穿戴件数；与武器登记先后不影响开战收尾。
@@ -55,6 +56,8 @@ public partial class CharacterBattleController
                 manager.StatusMainDict[key], null, null, new EquipmentEffectSource(Entity));
             RecordInitializationStatus(_artifactInitiateStatuses[key], 0, 2, InitialStatusKind.Artifact);
         }
+        EquippedArtifactSetCounts = new System.Collections.ObjectModel.ReadOnlyDictionary<int, int>(
+            new Dictionary<int, int>(equippedSetCounts));
         return true;
     }
 }

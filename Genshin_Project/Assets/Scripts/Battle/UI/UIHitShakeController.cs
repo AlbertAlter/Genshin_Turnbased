@@ -60,7 +60,7 @@ public sealed class UIHitShakeController : MonoBehaviour
         channel.Delta = Matrix4x4.identity;
         if (channel.Root == null) { channel.Impulses.Clear(); return; }
         Vector2 size = channel.Root.rect.size;
-        var pose = new HitShakePose(); float maxMove = 0, maxRotate = 0;
+        var pose = new HitShakePose(); float maxMove = 0, maxRotate = 0, maxX = 0, maxY = 0, maxZ = 0;
         for (int i = channel.Impulses.Count - 1; i >= 0; i--)
         {
             var impulse = channel.Impulses[i]; impulse.Age += delta;
@@ -68,14 +68,22 @@ public sealed class UIHitShakeController : MonoBehaviour
             { dueMarkers.Add(impulse.Marker); impulse.Marker = null; }
             if (impulse.Age >= impulse.Profile.Duration) { channel.Impulses.RemoveAt(i); continue; }
             var sample = HitShakeMath.Sample(impulse.Profile, size, impulse.Seed, impulse.Age);
-            pose.Offset += sample.Offset; pose.Rotation += sample.Rotation;
+            pose.Offset += sample.Offset; pose.Rotation += sample.Rotation; pose.ScaleDelta += sample.ScaleDelta;
             maxMove = Mathf.Max(maxMove, impulse.Profile.MaxTranslation); maxRotate = Mathf.Max(maxRotate, impulse.Profile.MaxRotation);
+            maxX = Mathf.Max(maxX, impulse.Profile.X); maxY = Mathf.Max(maxY, impulse.Profile.Y); maxZ = Mathf.Max(maxZ, impulse.Profile.Z);
         }
         if (channel.Impulses.Count == 0) return;
         pose = HitShakeMath.Clamp(pose, size, maxMove, maxRotate);
+        if (channel == screen)
+        {
+            pose.Offset.x = Mathf.Clamp(pose.Offset.x, -size.x * maxX, size.x * maxX);
+            pose.Offset.y = Mathf.Clamp(pose.Offset.y, -size.y * maxY, size.y * maxY);
+            pose.ScaleDelta = Mathf.Clamp(pose.ScaleDelta, -maxZ, maxZ);
+        }
         Vector3 center = channel.Root.TransformPoint(channel.Root.rect.center);
         Vector3 offset = channel.Root.TransformVector(pose.Offset);
-        channel.Delta = Matrix4x4.Translate(center + offset) * Matrix4x4.Rotate(Quaternion.AngleAxis(pose.Rotation, channel.Root.forward)) * Matrix4x4.Translate(-center);
+        channel.Delta = Matrix4x4.Translate(center + offset) * Matrix4x4.Rotate(Quaternion.AngleAxis(pose.Rotation, channel.Root.forward))
+            * Matrix4x4.Scale(Vector3.one * (1 + pose.ScaleDelta)) * Matrix4x4.Translate(-center);
     }
     private void Collect(Channel channel)
     {
@@ -96,7 +104,7 @@ public sealed class UIHitShakeController : MonoBehaviour
         {
             if (entry.Key == null || entry.Value == null) { graphics.Remove(entry.Key); owners.Remove(entry.Key); continue; }
             Matrix4x4 card = owners.TryGetValue(entry.Key, out var owner) ? owner.Delta : Matrix4x4.identity;
-            entry.Value.SetWorldDelta(screen.Delta * card);
+            entry.Value.SetWorldDelta(this, screen.Delta * card);
         }
         // Invoke outside channel iteration: a marker may release a card or start/cancel another animation.
         if (dueMarkers.Count > 0)
@@ -114,6 +122,11 @@ public sealed class UIHitShakeController : MonoBehaviour
         Advance(0);
     }
     public void ForgetScreenHits(long playback) => screenHits.RemoveWhere(key => key.Item1 == playback);
+    public void CancelScreen(long playback)
+    {
+        screen.Impulses.RemoveAll(item => playback < 0 || item.Playback == playback);
+        screenHits.RemoveWhere(key => playback < 0 || key.Item1 == playback); Advance(0);
+    }
     private void LateUpdate() { if (AutomaticClock) Advance(Time.unscaledDeltaTime); }
     private void OnDisable() => Cancel(-1);
 }

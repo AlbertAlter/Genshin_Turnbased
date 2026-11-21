@@ -45,7 +45,7 @@ public sealed class BattleTeamStatusHost : IDisposable
         EquipmentEffectSource equipmentSource, HashSet<string> bindingAncestry, bool managed, IEnumerable<long> causes = null,
         string enchantElement = null, string enchantOverride = null)
     {
-        if (id == PublicControlStates.OffField || id == PublicControlStates.EnemyStun)
+        if (id == PublicControlStates.OffField || PublicControlStates.IsEnemyOnly(id))
             throw new InvalidOperationException(id + "只能施加于合法单位实体。");
         if (IsDisposed) throw new ObjectDisposedException(nameof(BattleTeamStatusHost));
         if (string.IsNullOrWhiteSpace(id) || main == null || main.StatusID2 != id)
@@ -149,7 +149,7 @@ public sealed class BattleTeamStatusHost : IDisposable
 
     public void Dispose()
     {
-        using var teardown = StatusRemovalActions.SuppressForTeardown();
+        using var teardown = StatusRemovalActions.SuppressForCleanup();
         if (IsDisposed) return;
         StatusInstance extraHP = GetStatusList().Find(status => status.MainData?.GetMultiplierPart() == "ExtraBaseHP");
         // 会话销毁不冒充战斗内消耗、到期或移除，不执行OnEnd。
@@ -218,6 +218,48 @@ public static class StatusHostAccess
         => host is BattleEntity entity ? entity.HasStatusInstance(status)
         : host is FieldPosition field ? field.StatusList.Contains(status)
         : host is BattleTeamStatusHost team && team.Contains(status);
+
+    /// <summary>配表效果向已选定的宿主施加状态；各容器负责原有生命周期与声明。</summary>
+    internal static void Apply(object host, string id, BattleEntity caster, int duration, int addPhase,
+        int triggerPhase, StatusMainData main, StatusInstance sourceStatus, string param2, string enchantElement,
+        string enchantOverride)
+    {
+        var weapon = sourceStatus?.WeaponContext;
+        var equipment = sourceStatus?.EquipmentSource;
+        switch (host)
+        {
+            case BattleEntity entity:
+                entity.AddStatus(id, caster, duration, addPhase, triggerPhase, main, weapon, param2, equipment,
+                    enchantElement: enchantElement, enchantOverride: enchantOverride);
+                break;
+            case FieldPosition field:
+                field.AddStatus(id, caster, duration, addPhase, triggerPhase, main, weapon, param2,
+                    equipmentSource: equipment, enchantElement: enchantElement, enchantOverride: enchantOverride);
+                break;
+            case BattleTeamStatusHost team:
+                team.AddStatus(id, caster, duration, addPhase, triggerPhase, main, weapon, param2, equipment,
+                    enchantElement: enchantElement, enchantOverride: enchantOverride);
+                break;
+            default: return;
+        }
+    }
+
+    /// <summary>按原容器顺序移除同 ID 的所有实例；特定实例可走 Remove。</summary>
+    internal static void RemoveByID(object host, string id, Action<BattleEntity> onUnitRemoved = null)
+    {
+        switch (host)
+        {
+            case BattleEntity entity:
+                if (entity.RemoveStatus(id, -1)) onUnitRemoved?.Invoke(entity);
+                break;
+            case FieldPosition field:
+                field.RemoveStatus(id);
+                break;
+            case BattleTeamStatusHost team:
+                team.RemoveStatus(id);
+                break;
+        }
+    }
 
     public static bool Remove(object host, StatusInstance status, string reason = "Removed")
         => host is BattleEntity entity ? entity.RemoveStatusInstance(status, reason)

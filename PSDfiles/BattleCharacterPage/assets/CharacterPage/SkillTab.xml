@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="144,144" extention="Button" opaque="true">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0" />
+  <Button mode="Radio" />
+  <displayList>
+    <graph id="n2_tab02" name="selectedOutline" xy="15,0" size="114,114" type="rect" fillColor="#FEFEFE" lineSize="0" corner="57,57,57,57" touchable="false">
+      <gearDisplay controller="button" pages="1,3" />
+    </graph>
+    <image id="n0_tab02" name="outerDark" xy="19,4" size="106,106" src="circd" fileName="DeepBrownCircle.png" touchable="false" />
+    <image id="n1_tab02" name="middleLight" xy="22,7" size="100,100" src="circl" fileName="LightBrownCircle.png" touchable="false" />
+    <image id="n4_tab02" name="innerDark" xy="26,11" size="92,92" src="circd" fileName="DeepBrownCircle.png" touchable="false" />
+    <loader id="n5_tab02" name="icon" xy="32,17" size="80,80" align="center" vAlign="middle" fill="scale" touchable="false" />
+    <text id="n3_tab02" name="title" xy="0,114" size="144,30" font="Microsoft YaHei" fontSize="22" color="#5A4F42" text="技能" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearColor controller="button" pages="1,2,3" values="#33291F|#33291F|#33291F" />
+    </text>
+  </displayList>
+</component>

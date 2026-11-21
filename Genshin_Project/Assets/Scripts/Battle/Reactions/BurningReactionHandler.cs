@@ -136,7 +136,7 @@ public static class BurningReactionHandler
 
     private static void ExecuteTick(ReactionStateInstance state, TurnPhase phase)
     {
-        using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        using var resolutionEffect = ReactionEffectExecutor.BeginDamageEffect();
         using var hitResponses = BattleResolutionContext.BeginCollection();
         BattleEntity target = state.Target;
         if (target == null || !target.IsAlive)
@@ -170,7 +170,7 @@ public static class BurningReactionHandler
 
         DMGTakenSnapshot taken = target.PrepareDMGTaken(
             snapshot != null ? snapshot.SourceEffectID : string.Empty,
-            snapshot != null ? snapshot.SourceSkillID : string.Empty, "Reaction", "Pyro");
+            snapshot != null ? snapshot.SourceSkillID : string.Empty, "Reaction", "Pyro", snapshot?.SourceEntity);
         ReactionResult result = ReactionResolver.Resolve(new ReactionContext
         {
             SourceEntity = snapshot != null ? snapshot.SourceEntity : null,
@@ -179,7 +179,7 @@ public static class BurningReactionHandler
             SourceEffectID = snapshot != null ? snapshot.SourceEffectID : string.Empty,
             SourceSnapshotOverride = snapshot,
             Target = target,
-            EffectExecutionID = ReactionResolver.BeginEffectExecution(),
+            EffectExecutionID = resolutionEffect.ExecutionID,
             ApplicationPhase = (int)phase,
             AttackElement = "Pyro",
             AttackAmount = target.GetEnemyElementalShield()?.Element == "Pyro" ? 0f : 1f,

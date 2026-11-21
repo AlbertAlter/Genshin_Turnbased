@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -257,8 +259,19 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(env.Manager.APManager.CurrentAP, Is.EqualTo(70));
             Assert.That(env.Ally.GetBoundSkillCurrentCharge(2), Is.EqualTo(1));
             Assert.That(gains, Is.EqualTo(1)); Assert.That(env.Ally.Entity.CurrentEnergy, Is.EqualTo(8));
+            var orders = new HashSet<long>();
+            var batches = new HashSet<long>();
             for (int p = 1; p <= 5; p++)
-                Assert.That(env.Manager.Field.GetSlot(BattleSide.Enemy, p).StatusList.Exists(s => s.StatusID2 == "ST_Klee_Mine"), Is.EqualTo(p >= 3));
+            {
+                var mine = env.Manager.Field.GetSlot(BattleSide.Enemy, p).StatusList.Find(s => s.StatusID2 == "ST_Klee_Mine");
+                Assert.That(mine != null, Is.EqualTo(p >= 3));
+                if (mine == null) continue;
+                orders.Add(mine.ApplyOrder);
+                batches.Add(mine.SourceEffectExecutionId);
+            }
+            Assert.That(orders.Count, Is.EqualTo(3));
+            Assert.That(batches.Count, Is.EqualTo(1));
+            Assert.That(batches.Contains(0L), Is.False);
             Assert.That(random.IntCallCount, Is.EqualTo(5)); Assert.That(random.FloatCallCount, Is.EqualTo(9));
         }
 
@@ -286,6 +299,98 @@ namespace GenshinTurnBased.Tests.EditMode
             }
             Assert.That(blasts, Is.EqualTo(2)); Assert.That(field.StatusList, Is.Empty);
             Assert.That(first.IsActive, Is.False); Assert.That(second.IsActive, Is.False);
+        }
+
+        private sealed class PromptRecorder : IBattleResultPresentationPlayer
+        {
+            internal readonly List<BattlePresentationResult> Results = new List<BattlePresentationResult>();
+            public void Begin(BattlePresentationRequest request, Action impact) => impact();
+            public void ShowResult(BattlePresentationRequest request, Action finish) => finish();
+            public void Cancel(BattlePresentationRequest request) { }
+            public void SkipResults() { }
+            public void CancelResults() { }
+            public Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
+            {
+                Results.AddRange(sequence.Results);
+                return Task.CompletedTask;
+            }
+        }
+
+        [TestCase(1, 1, "OnEnd", false)]
+        [TestCase(3, 3, "OnEnd", false)]
+        [TestCase(0, 3, "OnEnd", false)]
+        [TestCase(1, 1, "OnItsTurn", false)]
+        [TestCase(1, 1, "OnItsTurn", true)]
+        [TestCase(0, 3, "OnItsTurn", true)]
+        public void OverlappingMines_UseExistingElementOrder_AndPromptPerSourceEffect(int sourceCount, int prompts,
+            string actionType, bool explicitPhase)
+        {
+            using var env = new BattleFlowTestEnv();
+            var owner = Start(env);
+            var center = env.CreateEnemy(2).Entity;
+            env.CreateEnemy(3);
+            var mine = Main(env, 4101602, "ST_Klee_Mine");
+            mine.MaxStack = mine.MaxCount = 0;
+            var blast = Effect(env, 410160201, "STE_Klee_MineDamage", "Damage", "0.1*TotalATK,1");
+            blast.Element = "Pyro"; blast.DamageType = "Skill"; blast.TargetType = "Enemy"; blast.TargetSelect = "1,1";
+            env.DataManager.StatusActionDict[mine.StatusID2] = new List<StatusActionData> {
+                new StatusActionData { StatusID2 = mine.StatusID2, ActionType = actionType,
+                    Param1 = blast.StatusEffectID2 }
+            };
+            center.ApplyAura("Hydro", .5f, owner.EntityID);
+            var instances = new List<StatusInstance>();
+            long firstEffect = ReactionResolver.BeginEffectExecution();
+            foreach (int slot in new[] { 3, 1, 2 }) // 实例施加顺序与格号顺序刻意不同
+            {
+                long id = sourceCount > 1 && instances.Count > 0 ? ReactionResolver.BeginEffectExecution() : firstEffect;
+                using (sourceCount == 0 ? null : BattleEventHub.BeginEffectExecution(id))
+                    instances.Add(env.Manager.Field.GetSlot(BattleSide.Enemy, slot).AddStatus(mine.StatusID2,
+                        owner, actionType == "OnItsTurn" ? 2 : 1, (int)TurnPhase.AllyPostTurn,
+                        explicitPhase ? (int)TurnPhase.AllyPostTurn : 0, mine));
+            }
+            var player = new PromptRecorder();
+            float fireAfterHit = 0;
+            using var observer = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, hit) => {
+                if (hit.Subject == center && hit.Source.SourceEffectID == blast.StatusEffectID2)
+                    fireAfterHit = center.GetAura("Pyro")?.AuraAmount ?? 0f;
+            }, 0);
+            BattleExecution.SetPlayer(player);
+            try
+            {
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+            }
+            finally { BattleExecution.ReleasePlayer(player); }
+
+            var labels = player.Results.Select(r => r.Data).OfType<BattleActionPromptData>()
+                .Where(p => p.IsStatus && p.Name == mine.StatusName).ToList();
+            Assert.That(labels.Count, Is.EqualTo(prompts));
+            Assert.That(labels.Select(p => p.SourceEffectExecutionId),
+                Is.EqualTo(sourceCount > 0 ? instances.Select(s => s.SourceEffectExecutionId).Distinct() : Enumerable.Repeat(0L, prompts)));
+            var hits = player.Results.Where(r => r.Data is DamageEventData d && d.Subject == center
+                && d.Source.SourceEffectID == blast.StatusEffectID2).ToList();
+            Assert.That(hits.Select(r => r.Header.HitId).Distinct().Count(), Is.EqualTo(3));
+            Assert.That(hits.Select(r => ((DamageEventData)r.Data).Source.SourceStatusApplyOrder),
+                Is.EqualTo(instances.Select(s => s.ApplyOrder)));
+            Assert.That(hits.Select(r => ((DamageEventData)r.Data).Source.ReactionType),
+                Is.EqualTo(new[] { ReactionType.Vaporize, ReactionType.None, ReactionType.None }));
+            Assert.That(center.GetAura("Hydro"), Is.Null);
+            Assert.That(fireAfterHit, Is.EqualTo(1f));
+            if (actionType == "OnItsTurn")
+            {
+                player.Results.Clear();
+                BattleExecution.SetPlayer(player);
+                try
+                {
+                    env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                    env.Manager.EndAllyTurn();
+                    env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+                }
+                finally { BattleExecution.ReleasePlayer(player); }
+                Assert.That(player.Results.Count(r => r.Data is BattleActionPromptData p && p.Name == mine.StatusName),
+                    Is.EqualTo(prompts));
+            }
+            Assert.That(instances.All(s => !s.IsActive), Is.True);
         }
 
         [UnityTest]

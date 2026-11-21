@@ -49,12 +49,4 @@ public partial class EnemyBattleController
             ? BattleTargetResolver.GetEntities(BattleManager.Instance, result, effect.EffectType == "Revive")
             : new List<BattleEntity>();
     }
-
-    private List<FieldPosition> ResolveEnemyTargetFields(EnemySkillEffectData effect, StatusInstance sourceStatus = null)
-    {
-        var result = ResolveEnemyTargetResult(effect, sourceStatus);
-        return result.IsValid
-            ? BattleTargetResolver.GetFields(BattleManager.Instance, result)
-            : new List<FieldPosition>();
-    }
 }

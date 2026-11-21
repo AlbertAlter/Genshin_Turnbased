@@ -61,13 +61,6 @@ public static class WorkbookIntegrityValidator
         }
     }
 
-    private static readonly HashSet<string> AllowedEffectTypes = new HashSet<string>(StringComparer.Ordinal)
-    {
-        "AddTurn", "ApplyStatus", "BindStatus", "Buff", "ChangeControl", "Damage", "Debuff",
-        "ExecuteEffect", "ExecuteSkill", "GainEnergy", "Heal", "RemoveStatus", "Shield",
-        "BondOfLife", "NightSoul"
-    };
-
     private static readonly HashSet<string> AllowedElements = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         "None", "Physical", "True", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro"
@@ -80,22 +73,13 @@ public static class WorkbookIntegrityValidator
 
     private static readonly HashSet<string> AllowedTargetTypes = new HashSet<string>(StringComparer.Ordinal)
     {
-        "Self", "Enemy", "EnemyField", "Allies", "AlliesOnly", "AllyField"
+        "Self", "Enemy", "EnemyField", "Ally", "Allies", "AlliesOnly", "AllyField", "AlliesField", "Field",
+        "AllyTeam", "EnemyTeam"
     };
 
     private static readonly HashSet<string> AllowedSkillActionTypes = new HashSet<string>(StringComparer.Ordinal)
     {
         "Normal", "Heavy", "Skill", "Burst"
-    };
-
-    private static readonly HashSet<string> AllowedStatusActionTypes = new HashSet<string>(StringComparer.Ordinal)
-    {
-        "OnApply", "OnItsTurn", "OnTrigger", "OnEnd", "OnHit"
-    };
-
-    private static readonly HashSet<string> SchemaTypeTokens = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "int", "long", "float", "double", "decimal", "string", "bool", "boolean"
     };
 
     public static IReadOnlyList<WorkbookValidationIssue> Validate(string dataRoot)
@@ -111,14 +95,14 @@ public static class WorkbookIntegrityValidator
             return issues;
         }
 
-        var presentSheets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        List<TableRow> rows = LoadRows(dataRoot, issues, presentSheets);
-        ValidateRequiredSources(presentSheets, issues);
+        foreach (string message in DataSourcePreflightValidator.ValidatePresence(dataRoot))
+            issues.Add(new WorkbookValidationIssue(WorkbookValidationSeverity.Error, "REQUIRED_SOURCE_MISSING", dataRoot, message));
+        List<TableRow> rows = LoadRows(dataRoot, issues);
+        NormalizeEquipmentKeys(rows);
 
         var seen = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
         var characterSkillIds = new HashSet<int>();
         var characterSkillNames = new HashSet<string>(StringComparer.Ordinal);
-        var characterEffectIds = new HashSet<int>();
         var characterEffectNames = new HashSet<string>(StringComparer.Ordinal);
         var statusIds = new HashSet<int>();
         var statusNames = new HashSet<string>(StringComparer.Ordinal);
@@ -128,17 +112,19 @@ public static class WorkbookIntegrityValidator
         var enemyEffectNames = new HashSet<string>(StringComparer.Ordinal);
         var enemyPatterns = new HashSet<string>(StringComparer.Ordinal);
         var weaponIds = new HashSet<int>();
-        var weaponSkillIds = new HashSet<int>();
 
+        var directlyCalledEffects = new HashSet<string>(StringComparer.Ordinal);
         foreach (TableRow row in rows)
         {
+            if (IsStatusActionSheet(row.Sheet) || row.Get("EffectType") == "ExecuteEffect")
+                foreach (string token in row.Get("Param1").Split(';'))
+                    if (!string.IsNullOrWhiteSpace(token)) directlyCalledEffects.Add(token.Trim());
             CollectPrimaryKeys(
                 row,
                 issues,
                 seen,
                 characterSkillIds,
                 characterSkillNames,
-                characterEffectIds,
                 characterEffectNames,
                 statusIds,
                 statusNames,
@@ -147,8 +133,7 @@ public static class WorkbookIntegrityValidator
                 enemySkillIds,
                 enemyEffectNames,
                 enemyPatterns,
-                weaponIds,
-                weaponSkillIds);
+                weaponIds);
             ValidateEnums(row, issues);
         }
 
@@ -157,9 +142,9 @@ public static class WorkbookIntegrityValidator
             ValidateReferences(
                 row,
                 issues,
+                directlyCalledEffects,
                 characterSkillIds,
                 characterSkillNames,
-                characterEffectIds,
                 characterEffectNames,
                 statusIds,
                 statusNames,
@@ -168,8 +153,7 @@ public static class WorkbookIntegrityValidator
                 enemySkillIds,
                 enemyEffectNames,
                 enemyPatterns,
-                weaponIds,
-                weaponSkillIds);
+                weaponIds);
         }
 
         return issues;
@@ -177,38 +161,37 @@ public static class WorkbookIntegrityValidator
 
     private static List<TableRow> LoadRows(
         string dataRoot,
-        List<WorkbookValidationIssue> issues,
-        HashSet<string> presentSheets)
+        List<WorkbookValidationIssue> issues)
     {
         var rows = new List<TableRow>();
         foreach (string path in Directory.GetFiles(dataRoot, "*.xlsx", SearchOption.AllDirectories)
-                     .Where(path => !Path.GetFileName(path).StartsWith("~$", StringComparison.Ordinal))
-                     .Where(path => !Path.GetFileNameWithoutExtension(path).StartsWith("0_", StringComparison.Ordinal)))
+                     .Where(DataSourcePreflightValidator.IsPublishedWorkbook))
         {
             string relative = path.Substring(dataRoot.Length)
                 .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 .Replace(Path.DirectorySeparatorChar, '/');
+            if (string.Equals(relative, "StatusData.xlsx", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(relative, "StatusData_Enemy.xlsx", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(relative, "EnemySkill.xlsx", StringComparison.OrdinalIgnoreCase)) continue;
             try
             {
                 using var package = new ExcelPackage(new FileInfo(path));
+                var missing = new List<string>();
+                DataSourcePreflightValidator.CollectMissingSheets(package, relative, missing);
+                foreach (string message in missing)
+                    issues.Add(new WorkbookValidationIssue(WorkbookValidationSeverity.Error, "REQUIRED_SHEET_MISSING", relative, message));
                 foreach (ExcelWorksheet sheet in package.Workbook.Worksheets)
                 {
-                    presentSheets.Add(relative + "|" + sheet.Name);
-                    if (sheet.Dimension == null) continue;
-
-                    var headers = new Dictionary<int, string>();
-                    for (int column = sheet.Dimension.Start.Column; column <= sheet.Dimension.End.Column; column++)
+                    if (sheet.Dimension == null || !IsAuditedSheet(relative, sheet.Name)) continue;
+                    var headers = ExcelTableHeaders.For(sheet);
+                    for (int number = headers.DataStartRow; number <= sheet.Dimension.End.Row; number++)
                     {
-                        string header = sheet.Cells[1, column].Text.Trim();
-                        if (!string.IsNullOrEmpty(header)) headers[column] = header;
-                    }
-
-                    for (int number = 2; number <= sheet.Dimension.End.Row; number++)
-                    {
-                        var cells = new Dictionary<string, string>(StringComparer.Ordinal);
-                        foreach (KeyValuePair<int, string> header in headers)
-                            cells[header.Value] = sheet.Cells[number, header.Key].Text.Trim();
-                        if (cells.Values.All(string.IsNullOrWhiteSpace) || IsSchemaTypeRow(cells.Values)) continue;
+                        var cells = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                        foreach (var header in headers.Columns)
+                            cells[header.Key] = sheet.Cells[number, header.Value].Text.Trim();
+                        if (!cells.Any(cell => cell.Value.Length > 0
+                            && !cell.Key.StartsWith("备注", StringComparison.Ordinal)
+                            && !cell.Key.StartsWith("Notes", StringComparison.OrdinalIgnoreCase))) continue;
                         rows.Add(new TableRow
                         {
                             Workbook = relative,
@@ -231,46 +214,63 @@ public static class WorkbookIntegrityValidator
         return rows;
     }
 
-    private static bool IsSchemaTypeRow(IEnumerable<string> values)
+    private static bool IsAuditedSheet(string workbook, string sheet)
     {
-        string[] nonEmpty = values.Where(value => !string.IsNullOrWhiteSpace(value)).ToArray();
-        return nonEmpty.Length > 0 && nonEmpty.All(value => SchemaTypeTokens.Contains(value));
+        if (workbook.StartsWith("Characters/", StringComparison.OrdinalIgnoreCase))
+            return sheet is "Attributes" or "Skills" or "SkillsEffect";
+        if (workbook.StartsWith("Enemies/", StringComparison.OrdinalIgnoreCase))
+            return sheet is "Enemy_Main" or "EnemySkill_Main" or "EnemySkill_Effect" or "EnemySkill_Param" or "EnemyAI" or "EnemyAI_Rule";
+        if (workbook == "WeaponAttributes.xlsx") return sheet is "Attributes" or "WeaponParam";
+        if (workbook.StartsWith("CharacterStatus/", StringComparison.OrdinalIgnoreCase)
+            || workbook.StartsWith("EnemyStatus/", StringComparison.OrdinalIgnoreCase)
+            || workbook is "StatusData_Overall.xlsx" or "StatusData_Artifacts.xlsx" or "StatusData_Weapon.xlsx")
+            return IsStatusMainSheet(sheet) || IsStatusActionSheet(sheet) || IsStatusEffectSheet(sheet);
+        return false;
     }
 
-    private static void ValidateRequiredSources(
-        HashSet<string> presentSheets,
-        List<WorkbookValidationIssue> issues)
+    private static void NormalizeEquipmentKeys(List<TableRow> rows)
     {
-        string[] required =
+        var artifactStatuses = new Dictionary<int, string>();
+        foreach (var row in rows)
         {
-            "Characters.xlsx|Sheet1",
-            "Character_Growth_Curve.xlsx|GrowthCurve_1",
-            "Character_Growth_Curve.xlsx|GrowthCurve_2",
-            "StatusData.xlsx|StatusData_Main",
-            "StatusData.xlsx|Status_Effect",
-            "StatusData.xlsx|Status_Action",
-            "StatusData_Enemy.xlsx|StatusData_Main_Enemy",
-            "EnemyAttributes.xlsx|Enemy_Main",
-            "EnemySkill.xlsx|EnemySkill_Main",
-            "EnemySkill.xlsx|EnemySkill_Effect",
-            "EnemySkill.xlsx|EnemySkill_Param",
-            "EnemySkill.xlsx|EnemyAI",
-            "EnemySkill.xlsx|EnemyAI_Rule",
-            "ReactionLevelCoefficient.xlsx|Sheet1"
-        };
-
-        foreach (string source in required)
-        {
-            if (!presentSheets.Contains(source))
+            bool weapon = row.Workbook == "StatusData_Weapon.xlsx";
+            if (!weapon && row.Workbook != "StatusData_Artifacts.xlsx") continue;
+            if (IsStatusMainSheet(row.Sheet) && TryInt(row.Get("StatusID"), out int status))
             {
-                issues.Add(new WorkbookValidationIssue(
-                    WorkbookValidationSeverity.Error,
-                    "REQUIRED_SHEET_MISSING",
-                    source,
-                    "Required workbook or sheet is missing."));
+                if (weapon) row.Cells["StatusID2"] = DataManager.WeaponStatusKey(status);
+                else
+                {
+                    if (row.Get("StatusID2").Length == 0) row.Cells["StatusID2"] = DataManager.ArtifactStatusKey(status);
+                    artifactStatuses[status] = row.Get("StatusID2");
+                }
+            }
+            if (IsStatusEffectSheet(row.Sheet) && TryInt(row.Get("StatusEffectID"), out int effect))
+            {
+                if (weapon) row.Cells["StatusEffectID2"] = DataManager.WeaponEffectKey(effect);
+                else if (row.Get("StatusEffectID2").Length == 0) row.Cells["StatusEffectID2"] = DataManager.ArtifactEffectKey(effect);
+            }
+        }
+        string ArtifactStatus(string value) => DataManager.ResolveArtifactReference(
+            CountStatusSystem.ResolvePublicStatusReference(value), artifactStatuses, DataManager.ArtifactStatusKey);
+        foreach (var row in rows)
+        {
+            if (row.Workbook == "StatusData_Weapon.xlsx")
+            {
+                if (IsStatusActionSheet(row.Sheet) && TryInt(row.Get("StatusID"), out int id))
+                    row.Cells["StatusID2"] = DataManager.WeaponStatusKey(id);
+                if (row.Get("EffectType") == "ApplyStatus")
+                    row.Cells["Param1"] = DataManager.NormalizeWeaponEffectParam("ApplyStatus", row.Get("Param1"));
+            }
+            else if (row.Workbook == "StatusData_Artifacts.xlsx")
+            {
+                if (IsStatusActionSheet(row.Sheet))
+                    row.Cells["StatusID2"] = ArtifactStatus(row.Get("StatusID2").Length > 0 ? row.Get("StatusID2") : row.Get("StatusID"));
+                if (row.Get("EffectType") == "ApplyStatus")
+                    row.Cells["Param1"] = string.Join(";", row.Get("Param1").Split(';').Select(ArtifactStatus));
             }
         }
     }
+
 
     private static void CollectPrimaryKeys(
         TableRow row,
@@ -278,7 +278,6 @@ public static class WorkbookIntegrityValidator
         Dictionary<string, Dictionary<string, string>> seen,
         HashSet<int> characterSkillIds,
         HashSet<string> characterSkillNames,
-        HashSet<int> characterEffectIds,
         HashSet<string> characterEffectNames,
         HashSet<int> statusIds,
         HashSet<string> statusNames,
@@ -287,8 +286,7 @@ public static class WorkbookIntegrityValidator
         HashSet<int> enemySkillIds,
         HashSet<string> enemyEffectNames,
         HashSet<string> enemyPatterns,
-        HashSet<int> weaponIds,
-        HashSet<int> weaponSkillIds)
+        HashSet<int> weaponIds)
     {
         bool characterWorkbook = row.Workbook.StartsWith("Characters/", StringComparison.OrdinalIgnoreCase);
         if (characterWorkbook && row.Sheet == "Attributes")
@@ -301,7 +299,7 @@ public static class WorkbookIntegrityValidator
         }
         else if (characterWorkbook && row.Sheet == "SkillsEffect")
         {
-            RegisterUnique(row, "SkillEffectID", "character-effect.id", issues, seen, characterEffectIds);
+            RegisterUnique(row, "SkillEffectID", "character-effect.id", issues, seen, (HashSet<int>)null);
             RegisterUnique(row, "SkillEffectID2", "character-effect.id2", issues, seen, characterEffectNames);
         }
 
@@ -317,7 +315,11 @@ public static class WorkbookIntegrityValidator
         }
 
         if (row.Sheet == "Enemy_Main")
-            RegisterUnique(row, "EnemyID", "enemy.id", issues, seen, enemyIds);
+        {
+            string phase = string.IsNullOrWhiteSpace(row.Get("Phase")) ? "0" : row.Get("Phase");
+            RegisterComposite(row, row.Get("EnemyID") + ":" + phase, "enemy.id-phase", issues, seen);
+            if (TryInt(row.Get("EnemyID"), out int enemyID)) enemyIds.Add(enemyID);
+        }
         else if (row.Sheet == "EnemySkill_Main")
             RegisterUnique(row, "EnemySkillID", "enemy-skill.id", issues, seen, enemySkillIds);
         else if (row.Sheet == "EnemySkill_Effect")
@@ -334,23 +336,28 @@ public static class WorkbookIntegrityValidator
 
         if (row.Workbook.Equals("WeaponAttributes.xlsx", StringComparison.OrdinalIgnoreCase) && row.Sheet == "Attributes")
             RegisterUnique(row, "WeaponID", "weapon.id", issues, seen, weaponIds);
-        else if (row.Sheet == "WeaponSkill_Main")
-            RegisterUnique(row, "WeaponSkillID", "weapon-skill.id", issues, seen, weaponSkillIds);
         else if (row.Sheet == "WeaponParam")
-            RegisterComposite(row, row.Get("id") + ":" + row.Get("index"), "weapon-param.id-index", issues, seen);
+            RegisterComposite(row, row.Get("WeaponID") + ":" + row.Get("index"), "weapon-param.id-index", issues, seen);
     }
 
     private static void ValidateEnums(TableRow row, List<WorkbookValidationIssue> issues)
     {
-        ValidateEnum(row, "EffectType", AllowedEffectTypes, issues);
-        ValidateEnum(row, "Element", AllowedElements, issues);
+        string effect = row.Get("EffectType");
+        try
+        {
+            if (row.Has("EffectType") && (IsStatusEffectSheet(row.Sheet) || row.Sheet is "SkillsEffect" or "EnemySkill_Effect"))
+                TableValidator.ValidateEffectType(row.Sheet, row.Number, effect);
+            if (IsStatusActionSheet(row.Sheet) && row.Has("ActionType"))
+                TableValidator.ValidateStatusActionType(row.Sheet, row.Number, row.Get("ActionType"));
+            if (DamageImmunity.IsImmuneType(effect)) DamageImmunity.ParseElements(row.Get("Element"));
+            else ValidateEnum(row, "Element", AllowedElements, issues);
+        }
+        catch (TableValidationException error) { AddIssue(issues, "INVALID_ENUM", row, error.Message); }
         ValidateEnum(row, "DamageType", AllowedDamageTypes, issues);
         ValidateEnum(row, "TargetType", AllowedTargetTypes, issues);
 
         if (row.Sheet == "Skills")
             ValidateEnum(row, "ActionType", AllowedSkillActionTypes, issues);
-        else if (row.Sheet.IndexOf("Status", StringComparison.OrdinalIgnoreCase) >= 0 && row.Has("ActionType"))
-            ValidateEnum(row, "ActionType", AllowedStatusActionTypes, issues);
 
         if (row.Has("PatternType"))
             ValidateEnum(row, "PatternType", new HashSet<string>(StringComparer.Ordinal) { "Weighted" }, issues);
@@ -365,9 +372,9 @@ public static class WorkbookIntegrityValidator
     private static void ValidateReferences(
         TableRow row,
         List<WorkbookValidationIssue> issues,
+        HashSet<string> directlyCalledEffects,
         HashSet<int> characterSkillIds,
         HashSet<string> characterSkillNames,
-        HashSet<int> characterEffectIds,
         HashSet<string> characterEffectNames,
         HashSet<int> statusIds,
         HashSet<string> statusNames,
@@ -376,8 +383,7 @@ public static class WorkbookIntegrityValidator
         HashSet<int> enemySkillIds,
         HashSet<string> enemyEffectNames,
         HashSet<string> enemyPatterns,
-        HashSet<int> weaponIds,
-        HashSet<int> weaponSkillIds)
+        HashSet<int> weaponIds)
     {
         bool characterWorkbook = row.Workbook.StartsWith("Characters/", StringComparison.OrdinalIgnoreCase);
         if (characterWorkbook && row.Sheet == "Attributes")
@@ -387,7 +393,8 @@ public static class WorkbookIntegrityValidator
             ValidateTextReference(row, "ElementalSkillID", characterSkillNames, issues);
             ValidateTextReference(row, "ElementalBurstID", characterSkillNames, issues);
         }
-        else if (characterWorkbook && row.Sheet == "SkillsEffect" && TryInt(row.Get("SkillEffectID"), out int skillEffectId))
+        else if (characterWorkbook && row.Sheet == "SkillsEffect" && TryInt(row.Get("SkillEffectID"), out int skillEffectId)
+            && !directlyCalledEffects.Contains(row.Get("SkillEffectID2")))
         {
             ValidateNumericReference(row, "SkillEffectID/100", skillEffectId / 100, characterSkillIds, issues);
         }
@@ -400,7 +407,11 @@ public static class WorkbookIntegrityValidator
 
         string effectType = row.Get("EffectType");
         if (effectType == "ApplyStatus")
-            ValidateTextReference(row, "Param1", statusNames, issues);
+        {
+            foreach (string status in row.Get("Param1").Split(';').Select(token => token.Trim()))
+                if (status.Length > 0 && !statusNames.Contains(status))
+                    AddIssue(issues, "INVALID_REFERENCE", row, $"Param1 references missing status [{status}].");
+        }
         else if (effectType == "ExecuteEffect")
         {
             string value = row.Get("Param1");
@@ -429,15 +440,13 @@ public static class WorkbookIntegrityValidator
         }
 
         if (row.Sheet == "WeaponParam")
-            ValidateNumericReference(row, "id", row.Get("id"), weaponIds, issues);
-        else if (row.Sheet == "WeaponSkill_Effect" && TryInt(row.Get("SkillEffectID"), out int weaponEffectId))
-            ValidateNumericReference(row, "SkillEffectID/100", weaponEffectId / 100, weaponSkillIds, issues);
+            ValidateNumericReference(row, "WeaponID", row.Get("WeaponID"), weaponIds, issues);
     }
 
     private static bool IsStatusMainSheet(string sheet)
     {
         return sheet == "StatusData_Main" || sheet == "StatusData_Main_Enemy" ||
-               sheet == "StatusData_Overall_Main" || sheet == "StatusWeapon_Main";
+               sheet == "StatusData_Overall_Main" || sheet == "StatusData_Main_Artifacts" || sheet == "StatusWeapon_Main";
     }
 
     private static bool IsStatusEffectSheet(string sheet)
@@ -448,7 +457,7 @@ public static class WorkbookIntegrityValidator
     private static bool IsStatusActionSheet(string sheet)
     {
         return sheet == "Status_Action" || sheet == "Status_Action_Enemy" ||
-               sheet == "StatusAction_Overall" || sheet == "StatusWeapon_Action";
+               sheet == "StatusAction_Overall" || sheet == "Status_Action_Artifacts" || sheet == "StatusWeapon_Action";
     }
 
     private static void RegisterUnique(

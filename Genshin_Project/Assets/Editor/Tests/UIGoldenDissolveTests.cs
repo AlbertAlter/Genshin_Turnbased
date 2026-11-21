@@ -138,41 +138,6 @@ namespace GenshinTurnBased.Tests.EditMode
             ["PreviewBackgroundColor"] = "#2D2822FF",
         };
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void Preview_MigratesLegacySerializedPaths_AndPreservesCustomPaths(bool backslashes)
-        {
-            var node = new UnityEngine.GameObject("GoldenDissolvePreviewPathTest");
-            try
-            {
-                var preview = node.AddComponent<GoldenDissolvePreview>();
-                string PathValue(string path) => backslashes ? path.Replace('/', '\\') : path;
-                preview.cardPath = PathValue("art_assets/Character_Whole/1009_03.png");
-                preview.framePath = PathValue("art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameOutline.png");
-                preview.innerShadowPath = PathValue("art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameInnerShadow.png");
-                preview.outerShadowPath = PathValue("art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameShadow.png");
-                var migrate = typeof(GoldenDissolvePreview).GetMethod("MigrateLegacyPaths",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                Assert.That(migrate, Is.Not.Null);
-                migrate.Invoke(preview, null);
-                Assert.That(preview.cardPath, Is.EqualTo("art_assets/Enemy/2001_01.png"));
-                Assert.That(preview.framePath, Is.EqualTo("art_assets/Character_Bare/Frame/01.png"));
-                Assert.That(preview.innerShadowPath, Is.EqualTo("art_assets/UI/BattleField1/UI_components/card/CardInnerShadow.png"));
-                Assert.That(preview.outerShadowPath, Is.EqualTo("art_assets/UI/BattleField1/UI_components/card/CardShadow.png"));
-
-                preview.cardPath = "art_assets/custom/art.png";
-                preview.framePath = "art_assets/custom/frame.png";
-                preview.innerShadowPath = "art_assets/custom/inner.png";
-                preview.outerShadowPath = "art_assets/custom/outer.png";
-                migrate.Invoke(preview, null);
-                Assert.That(preview.cardPath, Is.EqualTo("art_assets/custom/art.png"));
-                Assert.That(preview.framePath, Is.EqualTo("art_assets/custom/frame.png"));
-                Assert.That(preview.innerShadowPath, Is.EqualTo("art_assets/custom/inner.png"));
-                Assert.That(preview.outerShadowPath, Is.EqualTo("art_assets/custom/outer.png"));
-            }
-            finally { UnityEngine.Object.DestroyImmediate(node); }
-        }
-
         [Test]
         public void Values_LoadDurationColorsAndNormalizedDirection()
         {

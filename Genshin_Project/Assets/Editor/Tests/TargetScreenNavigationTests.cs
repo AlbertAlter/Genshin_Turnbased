@@ -43,5 +43,48 @@ namespace GenshinTurnBased.Tests.EditMode
             }
             finally { BattleRandom.SetSource(previous); }
         }
+
+        [TestCase(new[] { 3 }, 1, new[] { 3 })]
+        [TestCase(new[] { 3 }, 3, new[] { 2, 3, 4 })]
+        [TestCase(new[] { 2, 3, 4 }, 1, new[] { 3 })]
+        [TestCase(new[] { 1 }, 3, new[] { 1, 2, 3 })]
+        [TestCase(new[] { 5 }, 3, new[] { 3, 4, 5 })]
+        public void PhaseSelection_KeepsFocusAndCentersNewWindow(int[] previousPositions, int count, int[] expected)
+        {
+            var previous = BattleRandom.Source;
+            try
+            {
+                var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
+                var selector = new TargetSelector();
+                selector.Init(BattleSide.Enemy, count, 1, p => p == 5 ? 1000 : 1, _ => true,
+                    preferredPositions: previousPositions);
+                Assert.That(selector.CurrentSelection, Is.EqualTo(expected));
+                Assert.That(random.IntCallCount, Is.Zero, "Changing phases must not reroll the focus.");
+            }
+            finally { BattleRandom.SetSource(previous); }
+        }
+
+        [Test]
+        public void PhaseSelection_RespectsDeadExcludedAndTauntingTargets()
+        {
+            var previous = BattleRandom.Source;
+            try
+            {
+                var random = new SequenceBattleRandomSource(); BattleRandom.SetSource(random);
+                var selector = new TargetSelector();
+                selector.Init(BattleSide.Enemy, 1, 0, _ => 1, p => p != 3,
+                    excludePositions: new System.Collections.Generic.List<int> { 2 },
+                    preferredPositions: new[] { 3 });
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 4 }));
+                selector.Init(BattleSide.Enemy, 3, 1, _ => 1, _ => true,
+                    tauntProvider: p => p == 5, preferredPositions: new[] { 2 });
+                Assert.That(selector.CurrentSelection, Is.EqualTo(new[] { 3, 4, 5 }));
+                selector.Init(BattleSide.Enemy, 1, 0, _ => 1, _ => false,
+                    preferredPositions: new[] { 3 });
+                Assert.That(selector.IsSelectionValid(), Is.False);
+                Assert.That(random.IntCallCount, Is.Zero);
+            }
+            finally { BattleRandom.SetSource(previous); }
+        }
     }
 }

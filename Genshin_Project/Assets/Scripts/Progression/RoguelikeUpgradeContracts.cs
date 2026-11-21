@@ -14,10 +14,12 @@ public sealed class RoguelikeUpgradeLimits
     private static readonly int[] SkillCaps = { 2, 3, 4, 6, 8, 9, 10 };
     private static readonly int[] Thresholds = { 20, 40, 50, 60, 70, 80 };
     public int UnlockedAscensions { get; }
+    internal static int MaximumCharacterAndWeaponLevel => LevelCaps[LevelCaps.Length - 1];
     public int CharacterAndWeaponLevel => LevelCaps[UnlockedAscensions];
     public int ArtifactLevel => ArtifactCaps[UnlockedAscensions];
     // 只限制材料培养的基础等级，命座、状态等额外加级不占用这一上限。
     public int SkillBaseLevel => SkillCaps[UnlockedAscensions];
+    internal static int MaximumSkillBaseLevel => SkillCaps[SkillCaps.Length - 1];
 
     public RoguelikeUpgradeLimits(int unlockedAscensions)
     {
@@ -58,12 +60,15 @@ public sealed class RoguelikeUpgradeTarget
     }
 }
 
-/// <summary>只预览经验和等级，不预抽圣遗物词条。预览对象的修改不影响正式升级。</summary>
+/// <summary>预览经验、等级和突破阶段，不预抽圣遗物词条。预览对象的修改不影响正式升级。</summary>
 public sealed class RoguelikeUpgradePreview
 {
     public LevelUpResult Result;
+    /// <summary>目标等级生效后的突破阶段。圣遗物没有突破阶段，返回 null。</summary>
+    public int? TargetAscension;
     public int LevelCap;
     public int ExperienceToCap;
+    public int NextLevelExperience;
     public int GainedExperience;
     public IReadOnlyList<RoguelikeItemStackData> Costs;
 }

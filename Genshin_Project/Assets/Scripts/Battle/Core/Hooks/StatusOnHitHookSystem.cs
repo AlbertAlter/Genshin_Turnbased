@@ -161,6 +161,10 @@ public static class StatusOnHitHookSystem
         foreach (DamageResolvedEvent damageEvent in damageEvents)
         {
             if (damageEvent == null || damageEvent.Target == null) continue;
+            // 独立反应/专用伤害可能不经过状态执行器，按实际来源补足本目标的声明资格。
+            using var effectSource = BattleResolutionContext.BeginEquipmentEffectSource(
+                damageEvent.Source?.EquipmentSource != null
+                || EquipmentStatusLifetime.IsEquipmentStatus(damageEvent.Source?.SourceStatus));
             damageEvent.Declaration = damageEvent.Declaration ?? BattleEventHub.Record(damageEvent,
                 new DamageEventData(damageEvent), damageEvent.RuntimeHitID, damageEvent.TargetIndex);
             using var declaration = BattleEventHub.Enter(damageEvent.Declaration);
@@ -334,7 +338,9 @@ public static class StatusOnHitHookSystem
         DamageEffectFrame frame = DamageEffectFrames[DamageEffectFrames.Count - 1];
         if (frame.Source != damageEvent.Source.SourceEntity) return;
         if (frame.SourceEffectID != damageEvent.Source.SourceEffectID) return;
-        if (damageEvent.Source.SourceKind != ReactionSourceKind.CharacterSkill) return;
+        if (!damageEvent.Source.CountsAsHit
+            || (damageEvent.Source.SourceKind != ReactionSourceKind.CharacterSkill
+                && damageEvent.Source.SourceKind != ReactionSourceKind.StatusEffect)) return;
         frame.Events.Add(damageEvent);
     }
 
@@ -346,7 +352,7 @@ public static class StatusOnHitHookSystem
         int index = DamageEffectFrames.LastIndexOf(frame);
         if (index >= 0) DamageEffectFrames.RemoveAt(index);
         BattleSpecialRules.CompleteDamageEffect(frame.Source, frame.SourceEffectID);
-        if (!frame.IsActiveAction
+        if ((!frame.IsActiveAction && BattleResolutionContext.CurrentExecution == null)
             || frame.Source == null
             || frame.Source.Side != BattleSide.Ally
             || frame.Events.Count == 0)
@@ -456,12 +462,15 @@ public static class StatusOnHitHookSystem
             if (action.ActionType != "OnTrigger"
                 || !ScriptHookParser.TryFind(action.ScriptHook, eventHookName, out string argument))
                 continue;
+            // 只有显式采用Execution的行扩展到状态伤害；其余Post钩子保留主动攻击口径。
+            if (!frame.IsActiveAction && action.MaxTimePerExecution <= 0) continue;
 
             var matchedEvents = new List<DamageResolvedEvent>();
             bool hasHitFilter = !string.IsNullOrWhiteSpace(action.OutgoingHit);
             bool hasDamageFilter = !string.IsNullOrWhiteSpace(action.OutgoingDamage);
             foreach (DamageResolvedEvent damageEvent in frame.Events)
             {
+                if (damageEvent.Source.SourceStatus == status) continue; // 武器自己的追加不递归触发自身。
                 bool matched = (!hasHitFilter && !hasDamageFilter && damageEvent.HitLanded)
                     || (damageEvent.HitLanded
                                 && MatchesDamageFilter(action.OutgoingHit, damageEvent, dm))

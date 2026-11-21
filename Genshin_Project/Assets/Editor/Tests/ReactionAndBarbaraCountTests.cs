@@ -175,7 +175,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var status = new StatusInstance { IsActive = true };
             status.RecordSource(owner);
             var gain = new StatusActionData { StatusID2 = "ST_Artifact_452206", ActionType = "OnTrigger",
-                Param1 = "STE_Artifact_45220602", MaxTimePerAction = 1 };
+                Param1 = "STE_Artifact_45220602", MaxTimePerExecution = 1 };
             for (int i = 0; i < 4; i++)
             {
                 using (BattleResolutionContext.EnterAction(new BattleResolutionContext.CounterScope()))

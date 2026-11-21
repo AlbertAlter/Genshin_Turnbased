@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>Single-batch ice fragments. Original UVs retain the frost and card silhouette as fragments move.</summary>
+[RequireComponent(typeof(RectTransform), typeof(CanvasRenderer))]
 public sealed class UIFrozenShardGraphic : MaskableGraphic
 {
     private Texture source;

@@ -83,7 +83,9 @@ public sealed class HitBatch : IDisposable
     {
         if (_flushed) throw new InvalidOperationException("HitBatch already flushed");
         if (request == null || request.Target == null) return null;
-        if (!EquipmentStatusLifetime.CanExecute(request.Source))
+        if (BattleManager.Instance?.IsBattleOver == true || request.Target.HasWithdrawn
+            || request.Target.EnemyCtrl?.HasDepletedHealthPhase == true
+            || !EquipmentStatusLifetime.CanExecute(request.Source))
         {
             request.CountPlan?.Resolve(null);
             return null; // 未命中、不扣盾/血、不附带命中/死亡声明；旧装备请求不可在复活后复用。
@@ -104,11 +106,16 @@ public sealed class HitBatch : IDisposable
             source.ReactionType = isFixed ? ReactionType.None : request.Properties.Reaction;
         }
         DMGTakenSnapshot taken = isFixed ? null : request.DMGTaken ?? request.Target.PrepareDMGTaken(
-            source.SourceEffectID, source.SourceSkillID, request.DamageType, request.Element);
+            source.SourceEffectID, source.SourceSkillID, request.DamageType, request.Element, source.SourceEntity);
         float takenMultiplier = isFixed ? 1f : taken.GetMultiplier(source.ReactionType);
         incoming *= takenMultiplier;
         if (float.IsNaN(incoming) || float.IsInfinity(incoming)) incoming = 0f;
 
+        // 命中时取免伤快照，破盾不能使同一击溢出伤害到本体。
+        bool isImmune = !isTrue
+            && (request.EnemyShieldHit != null && request.EnemyShieldHit.TryReadDamageImmunity(
+                request.Element, source.SourceEffectID, out bool savedImmunity) ? savedImmunity
+                : DamageImmunity.Resolve(request.Target, request.Element, source.SourceEffectID));
         EnemyShieldHitResult elementalShield = null;
         if (!isFixed)
         {
@@ -118,13 +125,12 @@ public sealed class HitBatch : IDisposable
             if (elementalShield == null)
                 elementalShield = EnemyElementShieldSystem.PrepareHit(request.Target, request.Element,
                     request.ElementAmount, source.ReactionType == ReactionType.Overloaded ? "Overloaded" : null);
+            elementalShield.Source ??= source;
             EnemyElementShieldSystem.CommitHit(elementalShield);
             if (request.EnemyShieldHit != null && source.ReactionType == ReactionType.Overloaded)
-                EnemyElementShieldSystem.ResolveHit(request.Target, request.Element, request.ElementAmount, "Overloaded");
+                EnemyElementShieldSystem.ResolveHit(request.Target, request.Element, request.ElementAmount, "Overloaded", source: source);
         }
         // 敌方GU盾只结算元素耐久；本体承伤由状态决定，不能因有盾自动免伤。
-        bool isImmune = !isTrue
-            && DamageImmunity.Resolve(request.Target, request.Element, source.SourceEffectID);
         if (_deferForOverallShield) source = source.Snapshot();
         var resolution = new HitResolution
         {
@@ -139,7 +145,22 @@ public sealed class HitBatch : IDisposable
         } : null;
         void Commit(float remaining)
         {
+            if (request.Target.EnemyCtrl?.HasDepletedHealthPhase == true)
+            {
+                request.CountPlan?.Resolve(null);
+                return;
+            }
             using var committedHit = BattleEventHub.BeginHit(RuntimeHitID, request.TargetIndex + 1);
+            float immuneShieldAbsorbed = 0f;
+            // 敌人数值盾的耐久与本体免伤独立，免伤不能使数值盾永远无法击破。
+            if (isImmune && request.Target.Type == BattleEntity.EntityType.Enemy
+                && request.Target.Shields.Exists(s => s.Value > 0 && s.Element == "None"
+                    && string.Equals(s.SourceStatus?.MainData?.StatusType, "Shield", StringComparison.OrdinalIgnoreCase)))
+            {
+                float unabsorbed = isDirect ? request.Target.AbsorbDirectDamageWithShield(incoming)
+                    : request.Target.AbsorbDamageWithShield(incoming, request.Element ?? string.Empty);
+                immuneShieldAbsorbed = Mathf.Max(0f, incoming - unabsorbed);
+            }
             float afterShield = isImmune ? 0f : isTrue ? incoming : isDirect
                 ? request.Target.AbsorbDirectDamageWithShield(remaining) : request.Target.AbsorbDamageWithShield(
                 remaining,
@@ -155,10 +176,12 @@ public sealed class HitBatch : IDisposable
             damageEvent.DamageBeforeShield = incoming;
             damageEvent.Critical = isFixed ? null : request.Critical;
             damageEvent.IsImmune = isImmune;
-            damageEvent.ImmuneDamage = isImmune ? incoming : 0f;
-            damageEvent.ShieldAbsorbed = isImmune ? 0f : Mathf.Max(0f, incoming - afterShield);
+            damageEvent.ImmuneDamage = isImmune ? Mathf.Max(0f, incoming - immuneShieldAbsorbed) : 0f;
+            damageEvent.ShieldAbsorbed = isImmune ? immuneShieldAbsorbed : Mathf.Max(0f, incoming - afterShield);
             damageEvent.Element = request.Element;
             damageEvent.DamageType = request.DamageType;
+            if (request.DamageType == "Skill" && damageEvent.HitLanded && damageEvent.ActualHPDamage > 0f)
+                damageEvent.SourceSkillSlotCooldownID = source.SourceEntity?.CharacterCtrl?.CaptureSkillSlotCooldownTarget();
             damageEvent.ElementAmount = isFixed ? 0f : request.ElementAmount;
             damageEvent.Properties = isTrue ? default : request.Properties;
             damageEvent.Resonance = resonance;

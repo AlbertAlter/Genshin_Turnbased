@@ -67,6 +67,15 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(level20.BaseDEFFlat, Is.EqualTo(38f));
         }
 
+        [Test]
+        public void EulaBasicListener_IsLoadedFromBattleInitiateWithOnlyTwoTalents()
+        {
+            dataManager.LoadCharacterSheetsForTest();
+
+            Assert.That(dataManager.CharacterInitiateStatusDict[1040], Is.EqualTo(new[] { EulaScriptHooks.Root }));
+            Assert.That(dataManager.TalentDict[1040].Select(talent => talent.TalentIndex), Is.EqualTo(new[] { 1, 2 }));
+        }
+
         [TestCase("火", "Pyro")]
         [TestCase("水", "Hydro")]
         [TestCase("雷", "Electro")]

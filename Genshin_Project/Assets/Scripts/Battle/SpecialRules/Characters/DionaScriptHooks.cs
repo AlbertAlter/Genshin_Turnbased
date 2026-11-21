@@ -8,16 +8,6 @@ public static class DionaScriptHooks
 {
     public const string Rules = "ST_Diona_Rules", Charge = "ST_Diona_Charge", ChargeTarget = "ST_Diona_ChargeTarget";
     public const string Shield = "ST_Diona_Shield", Mist = "ST_Diona_Mist";
-    private sealed class Cast : IDisposable
-    {
-        internal readonly BattleEntity Owner;
-        internal readonly string Skill;
-        internal readonly List<StatusInstance> Markers = new List<StatusInstance>();
-        private readonly Cast previous = Casting.Value;
-        internal Cast(BattleEntity owner, SkillMainData skill) { Owner = owner; Skill = skill?.SkillID2; Casting.Value = this; }
-        public void Dispose() => Casting.Value = previous;
-    }
-    private static readonly AsyncLocal<Cast> Casting = new AsyncLocal<Cast>();
     private static readonly ConditionalWeakTable<StatusInstance, IDisposable> Listeners = new ConditionalWeakTable<StatusInstance, IDisposable>();
     private static bool Active(StatusInstance status) => status?.IsActive == true && status.Caster?.EntityID == 1031
         && status.Caster.IsAlive && StatusHostAccess.Contains(status.Host, status);
@@ -27,7 +17,6 @@ public static class DionaScriptHooks
 
     internal static void Register()
     {
-        BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new Cast(owner, skill));
         BattleSpecialRules.RegisterBattleReady(battle =>
         {
             foreach (var controller in battle.Allies)
@@ -40,18 +29,6 @@ public static class DionaScriptHooks
                 controller.RecordCharacterInitializationStatus(state, 0);
             }
         });
-        BattleSpecialRules.RegisterStatusLifecycle(ChargeTarget, (state, host) =>
-        {
-            if (Casting.Value?.Owner == state.Caster && Casting.Value.Skill == "SK_Heavy_Diona") Casting.Value.Markers.Add(state);
-        }, null);
-        BattleSpecialRules.RegisterStatusLifecycle(Charge, (state, host) =>
-        {
-            var cast = Casting.Value;
-            if (cast?.Owner != state.Caster || cast.Skill != "SK_Heavy_Diona")
-                throw new InvalidOperationException("迪奥娜蓄力必须保留本次手选位置。");
-            foreach (var marker in cast.Markers)
-                if (StatusHostAccess.Contains(marker.Host, marker)) state.BoundStatuses.Add(marker);
-        }, null);
         BattleSpecialRules.RegisterStatusLifecycle(Shield, StartShield, Stop);
         BattleSpecialRules.RegisterCondition("Diona_PawHit", (a, c) => Empty(a) && Active(c?.Status)
             && c.Status.StatusID2 == Rules && IsPawHit(c));

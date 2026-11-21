@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="940,308" overflow="scroll" scroll="vertical" scrollBar="hidden" opaque="true">
+  <displayList>
+    <richtext id="n1_desc0" name="description" xy="0,0" size="940,40" font="Microsoft YaHei" fontSize="25" color="#F2E7D6" text="对一名敌人造成物理伤害（93.8%攻击力）。&#10;消耗20点AP。" align="left" vAlign="top" autoSize="height" touchable="false" ubb="true" leading="9" />
+  </displayList>
+</component>

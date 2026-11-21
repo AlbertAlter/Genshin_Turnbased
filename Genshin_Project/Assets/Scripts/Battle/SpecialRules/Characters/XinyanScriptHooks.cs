@@ -34,11 +34,16 @@ public static class XinyanScriptHooks
 
     internal static void Register()
     {
+        BattleSpecialRules.RegisterForcedCritical((owner, target, effectID, element, statusEffect) => ForcesCritical(owner, effectID, element));
         BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new Cast(owner, skill));
         BattleSpecialRules.RegisterStatusLifecycle(Shield, StartShield, Stop);
         BattleSpecialRules.RegisterStatusLifecycle(CriticalRule, StartCriticalRule, Stop);
-        BattleSpecialRules.RegisterCondition("Xinyan_ShieldTier", (arg, context) => context?.Status?.StatusID2 == Shield
-            && int.TryParse(arg, out int tier) && tier >= 1 && tier <= 3 && context.Status.RuntimeIntValue == tier);
+        BattleSpecialRules.RegisterShieldParameter("STE_Xinyan_Shield1", state => {
+            if (state?.StatusID2 != Shield || state.Caster?.EntityID != 1033
+                || state.RuntimeIntValue < 1 || state.RuntimeIntValue > 3)
+                throw new InvalidOperationException("热情拂扫缺少本次护盾实例的合法档位。");
+            return "STE_Xinyan_Shield" + state.RuntimeIntValue;
+        });
         BattleSpecialRules.RegisterCondition("Xinyan_OwnShield", (arg, context) => string.IsNullOrEmpty(arg)
             && Active(context?.Status) && context.Status.StatusID2 == Shield && context.Status.Host == context.Caster
             && HasShield(context.Status));
@@ -61,7 +66,7 @@ public static class XinyanScriptHooks
     }
 
     // 二命是本段最终暴击率固定100%，不是向面板加100%；仍走统一逐目标暴击抽取与日志。
-    public static bool ForcesCritical(BattleEntity owner, string effectID, string element)
+    private static bool ForcesCritical(BattleEntity owner, string effectID, string element)
         => owner?.EntityID == 1033 && owner.ConstellationLevel >= 2
             && effectID == "SE_Burst_Xinyan" && string.Equals(element, "Physical", StringComparison.OrdinalIgnoreCase);
 

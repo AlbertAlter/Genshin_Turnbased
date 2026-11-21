@@ -151,9 +151,11 @@ public static class XianglingScriptHooks
     }
 }
 
-/// <summary>旋火轮：本人整数Count，初值/上限6，四命9，下限0；每次全队Normal行为后按配表攻击，再消费1次。时间到期清零。</summary>
+/// <summary>旋火轮每次响应我方普攻行为完成，按配表攻击并消费一次。到期清零。</summary>
 public sealed class XianglingPyronadoCount : CountStatusHandler
 {
+    private static int MaximumUses(BattleEntity owner) => owner.ConstellationLevel >= 4 ? 12 : 8;
+
     public override bool SupportsEffectChange => true;
     public override bool EffectUsesIntegerValue => true;
     public override void ValidateEffectChange(StatusInstance status,BattleEntity host,CountChangeRequest request)
@@ -163,14 +165,14 @@ public sealed class XianglingPyronadoCount : CountStatusHandler
     public override void ChangeFromEffect(StatusInstance status,BattleEntity host,CountChangeRequest request)
     {
         ValidateEffectChange(status,host,request);
-        request.ApplyInteger(status,host,0,host.ConstellationLevel>=4?9:6);
+        request.ApplyInteger(status, host, 0, MaximumUses(host));
         // 数值0仍保留。结束由状态行动中独立配置的RemoveStatus负责。
     }
     private sealed class Memory { internal IDisposable Listener; internal long LastAction; }
     public override void OnCreated(StatusInstance status, object host)
     {
         var owner = XianglingScriptHooks.RequireOwner(status, host); var memory = new Memory();
-        status.RuntimeIntValue = owner.ConstellationLevel >= 4 ? 9 : 6; status.StackCount = 1;
+        status.RuntimeIntValue = MaximumUses(owner); status.StackCount = 1;
         status.IsPermanent = false; status.RemainingPhaseCount = owner.ConstellationLevel >= 4 ? 3 : 2;
         status.CountRuntimeState = memory;
         memory.Listener = BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionCompleted, (header, fact) =>

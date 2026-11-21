@@ -11,6 +11,8 @@ public sealed class BattlePresentationTiming
     public float MediumRandomScale { get; }
     public BattleHitTemplate HitTemplate { get; }
     public double AnimationSeconds { get; }
+    public BattleAttackAnimationSpec AttackAnimation { get; internal set; }
+    internal bool HasAttackAnimationSnapshot { get; set; }
     public BattlePresentationTiming(double interval = 0, double jitter = 0, int x = 2, int y = 2, float mediumScale = .5f,
         BattleHitTemplate hitTemplate = null, double animationSeconds = 0)
     {
@@ -29,6 +31,9 @@ public sealed class BattlePresentationTiming
 
 public sealed class BattlePresentationCue
 {
+    public bool IsAttackStart { get; internal set; }
+    public BattleAttackAnimationSpec AttackAnimation { get; internal set; }
+    public double AttackWindupSeconds { get; internal set; }
     public string CharacterVoicePath { get; internal set; }
     public string CharacterVoiceKey { get; internal set; }
     public BattleSkillMarker SkillMarker { get; internal set; }
@@ -45,6 +50,8 @@ public sealed class BattlePresentationCue
     public int VisualHitCount { get; internal set; } = 1;
     // Cosmetic launch only. Ordinary result views must never consume this stage.
     public bool IsAnticipation { get; internal set; }
+    public bool IsEnemyExit { get; internal set; }
+    internal BattlePresentationResult EnemyExitGroup { get; set; }
     public double ProjectileSeconds { get; internal set; }
     internal BattlePresentationCue(BattlePresentationResult result, double time, BattlePresentationTiming timing, int block = 0)
     { Result = result; Time = time; Timing = timing; Block = block; }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using OfficeOpenXml;
 using UnityEngine;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 public partial class DataManager
 {
@@ -22,9 +24,19 @@ public partial class DataManager
         return fields;
     }
     private readonly List<string> _loadErrors = new List<string>();
+    private int _loadWorkbookCount;
+    private long _loadManagedPeakSample;
 
     /// <summary>最近一次整套加载是否成功。</summary>
     public bool IsLoaded { get; private set; }
+
+    internal static DataManager GetOrCreateLoaded()
+    {
+        var data = Instance;
+        if (data == null) data = new GameObject(nameof(DataManager)).AddComponent<DataManager>();
+        if (!data.IsLoaded) throw new InvalidOperationException("正式配表未加载成功，请查看控制台中的配表错误。");
+        return data;
+    }
 
     /// <summary>
     /// 安全重载全部配表。只有全部文件读取和校验成功才提交新数据；
@@ -32,19 +44,63 @@ public partial class DataManager
     /// </summary>
     public void ReloadAllData()
     {
+        var timer = Stopwatch.StartNew();
+        long managedBefore = GC.GetTotalMemory(false);
+        long preflightMs = 0;
+        _loadWorkbookCount = 0;
+        _loadManagedPeakSample = managedBefore;
         LoadDataAtomically(() =>
         {
-            IReadOnlyList<string> preflightErrors = DataSourcePreflightValidator.Validate(ChartsPath);
+            IReadOnlyList<string> preflightErrors = DataSourcePreflightValidator.ValidatePresence(ChartsPath);
             if (preflightErrors.Count > 0)
                 throw new DataLoadException("配表文件预检失败", preflightErrors);
 
+            preflightMs = timer.ElapsedMilliseconds;
             LoadAllTables();
 
             if (_loadErrors.Count > 0)
                 throw new DataLoadException($"配表校验失败，共 {_loadErrors.Count} 处", _loadErrors);
         });
 
-        Debug.Log($"DataManager: load complete. {CharacterOverviewList.Count} chars, {EnemyMainDict.Count} enemies, {StatusMainDict.Count} statuses");
+        long managedAfter = SampleLoadMemory();
+        const double mib = 1024d * 1024d;
+        Debug.Log($"DataManager: load complete. {CharacterOverviewList.Count} chars, {EnemyMainDict.Count} enemies, {StatusMainDict.Count} statuses. "
+            + $"workbooks={_loadWorkbookCount}, preflight={preflightMs} ms, load+validation={timer.ElapsedMilliseconds - preflightMs} ms, "
+            + $"managed before/after/high sample={managedBefore / mib:F1}/{managedAfter / mib:F1}/{_loadManagedPeakSample / mib:F1} MiB");
+    }
+
+    private long SampleLoadMemory()
+    {
+        long bytes = GC.GetTotalMemory(false);
+        _loadManagedPeakSample = Math.Max(_loadManagedPeakSample, bytes);
+        return bytes;
+    }
+
+    private ExcelPackage OpenDataWorkbook(string path, string source = null, Stream stream = null)
+    {
+        source = source ?? Path.GetFileName(path);
+        SampleLoadMemory();
+        ExcelPackage package;
+        try
+        {
+            package = stream == null ? new ExcelPackage(new FileInfo(path)) : new ExcelPackage(stream);
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidDataException($"无法打开 {source}：{exception.Message}", exception);
+        }
+        try
+        {
+            _loadWorkbookCount++;
+            SampleLoadMemory();
+            DataSourcePreflightValidator.RequireSheets(package, source);
+            return package;
+        }
+        catch
+        {
+            package.Dispose();
+            throw;
+        }
     }
 
     /// <summary>供安全重载流程与 EditMode 回滚测试共用。</summary>
@@ -62,6 +118,7 @@ public partial class DataManager
         try
         {
             loadAction();
+            InvalidateRosterCatalogs();
             IsLoaded = true;
             _loadErrors.Clear();
         }
@@ -105,19 +162,20 @@ public partial class DataManager
         LoadCharacterSheets();
         LoadGrowthCurve();
         LoadWeaponAttributes();
-        LoadStatusData();
+        LoadCharacterStatusData();
         LoadEnemyStatusData();
         LoadOverallStatusData();
         LoadWeaponStatusData();
         LoadArtifactStatusData();
         LoadEnemyAttributes();
-        LoadEnemyCurves();
         LoadEnemyPackages();
         LoadReactionLevelCoefficient();
         LoadEnemyShieldRules();
         LoadTeamBonus();
         LoadHexereiStatusRules();
+        TryValidate("角色开战初始化", ValidateCharacterInitiateStatuses);
         TryValidate("Immune状态及效果", () => DamageImmunity.ValidateDefinitions(this));
+        TryValidate("Shield状态及效果", () => TableValidator.ValidateShieldStatusDefinitions(this));
         TryValidate("Enchant状态及施加参数", () => EnchantStatusSystem.ValidateDefinitions(this));
         TryValidate("Count效果及状态引用", () => CountEffect.ValidateDefinitions(this));
 

@@ -24,9 +24,10 @@ namespace GenshinTurnBased.Tests.EditMode
             Rule("Pyro", "Hydro", "2"); Rule("Pyro", "Pyro", "0");
             Rule("Pyro", "Dendro", "1"); Rule("Pyro", "Electro", "1"); Rule("Pyro", "Anemo", "0.5");
             Rule("Hydro", "Cryo", "1"); Rule("Hydro", "Pyro", "0.5"); Rule("Hydro", "Electro", "1U");
-            Rule("Electro", "Hydro", "1U"); Rule("Dendro", "Pyro", "1");
+            Rule("Electro", "Hydro", "1U"); Rule("Electro", "Cryo", "1"); Rule("Dendro", "Pyro", "1");
             Rule("Freeze", "Pyro", "2"); Rule("Freeze", "Physical", "0.25U");
             Rule("Geo", "Pyro", "2"); Rule("Geo", "Overloaded", "1U");
+            Rule("Pyro", "Cryo", "0.5"); Rule("Geo", "Cryo", "2"); Rule("Dendro", "Cryo", "0");
             BattleRandom.SetSource(new SequenceBattleRandomSource());
         }
 
@@ -123,6 +124,76 @@ namespace GenshinTurnBased.Tests.EditMode
             var reaction = Contact("Hydro", 2f);
             Assert.That(reaction.HasReaction, Is.False);
             Assert.That(FrozenReactionHandler.IsFrozen(target), Is.False);
+            Assert.That(target.GetEnemyElementalShieldHP(), Is.EqualTo(5f));
+        }
+
+        [Test]
+        public void WetElectroShield_ConsumesWaterAndLosesGaugeWithoutFrozenControl()
+        {
+            Shield("Electro", 5f);
+            Contact("Hydro", 3f);
+            Assert.That(ElementQuery.GetAmount(target, "Hydro"), Is.EqualTo(2f));
+
+            var reaction = Contact("Cryo", 2f);
+
+            Assert.That(reaction.TriggeredReactions.Count(r => r.Type == ReactionType.Superconduct), Is.EqualTo(1));
+            Assert.That(reaction.EnemyShieldHit.AppliedLoss, Is.EqualTo(1f));
+            Assert.That(target.GetEnemyElementalShieldHP(), Is.EqualTo(3f));
+            Assert.That(ElementQuery.GetAmount(target, "Hydro"), Is.EqualTo(1f));
+            Assert.That(ElementQuery.GetAmount(target, "Cryo", ReactionPoolKind.Frozen), Is.Zero);
+            Assert.That(FrozenReactionHandler.IsFrozen(target), Is.False);
+        }
+
+        [TestCase("Cryo")]
+        [TestCase("Electro")]
+        public void ShieldImmunityAtStateEntry_EndsWithTheShield(string element)
+        {
+            var shield = Shield(element, 5f);
+            var source = new ReactionSourceSnapshot();
+            Assert.That(ReactionStateSystem.SetEntityState(target, ReactionType.Frozen, 1, source,
+                reactionElementAmount: 1f), Is.Null);
+            Assert.That(FrozenReactionHandler.IsFrozen(target), Is.False);
+
+            target.RemoveStatusInstance(shield);
+            Assert.That(ReactionStateSystem.SetEntityState(target, ReactionType.Frozen, 1, source,
+                reactionElementAmount: 1f), Is.Not.Null);
+        }
+
+        [TestCase("Dendro", 5f)]
+        [TestCase("Pyro", 4.5f)]
+        [TestCase("Geo", 3f)]
+        public void ElementalShield_ClearsExistingWaterBeforeCryoContact(string element, float remainingGauge)
+        {
+            target.ApplyAura("Hydro", 1f, 0);
+            Shield(element, 5f);
+            Assert.That(ElementQuery.ReadNormal(target, "Hydro"), Is.Null);
+
+            Contact("Cryo", 1f);
+
+            Assert.That(FrozenReactionHandler.IsFrozen(target), Is.False);
+            Assert.That(target.GetEnemyElementalShieldHP(), Is.EqualTo(remainingGauge));
+        }
+
+        [TestCase(ReactionType.Frozen)]
+        [TestCase(ReactionType.Burning)]
+        public void ReplacingElementalShield_ClearsExistingReactionStateAndItsElementPool(ReactionType type)
+        {
+            if (type == ReactionType.Frozen)
+            {
+                Shield("Hydro", 5f);
+                Contact("Cryo", 1f);
+            }
+            else
+            {
+                Shield("Pyro", 5f);
+                Contact("Dendro", 1f);
+            }
+            Assert.That(ReactionStateSystem.TryGetEntityState(target, type, out _), Is.True);
+
+            Shield("Geo", 5f);
+
+            Assert.That(ReactionStateSystem.TryGetEntityState(target, type, out _), Is.False);
+            Assert.That(ElementQuery.Capture(target), Is.Empty);
             Assert.That(target.GetEnemyElementalShieldHP(), Is.EqualTo(5f));
         }
 

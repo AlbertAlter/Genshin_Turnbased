@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -13,6 +14,12 @@ internal static class TestResultsAutoExporter
 {
     // 相对仓库根目录，不绑定盘符、机器或检出目录名称。
     internal const string RelativeReportPath = "codex_worktable/TestResults.xml";
+    private const string DiscoveryPath = "codex_worktable/TestDiscovery.txt";
+#if ROGUELIKE_SAVE_TESTS
+    private const string SaveTestDefine = "ON";
+#else
+    private const string SaveTestDefine = "OFF";
+#endif
     private static readonly ResultsCallbacks Callbacks = new ResultsCallbacks();
     private static TestRunnerApi api;
 
@@ -33,6 +40,40 @@ internal static class TestResultsAutoExporter
         api.UnregisterCallbacks(Callbacks);
         UnityEngine.Object.DestroyImmediate(api);
         api = null;
+    }
+
+    [MenuItem("Tools/Tests/Export Test Discovery (No Run)")]
+    private static void ExportDiscovery()
+    {
+        api.RetrieveTestList(TestMode.EditMode, editRoot =>
+            api.RetrieveTestList(TestMode.PlayMode, playRoot =>
+            {
+                try
+                {
+                    var lines = new List<string> { $"发现清单（未运行） UTC={DateTime.UtcNow:o} 目标={EditorUserBuildSettings.activeBuildTarget}",
+                        $"ROGUELIKE_SAVE_TESTS={SaveTestDefine}；OFF 时受此宏保护的用例未编译，不计作通过。" };
+                    AppendDiscovered(lines, TestMode.EditMode, editRoot);
+                    AppendDiscovered(lines, TestMode.PlayMode, playRoot);
+                    File.WriteAllLines(ReportPath(DiscoveryPath), lines, new UTF8Encoding(false));
+                    Debug.Log($"测试发现清单：{DiscoveryPath}。未启动测试，未覆盖运行结果。");
+                }
+                catch (Exception error) { Debug.LogError("导出测试发现清单失败：" + error.Message); }
+            }));
+    }
+
+    private static void AppendDiscovered(List<string> lines, TestMode mode, ITestAdaptor root)
+    {
+        if (root == null) throw new InvalidOperationException($"{mode} 未返回测试树。");
+        var leaves = new List<string>();
+        void Visit(ITestAdaptor node)
+        {
+            if (!node.IsSuite) leaves.Add($"{node.FullName}\t{node.RunState}");
+            else if (node.HasChildren) foreach (var child in node.Children) Visit(child);
+        }
+        Visit(root);
+        leaves.Sort(StringComparer.Ordinal);
+        lines.Add($"[{mode}] {leaves.Count}");
+        lines.AddRange(leaves);
     }
 
     private sealed class ResultsCallbacks : ICallbacks
@@ -59,14 +100,20 @@ internal static class TestResultsAutoExporter
         }
     }
 
-    internal static void Save(ITestResultAdaptor result)
+    private static string ReportPath(string relativePath)
     {
-        if (result == null) throw new ArgumentNullException("result");
         var projectRoot = Directory.GetParent(Application.dataPath);
         if (projectRoot == null || projectRoot.Parent == null)
             throw new InvalidOperationException("无法从 Unity 项目目录确定仓库根目录。");
-        string reportPath = Path.Combine(projectRoot.Parent.FullName, RelativeReportPath);
+        string reportPath = Path.Combine(projectRoot.Parent.FullName, relativePath);
         Directory.CreateDirectory(Path.GetDirectoryName(reportPath));
+        return reportPath;
+    }
+
+    internal static void Save(ITestResultAdaptor result)
+    {
+        if (result == null) throw new ArgumentNullException("result");
+        string reportPath = ReportPath(RelativeReportPath);
 
         // 使用框架提供的原始结果树，保留单项/选中项/整轮的断言、堆栈和测试输出。
         var resultNode = result.ToXml();
@@ -78,6 +125,8 @@ internal static class TestResultsAutoExporter
             writer.WriteStartElement("test-run");
             writer.WriteAttributeString("id", "2");
             writer.WriteAttributeString("result", result.ResultState);
+            writer.WriteAttributeString("roguelike-save-tests", SaveTestDefine);
+            writer.WriteAttributeString("build-target", EditorUserBuildSettings.activeBuildTarget.ToString());
             WriteCount(writer, "testcasecount", total);
             WriteCount(writer, "total", total);
             WriteCount(writer, "passed", result.PassCount);

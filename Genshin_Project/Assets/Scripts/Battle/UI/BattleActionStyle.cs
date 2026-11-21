@@ -7,7 +7,7 @@ using OfficeOpenXml;
 public sealed class BattleActionStyle
 {
     public const string FileName = "ActionPrompt.xlsx";
-    public int MinTextCharacters { get; private set; } = 8;
+    public int MinTextCharacters { get; private set; }
     public float Reveal { get; private set; }
     public float Hold { get; private set; }
     public float Fade { get; private set; }
@@ -29,8 +29,8 @@ public sealed class BattleActionStyle
         style.Hold = Seconds(values["HoldSeconds"], "HoldSeconds");
         style.Fade = Seconds(values["FadeSeconds"], "FadeSeconds");
         if (!values.TryGetValue("MinTextCharacters", out var text) ||
-            !int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int count) || count < 1)
-            throw new InvalidDataException("MinTextCharacters 须为正整数");
+            !int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int count) || count < 0)
+            throw new InvalidDataException("MinTextCharacters 须为非负整数，0表示按实际文字测宽");
         style.MinTextCharacters = count;
         style.ParticleSeconds = Seconds(values["StatusParticleSeconds"], "StatusParticleSeconds");
         return style;

@@ -36,7 +36,8 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
     public Color OutlineColor;
     public int Decimals, AmountMode;
 
-    public static BattlefieldDamagePopupStyle Load()
+    public static BattlefieldDamagePopupStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattlefieldDamagePopupStyle ReadPublished()
     {
         return ReadFile(BattleTimelineSettings.RuntimePath(FileName));
     }
@@ -50,15 +51,17 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         using var package = new ExcelPackage(stream);
         var sheet = package.Workbook.Worksheets["Parameters"];
-        if (sheet == null || sheet.Dimension == null || sheet.Cells[1, 1].Text != "Key" || sheet.Cells[1, 2].Text != "Value")
-            throw new InvalidDataException("跳字表需要 Parameters 子表，前两列表头为 Key、Value。");
+        if (sheet == null || sheet.Dimension == null)
+            throw new InvalidDataException("跳字表需要 Parameters 子表和 Key、Value 列。");
+        var headers = ExcelTableHeaders.For(sheet);
+        headers.Require("Key", "Value");
         var values = new Dictionary<string, string>(StringComparer.Ordinal);
-        for (int row = 2; row <= sheet.Dimension.End.Row; row++)
+        for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
         {
-            string key = sheet.Cells[row, 1].Text.Trim();
+            string key = headers.Cell(row, "Key").Text.Trim();
             if (key.Length == 0) continue;
             if (values.ContainsKey(key)) throw new InvalidDataException("跳字参数重复：" + key);
-            values.Add(key, Convert.ToString(sheet.Cells[row, 2].Value, CultureInfo.InvariantCulture)?.Trim() ?? "");
+            values.Add(key, Convert.ToString(headers.Cell(row, "Value").Value, CultureInfo.InvariantCulture)?.Trim() ?? "");
         }
         return values;
     }

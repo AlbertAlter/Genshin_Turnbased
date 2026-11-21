@@ -55,7 +55,7 @@ public partial class CharacterBattleController
         }
     }
 
-    List<string> GetHealingSegments(string effectID, string param, int skillType)
+    List<string> GetHealingSegments(string effectID, string param, int skillType, string parameterID = null)
     {
         var result = new List<string>();
         // 完整公式和引用直接执行一段；M*属性只是等级表公式的基准属性声明。
@@ -66,8 +66,9 @@ public partial class CharacterBattleController
         }
         if (!_levelDataBySkillType.TryGetValue(skillType, out var levels)) return result;
         int level = SourceSkillLevel(effectID, skillType);
-        var levelOne = levels.Find(row => row.ParamID == effectID && row.SkillLevel == 1);
-        var current = levels.Find(row => row.ParamID == effectID && row.SkillLevel == level) ?? levelOne;
+        parameterID ??= effectID;
+        var levelOne = levels.Find(row => row.ParamID == parameterID && row.SkillLevel == 1);
+        var current = levels.Find(row => row.ParamID == parameterID && row.SkillLevel == level) ?? levelOne;
         if (current == null) return result;
         for (int index = 1; index <= 7; index++)
         {
@@ -111,7 +112,10 @@ public partial class CharacterBattleController
     private float ResolveShieldAmount(string formula, string effectID, int skillType, string element, BattleEntity recipient)
     {
         using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(recipient);
-        var segments = GetHealingSegments(effectID, formula, skillType);
+        string parameterID = BattleSpecialRules.ResolveShieldParameterID(effectID, _currentEffectSourceStatus);
+        var segments = GetHealingSegments(effectID, formula, skillType, parameterID);
+        if (parameterID != effectID && segments.Count == 0)
+            throw new FormatException("护盾档位缺少等级表参数：" + parameterID);
         if (segments.Count > 1) throw new FormatException("护盾量只接受一段完整公式：" + effectID);
         float basis = segments.Count == 0 ? ResolveBaseValue(formula, effectID, skillType, element)
             : ResolveHealingAmount(segments[0], effectID, skillType, element, recipient);

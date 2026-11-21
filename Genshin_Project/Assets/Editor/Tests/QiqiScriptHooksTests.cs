@@ -49,7 +49,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var herald = Action(e, "Herald", "OnTrigger", E + "HitHeal", "Qiqi_HeraldHit()");
             herald.OutgoingHit = "Normal;Heavy"; herald.MaxTimePerHit = 1;
             Effect(e, 201, "TalismanHeal", "Heal", "1*TotalATK", "Allies").TargetOverride = "Qiqi_TalismanAttacker()";
-            var rune = Action(e, "Talisman", "OnTrigger", E + "TalismanHeal", "Qiqi_TalismanHit()"); rune.OnHit = "All"; rune.MaxTimePerAction = 1;
+            var rune = Action(e, "Talisman", "OnTrigger", E + "TalismanHeal", "Qiqi_TalismanHit()"); rune.OnHit = "All"; rune.MaxTimePerExecution = 1;
             var life = Effect(e, 301, "LifeApply", "ApplyStatus", S + "IncomingHealing", "Allies");
             life.Duration = 2; life.TargetOverride = "Qiqi_Reactor()";
             Action(e, "LifeProlongation", "OnTrigger", E + "LifeApply", "Qiqi_Reaction()");
@@ -96,7 +96,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(e.Ally.Entity.CurrentEnergy, Is.EqualTo(4)); Assert.That(heals, Is.EqualTo(2));
         }
 
-        [UnityTest] public IEnumerator IndependentStatus_AllRowsAndOtherCharacterExtensionsShareEachRunesQuota() => HookTestEnv.AwaitTask(StatusQuota);
+        [UnityTest] public IEnumerator IndependentStatus_AllRowsAndDirectExtensionsShareEachRunesExecutionQuota() => HookTestEnv.AwaitTask(StatusQuota);
         private async Task StatusQuota()
         {
             using var e = new BattleFlowTestEnv(); Setup(e);
@@ -116,7 +116,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using var a = BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionStarted, (_, f) => starts++, 0);
             using var d = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (header, f) =>
             {
-                scopes.Add(header.ActionScopeId); Assert.That(header.ActionExecutionId, Is.Zero);
+                scopes.Add(header.ExecutionScopeId); Assert.That(header.ActionScopeId, Is.Zero); Assert.That(header.ActionExecutionId, Is.Zero);
                 if (extension || f.Source.SourceEffectID != E + "Emitter0") return;
                 extension = true;
                 BattleExecution.Enqueue(() => Hit(e, e.Ally.Entity, "derived", "", targets));
@@ -126,6 +126,54 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(scopes, Has.Count.EqualTo(1)); Assert.That(scopes.Single(), Is.GreaterThan(0)); Assert.That(starts, Is.Zero);
             await BattleExecution.Run(() => other.ExecuteStatusActionsTask(emitter, rows, other.Entity, "OnItsTurn"));
             Assert.That(heals, Has.Count.EqualTo(4)); Assert.That(scopes, Has.Count.EqualTo(2));
+        }
+
+        [UnityTest] public IEnumerator IndependentStatusAndExtension_HealTheirOwnSourceOncePerRune() => HookTestEnv.AwaitTask(DifferentSources);
+        private async Task DifferentSources()
+        {
+            using var e = new BattleFlowTestEnv(); Setup(e);
+            var other = e.Manager.Allies.First(x => x != e.Ally).Entity;
+            var targets = e.Manager.Enemies.Take(2).Select(x => x.Entity).ToArray();
+            foreach (var target in targets) Add(e, "Talisman", target);
+            var heals = new List<HealEventData>();
+            using var listener = BattleEventHub.Subscribe<HealEventData>(BattleEventKind.HealResolved,
+                (_, fact) => { if (fact.EffectId == E + "TalismanHeal") heals.Add(fact); }, 0);
+            await BattleExecution.Run(async () => {
+                using var root = BattleResolutionContext.BeginStatusExecution(new StatusInstance());
+                await Hit(e, other, "independent-source", "", targets);
+                await Hit(e, other, "independent-second-hit", "", targets);
+                using (var child = BattleResolutionContext.BeginStatusExecution(new StatusInstance()))
+                {
+                    await Hit(e, e.Ally.Entity, "extension-source", "", targets);
+                    child.Complete();
+                }
+                root.Complete();
+            });
+            Assert.That(heals.Count(f => f.Subject == other), Is.EqualTo(2));
+            Assert.That(heals.Count(f => f.Subject == e.Ally.Entity), Is.EqualTo(2));
+        }
+
+        [UnityTest] public IEnumerator SameStatus_ThreeTriggersInOneActiveAction_HealThreeTimesPerRune() => HookTestEnv.AwaitTask(RepeatedSource);
+        private async Task RepeatedSource()
+        {
+            using var e = new BattleFlowTestEnv(); Setup(e);
+            var other = e.Manager.Allies.First(x => x != e.Ally).Entity;
+            var targets = e.Manager.Enemies.Take(2).Select(x => x.Entity).ToArray();
+            foreach (var target in targets) Add(e, "Talisman", target);
+            var source = new StatusInstance(); int heals = 0;
+            using var listener = BattleEventHub.Subscribe<HealEventData>(BattleEventKind.HealResolved,
+                (_, fact) => { if (fact.EffectId == E + "TalismanHeal" && fact.Subject == other) heals++; }, 0);
+            await BattleExecution.Run(async () => {
+                using var action = BattleResolutionContext.BeginSkillAction(true);
+                for (int i = 0; i < 3; i++)
+                    using (var trigger = BattleResolutionContext.BeginStatusExecution(source))
+                    {
+                        await Hit(e, other, "repeat-source", "", targets);
+                        await Hit(e, other, "repeat-second-hit", "", targets);
+                        trigger.Complete();
+                    }
+            });
+            Assert.That(heals, Is.EqualTo(6), "两枚符，每次真实触发各治疗一次；同触发的第二hit不重复");
         }
 
         [UnityTest] public IEnumerator Arcanum_RollsOnceForMultiTargetHit_AndCooldownDoesNotRollAgain() => HookTestEnv.AwaitTask(Arcanum);

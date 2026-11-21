@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 /// <summary>
 /// 死亡仍由HitBatch即时提交；这里只保存当前行为/独立状态效果链的死亡候选。
-/// 不替代原响应队列：复活请求仍通过BattleExecution及正式状态行动执行，最后才检查胜负。
+/// 不替代原响应队列。敌方全灭即时判胜并取消后续战斗效果；未结束时才继续死亡链和复活、检查败局。
 /// </summary>
 public static class BattleDeathResolution
 {
@@ -205,8 +205,9 @@ public static class BattleDeathResolution
         {
             while ((window.Cleanup.Count > 0 || window.Revivals.Count > 0) && Valid(window) && !BattleExecution.IsCancelled)
             {
+                if (BattleManager.Instance?.IsBattleOver == true) window.Revivals.Clear();
                 // 所有死亡行动及其子响应已经Flush；先清旧实例，再接受正式复活。
-                // 清理响应如产生新的死亡，继续处理它的行动与清理，不能提前判胜负。
+                // 未结束时继续清理链与正式复活；胜利锁定后仅完成清理。
                 if (window.Cleanup.Count > 0)
                 {
                     var cleanup = window.Cleanup.ToArray();
@@ -223,7 +224,7 @@ public static class BattleDeathResolution
                 requests.Sort((left, right) => left.Source.ApplyOrder.CompareTo(right.Source.ApplyOrder));
                 foreach (var request in requests)
                 {
-                    if (!Valid(window) || BattleExecution.IsCancelled) return;
+                    if (!Valid(window) || BattleExecution.IsCancelled || BattleManager.Instance?.IsBattleOver == true) return;
                     var previous = CurrentRevival.Value;
                     CurrentRevival.Value = request;
                     try { await BattleExecution.RunInline(() => request.Execute(request)); }

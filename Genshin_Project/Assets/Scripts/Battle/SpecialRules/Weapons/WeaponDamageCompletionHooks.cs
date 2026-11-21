@@ -72,6 +72,7 @@ internal static class WeaponDamageCompletionHooks
     private static DamageResolvedEvent Snapshot(BattleDeclaration declaration, DamageEventData data)
         => new DamageResolvedEvent { Declaration = declaration, Target = data.Subject, Source = data.Source,
             SourceWasPartyMember = data.SourceWasPartyMember, SourceWasOnField = data.SourceWasOnField,
+            SourceSkillSlotCooldownID = data.SourceSkillSlotCooldownID,
             HitLanded = data.HitLanded, ActualHPDamage = data.ActualHPDamage, HPBefore = data.HPBefore, HPAfter = data.HPAfter,
             RequestedHPDamage = data.RequestedDamage, DamageBeforeShield = data.DamageBeforeShield, Critical = data.Critical,
             ShieldAbsorbed = data.ShieldAbsorbed, IsImmune = data.IsImmune, ImmuneDamage = data.ImmuneDamage,

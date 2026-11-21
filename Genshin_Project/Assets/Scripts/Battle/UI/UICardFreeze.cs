@@ -191,7 +191,7 @@ public sealed class UICardFreeze : MonoBehaviour
         try
         {
             var canvas = appearance.GetComponentInParent<Canvas>();
-            int height = Mathf.CeilToInt(rect.height * (canvas != null ? canvas.scaleFactor : 1));
+            int height = Mathf.CeilToInt(rect.height * (canvas != null ? canvas.rootCanvas.scaleFactor : 1));
             backdrop = UICardDissolveSnapshot.BeginCapture(appearance.Root, appearance.SnapshotLayers, height,
                 appearance.SnapshotClip, appearance.SnapshotClippedLayers, includeRendererBrightness: false);
             backdropSource = source; backdropTint = tint; backdropRect = rect;

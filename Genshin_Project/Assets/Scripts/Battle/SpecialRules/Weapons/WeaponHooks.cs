@@ -87,6 +87,7 @@ public static class WeaponHooks
 
     internal static void Register()
     {
+        BattleSpecialRules.RegisterForcedCritical((owner, target, effectID, element, statusEffect) => ForceCritical(statusEffect));
         BattleSpecialRules.RegisterHitScope(BeginHit);
         BattleSpecialRules.RegisterNumberedCondition("4300201", (_, c) =>
             Aura(c, "Hydro", "Cryo") || Frozen(c));
@@ -444,7 +445,8 @@ public static class WeaponHooks
                 var hit = context.DamageEvent;
                 BattleEntity owner = Owner(context);
                 if (owner == null || hit == null || hit.Source?.SourceEntity != owner || !hit.HitLanded) return false;
-                if (requiresCritical ? hit.Critical?.IsCritical != true : hit.DamageType != "Skill" || hit.ActualHPDamage <= 0f)
+                if (requiresCritical ? hit.Critical?.IsCritical != true
+                    : hit.DamageType != "Skill" || hit.ActualHPDamage <= 0f || string.IsNullOrEmpty(hit.SourceSkillSlotCooldownID))
                     return false;
                 float chance = Param(context.Status, 1);
                 float roll = BattleRandom.NextFloat01();
@@ -501,7 +503,14 @@ public static class WeaponHooks
             || (effect.EffectType == "Shield" && effect.StatusEffectID == 430570101
                 && effect.DamageHook == "Hook(430570101)") || HandlesEnergyHook(effect)
             || WeaponStackTransferHooks.HandlesEnergy(effect) || WeaponSnapshotHooks.HandlesApply(effect)
-            || WeaponShieldCreationHooks.HandlesApply(effect) || ForceCritical(effect));
+            || WeaponShieldCreationHooks.HandlesApply(effect) || HandlesSacrificialCooldown(effect) || ForceCritical(effect));
+
+    // 祭礼的 DamageHook 只选目标；重置仍由配表的 Cooldown / Reset 提交。
+    internal static bool HandlesSacrificialCooldown(StatusEffectData effect)
+        => effect?.EffectType == "Cooldown"
+            && (effect.StatusEffectID == 430310101 || effect.StatusEffectID == 430590101
+                || effect.StatusEffectID == 430790101 || effect.StatusEffectID == 431330101)
+            && effect.DamageHook == "Hook(" + effect.StatusEffectID + ")";
 
     private static bool HandlesEnergyHook(StatusEffectData effect)
         => effect?.EffectType == "GainEnergy" && effect.DamageHook == "Hook(" + effect.StatusEffectID + ")"

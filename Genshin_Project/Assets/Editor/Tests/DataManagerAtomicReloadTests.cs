@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using OfficeOpenXml;
 using UnityEngine;
 
 namespace GenshinTurnBased.Tests.EditMode
@@ -61,6 +62,7 @@ namespace GenshinTurnBased.Tests.EditMode
             });
             var committedCollection = dataManager.CharacterOverviewList;
             var committedStatusIDs = dataManager.CharacterStatusIDs;
+            var committedPhases = dataManager.EnemyPhaseDict;
             EnemyShieldRuleTable committedShieldRules = dataManager.EnemyShieldRules;
 
             Assert.Throws<DataLoadException>(() => dataManager.RunAtomicForTest(() =>
@@ -68,6 +70,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 dataManager.CharacterOverviewList.Add(new CharacterOverviewData { CharacterID = 1010, Name = "未完成数据" });
                 dataManager.EnemyShieldRules.Add(CreateShieldRule("Cryo"));
                 dataManager.CharacterStatusIDs[1010] = new HashSet<string> { "ST_UncommittedCharacter" };
+                dataManager.EnemyPhaseDict[2073] = new Dictionary<int, EnemyMainData> { [1] = new EnemyMainData { EnemyID = 2073, Phase = 1 } };
                 throw new InvalidOperationException("模拟中途加载失败");
             }));
 
@@ -80,6 +83,119 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(dataManager.CharacterStatusIDs, Is.SameAs(committedStatusIDs));
             Assert.That(dataManager.CharacterStatusIDs.ContainsKey(1010), Is.False);
             Assert.That(dataManager.CharacterStatusIDs[1009], Does.Contain("ST_CommittedCharacter"));
+            Assert.That(dataManager.EnemyPhaseDict, Is.SameAs(committedPhases));
+            Assert.That(dataManager.EnemyPhaseDict.ContainsKey(2073), Is.False);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void EnemyPhase_BlankAndLegacyMissingColumnStayUnphased(bool withPhase)
+        {
+            using var package = new ExcelPackage();
+            var sheet = EnemyCoefficients(package, withPhase);
+            CoefficientRow(sheet, 2, null, 2, 3);
+            InvokeEnemyLoader("LoadEnemyCoefficientSheet", sheet);
+            Assert.That(dataManager.EnemyMainDict[2073].Phase, Is.Zero);
+            Assert.That(dataManager.GetEnemyPhaseCount(2073), Is.Zero);
+            Assert.That(dataManager.TryGetEnemyPhaseData(2073, 1, out _), Is.False);
+        }
+
+        [Test]
+        public void EnemyPhase_MovedHeadersAndReverseRowsKeepDistinctCoefficientsAndResistances()
+        {
+            using var package = new ExcelPackage();
+            var coeff = EnemyCoefficients(package, true);
+            CoefficientRow(coeff, 2, 2, 6, 14);
+            CoefficientRow(coeff, 3, 1, 6, 10);
+            InvokeEnemyLoader("LoadEnemyCoefficientSheet", coeff);
+            var main = EnemyAttributes(package);
+            AttributeRow(main, 2, 2, 0, .5);
+            AttributeRow(main, 3, 1, .5, 0);
+            InvokeEnemyLoader("LoadEnemyAttributeSheet", main);
+            Assert.That(dataManager.EnemyMainDict[2073].Phase, Is.EqualTo(1));
+            Assert.That(dataManager.GetEnemyPhaseCount(2073), Is.EqualTo(2));
+            Assert.That(dataManager.TryGetEnemyPhaseData(2073, 2, out var second), Is.True);
+            Assert.That(second.ATK_coeff, Is.EqualTo(14));
+            Assert.That(second.ElectroRes, Is.EqualTo(.5));
+            Assert.That(second.HydroRes, Is.Zero);
+            Assert.That(dataManager.EnemyMainDict[2073].ATK_coeff, Is.EqualTo(10));
+            Assert.That(dataManager.EnemyMainDict[2073].HydroRes, Is.EqualTo(.5));
+            Assert.That(dataManager.TryGetEnemyPhaseData(2073, 3, out _), Is.False);
+        }
+
+        [TestCase(-1)]
+        [TestCase(.5)]
+        [TestCase("bad")]
+        public void EnemyPhase_RejectsInvalidPhaseRatherThanTruncating(object phase)
+        {
+            using var package = new ExcelPackage();
+            var sheet = EnemyCoefficients(package, true);
+            CoefficientRow(sheet, 2, phase, 6, 10);
+            Assert.Throws<TableValidationException>(() => InvokeEnemyLoader("LoadEnemyCoefficientSheet", sheet));
+        }
+
+        [TestCase(null, 1)]
+        [TestCase(1, 1)]
+        [TestCase(1, 3)]
+        public void EnemyPhase_RejectsMixedDuplicateAndMissingStages(object first, object second)
+        {
+            using var package = new ExcelPackage();
+            var sheet = EnemyCoefficients(package, true);
+            CoefficientRow(sheet, 2, first, 6, 10);
+            CoefficientRow(sheet, 3, second, 6, 14);
+            Assert.Throws<TableValidationException>(() => InvokeEnemyLoader("LoadEnemyCoefficientSheet", sheet));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void EnemyPhase_MainRequiresExactlyTheConfiguredStages(bool duplicate)
+        {
+            using var package = new ExcelPackage();
+            var coeff = EnemyCoefficients(package, true);
+            CoefficientRow(coeff, 2, 1, 6, 10);
+            CoefficientRow(coeff, 3, 2, 6, 14);
+            InvokeEnemyLoader("LoadEnemyCoefficientSheet", coeff);
+            var main = EnemyAttributes(package);
+            AttributeRow(main, 2, 1, .5, 0);
+            if (duplicate) AttributeRow(main, 3, 1, .5, 0);
+            Assert.Throws<TableValidationException>(() => InvokeEnemyLoader("LoadEnemyAttributeSheet", main));
+        }
+
+        private void InvokeEnemyLoader(string name, ExcelWorksheet sheet)
+        {
+            try { typeof(DataManager).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic).Invoke(dataManager, new object[] { sheet }); }
+            catch (TargetInvocationException error) { System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error.InnerException).Throw(); }
+        }
+
+        private static ExcelWorksheet EnemyCoefficients(ExcelPackage package, bool withPhase)
+        {
+            var sheet = package.Workbook.Worksheets.Add("Coeff");
+            string[] columns = { "备注", "中文名", "ATK_Curve", "ATK_coeff", "HP_coeff", "EnemyID", "English Name", withPhase ? " phase " : "其他" };
+            for (int i = 0; i < columns.Length; i++) sheet.Cells[1, i + 1].Value = columns[i];
+            return sheet;
+        }
+
+        private static void CoefficientRow(ExcelWorksheet sheet, int row, object phase, double hp, double atk)
+        {
+            sheet.Cells[row, 2].Value = "公子"; sheet.Cells[row, 3].Value = 1;
+            sheet.Cells[row, 4].Value = atk; sheet.Cells[row, 5].Value = hp;
+            sheet.Cells[row, 6].Value = 2073; sheet.Cells[row, 7].Value = "Childe";
+            sheet.Cells[row, 8].Value = phase;
+        }
+
+        private static ExcelWorksheet EnemyAttributes(ExcelPackage package)
+        {
+            var sheet = package.Workbook.Worksheets.Add("Enemy_Main");
+            string[] columns = { "Phase", "EnemyID", "EnemyName", "EnemyNameID", "Threat", "ActsGiven", "PhysicalRes", "PyroRes", "HydroRes", "ElectroRes", "CryoRes", "AnemoRes", "DendroRes", "GeoRes", "PhysicalDmgBonus", "PyroDmgBonus", "HydroDmgBonus", "ElectroDmgBonus", "CryoDmgBonus", "AnemoDmgBonus", "DendroDmgBonus", "GeoDmgBonus" };
+            for (int i = 0; i < columns.Length; i++) sheet.Cells[1, i + 1].Value = columns[i];
+            return sheet;
+        }
+
+        private static void AttributeRow(ExcelWorksheet sheet, int row, object phase, double hydro, double electro)
+        {
+            sheet.Cells[row, 1].Value = phase; sheet.Cells[row, 2].Value = 2073;
+            sheet.Cells[row, 3].Value = "公子"; sheet.Cells[row, 4].Value = "Childe";
+            sheet.Cells[row, 9].Value = hydro; sheet.Cells[row, 10].Value = electro;
         }
 
         [Test]

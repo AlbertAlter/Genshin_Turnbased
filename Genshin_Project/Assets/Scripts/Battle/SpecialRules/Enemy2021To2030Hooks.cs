@@ -70,16 +70,23 @@ public static class Enemy2021To2030Hooks
             if (field != null && field.Occupant?.IsAlive != true) result.Add(field.SlotIndex);
         return result;
     }
-    public static void Summon(BattleEntity caster, StatusInstance source, string enemyID)
+    public static void Summon(BattleEntity caster, StatusInstance source, string enemyID, string targetOverride = null)
     {
         var memory = source?.CountRuntimeState as CounterMemory;
         if (memory != null) memory.Summoned = false;
-        if (!int.TryParse(enemyID, out int id) || id <= 0) throw new FormatException("Summon.Param1须为敌人ID。");
         var battle = BattleManager.Instance;
         var free = EmptyEnemyPositions(battle);
+        if (!string.IsNullOrWhiteSpace(targetOverride))
+        {
+            if (!BattleSpecialRules.TryResolveTargets(targetOverride, battle, caster, out var allowed))
+                throw new NotSupportedException("召唤位置钩子未实现：" + targetOverride);
+            free.RemoveAll(p => !allowed.Contains(p));
+        }
         if (caster?.IsAlive != true || free.Count == 0) return;
+        int id = EnemySummonSelection.Resolve(enemyID);
+        if (id == 0) return;
         int position = free[BattleRandom.NextInt(0, free.Count)];
-        bool success = battle.SummonEnemy(id, caster.Level, position) != null;
+        bool success = battle.SummonEnemy(id, caster.Level, position, caster) != null;
         if (memory != null) memory.Summoned = success;
     }
     public static void ClearAuras(BattleEntity target)

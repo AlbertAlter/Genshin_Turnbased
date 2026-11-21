@@ -6,39 +6,23 @@ using UnityEngine;
 
 public partial class DataManager
 {
-    // 角色、敌人、全局三份 Status 工作簿结构一致，只允许 Sheet 名不同。
-    void LoadStatusData()
-    {
-        LoadStatusWorkbook(
-            "StatusData.xlsx",
-            "StatusData_Main",
-            "Status_Action",
-            "Status_Effect",
-            "Status_Attributes",
-            false,
-            "StatusData");
-        LoadCharacterStatusData();
-    }
-
-    // 独立表已随原同步工具递归发布到Data/CharacterStatus；运行时不读取策划源目录。
     void LoadCharacterStatusData()
     {
         string directory = Path.Combine(ChartsPath, "CharacterStatus");
-        if (!Directory.Exists(directory)) return; // 兼容只有旧合并表的数据包，不伪造角色归属。
+        if (!Directory.Exists(directory)) return;
         string[] files = Directory.GetFiles(directory, "*.xlsx");
         Array.Sort(files, StringComparer.Ordinal);
         foreach (string file in files)
         {
+            if (!DataSourcePreflightValidator.IsPublishedWorkbook(file)) continue;
             string name = Path.GetFileNameWithoutExtension(file);
-            if (name.StartsWith("#", StringComparison.Ordinal) || name.StartsWith("~$", StringComparison.Ordinal)
-                || name.StartsWith("0_", StringComparison.Ordinal)) continue;
             int separator = name.IndexOf('_');
             if (separator <= 0 || !int.TryParse(name.Substring(0, separator), out int characterID) || characterID <= 0)
                 throw new TableValidationException("角色状态工作簿名须以角色ID_开头：" + name);
             string source = "CharacterStatus/" + Path.GetFileName(file);
             try
             {
-                using var package = new ExcelPackage(new FileInfo(file));
+                using var package = OpenDataWorkbook(file, source);
                 LoadCharacterStatusWorkbook(package, characterID, source);
             }
             catch (Exception error) { throw new InvalidDataException($"[{source}] {error.Message}", error); }
@@ -49,9 +33,6 @@ public partial class DataManager
     void LoadCharacterStatusWorkbook(ExcelPackage package, int characterID, string source)
     {
         if (characterID <= 0) throw new ArgumentOutOfRangeException(nameof(characterID));
-        foreach (string name in new[] { "StatusData_Main", "Status_Effect", "Status_Action", "Status_Attributes" })
-            if (package.Workbook.Worksheets[name] == null)
-                throw new TableValidationException(source + " 缺少工作表：" + name);
         LoadStatusMainSheet(package.Workbook.Worksheets["StatusData_Main"], characterID: characterID);
         LoadStatusEffectSheet(package.Workbook.Worksheets["Status_Effect"], source + "/Status_Effect", false);
         LoadStatusActionSheet(package.Workbook.Worksheets["Status_Action"], source + "/Status_Action");
@@ -60,22 +41,11 @@ public partial class DataManager
 
     void RegisterCharacterStatus(int characterID, string id)
     {
-        foreach (var entry in CharacterStatusIDs)
-            if (entry.Value.Contains(id))
-                throw new TableValidationException($"角色状态ID重复：{id} 已属于{entry.Key}，不能重复登记到{characterID}");
+        if (StatusMainDict.ContainsKey(id))
+            throw new TableValidationException($"角色状态ID重复：{id}，角色ID={characterID}");
         if (!CharacterStatusIDs.TryGetValue(characterID, out var ids))
             CharacterStatusIDs.Add(characterID, ids = new HashSet<string>(StringComparer.Ordinal));
         ids.Add(id);
-        // 独立正式表覆盖旧合并表的同ID定义，同时撤掉旧行动/效果，不能叠成两套触发。
-        if (StatusMainDict.TryGetValue(id, out var previous))
-        {
-            var stale = new List<string>();
-            foreach (var effect in StatusEffectDict)
-                if (effect.Value.StatusEffectID / 100 == previous.StatusID) stale.Add(effect.Key);
-            foreach (string key in stale) StatusEffectDict.Remove(key);
-            StatusActionDict.Remove(id);
-            StatusAttributesDict.Remove(id);
-        }
     }
 
     void LoadEnemyStatusData()
@@ -111,7 +81,7 @@ public partial class DataManager
             return;
         }
 
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
         LoadStatusMainSheet(pkg.Workbook.Worksheets[mainSheetName]);
         LoadStatusEffectSheet(
             pkg.Workbook.Worksheets[effectSheetName],
@@ -128,6 +98,8 @@ public partial class DataManager
     void LoadStatusMainSheet(ExcelWorksheet sheet, Func<int, string> keyForID = null, int characterID = 0)
     {
         if (sheet == null) return;
+        int iconColumn = ExcelTableHeaders.For(sheet).Optional("Icon");
+        int phaseExitColumn = ExcelTableHeaders.For(sheet).Optional("ClearOnPhaseExit");
         for (int row = GetDataStartRow(sheet); row <= GetSheetMaxRow(sheet); row++)
         {
             string id2 = sheet.Cells[row, FindColumnByHeader(sheet, "StatusID2")].Text;
@@ -145,13 +117,18 @@ public partial class DataManager
             if (keyForID != null && StatusMainDict.ContainsKey(id2))
                 throw new InvalidDataException($"[{sheet.Name}] row {row}: duplicate runtime key {id2}");
 
+            string phaseExit = phaseExitColumn > 0 ? sheet.Cells[row, phaseExitColumn].Text.Trim() : string.Empty;
+            if (phaseExit != "" && phaseExit != "0" && phaseExit != "1")
+                throw new TableValidationException($"[{sheet.Name}] 第{row}行 {id2} 的 ClearOnPhaseExit 必须为空、0或1。");
             StatusMainDict[id2] = new StatusMainData
             {
+                ClearOnPhaseExit = phaseExit == "1",
                 StatusID = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "StatusID")].Value),
                 StatusID2 = id2,
                 StatusName = sheet.Cells[row, FindColumnByHeader(sheet, "StatusName")].Text,
                 StatusType = sheet.Cells[row, FindColumnByHeader(sheet, "StatusType")].Text,
-                Display = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Display")].Value),
+                Icon = iconColumn > 0 ? sheet.Cells[row, iconColumn].Text.Trim() : string.Empty,
+                    Display = SafeGetInt(sheet.Cells[row, FindColumnByHeader(sheet, "Display")].Value),
                 Description = sheet.Cells[row, FindColumnByHeader(sheet, "Description")].Text,
                 MultiplierPart = StatusMultiplierParts.Parse(sheet.Cells[row, FindColumnByHeader(sheet, "MultiplierPart")].Text,
                     $"{sheet.Name} 第{row}行 ({id2})"),
@@ -244,8 +221,6 @@ public partial class DataManager
             if (data.EffectType == "SwitchIn")
                 TryValidate(sourceKey, () => TableValidator.ValidateSwitchIn(sourceKey, row,
                     data.Param1, data.Param3, data.DamageType, data.DamageHook, data.AddInPhase, data.TriggerPhase));
-            if (data.EffectType == "ResetCooldown")
-                TryValidate(sourceKey, () => TableValidator.ValidateResetCooldown(sourceKey, row, data.Param1));
             if (data.EffectType == "Cooldown")
                 TryValidate(sourceKey, () => TableValidator.ValidateCooldown(sourceKey, row, data.Param1, data.Param2, isEnemy));
             if (data.EffectType == "BondOfLife")
@@ -364,6 +339,7 @@ public partial class DataManager
             ActionKey = $"{sourceKey}:{row}"
         };
         ReadStatusTriggerLimits(sheet, row, data);
+        TryValidate(sourceKey, () => TableValidator.ValidateStatusActionType(sheet.Name, row, data.ActionType));
         return data;
     }
 
@@ -388,6 +364,7 @@ public partial class DataManager
         data.MaxTimePerLife = ReadOptionalStatusLimit(sheet, row, "MaxTimePerLife");
         data.MaxTimePerEffect = ReadOptionalStatusLimit(sheet, row, "MaxTimePerEffect");
         data.MaxTimePerAction = ReadOptionalStatusLimit(sheet, row, "MaxTimePerAction");
+        data.MaxTimePerExecution = ReadOptionalStatusLimit(sheet, row, "MaxTimePerExecution");
     }
     // Missing columns, empty values and non-positive values mean unlimited.
     int ReadOptionalStatusLimit(ExcelWorksheet sheet, int row, string header)

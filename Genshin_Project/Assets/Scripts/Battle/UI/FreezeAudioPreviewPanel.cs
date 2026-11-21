@@ -7,6 +7,7 @@ public sealed class FreezeAudioPreviewPanel : MonoBehaviour
 {
     public UICardFreezeAudio audioModule;
     public Font controlsFont;
+    [SerializeField] private Canvas previewCanvas;
     public Rect area = new Rect(60, 245, 600, 700);
 #if UNITY_EDITOR
     public static Func<FreezeAudioSettings, string> WriteTable;
@@ -19,7 +20,7 @@ public sealed class FreezeAudioPreviewPanel : MonoBehaviour
     private void OnGUI()
     {
         var oldMatrix = GUI.matrix; var oldFont = GUI.skin.font; bool oldEnabled = GUI.enabled;
-        GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1));
+        GUI.matrix = ProjectUiCanvas.GetGuiMatrix(previewCanvas);
         if (controlsFont != null) GUI.skin.font = controlsFont;
         var label = new GUIStyle(GUI.skin.label) { fontSize = 22, wordWrap = false };
         var button = new GUIStyle(GUI.skin.button) { fontSize = 22 };

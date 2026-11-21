@@ -62,7 +62,8 @@ public class TargetSelector
         List<int> excludePositions = null,
         bool allowEmptyWindows = false,
         bool preferLowerScore = false,
-        Func<int, bool> tauntProvider = null)
+        Func<int, bool> tauntProvider = null,
+        IReadOnlyList<int> preferredPositions = null)
     {
         Side = side;
         MaxPosition = side == BattleSide.Enemy ? 5 : BattleField.ALLY_SLOTS;
@@ -100,6 +101,39 @@ public class TargetSelector
         {
             _windowIndex = -1;
             CurrentSelection = new List<int>();
+            return;
+        }
+
+        // SkillPhase changes keep the player's focus. Do this before the default
+        // HP selection so advancing a phase does not consume another random draw.
+        if (preferredPositions != null && preferredPositions.Count > 0)
+        {
+            float center = 0f;
+            foreach (int position in preferredPositions) center += position;
+            center /= preferredPositions.Count;
+            float bestDistance = float.PositiveInfinity;
+            int bestOverlap = -1;
+            for (int i = 0; i < _validWindows.Count; i++)
+            {
+                float candidateCenter = 0f;
+                int overlap = 0;
+                foreach (int position in _validWindows[i])
+                {
+                    candidateCenter += position;
+                    for (int j = 0; j < preferredPositions.Count; j++)
+                        if (preferredPositions[j] == position) { overlap++; break; }
+                }
+                candidateCenter /= _validWindows[i].Count;
+                float distance = Mathf.Abs(candidateCenter - center);
+                if (distance < bestDistance - .0001f ||
+                    (Mathf.Abs(distance - bestDistance) <= .0001f && overlap > bestOverlap))
+                {
+                    bestDistance = distance;
+                    bestOverlap = overlap;
+                    _windowIndex = i;
+                }
+            }
+            ApplySelection("沿用选段目标");
             return;
         }
 

@@ -1,0 +1,13 @@
+{
+  "Seed": 1752562535,
+  "Character": {
+    "Sequence": 1,
+    "Draw": 77,
+    "IsUp": true
+  },
+  "Weapon": {
+    "Sequence": 0,
+    "Draw": 45,
+    "IsUp": true
+  }
+}

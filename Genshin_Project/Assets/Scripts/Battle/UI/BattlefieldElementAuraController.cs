@@ -17,7 +17,9 @@ public sealed class BattlefieldElementAuraController : MonoBehaviour
     public void Bind(IBattleUiLayout sceneLayout, IBattleUiAuraSource source)
     {
         ClearBars(); boundLayout = sceneLayout; boundSource = source;
-        if (boundLayout != null) foreach (var card in boundLayout.Cards) card?.auraBar?.Initialize();
+        if (!IsAlive(boundLayout)) return;
+        foreach (var card in boundLayout.Cards)
+            if (card?.auraBar != null) card.auraBar.Initialize();
     }
     private void Awake() => Bind(layout, dataSource as IBattleUiAuraSource);
     private IEnumerator Start()
@@ -34,14 +36,21 @@ public sealed class BattlefieldElementAuraController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (boundLayout == null) return;
+        if (!IsAlive(boundLayout)) return;
+        var source = IsAlive(boundSource) ? boundSource : null;
         foreach (var card in boundLayout.Cards)
-            if (card?.auraBar != null) card.auraBar.Present(boundSource?.GetAuras(card.side, card.slot), sprites);
+            if (card?.auraBar != null) card.auraBar.Present(source?.GetAuras(card.side, card.slot), sprites);
     }
     private void ClearBars()
     {
-        if (boundLayout != null) foreach (var card in boundLayout.Cards) card?.auraBar?.Present(null, sprites);
+        if (!IsAlive(boundLayout)) return;
+        foreach (var card in boundLayout.Cards)
+            if (card?.auraBar != null) card.auraBar.Clear();
     }
+    // Interface references and ?. do not use Unity's destroyed-object null check.
+    private static bool IsAlive(object value)
+        => value != null && (!(value is UnityEngine.Object unityObject) || unityObject != null);
+
     private void OnDisable() => ClearBars();
     private void OnDestroy()
     {

@@ -10,7 +10,8 @@ public sealed class UICardVariantStyle
     public const string FileName = "CardVariant.xlsx";
     public float Duration;
     public bool Smooth;
-    public static UICardVariantStyle Load() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
+    public static UICardVariantStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static UICardVariantStyle ReadPublished() => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
     public static UICardVariantStyle ReadFile(string path)
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);

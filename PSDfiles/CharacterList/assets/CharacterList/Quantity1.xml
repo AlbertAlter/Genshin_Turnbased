@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="116,35">
+  <controller name="quantity" pages="0,0,1,1" selected="0" />
+  <displayList>
+    <text id="n1_c0010" name="count" xy="34,0" size="48,34" font="Microsoft YaHei" fontSize="20" color="#342B24" text="0" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="quantity" pages="0,1" values="0|1" />
+    </text>
+    <graph id="n2_c0010" name="minusDisabled" xy="0,1" size="34,33" type="rect" fillColor="#C1B7A8" lineSize="0" corner="5,5,5,5" touchable="false" />
+    <text id="n3_c0010" name="minusLabel" xy="0,1" size="34,33" font="Microsoft YaHei" fontSize="18" color="#55493D" text="−" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c0010" name="plusDisabled" xy="82,1" size="34,33" type="rect" fillColor="#C1B7A8" lineSize="0" corner="5,5,5,5" touchable="false" />
+    <text id="n5_c0010" name="plusLabel" xy="82,1" size="34,33" font="Microsoft YaHei" fontSize="18" color="#55493D" text="+" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n6_c0010" name="plus_0" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="1" />
+      <gearDisplay controller="quantity" pages="0" />
+    </component>
+    <component id="n7_c0010" name="minus_1" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="0" />
+      <gearDisplay controller="quantity" pages="1" />
+    </component>
+  </displayList>
+</component>

@@ -73,6 +73,8 @@ public static class SwirlReactionHandler
                 AddNormalAtoms(snapshot);
                 context.EnemyShieldHit = context.EnemyShieldHit ?? EnemyElementShieldSystem.PrepareHit(
                     context.Target, context.AttackElement, context.AttackAmount);
+                context.EnemyShieldHit.CaptureSource(context);
+                context.EnemyShieldHit.CaptureDamageImmunity(context);
                 string shieldElement = context.EnemyShieldHit.ShieldRow == "Freeze"
                     ? "Cryo" : context.EnemyShieldHit.ShieldAtStart?.Element;
                 bool frozenHydroShield = context.EnemyShieldHit.ShieldAtStart?.Element == "Hydro"
@@ -229,8 +231,11 @@ public static class SwirlReactionHandler
             foreach (var entry in spread)
             {
                 BattleEntity target = entry.Key != null && entry.Key.IsOccupied ? entry.Key.Occupant : null;
-                if (target != null && target.IsOnField)
-                    ResolveStageThree(target, FirstSource(entry.Value), output.Reaction, PropagationCauses(entry.Value));
+                if (target == null || !target.IsOnField) continue;
+                var source = FirstSource(entry.Value);
+                if (source != null)
+                    ResidualReactionResolver.Resolve(target, CloneFor(source, target, source.AttackElement, source.AttackAmount),
+                        output.Reaction, PropagationCauses(entry.Value));
             }
             spread = next;
         }
@@ -602,177 +607,6 @@ public static class SwirlReactionHandler
                 result.DerivedHits.AddRange(resolution.DerivedHits);
             }
         }
-    }
-
-    private static void ResolveStageThree(BattleEntity target, ReactionContext source, ReactionResult aggregate, IReadOnlyList<long> causes)
-    {
-        if (source == null || target.GetEnemyElementalShield() != null) return;
-        source = CloneFor(source, target, source.AttackElement, source.AttackAmount);
-        source.CauseEventIds = causes;
-        for (int guard = 0; guard < 16; guard++)
-        {
-            if (TryResolveSimultaneousSuperconductAndQuicken(target, source, aggregate))
-                continue;
-            if (!TryFindStageThreePair(
-                    target,
-                    out string attackElement,
-                    out string auraElement,
-                    out float amount,
-                    HasLunarContact(aggregate, target))) break;
-            ReactionContext context = CloneFor(source, target, attackElement, amount);
-            context.PreReactionDamage = 0f;
-            context.PreserveIncomingAuraBeforeReaction = true;
-            context.RestrictedAuraElement = auraElement;
-            context.RestrictedAuraKind = ReactionPoolKind.Any;
-            ReactionResult resolved = ReactionResolver.Resolve(context);
-            if (!resolved.HasReaction) break;
-            foreach (ReactionOccurrence occurrence in resolved.TriggeredReactions)
-            {
-                if (occurrence.PendingLunarConduct != null)
-                    occurrence.PendingLunarConduct.SuppressImmediateDamage = true;
-                aggregate.TriggeredReactions.Add(occurrence);
-            }
-            // 第三阶段反应自身不造成伤害，handler 已经施加的非伤害效果保留。
-        }
-    }
-
-    private static bool TryResolveSimultaneousSuperconductAndQuicken(
-        BattleEntity target,
-        ReactionContext source,
-        ReactionResult aggregate)
-    {
-        ElementPoolReading electroAura = ElementQuery.ReadNormal(target, "Electro");
-        float electro = electroAura != null ? electroAura.Amount : 0f;
-        float cryo = ElementQuery.GetAvailableReactionAmount(target, "Cryo", electro);
-        float dendro = ElementQuery.ReadAura(target, "Dendro")?.AvailableFor(electro) ?? 0f;
-        if (electro <= Epsilon || cryo <= Epsilon || dendro <= Epsilon)
-            return false;
-        using var hit = BattleEventHub.BeginHit(source.LogicalHitID);
-        using var elements = ElementEventScope.Begin("SwirlResidualCommit", target);
-        int firstOccurrence = aggregate.TriggeredReactions.Count;
-
-        float quota = electro * 0.5f;
-        var superconductContext = CloneFor(source, target, "Electro", quota);
-        superconductContext.CanApplyAura = false;
-        superconductContext.PreserveIncomingAuraBeforeReaction = true;
-        superconductContext.RestrictedAuraElement = "Cryo";
-        superconductContext.RestrictedAuraKind = ReactionPoolKind.Any;
-        float level = ReactionDamageCalculator.GetLevelCoefficient(
-            superconductContext.SourceEntity != null ? superconductContext.SourceEntity.Level : 1);
-        bool superconduct = SuperconductReactionHandler.TryResolve(
-            superconductContext,
-            level,
-            out SuperconductReactionResolution superconductResult);
-
-        var quickenContext = CloneFor(source, target, "Electro", quota);
-        quickenContext.CanApplyAura = false;
-        quickenContext.RestrictedAuraElement = "Dendro";
-        quickenContext.RestrictedAuraKind = ReactionPoolKind.Any;
-        bool quicken = QuickenReactionHandler.TryResolve(
-            quickenContext,
-            out QuickenReactionResolution quickenResult);
-
-        float electroConsumed = 0f;
-        if (superconduct)
-        {
-            electroConsumed += Mathf.Max(0f, quota - superconductResult.RemainingAttackAmount);
-            AddStageThreeOccurrence(aggregate, superconductContext, superconductResult.Type,
-                superconductResult.DisplayName, "Cryo", superconductResult.PendingStellarSuperconduct);
-        }
-        if (quicken)
-        {
-            electroConsumed += Mathf.Max(0f, quota - quickenResult.RemainingAttackAmount);
-            AddStageThreeOccurrence(aggregate, quickenContext, ReactionType.Quicken, "原激化", "Dendro");
-        }
-        if (electroConsumed > Epsilon)
-            target.ConsumeAura("Electro", Mathf.Min(electro, electroConsumed));
-        if (superconduct || quicken)
-        {
-            ReactionContext contactContext = CloneFor(source, target, "Electro", electro);
-            contactContext.CanApplyAura = false;
-            var contact = ReactionResult.Unchanged(contactContext);
-            contact.RemainingAttackAmount = Mathf.Max(0f, electro - electroConsumed);
-            for (int i = firstOccurrence; i < aggregate.TriggeredReactions.Count; i++)
-                contact.TriggeredReactions.Add(aggregate.TriggeredReactions[i]);
-            contact.ContactDeclaration = BattleEventHub.Record(contact, new ElementContactEventData(contactContext, contact), causes: source.CauseEventIds);
-            elements.AddCause(contact.ContactDeclaration.Header.EventId);
-            foreach (var occurrence in contact.TriggeredReactions)
-            {
-                occurrence.Declaration = BattleEventHub.Record(occurrence, new ReactionEventData(occurrence),
-                    causes: new[] { contact.ContactDeclaration.Header.EventId });
-                StellarTeamBonusHandler.Commit(occurrence);
-            }
-            BattleEventHub.Dispatch(contact.ContactDeclaration);
-        }
-        return superconduct || quicken;
-    }
-
-    private static void AddStageThreeOccurrence(
-        ReactionResult aggregate,
-        ReactionContext context,
-        ReactionType type,
-        string displayName,
-        string auraElement,
-        PendingStellarSuperconduct stellar = null)
-    {
-        aggregate.TriggeredReactions.Add(new ReactionOccurrence
-        {
-            Type = type,
-            DisplayName = displayName,
-            SourceEntity = context.SourceEntity,
-            Target = context.Target,
-            SourceEffectID = context.SourceEffectID,
-            PendingStellarSuperconduct = stellar,
-            InvolvedElements = new List<string> { context.AttackElement, auraElement }
-        });
-    }
-
-    private static bool TryFindStageThreePair(
-        BattleEntity target,
-        out string attack,
-        out string aura,
-        out float amount,
-        bool lunarContact = false)
-    {
-        string[,] ordered = {
-            {"Electro","Cryo"},{"Cryo","Electro"},{"Electro","Dendro"},{"Dendro","Electro"},
-            {"Pyro","Electro"},{"Electro","Pyro"},{"Hydro","Dendro"},{"Dendro","Hydro"},
-            {"Hydro","Pyro"},{"Pyro","Hydro"},{"Pyro","Cryo"},{"Cryo","Pyro"},
-            {"Hydro","Cryo"},{"Cryo","Hydro"},
-            {"Pyro","Geo"},{"Hydro","Geo"},{"Electro","Geo"},{"Cryo","Geo"},
-            {"Pyro","Dendro"},{"Dendro","Pyro"},
-            {"Hydro","Electro"},{"Electro","Hydro"}
-        };
-        for (int i = 0; i < ordered.GetLength(0); i++)
-        {
-            bool waterElectro = (ordered[i, 0] == "Hydro" && ordered[i, 1] == "Electro")
-                || (ordered[i, 0] == "Electro" && ordered[i, 1] == "Hydro");
-            // 感电是允许水雷共存的状态，不是需要循环反应到一方耗尽的残留。
-            if (waterElectro && (lunarContact || ElectroChargedReactionHandler.IsElectroCharged(target)))
-                continue;
-            ElementPoolReading incoming = ElementQuery.ReadNormal(target, ordered[i,0]);
-            float opposing = incoming == null ? 0f : ElementQuery.GetAvailableReactionAmount(target, ordered[i,1],
-                ReactionPairRules.RequiredAura(ordered[i,0], ordered[i,1], incoming.Amount));
-            if (incoming != null && incoming.Amount > Epsilon && opposing > Epsilon)
-            {
-                attack = ordered[i,0];
-                aura = ordered[i,1];
-                amount = incoming.Amount;
-                return true;
-            }
-        }
-        attack = null;
-        aura = null;
-        amount = 0f;
-        return false;
-    }
-
-    private static bool HasLunarContact(ReactionResult result, BattleEntity target)
-    {
-        foreach (ReactionOccurrence occurrence in result.TriggeredReactions)
-            if (occurrence.Type == ReactionType.LunarElectroCharged && ReferenceEquals(occurrence.Target, target))
-                return true;
-        return false;
     }
 
     private static ReactionContext CloneFor(ReactionContext source, BattleEntity target, string element, float amount)

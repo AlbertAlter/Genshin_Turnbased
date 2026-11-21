@@ -20,6 +20,9 @@ public sealed class BattlefieldActionStateView : MonoBehaviour
         public Image StateBackground;
         public TMP_Text Cooldown;
         [System.NonSerialized] public string ResolvedIcon;
+        [System.NonSerialized] public string ResolvedElement;
+        [System.NonSerialized] public StreamingSpriteReference ElementLayer;
+        [System.NonSerialized] public Image ElementImage;
         public bool IsBurst;
         public int slot, skillType;
         [System.NonSerialized] public float DisabledAlpha;
@@ -163,12 +166,34 @@ public sealed class BattlefieldActionStateView : MonoBehaviour
         FadeIndicator(visual.Cooldown,showCooldown,ref visual.CooldownAlpha,visual.CooldownMaxAlpha);
 
         string configuredIcon = exists ? data.Icon : string.Empty;
-        if (visual.Icon == null || visual.ResolvedIcon == configuredIcon) return;
+        ApplyElementState(visual, data, exists ? style.IconOpacity : 0f);
+        if (visual.Icon == null || (visual.ResolvedIcon == configuredIcon && visual.ResolvedElement == data.Element)) return;
+        visual.ResolvedElement = data.Element;
+        string background = CharacterSkillIconResolver.ElementBackground(configuredIcon, data.Element);
+        if (background != null && visual.ElementLayer == null && visual.StateBackground != null)
+        {
+            var stateCircle = visual.StateBackground.GetComponent<StreamingSpriteReference>();
+            if (stateCircle != null)
+            {
+                visual.ElementLayer = stateCircle.GetSkillElementLayer();
+                visual.ElementImage = visual.ElementLayer.GetComponent<Image>();
+                ApplyElementState(visual, data, style.IconOpacity);
+            }
+        }
+        if (visual.ElementLayer != null && visual.ElementLayer.relativePath != background)
+            visual.ElementLayer.SetResolvedPath(background);
+        if (visual.ResolvedIcon == configuredIcon) return;
         visual.ResolvedIcon = configuredIcon;
         if (CharacterSkillIconResolver.TryGetRelativePath(configuredIcon, out string path))
             visual.Icon.SetResolvedPath(path);
         else
             visual.Icon.SetResolvedPath(string.Empty);
+    }
+
+    private static void ApplyElementState(ActionVisual visual, BattleUiActionState data, float opacity)
+    {
+        SetAlpha(visual.ElementImage, opacity);
+        if (visual.IsBurst) BattleUiEnergyFill.Apply(visual.ElementImage, data.Energy, data.MaximumEnergy);
     }
 
     private void LoadStateStyles()
@@ -236,6 +261,7 @@ public sealed class BattlefieldActionStateView : MonoBehaviour
             if (visual == null) continue;
             visual.IndicatorEntity = null;
             visual.DisabledAlpha = visual.CooldownAlpha = 0;
+            SetAlpha(visual.ElementImage, 0);
             if (visual.DisabledOverlay != null) visual.DisabledOverlay.gameObject.SetActive(false);
             if (visual.Cooldown != null) visual.Cooldown.gameObject.SetActive(false);
         }

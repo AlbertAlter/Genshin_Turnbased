@@ -21,7 +21,8 @@ public sealed class BattlefieldAnimationParameters
     public float Get(string key, float fallback, float min = 0, float max = float.MaxValue) =>
         values.TryGetValue(key, out float value) ? Mathf.Clamp(value,min,max) : fallback;
 
-    public static BattlefieldAnimationParameters Load()
+    public static BattlefieldAnimationParameters Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattlefieldAnimationParameters ReadPublished()
     {
         string path = Path.Combine(Application.streamingAssetsPath,"Charts","UI",FileName);
         try { return ReadFile(path); }

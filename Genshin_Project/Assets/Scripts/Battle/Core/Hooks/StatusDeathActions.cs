@@ -32,7 +32,8 @@ public static class StatusDeathActions
         }
 
         internal bool CanExecute => sessionVersion == BattleDeathResolution.SessionVersion
-            && !BattleExecution.IsCancelled && !dead.IsAlive && dead.EquipmentDeathVersion == deathVersion
+            && !BattleExecution.IsCancelled && BattleManager.Instance?.IsBattleOver != true
+            && !dead.IsAlive && dead.EquipmentDeathVersion == deathVersion
             && Status.IsActive && StatusHostAccess.Contains(Host, Status)
             && (Status.EquipmentSource == null || Status.EquipmentSource.IsAvailable
                 || Status.EquipmentSource.Owner == dead);
@@ -79,9 +80,12 @@ public static class StatusDeathActions
     internal static void Notify(IReadOnlyList<Candidate> candidates, DamageResolvedEvent damage, BattleDeclaration declaration,
         long targetDeathVersion)
     {
+        using var collection = BattleResolutionContext.BeginCollection();
+        var requests = new Dictionary<StatusInstance, Request>();
         foreach (var candidate in candidates)
         {
-            var request = new Request(candidate, damage, declaration, targetDeathVersion);
+            if (!requests.TryGetValue(candidate.Status, out var request))
+                requests.Add(candidate.Status, request = new Request(candidate, damage, declaration, targetDeathVersion));
             if (request.Status.Caster?.CharacterCtrl != null)
                 request.Status.Caster.CharacterCtrl.TryExecuteDeathStatusAction(request, candidate.Action);
             else if (request.Status.Caster?.EnemyCtrl != null)

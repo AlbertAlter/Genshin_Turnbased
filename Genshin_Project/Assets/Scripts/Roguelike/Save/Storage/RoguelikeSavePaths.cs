@@ -8,6 +8,10 @@ public sealed class RoguelikeSavePaths
     public const string SaveDirectoryName = "RoguelikeSaves";
     public string RootDirectory { get; private set; }
     public string ActiveRunPath { get { return Path.Combine(RootDirectory, "active_run.json"); } }
+    internal string WishPlanningPath => Path.Combine(RootDirectory, "wish_planning.json");
+    // Sibling directory: deleting the whole roguelike-save folder must not erase game-wide cosmetics.
+    public string AppearanceDirectory => RootDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + "_Appearance";
+    public string AppearancePath => Path.Combine(AppearanceDirectory, "player_appearance.json");
 
     public RoguelikeSavePaths()
         : this(Path.Combine(Application.dataPath, ProjectSaveDirectoryName, SaveDirectoryName))

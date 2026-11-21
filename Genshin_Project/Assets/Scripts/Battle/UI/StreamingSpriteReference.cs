@@ -14,10 +14,33 @@ public sealed class StreamingSpriteReference : MonoBehaviour
     public bool allowCrop;
     public bool loadOnEnable = true;
     public bool revealOnLoad = true;
+    public Vector4 spriteBorder;
+    public bool IsLoading => request != null;
     // Saved in the scene at authoring time; importing art never changes this decision.
     public bool vectorCircle;
     [HideInInspector] public bool slotCenterAligned;
     private Material vectorMaterial;
+    private StreamingSpriteReference skillElementLayer;
+
+    // The authored state circle stays underneath the gradient for cooldown and freeze.
+    // Both play mode and the non-serialized stage preview use this same layer.
+    public StreamingSpriteReference GetSkillElementLayer()
+    {
+        if (skillElementLayer != null) return skillElementLayer;
+        var layer = new GameObject("SkillElementBackground", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        layer.hideFlags = HideFlags.DontSave;
+        var rect = (RectTransform)layer.transform;
+        rect.SetParent(transform, false);
+        rect.SetAsFirstSibling();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+        Image image = layer.GetComponent<Image>();
+        image.raycastTarget = false;
+        image.enabled = false;
+        skillElementLayer = layer.AddComponent<StreamingSpriteReference>();
+        return skillElementLayer;
+    }
 
     private void ApplyVectorMaterial(Image image)
     {
@@ -145,6 +168,6 @@ public sealed class StreamingSpriteReference : MonoBehaviour
         {
             Debug.LogWarning(error, this);
             request = null;
-        });
+        }, spriteBorder);
     }
 }

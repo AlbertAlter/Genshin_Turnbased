@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public struct FrozenReactionResolution
@@ -10,6 +12,29 @@ public struct FrozenReactionResolution
 public static class FrozenReactionHandler
 {
     public const int ThawAPCost = 10;
+    private static readonly List<Func<BattleEntity, bool>> Immunities = new List<Func<BattleEntity, bool>>();
+    private static readonly List<Func<BattleEntity, float, float>> AmountRules = new List<Func<BattleEntity, float, float>>();
+    private static readonly List<Action<BattleEntity>> RemovalListeners = new List<Action<BattleEntity>>();
+
+    internal static void RegisterPolicy(Func<BattleEntity, bool> immune,
+        Func<BattleEntity, float, float> adjustAmount, Action<BattleEntity> removed)
+    {
+        Immunities.Add(immune);
+        AmountRules.Add(adjustAmount);
+        RemovalListeners.Add(removed);
+    }
+
+    internal static bool IsTemporarilyImmune(BattleEntity target)
+    {
+        string shieldElement = target?.GetEnemyElementalShield()?.Element;
+        return shieldElement == "Cryo" || shieldElement == "Electro"
+            || Immunities.Exists(immune => immune(target));
+    }
+
+    internal static void NotifyRemoved(BattleEntity target)
+    {
+        foreach (var listener in RemovalListeners) listener(target);
+    }
 
     public static bool IsFrozen(BattleEntity target)
     {
@@ -77,7 +102,9 @@ public static class FrozenReactionHandler
         // 已冻结时只进行元素消耗，不覆盖快照、不刷新持续时间。
         if (!wasFrozen && consumed > 0f)
         {
-            int duration = Mathf.CeilToInt(consumed);
+            float amount = consumed;
+            foreach (var adjust in AmountRules) amount = adjust(context.Target, amount);
+            int duration = Mathf.CeilToInt(amount);
             ReactionStateSystem.SetEntityState(
                 context.Target,
                 ReactionType.Frozen,
@@ -85,7 +112,7 @@ public static class FrozenReactionHandler
                 ReactionSourceSnapshot.Capture(context),
                 context.ApplicationPhase,
                 true,
-                consumed);
+                amount);
         }
         return true;
     }

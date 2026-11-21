@@ -142,7 +142,7 @@ public static class AlbedoScriptHooks
         && Casting.Value.Skill == "SK_Burst_Albedo" ? Casting.Value : null;
     internal static void SaveConsumption(BattleEntity owner, int value)
     { var cast = Burst(owner); if (cast != null) cast.Consumed = value; }
-    private static object NormalScope => (object)BattleResolutionContext.CurrentAction
+    private static object NormalScope => (object)BattleResolutionContext.CurrentChain
         ?? BattleResolutionContext.CurrentEffect ?? (object)Hitting.Value;
     private static CountDamageContribution PrepareNormal(StatusInstance state, object host, CountDamageContext context)
     {

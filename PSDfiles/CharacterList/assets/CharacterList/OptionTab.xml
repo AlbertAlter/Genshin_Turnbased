@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="137,40" extention="Button" opaque="true">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0" />
+  <Button mode="Radio" />
+  <displayList>
+    <graph id="n1_c0001" name="base" xy="0,0" size="137,40" type="rect" fillColor="#E3D8C6" lineSize="1" lineColor="#8E8070" corner="7,7,7,7" touchable="false" />
+    <graph id="n2_c0001" name="active" xy="0,0" size="137,40" type="rect" fillColor="#5B4D3F" lineSize="1" lineColor="#BDAB8E" corner="7,7,7,7" touchable="false">
+      <gearDisplay controller="button" pages="1,3" />
+    </graph>
+    <text id="n3_c0001" name="title" xy="3,0" size="131,40" font="Microsoft YaHei" fontSize="18" color="#342B24" text="按钮" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearColor controller="button" pages="0,1,2,3" values="#342B24|#FEFEFE|#342B24|#FEFEFE" />
+    </text>
+  </displayList>
+</component>

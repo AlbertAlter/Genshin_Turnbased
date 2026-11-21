@@ -22,6 +22,9 @@ public static class SongOfDaysPastArtifact
         internal int Spent;
         internal readonly Dictionary<long, HitUse> Hits = new Dictionary<long, HitUse>();
     }
+
+    internal static int? GetRemainingHits(StatusInstance wave)
+        => (wave?.CountRuntimeState as WaveState)?.Remaining;
     internal sealed class HitUse
     {
         internal BattleEntity Attacker;

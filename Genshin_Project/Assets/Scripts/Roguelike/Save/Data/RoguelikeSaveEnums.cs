@@ -29,4 +29,5 @@ public enum RoguelikeSaveReason
     ManualExit = 10,
     PendingRewardGenerated = 11,
     InventoryChanged = 12,
+    ShopPurchased = 13,
 }

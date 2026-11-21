@@ -386,6 +386,61 @@ namespace GenshinTurnBased.Tests.EditMode
             }
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public void CryoOnWaterElectro_CleansUpFrozenAndRemainingElectroWithoutAnotherHit(bool intrinsicElectro)
+        {
+            using (var env = CreateEnv())
+            {
+                var target = env.Enemy.Entity;
+                var source = env.Ally.Entity;
+                if (intrinsicElectro) AddIntrinsic(target, "Electro");
+                else target.ApplyAura("Electro", 3f, source.EntityID, sourceEntity: source);
+                ReactionResolver.Resolve(new ReactionContext { SourceEntity = source,
+                    Target = target, AttackElement = "Hydro", AttackAmount = 3f, ApplicationPhase = 2 });
+                Assert.That(ElectroChargedReactionHandler.IsElectroCharged(target), Is.True);
+
+                var contacts = new List<ElementContactEventData>();
+                using var observer = BattleEventHub.Subscribe<ElementContactEventData>(BattleEventKind.ElementContactResolved,
+                    (_, contact) => contacts.Add(contact), 0);
+                var result = ReactionResolver.Resolve(new ReactionContext { SourceEntity = source,
+                    Target = target, AttackElement = "Cryo", AttackAmount = 2f, ApplicationPhase = 2, TargetIndex = 2 });
+
+                Assert.That(result.TriggeredReactions.ConvertAll(reaction => reaction.Type),
+                    Is.EqualTo(new[] { ReactionType.Frozen, ReactionType.Superconduct, ReactionType.Superconduct }));
+                Assert.That(result.DerivedHits, Has.Count.EqualTo(1), "只有首次超导造成即时伤害");
+                Assert.That(contacts, Has.Count.EqualTo(1));
+                Assert.That(contacts[0].Element, Is.EqualTo("Cryo"));
+                Assert.That(ReactionStateSystem.TryGetEntityState(target, ReactionType.Frozen, out _), Is.False);
+                Assert.That(ElementQuery.GetAmount(target, "Hydro"), Is.EqualTo(1f));
+                Assert.That(ElementQuery.GetAmount(target, "Electro"), Is.Zero);
+                Assert.That(ElementQuery.HasAura(target, "Electro"), Is.EqualTo(intrinsicElectro));
+                Assert.That(ElectroChargedReactionHandler.IsElectroCharged(target), Is.EqualTo(intrinsicElectro));
+                var residual = result.TriggeredReactions[2].Declaration.Header;
+                Assert.That(residual.CauseEventIds, Does.Contain(result.ContactDeclaration.Header.EventId));
+                Assert.That(residual.HitId, Is.EqualTo(result.RuntimeHitID));
+                Assert.That(residual.TargetIndex, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        public void TwoIntrinsicElements_OnlyReactWhenAFinitePoolIsAvailable()
+        {
+            using (var env = CreateEnv())
+            {
+                var target = env.Enemy.Entity;
+                AddIntrinsic(target, "Hydro");
+                AddIntrinsic(target, "Electro");
+                var result = ReactionResolver.Resolve(new ReactionContext { SourceEntity = env.Ally.Entity,
+                    Target = target, AttackElement = "Cryo", AttackAmount = 2f, ApplicationPhase = 2 });
+                Assert.That(result.TriggeredReactions.ConvertAll(reaction => reaction.Type),
+                    Is.EqualTo(new[] { ReactionType.Frozen, ReactionType.Superconduct, ReactionType.Superconduct }));
+                var pools = ElementQuery.Capture(target);
+                Assert.That(pools, Has.Count.EqualTo(2));
+                foreach (var pool in pools) Assert.That(pool.IsIntrinsic, Is.True);
+            }
+        }
+
         private static StatusInstance AddIntrinsic(BattleEntity target, string element)
         {
             string id = ElementQuery.IntrinsicStatusID(element);

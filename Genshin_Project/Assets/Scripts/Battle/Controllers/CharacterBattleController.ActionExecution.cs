@@ -230,9 +230,7 @@ public partial class CharacterBattleController
         if (!_skillById2.TryGetValue(skillID2, out var sk)) return;
         using var actionExecution = BattleEventHub.BeginActionExecution(ActiveActionQuery.IsActiveAction(Entity, sk));
         using var specialSkillScope = BattleSpecialRules.BeginSkill(Entity);
-        using var resolutionAction = BattleResolutionContext.EnterAction(
-            ActiveActionQuery.IsActiveAction(Entity, sk)
-                ? new BattleResolutionContext.CounterScope() : BattleResolutionContext.CurrentAction);
+        using var resolutionAction = BattleResolutionContext.BeginSkillAction(ActiveActionQuery.IsActiveAction(Entity, sk));
 
         string previousSkillID2 = _currentExecutingSkillID2;
         bool previousSkillWasActiveAction = _currentExecutingSkillIsActiveAction;
@@ -262,7 +260,8 @@ public partial class CharacterBattleController
                     out var effects, out var forcedPositions, plan)) return;
 
             using var skillExecution = BattleSpecialRules.BeginSkillExecution(Entity, sk);
-            if (isPlayerInitiated) BattleExecution.RecordSkillPrompt(Entity, sk.SkillName, sk.SkillID2);
+            if (isPlayerInitiated) BattleExecution.RecordSkillPrompt(Entity, GetUiSkillName(skillType, currentSkill: sk),
+                sk.SkillID2, followsTargetSelection: plan?.HasConfirmedTargets == true);
             await BattleExecution.Flush();
             if (plan != null)
             {
@@ -277,7 +276,7 @@ public partial class CharacterBattleController
 
             LogManager.Log(LogCategory.Skill,
                 $"{sk.SkillName} used (targetPos={string.Join(",", forcedPositions)}, player={isPlayerInitiated})");
-            if (ActiveActionQuery.IsActiveAction(Entity, sk))
+            if (BattleManager.Instance?.IsBattleOver != true && !Entity.HasWithdrawn && ActiveActionQuery.IsActiveAction(Entity, sk))
             {
                 var completed = BattleEventHub.Publish(new ActionEventData(Entity, sk.SkillID2, sk.ActionType, true));
                 await BattleExecution.Flush();

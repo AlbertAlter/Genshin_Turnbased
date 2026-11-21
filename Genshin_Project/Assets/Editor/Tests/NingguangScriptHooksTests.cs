@@ -225,12 +225,10 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv(); var owner = Start(env); var stars = Star(env, owner, "C6");
             var markerMain = Main(env, 3, NingguangScriptHooks.ChargeTargetID); markerMain.MaxStack = 0;
-            var chargeMain = Main(env, 2, NingguangScriptHooks.ChargeID);
-            var charge = owner.AddStatus(chargeMain.StatusID2, owner, 1, 2, 0, chargeMain);
             var field = env.Manager.Field.GetSlot(BattleSide.Enemy, 1);
-            charge.BoundStatuses.Add(field.AddStatus(markerMain.StatusID2, owner, 0, 2, 0, markerMain));
-            charge.RemainingPhaseCount = 0;
-            using (BattleSpecialRules.BeginStatusAction(charge))
+            var marker = field.AddStatus(markerMain.StatusID2, owner, 1, 2, 0, markerMain);
+            marker.RemainingPhaseCount = 0;
+            using (BattleSpecialRules.BeginStatusAction(marker))
             {
                 Assert.That(stars.RuntimeIntValue, Is.Zero);
                 Assert.That(ExecuteCountEvaluator.Evaluate(1, "Ningguang_FiredJades()", owner), Is.EqualTo(7));
@@ -240,7 +238,7 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(ExecuteCountEvaluator.Evaluate(1, "Ningguang_FiredJades()", owner), Is.Zero);
             field.Occupant = null;
             env.Enemy.Entity.CurrentHP = 0;
-            using (BattleSpecialRules.BeginStatusAction(charge))
+            using (BattleSpecialRules.BeginStatusAction(marker))
                 Assert.That(ExecuteCountEvaluator.Evaluate(1, "Ningguang_FiredJades()", owner), Is.Zero);
             Assert.That(stars.RuntimeIntValue, Is.EqualTo(1));
         }
@@ -280,7 +278,7 @@ namespace GenshinTurnBased.Tests.EditMode
             env.ConfigureAllyAction(2, "SK_Skill_Ningguang", "SE_Skill_Ningguang", "Physical", ".01*TotalATK,0", apCost: 0, cooldown: 3);
             var owner = Start(env); owner.ConstellationLevel = 2;
             var main = Main(env, 12, NingguangScriptHooks.C2ID);
-            Effect(env, 12, 1, "STE_Ningguang_ResetSkill", "ResetCooldown", "SK_Skill_Ningguang");
+            Effect(env, 12, 1, "STE_Ningguang_ResetSkill", "Cooldown", "SK_Skill_Ningguang").Param2 = "Reset";
             env.DataManager.StatusActionDict[main.StatusID2] = new List<StatusActionData>
             { new StatusActionData { StatusID = main.StatusID, StatusID2 = main.StatusID2, ActionType = "OnTrigger",
                 Param1 = "STE_Ningguang_ResetSkill", ScriptHook = "Ningguang_ScreenBroken()", Cooldown = 2 } };
@@ -306,20 +304,20 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv();
             env.ConfigureAllyAction(1, "SK_Heavy_Ningguang", "SE_Heavy_NingguangTarget", "Physical", null,
-                apCost: 30, effectType: "ApplyStatus", param1: NingguangScriptHooks.ChargeTargetID, targetType: "EnemyField");
+                apCost: 30, effectType: "ApplyStatus", param1: NingguangScriptHooks.ChargeTargetID,
+                duration: 1, addInPhase: 2, targetType: "EnemyField");
             env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID][0].ActionType = "";
-            env.DataManager.SkillEffectDict["SE_Heavy_NingguangCharge"] = new SkillEffectData
-            { SkillEffectID2 = "SE_Heavy_NingguangCharge", EffectIndex = 1, EffectType = "ApplyStatus",
-                Param1 = NingguangScriptHooks.ChargeID, Duration = 1, AddInPhase = 2, TargetType = "Self" };
             var marker = Main(env, 3, NingguangScriptHooks.ChargeTargetID); marker.MaxStack = 0;
-            var chargeMain = Main(env, 2, NingguangScriptHooks.ChargeID);
+            var chargeMain = Main(env, 2, NingguangScriptHooks.ChargeID, "Charge");
+            var binding = Effect(env, 3, 1, "STE_Ningguang_ChargeTarget_BindCharge", "BindStatus", chargeMain.StatusID2, "Allies");
+            binding.TargetOverride = "ChargeCaster()";
             var mainDamage = Effect(env, 2, 2, "STE_Ningguang_HeavyDamage", "Damage", ".1*TotalATK,0", "Enemy");
             mainDamage.Element = "Physical"; mainDamage.DamageType = "Heavy"; mainDamage.TargetOverride = "Ningguang_ChargeTarget()";
             var jadeDamage = Effect(env, 2, 3, "STE_Ningguang_JadeDamage", "Damage", ".01*TotalATK,0", "Enemy");
             jadeDamage.Element = "Physical"; jadeDamage.DamageType = "Heavy"; jadeDamage.TargetOverride = "Ningguang_ChargeTarget()";
             jadeDamage.ExecuteCountHandler = "Ningguang_FiredJades()";
-            env.DataManager.StatusActionDict[chargeMain.StatusID2] = new List<StatusActionData>
-            { new StatusActionData { StatusID = chargeMain.StatusID, StatusID2 = chargeMain.StatusID2, ActionType = "OnEnd",
+            env.DataManager.StatusActionDict[marker.StatusID2] = new List<StatusActionData>
+            { new StatusActionData { StatusID = marker.StatusID, StatusID2 = marker.StatusID2, ActionType = "OnEnd",
                 Param1 = "STE_Ningguang_HeavyDamage;STE_Ningguang_JadeDamage" } };
             var freeMain = Main(env, 10, "ST_Ningguang_T1");
             var free = Effect(env, 10, 1, "STE_Ningguang_FreeCharge", "APCost", "Free");

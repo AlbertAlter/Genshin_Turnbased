@@ -15,6 +15,7 @@ internal sealed class DataManagerState
     internal Dictionary<string, Dictionary<int, SkillLevelData>> SkillLevelDict = new Dictionary<string, Dictionary<int, SkillLevelData>>();
     internal Dictionary<int, List<ConstellationData>> ConstellationDict = new Dictionary<int, List<ConstellationData>>();
     internal Dictionary<int, List<TalentData>> TalentDict = new Dictionary<int, List<TalentData>>();
+    internal Dictionary<int, List<string>> CharacterInitiateStatusDict = new Dictionary<int, List<string>>();
     internal Dictionary<int, Dictionary<int, float>> GrowthCurveDict = new Dictionary<int, Dictionary<int, float>>();
     internal Dictionary<int, WeaponAttributesData> WeaponAttributesDict = new Dictionary<int, WeaponAttributesData>();
     internal Dictionary<int, WeaponLevelBonusData> WeaponLevelBonusDict = new Dictionary<int, WeaponLevelBonusData>();
@@ -34,6 +35,7 @@ internal sealed class DataManagerState
     internal Dictionary<string, StatusAttributesData> StatusAttributesDict = new Dictionary<string, StatusAttributesData>();
 
     internal Dictionary<int, EnemyMainData> EnemyMainDict = new Dictionary<int, EnemyMainData>();
+    internal Dictionary<int, Dictionary<int, EnemyMainData>> EnemyPhaseDict = new Dictionary<int, Dictionary<int, EnemyMainData>>();
     internal Dictionary<int, EnemySkillMainData> EnemySkillMainDict = new Dictionary<int, EnemySkillMainData>();
     internal Dictionary<string, EnemySkillEffectData> EnemySkillEffectDict = new Dictionary<string, EnemySkillEffectData>();
     internal Dictionary<string, EnemySkillParamData> EnemySkillParamDict = new Dictionary<string, EnemySkillParamData>();
@@ -62,6 +64,7 @@ internal sealed class DataManagerState
             SkillLevelDict = manager.SkillLevelDict,
             ConstellationDict = manager.ConstellationDict,
             TalentDict = manager.TalentDict,
+            CharacterInitiateStatusDict = manager.CharacterInitiateStatusDict,
             GrowthCurveDict = manager.GrowthCurveDict,
             WeaponAttributesDict = manager.WeaponAttributesDict,
             WeaponLevelBonusDict = manager.WeaponLevelBonusDict,
@@ -78,6 +81,7 @@ internal sealed class DataManagerState
             StatusActionDict = manager.StatusActionDict,
             StatusAttributesDict = manager.StatusAttributesDict,
             EnemyMainDict = manager.EnemyMainDict,
+            EnemyPhaseDict = manager.EnemyPhaseDict,
             EnemySkillMainDict = manager.EnemySkillMainDict,
             EnemySkillEffectDict = manager.EnemySkillEffectDict,
             EnemySkillParamDict = manager.EnemySkillParamDict,
@@ -105,6 +109,7 @@ internal sealed class DataManagerState
         manager.SkillLevelDict = SkillLevelDict;
         manager.ConstellationDict = ConstellationDict;
         manager.TalentDict = TalentDict;
+        manager.CharacterInitiateStatusDict = CharacterInitiateStatusDict;
         manager.GrowthCurveDict = GrowthCurveDict;
         manager.WeaponAttributesDict = WeaponAttributesDict;
         manager.WeaponLevelBonusDict = WeaponLevelBonusDict;
@@ -121,6 +126,7 @@ internal sealed class DataManagerState
         manager.StatusActionDict = StatusActionDict;
         manager.StatusAttributesDict = StatusAttributesDict;
         manager.EnemyMainDict = EnemyMainDict;
+        manager.EnemyPhaseDict = EnemyPhaseDict;
         manager.EnemySkillMainDict = EnemySkillMainDict;
         manager.EnemySkillEffectDict = EnemySkillEffectDict;
         manager.EnemySkillParamDict = EnemySkillParamDict;

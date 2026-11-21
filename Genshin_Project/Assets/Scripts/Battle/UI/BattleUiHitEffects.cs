@@ -21,9 +21,9 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
     private float clock;
     private bool loading;
     private bool started;
-    private sealed class Impact { public UIHitTextureEffect View; public float Start; }
-    private sealed class Flight { public UIHitProjectileEffect View; public float Start; public (long, long)? CueID; }
-    private sealed class Pending { public Action Spawn; public float Time; }
+    private sealed class Impact { public UIHitTextureEffect View; public float Start; public BattlePresentationResult Group; }
+    private sealed class Flight { public UIHitProjectileEffect View; public float Start; public (long, long)? CueID; public BattlePresentationResult Group; }
+    private sealed class Pending { public Action Spawn; public float Time; public BattlePresentationResult Group; }
     private readonly List<Impact> impacts = new List<Impact>();
     private readonly List<Flight> flights = new List<Flight>();
     private readonly List<Pending> pending = new List<Pending>();
@@ -51,8 +51,12 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
         effects = nextEffects; textures = nextTextures; palette = nextPalette; Ready = true; loading = false;
     }
 
-    public HitEffectTextureStyle.PlaybackMode GetPlaybackMode(HitEffectWeapon weapon, bool heavy)
-        => textures != null ? textures.Get(weapon, heavy).Mode : HitEffectTextureStyle.PlaybackMode.PerTarget;
+    public HitEffectTextureStyle.PlaybackMode GetPlaybackMode(HitEffectWeapon weapon, bool heavy, string hitEffectPreset = null)
+    {
+        if (BattleAttackAnimationSpec.TryGetHitEffectPreset(hitEffectPreset, out int overrideWeapon, out bool overrideHeavy))
+        { weapon = (HitEffectWeapon)overrideWeapon; heavy = overrideHeavy; }
+        return textures != null ? textures.Get(weapon, heavy).Mode : HitEffectTextureStyle.PlaybackMode.PerTarget;
+    }
 
     /// <summary>Call once for one total hit with its complete target set. Different hits stay independent.</summary>
     public bool PlayHit(HitEffectWeapon weapon, bool heavy, string element, BattleUiCardBinding source,
@@ -66,9 +70,28 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
         long sessionID, long eventID)
         => Play(weapon, heavy, element, source, targets, hit, hitCount, seed, null, launchOnly, flightSeconds, (sessionID, eventID));
 
+    internal bool HasPendingHits(BattlePresentationResult group)
+    {
+        if (group == null) return false;
+        foreach (var item in pending) if (item.Group == group) return true;
+        foreach (var item in flights) if (item.Group == group && item.View != null) return true;
+        foreach (var item in impacts) if (item.Group == group && item.View != null) return true;
+        return false;
+    }
+    internal bool PlayTimelineHit(BattlePresentationCue cue, HitEffectWeapon weapon, bool heavy, string element,
+        BattleUiCardBinding source, IReadOnlyList<BattleUiCardBinding> targets, uint seed)
+    {
+        var template = cue.Timing.HitTemplate;
+        return Play(weapon, heavy, element, source, targets, cue.VisualHitIndex, cue.VisualHitCount, seed, null,
+            template == null ? (string.IsNullOrEmpty(cue.AttackAnimation?.HitEffectPreset) ? (bool?)null : false) : cue.IsAnticipation,
+            (float)(cue.IsAnticipation ? cue.ProjectileSeconds : template?.ProjectileSeconds ?? 0),
+            (cue.Result.Header.SessionId, cue.Result.Header.EventId), cue.EnemyExitGroup, cue.AttackAnimation?.HitEffectPreset);
+    }
+
     private bool Play(HitEffectWeapon weapon, bool heavy, string element, BattleUiCardBinding source,
         IReadOnlyList<BattleUiCardBinding> targets, int hit, int hitCount, uint seed,
-        HitEffectTextureStyle.PlaybackMode? modeOverride, bool? launchOnly, float flightSeconds, (long, long)? cueID)
+        HitEffectTextureStyle.PlaybackMode? modeOverride, bool? launchOnly, float flightSeconds, (long, long)? cueID,
+        BattlePresentationResult group = null, string hitEffectPreset = null)
     {
         // A slow frame can cross both markers. Never leave this hit's projectile flying after impact.
         if (launchOnly == false && cueID.HasValue)
@@ -81,7 +104,11 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
         foreach (var card in targets)
             if (card?.art != null && card.root != null && keys.Add((card.side, card.slot))) selected.Add(card);
         if (selected.Count == 0) return false;
-        var profile = effects.Get(weapon, heavy); var style = textures.Get(weapon, heavy);
+        var flightStyle = textures.Get(weapon, heavy);
+        var impactWeapon = weapon; bool impactHeavy = heavy;
+        if (BattleAttackAnimationSpec.TryGetHitEffectPreset(hitEffectPreset, out int overrideWeapon, out bool overrideHeavy))
+        { impactWeapon = (HitEffectWeapon)overrideWeapon; impactHeavy = overrideHeavy; }
+        var profile = effects.Get(impactWeapon, impactHeavy); var style = textures.Get(impactWeapon, impactHeavy);
         if (!profile.Enabled) return false;
         if (string.IsNullOrWhiteSpace(element) || element == "None") element = "Physical";
         Color color = palette.GetColor(element); var particles = effects.GetParticles(element);
@@ -105,25 +132,25 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
         {
             var card = selected[i]; uint visualSeed = grouped ? seed : HitEffectMath.Mix(seed ^ (uint)(i + 1));
             var parent = grouped ? groupLayer : layout.HitLayer(card, behind);
-            float delay = launchOnly.HasValue ? 0 : style.Number("FlightSeconds"), heading = 0;
+            float delay = launchOnly.HasValue ? 0 : flightStyle.Number("FlightSeconds"), heading = 0;
             if (source?.art != null && (delay > 0 || flightSeconds > 0))
             {
                 var flightLayer = layout.ProjectileLayer();
                 Vector2 destination = grouped ? (Vector2)flightLayer.InverseTransformPoint(groupLayer.TransformPoint(center))
                     : UIHitProjectileEffect.Destination(flightLayer, card.art, HitEffectMath.Center(profile, visualSeed));
-                heading = UIHitProjectileEffect.Heading(flightLayer, source.art, destination, style);
+                heading = UIHitProjectileEffect.Heading(flightLayer, source.art, destination, flightStyle);
                 float duration = launchOnly == true ? flightSeconds : delay;
                 if (duration > 0)
                 {
-                    var flight = UIHitProjectileEffect.Create(flightLayer, source.art, destination, style, library, color, duration);
-                    if (flight != null) flights.Add(new Flight { View = flight, Start = clock, CueID = cueID });
+                    var flight = UIHitProjectileEffect.Create(flightLayer, source.art, destination, flightStyle, library, color, duration);
+                    if (flight != null) flights.Add(new Flight { View = flight, Start = clock, CueID = cueID, Group = group });
                 }
             }
             if (launchOnly == true) continue;
             float start = clock + delay; Vector2 size = card.art.rect.size;
             Vector2? groupCenter = grouped ? (Vector2?)center : null, groupSpan = grouped ? (Vector2?)span : null;
-            pending.Add(new Pending { Time = start, Spawn = () => PlayResolved(parent, library, profile, particles,
-                style, color, size, visualSeed, hit, hitCount, heading, start, groupCenter, groupSpan) });
+            pending.Add(new Pending { Time = start, Group = group, Spawn = () => PlayResolved(parent, library, profile, particles,
+                style, color, size, visualSeed, hit, hitCount, heading, start, groupCenter, groupSpan, group) });
         }
         SetTime(clock); return true;
     }
@@ -131,12 +158,13 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
     // Explicit composition entry for a preview with already loaded settings. Borrowed assets remain caller-owned.
     public void PlayResolved(Transform parent, HitTextureLibrary assets, UIHitEffectStyle.Profile profile,
         UIHitEffectStyle.Particles particles, HitEffectTextureStyle.Profile style, Color color, Vector2 cardSize,
-        uint seed, int hit, int hitCount, float direction, float startTime, Vector2? center = null, Vector2? span = null)
+        uint seed, int hit, int hitCount, float direction, float startTime, Vector2? center = null, Vector2? span = null,
+        BattlePresentationResult group = null)
     {
         if (!isActiveAndEnabled || parent == null) return;
         var effect = UIHitTextureEffect.Create(parent, assets, profile, particles, style, color, cardSize,
             seed, hit, hitCount, direction, center, span);
-        impacts.Add(new Impact { View = effect, Start = startTime });
+        impacts.Add(new Impact { View = effect, Start = startTime, Group = group });
     }
     private void Update() { if (automaticClock && !paused) SetTime(clock + Time.unscaledDeltaTime); }
     public void SetTime(float seconds)

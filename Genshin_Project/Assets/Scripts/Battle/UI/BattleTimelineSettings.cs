@@ -13,7 +13,8 @@ public sealed class BattleTimelineSettings
     public IReadOnlyDictionary<string, string> Parameters { get; private set; }
     public float SelectionExitSeconds { get; private set; }
     public static string RuntimePath(string file) => Path.Combine(Application.streamingAssetsPath, "Data", "UI", Folder, file);
-    public static BattleTimelineSettings Load() => ReadFile(RuntimePath(FileName));
+    public static BattleTimelineSettings Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattleTimelineSettings ReadPublished() => ReadFile(RuntimePath(FileName));
 
     public static BattleTimelineSettings ReadFile(string path)
     {

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="54,54" extention="Button" opaque="true">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0" />
+  <Button mode="Common" />
+  <displayList>
+    <graph id="n1_c0008" name="back" xy="0,0" size="54,54" type="rect" fillColor="#695D50" lineSize="1" lineColor="#B2A18D" corner="8,8,8,8" touchable="false" />
+    <loader id="n2_c0008" name="icon" xy="2,2" size="50,50" url="" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <graph id="n3_c0008" name="glow" xy="4,49" size="46,2" type="rect" fillColor="#E8D1A2" lineSize="0" corner="1,1,1,1" touchable="false">
+      <gearDisplay controller="button" pages="1,2,3" />
+    </graph>
+  </displayList>
+</component>

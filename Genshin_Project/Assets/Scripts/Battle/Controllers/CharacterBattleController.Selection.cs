@@ -11,6 +11,7 @@ public partial class CharacterBattleController
     private sealed class SkillSelectionPlan
     {
         public string SkillID;
+        public bool HasConfirmedTargets;
         public readonly List<EffectSelectionPlan> Effects = new List<EffectSelectionPlan>();
     }
 
@@ -157,6 +158,7 @@ public partial class CharacterBattleController
         }
 
         var plan = _selectionPlan;
+        plan.HasConfirmedTargets = _selectionIndex > 0;
         int skillType = _selectionSkillType;
         _pendingSelectEffect = null;
         Task task = BattleExecution.Run(async () =>

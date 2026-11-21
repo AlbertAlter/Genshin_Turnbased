@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1008,665">
+  <controller name="skill" pages="0,普攻,1,重击,2,战技,3,爆发" selected="0" />
+  <displayList>
+    <component id="n0_skll1" name="normalTab" xy="54,0" size="144,144" src="tab02" fileName="SkillTab.xml">
+      <Button title="普攻" icon="ui://chpage01icnor" controller="skill" page="0" checked="true" />
+    </component>
+    <component id="n1_skll1" name="heavyTab" xy="306,0" size="144,144" src="tab02" fileName="SkillTab.xml">
+      <Button title="重击" icon="ui://chpage01ichea" controller="skill" page="1" checked="false" />
+    </component>
+    <component id="n2_skll1" name="skillTab" xy="558,0" size="144,144" src="tab02" fileName="SkillTab.xml">
+      <Button title="战技" icon="ui://chpage01icskl" controller="skill" page="2" checked="false" />
+    </component>
+    <component id="n3_skll1" name="burstTab" xy="810,0" size="144,144" src="tab02" fileName="SkillTab.xml">
+      <Button title="爆发" icon="ui://chpage01icbur" controller="skill" page="3" checked="false" />
+    </component>
+    <graph id="n6_skll1" name="detailPanel" xy="0,164" size="1008,445" type="rect" fillColor="#554A3E" lineSize="0" corner="10,10,10,10" touchable="false" />
+    <text id="n7_skll1" name="skillTitle" xy="34,186" size="730,50" font="Microsoft YaHei" fontSize="34" color="#FEFEFE" text="神射手·普攻" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="skill" pages="0,1,2,3" values="神射手·普攻|神射手·重击|爆弹玩偶|箭雨" />
+    </text>
+    <text id="n8_skll1" name="skillLevel" xy="774,186" size="200,50" font="Microsoft YaHei" fontSize="22" color="#E4D4BF" text="Lv. 7" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="skill" pages="0,1,2,3" values="Lv. 7|Lv. 7|Lv. 7|Lv. 9" />
+    </text>
+    <graph id="n25_skll1" name="detailDivider" xy="34,250" size="940,1" type="rect" fillColor="#877968" lineSize="0" touchable="false" />
+    <component id="n9_skll1" name="normalDescription" xy="34,271" size="940,308" src="desc0" fileName="SkillBody0.xml" customData="character_1009_normal_desc">
+      <gearDisplay controller="skill" pages="0" />
+    </component>
+    <component id="n12_skll1" name="heavyDescription" xy="34,271" size="940,308" src="desc1" fileName="SkillBody1.xml" customData="character_1009_heavy_desc">
+      <gearDisplay controller="skill" pages="1" />
+    </component>
+    <component id="n15_skll1" name="skillDescription" xy="34,271" size="940,308" src="desc2" fileName="SkillBody2.xml" customData="character_1009_skill_desc">
+      <gearDisplay controller="skill" pages="2" />
+    </component>
+    <component id="n18_skll1" name="burstDescription" xy="34,271" size="940,308" src="desc3" fileName="SkillBody3.xml" customData="character_1009_burst_desc">
+      <gearDisplay controller="skill" pages="3" />
+    </component>
+  </displayList>
+</component>

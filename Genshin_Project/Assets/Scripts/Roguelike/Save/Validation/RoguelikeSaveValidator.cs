@@ -89,8 +89,33 @@ public sealed class RoguelikeSaveValidator
             return Invalid("快照当前章节必须大于 0。");
         if (snapshot.CurrentStageIndex < 0)
             return Invalid("当前阶段索引不能小于 0。");
+        if (snapshot.UnlockedAscensions is < 0 or > 6)
+            return Invalid("突破解锁阶段必须在 0 到 6 之间。");
         if (snapshot.RandomStep < 0)
             return Invalid("随机步数不能小于 0。");
+        if (snapshot.ShopPurchaseCounts != null)
+            foreach (var purchase in snapshot.ShopPurchaseCounts)
+                if (string.IsNullOrWhiteSpace(purchase.Key) || purchase.Value <= 0)
+                    return Invalid("商店累计兑换次数含无效记录。");
+        if (snapshot.CompletedChapterNodeCounts != null)
+            foreach (var chapter in snapshot.CompletedChapterNodeCounts)
+                if (chapter.Key <= 0 || chapter.Key > snapshot.CurrentChapterId || chapter.Value <= 0)
+                    return Invalid("已完成章节的节点数含无效记录。");
+        var wish = snapshot.WishProgress;
+        if (wish != null && (wish.CharacterSinceFive < 0 || wish.CharacterSinceFour < 0 ||
+            wish.WeaponSinceFive < 0 || wish.WeaponSinceFour < 0))
+            return Invalid("祈愿保底计数不能小于 0。");
+        if (wish != null && (wish.FivePlanSeed != 0 || wish.CharacterFivePlan != null || wish.WeaponFivePlan != null) &&
+            (wish.FivePlanSeed <= 0 || wish.CharacterFivePlan?.IsValid != true || wish.WeaponFivePlan?.IsValid != true))
+            return Invalid("祈愿五星预定数据不完整或无效。");
+        if (wish?.History != null)
+            foreach (var entry in wish.History)
+                if (entry == null || entry.ChapterId < 1 || entry.ChapterId > snapshot.CurrentChapterId ||
+                    string.IsNullOrWhiteSpace(entry.WishId) || entry.PrizeId <= 0 || entry.Stars < 3 || entry.Stars > 5 ||
+                    string.IsNullOrWhiteSpace(entry.DrawnAtUtc) ||
+                    !Enum.IsDefined(typeof(RoguelikeWishKind), entry.PoolKind) ||
+                    !Enum.IsDefined(typeof(RoguelikeWishKind), entry.PrizeKind))
+                    return Invalid("祈愿历史含无效记录。");
         if (snapshot.Characters == null || snapshot.CharacterVitals == null || snapshot.PartyCharacterIds == null)
             return Invalid("角色、生命能量和队伍列表不能为 null。");
         if (snapshot.Inventory == null || snapshot.Inventory.Items == null ||
@@ -98,8 +123,36 @@ public sealed class RoguelikeSaveValidator
             return Invalid("背包及其物品、武器和圣遗物列表不能为 null。");
         if (snapshot.ClearedNodeIds == null || snapshot.SelectedRouteNodeIds == null)
             return Invalid("节点进度列表不能为 null。");
+        if (snapshot.UsedNodeContentIds != null)
+        {
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string id in snapshot.UsedNodeContentIds)
+                if (string.IsNullOrWhiteSpace(id) || !ids.Add(id))
+                    return Invalid("本章已抽取内容记录为空或重复。");
+        }
         if (snapshot.PendingRewardData != null && string.IsNullOrWhiteSpace(snapshot.PendingRewardData.RewardId))
             return Invalid("待选奖励存在时 RewardId 不能为空。");
+        if (snapshot.PendingNodeReward != null)
+        {
+            var pending = snapshot.PendingNodeReward;
+            if (snapshot.Flow?.Step != RoguelikeFlowStep.Settlement || pending.NodeId != snapshot.CurrentNodeId ||
+                pending.StageId != (long)snapshot.CurrentChapterId * 100 + snapshot.CurrentStageIndex + 1 ||
+                pending.Items == null || pending.Items.Count == 0)
+                return Invalid("待发节点奖励与当前结算节点不一致。");
+            var rewardItems = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var item in pending.Items)
+                if (item == null || string.IsNullOrWhiteSpace(item.ItemId) || item.Quantity <= 0 || !rewardItems.Add(item.ItemId))
+                    return Invalid("待发节点奖励的道具清单无效。");
+        }
+        if (snapshot.AppearanceAwards != null)
+        {
+            var identities = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var award in snapshot.AppearanceAwards)
+            {
+                var valid = PlayerAppearanceRules.Validate(award); if (!valid.Succeeded) return valid;
+                if (!identities.Add(award.CompletionId)) return Invalid("外观通关奖励身份重复。");
+            }
+        }
         if (snapshot.Flow != null)
         {
             var flow = snapshot.Flow;
@@ -117,6 +170,12 @@ public sealed class RoguelikeSaveValidator
                     return Invalid("肉鸽当前节点上下文与路线进度不一致。");
                 if (flow.Step == RoguelikeFlowStep.Battle && node.Kind == RoguelikeNodeKind.Event)
                     return Invalid("事件节点不能处于战斗步骤。");
+                if (node.IsChapterFinalBoss && node.Kind != RoguelikeNodeKind.Boss) return Invalid("章底Boss标记与节点类型不符。");
+                if (flow.AppearanceParticipants != null)
+                {
+                    var capture = PlayerAppearanceRules.Validate(new AppearanceBossAward { CompletionId = flow.StepId, Participants = flow.AppearanceParticipants });
+                    if (!capture.Succeeded) return capture;
+                }
             }
             else if (flow.Node != null) return Invalid("路线/章节完成步骤不应携带未结算节点。");
             if (snapshot.PendingRewardData != null && flow.Step != RoguelikeFlowStep.Settlement)
@@ -182,6 +241,22 @@ public sealed class RoguelikeSaveValidator
                 return Invalid("队伍成员必须是已拥有角色：" + characterId + "。");
             if (!partyIds.Add(characterId))
                 return Invalid("队伍成员不能重复：" + characterId + "。");
+        }
+
+        if (snapshot.PartyPresets != null)
+        {
+            var numbers = new HashSet<int>();
+            foreach (var preset in snapshot.PartyPresets)
+            {
+                if (preset == null || preset.Number < 1 || preset.Number > 10 || !numbers.Add(preset.Number)
+                    || preset.Members == null || preset.Members.Count > 4) return Invalid("编队预设编号或成员列表无效。");
+                var members = new HashSet<int>();
+                foreach (int member in preset.Members)
+                    if (!characterIds.Contains(member) || !members.Add(member)) return Invalid("编队预设包含重复或未拥有的角色。");
+            }
+            var active = snapshot.PartyPresets.Find(preset => preset.Number == snapshot.ActivePartyPreset);
+            if (active == null || !System.Linq.Enumerable.SequenceEqual(active.Members, snapshot.PartyCharacterIds))
+                return Invalid("当前出战队伍与选定的预设不符。");
         }
 
         var itemIds = new HashSet<string>(StringComparer.Ordinal);

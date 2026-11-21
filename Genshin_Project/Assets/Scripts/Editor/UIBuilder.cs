@@ -14,7 +14,6 @@ using TMPro;
 public static class UIBuilder
 {
     // ============ 布局参数（改这里后重新生成） ============
-    const float W = 1920f, H = 1080f;
     const string TAG = "UIGen_";
     static readonly Color SlotBg = new Color(0.13f, 0.13f, 0.16f, 0.85f);
     static readonly Color HpColor = new Color(0.25f, 0.85f, 0.4f, 1f);
@@ -62,18 +61,8 @@ public static class UIBuilder
     // ================= Canvas =================
     static Canvas EnsureCanvas()
     {
-        var existing = Object.FindObjectOfType<Canvas>();
-        if (existing != null) return existing;
-
-        var go = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        var canvas = go.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = go.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(W, H);
-        scaler.matchWidthOrHeight = 1f;
-        LogManager.Log(LogCategory.Build, "创建 Canvas（1920×1080, Match=1）");
-        return canvas;
+        var sharedCanvas = ProjectUiCanvasEditor.FindInActiveScene() ?? ProjectUiCanvasEditor.InstantiateInActiveScene();
+        return ProjectUiCanvasEditor.FindAuthoredCanvas(sharedCanvas) ?? sharedCanvas.CreateContentCanvas("Canvas");
     }
 
     static void CleanOld(Transform parent)
@@ -128,7 +117,7 @@ public static class UIBuilder
             SetRect(slot.hpText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 6), new Vector2(160, 20)); // 居中于血条
 
             slot.energyBall = CreateImage(TAG + "EnergyBall", root, EnergyColor, true, Image.Type.Filled);
-            slot.energyBall.fillMethod = Image.FillMethod.Radial360;
+            BattleUiEnergyFill.Apply(slot.energyBall, 1, 1);
             slot.energyBall.raycastTarget = true; // 能量球=爆发按钮，需可点击
             var ballBtn = root.gameObject.AddComponent<Button>();
             ballBtn.targetGraphic = slot.energyBall;

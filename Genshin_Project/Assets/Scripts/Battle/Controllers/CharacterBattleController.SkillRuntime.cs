@@ -47,12 +47,37 @@ public partial class CharacterBattleController
         return _boundSkills[skillType];
     }
 
+    /// <summary>当前按钮绑定的只读配表；详情界面与选段后的实际技能保持一致。</summary>
+    public SkillMainData GetBoundSkillData(int skillType)
+    {
+        string id = GetBoundSkillID(skillType);
+        return id != null && _skillById2 != null && _skillById2.TryGetValue(id, out var skill) ? skill : null;
+    }
+
     /// <summary>查询当前按钮绑定技能的名字（UI按钮显示用）。</summary>
     public string GetBoundSkillName(int skillType)
     {
         if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(_boundSkills[skillType]) || _skillById2 == null) return "";
         if (_skillById2.TryGetValue(_boundSkills[skillType], out var sk)) return sk.SkillName;
         return "";
+    }
+
+    /// <summary>界面标题使用按钮初始绑定的技能总名，阶段变化仍通过 GetBoundSkillData 查询。</summary>
+    public string GetUiSkillName(int skillType, bool english = false, SkillMainData currentSkill = null)
+    {
+        var skill = currentSkill ?? GetBoundSkillData(skillType);
+        if (skill == null) return string.Empty;
+        string baseId = skillType switch
+        {
+            0 => _attrData?.NormalAttackID,
+            1 => _attrData?.HeavyAttackID,
+            2 => _attrData?.ElementalSkillID,
+            3 => _attrData?.ElementalBurstID,
+            _ => null,
+        };
+        if (!string.IsNullOrEmpty(baseId) && _skillById2 != null && _skillById2.TryGetValue(baseId, out var baseSkill))
+            skill = baseSkill;
+        return DataManager.Instance?.GetUiName(UiNameKind.Skill, skill.SkillID, skill.SkillName, english) ?? skill.SkillName;
     }
 
     /// <summary>查询当前按钮绑定技能在 Skills/Icon 列填写的图标。</summary>
@@ -104,7 +129,7 @@ public partial class CharacterBattleController
     {
         string next = GetNextSkillPhaseID(skillType);
         if (next == null) return null;
-        _boundSkills[skillType] = next;
+        SetBoundSkillID(skillType, next);
         OnControlChanged?.Invoke();
         return next;
     }
@@ -132,11 +157,12 @@ public partial class CharacterBattleController
     {
         if (skillType < 0 || skillType > 3 || string.IsNullOrEmpty(originalSkillID2)) return;
         if (_boundSkills[skillType] == originalSkillID2) return;
-        _boundSkills[skillType] = originalSkillID2;
+        SetBoundSkillID(skillType, originalSkillID2);
         OnControlChanged?.Invoke();
     }
 
     public string NormalAttackID => _attrData?.NormalAttackID;
+    public string Element => _attrData?.Element;
     public string HeavyAttackID => _attrData?.HeavyAttackID;
     public string ElementalSkillID => _attrData?.ElementalSkillID;
     public string ElementalBurstID => _attrData?.ElementalBurstID;

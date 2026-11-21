@@ -16,6 +16,9 @@ namespace GenshinTurnBased.Tests.EditMode
             source.Characters[0].Level = 19;
             source.Characters[0].Experience = 90;
             var draft = Draft(source, 0);
+            var preview = draft.Preview(RoguelikeUpgradeTarget.Character(1009), Cost("660101", 1));
+            Assert.That(preview.Result.Level, Is.EqualTo(20));
+            Assert.That(preview.TargetAscension, Is.Zero);
             var result = draft.UpgradeCharacter(1009, Cost("660101", 1));
             Assert.That(result.Level, Is.EqualTo(20));
             Assert.That(result.Experience, Is.EqualTo(15));
@@ -43,8 +46,12 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(result.Characters[0].Ascension, Is.EqualTo(1));
             source.Characters[0].Level = 19; source.Characters[0].Experience = 90;
             draft = Draft(source, 1);
+            var preview = draft.Preview(RoguelikeUpgradeTarget.Character(1009), Cost("660101", 1));
+            Assert.That(preview.Result.Level, Is.EqualTo(20));
+            Assert.That(preview.TargetAscension, Is.EqualTo(1));
+            Assert.That(draft.ExportSnapshot().Characters[0].Ascension, Is.Zero);
             draft.UpgradeCharacter(1009, Cost("660101", 1));
-            Assert.That(draft.ExportSnapshot().Characters[0].Ascension, Is.EqualTo(1));
+            Assert.That(draft.ExportSnapshot().Characters[0].Ascension, Is.EqualTo(preview.TargetAscension));
         }
 
         [Test]
@@ -121,6 +128,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var draft = Draft(source, 0, random);
             var preview = draft.Preview(RoguelikeUpgradeTarget.Artifact("artifact-1"), Cost("660301", 8));
             Assert.That(preview.Result.Level, Is.EqualTo(4));
+            Assert.That(preview.TargetAscension, Is.Null);
             Assert.That(random.Step, Is.Zero);
             draft.UpgradeArtifact("artifact-1", Cost("660301", 8));
             var result = draft.ExportSnapshot();
@@ -180,6 +188,37 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(costs[1], Is.EqualTo(3));
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 LevelUpCalculator.GetSkillMaterialsToReach(Requirements(), 10, 11));
+        }
+
+        [Test]
+        public void RefinementPreview_IsReadOnly_AndCannotConsumeLockedOrEquippedCopies()
+        {
+            var source = Source();
+            var weapon = source.Inventory.Weapons[0];
+            weapon.Weapon.Refinement = 1;
+            var free = RoguelikeSaveJson.DeepClone(weapon);
+            free.InstanceId = "refinement-free";
+            free.Weapon.Refinement = 2;
+            var locked = RoguelikeSaveJson.DeepClone(free);
+            locked.InstanceId = "refinement-locked";
+            locked.IsLocked = true;
+            source.Inventory.Weapons.Add(free);
+            source.Inventory.Weapons.Add(locked);
+
+            var equipped = RoguelikeSaveJson.DeepClone(source);
+            equipped.Characters[0].EquippedWeaponInstanceId = free.InstanceId;
+            Assert.Throws<InvalidOperationException>(() => Draft(equipped, 0)
+                .PreviewWeaponRefinement(weapon.InstanceId, new[] { free.InstanceId }));
+            var draft = Draft(source, 0);
+            Assert.Throws<InvalidOperationException>(() => draft.PreviewWeaponRefinement(weapon.InstanceId, new[] { locked.InstanceId }));
+            Assert.Throws<InvalidOperationException>(() => draft.PreviewWeaponRefinement(weapon.InstanceId, new[] { free.InstanceId, free.InstanceId }));
+            Assert.That(draft.PreviewWeaponRefinement(weapon.InstanceId, new[] { free.InstanceId }), Is.EqualTo(3));
+            Assert.That(draft.ExportSnapshot().Inventory.Weapons.Count, Is.EqualTo(3));
+            draft.RefineWeapon(weapon.InstanceId, new[] { free.InstanceId });
+            var after = draft.ExportSnapshot();
+            Assert.That(after.Inventory.Weapons.Find(w => w.InstanceId == weapon.InstanceId).Weapon.Refinement, Is.EqualTo(3));
+            Assert.That(after.Inventory.Weapons.Exists(w => w.InstanceId == free.InstanceId), Is.False);
+            Assert.That(after.Inventory.Weapons.Exists(w => w.InstanceId == locked.InstanceId && w.IsLocked), Is.True);
         }
 
         internal static RoguelikeProgressSnapshot Source()

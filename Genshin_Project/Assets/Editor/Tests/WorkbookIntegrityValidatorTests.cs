@@ -28,15 +28,12 @@ namespace GenshinTurnBased.Tests.EditMode
         [Test]
         public void Validate_FindsDuplicateEnumReferenceAndMissingRelation()
         {
-            CreateWorkbook("EnemyAttributes.xlsx", package =>
+            CreateWorkbook("Enemies/1001_Test.xlsx", package =>
             {
                 AddSheet(package, "Enemy_Main",
                     new[] { "EnemyID", "EnemyName" },
                     new[] { "1001", "Slime A" },
                     new[] { "1001", "Slime B" });
-            });
-            CreateWorkbook("EnemySkill.xlsx", package =>
-            {
                 AddSheet(package, "EnemySkill_Main",
                     new[] { "EnemySkillID", "EnemySkillName" },
                     new[] { "2001", "Attack" });
@@ -83,11 +80,31 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(issues.Any(issue => issue.Code == "DUPLICATE_ID" && issue.Location.EndsWith("row 2")), Is.False);
         }
 
-        [TestCase("StatusData_Main", "Status_Effect")]
-        [TestCase("StatusData_Main_Enemy", "Status_Effect")]
-        [TestCase("StatusData_Overall_Main", "StatusEffect_Overall")]
-        [TestCase("StatusWeapon_Main", "StatusWeapon_Effect")]
-        public void Validate_SkillLevelAcceptsEffectsAndStatusContainers(string mainSheet, string effectSheet)
+        [Test]
+        public void Validate_UsesBattleVocabularyOnlyOnGameplayRows()
+        {
+            CreateWorkbook("CharacterStatus/1011_Test.xlsx", package =>
+            {
+                AddSheet(package, "Status_Action", new[] { "StatusID", "ActionType", "Notes" },
+                    new[] { "Type", "string", "Action kind" }, new[] { "10", "OnDestroy" },
+                    new[] { "10", "OnDeath" }, new[] { "", "", "Removed action" }, new[] { "10", "OnDeaht" });
+                AddSheet(package, "Status_Effect", new[] { "EffectType", "Element", "TargetType" },
+                    new[] { "Count", "", "Ally" }, new[] { "ApplyElement", "Pyro", "Enemy" },
+                    new[] { "Immune", "Physical;Hydro", "Self" }, new[] { "ApplyElemnt", "Pyro", "Enemy" });
+            });
+            CreateWorkbook("UI/Timeline.xlsx", package => AddSheet(package, "Templates",
+                new[] { "DamageType" }, new[] { "Support" }));
+
+            var errors = WorkbookIntegrityValidator.Validate(_root).Where(issue => issue.Code == "INVALID_ENUM").ToArray();
+            Assert.That(errors.Select(issue => issue.Location), Is.EquivalentTo(new[] {
+                "CharacterStatus/1011_Test.xlsx/Status_Action row 6", "CharacterStatus/1011_Test.xlsx/Status_Effect row 5" }));
+        }
+
+        [TestCase("CharacterStatus/1011_Test.xlsx", "StatusData_Main", "Status_Effect")]
+        [TestCase("EnemyStatus/1001_Test.xlsx", "StatusData_Main", "Status_Effect")]
+        [TestCase("StatusData_Overall.xlsx", "StatusData_Overall_Main", "StatusEffect_Overall")]
+        [TestCase("StatusData_Weapon.xlsx", "StatusWeapon_Main", "StatusWeapon_Effect")]
+        public void Validate_SkillLevelAcceptsEffectsAndStatusContainers(string workbook, string mainSheet, string effectSheet)
         {
             CreateWorkbook("Characters/1011_Test.xlsx", package =>
             {
@@ -104,7 +121,7 @@ namespace GenshinTurnBased.Tests.EditMode
                     new[] { "", "", "2", "", "0.516" },
                     new[] { "", "Burst", "1", "STE_Lisa_Burst", "0.3656*TotalATK,1" });
             });
-            CreateWorkbook("StatusData.xlsx", package =>
+            CreateWorkbook(workbook, package =>
             {
                 AddSheet(package, mainSheet,
                     new[] { "StatusID", "StatusID2" },

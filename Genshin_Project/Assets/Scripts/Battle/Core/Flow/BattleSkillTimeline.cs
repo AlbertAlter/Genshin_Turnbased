@@ -21,6 +21,8 @@ public interface ICharacterVoiceSequenceView : IBattleSkillVoiceTrack
 }
 public interface IBattleSkillHitEffectTrack : IBattleSkillTrack { }
 public interface IBattleSkillReactionIconTrack : IBattleSkillTrack { }
+public interface IBattleEnemyExitView : IBattlePresentationView { bool CanPresentExit(BattlePresentationCue cue); }
+public interface IBattleEnemyExitBarrier { bool HasPendingHits(BattlePresentationCue exit); }
 
 /// <summary>Bind already scheduled results to real casts. No clocks, duration estimates or battle mutations.</summary>
 public static class BattleSkillTimeline
@@ -78,7 +80,69 @@ public static class BattleSkillTimeline
             else if (voice == BattleVoiceAnchor.FirstImpact) voiceCue = cast.FirstImpact ?? cast.Start;
             voiceCue.SkillTracks |= enabled & BattleSkillTracks.Voice;
         }
-        return cues;
+        return ScheduleEnemyExits(cues, casts);
+    }
+
+    // Keep the Death declaration at its original position. Only its card visual gets a later block.
+    private static IReadOnlyList<BattlePresentationCue> ScheduleEnemyExits(IReadOnlyList<BattlePresentationCue> cues,
+        Dictionary<(long, long), Cast> casts)
+    {
+        Dictionary<(long, long, long, long), List<BattlePresentationCue>> deaths = null;
+        (long, long, long, long) Scope(BattlePresentationCue cue)
+        {
+            var h = cue.Result.Header;
+            if (h.ActionExecutionId != 0) return (h.SessionId, h.ActionExecutionId, 0, 0);
+            if (h.EffectExecutionId != 0) return (h.SessionId, 0, h.EffectExecutionId, 0);
+            return (h.SessionId, 0, 0, h.HitId != 0 ? h.HitId : -h.EventId);
+        }
+        foreach (var cue in cues)
+        {
+            if (!(cue.Result.Data is DeathEventData) || cue.Result.TargetSide != BattleSide.Enemy) continue;
+            deaths ??= new Dictionary<(long, long, long, long), List<BattlePresentationCue>>();
+            var key = Scope(cue);
+            if (!deaths.TryGetValue(key, out var batch)) deaths.Add(key, batch = new List<BattlePresentationCue>());
+            batch.Add(cue);
+        }
+        if (deaths == null) return cues;
+
+        foreach (var cue in cues)
+            if (cue.Result.Data is DamageEventData && deaths.TryGetValue(Scope(cue), out var group))
+                cue.EnemyExitGroup = group[0].Result;
+        var exits = new Dictionary<int, List<BattlePresentationCue>>();
+        for (int i = cues.Count - 1; i >= 0 && deaths.Count > 0; i--)
+        {
+            var cue = cues[i];
+            if (!(cue.Result.Data is DamageEventData) && !(cue.Result.Data is DeathEventData)
+                && cue.SkillMarker != BattleSkillMarker.CastEnd) continue;
+            var key = Scope(cue);
+            if (!deaths.TryGetValue(key, out var batch)) continue;
+            deaths.Remove(key);
+            foreach (var death in batch) death.EnemyExitGroup = batch[0].Result;
+            if (!exits.TryGetValue(cue.Block, out var group)) exits.Add(cue.Block, group = new List<BattlePresentationCue>());
+            group.AddRange(batch);
+        }
+        var scheduled = new List<BattlePresentationCue>(cues.Count + exits.Count);
+        int addedBlocks = 0;
+        for (int i = 0; i < cues.Count; i++)
+        {
+            var cue = cues[i];
+            int block = cue.Block;
+            cue.Block += addedBlocks;
+            scheduled.Add(cue);
+            if ((i + 1 < cues.Count && cues[i + 1].Block == block) || !exits.TryGetValue(block, out var batch)) continue;
+            addedBlocks++;
+            foreach (var death in batch)
+            {
+                // A final blow legitimately omits the gameplay ActionCompleted declaration.
+                var h = death.Result.Header;
+                double time = casts.TryGetValue((h.SessionId, h.ActionExecutionId), out var cast)
+                    ? Math.Max(cue.Time, cast.Start.Time + cast.Start.Timing.AnimationSeconds) : cue.Time;
+                scheduled.Add(new BattlePresentationCue(death.Result, time, death.Timing, block + addedBlocks) {
+                    IsEnemyExit = true, EnemyExitGroup = death.EnemyExitGroup
+                });
+            }
+        }
+        return scheduled;
     }
 
     private static bool IsCastDamage(BattlePresentationResult start, BattlePresentationResult result)
@@ -109,6 +173,8 @@ public static class BattleSkillTimeline
 
     public static bool Receives(IBattlePresentationView view, BattlePresentationCue cue)
     {
+        if (cue.IsAttackStart) return view is IBattleAttackAnimationView;
+        if (cue.IsEnemyExit || view is IBattleEnemyExitView) return cue.IsEnemyExit && view is IBattleEnemyExitView;
         if (view is ICharacterVoiceSequenceView) return cue.CharacterVoicePath != null;
         if (!(view is IBattleSkillTrack))
             return !cue.IsAnticipation || view is IBattlePresentationAnticipationView;

@@ -16,11 +16,13 @@ namespace Roguelike.Tests.RouteGeneration
         [SerializeField] private bool logRandomDraws = true;
         [SerializeField, Min(1f)] private float scrollSpeed = 900f;
         [SerializeField] private bool useNodeIcons = true;
+        [SerializeField] private ProjectUiCanvas sharedCanvas;
 
         private const string StageConfigRelativePath = "Data/Roguelike/StageConfig.xlsx";
         private const string StageRuleRelativePath = "Data/Roguelike/StageRule.xlsx";
 
         private RouteMapView _view;
+        private Canvas _canvas;
         private RouteHorizontalBrowser _browser;
         private Text _statusText;
         private Text _debugToggleLabel;
@@ -30,8 +32,18 @@ namespace Roguelike.Tests.RouteGeneration
 
         private void Awake()
         {
+            if (sharedCanvas == null)
+            {
+                Debug.LogError("路线预览缺少公共画布。", this);
+                return;
+            }
             BuildInterface();
             _artRequest = StartCoroutine(InitializeRoute());
+        }
+
+        private void OnDestroy()
+        {
+            if (_canvas != null) Destroy(_canvas.gameObject);
         }
 
         private IEnumerator InitializeRoute()
@@ -137,15 +149,10 @@ namespace Roguelike.Tests.RouteGeneration
             _font = LoadBuiltinFont();
 
             EnsureEventSystem(uiLayer);
-            GameObject canvasObject = CreateUiObject("Canvas", null, uiLayer,
-                typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            Canvas canvas = canvasObject.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 1f;
+            sharedCanvas.UseFullScreenAtReferenceHeight();
+            _canvas = sharedCanvas.CreateContentCanvas("RouteCanvas");
+            var canvasObject = _canvas.gameObject;
+            canvasObject.layer = uiLayer;
 
             RectTransform background = CreatePanel("Background", canvasObject.transform, uiLayer,
                 new Color32(153, 143, 129, 255));

@@ -14,6 +14,12 @@ public sealed class EquipmentEffectSource
 /// <summary>武器/圣遗物共用：来源阵亡，清理其全部实体/场地状态；不执行自然到期OnEnd。</summary>
 public static class EquipmentStatusLifetime
 {
+    /// <summary>来源身份优先；公共ID子状态也能识别为装备来源，旧实例兼容武器上下文与正式ID前缀。</summary>
+    internal static bool IsEquipmentStatus(StatusInstance status)
+        => status != null && (status.EquipmentSource != null || status.WeaponContext != null
+            || status.StatusID2?.StartsWith("ST_Artifact_", StringComparison.Ordinal) == true
+            || status.StatusID2?.StartsWith("ST_Weapon_", StringComparison.Ordinal) == true);
+
     internal static EquipmentEffectSource Resolve(string id, BattleEntity caster, WeaponRuntimeContext weapon,
         EquipmentEffectSource inherited)
     {
@@ -29,7 +35,10 @@ public static class EquipmentStatusLifetime
     public static bool CanExecute(DamageSourceInfo source)
         => source == null || source.EquipmentSource == null || source.EquipmentSource.IsAvailable || StatusDeathActions.Allows(source.SourceStatus);
 
-    internal static void OnDeath(BattleEntity owner)
+    internal static void OnDeath(BattleEntity owner) => Cleanup(owner, "EquipmentOwnerDied", true);
+    internal static void OnWithdrawn(BattleEntity owner) => Cleanup(owner, "EquipmentOwnerWithdrawn", false);
+
+    private static void Cleanup(BattleEntity owner, string reason, bool defer)
     {
         if (owner == null || owner.IsAlive) return;
         owner.EquipmentDeathVersion++; // 旧请求保留旧身份；即使之后复活，也不能重新生效。
@@ -66,8 +75,9 @@ public static class EquipmentStatusLifetime
         }
         candidates.Sort((left, right) => left.status.ApplyOrder.CompareTo(right.status.ApplyOrder));
         foreach (var item in candidates)
-            BattleDeathResolution.RemoveAfterDeathActions(item.status.Host ?? (object)item.entity ?? item.field,
-                item.status, "EquipmentOwnerDied");
+            if (defer) BattleDeathResolution.RemoveAfterDeathActions(item.status.Host ?? (object)item.entity ?? item.field,
+                item.status, reason);
+            else StatusHostAccess.Remove(item.status.Host ?? (object)item.entity ?? item.field, item.status, reason);
         // 正式移除会清理绑定、护盾、Count、阶段登记和订阅；绝不模拟OnEnd爆炸或转化。
     }
 }

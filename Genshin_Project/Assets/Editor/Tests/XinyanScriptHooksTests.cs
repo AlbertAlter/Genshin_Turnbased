@@ -16,17 +16,20 @@ namespace GenshinTurnBased.Tests.EditMode
         private static StatusMainData ConfigureShield(BattleFlowTestEnv env)
         {
             var main = Main(env, 4103301, XinyanScriptHooks.Shield, "Shield");
-            var ids = new List<string>();
+            const string effectID = "STE_Xinyan_Shield1";
+            env.DataManager.StatusEffectDict[effectID] = new StatusEffectData {
+                StatusEffectID = 410330101, StatusEffectID2 = effectID, EffectType = "Shield", Element = "Pyro",
+                Duration = 3, TargetType = "Self", ExecuteCount = 1 };
             for (int tier = 1; tier <= 3; tier++)
             {
-                string key = "STE_Xinyan_Shield" + tier; ids.Add(key);
-                env.DataManager.StatusEffectDict[key] = new StatusEffectData
-                { StatusEffectID = 410330100 + tier, StatusEffectID2 = key, EffectType = "Shield", Element = "Pyro",
-                    Param1 = (tier * 100).ToString(), Duration = 3, TargetType = "Self", ExecuteCount = 1,
-                    ScriptHook = "Xinyan_ShieldTier(" + tier + ")" };
+                string parameter = "STE_Xinyan_Shield" + tier;
+                env.DataManager.SkillLevelDict[BattleFlowTestEnv.AllyID + "_2_" + parameter] = new Dictionary<int, SkillLevelData> {
+                    [1] = new SkillLevelData { CharacterID = BattleFlowTestEnv.AllyID, SkillType = 2, SkillLevel = 1,
+                        ParamID = parameter, Hits1 = (tier * 100).ToString() }
+                };
             }
             env.DataManager.StatusActionDict[main.StatusID2] = new List<StatusActionData> { new StatusActionData
-            { StatusID2 = main.StatusID2, ActionType = "OnApply", Param1 = string.Join(";", ids), ExecuteCount = 1 } };
+            { StatusID2 = main.StatusID2, ActionType = "OnApply", Param1 = effectID, ExecuteCount = 1 } };
             return main;
         }
 
@@ -37,11 +40,12 @@ namespace GenshinTurnBased.Tests.EditMode
 
         [Test] public void Shield_CountsDistinctCommittedTargets_AndC2ReplacesWithIndependentPartyShields()
         {
-            using var env = new BattleFlowTestEnv(); env.CreateMinimalBattle();
+            using var env = new BattleFlowTestEnv();
+            var main = ConfigureShield(env); env.CreateMinimalBattle();
             var owner = env.Ally.Entity; owner.EntityID = 1033;
             var ally = env.CreateAlly(2).Entity;
             var targets = new[] { env.Enemy.Entity, env.CreateEnemy(2).Entity, env.CreateEnemy(3).Entity };
-            var main = ConfigureShield(env); StatusInstance first = null, upgraded = null, allyShield = null;
+            StatusInstance first = null, upgraded = null, allyShield = null;
             BattleExecution.Run(async () =>
             {
                 using (BattleSpecialRules.BeginSkillExecution(owner, new SkillMainData { SkillID2 = "SK_Skill_Xinyan" }))
@@ -108,12 +112,12 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var env = new BattleFlowTestEnv(); env.CreateMinimalBattle(); var owner = env.Ally.Entity; owner.EntityID = 1033;
             owner.ConstellationLevel = 2; owner.CritRate = .17f;
-            Assert.That(XinyanScriptHooks.ForcesCritical(owner, "SE_Burst_Xinyan", "Physical"), Is.True);
-            Assert.That(XinyanScriptHooks.ForcesCritical(owner, "STE_Xinyan_BurstPulse", "Pyro"), Is.False);
-            Assert.That(XinyanScriptHooks.ForcesCritical(owner, "SE_Normal_Xinyan", "Physical"), Is.False);
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, "SE_Burst_Xinyan", "Physical"), Is.True);
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, "SE_Burst_Xinyan", "Pyro"), Is.False);
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, "SE_Normal_Xinyan", "Physical"), Is.False);
             Assert.That(owner.CritRate, Is.EqualTo(.17f));
             owner.ConstellationLevel = 1;
-            Assert.That(XinyanScriptHooks.ForcesCritical(owner, "SE_Burst_Xinyan", "Physical"), Is.False);
+            Assert.That(BattleSpecialRules.ForcesCritical(owner, null, "SE_Burst_Xinyan", "Physical"), Is.False);
         }
     }
 }

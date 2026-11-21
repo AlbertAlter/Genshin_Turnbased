@@ -7,9 +7,10 @@ public partial class DataManager
 
     private void LoadTeamBonus()
     {
-        using var stream = new FileStream(Path.Combine(ChartsPath, "TeamBonus.xlsx"), FileMode.Open,
+        string path = Path.Combine(ChartsPath, "TeamBonus.xlsx");
+        using var stream = new FileStream(path, FileMode.Open,
             FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-        using var package = new ExcelPackage(stream);
+        using var package = OpenDataWorkbook(path, stream: stream);
         TeamBonusRules = TeamBonusTableLoader.Load(package.Workbook);
     }
 }

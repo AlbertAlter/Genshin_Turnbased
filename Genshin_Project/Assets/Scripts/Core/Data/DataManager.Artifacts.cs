@@ -22,7 +22,7 @@ public partial class DataManager
 
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read,
             FileShare.ReadWrite | FileShare.Delete);
-        using var package = new ExcelPackage(stream);
+        using var package = OpenDataWorkbook(path, stream: stream);
         ExcelWorksheet main = RequireArtifactSheet(package, "StatusData_Main_Artifacts");
         ExcelWorksheet actions = RequireArtifactSheet(package, "Status_Action_Artifacts");
         ExcelWorksheet effects = RequireArtifactSheet(package, "Status_Effect");
@@ -131,7 +131,7 @@ public partial class DataManager
         return keys;
     }
 
-    private static string ResolveArtifactReference(string value, Dictionary<int, string> keys,
+    public static string ResolveArtifactReference(string value, Dictionary<int, string> keys,
         Func<int, string> fallback)
     {
         value = value?.Trim();

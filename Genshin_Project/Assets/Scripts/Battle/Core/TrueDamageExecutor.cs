@@ -35,7 +35,7 @@ public static class TrueDamageExecutor
                 foreach (var entry in entries)
                 {
                     BattleEntity target = entry.Target;
-                    if (target != null && target.IsAlive)
+                    if (target != null && target.IsAlive && !target.HasWithdrawn)
                         batch.Resolve(new HitRequest
                         {
                             Target = target, DamageBeforeShield = amount * entry.Rate, Element = element, Properties = properties,

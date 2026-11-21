@@ -31,6 +31,28 @@ public sealed class StatusHealExecution
 /// </summary>
 public static class BattleSpecialRules
 {
+    internal delegate bool ForcedCriticalRule(BattleEntity attacker, BattleEntity target, string effectID, string element, StatusEffectData statusEffect);
+    private static readonly List<ForcedCriticalRule> ForcedCriticalRules = new List<ForcedCriticalRule>();
+
+    internal static void RegisterForcedCritical(ForcedCriticalRule rule) => ForcedCriticalRules.Add(rule);
+
+    public static bool ForcesCritical(BattleEntity attacker, BattleEntity target, string effectID, string element, StatusEffectData statusEffect = null)
+    {
+        foreach (var rule in ForcedCriticalRules)
+            if (rule(attacker, target, effectID, element, statusEffect)) return true;
+        return false;
+    }
+
+    private static readonly Dictionary<string, Func<BattleManager, BattleEntity, List<EnemyBattleController>>> EnemyDamageParticipants
+        = new Dictionary<string, Func<BattleManager, BattleEntity, List<EnemyBattleController>>>(StringComparer.Ordinal);
+    internal static void RegisterEnemyDamageParticipants(string effect, Func<BattleManager, BattleEntity, List<EnemyBattleController>> resolve)
+        => EnemyDamageParticipants.Add(effect, resolve);
+    public static bool TryGetEnemyDamageParticipants(string effect, BattleManager battle, BattleEntity owner, out List<EnemyBattleController> participants)
+    {
+        participants = null;
+        if (effect == null || battle == null || !EnemyDamageParticipants.TryGetValue(effect, out var resolve)) return false;
+        participants = resolve(battle, owner); return true;
+    }
     private sealed class DamageRule
     {
         public Action<string, BattleEntity, string> Validate;
@@ -43,6 +65,22 @@ public static class BattleSpecialRules
         = new Dictionary<string, Func<BattleEntity, int>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, DamageRule> DamageRules
         = new Dictionary<string, DamageRule>(StringComparer.Ordinal);
+    private static readonly List<Func<EnemyBattleController, int?>> EnemySkillSelections = new List<Func<EnemyBattleController, int?>>();
+    internal static void RegisterEnemySkillSelection(Func<EnemyBattleController, int?> select) => EnemySkillSelections.Add(select);
+    public static int? SelectReservedEnemySkill(EnemyBattleController owner)
+    {
+        foreach (var select in EnemySkillSelections) { var id = select(owner); if (id.HasValue) return id; }
+        return null;
+    }
+    public static bool HasDamageModifier(string hook) => hook != null && DamageRules.ContainsKey(hook.Trim());
+    private static readonly Dictionary<string, Func<EnemySkillEffectData, BattleEntity, float>> EnemyTargetDamageScales
+        = new Dictionary<string, Func<EnemySkillEffectData, BattleEntity, float>>(StringComparer.Ordinal);
+    internal static void RegisterEnemyTargetDamageScale(string hook, Func<EnemySkillEffectData, BattleEntity, float> resolve)
+        => EnemyTargetDamageScales.Add(hook, resolve);
+    internal static bool HasEnemyTargetDamageScale(string hook)
+        => hook != null && EnemyTargetDamageScales.ContainsKey(hook.Trim());
+    internal static float ResolveEnemyTargetDamageScale(EnemySkillEffectData effect, BattleEntity target)
+        => HasEnemyTargetDamageScale(effect.DamageHook) ? EnemyTargetDamageScales[effect.DamageHook.Trim()](effect, target) : 1f;
     private static readonly Dictionary<string, Func<StatusEffectData, StatusInstance, float>> BuffScalarRules
         = new Dictionary<string, Func<StatusEffectData, StatusInstance, float>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, Func<BattleManager, BattleEntity, List<int>>> Targets
@@ -85,6 +123,8 @@ public static class BattleSpecialRules
         = new Dictionary<string, Func<StatusHealExecution, Task>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, Func<BattleEntity, float, float>> ShieldBases
         = new Dictionary<string, Func<BattleEntity, float, float>>(StringComparer.Ordinal);
+    private static readonly Dictionary<string, Func<StatusInstance, string>> ShieldParameters
+        = new Dictionary<string, Func<StatusInstance, string>>(StringComparer.Ordinal);
     private static readonly Dictionary<string, Func<StatusActionData, string>> ActionCounterGroups
         = new Dictionary<string, Func<StatusActionData, string>>(StringComparer.Ordinal);
     private static readonly List<Action<BattleManager>> BattleReadyRules = new List<Action<BattleManager>>();
@@ -168,6 +208,14 @@ public static class BattleSpecialRules
         Enemy2021To2030Hooks.Register();
         Enemy2031To2040Hooks.Register();
         Enemy2041To2050Hooks.Register();
+        Enemy2051To2060Hooks.Register();
+        Enemy2074To2080Hooks.Register();
+        Enemy2081To2085Hooks.Register();
+        Enemy2061To2063Hooks.Register();
+        HypostasisPublicStates.Register();
+        Enemy2064To2066Hooks.Register();
+        Enemy2067To2070Hooks.Register();
+        Enemy2071To2073Hooks.Register();
         LisaScriptHooks.Register();
         VentiScriptHooks.Register();
         JeanScriptHooks.Register();
@@ -290,6 +338,7 @@ public static class BattleSpecialRules
     public static void OnStatusCreated(StatusInstance status, object host)
     {
         using var formulaIsolation = StatusFormulaSnapshot.Suspend();
+        if (status?.MainData?.ClearOnPhaseExit == true) status.Caster?.EnemyCtrl?.TrackPhaseStatus(status);
         HexereiStatusEnhancement.Capture(status);
         StatusFormulaSnapshot.Capture(status);
         if (status != null && StatusCreated.TryGetValue(status.StatusID2, out var created)) created(status, host);
@@ -297,6 +346,7 @@ public static class BattleSpecialRules
 
     public static void OnStatusRemoved(StatusInstance status, object host)
     {
+        status?.Caster?.EnemyCtrl?.UntrackPhaseStatus(status);
         if (status != null && StatusRemoved.TryGetValue(status.StatusID2, out var removed)) removed(status, host);
     }
 
@@ -321,6 +371,11 @@ public static class BattleSpecialRules
         => ShieldBases.Add(effectID, resolve);
     public static float ResolveShieldBase(string effectID, BattleEntity source, float basis)
         => effectID != null && ShieldBases.TryGetValue(effectID, out var resolve) ? resolve(source, basis) : basis;
+    // 只选择等级表参数键，保留同一实际Shield效果身份和后续造盾加成。
+    internal static void RegisterShieldParameter(string effectID, Func<StatusInstance, string> resolve)
+        => ShieldParameters.Add(effectID, resolve);
+    public static string ResolveShieldParameterID(string effectID, StatusInstance status)
+        => effectID != null && ShieldParameters.TryGetValue(effectID, out var resolve) ? resolve(status) : effectID;
     public static bool HasStatusHealHandler(string hook)
         => hook != null && StatusHealRules.ContainsKey(hook.Trim());
     public static Task ExecuteStatusHeal(StatusHealExecution context)

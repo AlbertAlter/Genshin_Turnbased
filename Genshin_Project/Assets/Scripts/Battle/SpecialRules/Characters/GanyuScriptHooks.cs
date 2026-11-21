@@ -9,18 +9,9 @@ public static class GanyuScriptHooks
 {
     public const string Charge = "ST_Ganyu_Charge", FrostCharge = "ST_Ganyu_FrostCharge";
     public const string Marker = "ST_Ganyu_ChargeTarget", Lotus = "ST_Ganyu_Lotus", Shower = "ST_Ganyu_Shower";
+    public const string FrostMarker = "ST_Ganyu_FrostChargeTarget";
     public const string Ready = "ST_Ganyu_C6Ready", C4 = "ST_Ganyu_C4", C4Bonus = "ST_Ganyu_C4Bonus";
-    private static readonly AsyncLocal<Cast> Casting = new AsyncLocal<Cast>();
     private static readonly AsyncLocal<Response> Responding = new AsyncLocal<Response>();
-    private sealed class Cast : IDisposable
-    {
-        internal readonly BattleEntity Owner;
-        internal readonly string Skill;
-        internal readonly List<StatusInstance> Markers = new List<StatusInstance>();
-        private readonly Cast previous = Casting.Value;
-        internal Cast(BattleEntity owner, SkillMainData skill) { Owner = owner; Skill = skill?.SkillID2; Casting.Value = this; }
-        public void Dispose() => Casting.Value = previous;
-    }
     private sealed class Response : IDisposable
     {
         internal readonly StatusInstance State;
@@ -34,16 +25,7 @@ public static class GanyuScriptHooks
         && StatusHostAccess.Contains(state.Host, state);
     internal static void Register()
     {
-        BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new Cast(owner, skill));
         BattleSpecialRules.RegisterStatusActionScope(state => new Response(state));
-        BattleSpecialRules.RegisterStatusLifecycle(Marker, (state, host) =>
-        {
-            var cast = Casting.Value;
-            if (cast?.Owner == state.Caster && (cast.Skill == "SK_Heavy_Ganyu1" || cast.Skill == "SK_Heavy_Ganyu2"))
-                cast.Markers.Add(state);
-        }, null);
-        foreach (string id in new[] { Charge, FrostCharge })
-            BattleSpecialRules.RegisterStatusLifecycle(id, BindCharge, null);
         BattleSpecialRules.RegisterStatusLifecycle(Lotus, (state, host) =>
         {
             if (!(host is FieldPosition field) || state.Caster?.EntityID != 1035 || field.Side == state.Caster.Side)
@@ -55,7 +37,7 @@ public static class GanyuScriptHooks
         BattleSpecialRules.RegisterTargets("Ganyu_BloomTargets()", (battle, owner) =>
         {
             var marker = battle.Field.EnemySlots.SelectMany(s => s.StatusList)
-                .FirstOrDefault(s => s.StatusID2 == Marker && s.Caster == owner && Active(s));
+                .FirstOrDefault(s => s.StatusID2 == FrostMarker && s.Caster == owner && Active(s));
             return marker?.Host is FieldPosition position ? Area(position.SlotIndex) : new List<int>();
         });
         BattleSpecialRules.RegisterTargets("Ganyu_LotusArea()", (battle, owner) =>
@@ -94,14 +76,6 @@ public static class GanyuScriptHooks
                 && hit.Source.SourceStatus == response.State && hit.Source.SourceEffectID == "STE_Ganyu_LotusDamage")
                 response.LotusHit = true;
         });
-    }
-    private static void BindCharge(StatusInstance state, object host)
-    {
-        var cast = Casting.Value;
-        if (host != state.Caster || state.Caster?.EntityID != 1035 || cast?.Owner != state.Caster
-            || (cast.Skill != "SK_Heavy_Ganyu1" && cast.Skill != "SK_Heavy_Ganyu2"))
-            throw new InvalidOperationException("甘雨蓄力缺少本人本次射击的位置。");
-        foreach (var marker in cast.Markers.Where(Active)) state.BoundStatuses.Add(marker);
     }
     private static List<int> Area(int center)
         => Enumerable.Range(Math.Max(1, center - 1), Math.Min(5, center + 1) - Math.Max(1, center - 1) + 1).ToList();

@@ -12,7 +12,8 @@ public sealed class BattleSkillPresentationTemplates
     private readonly Dictionary<string, BattleHitTemplate> byId = new Dictionary<string, BattleHitTemplate>(StringComparer.Ordinal);
     public BattleHitTemplate Get(string id) => id != null && byId.TryGetValue(id, out var value) ? value : null;
     public BattleHitTemplate Get(int weapon, string damageType) => templates.TryGetValue((weapon, damageType ?? ""), out var value) ? value : null;
-    public static BattleSkillPresentationTemplates Load() => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
+    public static BattleSkillPresentationTemplates Load() => CampaignUiTables.Read(ReadPublished);
+    private static BattleSkillPresentationTemplates ReadPublished() => ReadFile(BattleTimelineSettings.RuntimePath(FileName));
     public static BattleSkillPresentationTemplates ReadFile(string path)
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);

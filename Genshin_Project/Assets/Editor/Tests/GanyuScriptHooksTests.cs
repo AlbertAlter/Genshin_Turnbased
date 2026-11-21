@@ -15,7 +15,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 StatusID2 = S + key, StatusType = type, MaxCount = 1, MaxStack = 1, WhenMax = "0" };
         private static void Setup(BattleFlowTestEnv env)
         {
-            Main(env, 2, "FrostCharge"); Main(env, 3, "ChargeTarget"); Main(env, 5, "Lotus");
+            Main(env, 2, "FrostCharge", "Charge"); Main(env, 15, "FrostChargeTarget"); Main(env, 5, "Lotus");
             Main(env, 7, "Shower"); Main(env, 12, "C6Ready"); Main(env, 13, "C4", "Count");
             Main(env, 14, "C4Bonus", "Buff");
             var bonus = env.DataManager.StatusMainDict[S + "C4Bonus"];
@@ -25,27 +25,28 @@ namespace GenshinTurnBased.Tests.EditMode
             env.DataManager.StatusEffectDict["STE_Ganyu_C4Bonus"] = new StatusEffectData
             { StatusEffectID = 410351401, StatusEffectID2 = "STE_Ganyu_C4Bonus", EffectType = "Buff", Param1 = ".05", DamageHook = "Ganyu_C4Value()", TargetType = "Self" };
             env.ConfigureAllyAction(1, "SK_Heavy_Ganyu2", "SE_Heavy_Ganyu2Target", "", "", 50,
-                effectType: "ApplyStatus", param1: S + "ChargeTarget", duration: 1, addInPhase: 1, targetType: "EnemyField");
+                effectType: "ApplyStatus", param1: S + "FrostChargeTarget", duration: 1, addInPhase: 1, targetType: "EnemyField");
             env.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID].Last().ActionType = "";
-            env.DataManager.SkillEffectDict["SE_Heavy_Ganyu2Charge"] = new SkillEffectData
-            { SkillEffectID = 10350503, SkillEffectID2 = "SE_Heavy_Ganyu2Charge", EffectIndex = 3,
-                EffectType = "ApplyStatus", Param1 = S + "FrostCharge", Duration = 1, AddInPhase = 1, TriggerPhase = 1, TargetType = "Self" };
+            env.DataManager.StatusEffectDict["STE_Ganyu_FrostChargeTarget_BindCharge"] = new StatusEffectData
+            { StatusEffectID = 410351502, StatusEffectID2 = "STE_Ganyu_FrostChargeTarget_BindCharge", EffectIndex = 1,
+                EffectType = "BindStatus", Param1 = S + "FrostCharge", TargetType = "Allies", TargetOverride = "ChargeCaster()" };
             env.ConfigureAllyAction(1, "SK_Ganyu_FrostflakeAttack", "SE_Ganyu_FrostflakeAttackArrow", "Cryo", "2.56*TotalATK,0", 0);
             var arrow = env.DataManager.SkillEffectDict["SE_Ganyu_FrostflakeAttackArrow"];
-            arrow.TargetNumber = 0; arrow.TargetType = "EnemyField"; arrow.TargetOverride = S + "ChargeTarget";
+            arrow.TargetNumber = 0; arrow.TargetType = "EnemyField"; arrow.TargetOverride = S + "FrostChargeTarget";
             env.DataManager.SkillEffectDict["SE_Ganyu_FrostflakeAttackBloom"] = new SkillEffectData
             { SkillEffectID = 10350702, SkillEffectID2 = "SE_Ganyu_FrostflakeAttackBloom", EffectIndex = 1,
                 EffectType = "Damage", Element = "Cryo", DamageType = "Heavy", Param1 = "4.352*TotalATK,0",
                 TargetType = "EnemyField", TargetOverride = "Ganyu_BloomTargets()" };
-            foreach (var entry in new[] { ("Ready", "C6Ready"), ("End", "FrostCharge") })
+            foreach (var entry in new[] { ("Ready", "C6Ready"), ("End", "FrostChargeTarget") })
                 env.DataManager.SkillEffectDict["SE_Ganyu_FrostflakeAttack" + entry.Item1] = new SkillEffectData
                 { SkillEffectID2 = "SE_Ganyu_FrostflakeAttack" + entry.Item1, EffectIndex = entry.Item1 == "Ready" ? 4 : 5,
-                    EffectType = "RemoveStatus", Param1 = S + entry.Item2, TargetType = "Self" };
+                    EffectType = "RemoveStatus", Param1 = S + entry.Item2,
+                    TargetType = entry.Item1 == "Ready" ? "Self" : "EnemyField", TargetNumber = entry.Item1 == "Ready" ? 0 : -1 };
             env.DataManager.CharacterAttributesDict[BattleFlowTestEnv.AllyID].HeavyAttackID = "SK_Heavy_Ganyu2";
-            env.DataManager.StatusActionDict[S + "FrostCharge"] = new List<StatusActionData>
+            env.DataManager.StatusActionDict[S + "FrostChargeTarget"] = new List<StatusActionData>
             {
-                new StatusActionData { StatusID2 = S + "FrostCharge", ActionType = "OnApply", Param1 = "SK_Ganyu_FrostflakeAttack", ScriptHook = "Ganyu_C6Ready()" },
-                new StatusActionData { StatusID2 = S + "FrostCharge", ActionType = "OnItsTurn", Param1 = "SK_Ganyu_FrostflakeAttack" }
+                new StatusActionData { StatusID2 = S + "FrostChargeTarget", ActionType = "OnApply", Param1 = "SK_Ganyu_FrostflakeAttack", ScriptHook = "Ganyu_C6Ready()" },
+                new StatusActionData { StatusID2 = S + "FrostChargeTarget", ActionType = "OnEnd", Param1 = "SK_Ganyu_FrostflakeAttack" }
             };
             env.CreateMinimalBattle(); env.Ally.Entity.EntityID = 1035;
             env.CreateEnemy(2, 10000); env.Enemy.Entity.TotalHP = env.Enemy.Entity.CurrentHP = 10000;
@@ -78,15 +79,17 @@ namespace GenshinTurnBased.Tests.EditMode
                 {
                     Assert.That(starts, Is.Zero); Assert.That(positions, Is.Empty);
                     var charge = env.Ally.Entity.GetStatus(S + "FrostCharge");
-                    await BattleExecution.Run(() => env.Ally.ExecuteStatusActionsTask(charge,
-                        env.DataManager.StatusActionDict[S + "FrostCharge"], env.Ally.Entity, "OnItsTurn"));
+                    var marker = charge.BindingParent;
+                    Assert.That(marker.StatusID2, Is.EqualTo(S + "FrostChargeTarget"));
+                    await BattleExecution.Run(() => env.Ally.ExecuteStatusActionsTask(marker,
+                        env.DataManager.StatusActionDict[S + "FrostChargeTarget"], marker.Host, "OnEnd"));
                 }
                 Assert.That(starts, Is.EqualTo(1)); Assert.That(ends, Is.EqualTo(1));
                 Assert.That(paid, Is.EqualTo(50)); Assert.That(positions, Is.EqualTo(new[] { 1, 1, 2 }));
                 Assert.That(random.FloatCallCount, Is.EqualTo(3)); Assert.That(random.IntCallCount, Is.Zero);
                 Assert.That(env.Ally.Entity.HasStatus(S + "FrostCharge"), Is.False);
                 Assert.That(env.Ally.Entity.HasStatus(S + "C6Ready"), Is.False);
-                Assert.That(env.Manager.Field.EnemySlots.SelectMany(x => x.StatusList).Any(x => x.StatusID2 == S + "ChargeTarget"), Is.False);
+                Assert.That(env.Manager.Field.EnemySlots.SelectMany(x => x.StatusList).Any(x => x.StatusID2 == S + "FrostChargeTarget"), Is.False);
             }
         }
 

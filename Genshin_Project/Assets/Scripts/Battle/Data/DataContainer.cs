@@ -245,17 +245,6 @@ public class TalentData
 }
 
 // ============================================================
-// 单个角色 xlsx 的 BattleInitiate sheet —— 战斗进场的初始化状态（通用表占位，暂无内容）
-// ============================================================
-[Serializable]
-public class BattleInitiateData
-{
-    public int CharacterID;
-    public int InitiateIndex;
-    public string Modifiers;
-}
-
-// ============================================================
 // Character_Growth_Curve.xlsx —— 成长曲线（用于等级系数）
 // ============================================================
 [Serializable]
@@ -266,11 +255,13 @@ public class GrowthCurveData
 }
 
 // ============================================================
-// StatusData.xlsx 的 StatusData_Main sheet —— 状态定义
+// StatusData_Main 及同类子表 —— 状态定义
 // ============================================================
 [Serializable]
 public class StatusMainData
 {
+    public bool ClearOnPhaseExit;
+    public string Icon;
     public int StatusID;                 // 状态唯一数字ID
     public string StatusID2;             // 状态字符串ID（ST_xxx）
     public string StatusName;            // 状态名称
@@ -322,7 +313,7 @@ public static class StatusMultiplierParts
 }
 
 // ============================================================
-// StatusData.xlsx 的 Status_Effect sheet —— 状态效果列表
+// Status_Effect 及同类子表 —— 状态效果列表
 // ============================================================
 [Serializable]
 public class StatusEffectData
@@ -354,14 +345,14 @@ public class StatusEffectData
 }
 
 // ============================================================
-// StatusData.xlsx 的 Status_Action sheet —— 状态行动（在回合制状态机的某个阶段执行什么）
+// Status_Action 及同类子表 —— 状态行动
 // ============================================================
 [Serializable]
 public class StatusActionData
 {
     public int StatusID;                 // 所属状态数字ID
     public string StatusID2;             // 所属状态字符串ID（ST_xxx）
-    public string ActionType;            // 状态行动的触发时机OnApply/OnItsTurn/OnTrigger/OnEnd；不是Skill.ActionType行为分类
+    public string ActionType;            // 状态时机OnApply/OnItsTurn/OnTrigger/OnEnd/OnDestroy/OnDeath；不是Skill.ActionType行为分类
     public string Param1;                // 执行的状态效果ID2列表（分号分隔，如 STE_Bunny2;STE_Bunny4）
     public string Param2;                // 附加参数
     public string Param3;                // 附加参数
@@ -383,7 +374,8 @@ public class StatusActionData
     public int MaxTimePerHit;            // 同一逻辑 hit 的最大收集次数（0=不限），不改变逐目标事件
     public int MaxTimePerTurn;           // 每回合最大触发次数（0=不限）
     public int MaxTimePerEffect;         // 同一源效果及全部衍生连锁的最大收集次数（<=0=不限）
-    public int MaxTimePerAction;         // 同一行动及全部效果/连锁；无外层行动时按具体状态本阶段完整调用（<=0=不限）
+    public int MaxTimePerAction;         // 主动技能及全部延伸共用额度；无主动行为上下文时该行不触发
+    public int MaxTimePerExecution;      // 主动技能/状态连续调用段各自限次；打断后再调用或再次独立触发使用新额度
     public int MaxTimePerLife;           // 本状态实例生命周期内累计最大触发次数（0=不限）
     public int Cooldown;                 // 行动冷却（回合，0=无）
     public string ActionKey;              // 运行时稳定键（工作簿/Sheet/数据行），用于逐行计数和冷却
@@ -405,10 +397,11 @@ public class StatusActionData
                 bool supported = scope.Equals("Hit", StringComparison.OrdinalIgnoreCase)
                     || scope.Equals("Effect", StringComparison.OrdinalIgnoreCase)
                     || scope.Equals("Action", StringComparison.OrdinalIgnoreCase)
+                    || scope.Equals("Execution", StringComparison.OrdinalIgnoreCase)
                     || scope.Equals("Turn", StringComparison.OrdinalIgnoreCase)
                     || scope.Equals("Life", StringComparison.OrdinalIgnoreCase);
                 if (!supported || parsed.ContainsKey(scope))
-                    throw new TableValidationException($"MaxTimePer 类型无效或重复：[{scope}]；支持 Hit/Effect/Action/Turn/Life");
+                    throw new TableValidationException($"MaxTimePer 类型无效或重复：[{scope}]；支持 Hit/Effect/Action/Execution/Turn/Life");
                 if (!int.TryParse(counts[index].Trim(), System.Globalization.NumberStyles.Integer,
                         System.Globalization.CultureInfo.InvariantCulture, out int count) || count < 0)
                     throw new TableValidationException($"MaxTime 必须为非负整数：[{counts[index]}]");
@@ -418,13 +411,14 @@ public class StatusActionData
         MaxTimePerHit = parsed.TryGetValue("Hit", out int hit) ? hit : 0;
         MaxTimePerEffect = parsed.TryGetValue("Effect", out int effect) ? effect : 0;
         MaxTimePerAction = parsed.TryGetValue("Action", out int action) ? action : 0;
+        MaxTimePerExecution = parsed.TryGetValue("Execution", out int execution) ? execution : 0;
         MaxTimePerTurn = parsed.TryGetValue("Turn", out int turn) ? turn : 0;
         MaxTimePerLife = parsed.TryGetValue("Life", out int life) ? life : 0;
     }
 }
 
 // ============================================================
-// StatusData.xlsx 的 Status_Attributes sheet —— 状态公式快照启用标记
+// Status_Attributes 及同类子表 —— 状态公式快照启用标记
 //   只需状态身份；后续旧属性列保留表结构兼容，不是数值常量或逐项开关。
 //   运行时公式参数独立保存到StatusInstance.FormulaSnapshot；武器Snapshot字典用途不变。
 // ============================================================
@@ -460,6 +454,8 @@ public class StatusAttributesData
 [Serializable]
 public class EnemyMainData
 {
+    public List<string> PhaseInitiateStatuses = new List<string>();
+    public int Phase;                   // 0=无阶段（配表留空），正整数=生命阶段；与PatternID分开。
     public List<string> InitiateStatuses = new List<string>();
     public string EnemyType;             // Enemy.xlsx的明确EnemyType；空表示未配置，不能猜为Minion。
     public string EnemyFamily;           // Enemy.xlsx的生物种类；与Minion/Elite等等级类别独立。
@@ -497,6 +493,7 @@ public class EnemyMainData
 public class EnemySkillMainData
 {
     public int EnemySkillID;             // 敌人技能唯一数字ID
+    public int Phase;                    // 所属生命阶段，0表示无阶段
     public string EnemySkillID2;         // 敌人技能字符串ID（SK_Hilichurl_Dance 等）
     public string EnemySkillName;        // 技能显示名
     public List<string> SkillTags = new List<string>(); // SkillTags列，英文分号分隔
@@ -519,6 +516,7 @@ public class EnemySkillEffectData
     public string ExecuteCountHandler;
 
     public int SkillEffectID;            // 效果数字ID
+    public int Phase;                    // 与所属技能的生命阶段一致
     public string SkillEffectID2;        // 效果字符串ID（SE_Hilichurl_Dance 等）
     public int EffectIndex;              // 执行顺序
     public string EffectType;            // Damage / ApplyStatus / ApplyStatusToSelf 等
@@ -563,6 +561,7 @@ public class EnemySkillParamData
 public class EnemyAIData
 {
     public int EnemyID;                  // 敌人数字ID
+    public int Phase;                    // 所属生命阶段，0表示无阶段
     public string EnemyNameID;           // 敌人英文名
     public string EnemyName;             // 敌人显示名
     public int PatternID;                // 行为模式ID
@@ -580,6 +579,7 @@ public class EnemyAIData
 public class EnemyAIRuleData
 {
     public int EnemyID;                  // 敌人数字ID
+    public int Phase;                    // 与行为模式及技能的生命阶段一致
     public int PatternID;                // 行为模式ID（空=继承上一行）
     public string PatternType;           // Weighted等
     public int SkillID;                  // 该规则对应的技能数字ID

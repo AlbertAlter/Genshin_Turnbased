@@ -12,6 +12,10 @@ using UnityEngine;
 /// </summary>
 public static class BattleExecution
 {
+    /// <summary>胜负锁定后只允许显式BattleEnded结算（例如结束回血）；普通战斗响应停止。</summary>
+    public static bool GameplayEffectsStopped => BattleManager.Instance?.IsBattleOver == true
+        && BattleEventHub.Current?.Kind != BattleEventKind.BattleEnded
+        && ScriptHookContext.Current?.Declaration?.Kind != BattleEventKind.BattleEnded;
     /// <summary>重复内容仍属于一次效果；共享反应编号和每效果触发额度。</summary>
     public static async Task RepeatEffect(int count, string damageHook, Func<long, Task> execute,
         BattleEntity owner = null, string effectID = null)
@@ -28,6 +32,7 @@ public static class BattleExecution
             for (int i = 0; i < count; i++)
             {
                 ThrowIfCancelled();
+                if (GameplayEffectsStopped) return;
                 await execute(executionID);
                 await Flush();
             }
@@ -223,6 +228,8 @@ public static class BattleExecution
 
     public static async Task Play(BattlePresentationRequest request, Action commit)
     {
+        // 已提交的最后一hit继续显示结果；胜负锁定后不再开始新的游戏效果。
+        if (GameplayEffectsStopped) return;
         Session session = CurrentSession.Value;
         if (session == null)
         {
@@ -266,15 +273,16 @@ public static class BattleExecution
     }
 
     public static void Record(DamageResolvedEvent result) => CurrentPresentation.Value?.Record(result);
-    internal static void RecordSkillPrompt(BattleEntity actor, string name, string skillId)
-        => CurrentSession.Value?.Results.RecordPrompt(actor, name, null, skillId);
+    internal static void RecordSkillPrompt(BattleEntity actor, string name, string skillId, bool followsTargetSelection = false)
+        => CurrentSession.Value?.Results.RecordPrompt(actor, name, null, skillId, followsTargetSelection);
 
-    internal static void RecordStatusPrompt(StatusInstance status, string actionType)
+    internal static void RecordStatusPrompt(StatusInstance status, string actionType, ScriptHookContext context)
     {
         if (status != null && (actionType == "OnItsTurn" || actionType == "OnTrigger" || actionType == "OnEnd")
-            && BattleResolutionContext.CurrentAction?.IndependentStatus == status
+            && BattleResolutionContext.CurrentChain?.IndependentStatus == status
             && BattleManager.Instance != null && BattleManager.Instance.IsBattleRunning && !BattleManager.Instance.IsAwaitingAllyInput)
-            CurrentSession.Value?.Results.RecordPrompt(status.Caster, status.MainData?.StatusName, status);
+            CurrentSession.Value?.Results.RecordPrompt(status.Caster, status.MainData?.StatusName, status,
+                actionType: actionType, context: context);
     }
     public static void Record(HealResolvedEvent result) => CurrentPresentation.Value?.Record(result);
     public static void Record(ReactionOccurrence result) => CurrentPresentation.Value?.Record(result);

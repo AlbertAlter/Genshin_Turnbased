@@ -4,6 +4,58 @@ namespace GenshinTurnBased.Tests.EditMode
 {
     public class BattleFlowStatusTests
     {
+        [TestCase(false, 1, 0, 0, 0)]
+        [TestCase(true, 1, 0, 0, 0)]
+        [TestCase(false, 0, 1, 0, 0)]
+        [TestCase(true, 0, 1, 0, 0)]
+        [TestCase(false, 0, 0, 1, 0)]
+        [TestCase(true, 0, 0, 1, 0)]
+        [TestCase(false, 0, 0, 0, 1)]
+        [TestCase(true, 0, 0, 0, 1)]
+        [Timeout(9000)]
+        public void PhaseAction_OnlyEligibleRowsRollChance(bool enemy, int perTurn, int perLife, int cooldown, int perExecution)
+        {
+            using (var env = new BattleFlowTestEnv())
+            {
+                const string statusID = "ST_Eligibility";
+                const string markerID = "ST_EligibilityTriggered";
+                const string effectID = "STE_Eligibility";
+                env.ConfigureStatus(statusID, actionType: "OnItsTurn", actionEffectID2: effectID);
+                env.ConfigureStatus(markerID);
+                env.DataManager.StatusEffectDict[effectID] = new StatusEffectData
+                {
+                    StatusEffectID2 = effectID, EffectType = "ApplyStatus", Param1 = markerID,
+                    TargetType = "Self", TargetSelect = "1", Duration = 3, AddInPhase = 3, ExecuteCount = 1
+                };
+                var rows = env.DataManager.StatusActionDict[statusID];
+                var action = rows[0];
+                action.ActionKey = "Eligibility";
+                action.ScriptHook = "Chance(0.5)";
+                action.ExecuteCount = 1;
+                action.MaxTimePerTurn = perTurn;
+                action.MaxTimePerLife = perLife;
+                action.Cooldown = cooldown;
+                action.MaxTimePerExecution = perExecution;
+                rows.Add(action);
+                rows.Add(action);
+
+                env.CreateMinimalBattle();
+                env.Manager.StartBattle();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.AllyAction);
+                var owner = enemy ? env.Enemy.Entity : env.Ally.Entity;
+                var status = owner.AddStatus(statusID, owner, 3, 3, 3, env.DataManager.StatusMainDict[statusID]);
+                var random = new SequenceBattleRandomSource(new[] { 0.8f, 0.2f, 0.1f });
+                BattleRandom.SetSource(random);
+
+                env.Manager.EndAllyTurn();
+                env.Flow.AdvanceToPhase(env.Manager, TurnPhase.EnemyPreTurn);
+
+                Assert.That(owner.HasStatus(markerID), Is.True, "首次概率失败不占用额度");
+                Assert.That(status.ActionRuntime[action.ActionKey].LifeTriggerCount, Is.EqualTo(1));
+                Assert.That(random.FloatCallCount, Is.EqualTo(2), "达到限制的第三行不抽随机数");
+            }
+        }
+
         [TestCase(2, 3)]
         [TestCase(3, 3)]
         [TestCase(3, 0)]

@@ -1,0 +1,960 @@
+{
+  "Metadata": {
+    "SchemaVersion": 2,
+    "SaveId": "4dc4a2bad5eb498f984e13face51ea32",
+    "CreatedAt": "2026-11-20T22:06:37.6678441+08:00",
+    "UpdatedAt": "2026-11-20T23:04:07.9892823+08:00",
+    "GameVersion": "1.0"
+  },
+  "RunId": "493cabe76dc54fb0971d0c9caad9d9e5",
+  "StartType": 0,
+  "SourceChapterId": 0,
+  "SourceSlotIndex": 0,
+  "CurrentChapterId": 1,
+  "ResumePoint": 0,
+  "PendingBattleId": "",
+  "LastSaveReason": 6,
+  "Snapshot": {
+    "Characters": [
+      {
+        "CharacterID": 1009,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": "e0e522a4d3b44f0e8349154f9e91ff2d",
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1010,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": "500a92b2351b48448ba411bdeab30376",
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1011,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": "ed62c229da78405b867739172b7bae0a",
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1014,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": "49b5ad776af9473e8d4bdeae75abd1bc",
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1023,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": null,
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1021,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": null,
+        "EquippedArtifacts": []
+      },
+      {
+        "CharacterID": 1016,
+        "Level": 1,
+        "Experience": 0,
+        "Ascension": 0,
+        "ConstellationLevel": 0,
+        "SkillLevels": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "EquippedWeaponInstanceId": "02c859de426f486d984636a333b85c8c",
+        "EquippedArtifacts": []
+      }
+    ],
+    "CharacterVitals": [
+      {
+        "CharacterID": 1009,
+        "CurrentHealth": 793.0,
+        "MaxHealth": 793.0,
+        "CurrentEnergy": 40.0,
+        "MaxEnergy": 40.0
+      },
+      {
+        "CharacterID": 1010,
+        "CurrentHealth": 976.0,
+        "MaxHealth": 976.0,
+        "CurrentEnergy": 60.0,
+        "MaxEnergy": 60.0
+      },
+      {
+        "CharacterID": 1011,
+        "CurrentHealth": 802.0,
+        "MaxHealth": 802.0,
+        "CurrentEnergy": 80.0,
+        "MaxEnergy": 80.0
+      },
+      {
+        "CharacterID": 1014,
+        "CurrentHealth": 821.0,
+        "MaxHealth": 821.0,
+        "CurrentEnergy": 80.0,
+        "MaxEnergy": 80.0
+      },
+      {
+        "CharacterID": 1023,
+        "CurrentHealth": 857.0,
+        "MaxHealth": 857.0,
+        "CurrentEnergy": 80.0,
+        "MaxEnergy": 80.0
+      },
+      {
+        "CharacterID": 1021,
+        "CurrentHealth": 1012.0,
+        "MaxHealth": 1012.0,
+        "CurrentEnergy": 60.0,
+        "MaxEnergy": 60.0
+      },
+      {
+        "CharacterID": 1016,
+        "CurrentHealth": 801.0,
+        "MaxHealth": 801.0,
+        "CurrentEnergy": 60.0,
+        "MaxEnergy": 60.0
+      }
+    ],
+    "PartyCharacterIds": [
+      1016,
+      1010,
+      1011,
+      1014
+    ],
+    "ActivePartyPreset": 1,
+    "PartyPresets": [
+      {
+        "Number": 1,
+        "Members": [
+          1016,
+          1010,
+          1011,
+          1014
+        ]
+      }
+    ],
+    "Inventory": {
+      "Items": [
+        {
+          "ItemId": "660101",
+          "Quantity": 104
+        },
+        {
+          "ItemId": "660201",
+          "Quantity": 78
+        },
+        {
+          "ItemId": "660301",
+          "Quantity": 98
+        },
+        {
+          "ItemId": "660401",
+          "Quantity": 8
+        },
+        {
+          "ItemId": "680103",
+          "Quantity": 68250
+        },
+        {
+          "ItemId": "660501",
+          "Quantity": 17
+        },
+        {
+          "ItemId": "680102",
+          "Quantity": 160
+        },
+        {
+          "ItemId": "6102301",
+          "Quantity": 2
+        },
+        {
+          "ItemId": "680101",
+          "Quantity": 6
+        },
+        {
+          "ItemId": "6102101",
+          "Quantity": 1
+        }
+      ],
+      "Weapons": [
+        {
+          "InstanceId": "e0e522a4d3b44f0e8349154f9e91ff2d",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3014,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "500a92b2351b48448ba411bdeab30376",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3002,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "ed62c229da78405b867739172b7bae0a",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3021,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "49b5ad776af9473e8d4bdeae75abd1bc",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3020,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "a8eacec93dc64191ac27d873e7956fb6",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3009,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "ada4aead03fc49ec90f616f26830c415",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3003,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "2463d3fbf87e44b09bc83ade6ccb22cd",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3012,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "318d1c6b73574e1cb69d9278cfffbbc5",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3014,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "ad519c8d58684b9da078bf4831f3b5d2",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3001,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "376511dd1fca4753be218810aa21b7bb",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3001,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "df904460b4504621b80974b6e5260278",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3013,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "e16e72b962bf43688303fadc5ae990c7",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3013,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "0d00710504204707b36063f56c02444b",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3004,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "e9874f3bb33c4b3181325120189e7b45",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3011,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "a66d1c628a3c49ba92e9f7229a55013b",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3004,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "33ee1955de524796ae4993803c0a3ff6",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3024,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "f291a57560fb4eba9a0a31defd038ee4",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3006,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "02c859de426f486d984636a333b85c8c",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3022,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "55de1487e72f4465b53dc454c3059095",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3020,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "c517d37413144759bc85b53d6940a1ba",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3017,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "2ef99f5b11434b7494e03565db96a486",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3013,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "37f74d5074884ed092fa3030407fad06",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3017,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "fe56989213c04d76bee4969351ad1193",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3008,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "95597d8bcac14d07bbc220f9a342ccb0",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3014,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "9380f62b21b9464f87d7bfe29c66ad90",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3016,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "eef49c02507145f6b2eac66071c518ad",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3001,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "a248db46bdff4b848c46e3009f224657",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3006,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "0d6238a1170247b990fb356a8a1ad87a",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3016,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        },
+        {
+          "InstanceId": "2d1969d2cf7645338268ab9865ebb708",
+          "Experience": 0,
+          "IsLocked": false,
+          "Weapon": {
+            "WeaponID": 3091,
+            "Level": 1,
+            "Ascension": 0,
+            "Refinement": 1
+          }
+        }
+      ],
+      "Artifacts": []
+    },
+    "CurrentChapterId": 1,
+    "CurrentStageIndex": 5,
+    "CurrentNodeId": "14",
+    "ClearedNodeIds": [
+      "1",
+      "3",
+      "5",
+      "7",
+      "10"
+    ],
+    "UnlockedAscensions": null,
+    "SelectedRouteNodeIds": [
+      "1",
+      "3",
+      "5",
+      "7",
+      "10",
+      "14"
+    ],
+    "UsedNodeContentIds": [
+      "RB101",
+      "RB105",
+      "RB102",
+      "RB106",
+      "RB137",
+      "RB103"
+    ],
+    "PendingRewardData": null,
+    "PendingNodeReward": null,
+    "RunSeed": 1637671619,
+    "RandomStep": 67,
+    "WishProgress": {
+      "CharacterSinceFive": 13,
+      "CharacterSinceFour": 6,
+      "WeaponSinceFive": 0,
+      "WeaponSinceFour": 0,
+      "FivePlanSeed": 1752562535,
+      "CharacterFivePlan": {
+        "Sequence": 1,
+        "Draw": 77,
+        "IsUp": true
+      },
+      "WeaponFivePlan": {
+        "Sequence": 0,
+        "Draw": 45,
+        "IsUp": true
+      },
+      "CharacterFourUpGuaranteed": false,
+      "WeaponFourUpGuaranteed": false,
+      "History": [
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3009,
+          "PrizeName": "以理服人",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1023,
+          "PrizeName": "行秋",
+          "PrizeKind": 0,
+          "Stars": 4,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3003,
+          "PrizeName": "黎明神剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3012,
+          "PrizeName": "弹弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3014,
+          "PrizeName": "神射手之誓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3001,
+          "PrizeName": "飞天御剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3001,
+          "PrizeName": "飞天御剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3013,
+          "PrizeName": "鸦羽弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3013,
+          "PrizeName": "鸦羽弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3004,
+          "PrizeName": "暗铁剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:44.2711506Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3011,
+          "PrizeName": "白铁大剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1023,
+          "PrizeName": "行秋",
+          "PrizeKind": 0,
+          "Stars": 4,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1021,
+          "PrizeName": "诺艾尔",
+          "PrizeKind": 0,
+          "Stars": 4,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3004,
+          "PrizeName": "暗铁剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1023,
+          "PrizeName": "行秋",
+          "PrizeKind": 0,
+          "Stars": 4,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3024,
+          "PrizeName": "翡玉法球",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1016,
+          "PrizeName": "可莉",
+          "PrizeKind": 0,
+          "Stars": 5,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3006,
+          "PrizeName": "旅行剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3022,
+          "PrizeName": "甲级宝珏",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3020,
+          "PrizeName": "讨龙英杰谭",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:33:49.8470405Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3017,
+          "PrizeName": "黑缨枪",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3013,
+          "PrizeName": "鸦羽弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3017,
+          "PrizeName": "黑缨枪",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 1021,
+          "PrizeName": "诺艾尔",
+          "PrizeKind": 0,
+          "Stars": 4,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3008,
+          "PrizeName": "沐浴龙血的剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3014,
+          "PrizeName": "神射手之誓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3016,
+          "PrizeName": "反曲弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3001,
+          "PrizeName": "飞天御剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3006,
+          "PrizeName": "旅行剑",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        },
+        {
+          "ChapterId": 1,
+          "WishId": "R2004",
+          "PoolTitle": "闪焰的驻足",
+          "PoolKind": 0,
+          "PrizeId": 3016,
+          "PrizeName": "反曲弓",
+          "PrizeKind": 1,
+          "Stars": 3,
+          "DrawnAtUtc": "2026-11-20T14:34:10.5014374Z"
+        }
+      ]
+    },
+    "ShopPurchaseCounts": {
+      "1:63091": 1
+    },
+    "CompletedChapterNodeCounts": null,
+    "Flow": {
+      "Step": 1,
+      "StepId": "e5712d9ebc91457399891094cd6a60e3",
+      "Node": {
+        "NodeId": "14",
+        "StageIndex": 5,
+        "Kind": 0,
+        "ContentId": "RB103",
+        "IsChapterFinalBoss": false
+      },
+      "AppearanceParticipants": null
+    },
+    "AppearanceAwards": []
+  }
+}

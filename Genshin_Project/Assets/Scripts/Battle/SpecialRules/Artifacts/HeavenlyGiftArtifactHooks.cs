@@ -25,11 +25,11 @@ public static class HeavenlyGiftArtifactHooks
         StatusDescriptionResolver.Register(BaseDisplay, OwnerArgument);
         StatusDescriptionResolver.Register(OwnerDisplay, OwnerArgument);
         StatusDescriptionResolver.Register(ActiveDisplay, (context, index) => index == 0
-            ? ElementName(ActiveElement(context.Battle)) : null);
+            ? ElementName(ActiveElement(context.Battle), context.English) : null);
     }
 
     private static string OwnerArgument(StatusDescriptionContext context, int index)
-        => index == 0 ? ElementName(ElementOf(context.Battle, context.Caster)) : null;
+        => index == 0 ? ElementName(ElementOf(context.Battle, context.Caster), context.English) : null;
 
     public static bool Applies(BattleManager battle, StatusInstance status, string mode)
     {
@@ -74,8 +74,9 @@ public static class HeavenlyGiftArtifactHooks
         => element == "Pyro" || element == "Hydro" || element == "Electro" || element == "Cryo"
             || element == "Anemo" || element == "Geo" || element == "Dendro";
 
-    private static string ElementName(string element)
+    private static string ElementName(string element, bool english)
     {
+        if (english) return IsElement(element) ? element : "unassigned element";
         switch (element)
         {
             case "Pyro": return "火";

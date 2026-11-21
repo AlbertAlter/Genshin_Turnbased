@@ -20,17 +20,20 @@ namespace Roguelike.Tests.RouteGeneration
         private readonly Dictionary<string, Sprite> _artSprites = new Dictionary<string, Sprite>();
         private readonly List<Sprite> _brushes = new List<Sprite>();
         private RouteMapStyle _style = new RouteMapStyle();
+        public System.Func<RouteNodeData, bool> CanSelect { get; set; }
+        public System.Action<RouteNodeData> Selected { get; set; }
 
         public static string GetNodeIconPath(RouteNodeType type)
         {
             return new RouteMapStyle().GetIconPath(type);
         }
 
-        public IEnumerator ApplyStyle(RouteMapStyle style)
+        public IEnumerator ApplyStyle(RouteMapStyle style, Dictionary<string, Sprite> sharedArt = null)
         {
-            var loaded = new Dictionary<string, Sprite>();
+            var loaded = sharedArt ?? new Dictionary<string, Sprite>();
             foreach (string path in style.ArtPaths().Distinct())
             {
+                if (loaded.ContainsKey(path)) continue;
                 yield return StreamingAssetSpriteLoader.Load(path,
                     sprite => loaded[path] = PrepareNodeIcon(sprite),
                     error => Debug.LogWarning(error, this));
@@ -39,7 +42,8 @@ namespace Roguelike.Tests.RouteGeneration
             ClearChildren(_nodeLayer);
             ReleaseArt();
             _style = style;
-            foreach (KeyValuePair<string, Sprite> art in loaded) _artSprites.Add(art.Key, art.Value);
+            if (sharedArt == null)
+                foreach (var art in loaded) _artSprites.Add(art.Key, art.Value);
             foreach (RouteNodeType type in new[] { RouteNodeType.Battle, RouteNodeType.Event, RouteNodeType.Elite })
                 if (loaded.TryGetValue(style.GetIconPath(type), out Sprite icon)) _nodeIcons.Add(type, icon);
             if (style.RenderMode == RouteLineMode.BrushTexture)
@@ -58,14 +62,15 @@ namespace Roguelike.Tests.RouteGeneration
         {
             Texture2D texture = source.texture;
             Color32[] pixels = texture.GetPixels32();
-            int minX = texture.width;
-            int minY = texture.height;
+            int width = texture.width, height = texture.height;
+            int minX = width;
+            int minY = height;
             int maxX = -1;
             int maxY = -1;
-            for (int y = 0; y < texture.height; y++)
-            for (int x = 0; x < texture.width; x++)
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
-                int index = y * texture.width + x;
+                int index = y * width + x;
                 byte alpha = pixels[index].a;
                 // Treat the source as an alpha mask so Image.color is the exact UI brown.
                 pixels[index] = new Color32(255, 255, 255, alpha);
@@ -102,11 +107,14 @@ namespace Roguelike.Tests.RouteGeneration
 
         public void Render(RouteMapData map, RouteGenerationSettings settings)
         {
-            ClearChildren(_debugLayer);
             ClearChildren(_edgeLayer);
             ClearChildren(_nodeLayer);
             _content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, map.ContentWidth);
-            CreateCoordinateDebug(map, settings);
+            if (_debugLayer != null)
+            {
+                ClearChildren(_debugLayer);
+                CreateCoordinateDebug(map, settings);
+            }
 
             Dictionary<int, RouteNodeData> nodes = map.Stages.SelectMany(stage => stage.Nodes)
                 .ToDictionary(node => node.Id);
@@ -119,6 +127,7 @@ namespace Roguelike.Tests.RouteGeneration
 
         public bool ToggleCoordinateDebug()
         {
+            if (_debugLayer == null) return false;
             bool visible = !_debugLayer.gameObject.activeSelf;
             _debugLayer.gameObject.SetActive(visible);
             return visible;
@@ -263,6 +272,14 @@ namespace Roguelike.Tests.RouteGeneration
             }
             image.raycastTarget = false;
 
+            if (Selected != null)
+            {
+                var button = nodeObject.AddComponent<Button>();
+                button.targetGraphic = image;
+                button.interactable = CanSelect?.Invoke(node) == true;
+                image.raycastTarget = button.interactable;
+                button.onClick.AddListener(() => Selected(node));
+            }
             GameObject textObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
             textObject.layer = gameObject.layer;
             RectTransform textRect = textObject.GetComponent<RectTransform>();
@@ -317,15 +334,20 @@ namespace Roguelike.Tests.RouteGeneration
 
         private void ReleaseArt()
         {
-            foreach (Sprite icon in _artSprites.Values)
+            DestroyArt(_artSprites);
+            _nodeIcons.Clear();
+            _brushes.Clear();
+        }
+
+        internal static void DestroyArt(Dictionary<string, Sprite> art)
+        {
+            foreach (Sprite icon in art.Values)
             {
                 if (icon == null) continue;
                 Destroy(icon.texture);
                 Destroy(icon);
             }
-            _artSprites.Clear();
-            _nodeIcons.Clear();
-            _brushes.Clear();
+            art.Clear();
         }
 
         private void OnDestroy()

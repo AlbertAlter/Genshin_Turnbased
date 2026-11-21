@@ -34,7 +34,8 @@ public sealed class UIGoldenDissolveStyle
 
     private UIGoldenDissolveStyle() { }
 
-    public static UIGoldenDissolveStyle Load()
+    public static UIGoldenDissolveStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static UIGoldenDissolveStyle ReadPublished()
         => ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
 
     public static UIGoldenDissolveStyle ReadFile(string path)

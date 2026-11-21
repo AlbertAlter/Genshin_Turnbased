@@ -26,9 +26,6 @@ public static class BeidouScriptHooks
         BattleSpecialRules.RegisterCondition("Beidou_CounterLayer", (arg, c) => int.TryParse(arg, out int layer)
             && layer >= 0 && layer <= 2 && Active(c?.Status)
             && c.Status.CountRuntimeState is BeidouGuardCount.Memory memory && memory.Started && memory.Layers == layer);
-        BattleSpecialRules.RegisterCondition("Beidou_BurstHit", (arg, c) => string.IsNullOrEmpty(arg)
-            && c?.Status?.StatusID2 == BurstID && OwnHit(c)
-            && (c.DamageEvent.DamageType == "Normal" || c.DamageEvent.DamageType == "Heavy"));
         BattleSpecialRules.RegisterCondition("Beidou_NormalHit", (arg, c) => string.IsNullOrEmpty(arg)
             && OwnHit(c) && c.DamageEvent.DamageType == "Normal");
         BattleSpecialRules.RegisterTargets("Beidou_HitTarget()", (battle, owner) =>
@@ -48,8 +45,8 @@ public static class BeidouScriptHooks
     private static bool EnemyHit(ScriptHookContext c)
     {
         var hit = c?.DamageEvent; var source = hit?.Source;
-        return IncomingHit(c) && source.SourceKind == ReactionSourceKind.EnemySkill
-            && c.Declaration?.Header.ActionExecutionId > 0;
+        return IncomingHit(c) && source.SourceSide == BattleSide.Enemy
+            && c.Declaration?.Header.ExecutionScopeId > 0;
     }
 
     private static bool IncomingHit(ScriptHookContext c)

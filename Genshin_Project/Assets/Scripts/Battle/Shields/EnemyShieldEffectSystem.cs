@@ -9,6 +9,7 @@ public static class EnemyShieldEffectSystem
     public static void ValidateStatusDefinition(StatusMainData main)
     {
         if (!string.Equals(main?.StatusType, "Shield", StringComparison.OrdinalIgnoreCase) || DataManager.Instance == null) return;
+        TableValidator.ValidateShieldStatusDefinition(main, DataManager.Instance.StatusEffectDict.Values);
         foreach (var effect in DataManager.Instance.StatusEffectDict.Values)
             if (effect != null && effect.StatusEffectID / 100 == main.StatusID
                 && string.Equals(effect.EffectType, "Shield", StringComparison.OrdinalIgnoreCase))

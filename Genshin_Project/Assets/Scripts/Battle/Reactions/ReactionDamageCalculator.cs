@@ -180,8 +180,11 @@ public static class ReactionDamageCalculator
     }
 
     public static float GetResistanceMultiplier(BattleEntity target, string damageElement)
+        => GetResistanceMultiplier(GetResistance(target, damageElement));
+
+    internal static float GetResistance(BattleEntity target, string damageElement)
     {
-        if (target == null) return 1f;
+        if (target == null) return 0f;
 
         float resistance;
         switch (damageElement)
@@ -194,11 +197,10 @@ public static class ReactionDamageCalculator
             case "Dendro": resistance = target.DendroRes; break;
             case "Geo": resistance = target.GeoRes; break;
             case "Physical": resistance = target.PhysicalRes; break;
-            default: return 1f;
+            default: return 0f;
         }
 
-        return GetResistanceMultiplier(
-            resistance + target.ResBonus + target.GetStatusResBonus(damageElement));
+        return resistance + target.ResBonus + target.GetStatusResBonus(damageElement);
     }
 
     public static float GetResistanceMultiplier(float resistance)

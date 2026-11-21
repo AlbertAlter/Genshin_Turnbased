@@ -146,21 +146,17 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void WorkbookIndex_UsesRealRowsAndHeaders_NotNamesOrNumberPatterns_OverridesLegacyWithoutDuplicateActions()
+        public void WorkbookIndex_UsesRealRowsAndHeaders_AndRejectsDuplicateStatusIDs()
         {
             using var env = new BattleFlowTestEnv();
-            var old = Main(env, Owned, 17);
-            env.DataManager.StatusEffectDict["STE_Legacy"] = new StatusEffectData { StatusEffectID = 1701 };
-            env.DataManager.StatusActionDict[Owned] = new List<StatusActionData> { new StatusActionData { StatusID2 = Owned } };
             var first = new StatusMainData { StatusID = 123456, StatusID2 = Owned, StatusName = "新定义" };
             var second = new StatusMainData { StatusID = 987654, StatusID2 = "ST_AnotherUnrelatedName", StatusName = "另一个" };
             using var package = Workbook(first, second);
             Load(env.DataManager, package, 1020);
             Assert.That(env.DataManager.CharacterStatusIDs[1020], Is.EquivalentTo(new[] { first.StatusID2, second.StatusID2 }));
             Assert.That(env.DataManager.StatusMainDict[Owned].StatusID, Is.EqualTo(123456));
-            Assert.That(env.DataManager.StatusEffectDict.ContainsKey("STE_Legacy"), Is.False);
-            Assert.That(env.DataManager.StatusActionDict.ContainsKey(Owned), Is.False);
             Assert.Throws<TableValidationException>(() => Load(env.DataManager, package, 1019), "不同角色不允许共用同一状态ID");
+            Assert.That(env.DataManager.CharacterStatusIDs.ContainsKey(1019), Is.False);
         }
     }
 }

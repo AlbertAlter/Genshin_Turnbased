@@ -67,6 +67,7 @@ public sealed class BattleUiCombatHudSource : MonoBehaviour, IBattleUiHealthSour
             Cooldown = ally.GetCooldownRemaining(skillType),
             HasAvailableCharge = ally.GetBoundSkillMaxCharge(skillType) > 0
                 && ally.GetBoundSkillCurrentCharge(skillType) > 0,
-            Icon = ally.GetBoundSkillIcon(skillType) };
+            Icon = ally.GetBoundSkillIcon(skillType), Element = ally.Element,
+            Energy = ally.Entity.CurrentEnergy, MaximumEnergy = ally.Entity.MaxEnergy };
     }
 }

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <displayList>
+    <image id="n1_c0011" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c0011" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="武器精炼" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c0011" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择未装备的同名武器" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c0011" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c0011" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c0011" name="materialPanel" xy="31,128" size="449,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c0011" name="outcomePanel" xy="495,128" size="410,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <text id="n8_c0011" name="materialTitle" xy="45,139" size="422,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="选择同名武器" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n9_c0011" name="resultTitle" xy="512,139" size="370,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="精炼效果" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n10_c0011" name="sameWeaponPlate" xy="45,182" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n11_c0011" name="sameWeaponIconPlate" xy="55,193" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <loader id="n12_c0011" name="sameWeaponIcon" xy="55,193" size="42,42" url="ui://chrlist1i002b" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <text id="n13_c0011" name="sameWeaponTitle" xy="106,189" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="同名武器" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n14_c0011" name="sameWeaponDetail" xy="106,216" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="Lv.1 · 精炼 1 阶 · 持有 4 件" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n15_c0011" name="sameWeaponQuantity" xy="340,196" size="116,35" src="c0012" fileName="Quantity4.xml" />
+    <text id="n16_c0011" name="changeLabel0" xy="513,184" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="精炼等阶" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n17_c0011" name="changeValue0" xy="658,184" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="精炼 1 阶 → 2 阶" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n18_c0011" name="changeLine0" xy="514,230" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n19_c0011" name="changeLabel1" xy="513,246" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="踏火止水" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n20_c0011" name="changeValue1" xy="658,246" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="伤害提高 12% → 15%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n21_c0011" name="changeLine1" xy="514,292" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n22_c0011" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="仅可消耗未装备的同名武器。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

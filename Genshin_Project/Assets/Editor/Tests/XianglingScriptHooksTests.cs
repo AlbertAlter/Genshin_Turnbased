@@ -183,7 +183,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using var e = new BattleFlowTestEnv(); Setup(e);
             e.DataManager.SkillLevelDict[$"{BattleFlowTestEnv.AllyID}_0"][1].Hits2 = ".2*TotalATK,0";
             await Cast(e, "Burst", 3); var root = e.Ally.Entity.GetStatus(S+"Pyronado");
-            Assert.That(root.RuntimeIntValue, Is.EqualTo(6));
+            Assert.That(root.RuntimeIntValue, Is.EqualTo(8));
             var hits = new List<int>(); var aliveAtLastHit = new List<bool>();
             bool activeWhenZero=false;
             using var counts=BattleEventHub.Subscribe<ResourceEventData>(BattleEventKind.ResourceChanged,(_,f)=>
@@ -191,14 +191,14 @@ namespace GenshinTurnBased.Tests.EditMode
             using var listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, f) =>
             { if (f.Source.SourceEffectID == E+"PyronadoDamage") { hits.Add(f.Subject.SlotPosition); aliveAtLastHit.Add(root.IsActive); } }, 0);
             e.DataManager.SkillEffectDict["SE_Heavy_Xiangling"].DamageType = "Normal";
-            await Cast(e, "Heavy", 1); Assert.That(root.RuntimeIntValue, Is.EqualTo(6));
-            await Cast(e, "Normal", 0); Assert.That(root.RuntimeIntValue, Is.EqualTo(5));
-            await Cast(e, "Normal", 0, e.Manager.Allies[1]); Assert.That(root.RuntimeIntValue, Is.EqualTo(4));
-            for (int i = 0; i < 4; i++) await Cast(e, "Normal", 0);
-            Assert.That(hits.Count, Is.EqualTo(18)); Assert.That(aliveAtLastHit.All(v => v), Is.True);
+            await Cast(e, "Heavy", 1); Assert.That(root.RuntimeIntValue, Is.EqualTo(8));
+            await Cast(e, "Normal", 0); Assert.That(root.RuntimeIntValue, Is.EqualTo(7));
+            await Cast(e, "Normal", 0, e.Manager.Allies[1]); Assert.That(root.RuntimeIntValue, Is.EqualTo(6));
+            for (int i = 0; i < 6; i++) await Cast(e, "Normal", 0);
+            Assert.That(hits.Count, Is.EqualTo(24)); Assert.That(aliveAtLastHit.All(v => v), Is.True);
             Assert.That(root.RuntimeIntValue, Is.Zero); Assert.That(root.IsActive, Is.False);
             Assert.That(activeWhenZero,Is.True,"扣至0时仍存在，由下一条配置的RemoveStatus结束。");
-            await Cast(e, "Normal", 0); Assert.That(hits.Count, Is.EqualTo(18));
+            await Cast(e, "Normal", 0); Assert.That(hits.Count, Is.EqualTo(24));
         }
 
         [UnityTest]
@@ -228,7 +228,7 @@ namespace GenshinTurnBased.Tests.EditMode
         {
             using var e = new BattleFlowTestEnv(); Setup(e, 6); var owner = e.Ally.Entity;
             await Cast(e, "Burst", 3); var root = owner.GetStatus(S+"Pyronado");
-            Assert.That(root.RuntimeIntValue, Is.EqualTo(9)); Assert.That(root.RemainingPhaseCount, Is.EqualTo(3));
+            Assert.That(root.RuntimeIntValue, Is.EqualTo(12)); Assert.That(root.RemainingPhaseCount, Is.EqualTo(3));
             var child = root.BoundStatuses.Single(); Assert.That(child.Host, Is.SameAs(e.Manager.AllyTeam));
             Assert.That(root.FormulaSnapshot.Attribute("TotalATK", E+"PyronadoDamage", "Pyro"), Is.EqualTo(100));
             await Cast(e, "Skill", 2); var guoba = owner.GetStatus(S+"Guoba"); owner.TotalATK = 500;

@@ -13,7 +13,7 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "Characters.xlsx");
         if (!File.Exists(path)) { Debug.LogWarning("StreamingAssets/Data/Characters.xlsx not found"); return; }
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
         var sheet = pkg.Workbook.Worksheets[0];
         if (sheet == null) return;
         int startRow = GetDataStartRow(sheet);
@@ -133,14 +133,11 @@ public partial class DataManager
         var files = Directory.GetFiles(charDir, "*.xlsx");
         foreach (string f in files)
         {
+            if (!DataSourcePreflightValidator.IsPublishedWorkbook(f)) continue;
             string fileName = Path.GetFileNameWithoutExtension(f);
-            if (fileName.StartsWith("#", StringComparison.Ordinal) ||
-                fileName.StartsWith("~$", StringComparison.Ordinal) ||
-                fileName.StartsWith("0_", StringComparison.Ordinal))
-                continue;
             try
             {
-                using var pkg = new ExcelPackage(new FileInfo(f));
+                using var pkg = OpenDataWorkbook(f, "Characters/" + Path.GetFileName(f));
                 var sheets = pkg.Workbook.Worksheets;
                 if (sheets.Count == 0) continue;
 
@@ -338,8 +335,6 @@ public partial class DataManager
                             TryValidate(validationSource, () => TableValidator.ValidateSwitchIn("SkillsEffect", row,
                                 data.Param1, data.Param3, data.DamageType, data.DamageHook, data.AddInPhase, data.TriggerPhase));
                         // ChangeControl 专属校验（2026-08-11）：技能效果表允许，填了Duration定时结束，没填=永久
-                        if (data.EffectType == "ResetCooldown")
-                            TryValidate(validationSource, () => TableValidator.ValidateResetCooldown("SkillsEffect", row, data.Param1));
                         if (data.EffectType == "Cooldown")
                             TryValidate(validationSource, () => TableValidator.ValidateCooldown("SkillsEffect", row, data.Param1, data.Param2));
                         if (data.EffectType == "BondOfLife")
@@ -482,6 +477,7 @@ public partial class DataManager
                         TalentDict[charId].Add(data);
                     }
                 }
+                LoadCharacterInitiateStatuses(sheets["BattleInitiate"], workbookCharacterId);
             }
             catch (TableValidationException)
             {
@@ -494,6 +490,39 @@ public partial class DataManager
         }
     }
 
+    private void LoadCharacterInitiateStatuses(ExcelWorksheet sheet, int workbookCharacterId)
+    {
+        if (sheet?.Dimension == null) return;
+        var headers = ExcelTableHeaders.For(sheet);
+        var columns = headers.NumberedColumns("InitiateStatus");
+        int first = headers.Optional("InitiateStatus");
+        if (first > 0) columns.Insert(0, first);
+        if (columns.Count == 0) return;
+
+        int idColumn = headers.Required("CharacterID");
+        for (int row = headers.DataStartRow; row <= GetSheetMaxRow(sheet); row++)
+        {
+            foreach (int column in columns)
+            {
+                string status = sheet.Cells[row, column].Text.Trim();
+                if (status.Length == 0) continue;
+                if (workbookCharacterId <= 0 || SafeGetInt(sheet.Cells[row, idColumn].Value) != workbookCharacterId)
+                    throw new TableValidationException($"[BattleInitiate] 第 {row} 行 CharacterID 必须为本工作簿角色 {workbookCharacterId}。");
+                if (!CharacterInitiateStatusDict.TryGetValue(workbookCharacterId, out var statuses))
+                    CharacterInitiateStatusDict[workbookCharacterId] = statuses = new List<string>();
+                if (!statuses.Contains(status)) statuses.Add(status);
+            }
+        }
+    }
+
+    private void ValidateCharacterInitiateStatuses()
+    {
+        foreach (var entry in CharacterInitiateStatusDict)
+            foreach (string status in entry.Value)
+                if (!StatusMainDict.ContainsKey(status))
+                    throw new TableValidationException($"角色 {entry.Key} 的 BattleInitiate 引用了不存在的状态 {status}。");
+    }
+
     // ================================================================
     //  Character_Growth_Curve.xlsx（多sheet：GrowthCurve_1 / GrowthCurve_2）
     //  按 sheet 序号作为曲线ID（第1张=1，第2张=2，依此类推）
@@ -502,7 +531,7 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "Character_Growth_Curve.xlsx");
         if (!File.Exists(path)) return;
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
         for (int s = 0; s < pkg.Workbook.Worksheets.Count; s++)
         {
             var sheet = pkg.Workbook.Worksheets[s];

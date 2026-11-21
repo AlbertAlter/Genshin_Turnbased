@@ -27,7 +27,7 @@ public static class ReviveEffect
         using var declarations = BattleResolutionContext.BeginCollection();
         foreach (BattleEntity target in targets)
         {
-            if (target == null || target.IsAlive || !EquipmentStatusLifetime.CanExecute(sourceStatus)) continue;
+            if (target == null || target.HasWithdrawn || !target.IsDead || !EquipmentStatusLifetime.CanExecute(sourceStatus)) continue;
             var battle = BattleManager.Instance;
             if (battle != null && (battle.IsBattleOver || battle.GetEntityByPosition(target.Side, target.SlotPosition) != target)) continue;
             float maximum = target.GetFinalHP();

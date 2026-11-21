@@ -109,27 +109,24 @@ internal static class PsdLayoutImporter
     private static RectTransform ResolveParent(PsdDocumentInfo document)
     {
         if (Selection.activeTransform is RectTransform selectedRect &&
-            selectedRect.GetComponentInParent<Canvas>() != null)
+            selectedRect.GetComponentInParent<Canvas>() != null &&
+            selectedRect.GetComponent<ProjectUiCanvas>() == null)
             return selectedRect;
 
-        Canvas canvas = Object.FindObjectOfType<Canvas>();
-        if (canvas == null)
+        var sharedCanvas = ProjectUiCanvasEditor.FindInActiveScene();
+        if (sharedCanvas == null)
         {
-            var canvasObject = new GameObject(
-                "Canvas",
-                typeof(RectTransform),
-                typeof(Canvas),
-                typeof(CanvasScaler),
-                typeof(GraphicRaycaster));
-            Undo.RegisterCreatedObjectUndo(canvasObject, "Create PSD UI Canvas");
-            canvas = canvasObject.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(document.width, document.height);
-            scaler.matchWidthOrHeight = 0.5f;
+            sharedCanvas = ProjectUiCanvasEditor.InstantiateInActiveScene();
+            Undo.RegisterCreatedObjectUndo(sharedCanvas.gameObject, "Create PSD UI Canvas");
+            Undo.RecordObject(sharedCanvas.ContentFrame, "Set PSD UI Frame");
+            var scaler = sharedCanvas.GetComponent<CanvasScaler>();
+            Undo.RecordObject(scaler, "Set PSD UI Reference Size");
+            sharedCanvas.SetDesignSize(new Vector2(document.width, document.height));
+            PrefabUtility.RecordPrefabInstancePropertyModifications(sharedCanvas.ContentFrame);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(scaler);
         }
-        return (RectTransform)canvas.transform;
+        var canvas = ProjectUiCanvasEditor.FindAuthoredCanvas(sharedCanvas);
+        return canvas != null ? (RectTransform)canvas.transform : sharedCanvas.ContentFrame;
     }
 
     private static void BuildChildren(

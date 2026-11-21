@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1536,864">
+  <controller name="page" pages="0,属性,1,技能,2,装备,3,状态" selected="0" />
+  <displayList>
+    <image id="n0_root1" name="panelBackground" xy="0,0" size="1536,864" src="imgbg" fileName="PanelBackground.png" touchable="false" />
+    <image id="n1_root1" name="contentTint" xy="423,0" size="1113,864" src="imgtn" fileName="ContentTint.png" touchable="false" />
+    <image id="n2_root1" name="panelBorder" xy="0,0" size="1536,864" src="imgfr" fileName="PanelBorder.png" touchable="false" />
+    <image id="n3_root1" name="characterCard" xy="58,123" size="314,538" src="imgam" fileName="AmberSample.png" touchable="false" />
+    <text id="n4_root1" name="characterName" xy="58,670" size="314,52" font="Microsoft YaHei" fontSize="33" color="#716758" text="安柏" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n5_root1" name="characterLevel" xy="58,722" size="314,36" font="Microsoft YaHei" fontSize="21" color="#716758" text="Lv. 20" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n6_root1" name="skillLevels" xy="58,758" size="314,36" font="Microsoft YaHei" fontSize="21" color="#716758" text="技能 7/7/9" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n16_root1" name="tabTrack" xy="448,23" size="1060,50" type="rect" fillColor="#776B5B" lineSize="0" corner="6,6,0,0" touchable="false" />
+    <graph id="n17_root1" name="tabTrackLowlight" xy="448,71" size="1060,2" type="rect" fillColor="#685B4B" lineSize="0" touchable="false" />
+    <component id="n7_root1" name="attributesTab" xy="474,23" size="252,51" src="tab01" fileName="PageTab.xml">
+      <Button title="属性" controller="page" page="0" checked="true" />
+    </component>
+    <component id="n8_root1" name="attributesPage" xy="474,109" size="1008,665" src="attr1" fileName="Attributes.xml">
+      <gearDisplay controller="page" pages="0" />
+    </component>
+    <component id="n9_root1" name="skillsTab" xy="726,23" size="252,51" src="tab01" fileName="PageTab.xml">
+      <Button title="技能" controller="page" page="1" checked="false" />
+    </component>
+    <component id="n10_root1" name="skillsPage" xy="474,109" size="1008,665" src="skll1" fileName="Skills.xml">
+      <gearDisplay controller="page" pages="1" />
+    </component>
+    <component id="n11_root1" name="equipmentTab" xy="978,23" size="252,51" src="tab01" fileName="PageTab.xml">
+      <Button title="装备" controller="page" page="2" checked="false" />
+    </component>
+    <component id="n12_root1" name="equipmentPage" xy="474,109" size="1008,665" src="equip" fileName="Equipment.xml">
+      <gearDisplay controller="page" pages="2" />
+    </component>
+    <component id="n13_root1" name="statusTab" xy="1230,23" size="252,51" src="tab01" fileName="PageTab.xml">
+      <Button title="状态" controller="page" page="3" checked="false" />
+    </component>
+    <component id="n14_root1" name="statusPage" xy="474,109" size="1008,665" src="stat1" fileName="Status.xml">
+      <gearDisplay controller="page" pages="3" />
+    </component>
+  </displayList>
+</component>

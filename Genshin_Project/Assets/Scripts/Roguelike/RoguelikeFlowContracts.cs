@@ -1,4 +1,27 @@
 using System;
+using System.Globalization;
+using System.IO;
+
+internal static class RoguelikeStageId
+{
+    internal static int Parse(string value, string error)
+    {
+        if (value.Length < 2 || (value[0] != 'R' && value[0] != 'r') ||
+            !int.TryParse(value.Substring(1), NumberStyles.None, CultureInfo.InvariantCulture, out int id) ||
+            id < 101 || id % 100 == 0)
+            throw new InvalidDataException(error + $"节点编号无效 [{value}]。");
+        return id;
+    }
+
+    internal static bool IsReached(int stageId, RoguelikeProgressSnapshot snapshot)
+    {
+        int chapter = stageId / 100, node = stageId % 100;
+        if (snapshot.CurrentChapterId < chapter) return false;
+        if (snapshot.CurrentChapterId == chapter) return snapshot.CurrentStageIndex >= node - 1;
+        return snapshot.CompletedChapterNodeCounts == null ||
+            !snapshot.CompletedChapterNodeCounts.TryGetValue(chapter, out int count) || count >= node;
+    }
+}
 
 public enum RoguelikeFlowStep
 {
@@ -25,6 +48,8 @@ public sealed class RoguelikeNodeSelection
     public int StageIndex;
     public RoguelikeNodeKind Kind;
     public string ContentId;
+    // Explicit route/content identity. Not every Boss must be a chapter-ending Boss.
+    public bool IsChapterFinalBoss;
 }
 
 /// <summary>可选的流程恢复数据。旧存档没有该字段时不改变原存档结构的含义。</summary>
@@ -34,6 +59,7 @@ public sealed class RoguelikeFlowData
     public RoguelikeFlowStep Step;
     public string StepId;
     public RoguelikeNodeSelection Node;
+    public System.Collections.Generic.List<AppearanceBattleParticipant> AppearanceParticipants;
 }
 
 /// <summary>

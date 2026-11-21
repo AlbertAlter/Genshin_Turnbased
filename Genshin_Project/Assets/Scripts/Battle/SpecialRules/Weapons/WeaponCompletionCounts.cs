@@ -151,12 +151,14 @@ internal sealed class KingsSquireWeaponCount : CountStatusHandler
         return terminal;
     }
 
-    internal static Task EndNaturally(StatusInstance status, object host, List<StatusActionData> actions)
+    internal static Task EndNaturally(StatusInstance status, object host, List<StatusActionData> actions,
+        BattleStatusPromptOccurrence prompts)
     {
         var owner = WeaponCountLifetime.RequireOwner(status, host, 3095);
         if (!status.IsActive || !owner.HasStatusInstance(status) || status.IsPermanent || status.RemainingPhaseCount > 0)
             return Task.CompletedTask;
         var context = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
+        context.ActionPrompts = prompts;
         context.Caster = owner; context.Status = status; context.StatusHost = owner; context.Target = owner;
         var terminal = Claim(status, owner, actions, context);
         return terminal == null ? Task.CompletedTask : owner.CharacterCtrl.ExecuteCommittedWeaponEnd(terminal);

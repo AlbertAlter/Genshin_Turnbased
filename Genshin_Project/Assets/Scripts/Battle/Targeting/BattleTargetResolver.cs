@@ -80,11 +80,13 @@ public static class BattleTargetResolver
         }
 
         var boundStatusHost = selfUsesOrigin && targetType == "Self" ? origin as BattleEntity : null;
+        bool directSingle = IsSingleEnemySelection(sourceSide, targetType, targetNumber, targetOverride, targetSelect);
         request.IsEligible = position =>
         {
             var entity = battle.GetEntityByPosition(targetSide, position);
-            if (entity == null || (deadOnly ? entity.IsAlive : !entity.IsAlive)) return false;
+            if (entity == null || entity.HasWithdrawn || (deadOnly ? entity.IsAlive : !entity.IsAlive)) return false;
             if (entity.IsOffField && entity != boundStatusHost) return false;
+            if (directSingle && PublicControlStates.IsHidden(entity)) return false;
             if (targetType == "AlliesOnly" && entity == source) return false;
             return true;
         };
@@ -98,7 +100,7 @@ public static class BattleTargetResolver
             for (int position = 1; position <= request.MaxPosition; position++)
             {
                 var target = battle.GetEntityByPosition(targetSide, position);
-                if (IsTaunter(target)) request.TauntPositions.Add(position);
+                if (IsTaunter(target) && request.IsEligible(position)) request.TauntPositions.Add(position);
             }
         }
 
@@ -136,6 +138,8 @@ public static class BattleTargetResolver
         }
 
         var resolved = TargetResolver.Resolve(request);
+        if (directSingle)
+            resolved.Positions.RemoveAll(p => PublicControlStates.IsHidden(battle.GetEntityByPosition(targetSide, p)));
         resolved.BoundStatusHost = boundStatusHost;
         return resolved;
     }
@@ -150,7 +154,7 @@ public static class BattleTargetResolver
         foreach (int position in result.Positions)
         {
             var entity = battle.GetEntityByPosition(result.Side, position);
-            if (entity != null && (deadOnly ? entity.IsDead : entity.IsAlive)
+            if (entity != null && !entity.HasWithdrawn && (deadOnly ? entity.IsDead : entity.IsAlive)
                 && (!entity.IsOffField || entity == result.BoundStatusHost)) entities.Add(entity);
         }
         return entities;
@@ -171,6 +175,26 @@ public static class BattleTargetResolver
     }
 
     public static bool IsTeamTarget(string targetType) => targetType == "AllyTeam" || targetType == "EnemyTeam";
+
+    internal static bool IsFieldTarget(string targetType)
+        => targetType?.EndsWith("Field", StringComparison.Ordinal) == true;
+
+    /// <summary>保留效果声明的宿主类型；目标解析器仍由来源入口调用一次。</summary>
+    internal static IEnumerable<object> ResolveStatusEffectHosts(string targetType, Func<TargetResolutionResult> resolve)
+    {
+        if (IsTeamTarget(targetType)) return GetTeams(BattleManager.Instance, resolve());
+
+        var result = resolve();
+        if (!result.IsValid) return Array.Empty<object>();
+        var battle = BattleManager.Instance;
+        if (IsFieldTarget(targetType)) return GetFields(battle, result);
+        return GetEntities(battle, result);
+    }
+
+    public static bool IsSingleEnemySelection(BattleSide source, string type, int number, string targetOverride, string select = null)
+        => source == BattleSide.Ally && type == "Enemy"
+            && (string.IsNullOrWhiteSpace(select) ? number == 1 && string.IsNullOrWhiteSpace(targetOverride)
+                : select.Trim() == "1" && !(targetOverride?.Contains(",") ?? false));
 
     public static bool IsTaunter(BattleEntity entity)
         => entity?.IsOnField == true && entity.HasStatus("Taunt");

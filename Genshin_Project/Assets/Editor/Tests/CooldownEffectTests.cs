@@ -13,9 +13,11 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase("-2", -2)]
         [TestCase("0", 0)]
         [TestCase("-2147483648", int.MinValue)]
-        public void SignedDelta_IsAccepted(string text, int expected)
+        [TestCase("Reset", null)]
+        [TestCase(" reset ", null)]
+        public void CooldownParameter_IsAccepted(string text, int? expected)
         {
-            Assert.That(CooldownParameters.TryParseAmount(text, out int actual), Is.True);
+            Assert.That(CooldownParameters.TryParse(text, out int? actual), Is.True);
             Assert.That(actual, Is.EqualTo(expected));
             Assert.DoesNotThrow(() => TableValidator.ValidateCooldown("test", 1, "Skill", text));
         }
@@ -26,7 +28,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase("2147483648")]
         public void UndefinedOrOutOfRangeDelta_IsRejected(string text)
         {
-            Assert.That(CooldownParameters.TryParseAmount(text, out _), Is.False);
+            Assert.That(CooldownParameters.TryParse(text, out _), Is.False);
             Assert.Throws<TableValidationException>(() => TableValidator.ValidateCooldown("test", 1, "Skill", text));
         }
 

@@ -14,11 +14,13 @@ using UnityEngine;
 /// </summary>
 public static class ReferencedArtAssetsSync
 {
+    private const string PreferredCharacterVideoFolder = "Character_AnimatedwithBG";
+
     private static readonly HashSet<string> ImageExtensions = new HashSet<string>(
         new[] { ".png", ".jpg", ".jpeg", ".bmp", ".tga", ".tif", ".tiff", ".gif", ".webp", ".svg", ".exr", ".hdr" },
         StringComparer.OrdinalIgnoreCase);
 
-    public static void SyncReferencedImages()
+    public static bool SyncReferencedImages()
     {
         string dataRoot = Path.GetFullPath(Path.Combine(Application.streamingAssetsPath, "Data"));
         string sourceRoot = ArtAssetsImageSync.GetSourceRoot();
@@ -26,7 +28,7 @@ public static class ReferencedArtAssetsSync
         if (!Directory.Exists(sourceRoot))
         {
             Debug.LogError("art_assets 美术源目录不存在：" + sourceRoot);
-            return;
+            return false;
         }
 
         var required = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -34,8 +36,31 @@ public static class ReferencedArtAssetsSync
         if (Directory.Exists(dataRoot)) CollectDirectImageReferences(dataRoot, required, warnings);
         else warnings.Add("StreamingAssets/Data 不存在；本次只按 Charts/UI 收集美术资源：" + dataRoot);
         CollectSkillIcons(dataRoot, sourceRoot, required, warnings);
+        required.Add(BattleRosterStatusBar.Background);
+        // Status glyphs can also be chosen by the shared attribute/category resolver.
+        string statusIcons = SafeCombine(sourceRoot, "Status_Icon");
+        if (Directory.Exists(statusIcons))
+            foreach (string icon in Directory.EnumerateFiles(statusIcons, "*.png"))
+                required.Add(GetRelativePath(sourceRoot, icon));
+        foreach (string element in new[] { "Anemo", "Cryo", "Dendro", "Electro", "Geo", "Hydro", "Pyro" })
+            required.Add($"Skill_Icon/#Others/{element}_BG.png");
         CollectUiTableReferences(sourceRoot, required, warnings);
         CollectElementAuraIcons(required, warnings);
+        CollectAppearanceArt(sourceRoot, required);
+        CollectWishArt(dataRoot, sourceRoot, required, warnings);
+        CollectItemListArt(required);
+        required.Add(UIProjectMenuBackground.EmblemPath.Substring("art_assets/".Length));
+        required.Add(RoguelikeShopView.EmblemArtPath.Substring("art_assets/".Length));
+        CollectRosterArt(dataRoot, sourceRoot, required, warnings);
+        required.Add("Title_Menu.png");
+        foreach (string shortcut in new[] { "WishIcon", "CharacterIcon", "BackpackIcon", "PartySetupIcon" })
+            required.Add("UI/Icon/" + shortcut + ".png");
+        required.Add("UI/BattleField1/UI_components/CharacterPage/角色边框_1536x864@1x.png");
+        required.Add("UI/BattleField1/UI_components/CharacterPage/HealthValueIcon.png");
+        required.Add("UI/BattleField1/UI_components/CharacterPage/ShieldValueIcon.png");
+        required.Add(UIPageNavigation.CloseIconPath.Substring("art_assets/".Length));
+        required.Add("Others/PaimonEmblem_ProjectWhite.png");
+        required.Add("UI/Status/status-name-background.svg");
         // Card overlays can be serialized in existing scenes without UI-table rows.
         required.Add("UI/BattleField1/UI_components/card/CardShadow.png");
         required.Add("UI/BattleField1/UI_components/card/CardInnerShadow.png");
@@ -50,8 +75,9 @@ public static class ReferencedArtAssetsSync
         CollectStageBackgrounds(sourceRoot, required, warnings);
         CollectCardAnimations(sourceRoot, required, warnings);
         CollectCardVideos(sourceRoot, required, warnings);
-        CollectAnimatedCharacters(sourceRoot, required, warnings);
-        CollectAnimatedEnemies(sourceRoot, required, warnings);
+        var sourceOverrides = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var characterVideos = CollectAnimatedVideos(sourceRoot, UICardVideoCatalog.CharacterFolder, required, warnings, sourceOverrides);
+        var enemyVideos = CollectAnimatedVideos(sourceRoot, "Enemy_Animated", required, warnings, sourceOverrides);
         CollectRouteNodeIcons(required, warnings);
         CharacterCardArtManifest cardManifest = CollectCharacterCards(dataRoot, sourceRoot, required, warnings);
         EnemyArtManifest enemyManifest = CollectEnemyArt(dataRoot, sourceRoot, required, warnings);
@@ -75,7 +101,8 @@ public static class ReferencedArtAssetsSync
                     break;
                 }
 
-                string sourcePath = SafeCombine(sourceRoot, relativePath);
+                string sourcePath = SafeCombine(sourceRoot,
+                    sourceOverrides.TryGetValue(relativePath, out string source) ? source : relativePath);
                 string targetPath = SafeCombine(targetRoot, relativePath);
                 if (!File.Exists(sourcePath))
                 {
@@ -99,6 +126,8 @@ public static class ReferencedArtAssetsSync
             {
                 WriteCharacterCardManifest(targetRoot, cardManifest);
                 WriteEnemyArtManifest(targetRoot, enemyManifest);
+                WriteVideoCatalog(targetRoot, UICardVideoCatalog.CharacterManifestPath, UICardVideoCatalog.CharacterFolder, characterVideos);
+                WriteVideoCatalog(targetRoot, UICardVideoCatalog.EnemyManifestPath, "Enemy_Animated", enemyVideos);
             }
         }
         finally
@@ -114,6 +143,115 @@ public static class ReferencedArtAssetsSync
             $"按配表同步美术资源完成：识别 {paths.Length}，复制/更新 {copied}，跳过 {skipped}，" +
             $"缺失 {missing.Count}，角色表 {cardManifest.characters.Length}，有图片的敌人 {enemyManifest.enemies.Length}。" +
             (cancelled ? "同步已取消，角色和敌人图片清单未改动。" : string.Empty));
+        return !cancelled;
+    }
+
+    private static void CollectAppearanceArt(string sourceRoot, HashSet<string> result)
+    {
+        foreach (string folder in new[] { "CardBack", "Character_Bare/Frame" })
+        {
+            string directory = SafeCombine(sourceRoot, folder);
+            if (!Directory.Exists(directory)) continue;
+            foreach (string path in Directory.EnumerateFiles(directory, "*.png", SearchOption.TopDirectoryOnly))
+                result.Add(GetRelativePath(sourceRoot, path));
+        }
+    }
+
+    private static void CollectWishArt(string dataRoot, string sourceRoot, HashSet<string> result, List<string> warnings)
+    {
+        string uiRoot = SafeCombine(sourceRoot, "UI/Wish");
+        if (Directory.Exists(uiRoot))
+            foreach (string image in Directory.EnumerateFiles(uiRoot, "*.png"))
+                result.Add(GetRelativePath(sourceRoot, image));
+
+        string path = Path.Combine(dataRoot, "Roguelike", RoguelikeWishCatalog.WorkbookName);
+        if (!File.Exists(path)) return;
+        try
+        {
+            var pools = RoguelikeWishCatalog.Load(path).Pools;
+            foreach (string image in new[] { RoguelikeWishTile.WeaponBackdropPath(3),
+                RoguelikeWishTile.WeaponBackdropPath(4), RoguelikeWishTile.WeaponBackdropPath(5) })
+                result.Add(image.Substring("art_assets/".Length));
+            var weapons = new HashSet<int>(pools.Where(pool => pool.Featured.Kind == RoguelikeWishKind.Weapon)
+                .SelectMany(pool => pool.FourStars.Select(prize => prize.Id).Append(pool.Featured.Id)));
+            using var book = new ExcelPackage(new FileInfo(Path.Combine(dataRoot, "WeaponAttributes.xlsx")));
+            var sheet = book.Workbook.Worksheets["Attributes"] ?? throw new InvalidDataException("武器表缺少 Attributes。");
+            var headers = ExcelTableHeaders.For(sheet);
+            headers.Require("WeaponID", "Star");
+            for (int row = headers.DataStartRow; row <= (sheet.Dimension?.End.Row ?? 1); row++)
+                if (headers.Cell(row, "Star").Text.Trim() == "3" && int.TryParse(headers.Cell(row, "WeaponID").Text, out int id))
+                    weapons.Add(id);
+            foreach (int id in weapons)
+            {
+                result.Add(UICardFactory.WeaponArtFolder.Substring("art_assets/".Length) + $"{id}_01.png");
+                result.Add(RoguelikeWishTile.WeaponIconFolder.Substring("art_assets/".Length) + $"{id}_01.png");
+            }
+        }
+        catch (Exception error) { warnings.Add("祈愿美术资源未完整收集：" + error.Message); }
+    }
+    private static void CollectItemListArt(HashSet<string> result)
+    {
+        foreach (string path in new[] { UIItemListIcon.IconMaskPath, UIItemListIcon.ValueBarPath, UIItemListIcon.SelectionOutlinePath })
+            result.Add(path.Substring("art_assets/".Length));
+        for (int rarity = 1; rarity <= 5; rarity++)
+            result.Add(UIItemListIcon.GetRarityBackdropPath(rarity).Substring("art_assets/".Length));
+        string characterList = RoguelikeRosterView.CharacterListArtPath.Substring("art_assets/".Length);
+        foreach (string asset in new[]
+        {
+            "Shapes/TileMask.png", "Shapes/FilterBox.png", "Shapes/TitleDiamond.png",
+            "Shapes/DropdownChevron.png", "Shapes/RoundedMask.png", "Shapes/CircleMask.png",
+            "Rarity/background_purple.png", "Rarity/background_gold.png", "Details/Lock.png", "Details/Unlock.png",
+            "Details/flower.png", "Details/plume.png", "Details/sands.png", "Details/goblet.png", "Details/circlet.png"
+        })
+            result.Add(characterList + asset);
+        foreach (string element in new[] { "Anemo", "Cryo", "Dendro", "Electro", "Geo", "Hydro", "Pyro" })
+        {
+            result.Add(characterList + $"Details/element{element}.png");
+            result.Add(characterList + $"Details/disc{element}.png");
+        }
+    }
+
+    private static void CollectRosterArt(string dataRoot, string sourceRoot, HashSet<string> result, List<string> warnings)
+    {
+        string path = Path.Combine(dataRoot, RoguelikeItemCatalog.WorkbookName);
+        if (!File.Exists(path)) return;
+        try
+        {
+            using var book = new ExcelPackage(new FileInfo(path));
+            foreach (var sheet in book.Workbook.Worksheets)
+            {
+                if (sheet.Name == "UpgradeMaterial")
+                {
+                    var materials = ExcelTableHeaders.For(sheet);
+                    materials.Require("ItemID", "Icon");
+                    for (int row = materials.DataStartRow; row <= (sheet.Dimension?.End.Row ?? 1); row++)
+                    {
+                        string itemId = materials.Cell(row, "ItemID").Text.Trim();
+                        if (itemId.Length == 0 || !itemId.All(char.IsDigit) ||
+                            !string.IsNullOrWhiteSpace(materials.Cell(row, "Icon").Text)) continue;
+                        string icon = $"ItemIcon/{itemId}.png";
+                        if (File.Exists(SafeCombine(sourceRoot, icon))) result.Add(icon);
+                    }
+                    continue;
+                }
+                if (sheet.Name != "Weapon" && sheet.Name != "Artifact" && sheet.Name != "Constellation") continue;
+                var columns = ExcelTableHeaders.For(sheet);
+                columns.Require("ItemID", "ReferenceID", "Slot");
+                for (int row = columns.DataStartRow; row <= (sheet.Dimension?.End.Row ?? 1); row++)
+                {
+                    if (string.IsNullOrWhiteSpace(columns.Cell(row, "ItemID").Text) ||
+                        !int.TryParse(columns.Cell(row, "ReferenceID").Text, out int id)) continue;
+                    if (sheet.Name == "Weapon") result.Add($"Weapon_Icon/{id}_01.png");
+                    else if (sheet.Name == "Constellation")
+                    {
+                        string portrait = $"Character_Icon/{id}_04.png";
+                        result.Add(File.Exists(SafeCombine(sourceRoot, portrait)) ? portrait : $"Character_Icon/{id}_02.png");
+                    }
+                    else if (int.TryParse(columns.Cell(row, "Slot").Text, out int slot)) result.Add($"Artifact_Icon/{id}{slot}.png");
+                }
+            }
+        }
+        catch (Exception error) { warnings.Add("角色与背包装备图标未完整收集：" + error.Message); }
     }
 
     private static void CollectCardAnimations(string sourceRoot, HashSet<string> result, List<string> warnings)
@@ -141,57 +279,46 @@ public static class ReferencedArtAssetsSync
     [Serializable] private sealed class CardVideoCatalog { public CardVideoEntry[] clips; }
     [Serializable] private sealed class CardVideoEntry { public string videoPath; public string posterPath; }
 
-    [Serializable] private sealed class AnimatedCharacterManifest { public AnimatedCharacterEntry[] characters; }
-    [Serializable] private sealed class AnimatedCharacterEntry { public int id; public string status; public string video; public string poster; }
-
-    private static void CollectAnimatedCharacters(string sourceRoot, HashSet<string> result, List<string> warnings)
+    internal static UICardVideoCatalog.PublishedCatalog CollectAnimatedVideos(
+        string sourceRoot, string folder, HashSet<string> result, List<string> warnings,
+        Dictionary<string, string> sourceOverrides)
     {
-        const string manifest = "Character_Animated/manifest.json";
-        if (!File.Exists(SafeCombine(sourceRoot, manifest))) return;
-        try
+        bool character = folder == UICardVideoCatalog.CharacterFolder;
+        if (!character && folder != "Enemy_Animated")
+            throw new ArgumentException("Unknown animated card folder: " + folder);
+        var videos = new HashSet<string>(StringComparer.Ordinal);
+        // Both sources publish to the existing canonical path. Source priority is resolved only here.
+        foreach (string sourceFolder in character ? new[] { PreferredCharacterVideoFolder, folder } : new[] { folder })
         {
-            var data = JsonUtility.FromJson<AnimatedCharacterManifest>(File.ReadAllText(SafeCombine(sourceRoot, manifest)));
-            if (data?.characters == null) throw new InvalidDataException("Character_Animated manifest is empty.");
-            var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { manifest };
-            foreach (var entry in data.characters)
+            string directory = SafeCombine(sourceRoot, sourceFolder);
+            if (!Directory.Exists(directory)) continue;
+            foreach (string source in Directory.EnumerateFiles(directory, "*.mp4", SearchOption.TopDirectoryOnly))
             {
-                if (entry.status != "exported") continue;
-                string video = AnimationArtPath(UICardVideoPlayer.VideoPathForCharacter(entry.id));
-                string poster = AnimationArtPath(UICardVideoPlayer.PosterPathForCharacter(entry.id));
-                if ("Character_Animated/" + entry.video != video || "Character_Animated/" + entry.poster != poster)
-                    throw new InvalidDataException("Unexpected animated character paths: " + entry.id);
-                if (!File.Exists(SafeCombine(sourceRoot, video)) || !File.Exists(SafeCombine(sourceRoot, poster)))
-                    throw new FileNotFoundException("角色动态素材不完整：" + entry.id);
-                paths.Add(video); paths.Add(poster);
+                string file = Path.GetFileName(source);
+                if (!UICardVideoCatalog.TryGetIdentity(file, out int id, out int variant))
+                { warnings.Add("跳过命名无效的动态卡面：" + sourceFolder + "/" + file); continue; }
+                if (!videos.Add(file)) continue;
+                string destination = folder + "/" + file;
+                result.Add(destination);
+                if (sourceFolder != folder) sourceOverrides.Add(destination, sourceFolder + "/" + file);
+                // Reuse normal static art while the decoder prepares or fails.
+                string fallback = character ? $"Character_Bare/{id}_{variant:D2}.png" :
+                    AnimationArtPath(UICardVideoPlayer.PosterPathForEnemy(id, variant));
+                if (File.Exists(SafeCombine(sourceRoot, fallback))) result.Add(fallback);
+                else warnings.Add("动态卡面缺少静态回退：" + fallback);
             }
-            result.UnionWith(paths);
         }
-        catch (Exception error) { warnings.Add("角色动态清单未加载：" + error.Message); }
+        return new UICardVideoCatalog.PublishedCatalog { videos = videos.OrderBy(file => file, StringComparer.Ordinal).ToArray() };
     }
 
-    internal static void CollectAnimatedEnemies(string sourceRoot, HashSet<string> result, List<string> warnings)
+    private static void WriteVideoCatalog(string targetRoot, string path, string folder, UICardVideoCatalog.PublishedCatalog catalog)
     {
-        string manifest = AnimationArtPath(UICardVideoCatalog.EnemyManifestPath);
-        if (!File.Exists(SafeCombine(sourceRoot, manifest))) return;
-        try
-        {
-            var data = JsonUtility.FromJson<UICardVideoCatalog.EnemyCatalog>(File.ReadAllText(SafeCombine(sourceRoot, manifest)));
-            if (data?.enemies == null) throw new InvalidDataException("Enemy_Animated manifest is empty.");
-            var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { manifest };
-            foreach (var entry in data.enemies)
-            {
-                if (entry == null || entry.status != "exported") continue;
-                if (!UICardVideoCatalog.TryGetEnemyIdentity(entry, out int enemyId, out int variant))
-                    throw new InvalidDataException("敌人动态清单编号、形态或路径无效：" + entry.video);
-                string video = AnimationArtPath(UICardVideoPlayer.VideoPathForEnemy(enemyId, variant));
-                string poster = AnimationArtPath(UICardVideoPlayer.PosterPathForEnemy(enemyId, variant));
-                if (!File.Exists(SafeCombine(sourceRoot, video)) || !File.Exists(SafeCombine(sourceRoot, poster)))
-                    throw new FileNotFoundException($"敌人动态素材不完整：{enemyId}/{variant:D2}");
-                paths.Add(video); paths.Add(poster);
-            }
-            result.UnionWith(paths);
-        }
-        catch (Exception error) { warnings.Add("敌人动态清单未加载：" + error.Message); }
+        catalog.videos = catalog.videos.Where(file => File.Exists(SafeCombine(targetRoot, folder + "/" + file))).ToArray();
+        string target = SafeCombine(targetRoot, AnimationArtPath(path));
+        string json = JsonUtility.ToJson(catalog, true) + "\n";
+        if (File.Exists(target) && File.ReadAllText(target) == json) return;
+        Directory.CreateDirectory(Path.GetDirectoryName(target));
+        File.WriteAllText(target, json, new UTF8Encoding(false));
     }
 
     private static void CollectCardVideos(string sourceRoot, HashSet<string> result, List<string> warnings)
@@ -361,7 +488,17 @@ public static class ReferencedArtAssetsSync
                 continue;
             }
 
-            string relativeCardPath = $"Character_Bare/{characterId}_03.png";
+            string listPortrait = RoguelikeRosterView.CharacterListPortraitPath(characterId).Substring("art_assets/".Length);
+            string transparentPortrait = $"Character_Icon/{characterId}_02.png";
+            if (File.Exists(SafeCombine(sourceRoot, listPortrait))) result.Add(listPortrait);
+            else if (File.Exists(SafeCombine(sourceRoot, transparentPortrait))) result.Add(transparentPortrait);
+            string skills = SafeCombine(sourceRoot, $"Skill_Icon/{characterId}");
+            if (Directory.Exists(skills))
+                foreach (string pattern in new[] { $"{characterId}_S??.png", $"{characterId}_T??.png", $"{characterId}_C??.png" })
+                    foreach (string icon in Directory.EnumerateFiles(skills, pattern))
+                        result.Add($"Skill_Icon/{characterId}/{Path.GetFileName(icon)}");
+
+            string relativeCardPath = $"Character_Bare/{characterId}_01.png";
             string sourceCardPath = SafeCombine(sourceRoot, relativeCardPath);
             if (!File.Exists(sourceCardPath))
             {
@@ -370,6 +507,16 @@ public static class ReferencedArtAssetsSync
             }
 
             result.Add(relativeCardPath);
+            // Publish all authored character forms, keeping the default manifest
+            // entry on 01. Runtime adapters preload exact variants through the factory.
+            string cardFolder = SafeCombine(sourceRoot, "Character_Bare");
+            foreach (string cardFile in Directory.EnumerateFiles(cardFolder, $"{characterId}_*.png", SearchOption.TopDirectoryOnly))
+            {
+                string name = Path.GetFileName(cardFile);
+                var match = Regex.Match(name, @"^[0-9]+_([0-9]{2,})\.png$");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int variant) && variant > 0 &&
+                    name == $"{characterId}_{variant:D2}.png") result.Add("Character_Bare/" + name);
+            }
             string avatar = CharacterCardArtManifest.PortraitFile(characterId);
             if (File.Exists(SafeCombine(sourceRoot, avatar))) result.Add(avatar);
             entries.Add(new CharacterCardArtEntry
@@ -452,6 +599,13 @@ public static class ReferencedArtAssetsSync
                 {
                     string configuredIcon = sheet.Cells[row, iconColumn].Text.Trim();
                     if (string.IsNullOrWhiteSpace(configuredIcon)) continue;
+                    if (CharacterSkillIconResolver.TryGetRelativePath(configuredIcon, out string resolved)
+                        && TryNormalizeImagePath(resolved, out string relative)
+                        && File.Exists(Path.Combine(sourceRoot, relative)))
+                    {
+                        result.Add(relative);
+                        continue;
+                    }
                     if (configuredIcon.Contains("/") || configuredIcon.Contains("\\"))
                     {
                         string explicitPath = configuredIcon;

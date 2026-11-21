@@ -37,7 +37,7 @@ public static class MonaScriptHooks
         private readonly HitFrame previous = Hitting.Value;
         internal HitFrame(long id, BattleEntity source, IEnumerable<BattleEntity> targets)
         {
-            Source = source; SourceSlot = source?.SlotPosition ?? 0; Action = BattleResolutionContext.CurrentAction?.ScopeId ?? id;
+            Source = source; SourceSlot = source?.SlotPosition ?? 0; Action = BattleResolutionContext.CurrentChain?.ScopeId ?? id;
             Hitting.Value = this;
             if (targets != null) foreach (var target in targets)
             {
@@ -213,7 +213,7 @@ public static class MonaScriptHooks
         {
             memory.Turn = Turn;
             memory.Action = Frame(c, out var frame) ? frame.Action
-                : BattleResolutionContext.CurrentAction?.ScopeId ?? c.DamageEvent.RuntimeHitID;
+                : BattleResolutionContext.CurrentChain?.ScopeId ?? c.DamageEvent.RuntimeHitID;
         }
         return new Restore(null);
     }

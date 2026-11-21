@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
-/// <summary>ResetCooldown / Cooldown 的 Param1 语法；按钮类型名忽略大小写，SK_ 字符串 ID 保持精确匹配。</summary>
-public static class ResetCooldownTarget
+/// <summary>Cooldown 的 Param1 语法；按钮类型名忽略大小写，SK_ 字符串 ID 保持精确匹配。</summary>
+public static class CooldownTarget
 {
     public static bool TryGetButtonIndex(string reference, out int index)
     {
@@ -33,48 +34,70 @@ public static class ResetCooldownTarget
     }
 }
 
-/// <summary>Cooldown.Param2 为有符号 int 增减量：正数增加、负数减少、0 不变；不接受空值、小数或公式。</summary>
+/// <summary>Cooldown.Param2：正数增加回合，负数减少，0 不变，Reset 直接完成当前一轮。</summary>
 public static class CooldownParameters
 {
-    public static bool TryParseAmount(string value, out int rounds)
+    /// <summary>成功解析时，null 表示直接完成当前一轮冷却。</summary>
+    public static bool TryParse(string value, out int? rounds)
     {
-        return int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out rounds);
+        rounds = null;
+        if (string.Equals(value?.Trim(), "Reset", StringComparison.OrdinalIgnoreCase)) return true;
+        if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int delta)) return false;
+        rounds = delta;
+        return true;
     }
+
 }
 
 public partial class CharacterBattleController
 {
+    private const int ElementalSkillSlot = 2;
+    private readonly HashSet<string> _skillSlotBindings = new HashSet<string>(StringComparer.Ordinal);
+
+    private void SetBoundSkillID(int slot, string skillID)
+    {
+        _boundSkills[slot] = skillID;
+        if (slot == ElementalSkillSlot && !string.IsNullOrEmpty(skillID)) _skillSlotBindings.Add(skillID);
+    }
+
+    /// <summary>
+    /// 伤害提交时为祭礼取重置目标。优先当前挂载且有冷却的战技，否则只接受该槽唯一的冷却组。
+    /// 绑定记录包含换下的战技；同一 SkillPhase 共用一轮冷却。伤害来源技能和 ActionType 不参与选取。
+    /// </summary>
+    internal string CaptureSkillSlotCooldownTarget()
+    {
+        if (_cooldownRemaining == null || _skillById2 == null) return null;
+        string bound = GetBoundSkillID(ElementalSkillSlot);
+        if (IsSkillCoolingDown(bound)) return bound;
+
+        SkillMainData candidate = null;
+        foreach (string id in _skillSlotBindings)
+        {
+            if (!IsSkillCoolingDown(id) || !_skillById2.TryGetValue(id, out var skill)) continue;
+            if (candidate == null) { candidate = skill; continue; }
+            if (skill.SkillPhase <= 0 || skill.SkillPhase != candidate.SkillPhase) return null;
+            if (skill.SkillID < candidate.SkillID) candidate = skill;
+        }
+        return candidate?.SkillID2;
+    }
+
+    private bool IsSkillCoolingDown(string skillID)
+        => !string.IsNullOrEmpty(skillID) && _cooldownRemaining.TryGetValue(skillID, out int rounds) && rounds > 0;
+
     /// <summary>
     /// 完成指定技能的一轮冷却；类型名按当前按钮绑定解析，数字/字符串 ID 只匹配本角色技能。
     /// 沿用自然冷却结束的次数恢复规则，不补满次数、不改绑定、不解除 Freeze。
     /// </summary>
-    public bool ResetSkillCooldown(string reference)
-    {
-        string skillID;
-        if (!TryResolveCooldownSkill(reference, out skillID))
-        {
-            LogManager.LogWarning(LogCategory.Skill,
-                "ResetCooldown 无法解析本角色技能: [" + reference + "]");
-            return false;
-        }
-
-        CompleteSkillCooldown(skillID);
-        SyncSelectionPhaseRuntime(skillID);
-        SyncCooldownControlSnapshots(skillID);
-
-        LogManager.Log(LogCategory.Skill, "ResetCooldown " + reference + " -> " + skillID);
-        if (OnControlChanged != null) OnControlChanged();
-        return true;
-    }
+    public bool ResetSkillCooldown(string reference) => ChangeSkillCooldown(reference, null);
 
     /// <summary>
-    /// 增减本角色指定技能当前一轮的冷却，下限 0。正数延长，负数缩短，完成时沿用自然恢复一次的规则；
+    /// 修改本角色指定技能当前一轮的冷却，下限 0。正数延长，负数缩短，null 直接完成当前一轮；
     /// 超出的减量不带入下一轮充能，不改变按钮绑定，也不解除 Freeze。
     /// 普通技能（MaxCharge&lt;=0）允许正数从0开启冷却；充能技能满次数时将最后一次转回充能，否则调整当前轮。
     /// 返回 false 表示技能无效或增加后超出 int 范围；0增量以及对零冷却的负增量均为空操作。
     /// 满次数开启充能时可用次数减一，已有充能时不再扣次数；不重新调用施放冷却修正（例如重云二命）。
     /// </summary>
-    public bool ChangeSkillCooldown(string reference, int rounds)
+    public bool ChangeSkillCooldown(string reference, int? rounds)
     {
         string skillID;
         if (!TryResolveCooldownSkill(reference, out skillID))
@@ -84,40 +107,45 @@ public partial class CharacterBattleController
             return false;
         }
 
-        if (rounds == 0 || _cooldownRemaining == null) return true;
-        _cooldownRemaining.TryGetValue(skillID, out int cooldown);
-        bool reopenLastCharge = false;
-        if (cooldown <= 0)
+        if (rounds is int delta)
         {
-            if (rounds < 0) return true;
-            var skill = _skillById2[skillID];
-            if (skill.MaxCharge > 0)
+            if (delta == 0 || _cooldownRemaining == null) return true;
+            _cooldownRemaining.TryGetValue(skillID, out int cooldown);
+            bool reopenLastCharge = false;
+            if (cooldown <= 0)
             {
-                // 满次数时只把最后一次转回充能；缺次数却无计时的异常/特殊状态不在此补造计时。
-                if (_currentCharges == null || !_currentCharges.TryGetValue(skillID, out int charges)
-                    || charges != skill.MaxCharge) return true;
-                reopenLastCharge = true;
+                if (delta < 0) return true;
+                var skill = _skillById2[skillID];
+                if (skill.MaxCharge > 0)
+                {
+                    // 满次数时只把最后一次转回充能；缺次数却无计时的异常/特殊状态不在此补造计时。
+                    if (_currentCharges == null || !_currentCharges.TryGetValue(skillID, out int charges)
+                        || charges != skill.MaxCharge) return true;
+                    reopenLastCharge = true;
+                }
+                cooldown = 0;
             }
-            cooldown = 0;
-        }
 
-        // 使用 long，包含 int.MinValue 在内的负量均不会取反溢出；只完成当前这一轮。
-        long next = (long)cooldown + rounds;
-        if (next > int.MaxValue)
-        {
-            LogManager.LogWarning(LogCategory.Skill, "Cooldown 增加后超出 int 范围: " + skillID);
-            return false;
+            // 使用 long，包含 int.MinValue 在内的负量均不会取反溢出；只完成当前这一轮。
+            long next = (long)cooldown + delta;
+            if (next > int.MaxValue)
+            {
+                LogManager.LogWarning(LogCategory.Skill, "Cooldown 增加后超出 int 范围: " + skillID);
+                return false;
+            }
+            if (next <= 0) CompleteSkillCooldown(skillID);
+            else
+            {
+                if (reopenLastCharge) _currentCharges[skillID]--;
+                _cooldownRemaining[skillID] = (int)next;
+            }
         }
-        if (next <= 0) CompleteSkillCooldown(skillID);
-        else
-        {
-            if (reopenLastCharge) _currentCharges[skillID]--;
-            _cooldownRemaining[skillID] = (int)next;
-        }
+        else CompleteSkillCooldown(skillID);
+
         SyncSelectionPhaseRuntime(skillID);
         SyncCooldownControlSnapshots(skillID);
         LogManager.Log(LogCategory.Skill,
-            "Cooldown " + reference + " -> " + skillID + ", delta=" + rounds);
+            "Cooldown " + reference + " -> " + skillID + ", Param2=" + (rounds?.ToString() ?? "Reset"));
         if (OnControlChanged != null) OnControlChanged();
         return true;
     }
@@ -137,19 +165,12 @@ public partial class CharacterBattleController
         }
     }
 
-    void ExecuteResetCooldown(string reference, string effectID)
-    {
-        if (!ResetSkillCooldown(reference))
-            LogManager.LogWarning(LogCategory.Effect, effectID + " ResetCooldown 未执行");
-    }
-
     void ExecuteCooldown(string reference, string amount, string effectID)
     {
-        int rounds;
-        if (!CooldownParameters.TryParseAmount(amount, out rounds))
+        if (!CooldownParameters.TryParse(amount, out int? rounds))
         {
             LogManager.LogWarning(LogCategory.Effect,
-                effectID + " Cooldown.Param2 必须为有符号 int 增减量，当前=[" + amount + "]");
+                effectID + " Cooldown.Param2 必须为有符号 int 增减量或 Reset，当前=[" + amount + "]");
             return;
         }
         if (!ChangeSkillCooldown(reference, rounds))
@@ -159,9 +180,9 @@ public partial class CharacterBattleController
     bool TryResolveCooldownSkill(string reference, out string skillID)
     {
         skillID = null;
-        if (_skillById2 == null || !ResetCooldownTarget.IsValid(reference)) return false;
+        if (_skillById2 == null || !CooldownTarget.IsValid(reference)) return false;
         int buttonIndex;
-        if (ResetCooldownTarget.TryGetButtonIndex(reference, out buttonIndex))
+        if (CooldownTarget.TryGetButtonIndex(reference, out buttonIndex))
         {
             // 不使用角色初始技能，也不追溯当前伤害的来源技能。
             skillID = GetBoundSkillID(buttonIndex);

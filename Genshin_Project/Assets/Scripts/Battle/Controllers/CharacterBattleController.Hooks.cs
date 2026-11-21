@@ -25,8 +25,9 @@ public partial class CharacterBattleController
             context.Declaration = context.DamageEvent?.Declaration
                 ?? BattleEventHub.Find(context.HealEvent) ?? BattleEventHub.Find(context.ReactionEvent)
                 ?? BattleEventHub.Current;
+        if (!BattleResolutionContext.CanTriggerStatusAction(action, context)) return false;
         // 事件数据独立留存；实体仍为实时引用，不能快照属性或提前计算响应数值。
-        context = context?.Snapshot();
+        context = context?.SnapshotForStatusAction(status, action);
         return BattleResolutionContext.Submit(status.ApplyOrder,
             () => PrepareEventStatusAction(status, action, host, context, isStillValid));
     }
@@ -44,20 +45,18 @@ public partial class CharacterBattleController
         StatusRemovalActions.Request removal = null, StatusDeathActions.Request death = null)
     {
         using var deathScope = death?.Enter();
-        bool Valid() => (death != null ? death.CanExecute
+        bool Valid() => (BattleManager.Instance?.IsBattleOver != true || context?.Declaration?.Kind == BattleEventKind.BattleEnded)
+            && (death != null ? death.CanExecute
             : (removal != null ? removal.CanExecute : status.IsActive && !status.DeathCleanupPending)
                 && EquipmentStatusLifetime.CanExecute(status)) && (isStillValid == null || isStillValid());
         string key = $"{status.GetHashCode()}:{BattleResolutionContext.ActionKey(action)}";
         bool limited = BattleResolutionContext.HasApplicableLimit(action);
         // 未配置新限制的旧行保留重入保护；配置 N 次的行使用整条连锁额度。
         if (!Valid() || (!limited && ExecutingStatusActions.Contains(key))) return null;
-        if (StatusActionLimitReached(status, action)
-            || BattleResolutionContext.LimitReached(status, action, context)) return null;
         // 治疗候选只能在整段正式提交后确认，不能把预计算数据当作已经发生的事件。
-        if (context?.HealEvent != null && !context.HealEvent.IsCommitted) return null;
-        if (!ScriptHookEvaluator.Evaluate(action.ScriptHook, context)) return null;
-        if (!BattleResolutionContext.TryCollect(status, action, context)) return null;
+        if (context?.HealEvent?.IsCommitted == false) return null;
         StatusActionRuntimeState runtime = GetStatusActionRuntime(status, action);
+        if (!StatusActionDispatch.TryPrepare(status, action, context, runtime)) return null;
         runtime.PendingTriggerCount++;
         bool pending = true;
         Action release = () =>
@@ -72,6 +71,7 @@ public partial class CharacterBattleController
             // 不重复判断触发条件/概率；状态移除后取消请求，释放总次数预留。
             if (!Valid()) return;
             using var triggerDepth = BattleResolutionContext.EnterTrigger();
+            using var executionContext = ScriptHookContext.EnterExecution(context);
             bool ownsGuard = ExecutingStatusActions.Add(key);
             try
             {
@@ -80,7 +80,7 @@ public partial class CharacterBattleController
                 {
                     if (!Valid()) return;
                     release();
-                    CountStatusActionTrigger(status, action);
+                    CountStatusActionTrigger(status, action, runtime);
                     if (context != null && !string.IsNullOrEmpty(context.EventHookArgument)
                         && context.EventHookName != null && context.EventHookName.StartsWith("Post")
                         && context.ActionTargetPositions != null)
@@ -104,7 +104,8 @@ public partial class CharacterBattleController
             {
                 if (ownsGuard) ExecutingStatusActions.Remove(key);
             }
-        }, release);
+        }, release).WithStatus(status, (object)removal ?? death ?? BattleResolutionContext.StatusActionOccurrence(context),
+            () => { using var dying = death?.Enter(); return Valid(); });
     }
 
 /// <summary>状态施加时立刻生效（OnApply）：由状态施放者控制器调用（实体/位置通用）。</summary>
@@ -125,10 +126,17 @@ public partial class CharacterBattleController
     {
         if (act == null) return;
         var inst = caster != null ? caster.GetStatus(act.StatusID2) : null;
-        using var resolutionEffect = BattleResolutionContext.BeginEffect();
-        if (StatusActionLimitReached(inst, act)) return;
-        if (!BattleResolutionContext.TryCollect(inst, act)) return;
-        CountStatusActionTrigger(inst, act);
-        ExecuteStatusActionEffects(inst, act, caster);
+        if (inst == null) return;
+        var context = ScriptHookContext.Current?.Snapshot() ?? new ScriptHookContext();
+        context.Caster = caster; context.Status = inst; context.StatusHost = caster;
+        context.Target = context.Target ?? BattleManager.Instance?.GetActiveAlly()?.Entity ?? caster;
+        context.EventHookName = ScriptHookParser.TryFind(act.ScriptHook, "PreSelfDamage", out string argument)
+            ? "PreSelfDamage" : "PreAlliesDamage";
+        if (context.EventHookName == "PreAlliesDamage")
+            ScriptHookParser.TryFind(act.ScriptHook, "PreAlliesDamage", out argument);
+        context.EventHookArgument = argument;
+        context.ActionTargetPositions = context.ActionTargetPositions ?? BattleManager.Instance?.PendingActionTargetPositions;
+        using var collection = BattleResolutionContext.BeginCollection();
+        TryExecuteEventStatusAction(inst, act, caster, context);
     }
 }

@@ -127,7 +127,7 @@ public static class ElectroChargedReactionHandler
 
     private static void TickState(ReactionStateInstance state)
     {
-        using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        using var resolutionEffect = ReactionEffectExecutor.BeginDamageEffect();
         BattleEntity target = state.Target;
         ElementPoolReading hydro = ReadConductingAura(target, "Hydro");
         ElementPoolReading electro = ReadConductingAura(target, "Electro");
@@ -137,10 +137,9 @@ public static class ElectroChargedReactionHandler
             return;
         }
 
-        EnemyShieldHitResult hydroShield = ConsumeConductingAura(target, hydro);
-        EnemyShieldHitResult electroShield = ConsumeConductingAura(target, electro);
-
         ReactionSourceSnapshot snapshot = state.SourceSnapshot;
+        EnemyShieldHitResult hydroShield = ConsumeConductingAura(target, hydro, snapshot);
+        EnemyShieldHitResult electroShield = ConsumeConductingAura(target, electro, snapshot);
         float levelCoefficient = snapshot != null && snapshot.LevelCoefficient > 0f
             ? snapshot.LevelCoefficient
             : ReactionDamageCalculator.GetLevelCoefficient(snapshot != null ? snapshot.Level : 1);
@@ -193,7 +192,7 @@ public static class ElectroChargedReactionHandler
                 if (hydro?.IsPresent != true) continue;
 
                 visited.Add(adjacent);
-                EnemyShieldHitResult adjacentShield = ConsumeConductingAura(adjacent, hydro);
+                EnemyShieldHitResult adjacentShield = ConsumeConductingAura(adjacent, hydro, snapshot);
                 if (adjacentShield != null) shieldHits[adjacent] = adjacentShield;
                 queue.Enqueue(adjacent);
             }
@@ -266,10 +265,11 @@ public static class ElectroChargedReactionHandler
     private static ElementPoolReading ReadConductingAura(BattleEntity target, string element)
         => ElementQuery.ReadShield(target, element) ?? ElementQuery.ReadAura(target, element);
 
-    private static EnemyShieldHitResult ConsumeConductingAura(BattleEntity target, ElementPoolReading aura)
+    private static EnemyShieldHitResult ConsumeConductingAura(BattleEntity target, ElementPoolReading aura, ReactionSourceSnapshot source)
     {
         if (aura.Kind == ReactionPoolKind.EnemyShield)
-            return EnemyElementShieldSystem.ResolveHit(target, aura.Element == "Hydro" ? "Electro" : "Hydro", 1f);
+            return EnemyElementShieldSystem.ResolveHit(target, aura.Element == "Hydro" ? "Electro" : "Hydro", 1f,
+                source: DamageSourceInfo.FromReactionSnapshot(source, ReactionType.ElectroCharged));
         if (!aura.IsIntrinsic) target.ConsumeAura(aura.Element, aura.AvailableFor(1f));
         return null;
     }

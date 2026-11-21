@@ -4,12 +4,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>Two independently queued, edge-anchored PSD action prompts on the common results timeline.</summary>
+/// <summary>Shared side prompts for player target selection and the battle results timeline.</summary>
 [DisallowMultipleComponent]
 public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleSkillAnimationTrack
 {
-    public static readonly string[] LayerFiles = { "OuterRing.png", "InnerRing.png", "PortraitMask.png" };
+    private const string EmblemFile = "PaimonEmblem.png";
+    public static readonly string[] LayerFiles = { "OuterRing.png", "InnerRing.png", "PortraitMask.png", EmblemFile };
     public BattleUiLayout layout;
+    public BattleInputController selectionInput;
     public UIAdaptiveFrame framePrefab;
     public TMP_FontAsset font;
     public Vector2 allyInset = new Vector2(48, 191), enemyInset = new Vector2(49, 191);
@@ -32,6 +34,10 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
         public float Time, Width;
     }
     private Lane ally, enemy;
+    private Lane selectionLane;
+    private BattleEntity selectionActor;
+    private string selectionSkillId;
+    private float selectionTime, selectionFadeTime;
 
     protected override void Start()
     {
@@ -64,14 +70,23 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
         var lane = new Lane { Clip = clip, Opacity = clip.gameObject.AddComponent<CanvasGroup>() };
         lane.Opacity.alpha = 0; lane.Opacity.blocksRaycasts = lane.Opacity.interactable = false;
         lane.Content = Box("Content", clip, edge, edge, new Vector2(0, Height), Vector2.zero);
-        var frame = (RectTransform)Instantiate(framePrefab, lane.Content, false).transform;
+        var frameView = Instantiate(framePrefab, lane.Content, false);
+        var frame = (RectTransform)frameView.transform;
         frame.anchorMin = Vector2.zero; frame.anchorMax = Vector2.one; frame.offsetMin = frame.offsetMax = Vector2.zero;
+        frameView.BindOpeningDecoration(opening =>
+        {
+            // BattleField1.psd: 145×152 px, 3 px from the inner edge, 44 px above the top edge.
+            var emblem = Box("PaimonEmblem", opening, new Vector2(1 - x, 1), Vector2.one * .5f,
+                new Vector2(145, 152), new Vector2(-sign * 75.5f, -32));
+            if (right) emblem.localScale = new Vector3(-1, 1, 1);
+            Picture(emblem, EmblemFile);
+        });
         RectTransform Face(string name, int size) => Box(name, lane.Content, edge, Vector2.one * .5f,
             Vector2.one * size, new Vector2(sign * 73, 0));
         Picture(Face("OuterRing", 108), LayerFiles[0]); Picture(Face("InnerRing", 94), LayerFiles[1]);
         var mask = Face("PortraitMask", 80); Picture(mask, LayerFiles[2]);
         mask.gameObject.AddComponent<Mask>().showMaskGraphic = false;
-        lane.Portrait = Picture(Box("Portrait", mask, Vector2.one * .5f, Vector2.one * .5f, Vector2.one * (right ? 72 : 80), Vector2.zero));
+        lane.Portrait = Picture(Box("Portrait", mask, Vector2.one * .5f, Vector2.one * .5f, Vector2.one * 80, Vector2.zero));
         TMP_Text Label(string name, float y, Color32 color)
         {
             var rect = Box(name, lane.Content, edge, edge, new Vector2(1, 40), new Vector2(sign * TextInset, y));
@@ -88,7 +103,9 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
     public override void Present(long id, BattlePresentationCue cue, Action<Exception> done)
     {
         if (!(cue.Result.Data is BattleActionPromptData fact) || !cue.Result.TargetSide.HasValue ||
-            !isActiveAndEnabled || player.ActionStyle == null || ally == null) { done(null); return; }
+            !isActiveAndEnabled || player.ActionStyle == null || ally == null ||
+            (fact.FollowsTargetSelection && selectionInput != null && selectionInput.isActiveAndEnabled))
+        { done(null); return; }
         bool right = cue.Result.TargetSide == BattleSide.Enemy;
         var lane = right ? enemy : ally;
         lane.Queue.Enqueue(new Item { Id = id, Fact = fact, Done = done, Style = player.ActionStyle });
@@ -96,38 +113,105 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
     }
     private void Begin(Lane lane, bool right)
     {
+        if (selectionLane == lane) ClearSelection();
         var item = lane.Current = lane.Queue.Dequeue();
-        string key = item.Fact.IsStatus ? "ui_action_prompt_status" : right ? "ui_action_prompt_enemy" : "ui_action_prompt_ally";
-        lane.Header.text = DataManager.Instance.GetLangText(key);
-        lane.Detail.text = item.Fact.Name;
+        SetContent(lane, item.Style, item.Fact.Name, item.Fact.SubjectId, right, item.Fact.IsStatus);
+        lane.Time = 0;
+        SetReveal(lane, lane.Time, item.Style.Reveal);
+        lane.Opacity.alpha = 1;
+    }
+
+    private static void SetContent(Lane lane, BattleActionStyle style, string name, int actorId, bool enemyActor, bool isStatus = false)
+    {
+        string key = isStatus ? "ui_action_prompt_status" : enemyActor ? "ui_action_prompt_enemy" : "ui_action_prompt_ally";
+        lane.Header.text = DataManager.Instance?.GetLangText(key) ?? string.Empty;
+        lane.Detail.text = name;
         float Measure(TMP_Text label, string text) => label.GetPreferredValues(text, Mathf.Infinity, Mathf.Infinity).x;
-        float minimum = item.Style.MinTextCharacters * Measure(lane.Detail, "行");
         float content = Mathf.Max(Measure(lane.Detail, lane.Detail.text), Measure(lane.Header, lane.Header.text));
-        float width = Mathf.Ceil(Mathf.Max(minimum, content)) + 4;
+        float width = TextWidth(content, Measure(lane.Detail, "行"), style.MinTextCharacters);
         lane.Header.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         lane.Detail.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         lane.Width = TextInset + width + EndPadding;
         lane.Content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lane.Width);
-        string portrait = "art_assets/" + (right ? $"Enemy_Icon/{item.Fact.SubjectId}_01.png" : CharacterCardArtManifest.PortraitFile(item.Fact.SubjectId));
+        ((RectTransform)lane.Portrait.transform).sizeDelta = Vector2.one * (enemyActor ? 72 : 80);
+        string portrait = "art_assets/" + (enemyActor ? $"Enemy_Icon/{actorId}_01.png" : CharacterCardArtManifest.PortraitFile(actorId));
         if (lane.Portrait.relativePath != portrait) lane.Portrait.SetResolvedPath(portrait);
-        lane.Time = 0; lane.Clip.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0); lane.Opacity.alpha = 1;
     }
+    private static float TextWidth(float measuredWidth, float fullWidthGlyph, int minimumCharacters)
+        => Mathf.Ceil(Mathf.Max(measuredWidth, Mathf.Max(0, minimumCharacters) * fullWidthGlyph)) + 4;
+
+    private static void SetReveal(Lane lane, float elapsed, float seconds)
+    {
+        float reveal = seconds <= 0 ? 1 : Mathf.Clamp01(elapsed / seconds);
+        lane.Clip.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lane.Width * Mathf.SmoothStep(0, 1, reveal));
+    }
+
+    private void LateUpdate()
+    {
+        var style = player != null && player.isActiveAndEnabled ? player.ActionStyle : null;
+        if (ally == null || style == null) { ClearSelection(); return; }
+        if (selectionInput == null || !selectionInput.TryGetSkillSelection(out var caster, out int button, out var targetSide))
+        {
+            if (selectionLane != null)
+            {
+                selectionFadeTime += Time.unscaledDeltaTime;
+                selectionLane.Opacity.alpha = FadeAlpha(selectionFadeTime, style.Fade);
+                if (selectionLane.Opacity.alpha <= 0) ClearSelection();
+            }
+            return;
+        }
+
+        var lane = targetSide == BattleSide.Enemy ? enemy : ally;
+        var skill = caster.GetBoundSkillData(button);
+        if (skill == null || lane.Current != null) { ClearSelection(); return; }
+        if (selectionLane != lane || selectionActor != caster.Entity || selectionSkillId != skill.SkillID2 || selectionFadeTime > 0)
+        {
+            string name = caster.GetUiSkillName(button, currentSkill: skill);
+            ClearSelection();
+            if (string.IsNullOrWhiteSpace(name)) return;
+            SetContent(lane, style, name, caster.Entity.EntityID, enemyActor: false);
+            selectionLane = lane;
+            selectionActor = caster.Entity;
+            selectionSkillId = skill.SkillID2;
+            SetReveal(lane, 0, style.Reveal);
+            lane.Opacity.alpha = 1;
+        }
+
+        if (selectionTime < style.Reveal)
+        {
+            selectionTime = Mathf.Min(selectionTime + Time.unscaledDeltaTime, style.Reveal);
+            SetReveal(lane, selectionTime, style.Reveal);
+        }
+    }
+
+    private void ClearSelection()
+    {
+        if (selectionLane == null) return;
+        selectionLane.Opacity.alpha = 0;
+        selectionLane = null;
+        selectionActor = null;
+        selectionSkillId = null;
+        selectionTime = selectionFadeTime = 0;
+    }
+
+    private static float FadeAlpha(float elapsed, float seconds) => seconds <= 0 ? 0 : 1 - Mathf.Clamp01(elapsed / seconds);
+
     private void Update() { if (ally != null) { Tick(ally, false); Tick(enemy, true); } }
     private void Tick(Lane lane, bool right)
     {
         if (lane.Current == null) { if (lane.Queue.Count != 0) Begin(lane, right); else return; }
         lane.Time += Time.unscaledDeltaTime;
         var style = lane.Current.Style;
-        float reveal = style.Reveal <= 0 ? 1 : Mathf.Clamp01(lane.Time / style.Reveal);
-        lane.Clip.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lane.Width * Mathf.SmoothStep(0, 1, reveal));
+        SetReveal(lane, lane.Time, style.Reveal);
         float endHold = style.Reveal + style.Hold;
         if (lane.Time < endHold) return;
-        lane.Opacity.alpha = style.Fade <= 0 ? 0 : 1 - Mathf.Clamp01((lane.Time - endHold) / style.Fade);
+        lane.Opacity.alpha = FadeAlpha(lane.Time - endHold, style.Fade);
         if (lane.Opacity.alpha > 0) return;
         var done = lane.Current.Done; lane.Current = null; done(null);
     }
     public override void Cancel(long id)
     {
+        if (id < 0) ClearSelection();
         CancelLane(ally, id); CancelLane(enemy, id);
     }
     private static void CancelLane(Lane lane, long id)

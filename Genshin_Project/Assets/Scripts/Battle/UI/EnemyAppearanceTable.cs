@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using OfficeOpenXml;
 using UnityEngine;
 
@@ -17,10 +18,16 @@ public sealed class EnemyAppearanceTable
     }
     public IEnumerable<int> Variants(int enemy) => entries.TryGetValue(enemy, out var modes)
         ? new HashSet<int>(modes.Values) : new HashSet<int>();
-    public static EnemyAppearanceTable Load()
+    public static EnemyAppearanceTable Load() => CampaignUiTables.Read(ReadPublished);
+    private static EnemyAppearanceTable ReadPublished()
     {
         var table = ReadFile(Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName));
-        table.ValidateRuntimeReferences(Path.Combine(Application.streamingAssetsPath, "art_assets"));
+        string art = Path.Combine(Application.streamingAssetsPath, "art_assets");
+        var data = DataManager.Instance;
+        if (data != null && data.IsLoaded)
+            table.Validate(art, id => data.EnemyAIDict.TryGetValue(id, out var modes)
+                ? modes.Select(mode => mode.PatternID).ToHashSet() : null);
+        else table.ValidateRuntimeReferences(art);
         return table;
     }
     public static EnemyAppearanceTable ReadFile(string path)
@@ -68,9 +75,15 @@ public sealed class EnemyAppearanceTable
                 if (int.TryParse(h.Cell(row, "PatternID").Text.Trim(), out int mode)) modes.Add(mode);
             }
         }
+        Validate(artRoot, id => available.TryGetValue(id, out var modes) ? modes : null);
+    }
+
+    private void Validate(string artRoot, Func<int, HashSet<int>> patterns)
+    {
         foreach (var enemy in entries)
         {
-            if (!available.TryGetValue(enemy.Key, out var modes)) throw new InvalidDataException("外观总表敌人没有已发布行为模式：" + enemy.Key);
+            var modes = patterns(enemy.Key);
+            if (modes == null) throw new InvalidDataException("外观总表敌人没有已发布行为模式：" + enemy.Key);
             if (!modes.SetEquals(enemy.Value.Keys)) throw new InvalidDataException($"外观总表{enemy.Key}必须且只能覆盖该敌人已发布的全部模式。");
             foreach (int variant in new HashSet<int>(enemy.Value.Values))
                 if (!File.Exists(Path.Combine(artRoot, "Enemy", $"{enemy.Key}_{variant:D2}.png")))

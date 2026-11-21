@@ -1,5 +1,6 @@
 #if ROGUELIKE_SAVE_TESTS
 using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -41,6 +42,34 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void ChapterSlot_OffersRecoveryOnlyForVerifiedBackup()
+        {
+            RoguelikeChapterSlotInfo Slot() => service.ListChapterSlots(2).Data[0];
+            Assert.That(Slot().CanLoad || Slot().CanRestoreBackup, Is.False);
+            var paths = new RoguelikeSavePaths(root);
+            var path = paths.GetChapterSlotPath(2, 1);
+            var repository = new RoguelikeSaveRepository(paths);
+            for (int marker = 0; marker < 2; marker++)
+                Assert.That(repository.SaveChapterSlot(RoguelikeSaveTestFactory.ChapterEntry(2, 1, marker)).Succeeded, Is.True);
+            Assert.That(Slot().CanLoad, Is.True);
+            Assert.That(Slot().CanRestoreBackup, Is.False);
+
+            File.WriteAllText(path, "broken");
+            var recoverable = Slot();
+            Assert.That(recoverable.Summary, Is.Not.Null);
+            Assert.That(recoverable.CanLoad, Is.False);
+            Assert.That(recoverable.CanRestoreBackup, Is.True);
+            Assert.That(service.RestoreChapterSlotBackup(2, 1, true).Succeeded, Is.True);
+            Assert.That(Slot().CanLoad, Is.True);
+            Assert.That(Slot().CanRestoreBackup, Is.False);
+
+            File.WriteAllText(path, "broken");
+            File.WriteAllText(RoguelikeSavePaths.GetBackupPath(path), "broken backup");
+            var damaged = Slot();
+            Assert.That(damaged.CanLoad || damaged.CanRestoreBackup, Is.False);
+        }
+
+        [Test]
         public void ActiveRun_PreventsStartingAnotherRun()
         {
             Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1)).Succeeded, Is.True);
@@ -49,6 +78,36 @@ namespace GenshinTurnBased.Tests.EditMode
 
             Assert.That(secondStart.Succeeded, Is.False);
             Assert.That(secondStart.ErrorCode, Is.EqualTo(RoguelikeSaveErrorCode.ActiveRunAlreadyExists));
+        }
+
+        [Test]
+        public void ConfirmedReplacement_RejectsStaleRunAndKeepsCurrentSave()
+        {
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1)).Succeeded, Is.True);
+            string id = service.LoadActiveRun().Data.RunId;
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1, 1), "stale-run").Succeeded, Is.False);
+            Assert.That(service.LoadActiveRun().Data.RunId, Is.EqualTo(id));
+        }
+
+        [Test]
+        public void ConfirmedReplacement_InvalidNewSnapshotOrMissingSlotKeepsCurrentSave()
+        {
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1)).Succeeded, Is.True);
+            string id = service.LoadActiveRun().Data.RunId;
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(2), id).Succeeded, Is.False);
+            Assert.That(service.StartFromChapterSlot(2, 1, id).Succeeded, Is.False);
+            Assert.That(service.LoadActiveRun().Data.RunId, Is.EqualTo(id));
+        }
+
+        [Test]
+        public void ConfirmedReplacement_CommitsFreshRunWithoutAbandoningFirst()
+        {
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1)).Succeeded, Is.True);
+            string id = service.LoadActiveRun().Data.RunId;
+            Assert.That(service.StartNewGame(RoguelikeSaveTestFactory.Snapshot(1, 1), id).Succeeded, Is.True);
+            var current = service.LoadActiveRun();
+            Assert.That(current.Data.RunId, Is.Not.EqualTo(id));
+            Assert.That(current.Data.Snapshot.Characters[0].Level, Is.EqualTo(21));
         }
 
         [Test]

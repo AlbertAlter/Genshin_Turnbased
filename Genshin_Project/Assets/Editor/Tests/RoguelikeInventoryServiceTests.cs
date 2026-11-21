@@ -1,6 +1,7 @@
 #if ROGUELIKE_SAVE_TESTS
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace GenshinTurnBased.Tests.EditMode
@@ -168,6 +169,64 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(inventory.Commit(step, draft => called = true).Succeeded, Is.False);
             Assert.That(called, Is.False);
             Assert.That(notifications, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Reliquary_RequiresReachedVersionAndCommitsAWholeBatch()
+        {
+            const string boxId = "660503";
+            Assert.That(inventory.Commit(StepId(), draft => draft.AddItems(Items(boxId, 2))).Succeeded, Is.True);
+            var definitions = new List<RoguelikeItemDefinition>
+            {
+                new RoguelikeItemDefinition { ItemId = boxId, Name = "宝匣", Category = "ArtifactReliquary", Rarity = 5 },
+            };
+            foreach (int setId in new[] { 501, 502, 503 })
+                foreach (ArtifactSlot slot in Enum.GetValues(typeof(ArtifactSlot)))
+                    definitions.Add(new RoguelikeItemDefinition
+                    {
+                        ItemId = RoguelikeItemIds.Artifact(setId, slot), Name = slot.ToString(),
+                        ItemType = RoguelikeItemType.Artifact, Category = "Artifact", Stackable = false,
+                        ReferenceID = setId, Slot = (int)slot,
+                    });
+            var catalog = new RoguelikeItemCatalog(definitions);
+            var config = RoguelikeUpgradeTests.Config();
+            var reliquaries = new RoguelikeArtifactReliquaryService(new RoguelikeInventoryService(flow, new EquipmentCatalog(), catalog),
+                catalog, config, new (int, int, int, int?)[] { (501, 4, 5, 101), (502, 4, 5, 102), (503, 4, 5, null) });
+            string step = StepId();
+            var random = new SystemBattleRandomSource(42);
+            var snapshot = flow.Resume().Data.Snapshot;
+            Assert.That(reliquaries.Read(snapshot, boxId).SetIds, Is.EqualTo(new[] { 501 }));
+            Assert.That(reliquaries.Open(step, boxId, 502, 1, random).Succeeded, Is.False);
+            Assert.That(reliquaries.Open(step, boxId, 503, 1, random).Succeeded, Is.False);
+            Assert.That(random.Step, Is.Zero);
+
+            fileSystem.FailReplace = true;
+            Assert.That(reliquaries.Open(step, boxId, 501, 2, random).Succeeded, Is.False);
+            Assert.That(inventory.Read().Data.GetItemCount(boxId), Is.EqualTo(2));
+            Assert.That(inventory.Read().Data.GetArtifacts().Count, Is.EqualTo(1));
+            fileSystem.FailReplace = false;
+
+            random = new SystemBattleRandomSource(42);
+            var expectedRandom = new SystemBattleRandomSource(42);
+            var generator = new ArtifactGenerator(config, expectedRandom);
+            var expected = new[] { generator.Generate(5), generator.Generate(5) };
+            Assert.That(reliquaries.Open(step, boxId, 501, 2, random).Succeeded, Is.True);
+            var saved = inventory.Read().Data;
+            Assert.That(saved.GetItemCount(boxId), Is.Zero);
+            var rewards = saved.GetArtifacts().Where(entry => entry.ArtifactSetID == 501).ToArray();
+            Assert.That(rewards.Length, Is.EqualTo(2));
+            Assert.That(rewards[0].InstanceId, Is.Not.EqualTo(rewards[1].InstanceId));
+            for (int i = 0; i < rewards.Length; i++)
+            {
+                var artifact = rewards[i].Artifact;
+                Assert.That(artifact.Star, Is.EqualTo(5));
+                Assert.That(artifact.Level, Is.Zero);
+                Assert.That(artifact.Slot, Is.EqualTo(expected[i].Slot));
+                Assert.That(artifact.SecondaryAttributes.Select(stat => (stat.AttributeType, stat.Value)),
+                    Is.EqualTo(expected[i].SecondaryAttributes.Select(stat => (stat.AttributeType, stat.Value))));
+            }
+            Assert.That(reliquaries.Open(step, boxId, 501, 1, random).Succeeded, Is.False);
+            Assert.That(random.Step, Is.EqualTo(expectedRandom.Step));
         }
 
         [Test]

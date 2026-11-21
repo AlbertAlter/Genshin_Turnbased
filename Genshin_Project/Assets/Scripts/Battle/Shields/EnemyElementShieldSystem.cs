@@ -5,6 +5,7 @@ public sealed class EnemyShieldHitResult
 {
     [NonSerialized] public BattleEntity Target;
     [NonSerialized] internal Shield ShieldAtStart;
+    [NonSerialized] internal DamageSourceInfo Source;
     public string AttackElement;
     public float AttackElementAmount;
     public bool Committed;
@@ -16,6 +17,30 @@ public sealed class EnemyShieldHitResult
     public float AppliedLoss;
     public float RemainingShield;
     public bool BrokeShield;
+    [NonSerialized] private bool? damageImmuneAtStart;
+    [NonSerialized] private string immunityElement, immunityEffect;
+
+    internal void CaptureSource(ReactionContext context)
+    {
+        if (!HadShieldAtStart || Source != null || context == null) return;
+        Source = context.SourceEntity == null && context.SourceSnapshotOverride != null
+            ? DamageSourceInfo.FromReactionSnapshot(context.SourceSnapshotOverride)
+            : DamageSourceInfo.FromReactionContext(context);
+    }
+
+    // 只由真实伤害在元素交互前准备；纯ApplyElement不消费免疫钩子的随机判定。
+    internal void CaptureDamageImmunity(ReactionContext context)
+    {
+        if (!HadShieldAtStart || damageImmuneAtStart.HasValue || context == null
+            || context.DamageComponents == null && context.PreReactionDamage <= 0f) return;
+        immunityElement = context.AttackElement; immunityEffect = context.SourceEffectID;
+        damageImmuneAtStart = DamageImmunity.Resolve(Target, immunityElement, immunityEffect);
+    }
+    internal bool TryReadDamageImmunity(string element, string effect, out bool immune)
+    {
+        immune = damageImmuneAtStart ?? false;
+        return damageImmuneAtStart.HasValue && immunityElement == element && immunityEffect == effect;
+    }
 }
 
 /// <summary>EnemyShield.Type1 的单 Hit 查询与耐久提交入口。</summary>
@@ -26,9 +51,10 @@ public static class EnemyElementShieldSystem
         string attackElement,
         float attackElementAmount,
         string hitKind = null,
-        EnemyShieldRuleTable rules = null)
+        EnemyShieldRuleTable rules = null, DamageSourceInfo source = null)
     {
         var result = PrepareHit(target, attackElement, attackElementAmount, hitKind);
+        result.Source = source;
         CommitHit(result, rules);
         return result;
     }
@@ -77,7 +103,7 @@ public static class EnemyElementShieldSystem
             result.ShieldAtStart.Value);
         result.AppliedLoss = target.ApplyEnemyElementalShieldLoss(
             result.RequestedLoss,
-            out bool broken);
+            out bool broken, result.Source);
         result.BrokeShield = broken;
         result.RemainingShield = target.GetEnemyElementalShieldHP();
         LogResult(target, result.AttackElementAmount, result);

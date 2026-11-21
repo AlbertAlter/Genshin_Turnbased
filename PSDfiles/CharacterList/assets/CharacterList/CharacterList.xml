@@ -1,0 +1,1080 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="1440,900">
+  <controller name="screen" pages="l1,角色列表 1,l2,角色列表 2,1009,安柏,1010,凯亚,1011,丽莎,1014,芭芭拉,1012,温迪,1013,琴,1015,迪卢克,1016,可莉,1017,凝光,1018,北斗,1019,雷泽,1020,班尼特,1021,诺艾尔,1022,香菱,1023,行秋,1024,菲谢尔,1025,重云,1026,砂糖,1027,七七,1028,莫娜,1029,刻晴,1030,达达利亚,1031,迪奥娜,1032,钟离,1033,辛焱,1034,阿贝多,1035,甘雨,1036,魈,1037,胡桃,1038,罗莎莉亚,1039,烟绯,1040,优菈" selected="0" />
+  <controller name="tab" pages="0,基础属性,1,武器,2,圣遗物,3,技能,4,天赋,5,命座" selected="0" />
+  <controller name="skill" pages="0,普攻,1,重击,2,战技,3,爆发" selected="0" />
+  <controller name="slot" pages="0,生之花,1,死之羽,2,时之沙,3,空之杯,4,理之冠" selected="0" />
+  <controller name="node" pages="0,第1层,1,第2层,2,第3层,3,第4层,4,第5层,5,第6层" selected="0" />
+  <controller name="modal" pages="none,关闭,cu,角色升级,wu,武器升级,au,圣遗物强化,su,技能升级,co,激活命座,wr,武器精炼,wp,更换武器,ap,更换圣遗物" selected="0" />
+  <displayList>
+    <image id="n1_c0009" name="pageBackground" xy="0,0" size="1440,900" src="i0000" fileName="Images/PageBackground.png" touchable="false" />
+    <text id="n2_c0009" name="brand" xy="55,21" size="140,51" font="Microsoft YaHei" fontSize="28" color="#F3E9D8" text="◆ 角色" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n3_c0009" name="topDivider" xy="40,82" size="1360,1" type="rect" fillColor="#7E7060" lineSize="0" touchable="false" />
+    <component id="n4_c0009" name="backToList" xy="1268,25" size="124,44" src="c0004" fileName="SecondaryButton.xml">
+      <Button title="‹ 角色列表" controller="screen" page="l1" />
+    </component>
+    <component id="n5_c0009" name="quick_1009" xy="456,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1009" icon="ui://chrlist1i0003" />
+    </component>
+    <component id="n6_c0009" name="quick_1010" xy="522,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1010" icon="ui://chrlist1i0004" />
+    </component>
+    <component id="n7_c0009" name="quick_1011" xy="588,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1011" icon="ui://chrlist1i0005" />
+    </component>
+    <component id="n8_c0009" name="quick_1014" xy="654,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1014" icon="ui://chrlist1i0006" />
+    </component>
+    <component id="n9_c0009" name="quick_1012" xy="720,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1012" icon="ui://chrlist1i0007" />
+    </component>
+    <component id="n10_c0009" name="quick_1013" xy="786,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1013" icon="ui://chrlist1i0008" />
+    </component>
+    <component id="n11_c0009" name="quick_1015" xy="852,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1015" icon="ui://chrlist1i0009" />
+    </component>
+    <component id="n12_c0009" name="quick_1016" xy="918,19" size="54,54" src="c0008" fileName="PortraitButton.xml">
+      <Button controller="screen" page="1016" icon="ui://chrlist1i000a" />
+    </component>
+    <loader id="n13_c0009" name="characterArt" xy="139,131" size="322,552" url="ui://chrlist1i000b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i000b|ui://chrlist1i000c|ui://chrlist1i000d|ui://chrlist1i000e|ui://chrlist1i000f|ui://chrlist1i0010|ui://chrlist1i0011|ui://chrlist1i0012|ui://chrlist1i0013|ui://chrlist1i0014|ui://chrlist1i0015|ui://chrlist1i0016|ui://chrlist1i0017|ui://chrlist1i0018|ui://chrlist1i0019|ui://chrlist1i001a|ui://chrlist1i001b|ui://chrlist1i001c|ui://chrlist1i001d|ui://chrlist1i001e|ui://chrlist1i001f|ui://chrlist1i0020|ui://chrlist1i0021|ui://chrlist1i0022|ui://chrlist1i0023|ui://chrlist1i0024|ui://chrlist1i0025|ui://chrlist1i0026|ui://chrlist1i0027|ui://chrlist1i0028|ui://chrlist1i0029|ui://chrlist1i002a" />
+    </loader>
+    <image id="n14_c0009" name="cardOutline" xy="139,131" size="322,552" src="i0002" fileName="Images/CharacterCardFrame.png" touchable="false" />
+    <text id="n15_c0009" name="characterName" xy="103,698" size="395,49" font="Microsoft YaHei" fontSize="36" color="#FEFEFE" text="安柏" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="安柏|凯亚|丽莎|芭芭拉|温迪|琴|迪卢克|可莉|凝光|北斗|雷泽|班尼特|诺艾尔|香菱|行秋|菲谢尔|重云|砂糖|七七|莫娜|刻晴|达达利亚|迪奥娜|钟离|辛焱|阿贝多|甘雨|魈|胡桃|罗莎莉亚|烟绯|优菈" />
+    </text>
+    <text id="n16_c0009" name="characterLevel" xy="103,748" size="395,34" font="Microsoft YaHei" fontSize="21" color="#F3E9D8" text="火元素 · Lv.18 · 2 命" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="火元素 · Lv.18 · 2 命|冰元素 · Lv.24 · 1 命|雷元素 · Lv.16 · 0 命|水元素 · Lv.20 · 0 命|风元素 · Lv.16 · 1 命|风元素 · Lv.17 · 2 命|火元素 · Lv.18 · 0 命|火元素 · Lv.19 · 1 命|岩元素 · Lv.20 · 2 命|雷元素 · Lv.21 · 0 命|雷元素 · Lv.22 · 1 命|火元素 · Lv.23 · 2 命|岩元素 · Lv.24 · 0 命|火元素 · Lv.25 · 1 命|水元素 · Lv.26 · 2 命|雷元素 · Lv.27 · 0 命|冰元素 · Lv.28 · 1 命|风元素 · Lv.29 · 2 命|冰元素 · Lv.30 · 0 命|水元素 · Lv.12 · 1 命|雷元素 · Lv.13 · 2 命|水元素 · Lv.14 · 0 命|冰元素 · Lv.15 · 1 命|岩元素 · Lv.16 · 2 命|火元素 · Lv.17 · 0 命|岩元素 · Lv.18 · 1 命|冰元素 · Lv.19 · 2 命|风元素 · Lv.20 · 0 命|火元素 · Lv.21 · 1 命|冰元素 · Lv.22 · 2 命|火元素 · Lv.23 · 0 命|冰元素 · Lv.24 · 1 命" />
+    </text>
+    <text id="n17_c0009" name="characterOrigin" xy="103,783" size="395,29" font="Microsoft YaHei" fontSize="17" color="#D4C4AF" text="蒙德 · 弓" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="蒙德 · 弓|蒙德 · 单手剑|蒙德 · 法器|蒙德 · 法器|蒙德 · 弓|蒙德 · 单手剑|蒙德 · 双手剑|蒙德 · 法器|璃月 · 法器|璃月 · 双手剑|蒙德 · 双手剑|蒙德 · 单手剑|蒙德 · 双手剑|璃月 · 长柄武器|璃月 · 单手剑|蒙德 · 弓|璃月 · 双手剑|蒙德 · 法器|璃月 · 单手剑|蒙德 · 法器|璃月 · 单手剑|至冬 · 弓|蒙德 · 弓|璃月 · 长柄武器|璃月 · 双手剑|蒙德 · 单手剑|璃月 · 弓|璃月 · 长柄武器|璃月 · 长柄武器|蒙德 · 长柄武器|璃月 · 法器|蒙德 · 双手剑" />
+    </text>
+    <graph id="n18_c0009" name="tabRail" xy="508,108" size="789,58" type="rect" fillColor="#302822" lineSize="1" lineColor="#8D7F6D" corner="10,10,10,10" touchable="false" />
+    <component id="n19_c0009" name="tab_0" xy="515,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="基础属性" controller="tab" page="0" checked="true" />
+    </component>
+    <component id="n20_c0009" name="tab_1" xy="644,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="武器" controller="tab" page="1" checked="false" />
+    </component>
+    <component id="n21_c0009" name="tab_2" xy="773,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="圣遗物" controller="tab" page="2" checked="false" />
+    </component>
+    <component id="n22_c0009" name="tab_3" xy="902,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="技能" controller="tab" page="3" checked="false" />
+    </component>
+    <component id="n23_c0009" name="tab_4" xy="1031,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="天赋" controller="tab" page="4" checked="false" />
+    </component>
+    <component id="n24_c0009" name="tab_5" xy="1160,114" size="124,46" src="c0000" fileName="PageTab.xml">
+      <Button title="命座" controller="tab" page="5" checked="false" />
+    </component>
+    <image id="n25_c0009" name="detailFrame" xy="508,179" size="789,636" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n26_c0009" name="statsHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="基础属性" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n27_c0009" name="statsSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="等级与面板" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <graph id="n28_c0009" name="statsLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n29_c0009" name="statLabel0" xy="547,326" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="生命值上限" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n30_c0009" name="statValue0" xy="769,326" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="1,035" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="1,035|1,380|1,018|1,101|1,059|1,502|1,348|1,085|1,101|1,487|1,382|1,450|1,430|1,306|1,242|1,130|1,368|1,165|1,536|981|1,256|1,276|1,004|1,478|1,209|1,345|1,010|1,363|1,691|1,419|1,094|1,505" />
+    </text>
+    <graph id="n31_c0009" name="statRule0" xy="547,370" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n32_c0009" name="statLabel1" xy="908,326" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="攻击力" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n33_c0009" name="statValue1" xy="1130,326" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="131" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="131|128|125|129|120|94|119|107|100|110|118|96|117|136|103|138|127|105|121|144|112|141|125|141|152|112|107|164|113|137|151|157" />
+    </text>
+    <graph id="n34_c0009" name="statRule1" xy="908,370" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n35_c0009" name="statLabel2" xy="547,388" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="防御力" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n36_c0009" name="statValue2" xy="769,388" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="65" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="65|93|61|75|67|79|81|65|64|73|87|91|95|80|93|73|80|89|115|62|76|79|63|74|86|89|65|85|95|83|68|85" />
+    </text>
+    <graph id="n37_c0009" name="statRule2" xy="547,432" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n38_c0009" name="statLabel3" xy="908,388" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="元素精通" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n39_c0009" name="statValue3" xy="1130,388" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="29" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="29|0|62|0|0|0|0|0|0|51|0|0|0|0|33|0|0|23|0|0|0|0|0|0|0|0|36|0|66|0|0|0" />
+    </text>
+    <graph id="n40_c0009" name="statRule3" xy="908,432" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n41_c0009" name="statLabel4" xy="547,450" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="暴击率" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n42_c0009" name="statValue4" xy="769,450" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="5.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%|5.0%" />
+    </text>
+    <graph id="n43_c0009" name="statRule4" xy="547,494" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n44_c0009" name="statLabel5" xy="908,450" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="暴击伤害" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n45_c0009" name="statValue5" xy="1130,450" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="50.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%|50.0%" />
+    </text>
+    <graph id="n46_c0009" name="statRule5" xy="908,494" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n47_c0009" name="statLabel6" xy="547,512" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="元素充能效率" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n48_c0009" name="statValue6" xy="769,512" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="100.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%|100.0%" />
+    </text>
+    <graph id="n49_c0009" name="statRule6" xy="547,556" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n50_c0009" name="statElementLabel" xy="908,512" size="229,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="元素伤害加成" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n51_c0009" name="statElementValue" xy="1130,512" size="121,39" font="Microsoft YaHei" fontSize="20" color="#342B24" text="0.0%" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <graph id="n52_c0009" name="statRule7" xy="908,556" size="343,1" type="rect" fillColor="#958B7E" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <graph id="n53_c0009" name="equipmentSummary" xy="546,597" size="712,90" type="rect" fillColor="#C7BAA9" lineSize="1" lineColor="#9D907F" corner="8,8,8,8" touchable="false">
+      <gearDisplay controller="tab" pages="0" />
+    </graph>
+    <text id="n54_c0009" name="equipmentTitle" xy="565,604" size="106,36" font="Microsoft YaHei" fontSize="17" color="#55493D" text="当前装备" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+    </text>
+    <text id="n55_c0009" name="equippedNames" xy="565,639" size="670,31" font="Microsoft YaHei" fontSize="20" color="#342B24" text="鸦羽弓  ·  行者之心" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="鸦羽弓  ·  行者之心 / 海染砗磲|飞天御剑  ·  勇士之心 / 辰砂往生录|魔导绪论  ·  守护之心 / 来歆余响|讨龙英杰谭  ·  奇迹 / 深林的记忆|弹弓  ·  战狂 / 饰金之梦|冷刃  ·  武人 / 沙上楼阁史话|铁影阔剑  ·  教官 / 乐园遗落之花|甲级宝珏  ·  赌徒 / 水仙之梦|异世界行记  ·  流放者 / 花海甘露之光|沐浴龙血的剑  ·  冒险家 / 逐影猎人|以理服人  ·  幸运儿 / 黄金剧团|黎明神剑  ·  学士 / 昔时之歌|飞天大御剑  ·  游医 / 回声之林夜话|黑缨枪  ·  冰风迷途的勇士 / 谐律异想断章|暗铁剑  ·  平息鸣雷的尊者 / 未竟的遐思|神射手之誓  ·  渡过烈火的贤人 / 烬城勇者绘卷|白铁大剑  ·  被怜爱的少女 / 黑曜秘典|翡玉法球  ·  角斗士的终幕礼 / 长夜之誓|吃虎鱼刀  ·  翠绿之影 / 深廊终曲|西风秘典  ·  流浪大地的乐团 / 穹境示现之夜|旅行剑  ·  如雷的盛怒 / 纺月的夜歌|信使  ·  炽烈的炎之魔女 / 晨星与月的晓歌|反曲弓  ·  昔日宗室之仪 / 风起之日|白缨枪  ·  染血的骑士道 / 天之美赐|试作古华  ·  悠古的磐岩 / 影中沉凝的幻灭|匣里龙吟  ·  逆飞的流星 / 行者之心|绝弦  ·  沉沦之心 / 勇士之心|钺矛  ·  千岩牢固 / 守护之心|匣里灭辰  ·  苍白之火 / 奇迹|黑岩刺枪  ·  追忆之注连 / 战狂|流浪乐章  ·  绝缘之旗印 / 武人|西风大剑  ·  华馆梦醒形骸记 / 教官" />
+    </text>
+    <component id="n56_c0009" name="openCharacterUpgrade" xy="1124,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="角色升级" controller="modal" page="cu" />
+      <gearDisplay controller="tab" pages="0" />
+    </component>
+    <text id="n57_c0009" name="weaponHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="武器" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+    </text>
+    <text id="n58_c0009" name="weaponSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="基础属性与武器效果" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+    </text>
+    <graph id="n59_c0009" name="weaponLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="1" />
+    </graph>
+    <loader id="n60_c0009" name="weaponIcon" xy="547,323" size="109,109" url="ui://chrlist1i002b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="1" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i002b|ui://chrlist1i002c|ui://chrlist1i002d|ui://chrlist1i002e|ui://chrlist1i002f|ui://chrlist1i0030|ui://chrlist1i0031|ui://chrlist1i0032|ui://chrlist1i0033|ui://chrlist1i0034|ui://chrlist1i0035|ui://chrlist1i0036|ui://chrlist1i0037|ui://chrlist1i0038|ui://chrlist1i0039|ui://chrlist1i003a|ui://chrlist1i003b|ui://chrlist1i003c|ui://chrlist1i003d|ui://chrlist1i003e|ui://chrlist1i003f|ui://chrlist1i0040|ui://chrlist1i0041|ui://chrlist1i0042|ui://chrlist1i0043|ui://chrlist1i0044|ui://chrlist1i0045|ui://chrlist1i0046|ui://chrlist1i0047|ui://chrlist1i0048|ui://chrlist1i0049|ui://chrlist1i004a" />
+    </loader>
+    <text id="n61_c0009" name="weaponName" xy="679,324" size="540,49" font="Microsoft YaHei" fontSize="28" color="#342B24" text="鸦羽弓" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="鸦羽弓|飞天御剑|魔导绪论|讨龙英杰谭|弹弓|冷刃|铁影阔剑|甲级宝珏|异世界行记|沐浴龙血的剑|以理服人|黎明神剑|飞天大御剑|黑缨枪|暗铁剑|神射手之誓|白铁大剑|翡玉法球|吃虎鱼刀|西风秘典|旅行剑|信使|反曲弓|白缨枪|试作古华|匣里龙吟|绝弦|钺矛|匣里灭辰|黑岩刺枪|流浪乐章|西风大剑" />
+    </text>
+    <text id="n62_c0009" name="weaponInfo" xy="679,373" size="541,30" font="Microsoft YaHei" fontSize="18" color="#55493D" text="弓 · 3 星 · Lv.12" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="弓 · 3 星 · Lv.12|单手剑 · 3 星 · Lv.13|法器 · 3 星 · Lv.14|法器 · 3 星 · Lv.15|弓 · 3 星 · Lv.11|单手剑 · 3 星 · Lv.1|双手剑 · 3 星 · Lv.6|法器 · 3 星 · Lv.2|法器 · 3 星 · Lv.3|双手剑 · 3 星 · Lv.7|双手剑 · 3 星 · Lv.8|单手剑 · 3 星 · Lv.2|双手剑 · 3 星 · Lv.9|长柄武器 · 3 星 · Lv.16|单手剑 · 3 星 · Lv.3|弓 · 3 星 · Lv.13|双手剑 · 3 星 · Lv.10|法器 · 3 星 · Lv.4|单手剑 · 3 星 · Lv.4|法器 · 4 星 · Lv.14|单手剑 · 3 星 · Lv.5|弓 · 3 星 · Lv.14|弓 · 3 星 · Lv.15|长柄武器 · 3 星 · Lv.17|双手剑 · 4 星 · Lv.14|单手剑 · 4 星 · Lv.5|弓 · 4 星 · Lv.1|长柄武器 · 3 星 · Lv.18|长柄武器 · 4 星 · Lv.10|长柄武器 · 4 星 · Lv.11|法器 · 4 星 · Lv.15|双手剑 · 4 星 · Lv.15" />
+    </text>
+    <text id="n63_c0009" name="refinementRank" xy="679,405" size="541,28" font="Microsoft YaHei" fontSize="18" color="#55493D" text="精炼 1 阶" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+    </text>
+    <graph id="n64_c0009" name="passivePanel" xy="546,463" size="712,198" type="rect" fillColor="#C7BAA9" lineSize="1" lineColor="#9D907F" corner="8,8,8,8" touchable="false">
+      <gearDisplay controller="tab" pages="1" />
+    </graph>
+    <text id="n65_c0009" name="weaponEffectName" xy="568,475" size="667,35" font="Microsoft YaHei" fontSize="22" color="#342B24" text="踏火止水" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="1" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="踏火止水|决心|止水息雷|传承|弹弓|止水融冰|不屈|奔袭战术|能量沐浴|踏火息雷|有话直说|激励|勇气|克柔|过载|精准|收割|激流|决|顺风而行|旅程|飞矢传书|收割|锐利|粉碎|踏火息雷|无矢之歌|沉重|踏火止水|乘胜追击|登场乐|顺风而行" />
+    </text>
+    <richtext id="n66_c0009" name="weaponEffect" xy="568,521" size="666,126" font="Microsoft YaHei" fontSize="19" color="#342B24" text="对处于[color=#08E4FF]水元素[/color]或[color=#FFA971]火元素[/color]影响下的敌人，造成的伤害提高12%。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="1" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="对处于[color=#08E4FF]水元素[/color]或[color=#FFA971]火元素[/color]影响下的敌人，造成的伤害提高12%。|施放元素爆发后，提高12%攻击力，持续4回合。|对处于[color=#08E4FF]水元素[/color]或者[color=#DEBAFF]雷元素[/color]影响下的敌人，造成的伤害提升12%。|我方主动切换角色时，新出战的角色攻击力提升24%，持续3回合。每5回合只能触发一次。|进行普攻和重击时，若AP消耗不高于15，则造成的伤害提升36%，否则降低10%。|对处于[color=#08E4FF]水元素[/color]或[color=#CFFFFF]冰元素[/color]影响下的敌人，造成的伤害提升12%。|生命值低于70%时，重击伤害提高30%。|击败敌人后，攻击力提升12%，持续4回合。|每获得1能量，恢复自身0.6%最大生命值。|对处于[color=#FFA971]火元素[/color]或[color=#DEBAFF]雷元素[/color]影响下的敌人造成的伤害提升12%。|施放战技后，普攻和重击命中时，会对命中目标内随机敌方单体和其相邻目标造成一段60%攻击力的物理伤害，持续4回合，伤害效果每1回合只能触发一次。持续时间内再次施放战技刷新状态。|生命值高于90%时，暴击率提升14%。|普攻和重击命中时，攻击力提高6%，持续2回合。最多叠加4层。|对史莱姆类敌人造成的伤害提升40%。|触发任意[color=#DEBAFF]雷元素[/color]反应后，攻击力提高20%，持续3回合。|重击的伤害提升18%。|击败敌人时，恢复8%最大生命值。|触发任意[color=#08E4FF]水元素[/color]相关反应后，攻击力提升20%，持续3回合。|任意攻击命中时，有50%的概率对该次目标中随机一名敌人造成240%攻击力的物理伤害，每3回合触发一次。|攻击造成暴击时，有60%的几率为全队恢复6点元素能量。该效果每5回合只能触发一次。|每获得1能量，恢复自身0.6%最大生命值。|重击命中时，对随机一名被命中的目标额外造成一段100%攻击力的物理伤害，该伤害必定暴击。|击败敌人时，恢复8%最大生命值。|普攻造成的伤害提升24%。|普通攻击和重击命中时，有50%的概率对随机一名被命中的敌人及其相邻目标造成一段240%攻击力的物理伤害。该效果每4回合只能触发一次。|对处于[color=#FFA971]火元素[/color]或[color=#DEBAFF]雷元素[/color]影响下的敌人，造成的伤害提高20%。|元素战技与元素爆发的伤害提高24%。|普攻命中敌人后，对随机一名被命中的目标造成一段196%攻击力的额外伤害，每3回合触发一次。|对处于[color=#08E4FF]水元素[/color]或[color=#FFA971]火元素[/color]影响下的敌人，造成的伤害提高20%。|击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。|角色登场时，随机获得一个主题曲，持续2回合，每7回合只能触发一次。宣叙调：攻击力提升60%；咏叹调：伤害提升48%；间奏曲：元素精通提升240点。|攻击造成暴击时，有60%的几率为全队恢复6点元素能量。该效果每5回合只能触发一次。" />
+    </richtext>
+    <component id="n67_c0009" name="openWeaponUpgrade" xy="834,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="武器升级" controller="modal" page="wu" />
+      <gearDisplay controller="tab" pages="1" />
+    </component>
+    <component id="n68_c0009" name="openWeaponRefine" xy="979,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="武器精炼" controller="modal" page="wr" />
+      <gearDisplay controller="tab" pages="1" />
+    </component>
+    <component id="n69_c0009" name="openWeaponPicker" xy="1124,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="更换武器" controller="modal" page="wp" />
+      <gearDisplay controller="tab" pages="1" />
+    </component>
+    <text id="n70_c0009" name="artifactHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="圣遗物" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+    </text>
+    <text id="n71_c0009" name="artifactSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="装备位置与套装效果" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+    </text>
+    <graph id="n72_c0009" name="artifactLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+    </graph>
+    <component id="n73_c0009" name="slotTab0" xy="546,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="生之花" controller="slot" page="0" checked="true" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <loader id="n74_c0009" name="artifactIcon0" xy="546,388" size="102,102" url="ui://chrlist1i004b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="0" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i004b|ui://chrlist1i004c|ui://chrlist1i004d|ui://chrlist1i004e|ui://chrlist1i004f|ui://chrlist1i0050|ui://chrlist1i0051|ui://chrlist1i0052|ui://chrlist1i0053|ui://chrlist1i0054|ui://chrlist1i0055|ui://chrlist1i0056|ui://chrlist1i0057|ui://chrlist1i0058|ui://chrlist1i0059|ui://chrlist1i005a|ui://chrlist1i005b|ui://chrlist1i005c|ui://chrlist1i005d|ui://chrlist1i005e|ui://chrlist1i005f|ui://chrlist1i0060|ui://chrlist1i0061|ui://chrlist1i0062|ui://chrlist1i0063|ui://chrlist1i0064|ui://chrlist1i0065|ui://chrlist1i0066|ui://chrlist1i0067|ui://chrlist1i0068|ui://chrlist1i0069|ui://chrlist1i006a" />
+    </loader>
+    <text id="n75_c0009" name="artifactName0" xy="667,393" size="580,40" font="Microsoft YaHei" fontSize="26" color="#342B24" text="行者之心" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="行者之心|勇士之心|守护之心|奇迹|战狂|武人|教官|赌徒|流放者|冒险家|幸运儿|学士|游医|冰风迷途的勇士|平息鸣雷的尊者|渡过烈火的贤人|被怜爱的少女|角斗士的终幕礼|翠绿之影|流浪大地的乐团|如雷的盛怒|炽烈的炎之魔女|昔日宗室之仪|染血的骑士道|悠古的磐岩|逆飞的流星|沉沦之心|千岩牢固|苍白之火|追忆之注连|绝缘之旗印|华馆梦醒形骸记" />
+    </text>
+    <text id="n76_c0009" name="artifactInfo0" xy="667,440" size="580,32" font="Microsoft YaHei" fontSize="17" color="#55493D" text="生之花" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="生之花 · 3 星 · +1|生之花 · 4 星 · +2|生之花 · 4 星 · +3|生之花 · 3 星 · +4|生之花 · 4 星 · +0|生之花 · 4 星 · +1|生之花 · 3 星 · +2|生之花 · 4 星 · +3|生之花 · 4 星 · +4|生之花 · 3 星 · +0|生之花 · 3 星 · +1|生之花 · 4 星 · +2|生之花 · 3 星 · +3|生之花 · 5 星 · +4|生之花 · 5 星 · +0|生之花 · 4 星 · +1|生之花 · 5 星 · +2|生之花 · 5 星 · +3|生之花 · 4 星 · +4|生之花 · 5 星 · +0|生之花 · 4 星 · +2|生之花 · 5 星 · +3|生之花 · 5 星 · +4|生之花 · 4 星 · +0|生之花 · 4 星 · +1|生之花 · 5 星 · +2|生之花 · 5 星 · +3|生之花 · 4 星 · +4|生之花 · 5 星 · +0|生之花 · 5 星 · +1|生之花 · 4 星 · +2|生之花 · 5 星 · +3" />
+    </text>
+    <text id="n77_c0009" name="artifactSetEffects0" xy="547,523" size="707,150" font="Microsoft YaHei" fontSize="20" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" leading="5">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  施放元素战技后的2回合内，普通攻击和重击造成的伤害提升25%。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后，队伍中所有角色的元素精通提高120点，持续2回合。|2 件套  元素战技造成的伤害提升20%。&#10;&#10;4 件套  击败敌人时，有100%概率清除元素战技的冷却时间。该效果每4回合至多触发一次。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  施放元素爆发后，我方回合开始和结束时为队伍中所有角色（不包括自己）恢复1.5点元素能量。该效果持续2回合，无法叠加。|2 件套  生命值上限提高1000点。&#10;&#10;4 件套  我方全体生命值上限提高200点。|2 件套  防御力提高100点。&#10;&#10;4 件套  受到的伤害降低8%。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  我方任意角色能量增加时，队伍中所有弓箭和法器角色额外恢复3点元素能量。该效果每1回合只能触发一次。|2 件套  角色受到的治疗效果提高20%。&#10;&#10;4 件套  施放元素爆发时，恢复20%生命值。|2 件套  获得15%#4冰元素伤害加成#。&#10;&#10;4 件套  攻击处于#4冰元素#影响下的敌人时，暴击率提高20%；若敌人处于冻结状态下，则暴击率额外提高20%。|2 件套  #3雷元素抗性#提高40%。&#10;&#10;4 件套  对处于#3雷元素#影响下的敌人造成的伤害提升35%。|2 件套  #1火元素抗性#提高40%。&#10;&#10;4 件套  对处于#1火元素#影响下的敌人造成的伤害提升35%。|2 件套  角色造成的治疗效果提升15%。&#10;&#10;4 件套  施放元素战技或元素爆发后的3回合内，队伍中所有角色受治疗效果加成提高20%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。|2 件套  获得15%#5风元素伤害加成#。&#10;&#10;4 件套  扩散反应造成的伤害提升60%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续3回合。同元素类型的抗性降低效果无法叠加。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备该圣遗物套装的角色为法器、弓箭角色时，角色重击造成的伤害提高35%。|2 件套  获得15%#3雷元素伤害加成#。&#10;&#10;4 件套  超载、感电、超导、超绽放反应造成的伤害提升40%，超激化反应带来的伤害提升提高20%，月感电、星超导反应造成的伤害提升20%。每触发4次上述元素反应或原激化反应时，元素战技冷却时间减少1回合。每次行动最多触发一次计数。|2 件套  获得15%#1火元素伤害加成#。&#10;&#10;4 件套  超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的3回合内，2件套的效果提高50%，该效果最多叠加3次。|2 件套  元素爆发造成的伤害提升20%。&#10;&#10;4 件套  施放元素爆发后，队伍中所有角色攻击力提升20%，持续3回合。该效果不可叠加。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  击败敌人后的3回合内，重击AP消耗-5，且重击造成的伤害提升50%。|2 件套  获得15%#6岩元素伤害加成#。&#10;&#10;4 件套  获得结晶盾或触发月结晶反应时，队伍中所有角色获得35%#6岩元素#和反应对应元素伤害加成，持续3回合。多名角色装备时，只能通过最新触发的反应获得对应伤害加成。|2 件套  护盾强效提高35%。&#10;&#10;4 件套  处于护盾庇护下时，额外获得40%普通攻击和重击伤害加成。|2 件套  获得15%#2水元素伤害加成#。&#10;&#10;4 件套  施放元素战技后的4回合内，普通攻击与重击造成的伤害提高30%。|2 件套  生命值提升20%。&#10;&#10;4 件套  元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续1回合。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  元素战技命中敌人后，攻击力提升9%。该状态持续2回合，至多叠加2层，每一次效果至多触发一次。叠满2层时，2件套的效果提升100%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素战技时，如果角色的元素能量高于或等于15点，则会流失15点元素能量，使接下来的3回合内，普通攻击和重击造成的伤害提高50%，持续期间内该效果不会再次触发。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。|2 件套  防御力提高30%。&#10;&#10;4 件套  装备此圣遗物套装的角色在以下情况下，将获得「问答」效果：出战时，用#6岩元素#攻击命中敌人后获得一层，每一次效果至多触发一次；在队伍后台中，每回合我方回合开始时获得一层。问答至多叠加4层，每层能提供6%防御力与6%#6岩元素伤害加成#。每2回合我方回合开始时，若未获得问答效果，将损失一层。" />
+    </text>
+    <component id="n78_c0009" name="slotTab1" xy="690,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="死之羽" controller="slot" page="1" checked="false" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <loader id="n79_c0009" name="artifactIcon1" xy="546,388" size="102,102" url="ui://chrlist1i006b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="1" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i006b|ui://chrlist1i006c|ui://chrlist1i006d|ui://chrlist1i006e|ui://chrlist1i006f|ui://chrlist1i0070|ui://chrlist1i0071|ui://chrlist1i0072|ui://chrlist1i0073|ui://chrlist1i0074|ui://chrlist1i0075|ui://chrlist1i0076|ui://chrlist1i0077|ui://chrlist1i0078|ui://chrlist1i0079|ui://chrlist1i007a|ui://chrlist1i007b|ui://chrlist1i007c|ui://chrlist1i007d|ui://chrlist1i007e|ui://chrlist1i007f|ui://chrlist1i0080|ui://chrlist1i0081|ui://chrlist1i0082|ui://chrlist1i0083|ui://chrlist1i0084|ui://chrlist1i0085|ui://chrlist1i0086|ui://chrlist1i0087|ui://chrlist1i0088|ui://chrlist1i0089|ui://chrlist1i008a" />
+    </loader>
+    <text id="n80_c0009" name="artifactName1" xy="667,393" size="580,40" font="Microsoft YaHei" fontSize="26" color="#342B24" text="行者之心" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="行者之心|勇士之心|守护之心|奇迹|战狂|武人|教官|赌徒|流放者|冒险家|幸运儿|学士|游医|冰风迷途的勇士|平息鸣雷的尊者|渡过烈火的贤人|被怜爱的少女|角斗士的终幕礼|翠绿之影|流浪大地的乐团|如雷的盛怒|炽烈的炎之魔女|昔日宗室之仪|染血的骑士道|悠古的磐岩|逆飞的流星|沉沦之心|千岩牢固|苍白之火|追忆之注连|绝缘之旗印|华馆梦醒形骸记" />
+    </text>
+    <text id="n81_c0009" name="artifactInfo1" xy="667,440" size="580,32" font="Microsoft YaHei" fontSize="17" color="#55493D" text="死之羽" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="死之羽 · 3 星 · +1|死之羽 · 4 星 · +2|死之羽 · 4 星 · +3|死之羽 · 3 星 · +4|死之羽 · 4 星 · +0|死之羽 · 4 星 · +1|死之羽 · 3 星 · +2|死之羽 · 4 星 · +3|死之羽 · 4 星 · +4|死之羽 · 3 星 · +0|死之羽 · 3 星 · +1|死之羽 · 4 星 · +2|死之羽 · 3 星 · +3|死之羽 · 5 星 · +4|死之羽 · 5 星 · +0|死之羽 · 4 星 · +1|死之羽 · 5 星 · +2|死之羽 · 5 星 · +3|死之羽 · 4 星 · +4|死之羽 · 5 星 · +0|死之羽 · 4 星 · +2|死之羽 · 5 星 · +3|死之羽 · 5 星 · +4|死之羽 · 4 星 · +0|死之羽 · 4 星 · +1|死之羽 · 5 星 · +2|死之羽 · 5 星 · +3|死之羽 · 4 星 · +4|死之羽 · 5 星 · +0|死之羽 · 5 星 · +1|死之羽 · 4 星 · +2|死之羽 · 5 星 · +3" />
+    </text>
+    <text id="n82_c0009" name="artifactSetEffects1" xy="547,523" size="707,150" font="Microsoft YaHei" fontSize="20" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" leading="5">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  施放元素战技后的2回合内，普通攻击和重击造成的伤害提升25%。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后，队伍中所有角色的元素精通提高120点，持续2回合。|2 件套  元素战技造成的伤害提升20%。&#10;&#10;4 件套  击败敌人时，有100%概率清除元素战技的冷却时间。该效果每4回合至多触发一次。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  施放元素爆发后，我方回合开始和结束时为队伍中所有角色（不包括自己）恢复1.5点元素能量。该效果持续2回合，无法叠加。|2 件套  生命值上限提高1000点。&#10;&#10;4 件套  我方全体生命值上限提高200点。|2 件套  防御力提高100点。&#10;&#10;4 件套  受到的伤害降低8%。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  我方任意角色能量增加时，队伍中所有弓箭和法器角色额外恢复3点元素能量。该效果每1回合只能触发一次。|2 件套  角色受到的治疗效果提高20%。&#10;&#10;4 件套  施放元素爆发时，恢复20%生命值。|2 件套  获得15%#4冰元素伤害加成#。&#10;&#10;4 件套  攻击处于#4冰元素#影响下的敌人时，暴击率提高20%；若敌人处于冻结状态下，则暴击率额外提高20%。|2 件套  #3雷元素抗性#提高40%。&#10;&#10;4 件套  对处于#3雷元素#影响下的敌人造成的伤害提升35%。|2 件套  #1火元素抗性#提高40%。&#10;&#10;4 件套  对处于#1火元素#影响下的敌人造成的伤害提升35%。|2 件套  角色造成的治疗效果提升15%。&#10;&#10;4 件套  施放元素战技或元素爆发后的3回合内，队伍中所有角色受治疗效果加成提高20%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。|2 件套  获得15%#5风元素伤害加成#。&#10;&#10;4 件套  扩散反应造成的伤害提升60%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续3回合。同元素类型的抗性降低效果无法叠加。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备该圣遗物套装的角色为法器、弓箭角色时，角色重击造成的伤害提高35%。|2 件套  获得15%#3雷元素伤害加成#。&#10;&#10;4 件套  超载、感电、超导、超绽放反应造成的伤害提升40%，超激化反应带来的伤害提升提高20%，月感电、星超导反应造成的伤害提升20%。每触发4次上述元素反应或原激化反应时，元素战技冷却时间减少1回合。每次行动最多触发一次计数。|2 件套  获得15%#1火元素伤害加成#。&#10;&#10;4 件套  超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的3回合内，2件套的效果提高50%，该效果最多叠加3次。|2 件套  元素爆发造成的伤害提升20%。&#10;&#10;4 件套  施放元素爆发后，队伍中所有角色攻击力提升20%，持续3回合。该效果不可叠加。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  击败敌人后的3回合内，重击AP消耗-5，且重击造成的伤害提升50%。|2 件套  获得15%#6岩元素伤害加成#。&#10;&#10;4 件套  获得结晶盾或触发月结晶反应时，队伍中所有角色获得35%#6岩元素#和反应对应元素伤害加成，持续3回合。多名角色装备时，只能通过最新触发的反应获得对应伤害加成。|2 件套  护盾强效提高35%。&#10;&#10;4 件套  处于护盾庇护下时，额外获得40%普通攻击和重击伤害加成。|2 件套  获得15%#2水元素伤害加成#。&#10;&#10;4 件套  施放元素战技后的4回合内，普通攻击与重击造成的伤害提高30%。|2 件套  生命值提升20%。&#10;&#10;4 件套  元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续1回合。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  元素战技命中敌人后，攻击力提升9%。该状态持续2回合，至多叠加2层，每一次效果至多触发一次。叠满2层时，2件套的效果提升100%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素战技时，如果角色的元素能量高于或等于15点，则会流失15点元素能量，使接下来的3回合内，普通攻击和重击造成的伤害提高50%，持续期间内该效果不会再次触发。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。|2 件套  防御力提高30%。&#10;&#10;4 件套  装备此圣遗物套装的角色在以下情况下，将获得「问答」效果：出战时，用#6岩元素#攻击命中敌人后获得一层，每一次效果至多触发一次；在队伍后台中，每回合我方回合开始时获得一层。问答至多叠加4层，每层能提供6%防御力与6%#6岩元素伤害加成#。每2回合我方回合开始时，若未获得问答效果，将损失一层。" />
+    </text>
+    <component id="n83_c0009" name="slotTab2" xy="834,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="时之沙" controller="slot" page="2" checked="false" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <loader id="n84_c0009" name="artifactIcon2" xy="546,388" size="102,102" url="ui://chrlist1i008b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="2" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i008b|ui://chrlist1i008c|ui://chrlist1i008d|ui://chrlist1i008e|ui://chrlist1i008f|ui://chrlist1i0090|ui://chrlist1i0091|ui://chrlist1i0092|ui://chrlist1i0093|ui://chrlist1i0094|ui://chrlist1i0095|ui://chrlist1i0096|ui://chrlist1i0097|ui://chrlist1i0098|ui://chrlist1i0099|ui://chrlist1i009a|ui://chrlist1i009b|ui://chrlist1i009c|ui://chrlist1i009d|ui://chrlist1i009e|ui://chrlist1i009f|ui://chrlist1i00a0|ui://chrlist1i00a1|ui://chrlist1i00a2|ui://chrlist1i00a3|ui://chrlist1i00a4|ui://chrlist1i00a5|ui://chrlist1i00a6|ui://chrlist1i00a7|ui://chrlist1i00a8|ui://chrlist1i00a9|ui://chrlist1i00aa" />
+    </loader>
+    <text id="n85_c0009" name="artifactName2" xy="667,393" size="580,40" font="Microsoft YaHei" fontSize="26" color="#342B24" text="行者之心" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="行者之心|勇士之心|守护之心|奇迹|战狂|武人|教官|赌徒|流放者|冒险家|幸运儿|学士|游医|冰风迷途的勇士|平息鸣雷的尊者|渡过烈火的贤人|被怜爱的少女|角斗士的终幕礼|翠绿之影|流浪大地的乐团|如雷的盛怒|炽烈的炎之魔女|昔日宗室之仪|染血的骑士道|悠古的磐岩|逆飞的流星|沉沦之心|千岩牢固|苍白之火|追忆之注连|绝缘之旗印|华馆梦醒形骸记" />
+    </text>
+    <text id="n86_c0009" name="artifactInfo2" xy="667,440" size="580,32" font="Microsoft YaHei" fontSize="17" color="#55493D" text="时之沙" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="时之沙 · 3 星 · +1|时之沙 · 4 星 · +2|时之沙 · 4 星 · +3|时之沙 · 3 星 · +4|时之沙 · 4 星 · +0|时之沙 · 4 星 · +1|时之沙 · 3 星 · +2|时之沙 · 4 星 · +3|时之沙 · 4 星 · +4|时之沙 · 3 星 · +0|时之沙 · 3 星 · +1|时之沙 · 4 星 · +2|时之沙 · 3 星 · +3|时之沙 · 5 星 · +4|时之沙 · 5 星 · +0|时之沙 · 4 星 · +1|时之沙 · 5 星 · +2|时之沙 · 5 星 · +3|时之沙 · 4 星 · +4|时之沙 · 5 星 · +0|时之沙 · 4 星 · +2|时之沙 · 5 星 · +3|时之沙 · 5 星 · +4|时之沙 · 4 星 · +0|时之沙 · 4 星 · +1|时之沙 · 5 星 · +2|时之沙 · 5 星 · +3|时之沙 · 4 星 · +4|时之沙 · 5 星 · +0|时之沙 · 5 星 · +1|时之沙 · 4 星 · +2|时之沙 · 5 星 · +3" />
+    </text>
+    <text id="n87_c0009" name="artifactSetEffects2" xy="547,523" size="707,150" font="Microsoft YaHei" fontSize="20" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" leading="5">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  施放元素战技后的2回合内，普通攻击和重击造成的伤害提升25%。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后，队伍中所有角色的元素精通提高120点，持续2回合。|2 件套  元素战技造成的伤害提升20%。&#10;&#10;4 件套  击败敌人时，有100%概率清除元素战技的冷却时间。该效果每4回合至多触发一次。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  施放元素爆发后，我方回合开始和结束时为队伍中所有角色（不包括自己）恢复1.5点元素能量。该效果持续2回合，无法叠加。|2 件套  生命值上限提高1000点。&#10;&#10;4 件套  我方全体生命值上限提高200点。|2 件套  防御力提高100点。&#10;&#10;4 件套  受到的伤害降低8%。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  我方任意角色能量增加时，队伍中所有弓箭和法器角色额外恢复3点元素能量。该效果每1回合只能触发一次。|2 件套  角色受到的治疗效果提高20%。&#10;&#10;4 件套  施放元素爆发时，恢复20%生命值。|2 件套  获得15%#4冰元素伤害加成#。&#10;&#10;4 件套  攻击处于#4冰元素#影响下的敌人时，暴击率提高20%；若敌人处于冻结状态下，则暴击率额外提高20%。|2 件套  #3雷元素抗性#提高40%。&#10;&#10;4 件套  对处于#3雷元素#影响下的敌人造成的伤害提升35%。|2 件套  #1火元素抗性#提高40%。&#10;&#10;4 件套  对处于#1火元素#影响下的敌人造成的伤害提升35%。|2 件套  角色造成的治疗效果提升15%。&#10;&#10;4 件套  施放元素战技或元素爆发后的3回合内，队伍中所有角色受治疗效果加成提高20%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。|2 件套  获得15%#5风元素伤害加成#。&#10;&#10;4 件套  扩散反应造成的伤害提升60%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续3回合。同元素类型的抗性降低效果无法叠加。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备该圣遗物套装的角色为法器、弓箭角色时，角色重击造成的伤害提高35%。|2 件套  获得15%#3雷元素伤害加成#。&#10;&#10;4 件套  超载、感电、超导、超绽放反应造成的伤害提升40%，超激化反应带来的伤害提升提高20%，月感电、星超导反应造成的伤害提升20%。每触发4次上述元素反应或原激化反应时，元素战技冷却时间减少1回合。每次行动最多触发一次计数。|2 件套  获得15%#1火元素伤害加成#。&#10;&#10;4 件套  超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的3回合内，2件套的效果提高50%，该效果最多叠加3次。|2 件套  元素爆发造成的伤害提升20%。&#10;&#10;4 件套  施放元素爆发后，队伍中所有角色攻击力提升20%，持续3回合。该效果不可叠加。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  击败敌人后的3回合内，重击AP消耗-5，且重击造成的伤害提升50%。|2 件套  获得15%#6岩元素伤害加成#。&#10;&#10;4 件套  获得结晶盾或触发月结晶反应时，队伍中所有角色获得35%#6岩元素#和反应对应元素伤害加成，持续3回合。多名角色装备时，只能通过最新触发的反应获得对应伤害加成。|2 件套  护盾强效提高35%。&#10;&#10;4 件套  处于护盾庇护下时，额外获得40%普通攻击和重击伤害加成。|2 件套  获得15%#2水元素伤害加成#。&#10;&#10;4 件套  施放元素战技后的4回合内，普通攻击与重击造成的伤害提高30%。|2 件套  生命值提升20%。&#10;&#10;4 件套  元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续1回合。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。|2 件套  造成的物理伤害提高25%。&#10;&#10;4 件套  元素战技命中敌人后，攻击力提升9%。该状态持续2回合，至多叠加2层，每一次效果至多触发一次。叠满2层时，2件套的效果提升100%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素战技时，如果角色的元素能量高于或等于15点，则会流失15点元素能量，使接下来的3回合内，普通攻击和重击造成的伤害提高50%，持续期间内该效果不会再次触发。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。|2 件套  防御力提高30%。&#10;&#10;4 件套  装备此圣遗物套装的角色在以下情况下，将获得「问答」效果：出战时，用#6岩元素#攻击命中敌人后获得一层，每一次效果至多触发一次；在队伍后台中，每回合我方回合开始时获得一层。问答至多叠加4层，每层能提供6%防御力与6%#6岩元素伤害加成#。每2回合我方回合开始时，若未获得问答效果，将损失一层。" />
+    </text>
+    <component id="n88_c0009" name="slotTab3" xy="978,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="空之杯" controller="slot" page="3" checked="false" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <loader id="n89_c0009" name="artifactIcon3" xy="546,388" size="102,102" url="ui://chrlist1i00ab" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="3" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i00ab|ui://chrlist1i00ac|ui://chrlist1i00ad|ui://chrlist1i00ae|ui://chrlist1i00af|ui://chrlist1i00b0|ui://chrlist1i00b1|ui://chrlist1i00b2|ui://chrlist1i00b3|ui://chrlist1i00b4|ui://chrlist1i00b5|ui://chrlist1i00b6|ui://chrlist1i00b7|ui://chrlist1i00b8|ui://chrlist1i00b9|ui://chrlist1i00ba|ui://chrlist1i00bb|ui://chrlist1i00bc|ui://chrlist1i00bd|ui://chrlist1i00be|ui://chrlist1i00bf|ui://chrlist1i00c0|ui://chrlist1i00c1|ui://chrlist1i00c2|ui://chrlist1i00c3|ui://chrlist1i00c4|ui://chrlist1i00c5|ui://chrlist1i00c6|ui://chrlist1i00c7|ui://chrlist1i00c8|ui://chrlist1i00c9|ui://chrlist1i00ca" />
+    </loader>
+    <text id="n90_c0009" name="artifactName3" xy="667,393" size="580,40" font="Microsoft YaHei" fontSize="26" color="#342B24" text="海染砗磲" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="海染砗磲|辰砂往生录|来歆余响|深林的记忆|饰金之梦|沙上楼阁史话|乐园遗落之花|水仙之梦|花海甘露之光|逐影猎人|黄金剧团|昔时之歌|回声之林夜话|谐律异想断章|未竟的遐思|烬城勇者绘卷|黑曜秘典|长夜之誓|深廊终曲|穹境示现之夜|纺月的夜歌|晨星与月的晓歌|风起之日|天之美赐|影中沉凝的幻灭|行者之心|勇士之心|守护之心|奇迹|战狂|武人|教官" />
+    </text>
+    <text id="n91_c0009" name="artifactInfo3" xy="667,440" size="580,32" font="Microsoft YaHei" fontSize="17" color="#55493D" text="空之杯" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="空之杯 · 5 星 · +4|空之杯 · 4 星 · +0|空之杯 · 5 星 · +1|空之杯 · 5 星 · +2|空之杯 · 4 星 · +3|空之杯 · 5 星 · +4|空之杯 · 5 星 · +0|空之杯 · 4 星 · +1|空之杯 · 5 星 · +2|空之杯 · 5 星 · +3|空之杯 · 4 星 · +4|空之杯 · 5 星 · +0|空之杯 · 5 星 · +1|空之杯 · 4 星 · +2|空之杯 · 5 星 · +3|空之杯 · 5 星 · +4|空之杯 · 4 星 · +0|空之杯 · 5 星 · +1|空之杯 · 5 星 · +2|空之杯 · 4 星 · +3|空之杯 · 5 星 · +4|空之杯 · 5 星 · +0|空之杯 · 4 星 · +1|空之杯 · 5 星 · +2|空之杯 · 5 星 · +3|空之杯 · 3 星 · +1|空之杯 · 4 星 · +2|空之杯 · 4 星 · +3|空之杯 · 3 星 · +4|空之杯 · 4 星 · +0|空之杯 · 4 星 · +1|空之杯 · 3 星 · +2" />
+    </text>
+    <text id="n92_c0009" name="artifactSetEffects3" xy="547,523" size="707,150" font="Microsoft YaHei" fontSize="20" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" leading="5">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="2 件套  治疗加成提高15%。&#10;&#10;4 件套  装备此圣遗物套装的角色对队伍中的角色进行治疗时，将产生持续1回合的海染泡沫，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，海染泡沫将会爆炸，对全体敌人造成90%累计回复量的物理伤害（该伤害结算方式同感电、超导等元素反应，但不受元素精通、等级或反应伤害加成效果影响）。每1回合至多产生一个海染泡沫；海染泡沫至多记录30000点回复量，含溢出部分的治疗量；自己的队伍中同时至多存在一个海染泡沫。装备此圣遗物套装的角色未出战时，依然能触发该效果。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素爆发后，将产生持续4回合的「潜光」效果：攻击力提升8%；并在角色的生命值降低时，攻击力进一步提升10%，至多通过这种方式提升4次。「潜光」效果将在角色退场时消失；持续期间再次施放元素爆发，将移除原有的「潜光」。|2 件套  攻击力提高18%。&#10;&#10;4 件套  普通攻击命中敌人时，有36%概率触发「幽谷祝祀」：该次hit造成的基础伤害提高，伤害提高值为攻击力的70%。普通攻击未触发「幽谷祝祀」时，会使下次触发概率提升20%；单次hit至多判定1次触发与否。|2 件套  获得15%#7草元素伤害加成#。&#10;&#10;4 件套  元素战技或元素爆发命中敌人后，使命中目标的#7草元素抗性#降低30%，持续2回合。装备者处于队伍后台时，依然能触发该效果。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后的2回合内，会根据队伍内其他角色的元素类型，使装备者获得强化：队伍中每存在1个和装备者同类元素的角色，攻击力提升14%；每存在1个和装备者不同元素类型的角色，元素精通提升50点。上述每类效果至多计算3个角色。该效果每2回合至多触发一次。装备者处于队伍后台时，依然能触发该效果。|2 件套  获得15%#5风元素伤害加成#。&#10;&#10;4 件套  重击命中敌人后，该角色的普通攻击AP消耗-2，普通攻击与重击造成的伤害提升40%，持续4回合。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备者绽放、超绽放、烈绽放反应造成的伤害提升40%，造成的月绽放反应伤害提升10%。此外，装备者触发绽放、超绽放、烈绽放、月绽放后，上述效果带来的加成提升25%，该提升效果持续3回合，至多叠加4次，单次效果至多触发一次。装备者处于队伍后台时依然能触发该效果。|2 件套  获得15%#2水元素伤害加成#。&#10;&#10;4 件套  普通攻击、重击、元素战技或元素爆发命中敌人后，将产生1层持续2回合的「镜中水仙」状态。处于1/2/3层及以上「镜中水仙」效果下时，攻击力将提高7%/16%/25%，#2水元素伤害加成#提升4%/9%/15%。由普通攻击、重击、元素战技或元素爆发产生的「镜中水仙」将分别独立存在。|2 件套  生命值提升20%。&#10;&#10;4 件套  元素战技与元素爆发造成的伤害提升10%；装备者受到伤害后的1回合内，上述伤害提升效果提高80%，该提高效果至多叠加5层，每层持续时间独立计算，处于队伍后台时依然能触发该效果。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  当前生命值提升或降低时，暴击率提升12%，该效果持续1回合，至多叠加3次。|2 件套  元素战技造成的伤害提升20%。&#10;&#10;4 件套  元素战技造成的伤害提升25%；此外，处于队伍后台时，元素战技造成的伤害还将进一步提升25%，该效果将在登场后移除。|2 件套  治疗加成提高15%。&#10;&#10;4 件套  装备者对队伍中的角色进行治疗时，将产生持续2回合的渴盼状态，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，渴盼效果将转变为「彼时的浪潮」效果：队伍中当前出战角色的普通攻击、重击、元素战技与元素爆发命中敌人时，将基于渴盼效果所记录的回复量的8%提高基础伤害，「彼时的浪潮」将在生效5个hit或3回合后移除。一次渴盼效果至多记录15000点回复量，同时至多存在一个，能够记录多个装备者的产生的回复量；装备者处于队伍后台时，依然能触发该效果。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素战技后的3回合内，#6岩元素伤害加成#提升20%；若处于结晶反应产生的护盾庇护下，或敌方场地存在月结晶反应产生的月笼，上述效果提高150%，进一步提高的效果将在不满足上述条件时被移除。|2 件套  攻击力提高18%。&#10;&#10;4 件套  生命之契的数值提升或降低时，角色造成的伤害提升18%，该效果持续2回合，至多叠加3次。|2 件套  攻击力提高18%。&#10;&#10;4 件套  若我方回合结束时装备者未出战，则造成的伤害提升50%，至多50%。在出战状态下，我方回合开始和结束时，敌方场地若不存在处于燃烧状态下的敌人，上述伤害提升效果降低10%，直到降低至0%；存在处于燃烧状态下的敌人时，则提升10%，直到达到50%。装备此圣遗物套装的角色未出战时，依然会触发后者的增加效果。|2 件套  队伍中附近的角色触发「夜魂迸发」时，装备者恢复6点元素能量。&#10;&#10;4 件套  装备者触发其对应元素类型的相关反应后，队伍中附近的所有角色的该元素反应相关的元素伤害加成提升12%，持续4回合。若触发该效果时，装备者处于夜魂加持状态下，还将使队伍中附近的所有角色的与该元素反应相关的元素伤害加成提升28%，持续5回合。装备者处于后台时也能触发上述效果。同名圣遗物套装产生的伤害加成效果无法叠加。|2 件套  装备者处于夜魂加持状态，并且在场上时，造成的伤害提高15%。&#10;&#10;4 件套  装备者在场上消耗1点夜魂值后，暴击率提高40%，持续2回合。该效果每次行动至多触发一次。|2 件套  重击造成的伤害提升25%。&#10;&#10;4 件套  装备者的普攻和元素战技命中敌人后，获得2层「永照的流辉」，由普攻或元素战技产生的该效果分别每一次行动至多触发一次。永照的流辉：重击造成的伤害提升15%，持续2回合，至多叠加5层，每层持续时间独立计算。|2 件套  获得15%#4冰元素伤害加成#。&#10;&#10;4 件套  装备者的元素能量为0时，普通攻击造成的伤害提升60%，元素爆发造成的伤害提升60%。装备者的普通攻击造成伤害后，上述元素爆发伤害提升效果将失效2回合；装备者的元素爆发造成伤害后，上述普通攻击伤害提升效果将失效2回合。角色处于队伍后台也能触发。|2 件套  元素精通提高80点。&#10;&#10;4 件套  队伍中附近的角色触发月曜反应时，若装备者在场上，将获得持续1回合的「月辉明光·蓄念」效果：队伍的月兆为初辉/满辉时，暴击率提升15%/30%。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  造成元素伤害时，获得持续2回合的「月辉明光·崇信」效果：队伍的月兆为初辉/满辉时，队伍中的所有角色的元素精通提高60点/120点。装备者处于后台时也能触发上述效果。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备者未出战时，造成的月曜反应伤害提升20%；队伍的月兆等级至少为满辉时，造成的月曜反应伤害进一步提升40%。上述效果将在我方回合结束时且装备者出战的情况下移除。|2 件套  攻击力提高18%。&#10;&#10;4 件套  普通攻击、重击、元素战技或元素爆发命中敌人后，将获得持续2回合的「风与牧歌的决意」：攻击力提高25%，暴击率提升20%。装备者未出战时，也能触发上述效果。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  装备者施放元素战技后，会获得「天光之引」效果：依据装备者的元素类型，使我方全体获得20%对应元素伤害加成，持续5回合。装备者未出战时也能触发上述效果，同名圣遗物套装产生的伤害加成效果无法叠加。\n·队伍拥有「魔导·秘仪」效果时，「天光之引」效果将会升级为「凡世颂歌」，除装备者的元素类型外，还会依据队伍中自己的当前场上角色的元素类型，使我方全体角色获得对应元素伤害加成，且上述两种元素伤害加成提升至40%，同元素类型的元素伤害加成效果无法叠加。|2 件套  攻击力提高18%。&#10;&#10;4 件套  超导反应造成的伤害提升80%，星超导反应造成的伤害提升40%；装备者攻击受到超导或星超导反应影响的敌人时，本次攻击的暴击率提高16%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  施放元素战技后的2回合内，普通攻击和重击造成的伤害提升25%。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后，队伍中所有角色的元素精通提高120点，持续2回合。" />
+    </text>
+    <component id="n93_c0009" name="slotTab4" xy="1122,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="理之冠" controller="slot" page="4" checked="false" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <loader id="n94_c0009" name="artifactIcon4" xy="546,388" size="102,102" url="ui://chrlist1i00cb" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="4" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i00cb|ui://chrlist1i00cc|ui://chrlist1i00cd|ui://chrlist1i00ce|ui://chrlist1i00cf|ui://chrlist1i00d0|ui://chrlist1i00d1|ui://chrlist1i00d2|ui://chrlist1i00d3|ui://chrlist1i00d4|ui://chrlist1i00d5|ui://chrlist1i00d6|ui://chrlist1i00d7|ui://chrlist1i00d8|ui://chrlist1i00d9|ui://chrlist1i00da|ui://chrlist1i00db|ui://chrlist1i00dc|ui://chrlist1i00dd|ui://chrlist1i00de|ui://chrlist1i00df|ui://chrlist1i00e0|ui://chrlist1i00e1|ui://chrlist1i00e2|ui://chrlist1i00e3|ui://chrlist1i00e4|ui://chrlist1i00e5|ui://chrlist1i00e6|ui://chrlist1i00e7|ui://chrlist1i00e8|ui://chrlist1i00e9|ui://chrlist1i00ea" />
+    </loader>
+    <text id="n95_c0009" name="artifactName4" xy="667,393" size="580,40" font="Microsoft YaHei" fontSize="26" color="#342B24" text="海染砗磲" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="4" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="海染砗磲|辰砂往生录|来歆余响|深林的记忆|饰金之梦|沙上楼阁史话|乐园遗落之花|水仙之梦|花海甘露之光|逐影猎人|黄金剧团|昔时之歌|回声之林夜话|谐律异想断章|未竟的遐思|烬城勇者绘卷|黑曜秘典|长夜之誓|深廊终曲|穹境示现之夜|纺月的夜歌|晨星与月的晓歌|风起之日|天之美赐|影中沉凝的幻灭|行者之心|勇士之心|守护之心|奇迹|战狂|武人|教官" />
+    </text>
+    <text id="n96_c0009" name="artifactInfo4" xy="667,440" size="580,32" font="Microsoft YaHei" fontSize="17" color="#55493D" text="理之冠" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="4" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="理之冠 · 5 星 · +4|理之冠 · 4 星 · +0|理之冠 · 5 星 · +1|理之冠 · 5 星 · +2|理之冠 · 4 星 · +3|理之冠 · 5 星 · +4|理之冠 · 5 星 · +0|理之冠 · 4 星 · +1|理之冠 · 5 星 · +2|理之冠 · 5 星 · +3|理之冠 · 4 星 · +4|理之冠 · 5 星 · +0|理之冠 · 5 星 · +1|理之冠 · 4 星 · +2|理之冠 · 5 星 · +3|理之冠 · 5 星 · +4|理之冠 · 4 星 · +0|理之冠 · 5 星 · +1|理之冠 · 5 星 · +2|理之冠 · 4 星 · +3|理之冠 · 5 星 · +4|理之冠 · 5 星 · +0|理之冠 · 4 星 · +1|理之冠 · 5 星 · +2|理之冠 · 5 星 · +3|理之冠 · 3 星 · +1|理之冠 · 4 星 · +2|理之冠 · 4 星 · +3|理之冠 · 3 星 · +4|理之冠 · 4 星 · +0|理之冠 · 4 星 · +1|理之冠 · 3 星 · +2" />
+    </text>
+    <text id="n97_c0009" name="artifactSetEffects4" xy="547,523" size="707,150" font="Microsoft YaHei" fontSize="20" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" leading="5">
+      <gearDisplay controller="tab" pages="2" />
+      <gearDisplay2 controller="slot" pages="4" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="2 件套  治疗加成提高15%。&#10;&#10;4 件套  装备此圣遗物套装的角色对队伍中的角色进行治疗时，将产生持续1回合的海染泡沫，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，海染泡沫将会爆炸，对全体敌人造成90%累计回复量的物理伤害（该伤害结算方式同感电、超导等元素反应，但不受元素精通、等级或反应伤害加成效果影响）。每1回合至多产生一个海染泡沫；海染泡沫至多记录30000点回复量，含溢出部分的治疗量；自己的队伍中同时至多存在一个海染泡沫。装备此圣遗物套装的角色未出战时，依然能触发该效果。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素爆发后，将产生持续4回合的「潜光」效果：攻击力提升8%；并在角色的生命值降低时，攻击力进一步提升10%，至多通过这种方式提升4次。「潜光」效果将在角色退场时消失；持续期间再次施放元素爆发，将移除原有的「潜光」。|2 件套  攻击力提高18%。&#10;&#10;4 件套  普通攻击命中敌人时，有36%概率触发「幽谷祝祀」：该次hit造成的基础伤害提高，伤害提高值为攻击力的70%。普通攻击未触发「幽谷祝祀」时，会使下次触发概率提升20%；单次hit至多判定1次触发与否。|2 件套  获得15%#7草元素伤害加成#。&#10;&#10;4 件套  元素战技或元素爆发命中敌人后，使命中目标的#7草元素抗性#降低30%，持续2回合。装备者处于队伍后台时，依然能触发该效果。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后的2回合内，会根据队伍内其他角色的元素类型，使装备者获得强化：队伍中每存在1个和装备者同类元素的角色，攻击力提升14%；每存在1个和装备者不同元素类型的角色，元素精通提升50点。上述每类效果至多计算3个角色。该效果每2回合至多触发一次。装备者处于队伍后台时，依然能触发该效果。|2 件套  获得15%#5风元素伤害加成#。&#10;&#10;4 件套  重击命中敌人后，该角色的普通攻击AP消耗-2，普通攻击与重击造成的伤害提升40%，持续4回合。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备者绽放、超绽放、烈绽放反应造成的伤害提升40%，造成的月绽放反应伤害提升10%。此外，装备者触发绽放、超绽放、烈绽放、月绽放后，上述效果带来的加成提升25%，该提升效果持续3回合，至多叠加4次，单次效果至多触发一次。装备者处于队伍后台时依然能触发该效果。|2 件套  获得15%#2水元素伤害加成#。&#10;&#10;4 件套  普通攻击、重击、元素战技或元素爆发命中敌人后，将产生1层持续2回合的「镜中水仙」状态。处于1/2/3层及以上「镜中水仙」效果下时，攻击力将提高7%/16%/25%，#2水元素伤害加成#提升4%/9%/15%。由普通攻击、重击、元素战技或元素爆发产生的「镜中水仙」将分别独立存在。|2 件套  生命值提升20%。&#10;&#10;4 件套  元素战技与元素爆发造成的伤害提升10%；装备者受到伤害后的1回合内，上述伤害提升效果提高80%，该提高效果至多叠加5层，每层持续时间独立计算，处于队伍后台时依然能触发该效果。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  当前生命值提升或降低时，暴击率提升12%，该效果持续1回合，至多叠加3次。|2 件套  元素战技造成的伤害提升20%。&#10;&#10;4 件套  元素战技造成的伤害提升25%；此外，处于队伍后台时，元素战技造成的伤害还将进一步提升25%，该效果将在登场后移除。|2 件套  治疗加成提高15%。&#10;&#10;4 件套  装备者对队伍中的角色进行治疗时，将产生持续2回合的渴盼状态，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，渴盼效果将转变为「彼时的浪潮」效果：队伍中当前出战角色的普通攻击、重击、元素战技与元素爆发命中敌人时，将基于渴盼效果所记录的回复量的8%提高基础伤害，「彼时的浪潮」将在生效5个hit或3回合后移除。一次渴盼效果至多记录15000点回复量，同时至多存在一个，能够记录多个装备者的产生的回复量；装备者处于队伍后台时，依然能触发该效果。|2 件套  攻击力提高18%。&#10;&#10;4 件套  施放元素战技后的3回合内，#6岩元素伤害加成#提升20%；若处于结晶反应产生的护盾庇护下，或敌方场地存在月结晶反应产生的月笼，上述效果提高150%，进一步提高的效果将在不满足上述条件时被移除。|2 件套  攻击力提高18%。&#10;&#10;4 件套  生命之契的数值提升或降低时，角色造成的伤害提升18%，该效果持续2回合，至多叠加3次。|2 件套  攻击力提高18%。&#10;&#10;4 件套  若我方回合结束时装备者未出战，则造成的伤害提升50%，至多50%。在出战状态下，我方回合开始和结束时，敌方场地若不存在处于燃烧状态下的敌人，上述伤害提升效果降低10%，直到降低至0%；存在处于燃烧状态下的敌人时，则提升10%，直到达到50%。装备此圣遗物套装的角色未出战时，依然会触发后者的增加效果。|2 件套  队伍中附近的角色触发「夜魂迸发」时，装备者恢复6点元素能量。&#10;&#10;4 件套  装备者触发其对应元素类型的相关反应后，队伍中附近的所有角色的该元素反应相关的元素伤害加成提升12%，持续4回合。若触发该效果时，装备者处于夜魂加持状态下，还将使队伍中附近的所有角色的与该元素反应相关的元素伤害加成提升28%，持续5回合。装备者处于后台时也能触发上述效果。同名圣遗物套装产生的伤害加成效果无法叠加。|2 件套  装备者处于夜魂加持状态，并且在场上时，造成的伤害提高15%。&#10;&#10;4 件套  装备者在场上消耗1点夜魂值后，暴击率提高40%，持续2回合。该效果每次行动至多触发一次。|2 件套  重击造成的伤害提升25%。&#10;&#10;4 件套  装备者的普攻和元素战技命中敌人后，获得2层「永照的流辉」，由普攻或元素战技产生的该效果分别每一次行动至多触发一次。永照的流辉：重击造成的伤害提升15%，持续2回合，至多叠加5层，每层持续时间独立计算。|2 件套  获得15%#4冰元素伤害加成#。&#10;&#10;4 件套  装备者的元素能量为0时，普通攻击造成的伤害提升60%，元素爆发造成的伤害提升60%。装备者的普通攻击造成伤害后，上述元素爆发伤害提升效果将失效2回合；装备者的元素爆发造成伤害后，上述普通攻击伤害提升效果将失效2回合。角色处于队伍后台也能触发。|2 件套  元素精通提高80点。&#10;&#10;4 件套  队伍中附近的角色触发月曜反应时，若装备者在场上，将获得持续1回合的「月辉明光·蓄念」效果：队伍的月兆为初辉/满辉时，暴击率提升15%/30%。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  造成元素伤害时，获得持续2回合的「月辉明光·崇信」效果：队伍的月兆为初辉/满辉时，队伍中的所有角色的元素精通提高60点/120点。装备者处于后台时也能触发上述效果。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。|2 件套  元素精通提高80点。&#10;&#10;4 件套  装备者未出战时，造成的月曜反应伤害提升20%；队伍的月兆等级至少为满辉时，造成的月曜反应伤害进一步提升40%。上述效果将在我方回合结束时且装备者出战的情况下移除。|2 件套  攻击力提高18%。&#10;&#10;4 件套  普通攻击、重击、元素战技或元素爆发命中敌人后，将获得持续2回合的「风与牧歌的决意」：攻击力提高25%，暴击率提升20%。装备者未出战时，也能触发上述效果。|2 件套  元素充能效率提高20%。&#10;&#10;4 件套  装备者施放元素战技后，会获得「天光之引」效果：依据装备者的元素类型，使我方全体获得20%对应元素伤害加成，持续5回合。装备者未出战时也能触发上述效果，同名圣遗物套装产生的伤害加成效果无法叠加。\n·队伍拥有「魔导·秘仪」效果时，「天光之引」效果将会升级为「凡世颂歌」，除装备者的元素类型外，还会依据队伍中自己的当前场上角色的元素类型，使我方全体角色获得对应元素伤害加成，且上述两种元素伤害加成提升至40%，同元素类型的元素伤害加成效果无法叠加。|2 件套  攻击力提高18%。&#10;&#10;4 件套  超导反应造成的伤害提升80%，星超导反应造成的伤害提升40%；装备者攻击受到超导或星超导反应影响的敌人时，本次攻击的暴击率提高16%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  重击的暴击率提升30%。|2 件套  攻击力提高18%。&#10;&#10;4 件套  对生命值高于50%的敌人，造成的伤害增加30%。|2 件套  防御力提高30%。&#10;&#10;4 件套  队伍里每有不同一种元素类型的角色，自身获得30%相应的元素抗性。|2 件套  所有元素抗性提高20%。&#10;&#10;4 件套  受到某个元素类型的伤害后，相应的抗性提升30%，持续3回合。该效果每3回合只能触发一次。|2 件套  暴击率提高12%。&#10;&#10;4 件套  生命值低于70%时，暴击率额外提升24%。|2 件套  普通攻击与重击造成的伤害提高15%。&#10;&#10;4 件套  施放元素战技后的2回合内，普通攻击和重击造成的伤害提升25%。|2 件套  元素精通提高80点。&#10;&#10;4 件套  触发元素反应后，队伍中所有角色的元素精通提高120点，持续2回合。" />
+    </text>
+    <component id="n98_c0009" name="openArtifactUpgrade" xy="979,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="圣遗物强化" controller="modal" page="au" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <component id="n99_c0009" name="openArtifactPicker" xy="1124,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="更换圣遗物" controller="modal" page="ap" />
+      <gearDisplay controller="tab" pages="2" />
+    </component>
+    <text id="n100_c0009" name="skillHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="技能" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+    </text>
+    <text id="n101_c0009" name="skillSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="培养等级与生效等级" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+    </text>
+    <graph id="n102_c0009" name="skillLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="3" />
+    </graph>
+    <component id="n103_c0009" name="skillTab0" xy="546,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="普攻" controller="skill" page="0" checked="true" />
+      <gearDisplay controller="tab" pages="3" />
+    </component>
+    <loader id="n104_c0009" name="skillIcon0" xy="546,384" size="58,58" url="ui://chrlist1i00eb" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="0" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i00eb|ui://chrlist1i00ec|ui://chrlist1i00ed|ui://chrlist1i00ed|ui://chrlist1i00eb|ui://chrlist1i00ee|ui://chrlist1i00ee|ui://chrlist1i00ed|ui://chrlist1i00ed|ui://chrlist1i00ee|ui://chrlist1i00ee|ui://chrlist1i00ec|ui://chrlist1i00ee|ui://chrlist1i00ef|ui://chrlist1i00ec|ui://chrlist1i00eb|ui://chrlist1i00ee|ui://chrlist1i00ed|ui://chrlist1i00ec|ui://chrlist1i00ed|ui://chrlist1i00ec|ui://chrlist1i00eb|ui://chrlist1i00eb|ui://chrlist1i00ef|ui://chrlist1i00ee|ui://chrlist1i00ec|ui://chrlist1i00eb|ui://chrlist1i00ef|ui://chrlist1i00ef|ui://chrlist1i00ef|ui://chrlist1i00ed|ui://chrlist1i00ee" />
+    </loader>
+    <text id="n105_c0009" name="skillName0" xy="620,381" size="636,39" font="Microsoft YaHei" fontSize="26" color="#342B24" text="神射手·普攻" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="神射手·普攻|仪典剑术·普攻|指尖雷暴·普攻|水之浅唱·普攻|神代射术·普攻|西风剑术·普攻|淬炼之剑·普攻|砰砰·普攻|千金掷·普攻|征涛·普攻|钢脊·普攻|好运剑·普攻|西风剑术·女仆·普攻|白案功夫·普攻|古华剑法·普攻|罪灭之矢·普攻|灭邪四式·普攻|简式风灵作成·普攻|云来古剑法·普攻|因果点破·普攻|云来剑法·普攻|断雨·普攻|猎人射术·普攻|岩雨·普攻|炎舞·普攻|西风剑术·白·普攻|流天射术·普攻|卷积微尘·普攻|往生秘传枪法·普攻|教会枪术·普攻|火漆制印·普攻|西风剑术·宗室·普攻" />
+    </text>
+    <text id="n106_c0009" name="skillLevel0" xy="621,423" size="631,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="培养 Lv.1" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="0" condition="0" />
+    </text>
+    <richtext id="n107_c0009" name="skillDescription0" xy="548,472" size="705,230" font="Microsoft YaHei" fontSize="19" color="#342B24" text="对一名敌人造成物理伤害（59.3%攻击力）。&#10;消耗20点AP。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="对一名敌人造成物理伤害（59.3%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（88.2%攻击力）。&#10;消耗20点AP。|对一名敌人造成[color=#DEBAFF]雷元素伤害[/color]（55.0%攻击力）。&#10;消耗20点AP。|对一名敌人造成[color=#08E4FF]水元素伤害[/color]（55.2%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（71.0%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（79.2%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（134.0%攻击力）。&#10;消耗25点AP。|对一名敌人造成[color=#FFA971]火元素伤害[/color]（89.9%攻击力）。&#10;消耗20点AP。|对一名敌人造成两段[color=#F5D761]岩元素伤害[/color]（28.0%攻击力 × 2）。命中后获得1枚[color=#FEFEFE]星璇[/color]，每次普攻至多获得1枚。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]星璇[/color][/b]&#10;凝光每次普攻命中后获得1枚，最多通过普攻积攒3枚。重击发射时消耗全部[color=#FEFEFE]星璇[/color]，每枚对同一目标追加一段[color=#F5D761]岩元素伤害[/color]（49.6%攻击力）。|对一名敌人造成物理伤害（112.1%攻击力）。[color=#FEFEFE]雷兽之盾[/color]存在时，普攻命中可触发雷电弹射。&#10;消耗25点AP。&#10;&#10;[b][color=#FEFEFE]雷兽之盾[/color][/b]&#10;持续4回合，使北斗受到的伤害降低20.0%。北斗的普攻或重击每段命中时，触发一轮3次雷电弹射。每次弹射对一名随机敌人造成[color=#DEBAFF]雷元素[/color]爆发伤害（96.0%攻击力）。同一敌人可重复被选中。|对一名敌人造成物理伤害（136.1%攻击力）。[color=#FEFEFE]雷狼[/color]在场时，普攻会触发[color=#DEBAFF]雷元素[/color]协同攻击。&#10;消耗25点AP。&#10;&#10;[b][color=#FEFEFE]雷狼[/color][/b]&#10;持续4回合。雷泽的普攻AP消耗降低5点。每次普攻引发[color=#DEBAFF]雷元素[/color]协同攻击，倍率为当前普攻倍率的24.0%。雷泽切换至后台时提前结束，每剩余1回合为雷泽返还3点能量。|对一名敌人造成物理伤害（71.9%攻击力）。&#10;消耗20点AP。|通常状态&#10;对一名敌人造成物理伤害（113.4%攻击力）。&#10;消耗25点AP。&#10;&#10;[b][color=#FEFEFE]大扫除[/color][/b]&#10;对三名相邻敌人造成[color=#F5D761]岩元素伤害[/color]（113.4%攻击力）。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]大扫除[/color][/b]&#10;持续3回合。攻击力提高，提升量相当于诺艾尔防御力的40.0%。普攻与重击各降低5点AP消耗。普攻改为攻击三名相邻敌人，重击改为攻击全体敌人，均造成[color=#F5D761]岩元素伤害[/color]。&#10;&#10;[b][color=#FEFEFE]岩元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#F5D761]岩元素伤害[/color]。此附魔不可被其他附魔覆盖。|对一名敌人造成物理伤害（71.0%攻击力）。&#10;消耗20点AP。|对一名敌人造成两段物理伤害（35.9%攻击力 × 2）。&#10;消耗20点AP。|对一名敌人造成物理伤害（72.1%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（101.2%攻击力）。&#10;消耗25点AP。|对一名敌人造成[color=#A6F7CF]风元素伤害[/color]（47.9%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（63.0%攻击力）。&#10;消耗20点AP。|对一名敌人造成[color=#08E4FF]水元素伤害[/color]（56.2%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（67.0%攻击力）。&#10;消耗20点AP。|远程姿态&#10;对一名敌人造成物理伤害（72.8%攻击力）。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]近战状态[/color][/b]&#10;对一名敌人造成两段[color=#08E4FF]水元素伤害[/color]（35.4%攻击力／37.7%攻击力）。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]近战状态[/color][/b]&#10;持续5回合。普攻和重击改为两段[color=#08E4FF]水元素[/color]攻击；重击的每段对相邻敌人造成50%溅射伤害。命中已有[color=#FEFEFE]断流[/color]的敌人时，可触发[color=#FEFEFE]断流·斩[/color]。&#10;战技按钮替换为解除[color=#FEFEFE]近战状态[/color]，解除不消耗AP；也可等待持续时间结束。切换队友不直接解除此状态。&#10;近战结束后恢复远程攻击及原战技。战技恢复所需冷却为已持续的回合数加1，因此刚进入就立即解除时为1回合。&#10;&#10;[b][color=#FEFEFE]断流[/color][/b]&#10;[color=#FEFEFE]断流[/color]持续3回合，再次施加时刷新。蓄力重击、近战普攻或重击、近战爆发命中带有[color=#FEFEFE]断流[/color]的敌人时，分别触发[color=#FEFEFE]断流·闪[/color]、[color=#FEFEFE]断流·斩[/color]和[color=#FEFEFE]断流·爆[/color]。带有[color=#FEFEFE]断流[/color]的敌人被击败时触发[color=#FEFEFE]断流·破[/color]。蓄力重击和近战攻击须命中原先已有[color=#FEFEFE]断流[/color]的敌人，才会触发闪或斩。&#10;&#10;[b][color=#FEFEFE]断流·斩[/color][/b]&#10;近战普攻或重击命中已有[color=#FEFEFE]断流[/color]的敌人时，对该位置及相邻位置造成[color=#08E4FF]水元素[/color]战技伤害（60.2%攻击力）。每回合最多由2段攻击触发。单段命中多个[color=#FEFEFE]断流[/color]目标时，可同时引发多处[color=#FEFEFE]断流·斩[/color]。与[color=#FEFEFE]断流·闪[/color]共用每回合1次的2点回能。&#10;&#10;[b][color=#FEFEFE]断流·破[/color][/b]&#10;带有[color=#FEFEFE]断流[/color]的敌人被击败时，对相邻位置的敌人造成[color=#08E4FF]水元素伤害[/color]（62.0%攻击力），并为命中的敌人施加[color=#FEFEFE]断流[/color]。|对一名敌人造成物理伤害（53.8%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（54.5%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（115.8%攻击力）。&#10;消耗25点AP。|对一名敌人造成物理伤害（62.1%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（57.6%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（95.8%攻击力）。&#10;消耗20点AP。|对一名敌人造成物理伤害（86.0%攻击力）。[color=#FEFEFE]彼岸蝶舞[/color]期间，普攻转为[color=#FFA971]火元素伤害[/color]。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]彼岸蝶舞[/color][/b]&#10;持续2回合。攻击力提高，提升量为施放时胡桃生命值上限的3.8%，最多提高胡桃基础攻击力的400%。获得[color=#FEFEFE]火元素附魔[/color]，重击命中时施加[color=#FEFEFE]血梅香[/color]。普攻和重击每段命中后，产生2点[color=#FFA971]火元素能量[/color]。切换至后台时仍保留。&#10;&#10;[b][color=#FEFEFE]火元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#FFA971]火元素伤害[/color]。此附魔不可被其他附魔覆盖。|对一名敌人造成两段物理伤害（41.6%攻击力／43.0%攻击力）。&#10;消耗20点AP。|对一名敌人造成[color=#FFA971]火元素伤害[/color]（76.0%攻击力）。命中后获得1枚[color=#FEFEFE]丹火印[/color]，持续3回合。&#10;消耗20点AP。&#10;&#10;[b][color=#FEFEFE]丹火印[/color][/b]&#10;烟绯每次普攻命中后获得1枚[color=#FEFEFE]丹火印[/color]，持续3回合，最多3枚。获得新印会刷新已有[color=#FEFEFE]丹火印[/color]的持续时间。战技和爆发可补满[color=#FEFEFE]丹火印[/color]。施放重击时消耗全部[color=#FEFEFE]丹火印[/color]，每枚降低重击4点AP消耗，并提高该次重击伤害。切换至后台时仍保留。|对一名敌人造成两段物理伤害（56.8%攻击力 × 2）。&#10;消耗20点AP。" />
+    </richtext>
+    <component id="n108_c0009" name="skillTab1" xy="693,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="重击" controller="skill" page="1" checked="false" />
+      <gearDisplay controller="tab" pages="3" />
+    </component>
+    <loader id="n109_c0009" name="skillIcon1" xy="546,384" size="58,58" url="ui://chrlist1i00f0" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="1" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i00f0|ui://chrlist1i00f1|ui://chrlist1i00f2|ui://chrlist1i00f2|ui://chrlist1i00f0|ui://chrlist1i00f3|ui://chrlist1i00f3|ui://chrlist1i00f2|ui://chrlist1i00f2|ui://chrlist1i00f3|ui://chrlist1i00f3|ui://chrlist1i00f1|ui://chrlist1i00f3|ui://chrlist1i00f4|ui://chrlist1i00f1|ui://chrlist1i00f0|ui://chrlist1i00f3|ui://chrlist1i00f2|ui://chrlist1i00f1|ui://chrlist1i00f2|ui://chrlist1i00f1|ui://chrlist1i00f0|ui://chrlist1i00f0|ui://chrlist1i00f4|ui://chrlist1i00f3|ui://chrlist1i00f1|ui://chrlist1i00f0|ui://chrlist1i00f4|ui://chrlist1i00f4|ui://chrlist1i00f4|ui://chrlist1i00f2|ui://chrlist1i00f3" />
+    </loader>
+    <text id="n110_c0009" name="skillName1" xy="620,381" size="636,39" font="Microsoft YaHei" fontSize="26" color="#342B24" text="神射手·重击" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="神射手·重击|仪典剑术·重击|指尖雷暴·重击|水之浅唱·重击|神代射术·重击|西风剑术·重击|淬炼之剑·重击|砰砰·重击|千金掷·重击|征涛·重击|钢脊·重击|好运剑·重击|西风剑术·女仆·重击|白案功夫·重击|古华剑法·重击|罪灭之矢·重击|灭邪四式·重击|简式风灵作成·重击|云来古剑法·重击|因果点破·重击|云来剑法·重击|断雨·重击|猎人射术·重击|岩雨·重击|炎舞·重击|西风剑术·白·重击|流天射术·重击|卷积微尘·重击|往生秘传枪法·重击|教会枪术·重击|火漆制印·重击|西风剑术·宗室·重击" />
+    </text>
+    <text id="n111_c0009" name="skillLevel1" xy="621,423" size="631,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="培养 Lv.1" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="1" condition="0" />
+    </text>
+    <richtext id="n112_c0009" name="skillDescription1" xy="548,472" size="705,230" font="Microsoft YaHei" fontSize="19" color="#342B24" text="对选定位置蓄力，1回合后造成[color=#FFA971]火元素伤害[/color]（124.0%攻击力）。&#10;消耗30点AP。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="对选定位置蓄力，1回合后造成[color=#FFA971]火元素伤害[/color]（124.0%攻击力）。&#10;消耗30点AP。|对一名敌人造成两段物理伤害（29.4%攻击力／41.2%攻击力），每段对相邻敌人造成50%的溅射伤害。&#10;消耗30点AP。|对三名相邻敌人造成[color=#DEBAFF]雷元素伤害[/color]（18.3%攻击力），并分别施加1层[color=#FEFEFE]引雷[/color]。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]引雷[/color][/b]&#10;每名敌人最多持有3层。苍雷命中持有1／2／3层[color=#FEFEFE]引雷[/color]的敌人时，额外增加48.0%／102.0%／156.0%攻击力的基础伤害，随后清除目标的全部[color=#FEFEFE]引雷[/color]。|对三名相邻敌人造成[color=#08E4FF]水元素伤害[/color]（27.6%攻击力）。&#10;消耗30点AP。|对选定位置蓄力，在下个我方回合开始时造成[color=#A6F7CF]风元素伤害[/color]（124.0%攻击力）。&#10;消耗30点AP。|对一名敌人造成物理伤害（162.0%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|对三名相邻敌人造成物理伤害（68.8%攻击力）。&#10;消耗35点AP。|对三名相邻敌人造成[color=#FFA971]火元素伤害[/color]（157.4%攻击力）。&#10;消耗35点AP。|蓄力1回合后，对一名敌人造成[color=#F5D761]岩元素伤害[/color]（174.1%攻击力），并消耗全部[color=#FEFEFE]星璇[/color]造成额外伤害。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]星璇[/color][/b]&#10;凝光每次普攻命中后获得1枚，最多通过普攻积攒3枚。重击发射时消耗全部[color=#FEFEFE]星璇[/color]，每枚对同一目标追加一段[color=#F5D761]岩元素伤害[/color]（49.6%攻击力）。|对三名相邻敌人造成物理伤害（56.2%攻击力）。[color=#FEFEFE]雷兽之盾[/color]存在时，重击命中可触发雷电弹射。&#10;消耗35点AP。&#10;&#10;[b][color=#FEFEFE]雷兽之盾[/color][/b]&#10;持续4回合，使北斗受到的伤害降低20.0%。北斗的普攻或重击每段命中时，触发一轮3次雷电弹射。每次弹射对一名随机敌人造成[color=#DEBAFF]雷元素[/color]爆发伤害（96.0%攻击力）。同一敌人可重复被选中。|对三名相邻敌人造成物理伤害（62.5%攻击力）。&#10;消耗35点AP。|对一名敌人造成两段物理伤害（27.7%攻击力／30.0%攻击力），并对相邻敌人造成溅射伤害。&#10;消耗30点AP。|通常状态&#10;对三名相邻敌人造成物理伤害（50.7%攻击力）。&#10;消耗35点AP。&#10;&#10;[b][color=#FEFEFE]大扫除[/color][/b]&#10;对所有敌人造成[color=#F5D761]岩元素伤害[/color]（50.7%攻击力）。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]大扫除[/color][/b]&#10;持续3回合。攻击力提高，提升量相当于诺艾尔防御力的40.0%。普攻与重击各降低5点AP消耗。普攻改为攻击三名相邻敌人，重击改为攻击全体敌人，均造成[color=#F5D761]岩元素伤害[/color]。&#10;&#10;[b][color=#FEFEFE]岩元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#F5D761]岩元素伤害[/color]。此附魔不可被其他附魔覆盖。|对一名敌人造成物理伤害（121.7%攻击力）。&#10;消耗30点AP。|对一名敌人造成两段物理伤害（26.2%攻击力／31.2%攻击力），每段对相邻敌人造成50%的溅射伤害。&#10;消耗30点AP。|对选定位置蓄力，在下个我方回合开始时造成[color=#DEBAFF]雷元素伤害[/color]（124.0%攻击力）。&#10;消耗30点AP。|对三名相邻敌人造成物理伤害（56.3%攻击力）。&#10;消耗35点AP。|对三名相邻敌人造成[color=#A6F7CF]风元素伤害[/color]（25.4%攻击力）。&#10;消耗30点AP。|对一名敌人造成两段物理伤害（25.2%攻击力 × 2），每段对相邻敌人造成50%的溅射伤害。&#10;消耗30点AP。|对三名相邻敌人造成[color=#08E4FF]水元素伤害[/color]（50.0%攻击力）。&#10;消耗30点AP。|对一名敌人造成两段物理伤害（26.0%攻击力／29.2%攻击力），并对相邻敌人造成溅射伤害。命中[color=#FEFEFE]雷楔[/color]所在位置时，追加两段[color=#DEBAFF]雷元素伤害[/color]，随后清除[color=#FEFEFE]雷楔[/color]。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]雷楔[/color][/b]&#10;在选定位置保留2回合，期间可再次施放战技，在[color=#FEFEFE]雷楔[/color]及其相邻位置造成[color=#DEBAFF]雷元素[/color]战技伤害（168.0%攻击力）并清除[color=#FEFEFE]雷楔[/color]。刻晴切换出战时，自动免费施放该段（168.0%攻击力）。刻晴的重击命中[color=#FEFEFE]雷楔[/color]所在位置时，包括溅射命中，会触发两段[color=#FEFEFE]雷暴连斩[/color]（126.0%攻击力 × 2）并清除[color=#FEFEFE]雷楔[/color]。主动清除[color=#FEFEFE]雷楔[/color]产生6点[color=#DEBAFF]雷元素能量[/color]，自然到期时恢复一段战技。|远程姿态&#10;对选定位置蓄力，1回合后造成[color=#08E4FF]水元素伤害[/color]（124.0%攻击力），并施加持续3回合的[color=#FEFEFE]断流[/color]。命中已有[color=#FEFEFE]断流[/color]的目标时，触发三段[color=#FEFEFE]断流·闪[/color]。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]近战状态[/color][/b]&#10;对一名敌人造成两段[color=#08E4FF]水元素伤害[/color]（28.3%攻击力／30.1%攻击力），每段对相邻敌人造成50%的溅射伤害。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]断流[/color][/b]&#10;[color=#FEFEFE]断流[/color]持续3回合，再次施加时刷新。蓄力重击、近战普攻或重击、近战爆发命中带有[color=#FEFEFE]断流[/color]的敌人时，分别触发[color=#FEFEFE]断流·闪[/color]、[color=#FEFEFE]断流·斩[/color]和[color=#FEFEFE]断流·爆[/color]。带有[color=#FEFEFE]断流[/color]的敌人被击败时触发[color=#FEFEFE]断流·破[/color]。蓄力重击和近战攻击须命中原先已有[color=#FEFEFE]断流[/color]的敌人，才会触发闪或斩。&#10;&#10;[b][color=#FEFEFE]断流·闪[/color][/b]&#10;蓄力重击命中已有[color=#FEFEFE]断流[/color]的敌人时，对该敌人追加三段[color=#08E4FF]水元素[/color]普攻伤害（12.4%攻击力 × 3）。与[color=#FEFEFE]断流·斩[/color]共用每回合1次回能机会，命中后为达达利亚恢复2点能量。&#10;&#10;[b][color=#FEFEFE]近战状态[/color][/b]&#10;持续5回合。普攻和重击改为两段[color=#08E4FF]水元素[/color]攻击；重击的每段对相邻敌人造成50%溅射伤害。命中已有[color=#FEFEFE]断流[/color]的敌人时，可触发[color=#FEFEFE]断流·斩[/color]。&#10;战技按钮替换为解除[color=#FEFEFE]近战状态[/color]，解除不消耗AP；也可等待持续时间结束。切换队友不直接解除此状态。&#10;近战结束后恢复远程攻击及原战技。战技恢复所需冷却为已持续的回合数加1，因此刚进入就立即解除时为1回合。&#10;&#10;[b][color=#FEFEFE]断流·斩[/color][/b]&#10;近战普攻或重击命中已有[color=#FEFEFE]断流[/color]的敌人时，对该位置及相邻位置造成[color=#08E4FF]水元素[/color]战技伤害（60.2%攻击力）。每回合最多由2段攻击触发。单段命中多个[color=#FEFEFE]断流[/color]目标时，可同时引发多处[color=#FEFEFE]断流·斩[/color]。与[color=#FEFEFE]断流·闪[/color]共用每回合1次的2点回能。&#10;&#10;[b][color=#FEFEFE]断流·破[/color][/b]&#10;带有[color=#FEFEFE]断流[/color]的敌人被击败时，对相邻位置的敌人造成[color=#08E4FF]水元素伤害[/color]（62.0%攻击力），并为命中的敌人施加[color=#FEFEFE]断流[/color]。|对选定位置蓄力，在下个我方回合开始时造成[color=#CFFFFF]冰元素伤害[/color]（124.0%攻击力）。&#10;消耗30点AP。|对一名敌人造成物理伤害（111.0%攻击力）。&#10;消耗30点AP。|对三名相邻敌人造成物理伤害（62.6%攻击力）。&#10;消耗35点AP。|对一名敌人造成两段物理伤害（22.2%攻击力／28.2%攻击力），并对相邻敌人造成溅射伤害。&#10;消耗30点AP。|一段蓄力&#10;对选定位置蓄力，在下个我方回合开始时造成[color=#CFFFFF]冰元素伤害[/color]（124.0%攻击力）。选择目标时再次点击重击，可切换为二段蓄力。&#10;消耗30点AP。&#10;&#10;二段蓄力&#10;对选定位置蓄力，在下个我方回合开始时射出霜华矢，造成[color=#CFFFFF]冰元素伤害[/color]（256.0%攻击力）。随后霜华绽放，对该位置及相邻位置造成[color=#CFFFFF]冰元素伤害[/color]（435.2%攻击力）。&#10;消耗50点AP。|通常状态&#10;对一名敌人造成物理伤害（121.1%攻击力）。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]靖妖傩舞[/color][/b]&#10;对三名相邻敌人造成[color=#A6F7CF]风元素伤害[/color]（121.1%攻击力）。消耗30点AP。&#10;&#10;[b][color=#FEFEFE]靖妖傩舞[/color][/b]&#10;持续4回合。普攻和重击伤害提高58.5%，获得[color=#FEFEFE]风元素附魔[/color]，重击范围扩大为三名相邻敌人。每个我方回合结束时，魈流失当前生命值的10%，最低保留1点生命。期间战技不产生能量。切换至后台时提前结束。&#10;&#10;[b][color=#FEFEFE]风元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#A6F7CF]风元素伤害[/color]。此附魔不可被其他附魔覆盖。|对一名敌人造成物理伤害（136.0%攻击力）。[color=#FEFEFE]彼岸蝶舞[/color]期间，重击转为[color=#FFA971]火元素伤害[/color]，并为命中的敌人施加[color=#FEFEFE]血梅香[/color]。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]彼岸蝶舞[/color][/b]&#10;持续2回合。攻击力提高，提升量为施放时胡桃生命值上限的3.8%，最多提高胡桃基础攻击力的400%。获得[color=#FEFEFE]火元素附魔[/color]，重击命中时施加[color=#FEFEFE]血梅香[/color]。普攻和重击每段命中后，产生2点[color=#FFA971]火元素能量[/color]。切换至后台时仍保留。&#10;&#10;[b][color=#FEFEFE]火元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#FFA971]火元素伤害[/color]。此附魔不可被其他附魔覆盖。&#10;&#10;[b][color=#FEFEFE]血梅香[/color][/b]&#10;持续2回合。每个敌方回合结束时，对带有[color=#FEFEFE]血梅香[/color]的敌人造成[color=#FFA971]火元素[/color]战技伤害（64.0%攻击力）。重新施加时刷新持续时间。|对一名敌人造成物理伤害（136.7%攻击力）。&#10;消耗30点AP。|消耗全部[color=#FEFEFE]丹火印[/color]，对三名相邻敌人造成[color=#FFA971]火元素伤害[/color]。消耗0／1／2／3／4枚时，伤害分别为攻击力的98.2%／115.6%／132.9%／150.2%／167.6%。每消耗1枚，重击AP消耗降低4点。第四枚需解锁命之座第6层。&#10;消耗30点AP。&#10;&#10;[b][color=#FEFEFE]丹火印[/color][/b]&#10;烟绯每次普攻命中后获得1枚[color=#FEFEFE]丹火印[/color]，持续3回合，最多3枚。获得新印会刷新已有[color=#FEFEFE]丹火印[/color]的持续时间。战技和爆发可补满[color=#FEFEFE]丹火印[/color]。施放重击时消耗全部[color=#FEFEFE]丹火印[/color]，每枚降低重击4点AP消耗，并提高该次重击伤害。切换至后台时仍保留。|对一名敌人造成物理伤害（68.8%攻击力）。&#10;消耗30点AP。" />
+    </richtext>
+    <component id="n113_c0009" name="skillTab2" xy="840,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="战技" controller="skill" page="2" checked="false" />
+      <gearDisplay controller="tab" pages="3" />
+    </component>
+    <loader id="n114_c0009" name="skillIcon2" xy="546,384" size="58,58" url="ui://chrlist1i00f5" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="2" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i00f5|ui://chrlist1i00f6|ui://chrlist1i00f7|ui://chrlist1i00f8|ui://chrlist1i00f9|ui://chrlist1i00fa|ui://chrlist1i00fb|ui://chrlist1i00fc|ui://chrlist1i00fd|ui://chrlist1i00fe|ui://chrlist1i00ff|ui://chrlist1i0100|ui://chrlist1i0101|ui://chrlist1i0102|ui://chrlist1i0103|ui://chrlist1i0104|ui://chrlist1i0105|ui://chrlist1i0106|ui://chrlist1i0107|ui://chrlist1i0108|ui://chrlist1i0109|ui://chrlist1i010a|ui://chrlist1i010b|ui://chrlist1i010c|ui://chrlist1i010d|ui://chrlist1i010e|ui://chrlist1i010f|ui://chrlist1i0110|ui://chrlist1i0111|ui://chrlist1i0112|ui://chrlist1i0113|ui://chrlist1i0114" />
+    </loader>
+    <text id="n115_c0009" name="skillName2" xy="620,381" size="636,39" font="Microsoft YaHei" fontSize="26" color="#342B24" text="爆弹玩偶" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="爆弹玩偶|霜袭|苍雷|演唱，开始♪|高天之歌|风压剑|逆焰之刃|蹦蹦炸弹|璇玑屏|捉浪|利爪与苍雷|热情过载|护心铠|锅巴出击|古华剑·画雨笼山|夜巡影翼|灵刃·重华叠霜|风灵作成·陆叁零捌|仙法·寒病鬼差|水中幻愿|星斗归位|魔王武装·狂澜|猫爪冻冻|地心|热情拂扫|创生法·拟造阳华|山泽麟迹|风轮两立|蝶引来生|噬罪的告解|丹书立约|冰潮的涡漩" />
+    </text>
+    <text id="n116_c0009" name="skillLevel2" xy="621,423" size="631,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="培养 Lv.1" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="2" condition="0" />
+    </text>
+    <richtext id="n117_c0009" name="skillDescription2" xy="548,472" size="705,230" font="Microsoft YaHei" fontSize="19" color="#342B24" text="在选定位置放置[color=#FEFEFE]兔兔伯爵[/color]，持续2回合。[color=#FEFEFE]兔兔伯爵[/color]削弱附近的敌人，并在到期时爆炸。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]兔兔伯爵[/color][/b]&#10;持续2回合。使所在位置及相邻位置的敌人造成的伤害降低10%，减益不叠加。自然到期时爆炸，对这些位置的敌人造成[color=#FFA971]火元素[/color]战技伤害（123.0%攻击力），并产生10点[color=#FFA971]火元素能量[/color]。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="在选定位置放置[color=#FEFEFE]兔兔伯爵[/color]，持续2回合。[color=#FEFEFE]兔兔伯爵[/color]削弱附近的敌人，并在到期时爆炸。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]兔兔伯爵[/color][/b]&#10;持续2回合。使所在位置及相邻位置的敌人造成的伤害降低10%，减益不叠加。自然到期时爆炸，对这些位置的敌人造成[color=#FFA971]火元素[/color]战技伤害（123.0%攻击力），并产生10点[color=#FFA971]火元素能量[/color]。|对一名敌人造成[color=#CFFFFF]冰元素伤害[/color]（191.0%攻击力）。施放时产生18点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却2回合。|蓄力1回合后，对所有敌人造成[color=#DEBAFF]雷元素伤害[/color]（320.0%攻击力）。目标的[color=#FEFEFE]引雷[/color]层数越多，伤害越高；命中后清除[color=#FEFEFE]引雷[/color]。释放雷电时产生8点[color=#DEBAFF]雷元素能量[/color]。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]引雷[/color][/b]&#10;每名敌人最多持有3层。苍雷命中持有1／2／3层[color=#FEFEFE]引雷[/color]的敌人时，额外增加48.0%／102.0%／156.0%攻击力的基础伤害，随后清除目标的全部[color=#FEFEFE]引雷[/color]。|对所有敌人造成[color=#08E4FF]水元素伤害[/color]（58.4%攻击力），并获得持续5回合的[color=#FEFEFE]歌声之环[/color]。&#10;消耗30点AP，冷却8回合。&#10;&#10;[b][color=#FEFEFE]歌声之环[/color][/b]&#10;持续5回合。我方回合结束时治疗全队（4.0%生命值上限 + 385.2）。芭芭拉普攻命中时治疗全队（0.8%生命值上限 + 72.2），重击命中的治疗量为3.0%生命值上限 + 288.8。同一段攻击命中多名敌人时仍只触发一次治疗。|对所有敌人造成[color=#A6F7CF]风元素伤害[/color]（380.0%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。命中后产生8点[color=#A6F7CF]风元素能量[/color]。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|对三名相邻敌人造成[color=#A6F7CF]风元素伤害[/color]（292.0%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。命中后产生5点[color=#A6F7CF]风元素能量[/color]。&#10;消耗30点AP，冷却2回合。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|第一段&#10;对一名敌人造成[color=#FFA971]火元素伤害[/color]（94.4%攻击力）。本回合内可继续施放第二段。施放时产生2点[color=#FFA971]火元素能量[/color]。&#10;消耗15点AP，冷却2回合。&#10;&#10;第二段&#10;对一名敌人造成[color=#FFA971]火元素伤害[/color]（97.6%攻击力）。本回合内可继续施放第三段。施放时产生2点[color=#FFA971]火元素能量[/color]。&#10;消耗15点AP。&#10;&#10;第三段&#10;对一名敌人造成[color=#FFA971]火元素伤害[/color]（128.8%攻击力），结束本次连段。施放时产生3点[color=#FFA971]火元素能量[/color]。&#10;消耗15点AP。&#10;&#10;[b][color=#FEFEFE]逆焰连段[/color][/b]&#10;第一段、第二段施放后，可在同一回合内继续下一段。第三段结束或本回合未继续时，战技恢复为第一段。|先对选定的三个相邻位置造成[color=#FFA971]火元素伤害[/color]（95.2%攻击力），再弹射两次。每次重新随机选取三个相邻位置，造成等量[color=#FFA971]火元素伤害[/color]。在最后一次命中的位置留下持续4回合的[color=#FEFEFE]诡雷[/color]。本次战技首次命中时产生8点[color=#FFA971]火元素能量[/color]。&#10;消耗30点AP，每5回合恢复1次，最多存有2次。&#10;&#10;[b][color=#FEFEFE]诡雷[/color][/b]&#10;各份[color=#FEFEFE]诡雷[/color]独立持续4回合。到期时分别爆炸，对所在位置及相邻位置内的敌人造成[color=#FFA971]火元素[/color]战技伤害（32.8%攻击力）。同一位置可保留多份。|对三个相邻位置的敌人造成[color=#F5D761]岩元素伤害[/color]（230.4%攻击力），并构建持续5回合的[color=#FEFEFE]璇玑屏[/color]。施放时产生10点[color=#F5D761]岩元素能量[/color]，每回合至多产生一次。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]璇玑屏[/color][/b]&#10;覆盖三个相邻的敌方位置，持续5回合。位于覆盖位置的敌人造成的伤害降低10%。&#10;整面屏共用6次抵御次数。来自覆盖位置的敌人一次完整攻击实际命中我方后，消耗1次，同一次攻击的多段、多目标不重复消耗。次数耗尽时屏被摧毁，自然到期时正常消失。&#10;重新施放战技会更新位置、恢复次数和持续时间，不算屏被摧毁。屏存在时，凝光爆发额外发动6次[color=#F5D761]岩元素[/color]弹射攻击。爆发不会消耗或摧毁屏。|为自身及两侧相邻角色生成[color=#DEBAFF]雷元素护盾[/color]，并[color=#FEFEFE]嘲讽[/color]敌人。北斗在敌方回合结束或本次任一护盾破碎时，自动对全体敌人发起[color=#DEBAFF]雷元素[/color]反击，随后解除本次护盾和[color=#FEFEFE]嘲讽[/color]。&#10;消耗30点AP，冷却2回合。&#10;&#10;[b][color=#FEFEFE]架盾[/color][/b]&#10;每面护盾吸收量为14.4%生命值上限 + 1386.0。敌方角色和状态行动命中北斗时，积攒1层反击威力，最多2层。0／1／2层反击分别造成121.6%／281.6%／441.6%攻击力的[color=#DEBAFF]雷元素伤害[/color]，并分别产生4／6／8点[color=#DEBAFF]雷元素能量[/color]。&#10;&#10;[b][color=#FEFEFE]嘲讽[/color][/b]&#10;迫使敌方在选择非弹射攻击的目标时包含[color=#FEFEFE]嘲讽[/color]者：单体攻击优先选中[color=#FEFEFE]嘲讽[/color]者，相邻范围攻击必须覆盖[color=#FEFEFE]嘲讽[/color]者。&#10;弹射攻击不受[color=#FEFEFE]嘲讽[/color]限制，包括第一段就是弹射的攻击，以及后续的弹射段。[color=#FEFEFE]嘲讽[/color]不减少受到的伤害，也不阻止命中后的其他效果。|一段&#10;对三名相邻敌人造成[color=#DEBAFF]雷元素伤害[/color]（199.2%攻击力），并获得1层[color=#FEFEFE]雷之印[/color]，持续5回合。选择目标时再次点击战技，可切换为二段。&#10;消耗15点AP，冷却1回合。&#10;&#10;二段&#10;对所有敌人造成[color=#DEBAFF]雷元素伤害[/color]（295.2%攻击力），并消耗全部[color=#FEFEFE]雷之印[/color]。每消耗1层，恢复自身5点能量。&#10;消耗30点AP，冷却2回合。&#10;&#10;[b][color=#FEFEFE]雷之印[/color][/b]&#10;雷泽持有的[color=#FEFEFE]雷之印[/color]，持续5回合，最多3层，每层提高20%元素充能效率。再次获得时，刷新已有[color=#FEFEFE]雷之印[/color]的共同持续时间。&#10;施放二段战技或爆发时消耗全部[color=#FEFEFE]雷之印[/color]，每消耗1层，为雷泽恢复5点能量。|一段&#10;对一名敌人造成[color=#FFA971]火元素伤害[/color]（137.6%攻击力）。选择目标时再次点击战技，可切换为二段或三段。施放时产生4点[color=#FFA971]火元素能量[/color]。&#10;消耗10点AP，冷却1回合。&#10;&#10;二段&#10;对三名相邻敌人造成两段[color=#FFA971]火元素伤害[/color]（84.0%攻击力／92.0%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。施放时产生6点[color=#FFA971]火元素能量[/color]。&#10;消耗20点AP，冷却2回合。&#10;&#10;三段&#10;对三名相邻敌人造成三段[color=#FFA971]火元素伤害[/color]（88.0%攻击力／96.0%攻击力／132.0%攻击力），并将班尼特和可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。施放时产生6点[color=#FFA971]火元素能量[/color]。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（120.0%防御力），并获得持续3回合的[color=#FEFEFE]护心铠[/color]。&#10;消耗30点AP，冷却6回合。&#10;&#10;[b][color=#FEFEFE]护心铠[/color][/b]&#10;为诺艾尔生成持续3回合的[color=#F5D761]岩元素护盾[/color]，吸收量为160.0%防御力 + 769.0。护盾存在时，诺艾尔的普攻或重击每段命中后，有50.0%概率为全队恢复生命值（21.3%防御力 + 102.0）。同一段命中多名敌人时只判定一次。|召唤[color=#FEFEFE]锅巴[/color]，持续2回合。[color=#FEFEFE]锅巴[/color]在我方回合结束时向随机敌人喷火。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]锅巴[/color][/b]&#10;持续2回合。我方回合结束时，对一名随机敌人造成[color=#FFA971]火元素[/color]战技伤害（111.3%攻击力）。喷火命中时产生2点[color=#FFA971]火元素能量[/color]。伤害使用召唤时香菱的属性。重新召唤会替换旧[color=#FEFEFE]锅巴[/color]。|对三名相邻敌人造成[color=#08E4FF]水元素伤害[/color]（168.0%攻击力），再对中间目标追加一段[color=#08E4FF]水元素伤害[/color]（191.2%攻击力）。为全队生成3柄[color=#FEFEFE]雨帘剑[/color]，持续4回合，并为行秋施加[color=#08E4FF]水元素附着[/color]。命中后产生10点[color=#08E4FF]水元素能量[/color]。&#10;消耗30点AP，冷却5回合。&#10;&#10;[b][color=#FEFEFE]雨帘剑[/color][/b]&#10;每名队友各自持有，持续4回合，初始及上限均为3柄。持有[color=#FEFEFE]雨帘剑[/color]时，受到的伤害降低20.0%，并将行秋当前[color=#08E4FF]水元素伤害加成[/color]的20%额外转为减伤，转换部分最多提供24%减伤。敌人的一次完整攻击命中持有者后，消耗1柄，护盾吸收或免疫命中也会消耗。[color=#FEFEFE]虹剑势[/color]存在时，消耗后立即补满。|在选定位置召唤[color=#FEFEFE]奥兹[/color]，持续3回合，并对该位置及相邻敌人造成[color=#DEBAFF]雷元素伤害[/color]（115.4%攻击力）。&#10;消耗20点AP，冷却6回合。&#10;&#10;[b][color=#FEFEFE]奥兹[/color][/b]&#10;持续3回合。我方和敌方回合结束时各发动2次雷电弹射，每次对所在位置及相邻位置的一名随机敌人造成[color=#DEBAFF]雷元素[/color]战技伤害（88.8%攻击力）。同一敌人可重复被选中。每次攻击命中有50%概率产生2点[color=#DEBAFF]雷元素能量[/color]。重新召唤时更新位置并刷新持续时间。|对三名相邻敌人造成[color=#CFFFFF]冰元素伤害[/color]（172.0%攻击力），并展开持续2回合的[color=#FEFEFE]重华叠霜[/color]，为符合条件的我方角色提供[color=#FEFEFE]冰元素附魔[/color]。施放时产生8点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]重华叠霜[/color][/b]&#10;持续2回合。期间我方单手剑、双手剑和长柄武器角色获得[color=#FEFEFE]冰元素附魔[/color]。&#10;重新施放战技会建立新的领域。&#10;&#10;[b][color=#FEFEFE]冰元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#CFFFFF]冰元素伤害[/color]。|对三名相邻敌人造成[color=#A6F7CF]风元素伤害[/color]（211.2%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。命中后产生7点[color=#A6F7CF]风元素能量[/color]。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|对所有敌人造成[color=#CFFFFF]冰元素伤害[/color]（96.0%攻击力），并召唤持续4回合的[color=#FEFEFE]寒病鬼差[/color]。&#10;消耗30点AP，冷却7回合。&#10;&#10;[b][color=#FEFEFE]寒病鬼差[/color][/b]&#10;持续4回合。七七的普攻或重击每段命中时，治疗全队（10.6%攻击力 + 67.4）。我方回合结束时，先治疗全队（69.6%攻击力 + 450.6），再随机选择最多3名不同敌人，各造成一段[color=#CFFFFF]冰元素[/color]战技伤害（36.0%攻击力）。|在选定位置创造[color=#FEFEFE]虚影[/color]，持续2回合。[color=#FEFEFE]虚影[/color]削弱附近的敌人，持续造成[color=#08E4FF]水元素伤害[/color]，并在到期时爆炸。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]虚影[/color][/b]&#10;持续2回合。所在位置及相邻位置的敌人造成的伤害降低10%，重叠时减益不叠加。每个敌方回合结束时，对这些位置造成[color=#08E4FF]水元素[/color]战技伤害（32.0%攻击力）。自然到期时爆炸，造成[color=#08E4FF]水元素[/color]战技伤害（132.8%攻击力），命中时产生8点[color=#08E4FF]水元素能量[/color]。多份[color=#FEFEFE]虚影[/color]可独立存在。|投出[color=#FEFEFE]雷楔[/color]&#10;对选定位置及相邻敌人造成[color=#DEBAFF]雷元素伤害[/color]（50.4%攻击力），并在选定位置留下持续2回合的[color=#FEFEFE]雷楔[/color]。&#10;消耗20点AP，冷却2回合。&#10;&#10;再次施放&#10;对[color=#FEFEFE]雷楔[/color]所在位置及相邻敌人造成[color=#DEBAFF]雷元素伤害[/color]（168.0%攻击力），随后清除[color=#FEFEFE]雷楔[/color]。&#10;消耗10点AP。&#10;&#10;[b][color=#FEFEFE]雷楔[/color][/b]&#10;在选定位置保留2回合，期间可再次施放战技，在[color=#FEFEFE]雷楔[/color]及其相邻位置造成[color=#DEBAFF]雷元素[/color]战技伤害（168.0%攻击力）并清除[color=#FEFEFE]雷楔[/color]。刻晴切换出战时，自动免费施放该段（168.0%攻击力）。刻晴的重击命中[color=#FEFEFE]雷楔[/color]所在位置时，包括溅射命中，会触发两段[color=#FEFEFE]雷暴连斩[/color]（126.0%攻击力 × 2）并清除[color=#FEFEFE]雷楔[/color]。主动清除[color=#FEFEFE]雷楔[/color]产生6点[color=#DEBAFF]雷元素能量[/color]，自然到期时恢复一段战技。|进入近战&#10;对所有敌人造成[color=#08E4FF]水元素伤害[/color]（12.0%攻击力），并进入持续5回合的[color=#FEFEFE]近战状态[/color]。再次施放可提前解除。&#10;消耗20点AP。&#10;&#10;解除近战&#10;结束[color=#FEFEFE]近战状态[/color]，恢复远程攻击。&#10;&#10;[b][color=#FEFEFE]近战状态[/color][/b]&#10;持续5回合。普攻和重击改为两段[color=#08E4FF]水元素[/color]攻击；重击的每段对相邻敌人造成50%溅射伤害。命中已有[color=#FEFEFE]断流[/color]的敌人时，可触发[color=#FEFEFE]断流·斩[/color]。&#10;战技按钮替换为解除[color=#FEFEFE]近战状态[/color]，解除不消耗AP；也可等待持续时间结束。切换队友不直接解除此状态。&#10;近战结束后恢复远程攻击及原战技。战技恢复所需冷却为已持续的回合数加1，因此刚进入就立即解除时为1回合。&#10;&#10;[b][color=#FEFEFE]断流[/color][/b]&#10;[color=#FEFEFE]断流[/color]持续3回合，再次施加时刷新。蓄力重击、近战普攻或重击、近战爆发命中带有[color=#FEFEFE]断流[/color]的敌人时，分别触发[color=#FEFEFE]断流·闪[/color]、[color=#FEFEFE]断流·斩[/color]和[color=#FEFEFE]断流·爆[/color]。带有[color=#FEFEFE]断流[/color]的敌人被击败时触发[color=#FEFEFE]断流·破[/color]。蓄力重击和近战攻击须命中原先已有[color=#FEFEFE]断流[/color]的敌人，才会触发闪或斩。&#10;&#10;[b][color=#FEFEFE]断流·斩[/color][/b]&#10;近战普攻或重击命中已有[color=#FEFEFE]断流[/color]的敌人时，对该位置及相邻位置造成[color=#08E4FF]水元素[/color]战技伤害（60.2%攻击力）。每回合最多由2段攻击触发。单段命中多个[color=#FEFEFE]断流[/color]目标时，可同时引发多处[color=#FEFEFE]断流·斩[/color]。与[color=#FEFEFE]断流·闪[/color]共用每回合1次的2点回能。&#10;&#10;[b][color=#FEFEFE]断流·破[/color][/b]&#10;带有[color=#FEFEFE]断流[/color]的敌人被击败时，对相邻位置的敌人造成[color=#08E4FF]水元素伤害[/color]（62.0%攻击力），并为命中的敌人施加[color=#FEFEFE]断流[/color]。|发动5次弹射攻击，每次对一名随机敌人造成[color=#CFFFFF]冰元素伤害[/color]（41.9%攻击力），并为全队生成持续3回合的[color=#CFFFFF]冰元素护盾[/color]。每次弹射命中时产生2点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]猫爪护盾[/color][/b]&#10;为每名我方角色生成一面持续3回合的[color=#CFFFFF]冰元素护盾[/color]，吸收量为7.2%生命值上限 + 692.8。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（80.0%攻击力），在选定位置创造持续5回合的[color=#FEFEFE]岩脊[/color]，并生成持续5回合、保护全队的[color=#FEFEFE]玉璋护盾[/color]。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]岩脊[/color][/b]&#10;持续5回合的岩造物，通常全场最多1根。同一位置再次放置时刷新，超过上限时替换最早的[color=#FEFEFE]岩脊[/color]。我方回合结束时，对所在位置及相邻位置造成[color=#F5D761]岩元素[/color]共鸣伤害（32.0%攻击力）。共鸣可通过其他岩造物和月笼传导，空位置也可参与。每个岩造物每回合至多接受一次传导，[color=#FEFEFE]岩脊[/color]自身的回合末共鸣另计。[color=#FEFEFE]岩脊[/color]自身每次共鸣命中有70%概率产生2点[color=#F5D761]岩元素能量[/color]，全场[color=#FEFEFE]岩脊[/color]每回合共可成功2次。&#10;&#10;[b][color=#FEFEFE]玉璋护盾[/color][/b]&#10;持续5回合，保护全队。全队共享盾量，盾量为（12.8%生命值上限 + 1232.0）乘以施放时我方存活人数，护盾强效以钟离的数值为准。护盾存在时，全体敌人的所有元素抗性和物理抗性降低20%。重新施加时生成新的护盾。|对所有敌人造成[color=#FFA971]火元素伤害[/color]（169.6%攻击力），并为全队生成持续3回合的护盾。命中2名及以下、3名、4名及以上敌人时，分别生成一、二、三级护盾。施放时产生8点[color=#FFA971]火元素能量[/color]。&#10;消耗30点AP，冷却5回合。&#10;&#10;[b][color=#FEFEFE]热情拂扫护盾[/color][/b]&#10;全队护盾持续3回合。一／二／三级护盾的吸收量分别为104.0%防御力 + 500.6、122.4%防御力 + 588.9、144.0%防御力 + 692.8。辛焱持有此护盾时，每个我方回合结束时对全体敌人造成[color=#FFA971]火元素伤害[/color]（33.6%攻击力）。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（130.4%攻击力），并创造持续7回合的[color=#FEFEFE]阳华[/color]。&#10;消耗20点AP，冷却1回合。&#10;&#10;[b][color=#FEFEFE]阳华[/color][/b]&#10;持续7回合的岩造物，全场最多一份。重施战技替换旧[color=#FEFEFE]阳华[/color]。我方主动行动及其后续攻击命中时，从命中的敌人中随机选择一名，造成[color=#F5D761]岩元素[/color]战技伤害（133.6%防御力），每次主动行动最多1次，每回合最多2次。[color=#FEFEFE]阳华[/color]的协同攻击命中时，生成1份[color=#FEFEFE]瑰银[/color]，并有70%概率产生2点[color=#F5D761]岩元素能量[/color]。[color=#FEFEFE]阳华[/color]也可参与[color=#FEFEFE]岩脊[/color]共鸣。&#10;&#10;[b][color=#FEFEFE]瑰银[/color][/b]&#10;每份独立持续7回合，同时最多2份，满额时保留现有[color=#FEFEFE]瑰银[/color]。[color=#FEFEFE]阳华[/color]消失后仍可存在。我方主动行动及其后续攻击命中时，每份从命中的敌人中随机选一名，造成[color=#F5D761]岩元素[/color]战技伤害（133.6%防御力）。每份每次主动行动至多1次、每回合至多2次。攻击命中时有70%概率产生2点[color=#F5D761]岩元素能量[/color]。|在选定位置留下一朵[color=#FEFEFE]冰莲[/color]，持续2回合。[color=#FEFEFE]冰莲[/color]削弱附近的敌人，并在到期时绽放，攻击全体敌人。施放时产生4点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却3回合。&#10;&#10;[b][color=#FEFEFE]冰莲[/color][/b]&#10;持续2回合，使所在位置及相邻位置的敌人造成的伤害降低10%。自然到期时，对全体敌人造成[color=#CFFFFF]冰元素[/color]战技伤害（132.0%攻击力），命中时产生4点[color=#CFFFFF]冰元素能量[/color]。重新召唤时替换旧[color=#FEFEFE]冰莲[/color]，旧[color=#FEFEFE]冰莲[/color]直接消失。|对三名相邻敌人造成[color=#A6F7CF]风元素伤害[/color]（252.8%攻击力）。施放时产生6点[color=#A6F7CF]风元素能量[/color]。[color=#FEFEFE]靖妖傩舞[/color]期间不产生能量。&#10;消耗30点AP，每2回合恢复1次，最多存有2次。|消耗当前生命值的30%，进入持续2回合的[color=#FEFEFE]彼岸蝶舞[/color]，并获得[color=#FEFEFE]火元素附魔[/color]。&#10;消耗20点AP，冷却4回合。&#10;&#10;[b][color=#FEFEFE]彼岸蝶舞[/color][/b]&#10;持续2回合。攻击力提高，提升量为施放时胡桃生命值上限的3.8%，最多提高胡桃基础攻击力的400%。获得[color=#FEFEFE]火元素附魔[/color]，重击命中时施加[color=#FEFEFE]血梅香[/color]。普攻和重击每段命中后，产生2点[color=#FFA971]火元素能量[/color]。切换至后台时仍保留。&#10;&#10;[b][color=#FEFEFE]火元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#FFA971]火元素伤害[/color]。此附魔不可被其他附魔覆盖。&#10;&#10;[b][color=#FEFEFE]血梅香[/color][/b]&#10;持续2回合。每个敌方回合结束时，对带有[color=#FEFEFE]血梅香[/color]的敌人造成[color=#FFA971]火元素[/color]战技伤害（64.0%攻击力）。重新施加时刷新持续时间。|对三名相邻敌人造成两段[color=#CFFFFF]冰元素伤害[/color]（58.4%攻击力／136.0%攻击力）。施放时产生8点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却2回合。|对三名相邻敌人造成[color=#FFA971]火元素伤害[/color]（169.6%攻击力），并获得最大数量的[color=#FEFEFE]丹火印[/color]。施放时产生6点[color=#FFA971]火元素能量[/color]。&#10;消耗30点AP，冷却2回合。&#10;&#10;[b][color=#FEFEFE]丹火印[/color][/b]&#10;烟绯每次普攻命中后获得1枚[color=#FEFEFE]丹火印[/color]，持续3回合，最多3枚。获得新印会刷新已有[color=#FEFEFE]丹火印[/color]的持续时间。战技和爆发可补满[color=#FEFEFE]丹火印[/color]。施放重击时消耗全部[color=#FEFEFE]丹火印[/color]，每枚降低重击4点AP消耗，并提高该次重击伤害。切换至后台时仍保留。|一段&#10;对三名相邻敌人造成[color=#CFFFFF]冰元素伤害[/color]（146.4%攻击力），并获得1层[color=#FEFEFE]冷酷之心[/color]，持续5回合。选择目标时再次点击战技，可切换为二段。施放时产生3点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗15点AP，冷却1回合。&#10;&#10;二段&#10;消耗全部[color=#FEFEFE]冷酷之心[/color]，对所有敌人造成[color=#CFFFFF]冰元素伤害[/color]（245.6%攻击力）。若消耗了层数，命中后降低敌人的物理抗性和[color=#CFFFFF]冰元素抗性[/color]16.0%，持续2回合。每消耗1层，追加一次冰涡弹射，对一名随机敌人造成[color=#CFFFFF]冰元素伤害[/color]（96.0%攻击力）。施放时产生5点[color=#CFFFFF]冰元素能量[/color]。&#10;消耗30点AP，冷却2回合。&#10;&#10;[b][color=#FEFEFE]冷酷之心[/color][/b]&#10;持续5回合，最多2层，每层提高30%防御力。获得新层时刷新持续时间。二段战技消耗全部层数，每层追加一次冰涡弹射（96.0%攻击力）。本次二段及冰涡命中后，目标的物理抗性和[color=#CFFFFF]冰元素抗性[/color]降低16.0%，持续2回合。" />
+    </richtext>
+    <component id="n118_c0009" name="skillTab3" xy="987,319" size="137,40" src="c0001" fileName="OptionTab.xml">
+      <Button title="爆发" controller="skill" page="3" checked="false" />
+      <gearDisplay controller="tab" pages="3" />
+    </component>
+    <loader id="n119_c0009" name="skillIcon3" xy="546,384" size="58,58" url="ui://chrlist1i0115" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="3" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0115|ui://chrlist1i0116|ui://chrlist1i0117|ui://chrlist1i0118|ui://chrlist1i0119|ui://chrlist1i011a|ui://chrlist1i011b|ui://chrlist1i011c|ui://chrlist1i011d|ui://chrlist1i011e|ui://chrlist1i011f|ui://chrlist1i0120|ui://chrlist1i0121|ui://chrlist1i0122|ui://chrlist1i0123|ui://chrlist1i0124|ui://chrlist1i0125|ui://chrlist1i0126|ui://chrlist1i0127|ui://chrlist1i0128|ui://chrlist1i0129|ui://chrlist1i012a|ui://chrlist1i012b|ui://chrlist1i012c|ui://chrlist1i012d|ui://chrlist1i012e|ui://chrlist1i012f|ui://chrlist1i0130|ui://chrlist1i0131|ui://chrlist1i0132|ui://chrlist1i0133|ui://chrlist1i0134" />
+    </loader>
+    <text id="n120_c0009" name="skillName3" xy="620,381" size="636,39" font="Microsoft YaHei" fontSize="26" color="#342B24" text="箭雨" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="箭雨|凛冽轮舞|蔷薇的雷光|闪耀奇迹♪|风神之诗|蒲公英之风|黎明|轰轰火花|天权崩玉|斫雷|雷牙|美妙旅程|大扫除|旋火轮|古华剑·裁雨留虹|至夜幻现|灵刃·云开星落|禁·风灵作成·柒伍同构贰型|仙法·救苦度厄|星命定轨|天街巡游|极恶技·尽灭闪|最烈特调|天星|叛逆刮弦|诞生式·大地之潮|降众天华|靖妖傩舞|安神秘法|终命的圣礼|凭此结契|凝浪之光剑" />
+    </text>
+    <text id="n121_c0009" name="skillLevel3" xy="621,423" size="631,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="培养 Lv.1" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="3" condition="0" />
+    </text>
+    <richtext id="n122_c0009" name="skillDescription3" xy="548,472" size="705,230" font="Microsoft YaHei" fontSize="19" color="#342B24" text="对三名相邻敌人造成三段[color=#FFA971]火元素伤害[/color]（28.1%攻击力 × 3），并留下持续1回合的[color=#FEFEFE]箭雨[/color]。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]箭雨[/color][/b]&#10;在原选定位置持续1回合。敌方回合结束时，对这些位置的敌人造成三段[color=#FFA971]火元素[/color]爆发伤害（28.1%攻击力 × 3）。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="3" />
+      <gearDisplay2 controller="skill" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="对三名相邻敌人造成三段[color=#FFA971]火元素伤害[/color]（28.1%攻击力 × 3），并留下持续1回合的[color=#FEFEFE]箭雨[/color]。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]箭雨[/color][/b]&#10;在原选定位置持续1回合。敌方回合结束时，对这些位置的敌人造成三段[color=#FFA971]火元素[/color]爆发伤害（28.1%攻击力 × 3）。|获得持续2回合的[color=#FEFEFE]凛冽轮舞[/color]。我方角色发动攻击时，冰棱可先攻击其中一名敌人。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]凛冽轮舞[/color][/b]&#10;持续2回合。我方角色的主动攻击即将命中时，先对该次攻击的随机一名目标造成[color=#CFFFFF]冰元素[/color]爆发伤害（77.6%攻击力）。每回合至多触发3次。|召唤[color=#FEFEFE]蔷薇雷光[/color]，持续4回合。我方回合结束时，对敌人发动雷电弹射。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]蔷薇雷光[/color][/b]&#10;持续4回合。我方回合结束时发动5次雷电弹射，每次对一名随机敌人造成[color=#DEBAFF]雷元素[/color]爆发伤害（36.6%攻击力）。同一敌人可重复被选中。|为我方全体恢复生命值（17.6%生命值上限 + 1694.0）。&#10;消耗80点元素能量，冷却5回合。|对所有敌人造成[color=#A6F7CF]风元素伤害[/color]（37.6%攻击力），并创造持续2回合的[color=#FEFEFE]暴风之眼[/color]。&#10;消耗80点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]暴风之眼[/color][/b]&#10;持续2回合。我方回合开始和结束时，各对全体敌人造成五段[color=#A6F7CF]风元素[/color]爆发伤害（37.6%攻击力 × 5）。爆发的初始风伤或[color=#FEFEFE]暴风之眼[/color]的风伤触发扩散后，按火、水、雷、冰的顺序选定并锁定转化元素。转化后，每段后续风伤追加一段对应元素的爆发伤害（18.8%攻击力）。&#10;&#10;[b][color=#FEFEFE]元素转化[/color][/b]&#10;触发扩散后，首次选定并锁定一种转化元素，之后可额外造成该元素的伤害。选取优先级及追加伤害的时点由对应技能决定。|对所有敌人造成[color=#A6F7CF]风元素伤害[/color]（424.8%攻击力），为全队恢复生命值（251.2%攻击力 + 1540.0），并创造持续3回合的[color=#FEFEFE]蒲公英领域[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]蒲公英领域[/color][/b]&#10;持续3回合。我方回合结束时，为我方全体恢复生命值（100.5%攻击力 + 616.0），并施加1单位[color=#A6F7CF]风元素附着[/color]。敌人一次完整攻击实际命中我方后，领域在该次攻击结束时反击，对该敌人造成[color=#A6F7CF]风元素[/color]爆发伤害（78.4%攻击力）。|对所有敌人造成三段[color=#FFA971]火元素伤害[/color]。首段为60.0%攻击力，后两段各为204.0%攻击力。获得持续2回合的[color=#FEFEFE]火元素附魔[/color]。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]火元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#FFA971]火元素伤害[/color]。|可莉登场，获得持续3回合的[color=#FEFEFE]轰轰火花[/color]。[color=#FEFEFE]轰轰火花[/color]会在双方各自的回合结束时发动[color=#FFA971]火元素[/color]弹射攻击。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]轰轰火花[/color][/b]&#10;持续3回合。我方和敌方回合结束时各发动4次弹射攻击，每次对随机选取的三个相邻位置内的敌人造成[color=#FFA971]火元素[/color]爆发伤害（42.6%攻击力）。可莉切换至后台时提前结束。|发动6次弹射攻击，每次对一名随机敌人造成[color=#F5D761]岩元素伤害[/color]（87.0%攻击力）。[color=#FEFEFE]璇玑屏[/color]存在时，额外弹射6次。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]璇玑屏[/color][/b]&#10;覆盖三个相邻的敌方位置，持续5回合。位于覆盖位置的敌人造成的伤害降低10%。&#10;整面屏共用6次抵御次数。来自覆盖位置的敌人一次完整攻击实际命中我方后，消耗1次，同一次攻击的多段、多目标不重复消耗。次数耗尽时屏被摧毁，自然到期时正常消失。&#10;重新施放战技会更新位置、恢复次数和持续时间，不算屏被摧毁。屏存在时，凝光爆发额外发动6次[color=#F5D761]岩元素[/color]弹射攻击。爆发不会消耗或摧毁屏。|对所有敌人造成[color=#DEBAFF]雷元素伤害[/color]（121.6%攻击力），并获得持续4回合的[color=#FEFEFE]雷兽之盾[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]雷兽之盾[/color][/b]&#10;持续4回合，使北斗受到的伤害降低20.0%。北斗的普攻或重击每段命中时，触发一轮3次雷电弹射。每次弹射对一名随机敌人造成[color=#DEBAFF]雷元素[/color]爆发伤害（96.0%攻击力）。同一敌人可重复被选中。|雷泽登场，对所有敌人造成[color=#DEBAFF]雷元素伤害[/color]（160.0%攻击力），并获得持续4回合的[color=#FEFEFE]雷狼[/color]。消耗全部[color=#FEFEFE]雷之印[/color]，每层恢复5点能量。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]雷狼[/color][/b]&#10;持续4回合。雷泽的普攻AP消耗降低5点。每次普攻引发[color=#DEBAFF]雷元素[/color]协同攻击，倍率为当前普攻倍率的24.0%。雷泽切换至后台时提前结束，每剩余1回合为雷泽返还3点能量。&#10;&#10;[b][color=#FEFEFE]雷之印[/color][/b]&#10;雷泽持有的[color=#FEFEFE]雷之印[/color]，持续5回合，最多3层，每层提高20%元素充能效率。再次获得时，刷新已有[color=#FEFEFE]雷之印[/color]的共同持续时间。&#10;施放二段战技或爆发时消耗全部[color=#FEFEFE]雷之印[/color]，每消耗1层，为雷泽恢复5点能量。|选择两名相邻我方角色作为[color=#FEFEFE]鼓舞对象[/color]，对所有敌人造成[color=#FFA971]火元素伤害[/color]（232.8%攻击力），并展开持续3回合的[color=#FEFEFE]鼓舞领域[/color]。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]鼓舞领域[/color][/b]&#10;持续3回合。[color=#FEFEFE]鼓舞对象[/color]的生命值高于70%时，获得相当于班尼特基础攻击力56.0%的攻击力加成。我方和敌方回合结束时，为生命值低于70%的我方角色恢复生命值（12.0%生命值上限 + 1154.0），并为我方全体施加[color=#FFA971]火元素附着[/color]。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（67.2%攻击力），进入持续3回合的[color=#FEFEFE]大扫除[/color]，并获得[color=#FEFEFE]岩元素附魔[/color]。&#10;消耗60点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]大扫除[/color][/b]&#10;持续3回合。攻击力提高，提升量相当于诺艾尔防御力的40.0%。普攻与重击各降低5点AP消耗。普攻改为攻击三名相邻敌人，重击改为攻击全体敌人，均造成[color=#F5D761]岩元素伤害[/color]。&#10;&#10;[b][color=#FEFEFE]岩元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#F5D761]岩元素伤害[/color]。此附魔不可被其他附魔覆盖。|对所有敌人造成[color=#FFA971]火元素伤害[/color]（72.0%攻击力），并形成持续2回合的[color=#FEFEFE]旋火轮[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]旋火轮[/color][/b]&#10;持续2回合，最多发动6次。我方任意角色完成普攻后，对全体敌人造成一次[color=#FFA971]火元素[/color]爆发伤害（112.0%攻击力），并消耗1次。伤害使用施放时香菱的属性。|获得持续4回合的[color=#FEFEFE]虹剑势[/color]，并为全队补满[color=#FEFEFE]雨帘剑[/color]。我方普攻命中后可引发剑雨，[color=#FEFEFE]雨帘剑[/color]消耗后会立即补满。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]虹剑势[/color][/b]&#10;持续4回合。期间我方[color=#FEFEFE]雨帘剑[/color]消耗后立即补满。我方角色的普攻命中并结束后，从命中的敌人中随机选择一名，发动剑雨。剑雨段数等于当时行秋持有的[color=#FEFEFE]雨帘剑[/color]数量，每段造成[color=#08E4FF]水元素[/color]爆发伤害（54.3%攻击力）。每回合至多3轮。&#10;&#10;[b][color=#FEFEFE]雨帘剑[/color][/b]&#10;每名队友各自持有，持续4回合，初始及上限均为3柄。持有[color=#FEFEFE]雨帘剑[/color]时，受到的伤害降低20.0%，并将行秋当前[color=#08E4FF]水元素伤害加成[/color]的20%额外转为减伤，转换部分最多提供24%减伤。敌人的一次完整攻击命中持有者后，消耗1柄，护盾吸收或免疫命中也会消耗。[color=#FEFEFE]虹剑势[/color]存在时，消耗后立即补满。|对所有敌人造成[color=#DEBAFF]雷元素伤害[/color]（208.0%攻击力），并在选定位置召唤[color=#FEFEFE]奥兹[/color]；若[color=#FEFEFE]奥兹[/color]已在场，则重新召唤并刷新持续时间。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]奥兹[/color][/b]&#10;持续3回合。我方和敌方回合结束时各发动2次雷电弹射，每次对所在位置及相邻位置的一名随机敌人造成[color=#DEBAFF]雷元素[/color]战技伤害（88.8%攻击力）。同一敌人可重复被选中。每次攻击命中有50%概率产生2点[color=#DEBAFF]雷元素能量[/color]。重新召唤时更新位置并刷新持续时间。|对三名相邻敌人造成三段[color=#CFFFFF]冰元素伤害[/color]（142.4%攻击力 × 3）。&#10;消耗40点元素能量，冷却3回合。|召唤持续2回合的[color=#FEFEFE]大型风灵[/color]。[color=#FEFEFE]大型风灵[/color]在我方回合结束时攻击全体敌人，触发扩散后可以追加转化元素的伤害。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]大型风灵[/color][/b]&#10;持续2回合。我方回合结束时，对所有敌人造成[color=#A6F7CF]风元素[/color]爆发伤害（148.0%攻击力），并将可被控制的敌人[color=#FEFEFE]击飞[/color]1回合。触发扩散后，按火、雷、冰、水顺序选定并锁定一种元素。转化当次及后续每轮风伤之后，追加该元素的爆发伤害（44.0%攻击力）。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。&#10;&#10;[b][color=#FEFEFE]元素转化[/color][/b]&#10;触发扩散后，首次选定并锁定一种转化元素，之后可额外造成该元素的伤害。选取优先级及追加伤害的时点由对应技能决定。|为所有敌人施加持续4回合的[color=#FEFEFE]度厄真符[/color]，并造成[color=#CFFFFF]冰元素伤害[/color]（284.8%攻击力）。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]度厄真符[/color][/b]&#10;我方角色和状态行动命中带符敌人时，为伤害来源角色恢复生命值（90.0%攻击力 + 577.3）。护盾吸收或免疫命中仍可触发。命中多名带符敌人时，每枚真符分别治疗。|为所有敌人施加[color=#08E4FF]水元素[/color]附着、持续2回合的[color=#FEFEFE]泡影[/color]与持续1回合的[color=#FEFEFE]星异[/color]。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]泡影[/color][/b]&#10;持续2回合，使可被控制的敌人[color=#FEFEFE]击飞[/color]。目标被攻击命中后，[color=#FEFEFE]泡影[/color]破裂并造成[color=#08E4FF]水元素[/color]爆发伤害（442.4%攻击力），同时解除控制。自然到期时直接消失。[color=#FEFEFE]泡影[/color]与[color=#FEFEFE]星异[/color]同时施加，各自计时。&#10;&#10;[b][color=#FEFEFE]星异[/color][/b]&#10;持续1回合。我方对带有[color=#FEFEFE]星异[/color]的敌人造成的伤害获得42.0%伤害加成。从施放爆发起生效，与[color=#FEFEFE]泡影[/color]独立计时。&#10;&#10;[b][color=#FEFEFE]击飞[/color][/b]&#10;使目标暂时无法行动。护盾可以抵挡对我方角色施加的[color=#FEFEFE]击飞[/color]。出战角色被[color=#FEFEFE]击飞[/color]后，可点击控制标记三次并消耗10点AP提前解除一份[color=#FEFEFE]击飞[/color]。|对所有敌人造成十段[color=#DEBAFF]雷元素伤害[/color]。首段为88.0%攻击力，随后八段各为24.0%攻击力，末段为188.8%攻击力。&#10;消耗40点元素能量，冷却3回合。|远程姿态&#10;对所有敌人造成[color=#08E4FF]水元素伤害[/color]（378.4%攻击力），施加[color=#FEFEFE]断流[/color]，并返还20点能量。&#10;&#10;近战姿态&#10;对所有敌人造成[color=#08E4FF]水元素伤害[/color]（464.0%攻击力），使已有[color=#FEFEFE]断流[/color]的目标触发[color=#FEFEFE]断流·爆[/color]。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]断流[/color][/b]&#10;[color=#FEFEFE]断流[/color]持续3回合，再次施加时刷新。蓄力重击、近战普攻或重击、近战爆发命中带有[color=#FEFEFE]断流[/color]的敌人时，分别触发[color=#FEFEFE]断流·闪[/color]、[color=#FEFEFE]断流·斩[/color]和[color=#FEFEFE]断流·爆[/color]。带有[color=#FEFEFE]断流[/color]的敌人被击败时触发[color=#FEFEFE]断流·破[/color]。蓄力重击和近战攻击须命中原先已有[color=#FEFEFE]断流[/color]的敌人，才会触发闪或斩。&#10;&#10;[b][color=#FEFEFE]断流·爆[/color][/b]&#10;近战爆发命中已有[color=#FEFEFE]断流[/color]的敌人时，对该位置及相邻位置造成[color=#08E4FF]水元素[/color]爆发伤害（120.0%攻击力），随后清除引发爆炸的[color=#FEFEFE]断流[/color]。&#10;&#10;[b][color=#FEFEFE]断流·破[/color][/b]&#10;带有[color=#FEFEFE]断流[/color]的敌人被击败时，对相邻位置的敌人造成[color=#08E4FF]水元素伤害[/color]（62.0%攻击力），并为命中的敌人施加[color=#FEFEFE]断流[/color]。|对所有敌人造成[color=#CFFFFF]冰元素伤害[/color]（80.0%攻击力），并生成持续3回合的[color=#FEFEFE]冰气酒雾[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]冰气酒雾[/color][/b]&#10;持续3回合。我方和敌方回合结束时，各对所有敌人造成一次[color=#CFFFFF]冰元素[/color]爆发伤害（52.6%攻击力），并治疗全队（5.3%生命值上限 + 513.2）。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（401.1%攻击力），并使可被[color=#FEFEFE]石化[/color]的敌人[color=#FEFEFE]石化[/color]1回合。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]石化[/color][/b]&#10;使目标无法行动，持续时间结束后解除。&#10;[color=#FEFEFE]石化[/color]不属于冻结，不赋予元素附着，也不会使攻击触发碎冰。|对所有敌人造成物理伤害（340.8%攻击力），并获得持续1回合的[color=#FEFEFE]叛逆乱弦[/color]。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]叛逆乱弦[/color][/b]&#10;持续1回合。我方回合结束时，对所有敌人造成一次[color=#FFA971]火元素[/color]爆发伤害（40.0%攻击力）。|对所有敌人造成[color=#F5D761]岩元素伤害[/color]（367.2%攻击力）。[color=#FEFEFE]阳华[/color]存在时，追加7次生灭之花弹射，每次对随机选取的三个相邻位置内的敌人造成[color=#F5D761]岩元素伤害[/color]（72.0%攻击力）。&#10;消耗40点元素能量，冷却3回合。&#10;&#10;[b][color=#FEFEFE]阳华[/color][/b]&#10;持续7回合的岩造物，全场最多一份。重施战技替换旧[color=#FEFEFE]阳华[/color]。我方主动行动及其后续攻击命中时，从命中的敌人中随机选择一名，造成[color=#F5D761]岩元素[/color]战技伤害（133.6%防御力），每次主动行动最多1次，每回合最多2次。[color=#FEFEFE]阳华[/color]的协同攻击命中时，生成1份[color=#FEFEFE]瑰银[/color]，并有70%概率产生2点[color=#F5D761]岩元素能量[/color]。[color=#FEFEFE]阳华[/color]也可参与[color=#FEFEFE]岩脊[/color]共鸣。|召唤持续4回合的[color=#FEFEFE]冰灵珠[/color]。[color=#FEFEFE]冰灵珠[/color]会在双方各自的回合结束时发动[color=#CFFFFF]冰元素[/color]弹射攻击。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]冰灵珠[/color][/b]&#10;持续4回合。我方和敌方回合结束时各发动3次弹射攻击，每次对随机选取的三个相邻位置内的敌人造成[color=#CFFFFF]冰元素[/color]爆发伤害（70.3%攻击力）。重新施放时刷新持续时间。|魈登场，进入持续4回合的[color=#FEFEFE]靖妖傩舞[/color]，并获得[color=#FEFEFE]风元素附魔[/color]。&#10;消耗70点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]靖妖傩舞[/color][/b]&#10;持续4回合。普攻和重击伤害提高58.5%，获得[color=#FEFEFE]风元素附魔[/color]，重击范围扩大为三名相邻敌人。每个我方回合结束时，魈流失当前生命值的10%，最低保留1点生命。期间战技不产生能量。切换至后台时提前结束。&#10;&#10;[b][color=#FEFEFE]风元素附魔[/color][/b]&#10;将普攻和重击中原本的物理伤害转为[color=#A6F7CF]风元素伤害[/color]。此附魔不可被其他附魔覆盖。|对所有敌人造成[color=#FFA971]火元素伤害[/color]（303.3%攻击力），每命中一名敌人，为胡桃恢复6.3%生命值上限，合并为一次治疗。施放时生命值低于50%，伤害改为379.1%攻击力，每名敌人提供的治疗量改为8.4%生命值上限。&#10;消耗60点元素能量，冷却4回合。|对三名相邻敌人造成两段[color=#CFFFFF]冰元素伤害[/color]（104.0%攻击力／152.0%攻击力），留下持续2回合的[color=#FEFEFE]终命圣礼[/color]。&#10;消耗60点元素能量，冷却4回合。&#10;&#10;[b][color=#FEFEFE]终命圣礼[/color][/b]&#10;留在选定的三个相邻位置，持续2回合。每个我方回合结束时，对这些位置当前的敌人造成[color=#CFFFFF]冰元素[/color]爆发伤害（132.0%攻击力）。多次施放的效果各自计时、各自出伤。|对所有敌人造成[color=#FFA971]火元素伤害[/color]（182.4%攻击力），补满[color=#FEFEFE]丹火印[/color]，并获得持续4回合的[color=#FEFEFE]灼灼[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]丹火印[/color][/b]&#10;烟绯每次普攻命中后获得1枚[color=#FEFEFE]丹火印[/color]，持续3回合，最多3枚。获得新印会刷新已有[color=#FEFEFE]丹火印[/color]的持续时间。战技和爆发可补满[color=#FEFEFE]丹火印[/color]。施放重击时消耗全部[color=#FEFEFE]丹火印[/color]，每枚降低重击4点AP消耗，并提高该次重击伤害。切换至后台时仍保留。&#10;&#10;[b][color=#FEFEFE]灼灼[/color][/b]&#10;持续4回合，烟绯重击伤害提高33.4%。我方每累计消耗20点AP，烟绯获得1枚[color=#FEFEFE]丹火印[/color]。[color=#FEFEFE]丹火印[/color]在本次行动和后续效果全部结束后，或换人完成后发放。余数保留到敌方回合结束。烟绯在后台时仍可累计。|优菈登场，对所有敌人造成[color=#CFFFFF]冰元素伤害[/color]（245.6%攻击力），并创造持续2回合的[color=#FEFEFE]光降之剑[/color]。&#10;消耗80点元素能量，冷却5回合。&#10;&#10;[b][color=#FEFEFE]光降之剑[/color][/b]&#10;持续2回合，初始0点能量，最多30点。优菈的普攻、重击、战技和爆发每命中一名敌人，为每把正在积能的[color=#FEFEFE]光降之剑[/color]增加1点能量，护盾吸收或免疫命中也计入。自然到期或优菈切换至后台时引爆，对所有敌人造成物理爆发伤害（367.1%攻击力，每点能量再增加75.0%攻击力）。多把剑可独立积能，优菈倒下时清除。" />
+    </richtext>
+    <component id="n123_c0009" name="openSkillUpgrade" xy="1124,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="技能升级" controller="modal" page="su" />
+      <gearDisplay controller="tab" pages="3" />
+    </component>
+    <text id="n124_c0009" name="talentHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="天赋" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="4" />
+    </text>
+    <text id="n125_c0009" name="talentSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="角色专属天赋" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="4" />
+    </text>
+    <graph id="n126_c0009" name="talentLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="4" />
+    </graph>
+    <loader id="n127_c0009" name="talentIcon0" xy="546,328" size="53,53" url="ui://chrlist1i0135" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="4" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0135|ui://chrlist1i0136|ui://chrlist1i0137|ui://chrlist1i0138|ui://chrlist1i0139|ui://chrlist1i013a|ui://chrlist1i013b|ui://chrlist1i013c|ui://chrlist1i013d|ui://chrlist1i013e|ui://chrlist1i013f|ui://chrlist1i0140|ui://chrlist1i0141|ui://chrlist1i0142|ui://chrlist1i0143|ui://chrlist1i0144|ui://chrlist1i0145|ui://chrlist1i0146|ui://chrlist1i0147|ui://chrlist1i0148|ui://chrlist1i0149|ui://chrlist1i014a|ui://chrlist1i014b|ui://chrlist1i014c|ui://chrlist1i014d|ui://chrlist1i014e|ui://chrlist1i014f|ui://chrlist1i0150|ui://chrlist1i0151|ui://chrlist1i0152|ui://chrlist1i0153|ui://chrlist1i0154" />
+    </loader>
+    <text id="n128_c0009" name="talentName0" xy="612,324" size="643,30" font="Microsoft YaHei" fontSize="21" color="#342B24" text="百发百中！" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="百发百中！|冷血之剑|电感余震|光辉的季节|绪风之拥|顺风而行|永不休止|砰砰礼物|星移势转|遍宇灵光|觉醒|热情复燃|全心全意|交叉火力|化水为雨|噬星魔鸦|吐纳真定|触媒置换|延命妙法|“老太婆来抓我啊！”|抵天雷罚|永无谢幕|猫尾隐藏菜单|悬岩宸断|没有观众也要演奏…|白垩色的威压|唯此一心|降魔·平妖大圣|蝶隐之时|聆听忏悔的幽影|关联条款|潮卷冰削" />
+    </text>
+    <richtext id="n129_c0009" name="talentDescription0" xy="612,362" size="643,95" font="Microsoft YaHei" fontSize="18" color="#342B24" text="[color=#FEFEFE]箭雨[/color]可额外攻击一名相邻的敌人，且[color=#FEFEFE]箭雨[/color]及其持续伤害的暴击率提高10%。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="[color=#FEFEFE]箭雨[/color]可额外攻击一名相邻的敌人，且[color=#FEFEFE]箭雨[/color]及其持续伤害的暴击率提高10%。|施放霜袭时，为凯亚恢复相当于攻击力15%的生命值。|苍雷命中拥有3层[color=#FEFEFE]引雷[/color]的敌人时，在造成伤害并清除[color=#FEFEFE]引雷[/color]后，重新为其施加1层[color=#FEFEFE]引雷[/color]。|[color=#FEFEFE]歌声之环[/color]持续期间，我方切换角色消耗的AP减少5点。|施放高天之歌后，在我方场地留下持续2回合的风场。风场存在期间，切换角色消耗的AP减少5点。|琴的普通攻击命中时，有50%概率为全队恢复相当于琴攻击力15%的生命值。|重击消耗的AP减少10点。|蹦蹦炸弹的弹跳或普通攻击造成伤害时，有50%概率获得一朵爆裂火花。每段攻击至多获得一朵，同时命中多名敌人时也只判定一次。施放蹦蹦炸弹或[color=#FEFEFE]轰轰火花[/color]时，也会获得一朵，最多持有3朵。施放重击时消耗一朵，使本次重击消耗的AP减少15点，造成的伤害提高50%。|拥有[color=#FEFEFE]星璇[/color]时，凝光的重击不消耗AP。|捉浪的护盾破碎时，反击直接达到两层威力。|施放雷牙时，重置利爪与苍雷的冷却时间。|施放美妙旅程后，热情过载的冷却时间减少1回合。|我方角色生命值低于30%时，为其中当前生命值最低的一名角色生成持续5回合的[color=#F5D761]岩元素护盾[/color]，吸收量相当于诺艾尔防御力的400%。生命值相同时随机选择，每15回合至多触发一次。|[color=#FEFEFE]锅巴[/color]每次喷火随机攻击两名不同的敌人。喷火命中时仍只产生一次2点[color=#FFA971]火元素能量[/color]。|[color=#FEFEFE]雨帘剑[/color]被消耗或持续时间结束时，每柄消失的[color=#FEFEFE]雨帘剑[/color]为受益角色恢复其生命值上限6%的生命值。剩余[color=#FEFEFE]雨帘剑[/color]一同到期时，合并恢复相应生命值。|菲谢尔的蓄力箭命中[color=#FEFEFE]奥兹[/color]所在的位置时，[color=#FEFEFE]奥兹[/color]会降下圣裁之雷，对该位置及相邻位置造成[color=#DEBAFF]雷元素伤害[/color]，倍率为本次重击倍率的152.7%。|[color=#FEFEFE]重华叠霜[/color]存在期间，队伍中单手剑、双手剑和长柄武器角色的普通攻击与重击AP消耗降低5点。|砂糖触发扩散反应时，使队伍中对应元素类型角色的元素精通提高50点，持续2回合。|我方角色触发元素反应时，受治疗加成提高20%，持续2回合。|敌人命中莫娜时，本次行动对莫娜造成的伤害降低50%，触发的这一击也享受减伤。在攻击者所在位置生成持续1回合的弱化[color=#FEFEFE]虚影[/color]。敌方回合结束时造成[color=#08E4FF]水元素伤害[/color]（16.0%攻击力），到期爆炸时造成[color=#08E4FF]水元素伤害[/color]（66.4%攻击力）。[color=#FEFEFE]虚影[/color]仍会降低附近敌人的伤害，爆炸命中时产生8点[color=#08E4FF]水元素能量[/color]。每回合至多触发一次。|主动清除[color=#FEFEFE]雷楔[/color]后的2回合内，刻晴获得[color=#FEFEFE]雷元素附魔[/color]。|[color=#FEFEFE]断流[/color]的持续时间延长2回合。|处于猫爪冻冻护盾保护下的角色发起切换时，消耗的AP减少2。猫爪冻冻的护盾量提高75%。|[color=#FEFEFE]玉璋护盾[/color]受到伤害时，钟离的护盾强效提升5%，至多叠加5次，持续至护盾消失。|热情拂扫生成护盾所需的命中人数降低：命中1名及以下、2名、3名及以上敌人时，分别生成一级、二级、三级护盾。|[color=#FEFEFE]阳华[/color]对生命值低于50%的敌人造成的伤害提高25%。阿贝多拥有[color=#FEFEFE]瑰银[/color]时，[color=#FEFEFE]阳华[/color]的基础伤害额外提高，数值相当于阿贝多防御力的240%。|进入蓄力后，霜华矢及其绽放伤害的暴击率提高20%，持续1回合。此次蓄力射击完成前，该效果不会提前结束。|[color=#FEFEFE]靖妖傩舞[/color]持续期间，魈造成的伤害提高6%，每次我方回合结束时再提高6%。[color=#FEFEFE]靖妖傩舞[/color]结束时清除此效果。|[color=#FEFEFE]彼岸蝶舞[/color]结束时，除胡桃外的队伍中所有角色暴击率提高12%，持续2回合。|施放噬罪的告解前，我方剩余AP达到上限的50%时，罗莎莉亚先获得12%暴击率提升，持续1回合。|重击消耗[color=#FEFEFE]丹火印[/color]前，每枚[color=#FEFEFE]丹火印[/color]为烟绯提供5%[color=#FFA971]火元素伤害加成[/color]，持续2回合。再次施放重击时，按本次消耗的[color=#FEFEFE]丹火印[/color]数量重新计算并刷新持续时间。|二段冰潮的涡漩消耗两层[color=#FEFEFE]冷酷之心[/color]时，创造一把残缺的[color=#FEFEFE]光降之剑[/color]，立即对全体敌人造成物理爆发伤害（183.5%攻击力，为[color=#FEFEFE]光降之剑[/color]基础伤害的50%）。此攻击可为现有[color=#FEFEFE]光降之剑[/color]充能。" />
+    </richtext>
+    <loader id="n130_c0009" name="talentIcon1" xy="546,467" size="53,53" url="ui://chrlist1i0155" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="4" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0155|ui://chrlist1i0156|ui://chrlist1i0157|ui://chrlist1i0158|ui://chrlist1i0159|ui://chrlist1i015a|ui://chrlist1i015b|ui://chrlist1i015c|ui://chrlist1i015d|ui://chrlist1i015e|ui://chrlist1i015f|ui://chrlist1i0160|ui://chrlist1i0161|ui://chrlist1i0162|ui://chrlist1i0163|ui://chrlist1i0164|ui://chrlist1i0165|ui://chrlist1i0166|ui://chrlist1i0167|ui://chrlist1i0168|ui://chrlist1i0169|ui://chrlist1i016a|ui://chrlist1i016b|ui://chrlist1i016c|ui://chrlist1i016d|ui://chrlist1i016e|ui://chrlist1i016f|ui://chrlist1i0170|ui://chrlist1i0171|ui://chrlist1i0172|ui://chrlist1i0173|ui://chrlist1i0174" />
+    </loader>
+    <text id="n131_c0009" name="talentName1" xy="612,463" size="643,30" font="Microsoft YaHei" fontSize="21" color="#342B24" text="压制射击" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="压制射击|冰渊之心|静电场力|安可|暴风之眼|听凭风引|熔毁之翼|火花无限|储之千日，用之一刻|霹雳连霄|饥饿|无畏的热血|干净利落|绝云朝天椒|虚实工笔|断罪雷影|追冰剑诀|小小的慧风|玉签偶开|“托付于命运吧！”|玉衡之贵|水形剑|滑稽百出的醉相|炊金馔玉|…这才是摇滚！|瓶中人的天慧|天地交泰|坏劫·国土碾尘|血之灶火|暗中支援的黯色|法兽灼眼|战欲涌现" />
+    </text>
+    <richtext id="n132_c0009" name="talentDescription1" xy="612,501" size="643,95" font="Microsoft YaHei" fontSize="18" color="#342B24" text="蓄力射击命中敌人后，安柏的攻击力提高20%，持续2回合。多次获得的效果可叠加，各自独立计时。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="蓄力射击命中敌人后，安柏的攻击力提高20%，持续2回合。多次获得的效果可叠加，各自独立计时。|霜袭触发冻结反应时，为凯亚额外恢复4点元素能量。仅命中已经冻结的敌人而未触发冻结反应时，不会获得这部分能量。|蔷薇的雷光命中敌人后，使其防御力降低15%，持续2回合。至多叠加2层，各层独立计时。|[color=#FEFEFE]歌声之环[/color]持续时间结束时，若芭芭拉的元素能量尚未充满，则持续时间延长1回合。|[color=#FEFEFE]暴风之眼[/color]持续时间结束时，为温迪恢复15点元素能量。若发生过[color=#FEFEFE]元素转化[/color]，也为队伍中相应元素的角色恢复15点元素能量。|施放蒲公英之风后，为琴恢复16点元素能量。|黎明提供的[color=#FEFEFE]火元素附魔[/color]延长1回合。施放黎明后，[color=#FFA971]火元素伤害加成[/color]提高20%，持续3回合。|重击造成暴击后，为队伍中所有角色恢复2点元素能量。每次轰击至多恢复一次。|施放[color=#FEFEFE]璇玑屏[/color]后，我方全体获得12%[color=#F5D761]岩元素伤害加成[/color]，持续2回合。|施放两层威力的捉浪反击后，普通攻击与重击造成的伤害提高15%，普通攻击消耗的AP减少5点，重击消耗的AP减少10点，持续2回合。|雷泽的元素能量低于50%时，元素充能效率提高30%。|[color=#FEFEFE]鼓舞领域[/color]存在时，热情过载消耗的AP降低50%，且三段热情过载不会将班尼特自身[color=#FEFEFE]击飞[/color]。|诺艾尔每完成4次普通攻击或重击，[color=#FEFEFE]护心铠[/color]的冷却时间减少1回合。|[color=#FEFEFE]锅巴[/color]自然到期或被新的[color=#FEFEFE]锅巴[/color]替换时，香菱的攻击力提高10%，持续3回合。重复触发时刷新持续时间。|行秋获得20%[color=#08E4FF]水元素伤害加成[/color]。|[color=#FEFEFE]奥兹[/color]在场时，敌人受到[color=#DEBAFF]雷元素[/color]相关反应影响后，[color=#FEFEFE]奥兹[/color]会在本次反应的目标中随机选择一名，降下圣裁之雷，造成相当于菲谢尔80%攻击力的[color=#DEBAFF]雷元素伤害[/color]。每次效果至多触发一次，圣裁之雷不会触发此效果。|[color=#FEFEFE]重华叠霜[/color]到期或被新领域替换时，降下一柄灵刃，在原先选定的位置造成[color=#CFFFFF]冰元素[/color]战技伤害（172.0%攻击力），并使命中的敌人[color=#CFFFFF]冰元素抗性[/color]降低10%，持续2回合。伤害使用施放该领域时重云的属性。|风灵作成·陆叁零捌或[color=#FEFEFE]大型风灵[/color]命中敌人后，其他队友的元素精通提高，提高数值为砂糖当前元素精通的20%，持续2回合。重复触发时刷新持续时间，不叠加。|七七的普通攻击与重击每段命中时，有50%的概率为其中一名敌人施加持续2回合的[color=#FEFEFE]度厄真符[/color]。每7回合至多触发一次。|莫娜的[color=#08E4FF]水元素伤害加成[/color]额外提高，提高程度相当于她元素充能效率的20%。|施放天街巡游时，刻晴的暴击率和元素充能效率均提高15%，持续2回合。|[color=#FEFEFE]近战状态[/color]下，普通攻击与重击造成暴击时，为受到该次暴击的敌人施加[color=#FEFEFE]断流[/color]。|施放最烈特调后，敌方全体攻击力降低10%，持续4回合。|普通攻击与重击的基础伤害提高，提高值相当于钟离生命值上限的1.39%；地心与[color=#FEFEFE]岩脊[/color]共鸣的基础伤害提高，提高值相当于钟离生命值上限的1.9%。|受到[color=#FEFEFE]热情拂扫护盾[/color]保护的角色，物理伤害提高15%。|施放诞生式·大地之潮后，我方全体元素精通提高125点，持续3回合。|降众天华持续期间，我方出战角色获得20%[color=#CFFFFF]冰元素伤害加成[/color]。|施放风轮两立后，后续风轮两立造成的伤害提高15%，持续2回合，最多叠加3层。再次获得时刷新全部层数的持续时间。|胡桃的生命值低于或等于50%时，获得33%[color=#FFA971]火元素伤害加成[/color]。|施放终命的圣礼时，基于罗莎莉亚当时暴击率的15%，提高除自身外所有队友的暴击率，持续2回合。以此方式获得的暴击率提升至多为15%。|重击造成暴击时，对本次重击的所有目标额外造成一次相当于攻击力80%的[color=#FFA971]火元素伤害[/color]，视为重击伤害。此伤害不会再次触发法兽灼眼。|施放凝浪之光剑时，重置冰潮的涡漩的冷却时间，并获得一层[color=#FEFEFE]冷酷之心[/color]。" />
+    </richtext>
+    <loader id="n133_c0009" name="talentIcon2" xy="546,606" size="53,53" url="" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="4" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="||||||||||ui://chrlist1i0175|||||ui://chrlist1i0176||||ui://chrlist1i0177||||||||||||" />
+    </loader>
+    <text id="n134_c0009" name="talentName2" xy="612,602" size="643,30" font="Microsoft YaHei" fontSize="21" color="#342B24" text="" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="||||||||||魔女的前夜礼·苍雷奔涌|||||魔女的前夜礼·幻夜的坎塔塔||||魔女的前夜礼·天步真原||||||||||||" />
+    </text>
+    <richtext id="n135_c0009" name="talentDescription2" xy="612,640" size="643,95" font="Microsoft YaHei" fontSize="18" color="#342B24" text="" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="4" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="||||||||||队伍中存在至少两名魔导角色时：[color=#FEFEFE]雷狼[/color]协同攻击造成的基础伤害提高，提高值相当于雷泽攻击力的70%；[color=#FEFEFE]雷狼[/color]存在期间，施放利爪与苍雷获得[color=#FEFEFE]雷之印[/color]时，若[color=#FEFEFE]雷之印[/color]溢出，则对本次战技命中的敌人额外造成150%攻击力的[color=#DEBAFF]雷元素伤害[/color]，并为雷泽恢复7点元素能量。|||||队伍满足魔导·秘仪条件时：[color=#FEFEFE]奥兹[/color]在场期间，我方触发超载反应后，全队攻击力提升22.5%；触发感电或月感电反应后，全队元素精通提升90点。两种效果各持续3回合。||||队伍中存在至少两名魔导角色时：莫娜的普通攻击或重击每段命中时，获得一层[color=#FEFEFE]水星天的辉光[/color]，持续2回合，至多3层。其他队友触发蒸发反应时消耗全部辉光，每层使该段攻击的蒸发反应伤害提高5%。莫娜每两次普通攻击或重击行动命中[color=#FEFEFE]星异[/color]目标，使其[color=#FEFEFE]星异[/color]延长1回合；每份[color=#FEFEFE]星异[/color]至多以此延长2回合。||||||||||||" />
+    </richtext>
+    <text id="n136_c0009" name="constellationHeading" xy="547,213" size="704,48" font="Microsoft YaHei" fontSize="32" color="#342B24" text="命之座" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+    </text>
+    <text id="n137_c0009" name="constellationSub" xy="547,262" size="704,29" font="Microsoft YaHei" fontSize="17" color="#55493D" text="按顺序激活各层命之座" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+    </text>
+    <graph id="n138_c0009" name="constellationLine" xy="547,303" size="711,1" type="rect" fillColor="#F2E8D7" lineSize="0" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+    </graph>
+    <component id="n139_c0009" name="nodeTab0" xy="546,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="1 命" controller="node" page="0" checked="true" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n140_c0009" name="nodeIcon0" xy="546,390" size="65,65" url="ui://chrlist1i0178" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="0" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0178|ui://chrlist1i0179|ui://chrlist1i017a|ui://chrlist1i017b|ui://chrlist1i017c|ui://chrlist1i017d|ui://chrlist1i017e|ui://chrlist1i017f|ui://chrlist1i0180|ui://chrlist1i0181|ui://chrlist1i0182|ui://chrlist1i0183|ui://chrlist1i0184|ui://chrlist1i0185|ui://chrlist1i0186|ui://chrlist1i0187|ui://chrlist1i0188|ui://chrlist1i0189|ui://chrlist1i018a|ui://chrlist1i018b|ui://chrlist1i018c|ui://chrlist1i018d|ui://chrlist1i018e|ui://chrlist1i018f|ui://chrlist1i0190|ui://chrlist1i0191|ui://chrlist1i0192|ui://chrlist1i0193|ui://chrlist1i0194|ui://chrlist1i0195|ui://chrlist1i0196|ui://chrlist1i0197" />
+    </loader>
+    <text id="n141_c0009" name="nodeName0" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="一箭双丘丘！" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="一箭双丘丘！|卓越的血脉|无限的电回路|彩色歌谣|弦发的苍风|流转剑脊的暴风|罪罚裁断|连环轰隆|悬星尽散击云碎|鱼龙沉四方|狼性|冒险憧憬|支援就交给我吧|外酥里嫩|重帘留香|幽邃鸦眼|释凌咏冰|堆叠真空域|寒苦回向|沉没的预言|雷厉|魔王武装·遏浪|特调的余韵|岩者，六合引之为骨|绝命的加速|伊甸之花|饮露|坏劫·毁坏三界|赤团开时斜飞去|罪之导引|占理不饶人|光潮的幻象" />
+    </text>
+    <text id="n142_c0009" name="nodeNumber0" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 1 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="0" condition="0" />
+    </text>
+    <richtext id="n143_c0009" name="nodeDescription0" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="蓄力射击会追加一支箭矢，在第一支箭命中后，对同一目标造成相当于原本20%的[color=#FFA971]火元素伤害[/color]。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="0" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="蓄力射击会追加一支箭矢，在第一支箭命中后，对同一目标造成相当于原本20%的[color=#FFA971]火元素伤害[/color]。|对受到[color=#CFFFFF]冰元素[/color]影响的敌人，凯亚的普通攻击和重击暴击率提升15%。|苍雷释放的雷电每命中一名敌人，为丽莎恢复2点元素能量。每次施放至多通过这种方式恢复10点元素能量。|每回合为芭芭拉恢复1点元素能量。|重击额外射出两支分裂箭，分别攻击目标左右的敌人，造成原本的33%的伤害。|风压剑造成的伤害提高40%，并能[color=#FEFEFE]击飞[/color]更强的敌人。|对生命值高于50%的敌人造成的伤害提高15%。|每段攻击命中时有50%概率从命中的敌人中随机选一名，追加[color=#FFA971]火元素伤害[/color]（51.2%攻击力，为[color=#FEFEFE]轰轰火花[/color]单次攻击倍率的120%）。追加命中后，可莉攻击力提高60%，持续3回合，重复触发刷新。此追加不会触发自身。|普通攻击对三个相邻位置上的敌人同时造成伤害。|施放斫雷时，为北斗生成伤害吸收量为生命值上限16%的[color=#DEBAFF]雷元素护盾[/color]，持续4回合。|雷泽获得元素能量后，造成的伤害提高10%，持续2回合。|[color=#FEFEFE]鼓舞对象[/color]的攻击力提升不再受生命值限制，提升比例额外增加班尼特基础攻击力的20%。|同时处于[color=#FEFEFE]护心铠[/color]与[color=#FEFEFE]大扫除[/color]状态时，[color=#FEFEFE]护心铠[/color]的生命值恢复效果触发几率提升至100%。|受到[color=#FEFEFE]锅巴[/color]攻击的敌人，[color=#FFA971]火元素抗性[/color]降低15%，持续2回合。|[color=#FEFEFE]雨帘剑[/color]的最大数量增加1柄。|菲谢尔进行普通攻击后，[color=#FEFEFE]奥兹[/color]会对该目标追加一段相当于菲谢尔22%攻击力的[color=#DEBAFF]雷元素伤害[/color]。|重云在每回合内第三次进行普通攻击后，对该目标及相邻敌人额外造成一段相当于50%攻击力的[color=#CFFFFF]冰元素伤害[/color]。|风灵作成·陆叁零捌的可使用次数增加一次。|[color=#FEFEFE]寒病鬼差[/color]每命中一名处于[color=#FEFEFE]度厄真符[/color]状态下的敌人，为七七恢复2点元素能量。|处于[color=#FEFEFE]星异[/color]状态下的敌人受到的感电、月感电、蒸发、[color=#08E4FF]水元素[/color]扩散和月结晶反应伤害提高15%；由后台队友触发时，提高至24%。|星斗归位第一段的AP消耗减少10点。|魔王武装·狂澜的冷却时间减少1回合。|[color=#FEFEFE]冰气酒雾[/color]自然结束时，为迪奥娜恢复15点元素能量。|地心创造的[color=#FEFEFE]岩脊[/color]至多可同时存在2根。|辛焱造成暴击后，普通攻击与重击的AP消耗降低5，持续1回合。每回合至多触发一次，重复触发刷新持续时间，效果不叠加。|[color=#FEFEFE]阳华[/color]每次命中后，为阿贝多恢复1.2点元素能量。施放创生法·拟造[color=#FEFEFE]阳华[/color]后，阿贝多的防御力提高50%，持续5回合。|霜华矢及其绽放命中敌人时，使该敌人的[color=#CFFFFF]冰元素抗性[/color]降低15%，持续2回合。射出霜华矢时，为甘雨恢复2点元素能量。|风轮两立的可使用次数增加1次。|[color=#FEFEFE]彼岸蝶舞[/color]持续期间，重击的AP消耗降低5点。|罗莎莉亚造成暴击后，普通攻击的AP消耗降低5点，持续1回合。再次触发刷新持续时间。|每枚[color=#FEFEFE]丹火印[/color]额外降低重击2点AP消耗。|消耗[color=#FEFEFE]冷酷之心[/color]时，物理伤害提高30%。消耗一层时持续2回合，消耗两层时持续3回合。" />
+    </richtext>
+    <component id="n144_c0009" name="nodeTab1" xy="666,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="2 命" controller="node" page="1" checked="false" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n145_c0009" name="nodeIcon1" xy="546,390" size="65,65" url="ui://chrlist1i0198" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="1" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0198|ui://chrlist1i0199|ui://chrlist1i019a|ui://chrlist1i019b|ui://chrlist1i019c|ui://chrlist1i019d|ui://chrlist1i019e|ui://chrlist1i019f|ui://chrlist1i01a0|ui://chrlist1i01a1|ui://chrlist1i01a2|ui://chrlist1i01a3|ui://chrlist1i01a4|ui://chrlist1i01a5|ui://chrlist1i01a6|ui://chrlist1i01a7|ui://chrlist1i01a8|ui://chrlist1i01a9|ui://chrlist1i01aa|ui://chrlist1i01ab|ui://chrlist1i01ac|ui://chrlist1i01ad|ui://chrlist1i01ae|ui://chrlist1i01af|ui://chrlist1i01b0|ui://chrlist1i01b1|ui://chrlist1i01b2|ui://chrlist1i01b3|ui://chrlist1i01b4|ui://chrlist1i01b5|ui://chrlist1i01b6|ui://chrlist1i01b7" />
+    </loader>
+    <text id="n146_c0009" name="nodeName1" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="一触即发" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="一触即发|无尽的霜舞|空间电势结界|元气迸发|眷恋的泠风|守护众人的坚盾|炙热余烬|破破弹片|璇玑合璧镇昆仑|赫赫雷涌起|压制|踏破绝境|旋风女仆|大火宽油|天青现虹|吞罪鸦|周天运转|不羁型贝特|冰寒蚀骨|星月的连珠|苛捐|魔王武装·暗流|猫爪冰摇|石者，八荒韫玉而明|开场即兴段|显生之宙|获麟|空劫·虚空华开|最不安神晴又复雨|无福之地|最终解释权|海沫的少女" />
+    </text>
+    <text id="n147_c0009" name="nodeNumber1" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 2 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="1" condition="0" />
+    </text>
+    <richtext id="n148_c0009" name="nodeDescription1" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="蓄力射击命中[color=#FEFEFE]兔兔伯爵[/color]所在的位置时，会直接引爆[color=#FEFEFE]兔兔伯爵[/color]。以这种方式引爆时，爆炸伤害提高至原本的3倍。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="1" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="蓄力射击命中[color=#FEFEFE]兔兔伯爵[/color]所在的位置时，会直接引爆[color=#FEFEFE]兔兔伯爵[/color]。以这种方式引爆时，爆炸伤害提高至原本的3倍。|[color=#FEFEFE]凛冽轮舞[/color]持续期间，凯亚击败敌人时，其持续时间延长1回合。最多通过这种方式延长2回合。|重击命中敌人时，有50%概率为该敌人额外施加1层[color=#FEFEFE]引雷[/color]。|演唱，开始♪的冷却时间减少1回合。[color=#FEFEFE]歌声之环[/color]持续期间，我方全体获得15%[color=#08E4FF]水元素伤害加成[/color]。|被战技命中的敌人，[color=#A6F7CF]风元素抗性[/color]与物理抗性降低12%，持续2回合。处于[color=#FEFEFE]击飞[/color]状态的敌人额外降低12%。|琴在出战期间获得元素能量时，全队普通攻击与重击消耗的AP减少5点，持续4回合。重复触发时刷新持续时间，不叠加。|受到伤害后，攻击力提高10%，普攻和重击消耗的AP减少1点，持续3回合。至多叠加3层，每层独立计时，每回合至多触发2次。|蹦蹦炸弹命中敌人后，使其防御力降低23%，持续3回合。|[color=#FEFEFE]璇玑屏[/color]因抵御攻击次数耗尽而碎裂时，清除[color=#FEFEFE]璇玑屏[/color]的冷却时间。该效果每2回合至多触发一次。|[color=#FEFEFE]雷兽之盾[/color]每次触发的雷电弹射增加两次。|攻击生命值低于30%的敌人时，暴击率提高10%。|班尼特的生命值低于70%时，元素充能效率提高30%。|重击的AP消耗降低5，造成的伤害提高15%。|每个我方回合内，香菱第五次普通攻击会对被攻击的目标施加[color=#FEFEFE]内爆[/color]效果。[color=#FEFEFE]内爆[/color]持续1回合，结束时对该目标及其相邻敌人造成75%攻击力的[color=#FFA971]火元素伤害[/color]。|[color=#FEFEFE]虹剑势[/color]的持续时间延长1回合；受到剑雨攻击的敌人，[color=#08E4FF]水元素抗性[/color]降低15%，持续1回合。|夜巡影翼召唤[color=#FEFEFE]奥兹[/color]时，初始伤害额外增加200%攻击力的基础伤害，倍率提高至315.4%攻击力。[color=#FEFEFE]奥兹[/color]的周期攻击范围扩大至敌方全体。|[color=#FEFEFE]重华叠霜[/color]存在期间，我方施放的元素战技与元素爆发开始冷却时，若冷却时间不少于5回合，则减少1回合。|[color=#FEFEFE]大型风灵[/color]的持续时间延长1回合。|七七的普通攻击与重击对受[color=#CFFFFF]冰元素[/color]影响的敌人造成的伤害提高15%。|莫娜的普攻命中时，有20%概率免费施放一次重击，造成[color=#08E4FF]水元素伤害[/color]（50.0%攻击力）。施放星命定轨后的1回合内，下次普攻命中必定触发。两种效果共享1回合冷却。重击命中时，全队元素精通提高80点，持续3回合。|普通攻击与重击命中受到[color=#DEBAFF]雷元素[/color]影响的敌人时，有50%的概率产生2点[color=#DEBAFF]雷元素能量[/color]。每回合至多触发一次。|处于[color=#FEFEFE]断流[/color]状态的敌人被击败时，恢复达达利亚4点元素能量。|猫爪冻冻造成的伤害提高15%，护盾量提高15%。|施放天星时，为全队生成与地心相同的[color=#FEFEFE]玉璋护盾[/color]，持续5回合。全队共享盾量，盾量为（12.8%生命值上限 + 1232.0）乘以施放时我方存活人数。|叛逆刮弦的物理伤害暴击率固定为100%，并在造成伤害前为我方全体生成热情拂扫的三级护盾。|[color=#FEFEFE]阳华[/color]每次攻击命中后，获得一层[color=#FEFEFE]生灭计数[/color]，持续7回合，重复获得刷新持续时间。通过这种方式至多获得4层。施放元素爆发时消耗全部[color=#FEFEFE]生灭计数[/color]，每层使本次爆发和后续生灭之花的基础伤害提高相当于阿贝多防御力30%的数值。|山泽麟迹的可使用次数增加1次。|魈处于后台时，元素充能效率提高25%。|[color=#FEFEFE]血梅香[/color]造成的基础伤害提高，提高值为施加[color=#FEFEFE]血梅香[/color]时胡桃生命值上限的10%。安神秘法命中的敌人也会被施加[color=#FEFEFE]血梅香[/color]。|终命的圣礼持续时间延长1回合。|重击对生命值低于50%的敌人的暴击率提高20%。|冰潮的涡漩长按的冷却时间减少1回合。" />
+    </richtext>
+    <component id="n149_c0009" name="nodeTab2" xy="786,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="3 命" controller="node" page="2" checked="false" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n150_c0009" name="nodeIcon2" xy="546,390" size="65,65" url="ui://chrlist1i01b8" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="2" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i01b8|ui://chrlist1i01b9|ui://chrlist1i01ba|ui://chrlist1i01bb|ui://chrlist1i01bc|ui://chrlist1i01bd|ui://chrlist1i01be|ui://chrlist1i01bf|ui://chrlist1i01c0|ui://chrlist1i01c1|ui://chrlist1i01c2|ui://chrlist1i01c3|ui://chrlist1i01c4|ui://chrlist1i01c5|ui://chrlist1i01c6|ui://chrlist1i01c7|ui://chrlist1i01c8|ui://chrlist1i01c9|ui://chrlist1i01ca|ui://chrlist1i01cb|ui://chrlist1i01cc|ui://chrlist1i01cd|ui://chrlist1i01ce|ui://chrlist1i01cf|ui://chrlist1i01d0|ui://chrlist1i01d1|ui://chrlist1i01d2|ui://chrlist1i01d3|ui://chrlist1i01d4|ui://chrlist1i01d5|ui://chrlist1i01d6|ui://chrlist1i01d7" />
+    </loader>
+    <text id="n151_c0009" name="nodeName2" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="烧起来啦！" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="烧起来啦！|凛冽的冰戏|谐振的雷光|明日之星|千风的诗篇|西风吹拂之时|钢铁炽焰|可莉特调|星罗宿列天权临|潮奔蓦引电|兽魂|火热激情|女仆不会受伤|武火急烹|织诗成锦|渊色黑翼|云尽光生|零失误少女|升天宝诰|不休的天象|登楼|深渊之灾·纷争涡源|还、还要续杯？|圭璋，暝仍不移其晖|摭分的指法|太阳之华|云行|降魔·忿怒显相|逗留采血色|告解之仪|真火炼宝印|劳伦斯的血脉" />
+    </text>
+    <text id="n152_c0009" name="nodeNumber2" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 3 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="2" condition="0" />
+    </text>
+    <richtext id="n153_c0009" name="nodeDescription2" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="[color=#FEFEFE]箭雨[/color]的技能等级提高3级，最高15级。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="2" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="[color=#FEFEFE]箭雨[/color]的技能等级提高3级，最高15级。|霜袭的技能等级提高3级，最高15级。|蔷薇的雷光的技能等级提高3级，最高15级。|闪耀奇迹♪的技能等级提高3级，最高15级。|风神之诗的技能等级提高3级，最高15级。|蒲公英之风的技能等级提高3级，最高15级。|逆焰之刃的技能等级提高3级，最高15级。|蹦蹦炸弹的技能等级提高3级，最高15级。|天权崩玉的技能等级提高3级，最高15级。|捉浪的技能等级提高3级，最高15级。|雷牙的技能等级提高3级，最高15级。|热情过载的技能等级提高3级，最高15级。|[color=#FEFEFE]护心铠[/color]的技能等级提高3级，最高15级。|[color=#FEFEFE]旋火轮[/color]的技能等级提高3级，最高15级。|古华剑·裁雨留虹的技能等级提高3级，最高15级。|夜巡影翼的技能等级提高3级，最高15级。|灵刃·云开星落的技能等级提高3级，最高15级。|风灵作成·陆叁零捌的技能等级提高3级，最高15级。|仙法·救苦度厄的技能等级提高3级，最高15级。|星命定轨的技能等级提高3级，最高15级。|天街巡游的技能等级提高3级，最高15级。|魔王武装·狂澜的技能等级提高3级，最高15级。|最烈特调的技能等级提高3级，最高15级。|地心的技能等级提高3级，最高15级。|热情拂扫的技能等级提高3级，最高15级。|创生法·拟造[color=#FEFEFE]阳华[/color]的技能等级提高3级，最高15级。|降众天华的技能等级提高3级，最高15级。|风轮两立的技能等级提高3级，最高15级。|蝶引来生的技能等级提高3级，最高15级。|噬罪的告解的技能等级提高3级，最高15级。|丹书立约的技能等级提高3级，最高15级。|凝浪之光剑的技能等级提高3级，最高15级。" />
+    </richtext>
+    <component id="n154_c0009" name="nodeTab3" xy="906,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="4 命" controller="node" page="3" checked="false" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n155_c0009" name="nodeIcon3" xy="546,390" size="65,65" url="ui://chrlist1i01d8" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="3" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i01d8|ui://chrlist1i01d9|ui://chrlist1i01da|ui://chrlist1i01db|ui://chrlist1i01dc|ui://chrlist1i01dd|ui://chrlist1i01de|ui://chrlist1i01df|ui://chrlist1i01e0|ui://chrlist1i01e1|ui://chrlist1i01e2|ui://chrlist1i01e3|ui://chrlist1i01e4|ui://chrlist1i01e5|ui://chrlist1i01e6|ui://chrlist1i01e7|ui://chrlist1i01e8|ui://chrlist1i01e9|ui://chrlist1i01ea|ui://chrlist1i01eb|ui://chrlist1i01ec|ui://chrlist1i01ed|ui://chrlist1i01ee|ui://chrlist1i01ef|ui://chrlist1i01f0|ui://chrlist1i01f1|ui://chrlist1i01f2|ui://chrlist1i01f3|ui://chrlist1i01f4|ui://chrlist1i01f5|ui://chrlist1i01f6|ui://chrlist1i01f7" />
+    </loader>
+    <text id="n156_c0009" name="nodeName3" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="才不是普通的布偶" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="才不是普通的布偶|极寒的轻吻|如雨的电浆|努力即魔法|自由的凛风|蒲公英的国土|流火焦灼|一触即发|攻守易形著神机|牵星觅乡岸|撕咬|热情不灭|之后会扫干净的|文火慢煨|孤舟斩蛟|皇女幻绮谭|浮云霜天|炼金的偏执|天威压众|灭绝的预言|调律|深渊之灾·凝水盛放|「酒业杀手」|黄琮，破而不夺其坚|节奏的传染|神性之陨|西狩|神通·诸苦灭尽|伴君眠花房|苦痛恩典|丹书金铁卷|自卑者的逞强" />
+    </text>
+    <text id="n157_c0009" name="nodeNumber3" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 4 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="3" condition="0" />
+    </text>
+    <richtext id="n158_c0009" name="nodeDescription3" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="爆弹玩偶的可使用次数增加至2次，每次使用次数的恢复时间缩短为3回合。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="3" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="爆弹玩偶的可使用次数增加至2次，每次使用次数的恢复时间缩短为3回合。|凯亚受到伤害后，若生命值低于生命值上限的20%，则生成一个能吸收相当于生命值上限30%伤害的护盾，持续5回合。该护盾对[color=#CFFFFF]冰元素伤害[/color]有250%的吸收效果。每15回合至多触发一次。|[color=#FEFEFE]蔷薇雷光[/color]每个我方回合结束时额外发动5次弹射，合计10次。|芭芭拉的重击每命中一名敌人，为芭芭拉恢复5点元素能量。|温迪每次获得元素能量时，获得25%[color=#A6F7CF]风元素伤害加成[/color]，持续2回合。重复触发时刷新持续时间，不叠加。|领域存在时敌方全体[color=#A6F7CF]风元素抗性[/color]降低40%。|在逆焰之刃的连段期间，其他队友通过行动消耗AP后，下一段逆焰之刃造成的伤害提高40%。本次连段结束时移除。|[color=#FEFEFE]轰轰火花[/color]结束时引发爆炸，对所有敌人造成相当于攻击力555%的[color=#FFA971]火元素伤害[/color]。若因可莉退场而结束，该次爆炸造成的伤害提高100%。|[color=#FEFEFE]璇玑屏[/color]存在时，我方所有角色的所有元素抗性提升10%。|受到攻击后的2回合内，北斗普通攻击命中时，会对同一敌人追加[color=#DEBAFF]雷元素伤害[/color]，倍率为当前普通攻击倍率的20%。再次受到攻击会刷新持续时间。|利爪与苍雷的一段战技命中敌人时，使其防御力降低15%，持续2回合。|施放二段或三段热情过载后，下次普通攻击结束时，对该次普通攻击命中的目标追加一次火焰攻击，造成135%攻击力的[color=#FFA971]火元素伤害[/color]。|[color=#FEFEFE]护心铠[/color]的护盾结束、因伤害破碎或被再次施放的[color=#FEFEFE]护心铠[/color]替换时，对敌方全体造成400%攻击力的[color=#F5D761]岩元素伤害[/color]。|[color=#FEFEFE]旋火轮[/color]的持续时间延长1回合，可触发的次数增加3次。|[color=#FEFEFE]虹剑势[/color]持续期间，古华剑·画雨笼山的技能伤害倍率提高50%。|施放至夜幻现时，若[color=#FEFEFE]奥兹[/color]已在场，将先在其原位置及相邻位置造成相当于菲谢尔222%攻击力的[color=#DEBAFF]雷元素伤害[/color]，并为菲谢尔恢复20%生命值。|重云的攻击命中受[color=#CFFFFF]冰元素附着[/color]影响的敌人时，为自身恢复1点元素能量。每回合至多触发一次。|砂糖的普通攻击或重击每命中一名敌人，有10%的概率使风灵作成·陆叁零捌的冷却时间减少1回合。|处于[color=#FEFEFE]度厄真符[/color]状态下的敌人，攻击力降低20%。|我方角色攻击处于[color=#FEFEFE]星异[/color]状态下的敌人时，暴击率提高15%；魔导角色的暴击伤害额外提高15%。|刻晴触发[color=#DEBAFF]雷元素[/color]相关反应后，攻击力提高25%，持续3回合。再次触发时刷新持续时间。|我方回合结束时，若处于[color=#FEFEFE]近战状态[/color]，对每名带有[color=#FEFEFE]断流[/color]的敌人触发[color=#FEFEFE]断流·斩[/color]；否则触发[color=#FEFEFE]断流·闪[/color]。此效果不占用普通[color=#FEFEFE]断流·斩[/color]的每回合触发次数。|[color=#FEFEFE]冰气酒雾[/color]存在时，迪奥娜的重击AP消耗减少20。|天星的[color=#FEFEFE]石化[/color]效果延长1回合。|热情拂扫的挥舞攻击命中敌人后，使其物理抗性降低15%，持续3回合。|我方全体防御力提高200点。我方任意角色普通攻击命中敌人前，若阿贝多拥有[color=#FEFEFE]瑰银[/color]，摧毁一份[color=#FEFEFE]瑰银[/color]，使本次普通攻击伤害提高30%。|降众天华使敌人受到的伤害提高5%，每经过1回合再提高5%，至多25%。效果在降众天华结束后额外持续1回合。重新施放时，已有此效果的敌人保留原有的增伤幅度。|魈的生命值低于50%时，防御力提高100%。|处于[color=#FEFEFE]血梅香[/color]状态的敌人被击败时，除胡桃外的队伍中所有角色暴击率提高12%，持续4回合。|噬罪的告解造成暴击时，为罗莎莉亚恢复6点能量。每次施放噬罪的告解至多触发一次。|施放凭此结契时，为自己生成吸收量相当于生命值上限45%的[color=#FFA971]火元素护盾[/color]，持续4回合。|[color=#FEFEFE]光降之剑[/color]与残缺[color=#FEFEFE]光降之剑[/color]对生命值低于50%的敌人造成的伤害提高25%。" />
+    </richtext>
+    <component id="n159_c0009" name="nodeTab4" xy="1026,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="5 命" controller="node" page="4" checked="false" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n160_c0009" name="nodeIcon4" xy="546,390" size="65,65" url="ui://chrlist1i01f8" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="4" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i01f8|ui://chrlist1i01f9|ui://chrlist1i01fa|ui://chrlist1i01fb|ui://chrlist1i01fc|ui://chrlist1i01fd|ui://chrlist1i01fe|ui://chrlist1i01ff|ui://chrlist1i0200|ui://chrlist1i0201|ui://chrlist1i0202|ui://chrlist1i0203|ui://chrlist1i0204|ui://chrlist1i0205|ui://chrlist1i0206|ui://chrlist1i0207|ui://chrlist1i0208|ui://chrlist1i0209|ui://chrlist1i020a|ui://chrlist1i020b|ui://chrlist1i020c|ui://chrlist1i020d|ui://chrlist1i020e|ui://chrlist1i020f|ui://chrlist1i0210|ui://chrlist1i0211|ui://chrlist1i0212|ui://chrlist1i0213|ui://chrlist1i0214|ui://chrlist1i0215|ui://chrlist1i0216|ui://chrlist1i0217" />
+    </loader>
+    <text id="n161_c0009" name="nodeName4" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="是兔兔伯爵！" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="4" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="是兔兔伯爵！|至冷的拥抱|等离态的落雷|纯真的羁绊|高天的协奏|须臾一瞬的烈风|昭告黎明的火之鸟|轰击之星|琼屏千扇正天衡|踏浪霞连阶|利爪|开拓的心魂|骑士团扫除专家|锅巴凶猛|雨深闭门|至夜默示录|真道正理|认真普通瓶|红莲开绽|命运的嘲弄|移灯|极恶技·斩水斩雨|双份加冰|苍璧，驱之长昭天理|返场的高呼|冥古之潮|折草|成劫·无明增长|无可奈何燃花作香|临终祈礼|遵法切结书|骑士的素质" />
+    </text>
+    <text id="n162_c0009" name="nodeNumber4" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 5 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="4" condition="0" />
+    </text>
+    <richtext id="n163_c0009" name="nodeDescription4" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="爆弹玩偶的技能等级提高3级，最高15级。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="4" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="爆弹玩偶的技能等级提高3级，最高15级。|[color=#FEFEFE]凛冽轮舞[/color]的技能等级提高3级，最高15级。|苍雷的技能等级提高3级，最高15级。|演唱，开始♪的技能等级提高3级，最高15级。|高天之歌的技能等级提高3级，最高15级。|风压剑的技能等级提高3级，最高15级。|黎明的技能等级提高3级，最高15级。|[color=#FEFEFE]轰轰火花[/color]的技能等级提高3级，最高15级。|[color=#FEFEFE]璇玑屏[/color]的技能等级提高3级，最高15级。|斫雷的技能等级提高3级，最高15级。|利爪与苍雷的技能等级提高3级，最高15级。|美妙旅程的技能等级提高3级，最高15级。|[color=#FEFEFE]大扫除[/color]的技能等级提高3级，最高15级。|[color=#FEFEFE]锅巴[/color]出击的技能等级提高3级，最高15级。|古华剑·画雨笼山的技能等级提高3级，最高15级。|至夜幻现的技能等级提高3级，最高15级。|灵刃·[color=#FEFEFE]重华叠霜[/color]的技能等级提高3级，最高15级。|禁·风灵作成·柒伍同构贰型的技能等级提高3级，最高15级。|仙法·[color=#FEFEFE]寒病鬼差[/color]的技能等级提高3级，最高15级。|水中幻愿的技能等级提高3级，最高15级。|星斗归位的技能等级提高3级，最高15级。|极恶技·尽灭闪的技能等级提高3级，最高15级。|猫爪冻冻的技能等级提高3级，最高15级。|天星的技能等级提高3级，最高15级。|叛逆刮弦的技能等级提高3级，最高15级。|诞生式·大地之潮的技能等级提高3级，最高15级。|山泽麟迹的技能等级提高3级，最高15级。|[color=#FEFEFE]靖妖傩舞[/color]的技能等级提高3级，最高15级。|安神秘法的技能等级提高3级，最高15级。|终命的圣礼的技能等级提高3级，最高15级。|凭此结契的技能等级提高3级，最高15级。|冰潮的涡漩的技能等级提高3级，最高15级。" />
+    </richtext>
+    <component id="n164_c0009" name="nodeTab5" xy="1146,319" size="112,39" src="c0002" fileName="CompactOption.xml">
+      <Button title="6 命" controller="node" page="5" checked="false" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <loader id="n165_c0009" name="nodeIcon5" xy="546,390" size="65,65" url="ui://chrlist1i0218" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="5" condition="0" />
+      <gearIcon controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="ui://chrlist1i0218|ui://chrlist1i0219|ui://chrlist1i021a|ui://chrlist1i021b|ui://chrlist1i021c|ui://chrlist1i021d|ui://chrlist1i021e|ui://chrlist1i021f|ui://chrlist1i0220|ui://chrlist1i0221|ui://chrlist1i0222|ui://chrlist1i0223|ui://chrlist1i0224|ui://chrlist1i0225|ui://chrlist1i0226|ui://chrlist1i0227|ui://chrlist1i0228|ui://chrlist1i0229|ui://chrlist1i022a|ui://chrlist1i022b|ui://chrlist1i022c|ui://chrlist1i022d|ui://chrlist1i022e|ui://chrlist1i022f|ui://chrlist1i0230|ui://chrlist1i0231|ui://chrlist1i0232|ui://chrlist1i0233|ui://chrlist1i0234|ui://chrlist1i0235|ui://chrlist1i0236|ui://chrlist1i0237" />
+    </loader>
+    <text id="n166_c0009" name="nodeName5" xy="630,387" size="623,44" font="Microsoft YaHei" fontSize="27" color="#342B24" text="疾如野火" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="5" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="疾如野火|轮旋的冰凌|脉冲的魔女|将一切美好献给你|抗争的暴风|恩眷万民的狮牙|清算黑暗的炎之剑|火力全开|七星璨璨凝流光|北斗祓幽孽|天狼|烈火与勇气|要一尘不染才行|大龙卷旋火轮|万文集此|永夜之禽|四灵捧圣|混元熵增论|起死回骸|厄运的修辞|廉贞|极恶技·天使灭尽|猫尾打烊之时|金玉，礼予天地|地狱里摇摆|无垢之土|履虫|降魔·护法夜叉|幽蝶能留一缕芳|代行裁判|是额外条款|高贵者的义务" />
+    </text>
+    <text id="n167_c0009" name="nodeNumber5" xy="631,432" size="618,27" font="Microsoft YaHei" fontSize="18" color="#55493D" text="第 6 层" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="5" condition="0" />
+    </text>
+    <richtext id="n168_c0009" name="nodeDescription5" xy="548,491" size="706,207" font="Microsoft YaHei" fontSize="20" color="#342B24" text="施放[color=#FEFEFE]箭雨[/color]后，全队攻击力提高15%，持续2回合。多次获得的效果可叠加，各自独立计时。" align="left" vAlign="top" autoSize="shrink" touchable="false" ubb="true" leading="5">
+      <gearDisplay controller="tab" pages="5" />
+      <gearDisplay2 controller="node" pages="5" condition="0" />
+      <gearText controller="screen" pages="1009,1010,1011,1014,1012,1013,1015,1016,1017,1018,1019,1020,1021,1022,1023,1024,1025,1026,1027,1028,1029,1030,1031,1032,1033,1034,1035,1036,1037,1038,1039,1040" values="施放[color=#FEFEFE]箭雨[/color]后，全队攻击力提高15%，持续2回合。多次获得的效果可叠加，各自独立计时。|[color=#FEFEFE]凛冽轮舞[/color]每回合的触发次数上限提高至4次，每次造成[color=#CFFFFF]冰元素[/color]爆发伤害（77.6%攻击力）。施放[color=#FEFEFE]凛冽轮舞[/color]时，为凯亚恢复15点元素能量。|丽莎被切换上场时，为所有敌方目标赋予一层[color=#FEFEFE]引雷[/color]。该效果每回合只能触发一次。|芭芭拉存活时，其他队友倒下后，会在该次攻击或效果结束后复苏其中一人，并恢复其全部生命值。每场战斗至多触发一次。|受到风神之诗及[color=#FEFEFE]暴风之眼[/color]伤害的敌人，[color=#A6F7CF]风元素抗性[/color]降低20%，持续2回合。若[color=#FEFEFE]暴风之眼[/color]发生过[color=#FEFEFE]元素转化[/color]，则该敌人相应元素的抗性也降低20%，持续2回合。重复触发时刷新持续时间，不叠加。|[color=#FEFEFE]蒲公英领域[/color]存在期间，全队受到的伤害降低35%。领域消失后，该效果仍会保留，直至全队累计受到敌人3次攻击，或经过2回合。同一次攻击的连续命中只计1次。|施放黎明后，接下来的2次普攻伤害提高30%，普攻消耗的AP减少10点，持续1回合。|[color=#FEFEFE]轰轰火花[/color]持续期间，我方回合结束时为其他队友恢复4点元素能量。施放[color=#FEFEFE]轰轰火花[/color]后，其他队友的[color=#FFA971]火元素伤害加成[/color]提高10%，可莉的[color=#FFA971]火元素伤害加成[/color]提高50%，持续6回合。|施放天权崩玉时，凝光持有的[color=#FEFEFE]星璇[/color]数量变为7枚。|[color=#FEFEFE]雷兽之盾[/color]存在期间，所有敌人的[color=#DEBAFF]雷元素抗性[/color]降低15%。|普通攻击命中后，对该敌人额外造成100%攻击力的[color=#DEBAFF]雷元素伤害[/color]，每2回合至多触发一次。[color=#FEFEFE]雷狼[/color]不存在时触发此效果，或利爪与苍雷的一段战技命中敌人时，获得三层[color=#FEFEFE]雷之印[/color]，最多持有三层。以任意方式消耗[color=#FEFEFE]雷之印[/color]后，暴击率提高10%，暴击伤害提高50%，持续4回合。|[color=#FEFEFE]鼓舞对象[/color]获得15%[color=#FFA971]火元素伤害加成[/color]；单手剑、双手剑及长柄武器角色额外获得[color=#FEFEFE]火元素附魔[/color]。|[color=#FEFEFE]大扫除[/color]额外提高相当于诺艾尔防御力50%的攻击力。期间诺艾尔每击败一名敌人，[color=#FEFEFE]大扫除[/color]持续时间延长1回合，至多通过此方式延长2回合。|[color=#FEFEFE]旋火轮[/color]持续期间，我方所有角色获得15%[color=#FFA971]火元素伤害加成[/color]。本次[color=#FEFEFE]旋火轮[/color]先确定自身伤害，再提供该增益。|[color=#FEFEFE]虹剑势[/color]每触发两轮剑雨，下一轮剑雨造成的伤害提高50%；该轮剑雨每命中一次，为行秋恢复3点元素能量。|[color=#FEFEFE]奥兹[/color]的持续时间延长1回合。我方其他角色进行普通攻击或重击并命中后，[color=#FEFEFE]奥兹[/color]会从本次命中的目标中随机选择一名，造成相当于菲谢尔30%攻击力的[color=#DEBAFF]雷元素[/color]协同伤害。协同攻击后的2回合内，新触发的魔导增益效果提高100%。|灵刃·云开星落额外召唤一柄灵刃。每段灵刃命中前，若目标当前生命值百分比低于重云，则该段对其造成的伤害提高15%。|[color=#FEFEFE]大型风灵[/color]发生[color=#FEFEFE]元素转化[/color]后，在其持续期间，使队伍中所有角色获得20%的对应元素伤害加成。|施放仙法·救苦度厄并完成其效果后，复苏所有倒下的队友，恢复至各自生命上限的50%。每4回合至多触发一次。|我方回合结束时，莫娜若在后台，获得一层[color=#FEFEFE]厄运的修辞[/color]；每名带有[color=#FEFEFE]星异[/color]的敌人还会使她获得一层，至多3层。施放重击后清除全部层数，每层使本次重击伤害提高60%。对[color=#FEFEFE]星异[/color]目标，本次重击的基础倍率提高至原本的200%。|进行普通攻击、重击、主动清除[color=#FEFEFE]雷楔[/color]或施放元素爆发时，刻晴获得6%[color=#DEBAFF]雷元素伤害加成[/color]，持续2回合。四种来源的效果可独立存在，同一来源再次触发时刷新持续时间。|在[color=#FEFEFE]近战状态[/color]下施放极恶技·尽灭闪后，本次[color=#FEFEFE]近战状态[/color]结束时，立刻完成魔王武装·狂澜的冷却。|[color=#FEFEFE]冰气酒雾[/color]存在时，我方角色生命值低于或等于50%时，受治疗加成提升30%；生命值高于50%时，元素精通提升200点。|敌方角色和状态行动命中受[color=#FEFEFE]玉璋护盾[/color]保护的角色时，在本次攻击结算后治疗仍存活的受击者。每次受击按吸收前伤害的40%计算，单次回复最多为受益者生命值上限的8%。击破护盾的那次命中也计入。|重击的AP消耗降低5。计算重击伤害时，获得相当于辛焱当前防御力50%的攻击力加成。|我方角色持有结晶护盾，或敌方场地存在月笼时，我方全体造成的伤害提高17%。施放元素爆发前，摧毁全部[color=#FEFEFE]瑰银[/color]。每摧毁一份，获得4层[color=#FEFEFE]生灭计数[/color]，并获得一层[color=#FEFEFE]无垢之土[/color]：元素爆发的基础伤害提高相当于阿贝多防御力250%的数值，持续5回合，至多1层，重复获得刷新持续时间。|施放山泽麟迹后，获得持续7回合的[color=#FEFEFE]履虫[/color]效果。下一次二段重击会立即射出霜华矢，无需等待；该效果至多1层，重复获得刷新持续时间。|[color=#FEFEFE]靖妖傩舞[/color]持续期间，重击命中至少两名敌人时，恢复1次风轮两立的可使用次数，且下次风轮两立不消耗AP。使用次数不超过上限，免费机会最多保留1次，并在[color=#FEFEFE]靖妖傩舞[/color]结束时清除。|生命值降至25%以下或受到致命伤害时触发：该次伤害不会使胡桃倒下，所有元素抗性和物理抗性提高200%，暴击率提高100%，持续2回合。每15回合至多触发一次。|终命的圣礼命中敌人后，使其物理抗性降低20%，持续3回合。重复施加刷新持续时间，效果不叠加。|[color=#FEFEFE]丹火印[/color]的持有数量上限增加1枚。|[color=#FEFEFE]光降之剑[/color]创造时立即获得5点能量。符合条件的每段伤害命中后，在正常积攒能量之外，有50%概率额外获得1点能量；同段命中多名敌人只判定一次。" />
+    </richtext>
+    <component id="n169_c0009" name="openConstellation" xy="1124,742" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="激活命座" controller="modal" page="co" />
+      <gearDisplay controller="tab" pages="5" />
+    </component>
+    <graph id="n170_c0009" name="rosterInputBlocker" xy="0,0" size="1440,900" type="rect" fillColor="#26211C" lineSize="0" touchable="true">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </graph>
+    <image id="n171_c0009" name="rosterBackground" xy="0,0" size="1440,900" src="i0000" fileName="Images/PageBackground.png" touchable="false">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </image>
+    <text id="n172_c0009" name="rosterBrand" xy="55,21" size="140,51" font="Microsoft YaHei" fontSize="28" color="#F3E9D8" text="◆ 角色" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </text>
+    <graph id="n173_c0009" name="rosterTopDivider" xy="40,82" size="1360,1" type="rect" fillColor="#7E7060" lineSize="0" touchable="false">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </graph>
+    <text id="n174_c0009" name="rosterTitle" xy="47,102" size="353,55" font="Microsoft YaHei" fontSize="36" color="#F3E9D8" text="角色一览" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </text>
+    <text id="n175_c0009" name="rosterCount" xy="49,158" size="660,28" font="Microsoft YaHei" fontSize="17" color="#DCCDB9" text="已获得 32 名角色" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1,l2" />
+    </text>
+    <component id="n176_c0009" name="hero_1009" xy="47,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="安柏" controller="screen" page="1009" icon="ui://chrlist1i0003" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n177_c0009" name="element_1009" xy="63,222" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n178_c0009" name="rosterInfo_1009" xy="60,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.18 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n179_c0009" name="hero_1010" xy="217,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="凯亚" controller="screen" page="1010" icon="ui://chrlist1i0004" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n180_c0009" name="element_1010" xy="233,222" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n181_c0009" name="rosterInfo_1010" xy="230,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.24 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n182_c0009" name="hero_1011" xy="387,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="丽莎" controller="screen" page="1011" icon="ui://chrlist1i0005" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n183_c0009" name="element_1011" xy="403,222" size="26,26" url="ui://chrlist1i023a" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n184_c0009" name="rosterInfo_1011" xy="400,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="雷 · Lv.16 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n185_c0009" name="hero_1014" xy="557,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="芭芭拉" controller="screen" page="1014" icon="ui://chrlist1i0006" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n186_c0009" name="element_1014" xy="573,222" size="26,26" url="ui://chrlist1i023b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n187_c0009" name="rosterInfo_1014" xy="570,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="水 · Lv.20 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n188_c0009" name="hero_1012" xy="727,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="温迪" controller="screen" page="1012" icon="ui://chrlist1i0007" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n189_c0009" name="element_1012" xy="743,222" size="26,26" url="ui://chrlist1i023c" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n190_c0009" name="rosterInfo_1012" xy="740,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="风 · Lv.16 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n191_c0009" name="hero_1013" xy="897,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="琴" controller="screen" page="1013" icon="ui://chrlist1i0008" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n192_c0009" name="element_1013" xy="913,222" size="26,26" url="ui://chrlist1i023c" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n193_c0009" name="rosterInfo_1013" xy="910,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="风 · Lv.17 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n194_c0009" name="hero_1015" xy="1067,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="迪卢克" controller="screen" page="1015" icon="ui://chrlist1i0009" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n195_c0009" name="element_1015" xy="1083,222" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n196_c0009" name="rosterInfo_1015" xy="1080,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.18 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n197_c0009" name="hero_1016" xy="1237,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="可莉" controller="screen" page="1016" icon="ui://chrlist1i000a" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n198_c0009" name="element_1016" xy="1253,222" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n199_c0009" name="rosterInfo_1016" xy="1250,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.19 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n200_c0009" name="hero_1017" xy="47,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="凝光" controller="screen" page="1017" icon="ui://chrlist1i023d" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n201_c0009" name="element_1017" xy="63,474" size="26,26" url="ui://chrlist1i023e" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n202_c0009" name="rosterInfo_1017" xy="60,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="岩 · Lv.20 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n203_c0009" name="hero_1018" xy="217,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="北斗" controller="screen" page="1018" icon="ui://chrlist1i023f" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n204_c0009" name="element_1018" xy="233,474" size="26,26" url="ui://chrlist1i023a" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n205_c0009" name="rosterInfo_1018" xy="230,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="雷 · Lv.21 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n206_c0009" name="hero_1019" xy="387,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="雷泽" controller="screen" page="1019" icon="ui://chrlist1i0240" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n207_c0009" name="element_1019" xy="403,474" size="26,26" url="ui://chrlist1i023a" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n208_c0009" name="rosterInfo_1019" xy="400,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="雷 · Lv.22 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n209_c0009" name="hero_1020" xy="557,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="班尼特" controller="screen" page="1020" icon="ui://chrlist1i0241" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n210_c0009" name="element_1020" xy="573,474" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n211_c0009" name="rosterInfo_1020" xy="570,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.23 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n212_c0009" name="hero_1021" xy="727,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="诺艾尔" controller="screen" page="1021" icon="ui://chrlist1i0242" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n213_c0009" name="element_1021" xy="743,474" size="26,26" url="ui://chrlist1i023e" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n214_c0009" name="rosterInfo_1021" xy="740,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="岩 · Lv.24 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n215_c0009" name="hero_1022" xy="897,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="香菱" controller="screen" page="1022" icon="ui://chrlist1i0243" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n216_c0009" name="element_1022" xy="913,474" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n217_c0009" name="rosterInfo_1022" xy="910,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.25 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n218_c0009" name="hero_1023" xy="1067,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="行秋" controller="screen" page="1023" icon="ui://chrlist1i0244" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n219_c0009" name="element_1023" xy="1083,474" size="26,26" url="ui://chrlist1i023b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n220_c0009" name="rosterInfo_1023" xy="1080,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="水 · Lv.26 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n221_c0009" name="hero_1024" xy="1237,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="菲谢尔" controller="screen" page="1024" icon="ui://chrlist1i0245" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <loader id="n222_c0009" name="element_1024" xy="1253,474" size="26,26" url="ui://chrlist1i023a" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l1" />
+    </loader>
+    <text id="n223_c0009" name="rosterInfo_1024" xy="1250,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="雷 · Lv.27 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n224_c0009" name="hero_1025" xy="47,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="重云" controller="screen" page="1025" icon="ui://chrlist1i0246" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n225_c0009" name="element_1025" xy="63,222" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n226_c0009" name="rosterInfo_1025" xy="60,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.28 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n227_c0009" name="hero_1026" xy="217,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="砂糖" controller="screen" page="1026" icon="ui://chrlist1i0247" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n228_c0009" name="element_1026" xy="233,222" size="26,26" url="ui://chrlist1i023c" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n229_c0009" name="rosterInfo_1026" xy="230,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="风 · Lv.29 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n230_c0009" name="hero_1027" xy="387,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="七七" controller="screen" page="1027" icon="ui://chrlist1i0248" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n231_c0009" name="element_1027" xy="403,222" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n232_c0009" name="rosterInfo_1027" xy="400,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.30 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n233_c0009" name="hero_1028" xy="557,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="莫娜" controller="screen" page="1028" icon="ui://chrlist1i0249" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n234_c0009" name="element_1028" xy="573,222" size="26,26" url="ui://chrlist1i023b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n235_c0009" name="rosterInfo_1028" xy="570,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="水 · Lv.12 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n236_c0009" name="hero_1029" xy="727,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="刻晴" controller="screen" page="1029" icon="ui://chrlist1i024a" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n237_c0009" name="element_1029" xy="743,222" size="26,26" url="ui://chrlist1i023a" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n238_c0009" name="rosterInfo_1029" xy="740,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="雷 · Lv.13 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n239_c0009" name="hero_1030" xy="897,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="达达利亚" controller="screen" page="1030" icon="ui://chrlist1i024b" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n240_c0009" name="element_1030" xy="913,222" size="26,26" url="ui://chrlist1i023b" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n241_c0009" name="rosterInfo_1030" xy="910,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="水 · Lv.14 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n242_c0009" name="hero_1031" xy="1067,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="迪奥娜" controller="screen" page="1031" icon="ui://chrlist1i024c" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n243_c0009" name="element_1031" xy="1083,222" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n244_c0009" name="rosterInfo_1031" xy="1080,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.15 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n245_c0009" name="hero_1032" xy="1237,205" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="钟离" controller="screen" page="1032" icon="ui://chrlist1i024d" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n246_c0009" name="element_1032" xy="1253,222" size="26,26" url="ui://chrlist1i023e" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n247_c0009" name="rosterInfo_1032" xy="1250,402" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="岩 · Lv.16 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n248_c0009" name="hero_1033" xy="47,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="辛焱" controller="screen" page="1033" icon="ui://chrlist1i024e" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n249_c0009" name="element_1033" xy="63,474" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n250_c0009" name="rosterInfo_1033" xy="60,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.17 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n251_c0009" name="hero_1034" xy="217,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="阿贝多" controller="screen" page="1034" icon="ui://chrlist1i024f" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n252_c0009" name="element_1034" xy="233,474" size="26,26" url="ui://chrlist1i023e" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n253_c0009" name="rosterInfo_1034" xy="230,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="岩 · Lv.18 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n254_c0009" name="hero_1035" xy="387,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="甘雨" controller="screen" page="1035" icon="ui://chrlist1i0250" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n255_c0009" name="element_1035" xy="403,474" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n256_c0009" name="rosterInfo_1035" xy="400,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.19 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n257_c0009" name="hero_1036" xy="557,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="魈" controller="screen" page="1036" icon="ui://chrlist1i0251" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n258_c0009" name="element_1036" xy="573,474" size="26,26" url="ui://chrlist1i023c" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n259_c0009" name="rosterInfo_1036" xy="570,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="风 · Lv.20 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n260_c0009" name="hero_1037" xy="727,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="胡桃" controller="screen" page="1037" icon="ui://chrlist1i0252" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n261_c0009" name="element_1037" xy="743,474" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n262_c0009" name="rosterInfo_1037" xy="740,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.21 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n263_c0009" name="hero_1038" xy="897,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="罗莎莉亚" controller="screen" page="1038" icon="ui://chrlist1i0253" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n264_c0009" name="element_1038" xy="913,474" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n265_c0009" name="rosterInfo_1038" xy="910,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.22 · 2 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n266_c0009" name="hero_1039" xy="1067,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="烟绯" controller="screen" page="1039" icon="ui://chrlist1i0254" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n267_c0009" name="element_1039" xy="1083,474" size="26,26" url="ui://chrlist1i0238" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n268_c0009" name="rosterInfo_1039" xy="1080,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="火 · Lv.23 · 0 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n269_c0009" name="hero_1040" xy="1237,457" size="156,235" src="c0007" fileName="RosterTile.xml">
+      <Button title="优菈" controller="screen" page="1040" icon="ui://chrlist1i0255" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <loader id="n270_c0009" name="element_1040" xy="1253,474" size="26,26" url="ui://chrlist1i0239" fill="scale" align="center" vAlign="middle" touchable="false">
+      <gearDisplay controller="screen" pages="l2" />
+    </loader>
+    <text id="n271_c0009" name="rosterInfo_1040" xy="1250,654" size="130,23" font="Microsoft YaHei" fontSize="15" color="#55493D" text="冰 · Lv.24 · 1 命" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <component id="n272_c0009" name="rosterPage0" xy="1124,744" size="124,44" src="c0004" fileName="SecondaryButton.xml">
+      <Button title="下一页 ›" controller="screen" page="l2" />
+      <gearDisplay controller="screen" pages="l1" />
+    </component>
+    <text id="n273_c0009" name="pageIndex0" xy="1240,746" size="151,43" font="Microsoft YaHei" fontSize="19" color="#F3E9D8" text="1 / 2" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="screen" pages="l1" />
+    </text>
+    <component id="n274_c0009" name="rosterPage1" xy="1124,744" size="124,44" src="c0004" fileName="SecondaryButton.xml">
+      <Button title="‹ 上一页" controller="screen" page="l1" />
+      <gearDisplay controller="screen" pages="l2" />
+    </component>
+    <text id="n275_c0009" name="pageIndex1" xy="1240,746" size="151,43" font="Microsoft YaHei" fontSize="19" color="#F3E9D8" text="2 / 2" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearDisplay controller="screen" pages="l2" />
+    </text>
+    <graph id="n284_c0009" name="modalScrim" xy="0,0" size="1440,900" type="rect" fillColor="#171410" lineSize="0" touchable="true" alpha="0.72">
+      <gearDisplay controller="modal" pages="cu,wu,au,su,co,wr,wp,ap" />
+    </graph>
+    <component id="n276_c0009" name="modal_cu" xy="252,177" size="936,545" src="c000a" fileName="CharacterUpgrade.xml">
+      <gearDisplay controller="modal" pages="cu" />
+    </component>
+    <component id="n277_c0009" name="modal_wu" xy="252,177" size="936,545" src="c000c" fileName="WeaponUpgrade.xml">
+      <gearDisplay controller="modal" pages="wu" />
+    </component>
+    <component id="n278_c0009" name="modal_au" xy="252,177" size="936,545" src="c000d" fileName="ArtifactUpgrade.xml">
+      <gearDisplay controller="modal" pages="au" />
+    </component>
+    <component id="n279_c0009" name="modal_su" xy="252,177" size="936,545" src="c000e" fileName="SkillUpgrade.xml">
+      <gearDisplay controller="modal" pages="su" />
+    </component>
+    <component id="n280_c0009" name="modal_co" xy="252,177" size="936,545" src="c000f" fileName="ConstellationActivation.xml">
+      <gearDisplay controller="modal" pages="co" />
+    </component>
+    <component id="n281_c0009" name="modal_wr" xy="252,177" size="936,545" src="c0011" fileName="WeaponRefinement.xml">
+      <gearDisplay controller="modal" pages="wr" />
+    </component>
+    <component id="n282_c0009" name="modal_wp" xy="252,177" size="936,545" src="c0013" fileName="WeaponPicker.xml">
+      <gearDisplay controller="modal" pages="wp" />
+    </component>
+    <component id="n283_c0009" name="modal_ap" xy="252,177" size="936,545" src="c0015" fileName="ArtifactPicker.xml">
+      <gearDisplay controller="modal" pages="ap" />
+    </component>
+    <component id="n285_c0009" name="closeModal" xy="1115,201" size="42,39" src="c0005" fileName="CloseButton.xml">
+      <Button title="×" controller="modal" page="none" />
+      <gearDisplay controller="modal" pages="cu,wu,au,su,co,wr,wp,ap" />
+    </component>
+    <component id="n286_c0009" name="cancelModal" xy="875,656" size="124,44" src="c0004" fileName="SecondaryButton.xml">
+      <Button title="取消" controller="modal" page="none" />
+      <gearDisplay controller="modal" pages="cu,wu,au,su,co,wr,wp,ap" />
+    </component>
+    <component id="n287_c0009" name="confirm_wr" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认精炼" />
+      <gearDisplay controller="modal" pages="wr" />
+    </component>
+    <component id="n288_c0009" name="confirm_co" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认激活" />
+      <gearDisplay controller="modal" pages="co" />
+    </component>
+    <component id="n289_c0009" name="confirm_wp" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认装备" />
+      <gearDisplay controller="modal" pages="wp" />
+    </component>
+    <component id="n290_c0009" name="confirm_ap" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认装备" />
+      <gearDisplay controller="modal" pages="ap" />
+    </component>
+    <component id="n291_c0009" name="confirm_cu" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认升级" />
+      <gearDisplay controller="modal" pages="cu" />
+    </component>
+    <component id="n292_c0009" name="confirm_wu" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认升级" />
+      <gearDisplay controller="modal" pages="wu" />
+    </component>
+    <component id="n293_c0009" name="confirm_au" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认强化" />
+      <gearDisplay controller="modal" pages="au" />
+    </component>
+    <component id="n294_c0009" name="confirm_su" xy="1017,656" size="134,44" src="c0003" fileName="ActionButton.xml">
+      <Button title="确认升级" />
+      <gearDisplay controller="modal" pages="su" />
+    </component>
+  </displayList>
+</component>

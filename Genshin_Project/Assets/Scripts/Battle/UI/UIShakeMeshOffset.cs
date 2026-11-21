@@ -1,4 +1,5 @@
 using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 public sealed class UIShakeMeshOffset : BaseMeshEffect
 {
     private Matrix4x4 worldDelta = Matrix4x4.identity;
+    private readonly Dictionary<object, Matrix4x4> layers = new Dictionary<object, Matrix4x4>();
     private TextMeshProUGUI text;
     protected override void OnEnable()
     {
@@ -16,13 +18,27 @@ public sealed class UIShakeMeshOffset : BaseMeshEffect
     protected override void OnDisable()
     {
         worldDelta = Matrix4x4.identity;
+        layers.Clear();
         if (text != null) { text.OnPreRenderText -= DeformText; text.ForceMeshUpdate(); }
         base.OnDisable();
     }
     public void SetWorldDelta(Matrix4x4 delta)
+        => SetWorldDelta(this, delta);
+    public void ClearWorldDelta(object owner)
     {
-        if (worldDelta == delta) return;
-        worldDelta = delta;
+        if (layers.Remove(owner)) RefreshDelta();
+    }
+    public void SetWorldDelta(object owner, Matrix4x4 delta)
+    {
+        if (delta == Matrix4x4.identity) { ClearWorldDelta(owner); return; }
+        if (layers.TryGetValue(owner, out var current) && current == delta) return;
+        layers[owner] = delta; RefreshDelta();
+    }
+    private void RefreshDelta()
+    {
+        var combined = Matrix4x4.identity;
+        foreach (var layer in layers.Values) combined = layer * combined;
+        worldDelta = combined;
         if (graphic != null) graphic.SetVerticesDirty();
         // TMP builds its own meshes rather than Graphic's IMeshModifier pipeline.
         if (text != null && text.isActiveAndEnabled) text.ForceMeshUpdate();

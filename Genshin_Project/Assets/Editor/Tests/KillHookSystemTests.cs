@@ -18,6 +18,8 @@ namespace GenshinTurnBased.Tests.EditMode
         private CharacterBattleController _kaeya;
         private GameObject _enemyObject;
         private BattleEntity _enemy;
+        private GameObject _survivorObject;
+        private BattleEntity _survivor;
 
         private StatusInstance _burst;    // ST_Burst_Kaeya（延长目标）
         private StatusInstance _kaeyaC2;  // ST_Kaeya_C2（Kill(1010) 状态实例）
@@ -67,6 +69,15 @@ namespace GenshinTurnBased.Tests.EditMode
             _enemy.SlotPosition = 1;
             _enemy.Side = BattleSide.Enemy;
             _bm.RegisterEnemy(enemyCtrl);
+            // 普通Kill用例保留一名敌人；最后敌人死亡后的普通效果按新规则取消。
+            _survivorObject = new GameObject("KillHook_Survivor");
+            var survivorCtrl = _survivorObject.AddComponent<EnemyBattleController>();
+            survivorCtrl.InitEnemy(20000, 1);
+            _survivor = survivorCtrl.Entity;
+            _survivor.TotalHP = _survivor.CurrentHP = 1000000f;
+            _survivor.SlotPosition = 2;
+            _survivor.Side = BattleSide.Enemy;
+            _bm.RegisterEnemy(survivorCtrl);
         }
 
         [TearDown]
@@ -75,6 +86,7 @@ namespace GenshinTurnBased.Tests.EditMode
             HookTestEnv.ResetStaticState();
             HookTestEnv.ClearBattleManagerSingleton();
             Object.DestroyImmediate(_enemyObject);
+            Object.DestroyImmediate(_survivorObject);
             Object.DestroyImmediate(_kaeyaObject);
             Object.DestroyImmediate(_bmObject);
         }
@@ -256,14 +268,14 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void LastEnemyKilled_KillHookFiresAndBattleEnds()
+        public void LastEnemyKilled_BattleEndsBeforeOrdinaryKillEffects()
         {
             KillHookSystem.Register(_kaeyaC2, _kaeya.Entity);
+            _survivor.CurrentHP = 0f;
 
             _enemy.TakeDamage(100f, DamageSourceInfo.Create(_kaeya.Entity, ReactionSourceKind.CharacterSkill, "SK_Normal_Kaeya", "SE_Normal_Kaeya"));
 
-            // 死亡钩子先于最终战斗结束通知执行：击杀最后敌人时钩子仍能收到死亡声明
-            Assert.That(_burst.RemainingPhaseCount, Is.EqualTo(2), "击杀最后敌人时 Kill 钩子必须已执行");
+            Assert.That(_burst.RemainingPhaseCount, Is.EqualTo(1), "胜利已锁定，普通Kill效果不再延长状态");
             Assert.That(_bm.IsBattleOver, Is.True);
             Assert.That(_bm.Victory, Is.True);
         }

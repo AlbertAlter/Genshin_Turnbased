@@ -27,6 +27,8 @@ public sealed class RoguelikeBattleSetup
     public int BackgroundId;
     public int RunSeed;
     public int RandomStep;
+    public float EnemyHPMultiplier = 1f;
+    public float EnemyATKMultiplier = 1f;
     public List<RoguelikeBattleAllyBuild> Allies = new List<RoguelikeBattleAllyBuild>();
     public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();
 }
@@ -35,6 +37,11 @@ public sealed class RoguelikeBattleSetup
 public interface IRoguelikeEncounterCatalog
 {
     RoguelikeSaveResult<StageSetupData> Resolve(string contentId);
+}
+
+public interface IRoguelikeStageEncounterCatalog : IRoguelikeEncounterCatalog
+{
+    RoguelikeSaveResult<StageSetupData> Resolve(int chapter, RoguelikeNodeSelection node);
 }
 
 public interface IRoguelikeEnemyCatalog
@@ -111,7 +118,9 @@ public sealed class RoguelikeBattlePreparation
         if (snapshot.PartyCharacterIds.Count < 1 || snapshot.PartyCharacterIds.Count > 4)
             return Invalid("进入战斗前必须确认 1～4 名出战角色。");
 
-        var stageResult = encounters.Resolve(flow.Node.ContentId);
+        var stageResult = encounters is IRoguelikeStageEncounterCatalog stageCatalog
+            ? stageCatalog.Resolve(snapshot.CurrentChapterId, flow.Node)
+            : encounters.Resolve(flow.Node.ContentId);
         if (!stageResult.Succeeded) return Failure(stageResult);
         var stage = stageResult.Data;
         if (stage == null || stage.Enemies == null || stage.Enemies.Count < 1 || stage.Enemies.Count > 5)
@@ -127,6 +136,7 @@ public sealed class RoguelikeBattlePreparation
             RunId = context.RunId, StepId = flow.StepId, BattleId = context.BattleId,
             NodeId = flow.Node.NodeId, ContentId = flow.Node.ContentId, ChapterId = snapshot.CurrentChapterId,
             BackgroundId = stage.BattleID, RunSeed = snapshot.RunSeed, RandomStep = snapshot.RandomStep,
+            EnemyHPMultiplier = stage.EnemyHPMultiplier, EnemyATKMultiplier = stage.EnemyATKMultiplier,
             Enemies = stage.Enemies,
         };
         var characters = snapshot.Characters.ToDictionary(item => item.CharacterID);

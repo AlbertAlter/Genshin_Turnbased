@@ -137,20 +137,12 @@ public static class BattlefieldUiSceneGenerator
 
     private static Canvas CreateCanvas()
     {
-        var go = new GameObject("BattleField1Canvas", typeof(RectTransform), typeof(Canvas),
-            typeof(CanvasScaler), typeof(GraphicRaycaster));
-        Canvas canvas = go.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        Canvas canvas = ProjectUiCanvasEditor.InstantiateInActiveScene().CreateContentCanvas("BattleField1Canvas");
         // Keep thin HUD lines and TMP glyph edges aligned with the output pixel grid.
         // This matters especially in the editor Game view, where a fractional canvas
         // scale otherwise makes the one-pixel highlights look uniformly soft.
         canvas.pixelPerfect = true;
-        CanvasScaler scaler = go.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(DesignWidth, DesignHeight);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = 0.5f;
-        scaler.referencePixelsPerUnit = 100f;
+        canvas.overridePixelPerfect = true;
         return canvas;
     }
 

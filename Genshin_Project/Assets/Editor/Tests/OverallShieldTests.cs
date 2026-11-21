@@ -129,6 +129,19 @@ namespace GenshinTurnBased.Tests.EditMode
             b.RemoveStatusInstance(surviving); Assert.That(target.HasShieldProtection(), Is.False);
         }
 
+        [Test] public void AllyAirborneChecksOverallShieldAtApplicationTime()
+        {
+            using var env = new BattleFlowTestEnv(); env.CreateMinimalBattle();
+            var owner = env.Ally.Entity;
+            var ally = env.CreateAlly(2).Entity;
+            var shield = Add(env, owner, "ST_TestOverall", 50);
+            const string airborne = AirborneStatusHandler.CharacterStatusID;
+            Assert.That(ally.GetTotalShieldHP(), Is.Zero);
+            Assert.That(ally.AddStatus(airborne, owner, 1, 2, 0, null), Is.Null);
+            owner.RemoveStatusInstance(shield);
+            Assert.That(ally.AddStatus(airborne, owner, 1, 2, 0, null), Is.Not.Null);
+        }
+
         [Test] public void DirectUsesRawValue_TrueBypasses_AndDeadSourceCannotProtect()
         {
             using var env = new BattleFlowTestEnv(); env.CreateMinimalBattle();

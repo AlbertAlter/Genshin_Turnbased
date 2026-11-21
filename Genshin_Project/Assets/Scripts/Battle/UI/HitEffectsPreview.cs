@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public sealed class HitEffectsPreview : MonoBehaviour
 {
     public Font controlsFont;
+    [SerializeField] private ProjectUiCanvas sharedCanvas;
     public TMP_FontAsset numberFont;
     public int[] characterIds = { 1009, 1010, 1011, 1012 };
     public int enemyId = 2001;
@@ -29,6 +30,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private UICardFactory cardFactory;
     private readonly UICardView[] cardViews = new UICardView[9];
     private ShieldPreviewPanel shieldPanel;
+    private Canvas previewCanvas;
     private BattleUiLayout sceneLayout;
     private BattleUiHitEffects hitModule;
     private int previewTab;
@@ -53,9 +55,11 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private BattleSkillPresentationTemplates templates;
     private bool useGenericTemplate = true;
     private float playingFlightDuration;
-    private HitShakeStyle shakeStyle;
-    private UIHitShakeController shake;
-    private HitShakeStyle.Selection playingShake;
+    private BattleAttackAnimationTable attackAnimations;
+    private UICardAttackMotion shake;
+    private BattleAttackAnimationSpec playingAnimation;
+    private int playingHitAnimation;
+    private long playingMotionID;
     private UIHitEffectStyle.Profile playingProfile;
     private UIHitEffectStyle.Particles playingParticles;
     private BattlefieldDamagePopupStyle playingPopup;
@@ -68,7 +72,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private float elapsed, endTime;
     private string hitsText = "3", critText = "50", amountText = "1234", error, inputError;
     private int playingHits;
-    private bool cardShake = true, screenShake;
+    private bool cardShake = true;
     private struct Cue { public float Time, DirectionDegrees; public int Hit, Target; public bool Critical; public uint Seed; public float Amount; }
     private sealed class VisualCue { public Cue Cue; public bool Grouped; public Vector2 Center, Span; }
     private sealed class Flight { public UIHitProjectileEffect Graphic; public float Start; }
@@ -76,6 +80,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
 
     private IEnumerator Start()
     {
+        if (sharedCanvas == null) { Fail("命中特效预览缺少公共画布。"); yield break; }
         if (!ReadSettings()) yield break;
         if (characterIds == null || characterIds.Length != 4 || allyPositions.Length != 4 || enemyPositions.Length != 5 ||
             Array.Exists(characterIds, id => id <= 0) || enemyId <= 0)
@@ -95,12 +100,12 @@ public sealed class HitEffectsPreview : MonoBehaviour
         {
             // Parse all first: reloading an invalid table must not partially replace the active configuration.
             var newEffects = UIHitEffectStyle.Load(); var newPalette = ElementColorPalette.Load();
-            var newShake = HitShakeStyle.Load();
+            var newAnimations = BattleAttackAnimationTable.Load();
             var newTextures = HitEffectTextureStyle.Load();
             var newPopup = BattlefieldDamagePopupStyle.Load();
             var newTemplates = BattleSkillPresentationTemplates.Load();
             var newTiming = BattlePresentationConfiguration.Parse(BattleTimelineSettings.Load().Parameters);
-            effects = newEffects; textures = newTextures; palette = newPalette; popupStyle = newPopup; timing = newTiming; templates = newTemplates; shakeStyle = newShake; error = null; return true;
+            effects = newEffects; textures = newTextures; palette = newPalette; popupStyle = newPopup; timing = newTiming; templates = newTemplates; attackAnimations = newAnimations; error = null; return true;
         }
         catch (Exception exception) { Fail(exception.Message); return false; }
     }
@@ -109,10 +114,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
         var cameraObject = new GameObject("HitPreviewCamera", typeof(Camera)); cameraObject.transform.SetParent(transform, false);
         var camera = cameraObject.GetComponent<Camera>(); camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = new Color(.16f, .15f, .14f); camera.cullingMask = 0;
-        var canvasObject = new GameObject("HitPreviewCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
-        canvasObject.transform.SetParent(transform, false); canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvasObject.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
+        previewCanvas = sharedCanvas.CreateContentCanvas("HitPreviewCanvas");
+        var canvasObject = previewCanvas.gameObject;
         groupBehind = Rect("GroupImpactsBehind", canvasObject.transform, new Vector2(1920, 1080));
         var allies = Rect("character", canvasObject.transform, new Vector2(737, 541));
         allies.anchorMin = allies.anchorMax = new Vector2(1, .5f); allies.anchoredPosition = allyGroupOffset;
@@ -131,7 +134,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         flightLayer = Rect("ProjectileLayer", canvasObject.transform, new Vector2(1920, 1080));
         popupLayer = Rect("IndependentDamagePopups", canvasObject.transform, new Vector2(1920, 1080));
         sceneLayout = gameObject.AddComponent<BattleUiLayout>();
-        sceneLayout.canvas = canvasObject.GetComponent<Canvas>();
+        sceneLayout.canvas = previewCanvas;
         sceneLayout.groupHitsBehind = groupBehind; sceneLayout.groupHitsFront = groupFront; sceneLayout.projectiles = flightLayer;
         sceneLayout.cards = new BattleUiCardBinding[cards.Length];
         for (int i = 0; i < cards.Length; i++)
@@ -140,9 +143,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
                 hitsBehind = behind[i], hitsFront = front[i], shieldLayer = cardViews[i].Appearance.ShieldLayer };
         hitModule = gameObject.AddComponent<BattleUiHitEffects>();
         hitModule.layout = sceneLayout; hitModule.loadOnStart = false; hitModule.automaticClock = false;
-        shake = gameObject.AddComponent<UIHitShakeController>(); shake.AutomaticClock = false;
-        shake.BindScreen(canvasObject.transform as RectTransform);
-        foreach (var card in cards) shake.RegisterCard(card);
+        shake = gameObject.AddComponent<UICardAttackMotion>(); shake.AutomaticClock = false;
         var shields = gameObject.AddComponent<BattleUiShields>();
         shields.layout = sceneLayout; shields.loadOnStart = false; shields.automaticClock = false;
         shieldPanel = gameObject.AddComponent<ShieldPreviewPanel>();
@@ -188,9 +189,8 @@ public sealed class HitEffectsPreview : MonoBehaviour
         playingHits = count; playingNumbers = showNumbers; playingProfile = effects.Get((HitEffectWeapon)weapon, attack == 1);
         playingTextures = textures.Get((HitEffectWeapon)weapon, attack == 1); playingSource = source;
         playingGrouped = playbackMode == 2 || (playbackMode == 0 && playingTextures.Mode == HitEffectTextureStyle.PlaybackMode.PerHitGroup);
-        playingShake = shakeStyle.Resolve(attack == 1 ? "Heavy" : "Normal", "", -1);
-        if (!cardShake) playingShake.Card = null;
-        playingShake.Screen = screenShake ? shakeStyle.Get("ScreenDefault") : null;
+        playingAnimation = attackAnimations.GetPreset(new[] { "Sword", "Claymore", "Bow", "Polearm", "Catalyst" }[weapon] + (attack == 1 ? "_Heavy" : "_Normal"));
+        playingHitAnimation = cardShake ? playingAnimation.HitAnimation : 1;
         playingColor = palette.GetColor(Elements[element]); playingParticles = effects.GetParticles(Elements[element]); playingPopup = popupStyle;
         playingSeed = newSeedEachPlay ? unchecked((int)HitEffectMath.Mix((uint)fixedSeed ^ (uint)++playIndex)) : fixedSeed;
         float jitter = fullTimeRandom ? (float)timing.FullJitter : 0;
@@ -238,8 +238,11 @@ public sealed class HitEffectsPreview : MonoBehaviour
             visualCues.Add(visual);
         }
         float tail = Mathf.Max(playingTextures.Duration(playingProfile), playingNumbers ? playingPopup.Lifetime : 0);
-        tail = Mathf.Max(tail, Mathf.Max(playingShake.Card?.Duration ?? 0, playingShake.Screen?.Duration ?? 0));
+        tail = Mathf.Max(tail, Mathf.Max(CardAttackMotionMath.HitDuration(playingHitAnimation), playingAnimation.Duration * (1 - playingAnimation.ContactRatio)));
         endTime = cues[cues.Count - 1].Time + tail;
+        float direction = Mathf.Sign(cards[selectedTargets[0]].position.x - cards[playingSource].position.x);
+        playingMotionID = shake.PlaySelf(playIndex, cardViews[playingSource].Appearance.Root, playingAnimation,
+            direction == 0 ? -1 : direction, cues[0].Time, false, null);
         running = true; paused = false;
     }
     private void Stop()
@@ -254,9 +257,9 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private void Spawn(Cue cue)
     {
         if (shieldPanel != null) shieldPanel.NotifyHit(cue.Target);
-        shake.PulseCard(playIndex, cards[cue.Target], playingShake.Card, cue.Seed);
-        shake.PulseScreen(playIndex, 0, playIndex, "Preview", cue.Hit, playingShake.Screen,
-            HitEffectMath.CueSeed(playingSeed, cue.Hit, 0));
+        shake.Impact(playingMotionID);
+        float direction = Mathf.Sign(cards[cue.Target].position.x - cards[playingSource].position.x);
+        shake.PlayHit(playIndex, cardViews[cue.Target].Appearance.Root, playingHitAnimation, direction == 0 ? -1 : direction, cue.Seed, playingAnimation.Strength);
         if (!playingNumbers || !playingPopup.Enabled || (cue.Amount == 0 && !playingPopup.ShowZero)) return;
         if (popups.Count >= playingPopup.MaxVisible) { Destroy(popups[0].Text.gameObject); popups.RemoveAt(0); }
         Vector2 point = BattlefieldDamagePopupLayout.Sample(playingPopup, playingSeed, 1, cue.Hit, cue.Target);
@@ -326,8 +329,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private void OnGUI()
     {
         var oldMatrix = GUI.matrix;
-        float scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f);
-        GUI.matrix = Matrix4x4.TRS(new Vector3((Screen.width - 1920 * scale) * .5f, 0), Quaternion.identity, Vector3.one * scale);
+        GUI.matrix = ProjectUiCanvas.GetGuiMatrix(previewCanvas);
         var skin = GUI.skin; var savedFont = skin.font; if (controlsFont != null) skin.font = controlsFont;
         var label = new GUIStyle(skin.label) { fontSize = 21 };
         var button = new GUIStyle(skin.button) { fontSize = 21 };
@@ -357,7 +359,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         showNumbers = GUILayout.Toggle(showNumbers, "跳字（完整空间范围）", toggle);
         useGenericTemplate = GUILayout.Toggle(useGenericTemplate, "通用命中模板", toggle);
         if (!useGenericTemplate) fullTimeRandom = GUILayout.Toggle(fullTimeRandom, "旧节奏：完整时间偏移", toggle);
-        cardShake = GUILayout.Toggle(cardShake, "卡牌微抖", toggle); screenShake = GUILayout.Toggle(screenShake, "全屏抖动", toggle);
+        cardShake = GUILayout.Toggle(cardShake, "受击动画", toggle);
         autoReplay = GUILayout.Toggle(autoReplay, "循环", toggle); newSeedEachPlay = GUILayout.Toggle(newSeedEachPlay, "新随机样式", toggle);
         GUILayout.EndHorizontal();
         target = GUILayout.SelectionGrid(target, TargetLabels, TargetLabels.Length, button);
@@ -390,5 +392,6 @@ public sealed class HitEffectsPreview : MonoBehaviour
         Stop();
         textureLibrary?.Dispose();
         pendingTextureLibrary?.Dispose();
+        if (previewCanvas != null) Destroy(previewCanvas.gameObject);
     }
 }

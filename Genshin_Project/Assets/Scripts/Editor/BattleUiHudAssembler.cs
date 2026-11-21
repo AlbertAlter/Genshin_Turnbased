@@ -14,6 +14,8 @@ public static class BattleUiHudAssembler
         source.switcher = runtime.GetComponent<BattlefieldSwitchController>();
         var loader = runtime.GetComponent<BattlefieldStageViewLoader>();
         loader.canvas = canvas;
+        loader.showRosterStatuses = true;
+        loader.bossPanel = canvas.transform.Find("Boss");
         loader.characterCards = canvas.transform.Find("character");
         loader.characterRoster = canvas.transform.Find("角色栏");
         loader.enemyCards = canvas.transform.Find("Enemy");

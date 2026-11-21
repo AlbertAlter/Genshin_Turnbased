@@ -182,24 +182,27 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(BattleResolutionContext.CurrentEffect, Is.Null);
         }
 
-        [TestCase("Hit", "1", 1, 0, 0, 0, 0)]
-        [TestCase("Turn;Effect", "2;1", 0, 1, 0, 2, 0)]
-        [TestCase(" hit ; ACTION ; life ", "2;1;3", 2, 0, 1, 0, 3)]
-        [TestCase("", "", 0, 0, 0, 0, 0)]
+        [TestCase("Hit", "1", 1, 0, 0, 0, 0, 0)]
+        [TestCase("Turn;Effect", "2;1", 0, 1, 0, 0, 2, 0)]
+        [TestCase(" hit ; ACTION ; life ", "2;1;3", 2, 0, 1, 0, 0, 3)]
+        [TestCase("Execution;Action", "2;1", 0, 0, 1, 2, 0, 0)]
+        [TestCase("", "", 0, 0, 0, 0, 0, 0)]
         public void TriggerLimits_TwoColumnsPreserveIndependentScopes(string scopes, string counts,
-            int hit, int effect, int action, int turn, int life)
+            int hit, int effect, int action, int execution, int turn, int life)
         {
             var data = new StatusActionData();
             data.SetTriggerLimits(scopes, counts);
             Assert.That(data.MaxTimePerHit, Is.EqualTo(hit));
             Assert.That(data.MaxTimePerEffect, Is.EqualTo(effect));
             Assert.That(data.MaxTimePerAction, Is.EqualTo(action));
+            Assert.That(data.MaxTimePerExecution, Is.EqualTo(execution));
             Assert.That(data.MaxTimePerTurn, Is.EqualTo(turn));
             Assert.That(data.MaxTimePerLife, Is.EqualTo(life));
         }
 
         [TestCase("Hit;Turn", "1")]
         [TestCase("Hit;Hit", "1;2")]
+        [TestCase("Execution;execution", "1;2")]
         [TestCase("Target", "1")]
         [TestCase("Hit", "1.5")]
         [TestCase("Hit", "-1")]

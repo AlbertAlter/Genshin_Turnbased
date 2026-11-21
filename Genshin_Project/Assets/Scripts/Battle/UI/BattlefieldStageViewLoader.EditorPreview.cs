@@ -135,7 +135,7 @@ public sealed partial class BattlefieldStageViewLoader
             {
                 StageAllySetup ally = allies[index];
                 PreviewBoundImage(group, "CharacterCardArt",
-                    $"art_assets/Character_Bare/{ally.CharacterID}_03.png");
+                    $"art_assets/Character_Bare/{ally.CharacterID}_01.png");
             });
 
         // Keep this paired with the runtime binding call above: the generated
@@ -147,9 +147,8 @@ public sealed partial class BattlefieldStageViewLoader
                 StageAllySetup ally = allies[index];
                 PreviewBoundImage(group, "CharacterAvatar",
                     "art_assets/" + CharacterCardArtManifest.PortraitFile(ally.CharacterID));
-                List<string> icons = LoadCharacterSkillIcons(ally.CharacterID);
-                if (icons.Count > 0 && CharacterSkillIconResolver.TryGetRelativePath(icons[icons.Count - 1], out string burstPath))
-                    PreviewBoundImage(group, "BurstIcon", burstPath);
+                string[] icons = LoadCharacterSkillIcons(ally.CharacterID, out string element);
+                PreviewActionIcon(group, icons[3], element, true);
             });
 
         PreviewActiveCharacterSkillIcons(allies);
@@ -178,8 +177,7 @@ public sealed partial class BattlefieldStageViewLoader
     {
         StageAllySetup active = allies.FirstOrDefault(item => item != null && item.CharacterID > 0);
         if (active == null) return;
-        List<string> icons = LoadCharacterSkillIcons(active.CharacterID);
-        if (icons.Count == 0) return;
+        string[] icons = LoadCharacterSkillIcons(active.CharacterID, out string element);
 
         Transform skillContainer = FindBestRosterContainer("SkillIcon");
         if (skillContainer == null) return;
@@ -189,11 +187,20 @@ public sealed partial class BattlefieldStageViewLoader
                 .Any(binding => binding.bindingKey == "SkillIcon"))
             .OrderBy(child => FirstNumber(child.name))
             .ToList();
-        int count = Mathf.Min(groups.Count, Mathf.Max(0, icons.Count - 1));
-        for (int index = 0; index < count; index++)
+        for (int index = 0; index < Mathf.Min(groups.Count, 3); index++)
+            PreviewActionIcon(groups[index], icons[index], element, false);
+    }
+
+    private void PreviewActionIcon(Transform group, string icon, string element, bool burst)
+    {
+        if (!CharacterSkillIconResolver.TryGetRelativePath(icon, out string path)) return;
+        PreviewBoundImage(group, burst ? "BurstIcon" : "SkillIcon", path);
+        string background = CharacterSkillIconResolver.ElementBackground(icon, element);
+        if (background == null) return;
+        foreach (var binding in group.GetComponentsInChildren<PsdUiBinding>(true))
         {
-            if (CharacterSkillIconResolver.TryGetRelativePath(icons[index], out string path))
-                PreviewBoundImage(groups[index], "SkillIcon", path);
+            if (binding.bindingKey == (burst ? "BurstStateBackground" : "SkillStateBackground"))
+                ApplyEditorPreview(FindStreamingReference(binding)?.GetSkillElementLayer(), background);
         }
     }
 
@@ -315,9 +322,10 @@ public sealed partial class BattlefieldStageViewLoader
         return names;
     }
 
-    private static List<string> LoadCharacterSkillIcons(int characterId)
+    private static string[] LoadCharacterSkillIcons(int characterId, out string element)
     {
-        var icons = new List<string>();
+        var icons = new string[4];
+        element = null;
         string folder = Path.Combine(Application.streamingAssetsPath, "Data", "Characters");
         if (!Directory.Exists(folder)) return icons;
         string file = Directory.GetFiles(folder, characterId + "_*.xlsx").FirstOrDefault();
@@ -326,24 +334,23 @@ public sealed partial class BattlefieldStageViewLoader
         {
             using var package = new ExcelPackage(new FileInfo(file));
             var sheet = package.Workbook.Worksheets["Skills"];
-            if (sheet?.Dimension == null) return icons;
-            int headerRow = -1;
-            int iconColumn = -1;
-            int headerLimit = Mathf.Min(5, sheet.Dimension.End.Row);
-            for (int row = 1; row <= headerLimit && iconColumn < 0; row++)
-            for (int column = 1; column <= sheet.Dimension.End.Column; column++)
+            var attributes = package.Workbook.Worksheets["Attributes"];
+            if (sheet?.Dimension == null || attributes?.Dimension == null) return icons;
+            var attr = ExcelTableHeaders.For(attributes);
+            int characterRow = attr.DataStartRow;
+            string Attribute(string name) => attributes.Cells[characterRow, attr.Required(name)].Text.Trim();
+            element = CharacterMetadataParser.ParseElement(Attribute("Element"));
+            string[] ids = { Attribute("NormalAttackID"), Attribute("HeavyAttackID"),
+                Attribute("ElementalSkillID"), Attribute("ElementalBurstID") };
+            var headers = ExcelTableHeaders.For(sheet);
+            int idColumn = headers.Required("SkillID2");
+            int iconColumn = headers.Required("Icon");
+            for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
             {
-                if (!string.Equals(sheet.Cells[row, column].Text.Trim(), "Icon", StringComparison.OrdinalIgnoreCase))
-                    continue;
-                headerRow = row;
-                iconColumn = column;
-                break;
-            }
-            if (iconColumn < 0) return icons;
-            for (int row = headerRow + 1; row <= sheet.Dimension.End.Row; row++)
-            {
-                string icon = sheet.Cells[row, iconColumn].Text.Trim();
-                if (!string.IsNullOrEmpty(icon)) icons.Add(icon);
+                string id = sheet.Cells[row, idColumn].Text.Trim();
+                if (id.Length == 0) continue;
+                for (int slot = 0; slot < ids.Length; slot++)
+                    if (id == ids[slot]) icons[slot] = sheet.Cells[row, iconColumn].Text.Trim();
             }
         }
         catch

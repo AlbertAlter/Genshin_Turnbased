@@ -60,7 +60,7 @@ public sealed class HealBatch : IDisposable
         string effectID = null, int segmentIndex = 1, float? hpCeiling = null)
     {
         if (_flushed) throw new InvalidOperationException("HealBatch already flushed");
-        if (target == null || target.IsDead || amount <= 0f
+        if (target == null || !target.IsAlive || amount <= 0f
             || float.IsNaN(amount) || float.IsInfinity(amount)) return;
         float before = _projectedHP.TryGetValue(target, out float projected) ? projected : target.CurrentHP;
         if (hpCeiling.HasValue && (float.IsNaN(hpCeiling.Value) || float.IsInfinity(hpCeiling.Value)))

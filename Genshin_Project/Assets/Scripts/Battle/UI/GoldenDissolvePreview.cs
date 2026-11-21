@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public sealed class GoldenDissolvePreview : MonoBehaviour
 {
     public Font controlsFont;
+    [SerializeField] private ProjectUiCanvas sharedCanvas;
     public int[] enemyIds = { 2001, 2002, 2003, 2004, 2005 };
     public int[] characterIds = { 1009, 1010, 1011, 1012 };
     public bool autoReplay = true;
@@ -38,6 +39,7 @@ public sealed class GoldenDissolvePreview : MonoBehaviour
     private IEnumerator Start()
     {
         started = true;
+        if (sharedCanvas == null) { Fail("入退场预览缺少公共画布。"); yield break; }
         if (!ReadSettings()) yield break;
         if (characterIds == null || characterIds.Length != 4 || Array.Exists(characterIds, id => id <= 0))
         { Fail("入退场预览需要四个有效角色编号。"); yield break; }
@@ -69,11 +71,7 @@ public sealed class GoldenDissolvePreview : MonoBehaviour
         previewCamera = new GameObject("PreviewCamera", typeof(Camera)).GetComponent<Camera>();
         previewCamera.transform.SetParent(transform, false); previewCamera.clearFlags = CameraClearFlags.SolidColor;
         previewCamera.backgroundColor = exitStyle.PreviewBackgroundColor; previewCamera.cullingMask = 0;
-        var canvas = new GameObject("EntryExitCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler)).GetComponent<Canvas>();
-        previewCanvas = canvas;
-        canvas.transform.SetParent(transform, false); canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvas.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
+        var canvas = previewCanvas = sharedCanvas.CreateContentCanvas("EntryExitCanvas");
         for (int i = 0; i < 9; i++)
         {
             bool ally = i >= 5; int slot = ally ? i - 5 : i;
@@ -180,7 +178,7 @@ public sealed class GoldenDissolvePreview : MonoBehaviour
     private void OnGUI()
     {
         var matrix = GUI.matrix; var font = GUI.skin.font; bool enabled = GUI.enabled;
-        GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1));
+        GUI.matrix = ProjectUiCanvas.GetGuiMatrix(previewCanvas);
         if (controlsFont != null) GUI.skin.font = controlsFont;
         var label = new GUIStyle(GUI.skin.label) { fontSize = 24 };
         var button = new GUIStyle(GUI.skin.button) { fontSize = 22 };
@@ -240,5 +238,6 @@ public sealed class GoldenDissolvePreview : MonoBehaviour
     {
         foreach (var video in videos) if (video != null) video.Unload();
         foreach (var card in cards) { if (card.Exit != null) card.Exit.ResetEffect(); if (card.View != null) card.View.Clear(); }
+        if (previewCanvas != null) Destroy(previewCanvas.gameObject);
     }
 }

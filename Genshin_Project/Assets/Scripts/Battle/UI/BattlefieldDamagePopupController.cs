@@ -10,6 +10,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
 {
     public BattleUiLayout layout;
     public TMP_FontAsset numberFont;
+    public UIStatusNamePopup statusNames;
     private sealed class Pending
     {
         public BattleSide Side;
@@ -37,7 +38,6 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
     private readonly List<Popup> active = new List<Popup>();
     private readonly Stack<TMP_Text> pool = new Stack<TMP_Text>();
     private BattlefieldDamagePopupStyle style;
-    private BattlefieldStatusPopupStyle statusStyle;
     private ElementColorPalette elementColors;
     private bool unknownElementReported;
     private RectTransform layer;
@@ -74,12 +74,6 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
             style = null;
             Debug.LogError("伤害跳字参数未加载，请同步 UI 配表：" + error.Message, this);
         }
-        try { statusStyle = BattlefieldStatusPopupStyle.Load(); }
-        catch (Exception error)
-        {
-            statusStyle = null;
-            Debug.LogError("状态跳字参数未加载，请同步 UI 配表：" + error.Message, this);
-        }
         ClearPopups();
     }
 
@@ -96,7 +90,9 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
             if (isActiveAndEnabled && cue.Result.TargetSide.HasValue && cue.Result.TargetSlot > 0)
             {
                 if (cue.Result.Data is DamageEventData damage) ShowDamage(playbackID, cue, damage);
-                else if (cue.Result.Data is StatusEventData status) ShowStatus(playbackID, cue, status);
+                else if (cue.Result.Data is StatusEventData status) ShowStatus(playbackID, cue, BattlefieldStatusPopupStyle.TextFor(status));
+                else if (cue.Result.Data is ShieldResistedStatusEventData)
+                    ShowStatus(playbackID, cue, DataManager.Instance?.GetLangText("status_immune"));
             }
         }
         catch (Exception error) { completed(error); return; }
@@ -139,17 +135,11 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
         return style.Color;
     }
 
-    private void ShowStatus(long playbackID, BattlePresentationCue cue, StatusEventData fact)
+    private void ShowStatus(long playbackID, BattlePresentationCue cue, string text)
     {
-        if (statusStyle == null || !statusStyle.Enabled || !fact.HostSide.HasValue || fact.HostSlot <= 0) return;
-        string text = BattlefieldStatusPopupStyle.TextFor(fact);
-        if (text.Length == 0) return; // 不用 ID、描述或其他占位文字替代空状态名。
-        if (!EnsureLayer()) return;
-        Spawn(new Pending
-        {
-            Side = cue.Result.TargetSide.Value, Slot = cue.Result.TargetSlot, Text = text, Style = statusStyle, PlaybackID = playbackID,
-            Position = new Vector2(.5f, 1),
-        });
+        if (statusNames == null || !statusNames.isActiveAndEnabled || string.IsNullOrEmpty(text)) return;
+        if (TryGetCard(cue.Result.TargetSide.Value, cue.Result.TargetSlot, out var card))
+            statusNames.TryShow(text, card, playbackID);
     }
 
     private void BindCards()
@@ -189,7 +179,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
 
     private void LateUpdate()
     {
-        if ((style == null || !style.Enabled) && (statusStyle == null || !statusStyle.Enabled)) return;
+        if (style == null || !style.Enabled) return;
         float delta = Mathf.Max(0, Time.unscaledDeltaTime);
         for (int i = active.Count - 1; i >= 0; i--)
         {
@@ -205,24 +195,27 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
         }
     }
 
-    private void Spawn(Pending request)
+    private bool TryGetCard(BattleSide side, int slot, out RectTransform card)
     {
-        if (!cards.TryGetValue((request.Side, request.Slot), out var card) || card == null)
+        if (!cards.TryGetValue((side, slot), out card) || card == null)
         {
             BindCards();
-            if (!cards.TryGetValue((request.Side, request.Slot), out card) || card == null)
+            if (!cards.TryGetValue((side, slot), out card) || card == null)
             {
                 if (!missingAnchorReported) Debug.LogWarning("跳字未找到目标卡牌，可通过 RegisterCard 绑定阵营与位置。", this);
                 missingAnchorReported = true;
-                return;
+                return false;
             }
         }
+        return true;
+    }
+    private void Spawn(Pending request)
+    {
+        if (!TryGetCard(request.Side, request.Slot, out var card)) return;
         if (!card.gameObject.activeInHierarchy) return;
-        bool statusPopup = request.Style is BattlefieldStatusPopupStyle;
-        while (active.Count(popup => (popup.Style is BattlefieldStatusPopupStyle) == statusPopup) >= request.Style.MaxVisible)
+        while (active.Count >= request.Style.MaxVisible)
         {
-            int index = active.FindIndex(popup => (popup.Style is BattlefieldStatusPopupStyle) == statusPopup);
-            Recycle(active[index]); active.RemoveAt(index);
+            Recycle(active[0]); active.RemoveAt(0);
         }
         TMP_Text text;
         if (pool.Count > 0) text = pool.Pop();
@@ -256,17 +249,6 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
         text.color = initialColor;
         Vector2 preferred = text.GetPreferredValues(text.text);
         text.rectTransform.sizeDelta = new Vector2(Mathf.Max(text.fontSize, preferred.x), Mathf.Max(text.fontSize * 2, preferred.y));
-        if (request.Style is BattlefieldStatusPopupStyle status)
-        {
-            float? previousTop = null;
-            foreach (var popup in active)
-                if (popup.Style is BattlefieldStatusPopupStyle && popup.Side == request.Side && popup.Slot == request.Slot)
-                {
-                    float top = popup.Text.rectTransform.anchoredPosition.y + popup.Text.rectTransform.sizeDelta.y * .5f;
-                    previousTop = previousTop.HasValue ? Mathf.Max(previousTop.Value, top) : top;
-                }
-            origin.y = status.CenterAbove(origin.y, height, text.rectTransform.sizeDelta.y, previousTop);
-        }
         text.rectTransform.anchoredPosition = origin;
         text.gameObject.SetActive(true);
         active.Add(new Popup { Text = text, Origin = origin, Height = height, Style = request.Style,
@@ -283,6 +265,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
     {
         foreach (var popup in active) Recycle(popup);
         active.Clear();
+        if (statusNames != null) statusNames.Clear();
     }
 
     private void OnDisable()
@@ -296,6 +279,7 @@ public sealed class BattlefieldDamagePopupController : MonoBehaviour, IBattlePre
 
     public void Cancel(long playbackID)
     {
+        if (statusNames != null) statusNames.Cancel(playbackID);
         for (int i = active.Count - 1; i >= 0; i--)
             if (playbackID < 0 || active[i].PlaybackID == playbackID)
             { Recycle(active[i]); active.RemoveAt(i); }

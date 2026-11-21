@@ -16,6 +16,16 @@ public class BattleInputController : MonoBehaviour
     public BattleUiLayout selectionLayout;
     /// <summary>提示表现层预留：只发送lang key，尚未创建提示跳字UI。</summary>
     public event Action<string> TipRequested;
+    private readonly HashSet<object> uiInputOwners = new HashSet<object>();
+    public bool IsUiInputBlocked => uiInputOwners.Count != 0;
+
+    /// <summary>弹窗按持有者阻止操作；关闭旧界面不会解锁其他界面。</summary>
+    public void SetUiInputBlocked(object owner, bool blocked)
+    {
+        if (owner == null) return;
+        if (blocked) uiInputOwners.Add(owner);
+        else uiInputOwners.Remove(owner);
+    }
 
     private void NotifyNoValidTarget()
         => NotifyTip(BattleTipKeys.NoValidTarget);
@@ -73,6 +83,8 @@ public class BattleInputController : MonoBehaviour
         if (bm.IsBattleOver || BattleExecution.IsBusy) return;
         if (_selecting && bm.CurrentPhase != TurnPhase.AllyAction) ExitSelecting();
         if (_selecting && _pendingAlly?.Entity?.IsOnField != true) ExitSelecting();
+
+        if (IsUiInputBlocked) return;
 
         if (_selecting)
         {
@@ -177,7 +189,8 @@ public class BattleInputController : MonoBehaviour
     /// 按效果参数初始化选择器（2026-08-15，效果级）：
     ///  Self→仅高亮施放者；Consecutive=0且TargetNumber&gt;1→逐个选（不可重复）；2/3/4→全体特效走流程；其余→滑动窗口。
     /// </summary>
-    void InitSelectorForEffect(BattleManager bm, CharacterBattleController ally, int skill, SkillEffectData eff)
+    void InitSelectorForEffect(BattleManager bm, CharacterBattleController ally, int skill, SkillEffectData eff,
+        BattleSide? preferredSide = null, IReadOnlyList<int> preferredPositions = null)
     {
         _oneByOneMode = false;
         _oneByOneExcluded.Clear();
@@ -197,8 +210,11 @@ public class BattleInputController : MonoBehaviour
         bool allySide = eff.TargetType == "Allies" || eff.TargetType == "AlliesOnly" || eff.TargetType == "AllyField";
         bool fieldTarget = !string.IsNullOrEmpty(eff.TargetType) && eff.TargetType.EndsWith("Field", StringComparison.Ordinal);
         var side = allySide ? BattleSide.Ally : BattleSide.Enemy;
+        if (preferredSide != side) preferredPositions = null;
         Func<int, float> hp = allySide ? (Func<int, float>)bm.GetAllyHpAt : bm.GetEnemyHpAt;
         Func<int, bool> alive = allySide ? (Func<int, bool>)bm.IsAllyAliveAt : bm.IsEnemyAliveAt;
+        if (BattleTargetResolver.IsSingleEnemySelection(ally.Entity.Side, eff.TargetType, eff.TargetNumber, eff.TargetOverride))
+            alive = pos => bm.IsEnemyAliveAt(pos) && !PublicControlStates.IsHidden(bm.GetEntityByPosition(side, pos));
         bool preferLower = allySide && (eff.EffectType == "Heal" || eff.EffectType == "Shield");
         // 友方增益的正式评分依赖“本场伤害统计”；该系统未建立前保持中性并列随机，不能拿血量冒充伤害。
         Func<int, float> score = allySide ? (Func<int, float>)(_ => 0f) : hp;
@@ -221,7 +237,7 @@ public class BattleInputController : MonoBehaviour
         if (eff.EffectType == "Damage" && BattleTargetResolver.AffectedByTaunt(
             ally.Entity.Side, side, fieldTarget ? BattleTargetDomain.Field : BattleTargetDomain.Unit,
             eff.TargetNumber, eff.TargetConsecutive, eff.TargetOverride, null))
-            _selectionTaunt = pos => BattleTargetResolver.IsTaunter(bm.GetEntityByPosition(side, pos));
+            _selectionTaunt = pos => alive(pos) && BattleTargetResolver.IsTaunter(bm.GetEntityByPosition(side, pos));
         if (eff.TargetNumber == -1 || (eff.TargetConsecutive >= 2 && eff.TargetConsecutive <= 4))
         {
             // -1 全体确认或 2/3/4 随机预览：高亮全体存活目标，确认后按原效果规则执行。
@@ -233,11 +249,11 @@ public class BattleInputController : MonoBehaviour
             _oneByOneMode = true;
             _oneByOneRemaining = eff.TargetNumber;
             _oneByOnePicked = new List<int>();
-            _selector.Init(side, 1, 0, score, alive, _oneByOneExcluded, fieldTarget, preferLower, _selectionTaunt);
+            _selector.Init(side, 1, 0, score, alive, _oneByOneExcluded, fieldTarget, preferLower, _selectionTaunt, preferredPositions);
         }
         else
         {
-            _selector.Init(side, eff.TargetNumber, eff.TargetConsecutive, score, alive, _oneByOneExcluded, fieldTarget, preferLower, _selectionTaunt);
+            _selector.Init(side, eff.TargetNumber, eff.TargetConsecutive, score, alive, _oneByOneExcluded, fieldTarget, preferLower, _selectionTaunt, preferredPositions);
         }
     }
 
@@ -305,7 +321,10 @@ public class BattleInputController : MonoBehaviour
                 LogManager.Log(LogCategory.Select, $"{SkillNames[skill]}已是最后一段或非多段技能");
                 return;
             }
-            // 多段升级是改选整次技能，不保留上一段已收集的目标。
+            // Rebuild the selection sequence, but keep the player's current focus
+            // when the next phase selects the same side.
+            var preferredSide = _selector.Side;
+            var preferredPositions = new List<int>(_selector.CurrentSelection);
             _pendingPhaseSkillID2 = next;
             ally.AbortEffectSequence();
             if (!ally.TryGetFirstSelectEffect(skill, out var first)) { ExitSelecting(); return; }
@@ -317,7 +336,7 @@ public class BattleInputController : MonoBehaviour
                 if (!BattleExecution.IsBusy) ExitSelecting();
                 return;
             }
-            InitSelectorForEffect(bm, ally, skill, first);
+            InitSelectorForEffect(bm, ally, skill, first, preferredSide, preferredPositions);
             if (!_selector.IsSelectionValid())
             {
                 NotifyNoValidTarget();
@@ -446,6 +465,7 @@ public class BattleInputController : MonoBehaviour
 
     // UI 调用也必须遵守回合、结算和换人模态锁；MonoBehaviour.enabled 不会自动拦截方法调用。
     private bool CanAcceptAction(BattleManager bm) => isActiveAndEnabled && bm != null
+        && !IsUiInputBlocked
         && !bm.IsBattleOver && bm.CurrentPhase == TurnPhase.AllyAction
         && !BattleExecution.IsBusy && !_waitingForResolution;
 
@@ -518,6 +538,15 @@ public class BattleInputController : MonoBehaviour
     }
 
 
+    public bool CanClickControlAlly(BattleEntity target) => CanAcceptAction(BattleManager.Instance) && !_selecting
+        && BattleManager.Instance.CanClickControlAlly(target);
+
+    public bool UIClickControlAlly(BattleEntity target, out AllyControlClickResult result)
+    {
+        result = AllyControlClickResult.Ignored;
+        return CanClickControlAlly(target) && BattleManager.Instance.TryClickControlAlly(target, out result);
+    }
+
     public bool CanThaw => CanThawAlly(BattleManager.Instance?.GetActiveAlly()?.Entity);
 
     public bool CanThawAlly(BattleEntity target) => CanAcceptAction(BattleManager.Instance) && !_selecting
@@ -555,6 +584,17 @@ public class BattleInputController : MonoBehaviour
     public bool IsSelecting => _selecting;
     /// <summary>尚未提交的选择画面。提交后由表现模块淡出，目标数据继续保留。</summary>
     public bool IsSelectionVisible => _selecting && !_waitingForResolution && !BattleExecution.IsBusy;
+
+    /// <summary>当前可显示的玩家选目标信息；只读，不推进选段或提交行动。</summary>
+    public bool TryGetSkillSelection(out CharacterBattleController caster, out int button, out BattleSide targetSide)
+    {
+        caster = _pendingAlly;
+        button = _pendingSkill;
+        targetSide = _selector.Side;
+        var battle = BattleManager.Instance;
+        return isActiveAndEnabled && IsSelectionVisible && battle != null && !battle.IsBattleOver &&
+            battle.CurrentPhase == TurnPhase.AllyAction && caster?.Entity?.IsOnField == true;
+    }
 
     /// <summary>当前选择的技能按钮类型（-1=无）。</summary>
     public int PendingSkill => _pendingSkill;

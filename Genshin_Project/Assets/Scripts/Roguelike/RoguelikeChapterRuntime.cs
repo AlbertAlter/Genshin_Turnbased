@@ -48,6 +48,16 @@ public sealed class RoguelikeChapterRuntime
     public RoguelikeCharacterProgressData GetCharacterProgress(int characterId)
         => RoguelikeSaveJson.DeepClone(RequireCharacter(characterId));
 
+    internal int WeaponTemplateId(string instanceId) => RequireWeapon(instanceId).Weapon.WeaponID;
+    internal int ItemCount(string itemId) => snapshot.Inventory.Items.Find(item => item.ItemId == itemId)?.Quantity ?? 0;
+    internal ArtifactSlot ArtifactSlotOf(string instanceId) => RequireArtifact(instanceId).Artifact.Slot;
+    internal int WeaponOwner(string instanceId)
+        => string.IsNullOrEmpty(instanceId) ? 0 :
+            snapshot.Characters.Find(character => character.EquippedWeaponInstanceId == instanceId)?.CharacterID ?? 0;
+    internal int ArtifactOwner(string instanceId)
+        => snapshot.Characters.Find(character => character.EquippedArtifacts.Exists(item => item.ArtifactInstanceId == instanceId))
+            ?.CharacterID ?? 0;
+
     public void UpdateCharacterProgress(int characterId, int level, int experience, int ascension,
         int constellationLevel, IReadOnlyList<int> skillLevels)
     {
@@ -67,7 +77,7 @@ public sealed class RoguelikeChapterRuntime
         character.SkillLevels = skillLevels.ToArray();
     }
 
-    public void SetParty(IEnumerable<int> characterIds)
+    public void SetParty(IEnumerable<int> characterIds, int? preset = null)
     {
         if (characterIds == null) throw new ArgumentNullException(nameof(characterIds));
         List<int> party = characterIds.ToList();
@@ -76,6 +86,13 @@ public sealed class RoguelikeChapterRuntime
             throw new ArgumentException("出战队伍不能包含重复角色。", nameof(characterIds));
         for (int i = 0; i < party.Count; i++)
             RequireCharacter(party[i]);
+        int number = preset ?? Math.Max(1, snapshot.ActivePartyPreset);
+        if (number < 1 || number > 10) throw new ArgumentOutOfRangeException(nameof(preset));
+        snapshot.PartyPresets ??= new List<RoguelikePartyPreset> {
+            new RoguelikePartyPreset { Number = Math.Max(1, snapshot.ActivePartyPreset), Members = new List<int>(snapshot.PartyCharacterIds) } };
+        snapshot.PartyPresets.RemoveAll(entry => entry.Number == number);
+        snapshot.PartyPresets.Add(new RoguelikePartyPreset { Number = number, Members = new List<int>(party) });
+        snapshot.ActivePartyPreset = number;
         snapshot.PartyCharacterIds = party;
     }
 
@@ -110,6 +127,8 @@ public sealed class RoguelikeChapterRuntime
             .FirstOrDefault(entry => string.Equals(entry.ItemId, itemId, StringComparison.Ordinal));
         long current = item == null ? 0L : item.Quantity;
         long result = current + delta;
+        if (delta > 0 && result > RoguelikeInventoryData.StackLimit(itemId))
+            throw new InvalidOperationException("道具数量超过上限：" + itemId + "。");
         if (result < 0L || result > int.MaxValue)
             throw new InvalidOperationException("物品数量调整后超出有效范围：" + itemId + "。");
         if (result == 0L)
@@ -126,11 +145,45 @@ public sealed class RoguelikeChapterRuntime
         return item.Quantity;
     }
 
+    internal string[] AddDefaultWeapons(int weaponId, int quantity)
+    {
+        if (weaponId <= 0) throw new ArgumentOutOfRangeException(nameof(weaponId));
+        if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));
+        if (quantity > RoguelikeInventoryData.MaxWeapons - snapshot.Inventory.Weapons.Count)
+            throw new InvalidOperationException("武器已到上限，无法获得更多武器。");
+        var ids = new string[quantity];
+        if (quantity == 1)
+        {
+            ids[0] = Guid.NewGuid().ToString("N");
+            RequireNewInstanceId(ids[0]);
+        }
+        else
+        {
+            var used = EquipmentInstanceIds();
+            for (int i = 0; i < ids.Length; i++)
+                do { ids[i] = Guid.NewGuid().ToString("N"); } while (!used.Add(ids[i]));
+        }
+        foreach (string id in ids)
+            snapshot.Inventory.Weapons.Add(new RoguelikeWeaponInstanceData {
+                InstanceId = id, Weapon = new WeaponLoadout { WeaponID = weaponId }
+            });
+        return ids;
+    }
+
+    private HashSet<string> EquipmentInstanceIds()
+    {
+        var ids = new HashSet<string>(snapshot.Inventory.Weapons.Select(weapon => weapon.InstanceId), StringComparer.Ordinal);
+        ids.UnionWith(snapshot.Inventory.Artifacts.Select(artifact => artifact.InstanceId));
+        return ids;
+    }
+
     public void AddWeapon(string instanceId, WeaponLoadout weapon, int experience = 0)
     {
         RequireNewInstanceId(instanceId);
         if (weapon == null) throw new ArgumentNullException(nameof(weapon));
         if (experience < 0) throw new ArgumentOutOfRangeException(nameof(experience));
+        if (snapshot.Inventory.Weapons.Count >= RoguelikeInventoryData.MaxWeapons)
+            throw new InvalidOperationException("武器已到上限，无法获得更多武器。");
         var instance = new RoguelikeWeaponInstanceData
         {
             InstanceId = instanceId,
@@ -181,10 +234,35 @@ public sealed class RoguelikeChapterRuntime
             Experience = experience,
             Artifact = RoguelikeSaveJson.DeepClone(artifact),
         };
+        AppendArtifacts(new[] { instance });
+    }
+
+    internal void AddArtifacts(int setId, IReadOnlyList<GeneratedArtifact> artifacts)
+    {
+        var additions = new List<RoguelikeArtifactInstanceData>(artifacts.Count);
+        var ids = EquipmentInstanceIds();
+        foreach (var artifact in artifacts)
+        {
+            string instanceId;
+            do { instanceId = Guid.NewGuid().ToString("N"); } while (!ids.Add(instanceId));
+            additions.Add(new RoguelikeArtifactInstanceData
+            {
+                InstanceId = instanceId,
+                ArtifactSetID = setId,
+                Artifact = RoguelikeSaveJson.DeepClone(artifact),
+            });
+        }
+        AppendArtifacts(additions);
+    }
+
+    private void AppendArtifacts(IReadOnlyList<RoguelikeArtifactInstanceData> additions)
+    {
+        if (additions.Count > RoguelikeInventoryData.MaxArtifacts - snapshot.Inventory.Artifacts.Count)
+            throw new InvalidOperationException("圣遗物已到上限，无法获得更多圣遗物。");
         RoguelikeProgressSnapshot candidate = RoguelikeSaveJson.DeepClone(snapshot);
-        candidate.Inventory.Artifacts.Add(instance);
+        candidate.Inventory.Artifacts.AddRange(additions);
         EnsureValid(candidate);
-        snapshot.Inventory.Artifacts.Add(instance);
+        snapshot.Inventory.Artifacts.AddRange(additions);
     }
 
     public void EquipArtifact(int characterId, string instanceId)
@@ -218,6 +296,15 @@ public sealed class RoguelikeChapterRuntime
             equipped => equipped.ArtifactInstanceId == instanceId)))
             throw new InvalidOperationException("已装备的圣遗物必须先卸下，不能直接移除。");
         snapshot.Inventory.Artifacts.Remove(artifact);
+    }
+
+    public void SetEquipmentLocked(string instanceId, bool locked)
+    {
+        var weapon = snapshot.Inventory.Weapons.Find(item => item.InstanceId == instanceId);
+        if (weapon != null) { weapon.IsLocked = locked; return; }
+        var artifact = snapshot.Inventory.Artifacts.Find(item => item.InstanceId == instanceId);
+        if (artifact == null) throw new InvalidOperationException("找不到装备实例：" + instanceId);
+        artifact.IsLocked = locked;
     }
 
     public RoguelikeProgressSnapshot ExportSnapshot()

@@ -22,8 +22,8 @@ public partial class BattleEntity
     /// 带来源的扣血接口（2026-08-19，状态钩子任务）。固定顺序：
     ///  1. 记录 HPBefore；2. 在护盾之后应用已登记的扣血保护，再扣HP并限制不低于0；3. 生成 DamageResolvedEvent；
     ///  4. HitLanded 时触发目标的统一 OnHit（StatusOnHitHookSystem）；
-    ///  5. CausedDeath 时广播死亡声明（KillHookSystem，先于战斗结束通知，确保击杀最后敌人仍能收到）；
-    ///  6. 在完整行为或独立状态效果链结清后处理复活及胜负；7. 返回事件对象。
+    ///  5. CausedDeath 时广播死亡声明；敌方全灭则在普通响应执行前锁定胜利；
+    ///  6. 未结束时在完整效果链结清后处理复活及败局；7. 返回事件对象。
     /// </summary>
     public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source)
     {
@@ -33,7 +33,7 @@ public partial class BattleEntity
 
     public DamageResolvedEvent TakeDamage(float damage, DamageSourceInfo source, bool hitLanded)
     {
-        if (!EquipmentStatusLifetime.CanExecute(source)) return null;
+        if (BattleManager.Instance?.IsBattleOver == true || !EquipmentStatusLifetime.CanExecute(source)) return null;
         DamageResolvedEvent damageEvent = ApplyDamageCore(damage, source, hitLanded);
         FinalizeDamageEvents(new[] { damageEvent });
         return damageEvent;
@@ -44,7 +44,7 @@ public partial class BattleEntity
     {
         if (float.IsNaN(damage) || float.IsInfinity(damage) || damage < 0f)
             damage = 0f;
-        if (IsDead)
+        if (!IsAlive)
             hitLanded = false;
 
         BattleEntity sourceEntity = source?.SourceEntity;
@@ -58,6 +58,8 @@ public partial class BattleEntity
         float hpDamage = IsAlive ? BattleSpecialRules.GuardHPDamage(this, damage) : damage;
         CurrentHP -= hpDamage;
         if (CurrentHP < 0f) CurrentHP = 0f;
+        bool exhausted = hpBefore > 0f && CurrentHP <= 0f;
+        int depletedPhase = exhausted && EnemyCtrl?.TryDepleteHealthPhase() == true ? EnemyCtrl.HealthPhases.Current : 0;
 
         var damageEvent = new DamageResolvedEvent
         {
@@ -71,7 +73,8 @@ public partial class BattleEntity
             DamageBeforeShield = damage,
             ActualHPDamage = Mathf.Max(0f, hpBefore - CurrentHP),
             HitLanded = hitLanded,
-            CausedDeath = hpBefore > 0f && CurrentHP <= 0f
+            CausedDeath = exhausted && depletedPhase == 0,
+            DepletedEnemyPhase = depletedPhase
         };
 
         return damageEvent;
@@ -106,7 +109,31 @@ public partial class BattleEntity
                 deaths.Add(damageEvent.Snapshot());
         BattleDeathResolution.RecordDeaths(deaths);
         StatusOnHitHookSystem.NotifyDamageBatch(damageEvents);
+        foreach (DamageResolvedEvent damage in damageEvents)
+        {
+            if (damage?.DepletedEnemyPhase > 0)
+            {
+                var enemy = damage.Target.EnemyCtrl;
+                void Advance()
+                {
+                    using var cause = BattleEventHub.Enter(damage.Declaration);
+                    enemy.FinishDepletedHealthPhase(damage.DepletedEnemyPhase);
+                }
+                if (!BattleResolutionContext.AfterCurrentExecution(Advance))
+                    BattleResolutionContext.AfterResponses(Advance);
+            }
+        }
         if (deaths.Count == 0) return;
+        if (BattleManager.Instance?.AllEnemiesDefeated == true)
+        {
+            // 同一hit的全部目标已提交。保留致死及死亡事实，在响应集合释放前锁定胜利。
+            // 后续死亡爆炸/反击不再获得执行资格，死亡清理仍完成。
+            foreach (var death in deaths) KillHookSystem.NotifyDeath(death);
+            BattleManager.Instance.CheckBattleEnd();
+            BattleResolutionContext.AfterResponses(() =>
+                BattleResolutionContext.AfterSettlement(BattleDeathResolution.AfterDamageSettlement));
+            return;
+        }
         BattleResolutionContext.AfterResponses(() =>
         {
             using (BattleResolutionContext.BeginCollection())

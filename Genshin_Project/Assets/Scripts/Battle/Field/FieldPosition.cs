@@ -45,8 +45,8 @@ public class FieldPosition
     {
         using var declarationResolution = BattleEventHub.BeginResolution();
         using var declarations = BattleResolutionContext.BeginCollection();
-        if (id == PublicControlStates.EnemyStun)
-            throw new InvalidOperationException("敌人眩晕只能施加于敌人实体。");
+        if (PublicControlStates.IsEnemyOnly(id))
+            throw new InvalidOperationException(id + "只能施加于敌人实体。");
         equipmentSource = EquipmentStatusLifetime.Resolve(id, caster, weaponContext, equipmentSource);
         if (equipmentSource != null && !equipmentSource.IsAvailable) return null;
         // 场地状态与实体状态保持一致：空施加阶段取本次实际施加阶段。

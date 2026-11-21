@@ -20,13 +20,15 @@ internal static class DamageHitTargets
         var result = new List<Entry>();
         var seen = new HashSet<BattleEntity>();
         foreach (BattleEntity target in primary)
-            if (target != null && target.IsAlive && (!target.IsOffField || target == boundStatusHost) && seen.Add(target))
+            if (target != null && target.IsAlive && !target.HasWithdrawn
+                && (!target.IsOffField || target == boundStatusHost) && seen.Add(target))
                 result.Add(new Entry(target, 1f, false));
         bool hasSplash = TryParse(splash, out float rate, out int left, out int right);
         var battle = BattleManager.Instance;
         if (hasSplash) foreach (BattleEntity target in primary)
         {
-            if (target == null || !target.IsAlive || (target.IsOffField && target != boundStatusHost)) continue;
+            if (target == null || !target.IsAlive || target.HasWithdrawn
+                || (target.IsOffField && target != boundStatusHost)) continue;
             int origin = target.Position != null ? target.Position.SlotIndex : -1;
             if (origin < 1) continue;
             for (int pos = Mathf.Max(1, origin - left);

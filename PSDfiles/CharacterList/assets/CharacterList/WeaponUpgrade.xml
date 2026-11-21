@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <displayList>
+    <image id="n1_c000c" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c000c" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="武器升级" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c000c" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择武器经验材料" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c000c" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c000c" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c000c" name="materialPanel" xy="31,128" size="449,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c000c" name="outcomePanel" xy="495,128" size="410,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <text id="n8_c000c" name="materialTitle" xy="45,139" size="422,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="选择材料" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n9_c000c" name="resultTitle" xy="512,139" size="370,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="等级与属性变化" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n10_c000c" name="item_660201Plate" xy="45,182" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n11_c000c" name="item_660201IconPlate" xy="55,193" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <text id="n12_c000c" name="item_660201Icon" xy="55,193" size="42,42" font="Microsoft YaHei" fontSize="14" color="#FEFEFE" text="精锻" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n13_c000c" name="item_660201Title" xy="106,189" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="精锻用杂矿" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n14_c000c" name="item_660201Detail" xy="106,216" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="每件 +40 经验 · 持有 25" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n15_c000c" name="item_660201Quantity" xy="340,196" size="116,35" src="c000b" fileName="Quantity9.xml" />
+    <graph id="n16_c000c" name="item_660202Plate" xy="45,257" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n17_c000c" name="item_660202IconPlate" xy="55,268" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <text id="n18_c000c" name="item_660202Icon" xy="55,268" size="42,42" font="Microsoft YaHei" fontSize="14" color="#FEFEFE" text="精锻" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n19_c000c" name="item_660202Title" xy="106,264" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="精锻用良矿" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n20_c000c" name="item_660202Detail" xy="106,291" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="每件 +200 经验 · 持有 20" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n21_c000c" name="item_660202Quantity" xy="340,271" size="116,35" src="c000b" fileName="Quantity9.xml" />
+    <graph id="n22_c000c" name="item_660203Plate" xy="45,332" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n23_c000c" name="item_660203IconPlate" xy="55,343" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <text id="n24_c000c" name="item_660203Icon" xy="55,343" size="42,42" font="Microsoft YaHei" fontSize="14" color="#FEFEFE" text="精锻" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n25_c000c" name="item_660203Title" xy="106,339" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="精锻用魔矿" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n26_c000c" name="item_660203Detail" xy="106,366" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="每件 +1000 经验 · 持有 12" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n27_c000c" name="item_660203Quantity" xy="340,346" size="116,35" src="c000b" fileName="Quantity9.xml" />
+    <text id="n28_c000c" name="changeLabel0" xy="513,184" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="武器等级" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n29_c000c" name="changeValue0" xy="658,184" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="Lv.12 → Lv.13" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n30_c000c" name="changeLine0" xy="514,230" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n31_c000c" name="changeLabel1" xy="513,246" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="基础攻击力" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n32_c000c" name="changeValue1" xy="658,246" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="76 → 79" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n33_c000c" name="changeLine1" xy="514,292" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n34_c000c" name="gainedExperience" xy="513,320" size="370,33" font="Microsoft YaHei" fontSize="17" color="#55493D" text="经验随选择的材料数量变化" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n35_c000c" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="确认后消耗已选材料。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

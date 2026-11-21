@@ -14,7 +14,8 @@ public sealed class UICardFreezeStyle
     public int FragmentCount;
     public bool Unscaled;
 
-    public static UICardFreezeStyle Load() => Parse(BattlefieldDamagePopupStyle.ReadParameters(
+    public static UICardFreezeStyle Load() => CampaignUiTables.Read(ReadPublished);
+    private static UICardFreezeStyle ReadPublished() => Parse(BattlefieldDamagePopupStyle.ReadParameters(
         Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName)));
 
     public static UICardFreezeStyle Parse(IReadOnlyDictionary<string, string> values)

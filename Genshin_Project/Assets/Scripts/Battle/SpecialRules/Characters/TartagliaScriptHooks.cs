@@ -29,15 +29,6 @@ public static class TartagliaScriptHooks
         internal Restore(Action action) { callback = action; }
         public void Dispose() { var action = callback; callback = null; action?.Invoke(); }
     }
-    private sealed class Cast : IDisposable
-    {
-        internal readonly BattleEntity Owner;
-        internal readonly string Skill;
-        internal readonly List<StatusInstance> Markers = new List<StatusInstance>();
-        private readonly Cast previous = Casting.Value;
-        internal Cast(BattleEntity owner, SkillMainData skill) { Owner = owner; Skill = skill?.SkillID2; Casting.Value = this; }
-        public void Dispose() => Casting.Value = previous;
-    }
     private sealed class Hit : IDisposable
     {
         internal readonly BattleEntity Owner;
@@ -77,7 +68,6 @@ public static class TartagliaScriptHooks
     private static readonly ConditionalWeakTable<StatusInstance, MarkMemory> Marks = new ConditionalWeakTable<StatusInstance, MarkMemory>();
     private static readonly ConditionalWeakTable<StatusInstance, IDisposable> Listeners = new ConditionalWeakTable<StatusInstance, IDisposable>();
     private static readonly ConditionalWeakTable<BattleDeclaration, Fact> Facts = new ConditionalWeakTable<BattleDeclaration, Fact>();
-    private static readonly AsyncLocal<Cast> Casting = new AsyncLocal<Cast>();
     private static readonly AsyncLocal<Hit> Hitting = new AsyncLocal<Hit>();
     private static readonly AsyncLocal<Response> Responding = new AsyncLocal<Response>();
     private static readonly AsyncLocal<string> Executing = new AsyncLocal<string>();
@@ -107,24 +97,12 @@ public static class TartagliaScriptHooks
         });
         BattleSpecialRules.RegisterStatusLifecycle(Rules, StartRules, StopRules);
         BattleSpecialRules.RegisterStatusLifecycle(Mark, StartMark, StopMark);
-        BattleSpecialRules.RegisterStatusLifecycle(ChargeTarget, (state, host) =>
-        {
-            if (Casting.Value?.Owner == state.Caster && Casting.Value.Skill == "SK_Heavy_Tartaglia") Casting.Value.Markers.Add(state);
-        }, null);
-        BattleSpecialRules.RegisterStatusLifecycle(Charge, (state, host) =>
-        {
-            var cast = Casting.Value;
-            if (cast?.Owner != state.Caster || cast.Skill != "SK_Heavy_Tartaglia")
-                throw new InvalidOperationException("达达利亚蓄力必须保留本次手选位置。");
-            foreach (var marker in cast.Markers) if (StatusHostAccess.Contains(marker.Host, marker)) state.BoundStatuses.Add(marker);
-        }, null);
         BattleSpecialRules.RegisterStatusLifecycle(Ready, (state, host) =>
         {
             var root = state.Caster?.GetStatusInstances(Melee).FirstOrDefault(Active);
             if (root == null) throw new InvalidOperationException("达达利亚六命必须绑定本次近战状态。");
             root.BoundStatuses.Add(state);
         }, null);
-        BattleSpecialRules.RegisterSkillExecutionScope((owner, skill) => new Cast(owner, skill));
         BattleSpecialRules.RegisterHitScope((id, owner, targets) => new Hit(owner, targets));
         BattleSpecialRules.RegisterStatusActionScope(status => new Response(status));
         BattleSpecialRules.RegisterEffectInvocationScope((owner, effect, execution) =>

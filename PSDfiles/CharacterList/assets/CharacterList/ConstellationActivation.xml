@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="936,545">
+  <displayList>
+    <image id="n1_c000f" name="adaptiveFrame" xy="0,0" size="936,545" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <text id="n2_c000f" name="modalTitle" xy="31,24" size="831,43" font="Microsoft YaHei" fontSize="31" color="#342B24" text="激活命座" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n3_c000f" name="subject" xy="32,69" size="824,28" font="Microsoft YaHei" fontSize="17" color="#55493D" text="选择角色的命之座道具" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c000f" name="headerDivider" xy="31,109" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n5_c000f" name="footerDivider" xy="31,467" size="874,1" type="rect" fillColor="#F6EDDC" lineSize="0" touchable="false" />
+    <graph id="n6_c000f" name="materialPanel" xy="31,128" size="449,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <graph id="n7_c000f" name="outcomePanel" xy="495,128" size="410,305" type="rect" fillColor="#CFC3B4" lineSize="1" lineColor="#988A79" corner="9,9,9,9" touchable="false" />
+    <text id="n8_c000f" name="materialTitle" xy="45,139" size="422,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="选择材料" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n9_c000f" name="resultTitle" xy="512,139" size="370,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="激活效果" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n10_c000f" name="constellationItemPlate" xy="45,182" size="421,64" type="rect" fillColor="#E8DCCB" lineSize="1" lineColor="#9C8F7D" corner="8,8,8,8" touchable="false" />
+    <graph id="n11_c000f" name="constellationItemIconPlate" xy="55,193" size="42,42" type="rect" fillColor="#776858" lineSize="0" corner="6,6,6,6" touchable="false" />
+    <text id="n12_c000f" name="constellationItemIcon" xy="55,193" size="42,42" font="Microsoft YaHei" fontSize="14" color="#FEFEFE" text="命座" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n13_c000f" name="constellationItemTitle" xy="106,189" size="231,27" font="Microsoft YaHei" fontSize="18" color="#342B24" text="角色命之座" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n14_c000f" name="constellationItemDetail" xy="106,216" size="234,22" font="Microsoft YaHei" fontSize="14" color="#55493D" text="激活当前层需要 1 件" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n15_c000f" name="constellationItemQuantity" xy="340,196" size="116,35" src="c0010" fileName="Quantity1.xml" />
+    <text id="n16_c000f" name="changeLabel0" xy="513,184" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="命之座" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n17_c000f" name="changeValue0" xy="658,184" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="第 2 层 → 第 3 层" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n18_c000f" name="changeLine0" xy="514,230" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n19_c000f" name="changeLabel1" xy="513,246" size="171,38" font="Microsoft YaHei" fontSize="18" color="#342B24" text="技能等级" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n20_c000f" name="changeValue1" xy="658,246" size="227,38" font="Microsoft YaHei" fontSize="18" color="#284D36" text="爆发等级 +3" align="right" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n21_c000f" name="changeLine1" xy="514,292" size="371,1" type="rect" fillColor="#978B7A" lineSize="0" touchable="false" />
+    <text id="n22_c000f" name="confirmationHint" xy="31,479" size="530,44" font="Microsoft YaHei" fontSize="16" color="#55493D" text="确认后消耗已选材料。" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>

@@ -18,14 +18,31 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
     public float pixelsPerUnitMultiplier = 1f;
     public Color fillColor = new Color32(187, 177, 164, 255);
     public bool showFill = true;
+    [SerializeField, Tooltip("可选的背景 Image，与边框等大，使用边框开口作为遮罩。")]
+    private Image[] openingMasks = Array.Empty<Image>();
     public bool Ready => frameImage != null && frameImage.sprite != null;
 
     private RectTransform visuals;
     private Image fillImage, frameImage;
+    private Image decorationMask;
+    private Action<RectTransform> buildOpeningDecoration;
     private Sprite loadedSprite, slicedFrame, slicedFill;
     private Texture2D fillTexture;
+    // Separate instances load their own textures. Reuse the last opening only while its source alpha matches.
+    private static byte[] cachedAlpha;
+    private static int cachedWidth;
+    private static Color32[] cachedOpening;
     private Coroutine request;
     private int version;
+
+    /// <summary>Build optional decoration inside the opening, between the fill and the border.</summary>
+    public void BindOpeningDecoration(Action<RectTransform> build)
+    {
+        buildOpeningDecoration = build;
+        if (!Ready) return;
+        RebuildOpeningDecoration();
+        RefreshAppearance();
+    }
 
     private void OnEnable() => Reload();
 
@@ -105,10 +122,8 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
             throw new InvalidOperationException("九宫格必须保留非零的中央区域。");
 
         Color32[] pixels = texture.GetPixels32();
-        var alpha = new byte[pixels.Length];
-        for (int i = 0; i < pixels.Length; i++) alpha[i] = pixels[i].a;
         // 与角色卡面使用同一闭合开口及两像素内侧搭接，底色不会漏到框外。
-        Color32[] mask = UICardFrameView.BuildOpeningMask(alpha, width, height);
+        Color32[] mask = OpeningPixels(pixels, width, height);
         fillTexture = new Texture2D(width, height, TextureFormat.RGBA32, false)
         {
             name = "AdaptiveFrameOpening", hideFlags = HideFlags.HideAndDontSave,
@@ -124,7 +139,46 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
         Stretch(visuals, transform);
         fillImage = AddImage("Fill", slicedFill, true);
         frameImage = AddImage("Frame", slicedFrame, false);
+        RebuildOpeningDecoration();
+        foreach (var openingMask in openingMasks)
+        {
+            if (openingMask == null) continue;
+            openingMask.sprite = slicedFill;
+            openingMask.type = Image.Type.Sliced;
+        }
         RefreshAppearance();
+    }
+
+    private static Color32[] OpeningPixels(Color32[] pixels, int width, int height)
+    {
+        if (cachedWidth == width && cachedAlpha?.Length == pixels.Length)
+        {
+            int i = 0;
+            while (i < pixels.Length && pixels[i].a == cachedAlpha[i]) i++;
+            if (i == pixels.Length) return cachedOpening;
+        }
+        var alpha = new byte[pixels.Length];
+        for (int i = 0; i < pixels.Length; i++) alpha[i] = pixels[i].a;
+        var opening = UICardFrameView.BuildOpeningMask(alpha, width, height);
+        cachedAlpha = alpha;
+        cachedWidth = width;
+        return cachedOpening = opening;
+    }
+
+    private void RebuildOpeningDecoration()
+    {
+        if (decorationMask != null)
+        {
+            decorationMask.gameObject.SetActive(false);
+            Release(decorationMask.gameObject);
+        }
+        decorationMask = null;
+        if (buildOpeningDecoration == null) return;
+
+        decorationMask = AddImage("OpeningDecoration", slicedFill, true);
+        decorationMask.transform.SetSiblingIndex(frameImage.transform.GetSiblingIndex());
+        decorationMask.gameObject.AddComponent<Mask>().showMaskGraphic = false;
+        buildOpeningDecoration(decorationMask.rectTransform);
     }
 
     private Sprite CreateSliced(Texture2D texture)
@@ -159,11 +213,18 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
     {
         float multiplier = float.IsNaN(pixelsPerUnitMultiplier) || float.IsInfinity(pixelsPerUnitMultiplier)
             ? 1f : Mathf.Max(.01f, pixelsPerUnitMultiplier);
-        if (frameImage != null) frameImage.pixelsPerUnitMultiplier = multiplier;
+        UpdateMultiplier(frameImage, multiplier);
+        UpdateMultiplier(decorationMask, multiplier);
+        foreach (var openingMask in openingMasks) UpdateMultiplier(openingMask, multiplier);
         if (fillImage == null) return;
-        fillImage.pixelsPerUnitMultiplier = multiplier;
+        UpdateMultiplier(fillImage, multiplier);
         fillImage.color = fillColor;
         fillImage.enabled = showFill;
+    }
+    private static void UpdateMultiplier(Image image, float multiplier)
+    {
+        if (image != null && image.pixelsPerUnitMultiplier != multiplier)
+            image.pixelsPerUnitMultiplier = multiplier;
     }
 
 #if UNITY_EDITOR
@@ -189,7 +250,10 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
         if (stopRequest && request != null) StopCoroutine(request);
         request = null;
         if (visuals != null) { visuals.gameObject.SetActive(false); Release(visuals.gameObject); }
-        visuals = null; frameImage = fillImage = null;
+        visuals = null; frameImage = fillImage = decorationMask = null;
+        if (slicedFill != null)
+            foreach (var openingMask in openingMasks)
+                if (openingMask != null && openingMask.sprite == slicedFill) openingMask.sprite = null;
         Release(slicedFrame); Release(slicedFill); Release(fillTexture);
         if (loadedSprite != null) { Release(loadedSprite.texture); Release(loadedSprite); }
         slicedFrame = slicedFill = loadedSprite = null; fillTexture = null;

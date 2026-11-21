@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // ============================================================
@@ -19,6 +20,41 @@ public class TableValidationException : System.Exception
 
 public static class TableValidator
 {
+    // All effect tables use this vocabulary. Parameters and allowed uses are checked by their own loaders.
+    public static void ValidateEffectType(string table, int row, string value)
+    {
+        if (value is "Damage" or "Heal" or "ApplyElement" or "ApplyStatus" or "RemoveStatus"
+            or "BindStatus" or "AddTurn" or "ExecuteEffect" or "ExecuteSkill" or "ChangeControl"
+            or "GainEnergy" or "DrainEnergy" or "Cooldown" or "APCost" or "NightSoul" or "BondOfLife"
+            or "Count" or "Shield" or "Buff" or "Debuff" or "Revive" or "SwitchIn" or "Withdrawn"
+            or "SwitchPattern" or "GrantAction" or "Summon" or "ClearAura" || DamageImmunity.IsImmuneType(value)) return;
+        throw new TableValidationException($"[{table}] 第{row}行：未知 EffectType [{value}]。");
+    }
+
+    public static void ValidateStatusActionType(string table, int row, string value)
+    {
+        if (value is "OnApply" or "OnItsTurn" or "OnTrigger" or "OnEnd" or "OnHit" or "OnDestroy" or "OnDeath") return;
+        throw new TableValidationException($"[{table}] 第{row}行：未知状态 ActionType [{value}]。");
+    }
+
+    /// <summary>盾状态必须恰有一条本状态所属的Shield效果；其他类型效果不计入。</summary>
+    public static void ValidateShieldStatusDefinition(StatusMainData main, IEnumerable<StatusEffectData> effects)
+    {
+        if (!string.Equals(main?.StatusType?.Trim(), "Shield", StringComparison.OrdinalIgnoreCase)) return;
+        int count = 0;
+        foreach (var effect in effects)
+            if (effect != null && effect.StatusEffectID / 100 == main.StatusID
+                && string.Equals(effect.EffectType?.Trim(), "Shield", StringComparison.OrdinalIgnoreCase)) count++;
+        if (count != 1)
+            throw new TableValidationException($"Shield状态必须且只能配置一条所属Shield效果：{main.StatusID2}（ID={main.StatusID}，名称={main.StatusName}，实际{count}条）。");
+    }
+
+    public static void ValidateShieldStatusDefinitions(DataManager data)
+    {
+        foreach (var main in data.StatusMainDict.Values)
+            ValidateShieldStatusDefinition(main, data.StatusEffectDict.Values);
+    }
+
     public static void ValidateDamageProperties(string table, int row, string effectType, string element,
         string param1, string param2, string param3, string damageHook = null)
     {
@@ -76,6 +112,7 @@ public static class TableValidator
         bool isEnemy, bool checkTargetNumber = true, string targetSelect = null, bool isStatusEffectTable = false)
     {
         string tag = $"[配表校验] {tableName} 第{row}行 ({effectType})";
+        ValidateEffectType(tableName, row, effectType);
         if (effectType == "Count")
         {
             try
@@ -87,6 +124,12 @@ public static class TableValidator
             }
             catch (Exception error) when (error is FormatException || error is NotSupportedException)
             { throw new TableValidationException(tag + ": " + error.Message); }
+        }
+        if (effectType == "Withdrawn")
+        {
+            if (!string.IsNullOrWhiteSpace(element) || !string.IsNullOrWhiteSpace(param2) || duration != 0
+                || BattleTargetResolver.IsTeamTarget(targetType) || targetType?.EndsWith("Field", StringComparison.Ordinal) == true)
+                throw new TableValidationException(tag + ": Withdrawn仅作用于实体，不使用Element/Param2/Duration。 ");
         }
         if (effectType == "SwitchIn")
         {
@@ -121,11 +164,9 @@ public static class TableValidator
         bool noTarget = effectType == "ExecuteSkill" || effectType == "ExecuteEffect"
                      || effectType == "BindStatus" || effectType == "Buff" || effectType == "Debuff"
                      || effectType == "ChangeControl" || effectType == "APCost"
-                     || effectType == "ResetCooldown" || (effectType == "Cooldown" && !isEnemy) || effectType == "SwitchPattern" || effectType == "GrantAction";
+                     || (effectType == "Cooldown" && !isEnemy) || effectType == "SwitchPattern" || effectType == "GrantAction";
         if ((effectType == "SwitchPattern" || effectType == "GrantAction") && !isEnemy)
             throw new TableValidationException($"{tag}: {effectType}仅供敌人使用。");
-        if (effectType == "ResetCooldown" && isEnemy)
-            throw new TableValidationException($"{tag}: {effectType} 当前作用于角色技能；敌人没有对应的技能按钮绑定");
         // GainEnergy 的模式仍须合法；只有 Based 读取元素系数。
         // Flat 忽略 Element，允许留空或填 None/none。
         string energyMode = effectType == "GainEnergy" ? NormalizeEnergyMode(param2) : null;
@@ -225,19 +266,12 @@ public static class TableValidator
         { throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ApplyElement): {error.Message}"); }
     }
 
-    public static void ValidateResetCooldown(string tableName, int row, string param1)
-    {
-        if (!ResetCooldownTarget.IsValid(param1))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (ResetCooldown): Param1 必须为正整数技能ID、SK_字符串ID或Normal/Heavy/Skill/Burst，当前=[{param1}]");
-    }
-
     public static void ValidateCooldown(string tableName, int row, string param1, string param2, bool isEnemy = false)
     {
-        if (isEnemy ? !EnemySkillTags.IsValidReference(param1) : !ResetCooldownTarget.IsValid(param1))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param1 必须为技能ID；角色还支持按钮名，敌人还支持Tag(标签)，当前=[{param1}]");
-        int rounds;
-        if (!CooldownParameters.TryParseAmount(param2, out rounds))
-            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param2 必须为有符号int增减量（正数增加、负数减少），不接受空值、小数或公式，当前=[{param2}]");
+        if (isEnemy ? !EnemyBattleController.IsValidCooldownReference(param1) : !CooldownTarget.IsValid(param1))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param1 必须为技能ID、角色按钮名或敌人Tag(标签)；敌人指定角色时可用Random(Skill;Burst)，当前=[{param1}]");
+        if (!CooldownParameters.TryParse(param2, out _))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Cooldown): Param2 必须为有符号int增减量（正数增加、负数减少）或 Reset，当前=[{param2}]");
     }
 
     public static void ValidateBondOfLife(string tableName, int row, string param1)
@@ -266,6 +300,8 @@ public static class TableValidator
     public static void ValidatePublicCountEffect(string tableName, int row, string effectType,
         string param1, string param2, string targetType)
     {
+        if (effectType == "Withdrawn" && (!string.IsNullOrWhiteSpace(param1) || !string.IsNullOrWhiteSpace(param2)))
+            throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (Withdrawn): Param1/Param2必须留空。");
         bool appliesNightSoul = effectType == "ApplyStatus" && NightSoulStatusHandler.IsStatusReference(param1);
         if (effectType == "NightSoul" && !NightSoulEffect.IsValidAmount(param1))
             throw new TableValidationException($"[配表校验] {tableName} 第{row}行 (NightSoul): Param1必须为有符号int增减量，当前=[{param1}]");

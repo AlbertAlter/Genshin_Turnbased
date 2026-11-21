@@ -30,4 +30,10 @@ public sealed class BattleHitTemplate
         return index < times.Length ? times[index] : times[times.Length - 1] + (index - times.Length + 1) * RepeatInterval;
     }
     public BattleHitTemplate WithUniformInterval(double interval) => new BattleHitTemplate(ID, new[] { times[0] }, interval, ProjectileSeconds, WeaponType, AttackType, AnimationSeconds);
+    public BattleHitTemplate WithMinimumFirstHit(double minimum)
+    {
+        double shift = Math.Max(0, minimum - times[0]);
+        var shifted = new double[times.Length]; for (int i = 0; i < times.Length; i++) shifted[i] = times[i] + shift;
+        return new BattleHitTemplate(ID, shifted, RepeatInterval, ProjectileSeconds, WeaponType, AttackType, AnimationSeconds);
+    }
 }

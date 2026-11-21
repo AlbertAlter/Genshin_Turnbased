@@ -23,6 +23,8 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     public BattleSkillTimelineTemplate skillTimeline;
     public BattlefieldSelectionPresentation selectionPresentation;
     private int playbackGeneration;
+    private int waitingForSelection;
+    internal bool HasPendingResults => waitingForSelection > 0 || playback?.IsBusy == true;
     public bool VoicesEnabled => skillTimeline == null || (skillTimeline.tracks & BattleSkillTracks.Voice) != 0;
     public BattleActionStyle ActionStyle => configuration?.ActionStyle;
 
@@ -40,7 +42,7 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
             enabled = false; return;
         }
         runtimeOwner = this;
-        playback = new BattlePresentationPlayback(Present, CancelViews);
+        playback = new BattlePresentationPlayback(Present, CancelViews, HasPendingHits);
         if (skillTimeline == null) skillTimeline = Resources.Load<BattleSkillTimelineTemplate>(BattleSkillTimelineTemplate.DefaultResource);
         if (skillTimeline == null) Debug.LogError("缺少默认技能时间轴模板，临时使用公共默认轨道。", this);
         ReloadConfiguration();
@@ -89,11 +91,16 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
         if (!isActiveAndEnabled || playback == null) return;
         int generation = playbackGeneration;
         if (selectionPresentation != null)
-            await selectionPresentation.WaitForSelectionExit(configuration.SelectionExitSeconds, cancellation);
+        {
+            waitingForSelection++;
+            try { await selectionPresentation.WaitForSelectionExit(configuration.SelectionExitSeconds, cancellation); }
+            finally { waitingForSelection--; }
+        }
         cancellation.ThrowIfCancellationRequested();
         if (generation != playbackGeneration || !isActiveAndEnabled || playback == null) return;
         var cues = skillTimeline != null ? skillTimeline.Build(sequence, configuration.For)
             : BattleSkillTimeline.Build(sequence, configuration.For, BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
+        if (configuration.Attacks != null) cues = BattleAttackAnimationTimeline.Build(cues, configuration.Attacks.Find);
         bool voicePrepared = false;
         if (VoicesEnabled)
             foreach (var view in views)
@@ -138,6 +145,17 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
         BattleExecution.TryInstallDefaultPlayer(this);
     }
 
+    private bool HasPendingHits(BattlePresentationCue exit)
+    {
+        foreach (var view in views)
+            if (view is IBattleEnemyExitBarrier barrier && barrier.HasPendingHits(exit))
+            {
+                foreach (var target in views)
+                    if (target is IBattleEnemyExitView cards && cards.CanPresentExit(exit)) return true;
+                return false;
+            }
+        return false;
+    }
     private void Present(long id, BattlePresentationCue cue, Action<Exception> completed)
     {
         var targets = views.FindAll(view => BattleSkillTimeline.Receives(view, cue)

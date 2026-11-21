@@ -137,7 +137,7 @@ public static class StatusBindingSystem
                         effect.AddInPhase > 0 ? effect.AddInPhase : parent.AddInPhase,
                         effect.TriggerPhase, childMain, parent.WeaponContext, effect.Param2,
                         parent.EquipmentSource, ancestry, enchantElement: effect.Element, enchantOverride: effect.Param3);
-                    if (child != null && !previousInstances.Contains(child) && team.Contains(child)) parent.BoundStatuses.Add(child);
+                    if (child != null && !previousInstances.Contains(child) && team.Contains(child)) Attach(parent, child);
                 }
             }
             else if (result.Domain == BattleTargetDomain.Field)
@@ -174,7 +174,7 @@ public static class StatusBindingSystem
             // WhenMax=1 拒绝施加时返回旧实例，它不属于本次父状态，不能抢走清理权。
             if (child != null && !previous.Contains(child) && target.HasStatusInstance(child)
                 && !parent.BoundStatuses.Contains(child))
-                parent.BoundStatuses.Add(child);
+                Attach(parent, child);
         }
     }
 
@@ -196,8 +196,14 @@ public static class StatusBindingSystem
                 effect.TriggerPhase, childMain, parent.WeaponContext,
                 effect.Param2, ancestry, parent.EquipmentSource, enchantElement: effect.Element, enchantOverride: effect.Param3);
             if (child != null && !previous.Contains(child) && field.StatusList.Contains(child))
-                parent.BoundStatuses.Add(child);
+                Attach(parent, child);
         }
+    }
+
+    private static void Attach(StatusInstance parent, StatusInstance child)
+    {
+        child.BindingParent = parent;
+        parent.BoundStatuses.Add(child);
     }
 
     private static bool RemoveFromEntities(BattleManager battle, StatusInstance child)

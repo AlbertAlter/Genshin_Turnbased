@@ -80,6 +80,9 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
     }
 
     public bool SetShield(BattleSide side, int slot, bool visible, string element = "None")
+        => SetShield(side, slot, visible, element, false);
+
+    public bool SetShield(BattleSide side, int slot, bool visible, string element, bool immediate)
     {
         if (!isActiveAndEnabled || !Ready || !views.TryGetValue((side, slot), out var view)) return false;
         if (element != "None" && !Palette.TryGetColor(element, out _)) throw new ArgumentException("未知护盾元素：" + element);
@@ -92,11 +95,18 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
         }
         if (!visible) view.Sweep = false;
         view.Visible = visible;
+        if (!visible && immediate)
+        {
+            view.Alpha = 0;
+            view.RevealProgress = 1;
+            if (view.Graphic != null) view.Graphic.gameObject.SetActive(false);
+        }
         // 保留消失前的元素色，不能在淡出第一帧变成无元素盾。
         if (visible) view.Element = element;
         return true;
     }
-    public void SetOccupantShield(BattleUiCardBinding card, object occupant, bool visible, string element, object shieldIdentity = null)
+    public void SetOccupantShield(BattleUiCardBinding card, object occupant, bool visible, string element, object shieldIdentity = null,
+        bool immediate = false)
     {
         if (!views.TryGetValue((card.side, card.slot), out var view)) return;
         if (!ReferenceEquals(view.Occupant, occupant))
@@ -111,7 +121,7 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
             view.Alpha = 0; view.Visible = false;
         }
         view.ShieldIdentity = shieldIdentity;
-        SetShield(card.side, card.slot, visible, element);
+        SetShield(card.side, card.slot, visible, element, immediate);
     }
     public bool PlaySweep(BattleSide side, int slot, bool loop = false)
     {

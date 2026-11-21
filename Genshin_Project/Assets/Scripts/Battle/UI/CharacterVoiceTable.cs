@@ -21,6 +21,9 @@ public sealed class CharacterVoiceTable
     public IReadOnlyList<string> Action(int actor, CharacterVoiceAction key) =>
         actions.TryGetValue((actor, key), out var pool) ? pool : Array.Empty<string>();
 
+    public static CharacterVoiceTable Load() => CampaignUiTables.Read(ReadPublished);
+    private static CharacterVoiceTable ReadPublished() => Read(Path.Combine(UnityEngine.Application.streamingAssetsPath, "Data", FileName));
+
     public static CharacterVoiceTable Read(string path)
     {
         using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);

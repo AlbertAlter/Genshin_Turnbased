@@ -75,6 +75,19 @@ public partial class CharacterBattleController
         return totalEnergy;
     }
 
+    /// <summary>外部扣能量，按实际余额结算，不计作角色主动消费。</summary>
+    public static float ApplyEnergyLoss(BattleEntity target, float amount, BattleEntity source)
+    {
+        if (target?.CharacterCtrl == null || amount <= 0f || float.IsNaN(amount) || float.IsInfinity(amount)) return 0f;
+        float before = target.CurrentEnergy;
+        if (before <= 0f) return 0f;
+        float after = Mathf.Max(0f, before - amount);
+        target.CurrentEnergy = after;
+        BattleEventHub.Publish(new ResourceEventData("Energy", "Energy", target,
+            before, after, -amount, ResourceChangeReason.Adjustment, false, actor: source));
+        return before - after;
+    }
+
     private static float GetEnergyOnstageStatus(BattleEntity target)
     {
         if (target.Type != BattleEntity.EntityType.Character

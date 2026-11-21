@@ -40,7 +40,8 @@ public partial class BattleEntity
     /// 只汇总受击方及其所在位置的 DMGTaken；来源方的 DMGBonus 是另外一个乘区。
     /// damageType 必须传实际效果标签，空标签不冒充 Skill/Normal 等伤害。
     /// </summary>
-    public DMGTakenSnapshot PrepareDMGTaken(string effectID, string skillID, string damageType, string element)
+    public DMGTakenSnapshot PrepareDMGTaken(string effectID, string skillID, string damageType, string element,
+        BattleEntity attacker = null)
     {
         var contributions = new List<KeyValuePair<string, float>>();
         var dm = DataManager.Instance;
@@ -65,7 +66,8 @@ public partial class BattleEntity
                 HitEffectID = effectID,
                 DamageSkillID = skillID,
                 DamageType = damageType,
-                DamageElement = element
+                DamageElement = element,
+                DamageAttacker = attacker
             };
             if (!ScriptHookEvaluator.Evaluate(main.ScriptHook, context)) continue;
             int count = StatusAggregation.Take(status, used);

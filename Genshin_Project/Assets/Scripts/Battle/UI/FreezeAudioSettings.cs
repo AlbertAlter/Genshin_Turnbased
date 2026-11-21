@@ -13,7 +13,8 @@ public sealed class FreezeAudioSettings
     public static string VolumeKey(int index) => $"Click{index + 1}VolumePercent";
     public static string PitchKey(int index) => $"Click{index + 1}PitchSemitones";
 
-    public static FreezeAudioSettings Load() => Parse(BattlefieldDamagePopupStyle.ReadParameters(
+    public static FreezeAudioSettings Load() => CampaignUiTables.Read(ReadPublished);
+    private static FreezeAudioSettings ReadPublished() => Parse(BattlefieldDamagePopupStyle.ReadParameters(
         Path.Combine(Application.streamingAssetsPath, "Data", "UI", FileName)));
 
     public static FreezeAudioSettings Parse(IReadOnlyDictionary<string, string> values)

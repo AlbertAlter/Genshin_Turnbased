@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="156,235" extention="Button" opaque="true">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0" />
+  <Button mode="Common" />
+  <displayList>
+    <image id="n1_c0007" name="adaptiveFrame" xy="0,0" size="156,235" src="i0001" fileName="Images/AdaptiveCharacterFrame.png" touchable="false" />
+    <graph id="n2_c0007" name="portraitPlate" xy="10,11" size="136,145" type="rect" fillColor="#8A7F70" lineSize="0" corner="9,9,9,9" touchable="false" />
+    <loader id="n3_c0007" name="icon" xy="10,11" size="136,145" url="" fill="scale" align="center" vAlign="middle" touchable="false" />
+    <text id="n4_c0007" name="title" xy="13,162" size="130,34" font="Microsoft YaHei" fontSize="22" color="#342B24" text="角色" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <graph id="n5_c0007" name="hoverLine" xy="13,220" size="130,3" type="rect" fillColor="#80664D" lineSize="0" corner="1,1,1,1" touchable="false">
+      <gearDisplay controller="button" pages="1,2,3" />
+    </graph>
+  </displayList>
+</component>

@@ -2,18 +2,22 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-/// <summary>UI art import and animation-only publication. Never rebuilds or modifies scene layout.</summary>
+/// <summary>UI art and audio publication, plus parameter refresh.</summary>
 public static class UiConfigurationSyncWindow
 {
-    [MenuItem("Tools/UI/导入美术资源")]
+    [MenuItem("Tools/UI/导入全部美术资源")]
     public static void ImportArt()
     {
         if(EditorApplication.isPlayingOrWillChangePlaymode)return;
         try
         {
             UiChartSync.Sync();
-            ReferencedArtAssetsSync.SyncReferencedImages();
-            Debug.Log("UI art synchronized. Scene configuration was not changed.");
+            if (!ReferencedArtAssetsSync.SyncReferencedImages()) return;
+            string root = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, "../.."));
+            Debug.Log(CharacterVoiceSync.Publish(root, Application.streamingAssetsPath));
+            WishCharacterThemeSync.Publish(root, Application.streamingAssetsPath);
+            AssetDatabase.Refresh();
+            Debug.Log("美术与音频资源同步完成。");
         }
         catch(Exception error) { Debug.LogException(error); }
     }
@@ -92,6 +96,8 @@ public static class UiConfigurationSyncWindow
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldHealthBar>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattleUiEnemyShieldBar>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldDamagePopupController>(true))view.ReloadConfiguration();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<UIStatusNamePopup>(true))view.ReloadConfiguration();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<BattleUiStatusRiseView>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldPresentationPlayer>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldSelectionPresentation>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldActionStateView>(true))view.ReloadAnimationParameters();

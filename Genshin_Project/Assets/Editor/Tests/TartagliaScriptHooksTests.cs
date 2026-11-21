@@ -61,13 +61,14 @@ namespace GenshinTurnBased.Tests.EditMode
                 new StatusEffectData { StatusEffectID=410300303,StatusEffectID2="STE_Tartaglia_MeleeSkill",EffectType="ChangeControl",Param1="Skill",Param2="SK_Skill_Tartaglia2",Param3="1" },
                 new StatusEffectData { StatusEffectID=410300304,StatusEffectID2="STE_Tartaglia_EntryCooldown",EffectType="Cooldown",Param1="SK_Skill_Tartaglia1",Param2="1",TargetType="Self" },
                 new StatusEffectData { StatusEffectID=410300305,StatusEffectID2="STE_Tartaglia_RoundCooldown",EffectType="Cooldown",Param1="SK_Skill_Tartaglia1",Param2="1",TargetType="Self" },
-                new StatusEffectData { StatusEffectID=410300306,StatusEffectID2="STE_Tartaglia_ExitReset",EffectType="ResetCooldown",Param1="SK_Skill_Tartaglia1",TargetType="Self" }
+                new StatusEffectData { StatusEffectID=410300306,StatusEffectID2="STE_Tartaglia_ExitReset",EffectType="Cooldown",Param1="SK_Skill_Tartaglia1",Param2="Reset",TargetType="Self" }
             };
             foreach (var effect in controls) e.DataManager.StatusEffectDict[effect.StatusEffectID2] = effect;
             Action(e, "Melee", "OnApply", "STE_Tartaglia_EntryCooldown", "Tartaglia_NoC1()");
             Action(e, "Melee", "OnItsTurn", "STE_Tartaglia_RoundCooldown", "Tartaglia_MeleeRound()");
             Action(e, "Melee", "OnEnd", "STE_Tartaglia_ExitReset", "Tartaglia_ResetOnExit()");
-            Effect(e, "SE_Skill_Tartaglia2Reset", "ResetCooldown", "SK_Skill_Tartaglia1", "Self", hook: "Tartaglia_ResetOnExit()");
+            Effect(e, "SE_Skill_Tartaglia2Reset", "Cooldown", "SK_Skill_Tartaglia1", "Self", hook: "Tartaglia_ResetOnExit()");
+            e.DataManager.SkillEffectDict["SE_Skill_Tartaglia2Reset"].Param2 = "Reset";
             e.DataManager.SkillEffectDict["SE_Skill_Tartaglia2Reset"].EffectIndex = -1;
             e.CreateMinimalBattle(); e.Ally.Entity.EntityID = 1030; e.Ally.Entity.ConstellationLevel = constellation;
             e.CreateEnemy(2, 10000); e.CreateEnemy(3, 10000); e.Enemy.Entity.TotalHP = e.Enemy.Entity.CurrentHP = 10000;

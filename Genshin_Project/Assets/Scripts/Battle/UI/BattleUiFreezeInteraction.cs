@@ -14,23 +14,33 @@ public interface IBattleUiFreezeSource
     FrozenThawClickResult ClickThaw();
 }
 
-/// <summary>Reusable click/keyboard adapter. Reads real progress and calls shared thaw + existing hit-shake modules.</summary>
+public interface IBattleUiControlReleaseSource
+{
+    AllyControlState GetControl();
+    bool CanClickControl { get; }
+    AllyControlClickResult ClickControl();
+}
+
+/// <summary>Shared card input. Ice follows actual Frozen; airborne clicks use the same shake profile.</summary>
 [DisallowMultipleComponent]
 public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     public MonoBehaviour dataSource;
     public UICardFreeze effect;
+    public UICardStunStars airborneStars;
     public UICardFreezeAudio clickAudio;
     public UIHitShakeController shake;
     public RectTransform shakeRoot;
     public Graphic hitArea;
-    public string shakeProfile = "CardNormal";
+    public string shakeProfile = "FreezeClick1";
     public bool keyboardEnabled;
     public KeyCode clickKey = KeyCode.Space;
     public FrozenThawClickResult LastResult { get; private set; }
     private HitShakeStyle.Profile profile;
     private ReactionStateInstance observed;
     private int renderedProgress;
+    private StatusInstance observedAirborne;
+    private int renderedAirborneProgress;
     private uint clickSerial;
     private long Playback => long.MaxValue - unchecked((uint)GetInstanceID());
     private IBattleUiFreezeSource Source => dataSource as IBattleUiFreezeSource;
@@ -55,8 +65,18 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
 
     public bool RequestClick()
     {
-        if (!isActiveAndEnabled || Source == null || effect == null || !effect.Available) return false;
+        if (!isActiveAndEnabled || Source == null) return false;
         Refresh();
+        if (Source is IBattleUiControlReleaseSource controls && controls.GetControl().Airborne != null)
+        {
+            if (!controls.CanClickControl) return false;
+            LastResult = FrozenThawClickResult.Ignored;
+            var clicked = controls.ClickControl();
+            if (clicked == AllyControlClickResult.InsufficientAP) Pulse();
+            Refresh();
+            return clicked == AllyControlClickResult.Progressed || clicked == AllyControlClickResult.Released;
+        }
+        if (effect == null || !effect.Available) return false;
         var state = Source.GetFreeze();
         if (state.Instance == null || !state.CanInteract) return false;
         LastResult = Source.ClickThaw();
@@ -67,10 +87,20 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
 
     public void Refresh()
     {
-        if (Source == null || effect == null || !effect.Available)
-        { if (hitArea != null) hitArea.raycastTarget = false; return; }
+        if (Source == null)
+        { airborneStars?.SetRemaining(0); if (hitArea != null) hitArea.raycastTarget = false; return; }
+        var controls = Source as IBattleUiControlReleaseSource;
+        var airborne = controls?.GetControl().Airborne;
+        // 先读旧实例。成功解除后即使已经换成下一份控制，第三下仍对应刚解除的实例。
+        if (observedAirborne != null && observedAirborne.ControlReleaseClicks != renderedAirborneProgress) Pulse();
+        observedAirborne = airborne;
+        renderedAirborneProgress = airborne?.ControlReleaseClicks ?? 0;
+        airborneStars?.SetRemaining(airborne == null ? 0 : AllyControlRelease.RequiredClicks - renderedAirborneProgress);
         var state = Source.GetFreeze();
-        if (hitArea != null) hitArea.raycastTarget = isActiveAndEnabled && state.Instance != null && state.CanInteract;
+        bool iceAvailable = effect != null && effect.Available;
+        if (hitArea != null) hitArea.raycastTarget = isActiveAndEnabled &&
+            ((airborne != null && controls.CanClickControl) || (iceAvailable && state.Instance != null && state.CanInteract));
+        if (!iceAvailable) return;
         if (state.Instance == null)
         {
             if (observed != null && observed.ThawClicks == FrozenThawInteraction.RequiredClicks)
@@ -98,7 +128,8 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
     }
     private void OnDisable()
     {
-        shake?.Cancel(Playback); observed = null;
+        shake?.Cancel(Playback); observed = null; observedAirborne = null;
+        airborneStars?.SetRemaining(0);
         if (hitArea != null) hitArea.raycastTarget = false;
         effect?.Hide();
     }

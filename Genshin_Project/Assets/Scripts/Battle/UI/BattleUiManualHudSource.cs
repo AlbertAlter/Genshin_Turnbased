@@ -22,6 +22,8 @@ public sealed class BattleUiManualHudSource : MonoBehaviour, IBattleUiHealthSour
         public bool visible = true, frozen;
         public int cooldown;
         public string icon;
+        public string element;
+        public float energy = 100, maximumEnergy = 100;
     }
     public Meter[] health = Array.Empty<Meter>(), enemyShields = Array.Empty<Meter>();
     public Action[] actions = Array.Empty<Action>();
@@ -37,6 +39,7 @@ public sealed class BattleUiManualHudSource : MonoBehaviour, IBattleUiHealthSour
     {
         var a = isActiveAndEnabled ? Array.Find(actions, x => x != null && x.slot == slot && x.skillType == skillType) : null;
         return a == null ? default : new BattleUiActionState { Identity = a, Visible = a.visible,
-            Frozen = a.frozen, Cooldown = a.cooldown, Icon = a.icon };
+            Frozen = a.frozen, Cooldown = a.cooldown, Icon = a.icon, Element = a.element,
+            Energy = a.energy, MaximumEnergy = a.maximumEnergy };
     }
 }

@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component size="116,35">
+  <controller name="quantity" pages="0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9" selected="0" />
+  <displayList>
+    <text id="n1_c000b" name="count" xy="34,0" size="48,34" font="Microsoft YaHei" fontSize="20" color="#342B24" text="0" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true">
+      <gearText controller="quantity" pages="0,1,2,3,4,5,6,7,8,9" values="0|1|2|3|4|5|6|7|8|9" />
+    </text>
+    <graph id="n2_c000b" name="minusDisabled" xy="0,1" size="34,33" type="rect" fillColor="#C1B7A8" lineSize="0" corner="5,5,5,5" touchable="false" />
+    <text id="n3_c000b" name="minusLabel" xy="0,1" size="34,33" font="Microsoft YaHei" fontSize="18" color="#55493D" text="−" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n4_c000b" name="plusDisabled" xy="82,1" size="34,33" type="rect" fillColor="#C1B7A8" lineSize="0" corner="5,5,5,5" touchable="false" />
+    <text id="n5_c000b" name="plusLabel" xy="82,1" size="34,33" font="Microsoft YaHei" fontSize="18" color="#55493D" text="+" align="center" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <component id="n6_c000b" name="plus_0" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="1" />
+      <gearDisplay controller="quantity" pages="0" />
+    </component>
+    <component id="n7_c000b" name="minus_1" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="0" />
+      <gearDisplay controller="quantity" pages="1" />
+    </component>
+    <component id="n8_c000b" name="plus_1" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="2" />
+      <gearDisplay controller="quantity" pages="1" />
+    </component>
+    <component id="n9_c000b" name="minus_2" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="1" />
+      <gearDisplay controller="quantity" pages="2" />
+    </component>
+    <component id="n10_c000b" name="plus_2" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="3" />
+      <gearDisplay controller="quantity" pages="2" />
+    </component>
+    <component id="n11_c000b" name="minus_3" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="2" />
+      <gearDisplay controller="quantity" pages="3" />
+    </component>
+    <component id="n12_c000b" name="plus_3" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="4" />
+      <gearDisplay controller="quantity" pages="3" />
+    </component>
+    <component id="n13_c000b" name="minus_4" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="3" />
+      <gearDisplay controller="quantity" pages="4" />
+    </component>
+    <component id="n14_c000b" name="plus_4" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="5" />
+      <gearDisplay controller="quantity" pages="4" />
+    </component>
+    <component id="n15_c000b" name="minus_5" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="4" />
+      <gearDisplay controller="quantity" pages="5" />
+    </component>
+    <component id="n16_c000b" name="plus_5" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="6" />
+      <gearDisplay controller="quantity" pages="5" />
+    </component>
+    <component id="n17_c000b" name="minus_6" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="5" />
+      <gearDisplay controller="quantity" pages="6" />
+    </component>
+    <component id="n18_c000b" name="plus_6" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="7" />
+      <gearDisplay controller="quantity" pages="6" />
+    </component>
+    <component id="n19_c000b" name="minus_7" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="6" />
+      <gearDisplay controller="quantity" pages="7" />
+    </component>
+    <component id="n20_c000b" name="plus_7" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="8" />
+      <gearDisplay controller="quantity" pages="7" />
+    </component>
+    <component id="n21_c000b" name="minus_8" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="7" />
+      <gearDisplay controller="quantity" pages="8" />
+    </component>
+    <component id="n22_c000b" name="plus_8" xy="82,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="+" controller="quantity" page="9" />
+      <gearDisplay controller="quantity" pages="8" />
+    </component>
+    <component id="n23_c000b" name="minus_9" xy="0,1" size="34,33" src="c0006" fileName="QuantityButton.xml">
+      <Button title="−" controller="quantity" page="8" />
+      <gearDisplay controller="quantity" pages="9" />
+    </component>
+  </displayList>
+</component>

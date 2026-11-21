@@ -33,6 +33,8 @@ public class StageSetupData
     public int BattleID = 1;                              // 战斗背景编号，对应 BattleBG/{BattleID}_BG.png
     public List<StageAllySetup> Allies = new List<StageAllySetup>();      // 我方队伍（最多4）
     public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();   // 敌方阵容（最多5）
+    public float EnemyHPMultiplier = 1f;
+    public float EnemyATKMultiplier = 1f;
     public string InitialEnergyMode = "Percent";   // Percent=百分比 / Fixed=固定数值
     public float InitialEnergyValue = 0f;          // 对应模式的数值
 

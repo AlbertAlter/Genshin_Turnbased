@@ -1,108 +1,144 @@
-using TMPro;
+using System;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-/// <summary>状态图标悬停说明。打开期间持续读取动态描述，不把结果写回共享主表。</summary>
-public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+/// <summary>绑定状态图标与其真实实例的详情；生命周期随图标池中的当前绑定。</summary>
+public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHandler
 {
-    private StatusInstance status;
-    private object host;
-    private bool hovering;
-    private RectTransform popup;
-    private TMP_Text description;
-    private Canvas canvas;
-    private Vector2 pointerPosition;
-    private Camera pointerCamera;
+    private const string ViewResource = "UI/BattleSkillInfo";
 
-    public void Bind(StatusInstance value, object statusHost)
+    private StatusInstance status;
+    private BattleEntity host;
+    private BattleInputController input;
+    private Canvas canvas;
+    private RectTransform overlay;
+    private BattleSkillInfoView view;
+    private BattleInfoPopupStyle style;
+    private bool open;
+    private bool langError;
+    private string shownBody, shownSummary;
+
+    public void Bind(StatusInstance value, BattleEntity statusHost, BattleInputController battleInput)
     {
-        // 图标池排序/复用后，不把原来悬停的状态说明偷偷改成另一份状态。
-        if (!ReferenceEquals(status, value) || !ReferenceEquals(host, statusHost)) Hide();
+        if (!ReferenceEquals(status, value) || !ReferenceEquals(host, statusHost) || input != battleInput) Close();
         status = value;
         host = statusHost;
+        input = battleInput;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (!CanShow()) return;
-        pointerPosition = eventData.position;
-        pointerCamera = eventData.enterEventCamera;
-        hovering = true;
-        EnsurePopup();
-        RefreshDescription();
+        if (eventData.button != PointerEventData.InputButton.Left || eventData.dragging || open
+            || input?.IsUiInputBlocked == true || !CanShow()) return;
+        canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) return;
+        var prefab = Resources.Load<GameObject>(ViewResource)?.GetComponent<BattleSkillInfoView>();
+        if (prefab == null)
+        {
+            Debug.LogError("[UI] 状态详情缺少共用弹窗预制件：" + ViewResource, this);
+            return;
+        }
+
+        style = BattleInfoPopupStyle.Load();
+        overlay = BattleSkillInfoView.CreateDismissOverlay(canvas, "StatusInfoOverlay", Close);
+        view = Instantiate(prefab, overlay, false);
+        view.name = "StatusInstanceInfo";
+        Refresh(true);
+        input?.SetUiInputBlocked(this, true);
+        open = true;
+        eventData.Use();
     }
 
-    public void OnPointerExit(PointerEventData eventData) => Hide();
-    private void OnDisable() => Hide();
-    private void OnDestroy() { if (popup != null) Destroy(popup.gameObject); }
-    private void LateUpdate() { if (hovering) RefreshDescription(); }
+    private void LateUpdate()
+    {
+        if (!open) return;
+        if (canvas == null || !canvas.isActiveAndEnabled || view == null || !CanShow()
+            || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
+        { Close(); return; }
+        Refresh(false);
+    }
+
+    private void OnDisable() => Close();
+    private void OnApplicationFocus(bool focused) { if (!focused) Close(); }
 
     private bool CanShow()
-        => isActiveAndEnabled && status != null && status.IsActive && status.MainData?.Display == 1;
+        => isActiveAndEnabled && status?.IsActive == true && status.MainData?.Display == 1
+            && host?.IsAlive == true && host.IsOnField && host.HasStatusInstance(status)
+            && BattleManager.Instance?.IsBattleOver != true;
 
-    private void Hide()
+    internal static bool ShowsCount(StatusInstance status)
     {
-        hovering = false;
-        if (popup != null) popup.gameObject.SetActive(false);
-    }
-
-    private void EnsurePopup()
-    {
-        if (popup != null) return;
-        var parentCanvas = GetComponentInParent<Canvas>();
-        if (parentCanvas == null) return;
-        canvas = parentCanvas.rootCanvas;
-        var panel = new GameObject("StatusDescription", typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
-        popup = panel.GetComponent<RectTransform>();
-        popup.SetParent(canvas.transform, false);
-        popup.anchorMin = popup.anchorMax = Vector2.zero;
-        popup.pivot = new Vector2(0f, 1f);
-        var background = panel.GetComponent<Image>();
-        background.color = new Color(0.08f, 0.08f, 0.08f, 0.95f);
-        background.raycastTarget = false;
-        var group = panel.GetComponent<CanvasGroup>();
-        group.blocksRaycasts = false;
-        group.interactable = false;
-        var textObject = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
-        textObject.transform.SetParent(popup, false);
-        description = textObject.GetComponent<TextMeshProUGUI>();
-        var owner = GetComponentInParent<UIBattleController>();
-        var reference = owner != null ? owner.GetComponentInChildren<TMP_Text>(true) : null;
-        if (reference != null && reference.font != null) description.font = reference.font;
-        description.fontSize = 18f;
-        description.color = Color.white;
-        description.richText = false;
-        description.raycastTarget = false;
-        description.enableWordWrapping = true;
-        description.alignment = TextAlignmentOptions.TopLeft;
-        var textRect = description.rectTransform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = new Vector2(12f, 10f);
-        textRect.offsetMax = new Vector2(-12f, -10f);
-    }
-
-    private void RefreshDescription()
-    {
-        if (!CanShow()) { Hide(); return; }
-        if (popup == null || description == null || canvas == null) return;
-        string lifetime = status.IsPermanent ? "持续存在" : $"剩余{status.RemainingPhaseCount}回合";
-        string content = $"{status.MainData.StatusName}\n{status.GetDescription(host)}\n{lifetime}";
-        if (description.text != content) description.text = content;
-        var canvasRect = (RectTransform)canvas.transform;
-        float width = Mathf.Min(360f, Mathf.Max(24f, canvasRect.rect.width));
-        float height = description.GetPreferredValues(content, Mathf.Max(1f, width - 24f), Mathf.Infinity).y + 20f;
-        popup.sizeDelta = new Vector2(width, height);
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, pointerPosition, pointerCamera, out Vector2 local))
+        if (!CountStatusSystem.IsCount(status.MainData)) return false;
+        switch (status.StatusID2)
         {
-            float x = local.x - canvasRect.rect.xMin + 16f;
-            float y = local.y - canvasRect.rect.yMin - 16f;
-            popup.anchoredPosition = new Vector2(
-                Mathf.Clamp(x, 0f, Mathf.Max(0f, canvasRect.rect.width - width)),
-                Mathf.Clamp(y, Mathf.Min(height, canvasRect.rect.height), canvasRect.rect.height));
+            case XingqiuScriptHooks.Rainbow:
+            case WidsithWeaponCount.ID:
+            // 这些Count保存增益值而非层数，实际增益已显示在正文。
+            case "ST_Weapon_4309102": case "ST_Weapon_4309502": case "ST_Weapon_4309602":
+            case "ST_Weapon_4310002": case "ST_Weapon_4310902": case "ST_Weapon_4313402":
+            case "ST_Weapon_4314604": case "ST_Weapon_4321203":
+                return false;
+            default: return true;
         }
-        popup.SetAsLastSibling();
-        popup.gameObject.SetActive(true);
+    }
+
+    private static string CountLabel(string id)
+    {
+        switch (id)
+        {
+            case YanfeiScriptHooks.Brilliance: return "累计AP";
+            case SeaHuedClamArtifact.BubbleID: case SongOfDaysPastArtifact.RecordID: return "累计治疗";
+            case SongOfDaysPastArtifact.WaveID: return "记录治疗";
+            case "ST_Weapon_4304903": case "ST_Weapon_4309402": case "ST_Weapon_4316203":
+            case "ST_Weapon_4317103": case "ST_Weapon_4318703": return "剩余次数";
+            default: return "层数";
+        }
+    }
+
+    private void Close()
+    {
+        if (open && input != null) input.SetUiInputBlocked(this, false);
+        open = false;
+        if (overlay != null)
+        {
+            overlay.gameObject.SetActive(false);
+            Destroy(overlay.gameObject);
+        }
+        overlay = null;
+        view = null;
+        langError = false;
+        shownBody = shownSummary = null;
+    }
+
+    private void Refresh(bool first)
+    {
+        string summary = status.IsPermanent ? "剩余回合数：不限" : $"剩余回合数：{status.RemainingPhaseCount}";
+        if (ShowsCount(status))
+        {
+            string count = status.HasIntegerRuntimeValue ? status.RuntimeIntValue.ToString(CultureInfo.InvariantCulture)
+                : status.RuntimeValue.ToString("0.##", CultureInfo.InvariantCulture);
+            summary += "   " + CountLabel(status.StatusID2) + "：" + count;
+        }
+        string langBody = null;
+        if (!langError)
+        {
+            try { langBody = DataManager.Instance?.GetStatusIconDescriptionText(status, host); }
+            catch (FormatException error)
+            {
+                Debug.LogError(error.Message, this);
+                langError = true;
+            }
+        }
+        string body = langBody ?? status.GetDescription(host);
+        bool changed = first || shownSummary != summary || shownBody != body;
+        if (changed)
+        {
+            view.ShowStatusInstance(status.MainData.StatusName, summary, body, langBody != null);
+            shownSummary = summary;
+            shownBody = body;
+        }
+
+        view.LayoutBelowAnchor((RectTransform)canvas.transform, (RectTransform)transform, style, changed, first);
     }
 }

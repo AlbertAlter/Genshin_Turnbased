@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 场景外养成入口。UI 先用草稿 Preview/GetAdditionalMaterialLimit 或 PreviewSkillUpgrade，
+/// 场景外养成入口。UI 从当前快照读取经验、精炼与技能预览，
 /// 确认后带当前 StepId 提交；天赋调用 draft.UpgradeSkill(characterId, skillIndex, targetBaseLevel)。
 /// 节点系统注入突破门槛；通过门槛后的 ReconcileUnlockedProgress 可与节点结果一并提交。
 /// </summary>
@@ -47,6 +47,15 @@ public sealed class RoguelikeUpgradeService
     public RoguelikeUpgradeTransaction CreateDraft(RoguelikeProgressSnapshot source)
         => CreateDraft(source, randomSource ?? BattleRandom.Source);
 
+    internal RoguelikeUpgradePreview PreviewLevel(RoguelikeProgressSnapshot snapshot, RoguelikeUpgradeLimits limits,
+        RoguelikeUpgradeTarget target, IReadOnlyList<RoguelikeItemStackData> selected)
+        => RoguelikeUpgradeTransaction.Preview(snapshot, target, selected, equipment, items, requirements, artifactConfig, limits);
+
+    internal RoguelikeSkillUpgradePreview PreviewSkillUpgrade(RoguelikeProgressSnapshot snapshot,
+        RoguelikeUpgradeLimits limits, int characterId, int skillIndex, int targetBaseLevel)
+        => RoguelikeUpgradeTransaction.PreviewSkillUpgrade(snapshot, items, requirements, limits,
+            characterId, skillIndex, targetBaseLevel);
+
     private RoguelikeUpgradeTransaction CreateDraft(RoguelikeProgressSnapshot source, IBattleRandomSource random)
     {
         int unlocked = gate.GetUnlockedAscensions(RoguelikeSaveJson.DeepClone(source));
@@ -55,6 +64,9 @@ public sealed class RoguelikeUpgradeService
 
     /// <summary>升级、命座消耗和实例变化只保存一次；保存失败不发布 Changed，不提交部分结果。</summary>
     public RoguelikeSaveResult Commit(string stepId, Action<RoguelikeUpgradeTransaction> operation)
+        => CommitWithContext(stepId, operation);
+
+    internal RoguelikeSaveResult<RoguelikeFlowContext> CommitWithContext(string stepId, Action<RoguelikeUpgradeTransaction> operation)
     {
         if (operation == null || committing) return Invalid("养成操作不能为空，也不能在提交时重入。");
         var current = flow.Resume();
@@ -79,7 +91,7 @@ public sealed class RoguelikeUpgradeService
             draft = CreateDraft(current.Data.Snapshot, retryRandom);
             operation(draft);
             var snapshot = draft.ExportSnapshot();
-            var result = flow.CommitProgressAction(stepId, snapshot, RoguelikeSaveReason.CharacterUpgraded);
+            var result = flow.CommitProgressActionWithContext(stepId, snapshot, RoguelikeSaveReason.CharacterUpgraded);
             if (!result.Succeeded) return result;
             draft.Close();
             retryRandom = null; retryStep = null; retrySource = null;
@@ -91,7 +103,7 @@ public sealed class RoguelikeUpgradeService
         }
         catch (Exception exception)
         {
-            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation,
+            return RoguelikeSaveResult<RoguelikeFlowContext>.Failure(RoguelikeSaveErrorCode.InvalidOperation,
                 "养成操作未提交：" + exception.Message, exception);
         }
         finally
@@ -101,8 +113,8 @@ public sealed class RoguelikeUpgradeService
         }
     }
 
-    private static RoguelikeSaveResult Invalid(string message)
-        => RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, message);
+    private static RoguelikeSaveResult<RoguelikeFlowContext> Invalid(string message)
+        => RoguelikeSaveResult<RoguelikeFlowContext>.Failure(RoguelikeSaveErrorCode.InvalidOperation, message);
 
     /// <summary>
     /// 只缓存统一随机入口的实际抽取，不创建新随机流。同一服务同一步骤保存失败后重试复用值，

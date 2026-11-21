@@ -13,7 +13,7 @@ public partial class DataManager
     {
         string path = Path.Combine(ChartsPath, "ReactionLevelCoefficient.xlsx");
         if (!File.Exists(path)) return;
-        using var pkg = new ExcelPackage(new FileInfo(path));
+        using var pkg = OpenDataWorkbook(path);
         var sheet = pkg.Workbook.Worksheets[0];
         if (sheet == null) return;
         int startRow = GetDataStartRow(sheet);

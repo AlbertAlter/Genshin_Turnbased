@@ -26,19 +26,29 @@ public partial class EnemyBattleController
         return new List<HitData> { new HitData(multiplier, gauge) };
     }
 
-    private async Task ExecuteEnemyHealAsync(EnemySkillEffectData effect, StatusInstance sourceStatus)
+    private Task ExecuteEnemyHealAsync(EnemySkillEffectData effect, StatusInstance sourceStatus)
+    {
+        if (sourceStatus != null && BattleSpecialRules.HasStatusHealHandler(effect.DamageHook))
+            return BattleSpecialRules.ExecuteStatusHeal(new StatusHealExecution {
+                Effect = dm.StatusEffectDict[effect.SkillEffectID2], Status = sourceStatus, Host = sourceStatus.Host,
+                ExecuteDefault = (targets, formula, ceiling) => ExecuteEnemyHealCore(effect, sourceStatus, targets, formula, ceiling)
+            });
+        return ExecuteEnemyHealCore(effect, sourceStatus, ResolveEnemyTargets(effect, sourceStatus), null, null);
+    }
+
+    private async Task ExecuteEnemyHealCore(EnemySkillEffectData effect, StatusInstance sourceStatus,
+        List<BattleEntity> targets, string formula, float? hpCeiling)
     {
         string skillID = sourceStatus == null ? _currentSkillID2 : null;
-        var targets = ResolveEnemyTargets(effect, sourceStatus);
         await BattleExecution.Play(new BattlePresentationRequest(BattlePresentationKind.Heal,
             Entity, effect.SkillEffectID2, 1, targets), () => {
             using var batch = new HealBatch();
             foreach (var target in targets)
             {
                 if (target == null || !target.IsAlive) continue;
-                float? ceiling = Enemy2011To2020Hooks.HealingCeiling(effect, target);
+                float? ceiling = hpCeiling ?? Enemy2011To2020Hooks.HealingCeiling(effect, target);
                 if (ceiling.HasValue && target.CurrentHP >= ceiling.Value) continue;
-                float amount = ResolveEnemyHealingFormula(effect.Param1, effect, skillID, target);
+                float amount = ResolveEnemyHealingFormula(formula ?? effect.Param1, effect, skillID, target);
                 float outgoing = Entity.HealBonus + Entity.GetStatusHealingBonus(
                     "HealBonus", effect.SkillEffectID2, skillID, -1, effect.Element, target);
                 float incoming = target.BeHealedBonus + target.GetStatusHealingBonus(

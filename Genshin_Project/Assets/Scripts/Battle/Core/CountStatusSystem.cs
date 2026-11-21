@@ -104,6 +104,12 @@ public static class CountStatusSystem
         Register(EulaScriptHooks.Sword, new EulaLightfallCount());
         Register(Enemy2021To2030Hooks.Growth, new Enemy2021To2030Hooks.Counter(3, 3));
         Register(Enemy2021To2030Hooks.Charge, new Enemy2021To2030Hooks.Counter(0, 8));
+        Register(Enemy2061To2063Hooks.Core, new Enemy2061To2063Hooks.CoreCounter());
+        Register(Enemy2081To2085Hooks.GraderCore, new Enemy2061To2063Hooks.CoreCounter());
+        Register(HypostasisPublicStates.Exposure, new HypostasisPublicStates.Counter());
+        Register(HypostasisPublicStates.WindPrisms, new HypostasisPublicStates.Counter());
+        Register(HypostasisPublicStates.ElectroPrisms, new HypostasisPublicStates.Counter());
+        Register(Enemy2071To2073Hooks.Rift, new Enemy2071To2073Hooks.RiftCounter());
         WeaponHooks.RegisterCounts();
         ArtifactHooks.RegisterCounts();
     }

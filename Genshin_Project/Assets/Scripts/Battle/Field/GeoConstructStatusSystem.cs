@@ -110,9 +110,13 @@ public static class GeoConstructStatusSystem
             try
             {
                 Emission.Value = emission;
+                using var emitterExecution = BattleResolutionContext.BeginStatusExecution(emission.Emitter,
+                    joinCurrentExecution: !emission.IsTriggered);
+                await BattleResolutionContext.FlushExecutionStart();
                 var targets = coverage.Where(position => position.Occupant?.IsOnField == true)
                     .Select(position => position.Occupant).ToList();
                 if (targets.Count > 0) await executeDamage(targets);
+                emitterExecution.Complete();
             }
             finally { Emission.Value = previous; }
             if (!source.IsAlive || GetPosition(origin) == null || battle.IsBattleOver) break;

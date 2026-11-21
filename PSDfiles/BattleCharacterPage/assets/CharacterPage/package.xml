@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="chpage01">
+  <resources>
+    <image id="imgbg" name="PanelBackground.png" path="/" />
+    <image id="imgtn" name="ContentTint.png" path="/" />
+    <image id="imgfr" name="PanelBorder.png" path="/" />
+    <image id="imgct" name="CitlaliSample.png" path="/" />
+    <image id="imgam" name="AmberSample.png" path="/" />
+    <image id="circd" name="DeepBrownCircle.png" path="/" />
+    <image id="circl" name="LightBrownCircle.png" path="/" />
+    <image id="icnor" name="2_1.png" path="/" />
+    <image id="ichea" name="2_2.png" path="/" />
+    <image id="icskl" name="1009_S01.png" path="/" />
+    <image id="icbur" name="1009_S02.png" path="/" />
+    <image id="vithp" name="HealthValueIcon.png" path="/" />
+    <image id="vitsh" name="ShieldValueIcon.png" path="/" />
+    <image id="vitnr" name="EnergyChargeFill.png" path="/" />
+    <component id="tab01" name="PageTab.xml" path="/" />
+    <component id="tab02" name="SkillTab.xml" path="/" />
+    <component id="attr1" name="Attributes.xml" path="/" />
+    <component id="vital" name="CharacterVitals.xml" path="/" />
+    <component id="skll1" name="Skills.xml" path="/" />
+    <component id="desc0" name="SkillBody0.xml" path="/" />
+    <component id="desc1" name="SkillBody1.xml" path="/" />
+    <component id="desc2" name="SkillBody2.xml" path="/" />
+    <component id="desc3" name="SkillBody3.xml" path="/" />
+    <component id="equip" name="Equipment.xml" path="/" />
+    <component id="stat1" name="Status.xml" path="/" />
+    <component id="root1" name="CharacterPage.xml" path="/" exported="true" />
+  </resources>
+  <publish name="CharacterPage" />
+</packageDescription>

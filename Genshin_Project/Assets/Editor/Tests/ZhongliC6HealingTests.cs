@@ -16,7 +16,7 @@ namespace GenshinTurnBased.Tests.EditMode
             env.DataManager.StatusActionDict[ZhongliC6Healing.StatusID] = new List<StatusActionData>
             { new StatusActionData { StatusID = 4103209, StatusID2 = ZhongliC6Healing.StatusID,
                 ActionType = "OnTrigger", ScriptHook = ZhongliC6Healing.Trigger, Param1 = Heal, ExecuteCount = 1,
-                MaxTimePerAction = 1 } };
+                MaxTimePerExecution = 1 } };
             env.DataManager.StatusEffectDict[Heal] = new StatusEffectData
             { StatusEffectID = 410320901, StatusEffectID2 = Heal, EffectType = "Heal", TargetType = "Self",
                 DamageHook = ZhongliC6Healing.HealHook, ExecuteCount = 1 };
@@ -52,6 +52,7 @@ namespace GenshinTurnBased.Tests.EditMode
                 (_, __) => heals++, 0);
             BattleExecution.Run(async () =>
             {
+                using var quota = BattleResolutionContext.BeginSkillAction(true);
                 using var action = BattleEventHub.BeginActionExecution(); Start(env);
                 Hit(env, target, 100); await BattleExecution.Flush();
                 Assert.That(target.CurrentHP, Is.EqualTo(500)); Assert.That(heals, Is.Zero);
@@ -72,6 +73,7 @@ namespace GenshinTurnBased.Tests.EditMode
             var listener = Setup(env); var target = env.CreateAlly(2).Entity; target.CurrentHP = 500; Shield(env, 50);
             BattleExecution.Run(async () =>
             {
+                using var quota = BattleResolutionContext.BeginSkillAction(true);
                 using var action = BattleEventHub.BeginActionExecution(); Start(env);
                 Hit(env, target, 100); await BattleExecution.Flush();
                 Assert.That(ZhongliC6Healing.PendingRecordCount(listener), Is.EqualTo(1));
@@ -91,8 +93,10 @@ namespace GenshinTurnBased.Tests.EditMode
             env.Ally.Entity.HealBonus = 1; Shield(env, 500);
             BattleExecution.Run(async () =>
             {
+                using var quota = BattleResolutionContext.BeginSkillAction(true);
                 using var outer = BattleEventHub.BeginActionExecution(); Start(env);
                 Hit(env, target, 300); await BattleExecution.Flush(); Shield(env, 500);
+                using (BattleResolutionContext.BeginSkillAction(true))
                 using (BattleEventHub.BeginActionExecution()) { Start(env); End(env); await BattleExecution.Flush(); }
                 Assert.That(target.CurrentHP, Is.EqualTo(200));
                 End(env); await BattleExecution.Flush();
@@ -108,11 +112,33 @@ namespace GenshinTurnBased.Tests.EditMode
             var shield = Shield(env, 500);
             BattleExecution.Run(async () =>
             {
+                using var quota = BattleResolutionContext.BeginSkillAction(true);
                 using var action = BattleEventHub.BeginActionExecution(); Start(env);
                 Hit(env, target, 100, "True"); await BattleExecution.Flush();
                 env.Ally.Entity.RemoveStatusInstance(shield);
                 Hit(env, target, 100); await BattleExecution.Flush(); End(env); await BattleExecution.Flush();
                 Assert.That(target.CurrentHP, Is.EqualTo(300));
+                Assert.That(ZhongliC6Healing.PendingRecordCount(listener), Is.Zero);
+            }).GetAwaiter().GetResult();
+        }
+
+        [Test] public void IndependentEnemyStatus_HealsAfterAllHits_AndRetainsBrokenShieldRecord()
+        {
+            using var env = new BattleFlowTestEnv(); env.CreateMinimalBattle();
+            var listener = Setup(env); var target = env.CreateAlly(2).Entity; target.CurrentHP = 500;
+            var shield = Shield(env, 150); int heals = 0;
+            using var subscription = BattleEventHub.Subscribe<HealEventData>(BattleEventKind.HealResolved, (_, __) => heals++, 0);
+            BattleExecution.Run(async () => {
+                using (var state = BattleResolutionContext.BeginStatusExecution(new StatusInstance()))
+                {
+                    Hit(env, target, 100); await BattleExecution.Flush();
+                    Hit(env, target, 100); await BattleExecution.Flush();
+                    Assert.That(shield.IsActive, Is.False); Assert.That(heals, Is.Zero);
+                    Assert.That(ZhongliC6Healing.PendingRecordCount(listener), Is.EqualTo(2));
+                    state.Complete();
+                }
+                await BattleExecution.Flush();
+                Assert.That(target.CurrentHP, Is.EqualTo(530)); Assert.That(heals, Is.EqualTo(2));
                 Assert.That(ZhongliC6Healing.PendingRecordCount(listener), Is.Zero);
             }).GetAwaiter().GetResult();
         }

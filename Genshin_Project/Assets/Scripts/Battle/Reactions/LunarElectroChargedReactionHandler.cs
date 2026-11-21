@@ -209,7 +209,7 @@ public sealed class LunarElectroChargedReactionHandler : IDisposable
             if (battle == null || battle.IsBattleOver || !ReferenceEquals(battle.TeamBonuses, team)) return;
             using var resolution = BattleEventHub.BeginResolution();
             using var responses = BattleResolutionContext.BeginCollection();
-            using var effect = BattleResolutionContext.BeginEffect();
+            using var effect = ReactionEffectExecutor.BeginDamageEffect();
             CloudRuntime state = Runtime;
             var hits = new ReactionResult();
             foreach (var enemy in battle.Enemies)

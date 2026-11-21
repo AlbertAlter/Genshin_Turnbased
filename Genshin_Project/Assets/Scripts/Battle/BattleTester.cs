@@ -12,11 +12,8 @@ using UnityEngine;
 ///  - 敌方：由关卡编辑器 Stage JSON 的 EnemyID、Level、Slot 决定
 ///  - 自动调用 BattleManager.StartBattle() 启动六阶段循环
 /// </summary>
-public class BattleTester : MonoBehaviour
+public class BattleTester : BattleSceneRuntime
 {
-    // Legacy test scene creates its manager at startup; bind the explicitly selected voice module then.
-    public CharacterBattleVoice characterVoice;
-    public BattleUiStatusRiseView statusRise;
     /// <summary>编辑器热加载请求：StageBuilder 置 true 后本组件下一帧重建战斗</summary>
     public static bool ReloadRequest = false;
 
@@ -28,33 +25,7 @@ public class BattleTester : MonoBehaviour
 
     void Start()
     {
-        // 输入控制：测试时自动挂载（正式场景手动挂 BattleInputController）
-        if (GetComponent<BattleInputController>() == null)
-            gameObject.AddComponent<BattleInputController>();
-
-        // 确保 DataManager 已初始化
-        if (DataManager.Instance == null)
-        {
-            var dmGO = new GameObject("DataManager");
-            dmGO.AddComponent<DataManager>();
-        }
-
-        var dm = DataManager.Instance;
-        if (dm == null || !dm.IsLoaded)
-        {
-            Debug.LogError("DataManager 初始化失败或配表未完整加载，已停止启动战斗。请先处理上方配表错误。");
-            return;
-        }
-
-        // 确保 BattleManager 存在
-        if (BattleManager.Instance == null)
-            gameObject.AddComponent<BattleManager>();
-
-        var bm = BattleManager.Instance;
-        if (characterVoice != null) characterVoice.battle = bm;
-        if (statusRise != null) statusRise.battle = bm;
-        bm.UnregisterAll();
-
+        PrepareScene();
         // ---- 读取关卡配置（编辑器工具生成的 JSON，无则用默认） ----
         StageSetupData cfg = LoadStageConfig();
         ReloadStage(cfg);
@@ -92,58 +63,7 @@ public class BattleTester : MonoBehaviour
             profiles.Add(CharacterProgressSource == null ? CharacterProfile.FromStageAlly(cfg.Allies[i])
                 : CharacterProfile.FromProgress(CharacterProgressSource.GetCharacterProgress(cfg.Allies[i].CharacterID)));
 
-        // 先保留旧对象引用，再彻底结束上一场。ResetBattle 会清空注册表和场地。
-        var oldAllies = new List<CharacterBattleController>(bm.Allies);
-        var oldEnemies = new List<EnemyBattleController>(bm.Enemies);
-        GetComponent<BattleInputController>()?.ResetForBattle();
-        bm.ResetBattle();
-
-        // 销毁旧实体
-        foreach (var ally in oldAllies)
-        {
-            if (ally != null && ally.gameObject != null)
-                Destroy(ally.gameObject);
-        }
-        foreach (var enemy in oldEnemies)
-        {
-            if (enemy != null && enemy.gameObject != null)
-                Destroy(enemy.gameObject);
-        }
-
-        // ---- 创建我方角色 ----
-        for (int i = 0; i < cfg.Allies.Count && i < 4; i++)
-        {
-            var a = cfg.Allies[i];
-            var allyGO = new GameObject($"Ally_{a.CharacterID}");
-            var allyCtrl = allyGO.AddComponent<CharacterBattleController>();
-            CharacterBuildApplier.InitializePanel(allyCtrl, profiles[i]);
-
-            allyCtrl.IsActive = (i == 0);
-            if (allyCtrl.Entity != null)
-            {
-                allyCtrl.Entity.Side = BattleSide.Ally;
-                allyCtrl.Entity.SlotPosition = i + 1;  // 先设位置再注册，避免 AssignToField 用默认0
-                LogManager.Log(LogCategory.Ally, $"{a.CharacterID} 分配位置 pos={i + 1}");
-            }
-            bm.RegisterAlly(allyCtrl);
-        }
-
-        // ---- 创建敌方（按配置的槽位） ----
-        foreach (var e in cfg.Enemies)
-        {
-            SpawnEnemy(bm, e.EnemyID, $"Enemy_{e.EnemyID}", e.Slot, e.Level);
-        }
-
-        // 先完成双方实体、真实站位和注册，再挂载构筑。OnApply/BindStatus 的 Self、全队、
-        // 敌方目标都依赖这些注册信息；逐人创建时提前应用会漏掉本人或后续成员，不能靠重跑OnApply补救。
-        for (int i = 0; i < bm.Allies.Count; i++)
-            CharacterBuildApplier.ApplyBuild(bm.Allies[i], profiles[i]);
-
-        // ---- 初始能量 ----
-        ApplyInitialEnergy(cfg);
-
-        // 启动全新的测试战斗
-        bm.StartBattle();
+        Assemble(cfg, profiles);
     }
 
     // 读取关卡配置：优先用 Inspector 拖的 TextAsset，否则读 Resources/StageConfig
@@ -166,36 +86,5 @@ public class BattleTester : MonoBehaviour
         return cfg;
     }
 
-    // 初始能量：Percent=MaxEnergy百分比 / Fixed=固定值
-    private void ApplyInitialEnergy(StageSetupData cfg)
-    {
-        var allies = BattleManager.Instance != null ? BattleManager.Instance.Allies : null;
-        if (allies == null) return;
 
-        foreach (var ally in allies)
-        {
-            if (ally == null || ally.Entity == null) continue;
-            float max = ally.Entity.MaxEnergy;
-            if (max <= 0) continue;
-
-            if (cfg.InitialEnergyMode == "Fixed")
-                ally.Entity.CurrentEnergy = cfg.InitialEnergyValue;
-            else
-                ally.Entity.CurrentEnergy = max * Mathf.Clamp01(cfg.InitialEnergyValue / 100f);
-        }
-    }
-
-    private void SpawnEnemy(BattleManager bm, int enemyID, string name, int position, int level = 1)
-    {
-        var enemyGO = new GameObject(name);
-        var enemyCtrl = enemyGO.AddComponent<EnemyBattleController>();
-        enemyCtrl.InitEnemy(enemyID, level);
-        if (enemyCtrl.Entity != null)
-        {
-            enemyCtrl.Entity.Side = BattleSide.Enemy;
-            enemyCtrl.Entity.SlotPosition = position;   // 先设位置再注册，避免 AssignToField 用默认0
-            LogManager.Log(LogCategory.Enemy, $"{enemyID} 分配位置 pos={position}");
-        }
-        bm.RegisterEnemy(enemyCtrl);
-    }
 }

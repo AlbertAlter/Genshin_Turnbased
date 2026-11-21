@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 单次伤害结算结果（2026-08-19，状态钩子任务）。
 ///  - ActualHPDamage = HPBefore - HPAfter（不小于0）
-///  - CausedDeath = HPBefore > 0 且 HPAfter &lt;= 0；同一已经死亡的目标再次受击不会再次产生死亡声明
+///  - CausedDeath 表示真正死亡；非末生命阶段归零只标记该阶段耗尽
 ///  - HitLanded 表示有效命中了目标，不要求实际扣血（护盾全吸收时也可为 true）
 /// </summary>
 [Serializable]
@@ -49,6 +49,9 @@ public sealed class DamageResolvedEvent
     public bool SourceWasPartyMember;
     public bool SourceWasOnField;
 
+    /// <summary>本次战技伤害提交时，来源角色战技槽可重置的技能 ID。空值表示没有可确定的目标。</summary>
+    public string SourceSkillSlotCooldownID;
+
     /// <summary>受击前生命值。</summary>
     public float HPBefore;
 
@@ -66,6 +69,7 @@ public sealed class DamageResolvedEvent
 
     /// <summary>本次伤害是否导致目标从存活变为死亡。</summary>
     public bool CausedDeath;
+    internal int DepletedEnemyPhase;
 
     public DamageResolvedEvent Snapshot()
     {

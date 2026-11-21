@@ -28,6 +28,7 @@ public sealed class UICardFrameView : MonoBehaviour
         }
     }
     private Image frameImage, glowImage, innerImage;
+    private Image contentMaskImage, innerMaskImage;
     private RectTransform visuals;
     private Sprite frame;
     private int maskKey;
@@ -52,11 +53,13 @@ public sealed class UICardFrameView : MonoBehaviour
         glowImage = AddPaddedImage("SelectionGlow", visuals, glow, basis); glowImage.enabled = false;
         BackEffects = Stretch("EffectsBehind", visuals);
         RectTransform content = AddMask("CardContentMask", visuals, silhouette);
+        contentMaskImage = content.GetComponent<Image>();
         Surface = Stretch("CardSurface", content).gameObject.AddComponent<RawImage>();
         Surface.raycastTarget = false; Surface.texture = texture;
         frameImage = AddImage("Frame", visuals, frame);
         // Keep the frame's original antialiased outside edge, then put the clipped inner shadow above it.
         RectTransform shade = AddMask("CardInnerShadowMask", visuals, silhouette);
+        innerMaskImage = shade.GetComponent<Image>();
         innerImage = AddImage("InnerShadow", shade, innerShadow);
         FreezeLayer = Stretch("FreezeOverlay", visuals);
         ShieldLayer = Stretch("ShieldOverlay", visuals);
@@ -69,6 +72,16 @@ public sealed class UICardFrameView : MonoBehaviour
             Root.rect.width * frame.rect.height / frame.rect.width);
     }
     public void SetFrameVisible(bool visible) { if (frameImage != null) frameImage.enabled = visible; }
+    /// <summary>Automatic cosmetic update; preserves surface/video, effects, positions, sizes and hierarchy.</summary>
+    public void ReplaceFrame(Sprite replacement)
+    {
+        if (replacement == null) throw new ArgumentNullException(nameof(replacement));
+        if (frameImage == null || frame == replacement) return;
+        Sprite opening = AcquireMask(replacement); // Validate before releasing a working mask.
+        ReleaseMask(); frame = replacement; maskKey = replacement.GetInstanceID();
+        frameImage.sprite = replacement;
+        contentMaskImage.sprite = innerMaskImage.sprite = opening;
+    }
     public void SetSurfaceTexture(Texture texture)
     {
         if (Surface == null) return;
@@ -196,8 +209,12 @@ public sealed class UICardFrameView : MonoBehaviour
     public void Clear()
     {
         if (visuals != null) { visuals.gameObject.SetActive(false); Destroy(visuals.gameObject); visuals = null; }
-        Surface = null; frameImage = glowImage = innerImage = OuterShadow = null;
+        Surface = null; frameImage = glowImage = innerImage = OuterShadow = contentMaskImage = innerMaskImage = null;
         FrontEffects = BackEffects = FreezeLayer = ShieldLayer = null; frame = null;
+        ReleaseMask();
+    }
+    private void ReleaseMask()
+    {
         if (maskKey != 0 && Masks.TryGetValue(maskKey, out var mask) && --mask.Users == 0)
         {
             Destroy(mask.Sprite.texture); Destroy(mask.Sprite);

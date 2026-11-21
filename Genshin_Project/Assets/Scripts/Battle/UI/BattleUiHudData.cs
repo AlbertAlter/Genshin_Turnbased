@@ -26,6 +26,8 @@ public struct BattleUiActionState
     public bool HasAvailableCharge;
     public int Cooldown;
     public string Icon;
+    public string Element;
+    public float Energy, MaximumEnergy;
 }
 
 public interface IBattleUiHealthSource

@@ -11,6 +11,8 @@ public sealed class UIBattlePressArea : MonoBehaviour, IPointerDownHandler, IPoi
     private double pressedAt;
     private bool held;
 
+    public void BindClick(Action onClick) => Bind(float.PositiveInfinity, onClick, null, null);
+
     public void Bind(float seconds, Action onClick, Action onHold, Action onRelease)
     {
         threshold = Mathf.Max(.05f, seconds);

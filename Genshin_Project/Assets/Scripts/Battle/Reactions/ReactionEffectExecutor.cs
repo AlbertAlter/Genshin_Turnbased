@@ -1,8 +1,43 @@
+using System;
 using System.Collections.Generic;
 
 /// <summary>统一执行反应生成的派生命中；派生 Hit 的元素量由 handler 明确填写。</summary>
 public static class ReactionEffectExecutor
 {
+    /// <summary>
+    /// 代码生成的伤害效果也具有真实执行身份。独立tick不传编号，取得新编号；
+    /// 原效果的即时派生传入正在执行的编号，保留既有因果与连锁限次范围。
+    /// 不发布额外行动或伤害声明，实际结果仍由HitBatch提交。
+    /// </summary>
+    public sealed class DamageEffectScope : IDisposable
+    {
+        public long ExecutionID { get; }
+        private readonly IDisposable counterScope;
+        private readonly IDisposable executionScope;
+        private readonly IDisposable participantScope;
+        private bool disposed;
+
+        internal DamageEffectScope(long executionID)
+        {
+            participantScope = BattleResolutionContext.BeginIndependentExecution();
+            counterScope = BattleResolutionContext.BeginEffect();
+            ExecutionID = executionID > 0 ? executionID : ReactionResolver.BeginEffectExecution();
+            executionScope = BattleEventHub.BeginEffectExecution(ExecutionID);
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+            executionScope.Dispose();
+            counterScope.Dispose();
+            participantScope.Dispose();
+        }
+    }
+
+    public static DamageEffectScope BeginDamageEffect(long executionID = 0)
+        => new DamageEffectScope(executionID);
+
     /// <summary>主命中结算后落地碎冰；护盾吸收、实际扣血为零也不阻止碎冰。</summary>
     public static void FinalizePrimaryHit(ReactionResult result, float actualHPDamage)
     {
@@ -10,6 +45,7 @@ public static class ReactionEffectExecutor
         PendingShatterEffect pending = result.PendingShatter;
         result.PendingShatter = null;
         if (pending.Target == null) return;
+        using var effectSource = BattleResolutionContext.BeginEquipmentEffectSource(pending.EquipmentSource != null);
         using var resolution = BattleEventHub.BeginResolution();
         using var execution = BattleEventHub.BeginEffectExecution(result.EffectExecutionID);
         using var hit = BattleEventHub.BeginHit(result.RuntimeHitID, result.TargetIndex);
@@ -53,10 +89,32 @@ public static class ReactionEffectExecutor
     public static void ExecuteDerivedHits(ReactionResult result)
         => ExecuteDerivedHitBatch(new[] { result });
 
+    /// <summary>主命中整批提交后汇总跨目标反应，再按原目标顺序结清各自派生伤害。</summary>
+    internal static void CompleteDirectHit(IReadOnlyList<ReactionResult> reactions, IReadOnlyList<HitResolution> hits,
+        Action<int, HitResolution> afterTarget)
+    {
+        var shared = PrepareLunarBatch(reactions);
+        CompletePrimaryHits(reactions, hits, afterTarget);
+        ExecuteDerivedHits(shared);
+    }
+
+    /// <summary>风伤调用方可在这些主命中结清后继续提交此前准备的扩散批次。</summary>
+    internal static void CompletePrimaryHits(IReadOnlyList<ReactionResult> reactions, IReadOnlyList<HitResolution> hits,
+        Action<int, HitResolution> afterTarget = null)
+    {
+        for (int index = 0; index < reactions.Count; index++)
+        {
+            HitResolution hit = hits[index];
+            FinalizePrimaryHit(reactions[index], hit?.DamageEvent?.ActualHPDamage ?? 0f);
+            ExecuteDerivedHits(reactions[index]);
+            if (hit != null) afterTarget?.Invoke(index, hit);
+        }
+    }
+
     /// <summary>同一逻辑hit全部目标一起提交雷暴云，不能逐目标生成并丢掉先前目标的贡献者。</summary>
     public static void ExecuteDerivedHitBatch(IReadOnlyList<ReactionResult> results)
     {
-        using var resolutionEffect = BattleResolutionContext.BeginEffect();
+        using var resolutionEffect = BeginDamageEffect(BattleEventHub.CurrentEffectExecutionId);
         if (results == null) return;
         using var responses = BattleResolutionContext.BeginCollection();
         ReactionResult lunar = PrepareLunarBatch(results);

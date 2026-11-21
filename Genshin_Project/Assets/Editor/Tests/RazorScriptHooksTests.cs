@@ -66,7 +66,7 @@ namespace GenshinTurnBased.Tests.EditMode
             {
                 var f=SkillEffect(e,"SE_Burst_RazorEnergy"+n,4+n,"GainEnergy",(n*5).ToString(),$"Razor_Consumed({n})");f.Param2="Flat";
             }
-            SkillEffect(e,"SE_Burst_RazorReset",8,"ResetCooldown","Skill","Check(1019_T1)");
+            SkillEffect(e,"SE_Burst_RazorReset",8,"Cooldown","Skill","Check(1019_T1)").Param2 = "Reset";
             e.DataManager.CharacterAttributesDict[BattleFlowTestEnv.AllyID].ElementalSkillID = RazorScriptHooks.Press;
             var skills = e.DataManager.CharacterSkillDict[BattleFlowTestEnv.AllyID];
             skills.Single(s=>s.SkillID2==RazorScriptHooks.Press).SkillID = 101903;

@@ -116,6 +116,10 @@ public partial class BattleEntity
             SourceStatus = sourceStatus
         };
         Shields.Add(shield);
+        using var elements = ElementEventScope.Begin("EnemyElementalShieldApplied", this);
+        ElementalAuras.Clear();
+        ReactionStateSystem.RemoveEntityState(this, ReactionType.Frozen);
+        ReactionStateSystem.RemoveEntityState(this, ReactionType.Burning);
         return shield;
     }
 
@@ -186,7 +190,7 @@ public partial class BattleEntity
     /// <summary>
     /// 提交单次 Hit 的敌方元素盾损失。返回实际扣除量；破盾时统一移除来源状态。
     /// </summary>
-    public float ApplyEnemyElementalShieldLoss(float requestedLoss, out bool broken)
+    public float ApplyEnemyElementalShieldLoss(float requestedLoss, out bool broken, DamageSourceInfo source = null)
     {
         using var declarations = ShieldEventScope.Begin(this, "ElementalShieldLoss");
         broken = false;
@@ -204,7 +208,8 @@ public partial class BattleEntity
         StatusInstance owner = shield.SourceStatus;
         if (HasStatusInstance(owner) && IsShieldOwnedByStatus(shield, owner))
         {
-            RemoveStatusInstance(owner);
+            owner.ShieldBreakSource = source?.Snapshot();
+            RemoveStatusInstance(owner, "ShieldBroken");
         }
         else
         {

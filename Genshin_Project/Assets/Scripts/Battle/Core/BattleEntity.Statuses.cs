@@ -13,7 +13,8 @@ public partial class BattleEntity
 
     public StatusInstance AddStatus(string statusID2, BattleEntity caster, int initialPhaseCount)
     {
-        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2)) return null;
+        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2)
+            || AirborneStatusHandler.TryResistWithShield(this, statusID2)) return null;
         if (statusID2 == TeamPublicStatuses.MoonCage)
             throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
         if (StatusDict.TryGetValue(statusID2, out var existing))
@@ -63,7 +64,8 @@ public partial class BattleEntity
             throw new InvalidOperationException("月笼属于敌方格子，须由月结晶公共处理器创建。");
         using var declarationResolution = BattleEventHub.BeginResolution();
         using var declarations = BattleResolutionContext.BeginCollection();
-        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2, mainData)) return null;
+        if (!PublicControlStates.CanApply(this, statusID2, caster) || EnemyTraits.IsStatusImmune(this, statusID2, mainData)
+            || AirborneStatusHandler.TryResistWithShield(this, statusID2)) return null;
         // 先拒绝非法敌人盾配置，不能先覆盖旧盾后才发现新公式无效。
         if (Type == EntityType.Enemy) EnemyShieldEffectSystem.ValidateStatusDefinition(mainData);
         using var intrinsicElements = ElementQuery.IsIntrinsicStatus(statusID2)
@@ -147,6 +149,8 @@ public partial class BattleEntity
         var appliedFact = BattleEventHub.Publish(new StatusEventData(inst, this, true, "Applied"));
         intrinsicElements?.AddCause(appliedFact.Header.EventId, this);
         using var appliedDeclaration = BattleEventHub.Enter(appliedFact);
+        PublicControlStates.OnStatusApplied(this, inst);
+        if (!HasStatusInstance(inst)) return inst;
         EnemyShieldEffectSystem.ApplyStatus(this, inst);
 
         // ========== BindStatus 自动绑定（2026-08-06） ==========
@@ -310,7 +314,7 @@ public partial class BattleEntity
     public float GetFinalATK(string effectID2, string skillID2, int skillType, string element)
         => GetTotalBaseATK(effectID2, skillID2, skillType, element) * (1f + CharacterATKBonus + WeaponATKBonus
             + GetStatusATKBonus(effectID2, skillID2, skillType, element))
-            + GetStatusATKBonusFlat(effectID2, skillID2, skillType, element);
+            + ArtifactFlatATK + GetStatusATKBonusFlat(effectID2, skillID2, skillType, element);
 
     /// <summary>白值：角色成长/突破+武器白值+ExtraBaseATK；不含任何攻击百分比或ATKBonusFlat。</summary>
     public float GetTotalBaseATK(string effectID = "", string skillID = "", int skillType = -1, string element = "")
@@ -476,6 +480,18 @@ public partial class BattleEntity
             GetEffectiveStatusList().Where(StatusSnapshotConditions.IsLiveTargetStatus), reaction);
     }
 
+    private bool readingDisplayAttributes;
+
+    // The character panel has no attack target or hit context. Do not execute hook conditions
+    // while reading it, because some conditions consume the combat RNG.
+    internal void ReadAttributesForDisplay(Action read)
+    {
+        bool previous = readingDisplayAttributes;
+        readingDisplayAttributes = true;
+        try { read(); }
+        finally { readingDisplayAttributes = previous; }
+    }
+
     private float GetStatusAdditiveAttributeBonus(string part, string effectID, string skillID, int skillType,
         string element, BattleEntity target, IEnumerable<StatusInstance> suppliedStatuses = null, ReactionType? damageReaction = null)
     {
@@ -487,6 +503,7 @@ public partial class BattleEntity
         {
             var main = status?.MainData;
             if (main == null || !status.IsActive || main.GetMultiplierPart() != part) continue;
+            if (readingDisplayAttributes && !string.IsNullOrWhiteSpace(main.ScriptHook)) continue;
             if (!StatusAppliesTo(status, effectID, skillID, skillType, element, target, damageReaction)) continue;
             int count = StatusAggregation.Take(status, used);
             if (count == 0) continue;
@@ -495,6 +512,7 @@ public partial class BattleEntity
             {
                 if (effect == null || effect.StatusEffectID / 100 != main.StatusID
                     || (effect.EffectType != "Buff" && effect.EffectType != "Debuff")) continue;
+                if (readingDisplayAttributes && !string.IsNullOrWhiteSpace(effect.ScriptHook)) continue;
                 if (part == "BaseDMGBonusFlat" && BattleSpecialRules.IsPreparedBaseDamageEffect(status, effect)) continue;
                 if (!ScriptHookEvaluator.Evaluate(effect.ScriptHook, new ScriptHookContext
                 { Caster = status.Caster, Status = status, Target = target, Recipient = this,

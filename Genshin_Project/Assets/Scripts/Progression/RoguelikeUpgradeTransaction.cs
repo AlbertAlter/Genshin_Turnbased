@@ -34,13 +34,20 @@ public sealed class RoguelikeUpgradeTransaction
         IReadOnlyList<RoguelikeItemStackData> selected)
     {
         EnsureOpen();
-        var state = Resolve(snapshot, target);
+        return Preview(snapshot, target, selected, equipment, items, requirements, artifactConfig, limits);
+    }
+
+    internal static RoguelikeUpgradePreview Preview(RoguelikeProgressSnapshot snapshot, RoguelikeUpgradeTarget target,
+        IReadOnlyList<RoguelikeItemStackData> selected, IRoguelikeEquipmentCatalog equipment, RoguelikeItemCatalog items,
+        LevelUpRequirementsTable requirements, ArtifactGenerationConfig artifactConfig, RoguelikeUpgradeLimits limits)
+    {
+        var state = Resolve(snapshot, target, equipment, requirements, artifactConfig, limits);
         var costs = Sum(selected);
         int gained = 0;
         int smallest = int.MaxValue;
         foreach (var cost in costs)
         {
-            int value = ExperienceValue(cost.ItemId, target.Kind);
+            int value = ExperienceValue(items, cost.ItemId, target.Kind);
             if (ItemCount(snapshot, cost.ItemId) < cost.Quantity)
                 throw new InvalidOperationException("升级材料不足：" + cost.ItemId);
             gained = checked(gained + checked(value * cost.Quantity));
@@ -51,12 +58,17 @@ public sealed class RoguelikeUpgradeTransaction
         // 允许最后一件导致溢出；如果拿掉任意一件后仍能达到上限，就属于多选材料。
         if (gained > 0 && (needed == 0 || (long)gained - smallest >= needed))
             throw new InvalidOperationException("材料只能选择到刚好达到或溢出当前等级上限的数量。");
+        var result = LevelUpCalculator.ApplyExperience(requirements, target.Kind, state.Level,
+            state.Experience, gained, state.Cap, state.Star);
+        int? targetAscension = state.Character?.Ascension ?? state.Weapon?.Weapon.Ascension;
+        if (targetAscension.HasValue)
+            targetAscension = Math.Max(targetAscension.Value, limits.GetAscension(result.Level));
         return new RoguelikeUpgradePreview
         {
             LevelCap = state.Cap, ExperienceToCap = needed, GainedExperience = gained,
+            NextLevelExperience = result.ReachedLevelCap ? 0 : requirements.GetExperienceRequired(target.Kind, result.Level + 1, state.Star),
             Costs = costs.AsReadOnly(),
-            Result = LevelUpCalculator.ApplyExperience(requirements, target.Kind, state.Level,
-                state.Experience, gained, state.Cap, state.Star),
+            Result = result, TargetAscension = targetAscension,
         };
     }
 
@@ -65,7 +77,13 @@ public sealed class RoguelikeUpgradeTransaction
         IReadOnlyList<RoguelikeItemStackData> selected, string itemId)
     {
         var preview = Preview(target, selected);
-        int value = ExperienceValue(itemId, target.Kind);
+        return GetAdditionalMaterialLimit(snapshot, items, target.Kind, preview, itemId);
+    }
+
+    internal static int GetAdditionalMaterialLimit(RoguelikeProgressSnapshot snapshot, RoguelikeItemCatalog items,
+        LevelUpTarget kind, RoguelikeUpgradePreview preview, string itemId)
+    {
+        int value = ExperienceValue(items, itemId, kind);
         long remaining = (long)preview.ExperienceToCap - preview.GainedExperience;
         if (remaining <= 0) return 0;
         int used = 0;
@@ -73,7 +91,7 @@ public sealed class RoguelikeUpgradeTransaction
         foreach (var cost in preview.Costs)
         {
             if (cost.ItemId == itemId) used = cost.Quantity;
-            smallest = Math.Min(smallest, ExperienceValue(cost.ItemId, target.Kind));
+            smallest = Math.Min(smallest, ExperienceValue(items, cost.ItemId, kind));
         }
         // 混用大小经验道具时，也不能让已选的小道具变成可以拿掉的多余材料。
         long selectable = (remaining + smallest - 1) / value;
@@ -94,19 +112,19 @@ public sealed class RoguelikeUpgradeTransaction
         {
             var preview = Preview(target, materials);
             var candidate = Consume(snapshot, preview.Costs);
-            var state = Resolve(candidate, target);
+            var state = Resolve(candidate, target, equipment, requirements, artifactConfig, limits);
             result = preview.Result;
             if (state.Character != null)
             {
                 state.Character.Level = result.Level;
                 state.Character.Experience = result.Experience;
-                state.Character.Ascension = Math.Max(state.Character.Ascension, limits.GetAscension(result.Level));
+                state.Character.Ascension = preview.TargetAscension.Value;
             }
             else if (state.Weapon != null)
             {
                 state.Weapon.Weapon.Level = result.Level;
                 state.Weapon.Experience = result.Experience;
-                state.Weapon.Weapon.Ascension = Math.Max(state.Weapon.Weapon.Ascension, limits.GetAscension(result.Level));
+                state.Weapon.Weapon.Ascension = preview.TargetAscension.Value;
             }
             else
             {
@@ -127,6 +145,13 @@ public sealed class RoguelikeUpgradeTransaction
     public RoguelikeSkillUpgradePreview PreviewSkillUpgrade(int characterId, int skillIndex, int targetBaseLevel)
     {
         EnsureOpen();
+        return PreviewSkillUpgrade(snapshot, items, requirements, limits, characterId, skillIndex, targetBaseLevel);
+    }
+
+    internal static RoguelikeSkillUpgradePreview PreviewSkillUpgrade(RoguelikeProgressSnapshot snapshot,
+        RoguelikeItemCatalog items, LevelUpRequirementsTable requirements, RoguelikeUpgradeLimits limits,
+        int characterId, int skillIndex, int targetBaseLevel)
+    {
         if (skillIndex < 0 || skillIndex >= 4) throw new ArgumentOutOfRangeException(nameof(skillIndex));
         var character = FindCharacter(snapshot, characterId);
         int current = character.SkillLevels[skillIndex];
@@ -173,6 +198,46 @@ public sealed class RoguelikeUpgradeTransaction
         return preview;
     }
 
+    public int PreviewWeaponRefinement(string instanceId, IReadOnlyList<string> materialIds)
+    {
+        EnsureOpen();
+        return PreviewWeaponRefinement(snapshot, instanceId, materialIds);
+    }
+
+    internal static int PreviewWeaponRefinement(RoguelikeProgressSnapshot snapshot, string instanceId,
+        IReadOnlyList<string> materialIds)
+    {
+        var target = snapshot.Inventory.Weapons.Find(item => item.InstanceId == instanceId);
+        if (target == null) throw new InvalidOperationException("找不到武器实例：" + instanceId);
+        int limit = target.Weapon.WeaponID == 3034 ? 1 : 5;
+        int rank = target.Weapon.Refinement;
+        var unique = new HashSet<string>(StringComparer.Ordinal);
+        foreach (string id in materialIds ?? throw new ArgumentNullException(nameof(materialIds)))
+        {
+            var copy = snapshot.Inventory.Weapons.Find(item => item.InstanceId == id);
+            if (id == instanceId || !unique.Add(id) || copy == null || copy.IsLocked ||
+                copy.Weapon.WeaponID != target.Weapon.WeaponID ||
+                snapshot.Characters.Exists(character => character.EquippedWeaponInstanceId == id))
+                throw new InvalidOperationException("精炼需要未装备、未锁定的独立同名武器。");
+            rank += copy.Weapon.Refinement;
+        }
+        if (rank > limit) throw new InvalidOperationException("精炼材料超过最高精炼阶数。");
+        return rank;
+    }
+
+    public void RefineWeapon(string instanceId, IReadOnlyList<string> materialIds)
+    {
+        Mutate(() =>
+        {
+            int rank = PreviewWeaponRefinement(instanceId, materialIds);
+            if (materialIds.Count == 0) throw new InvalidOperationException("请选择精炼材料。");
+            var candidate = RoguelikeSaveJson.DeepClone(snapshot);
+            foreach (string id in materialIds) candidate.Inventory.Weapons.RemoveAll(item => item.InstanceId == id);
+            candidate.Inventory.Weapons.Find(item => item.InstanceId == instanceId).Weapon.Refinement = rank;
+            Accept(candidate);
+        });
+    }
+
     /// <summary>每个对应命之座激活一命，最多六命；不改培养技能等级，角色自身等级查询据此解析命座加级。</summary>
     public void ActivateConstellation(int characterId)
     {
@@ -211,7 +276,9 @@ public sealed class RoguelikeUpgradeTransaction
 
     public void Close() { closed = true; }
 
-    private State Resolve(RoguelikeProgressSnapshot data, RoguelikeUpgradeTarget target)
+    private static State Resolve(RoguelikeProgressSnapshot data, RoguelikeUpgradeTarget target,
+        IRoguelikeEquipmentCatalog equipment, LevelUpRequirementsTable requirements, ArtifactGenerationConfig artifactConfig,
+        RoguelikeUpgradeLimits limits)
     {
         if (target == null) throw new ArgumentNullException(nameof(target));
         var state = new State();
@@ -256,7 +323,7 @@ public sealed class RoguelikeUpgradeTransaction
         finally { inventory.Close(); }
     }
 
-    private int ExperienceValue(string itemId, LevelUpTarget target)
+    private static int ExperienceValue(RoguelikeItemCatalog items, string itemId, LevelUpTarget target)
     {
         if (!items.TryGetExperienceValue(itemId, target, out int value) || value <= 0)
             throw new InvalidOperationException("此道具不能用于该类型的经验升级：" + itemId);

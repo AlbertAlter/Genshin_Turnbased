@@ -58,6 +58,7 @@ MonoBehaviour:
   enemyId: 2004
   firstVariant: 1
   secondVariant: 2
+  previewCanvas: {fileID: 202}
 --- !u!114 &103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +92,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68fd09cc270f42b78019bd164c2f7108, type: 3}
+  m_Script: {fileID: 11500000, guid: db39d89222234f228df17aade870ce2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   AutomaticClock: 0
@@ -105,7 +106,6 @@ GameObject:
   m_Component:
   - component: {fileID: 201}
   - component: {fileID: 202}
-  - component: {fileID: 203}
   - component: {fileID: 204}
   m_Layer: 5
   m_Name: VariantPreviewCanvas
@@ -124,10 +124,10 @@ RectTransform:
   m_Children:
   - {fileID: 301}
   - {fileID: 311}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 9101000002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -147,24 +147,6 @@ Canvas:
   m_OverrideSorting: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
 --- !u!114 &204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,5 +290,26 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 101}
-  - {fileID: 201}
+  - {fileID: 9101000001}
   - {fileID: 601}
+--- !u!1001 &9101000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 201, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 201}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+--- !u!224 &9101000002 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 201, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+  m_PrefabInstance: {fileID: 9101000001}
+  m_PrefabAsset: {fileID: 0}

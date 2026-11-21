@@ -101,7 +101,7 @@ public sealed class RoundedHealthFill : MaskableGraphic
             DrawPsd(mesh, rect, psdSprite, psdPadding, psdCaps, psdBodyHeight, color.a);
             return;
         }
-        DrawCapsule(mesh, rect, color, canvas != null ? canvas.scaleFactor : 1);
+        DrawCapsule(mesh, rect, color, canvas != null ? canvas.rootCanvas.scaleFactor : 1);
     }
 
     public static void DrawPsd(VertexHelper mesh, Rect body, Sprite psdSprite, Vector4 psdPadding,

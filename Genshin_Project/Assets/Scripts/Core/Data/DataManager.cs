@@ -15,6 +15,7 @@ public partial class DataManager : Singleton<DataManager>
     public Dictionary<string, Dictionary<int, SkillLevelData>> SkillLevelDict = new Dictionary<string, Dictionary<int, SkillLevelData>>();
     public Dictionary<int, List<ConstellationData>> ConstellationDict = new Dictionary<int, List<ConstellationData>>();
     public Dictionary<int, List<TalentData>> TalentDict = new Dictionary<int, List<TalentData>>();
+    public Dictionary<int, List<string>> CharacterInitiateStatusDict = new Dictionary<int, List<string>>();
 
     // ========== Weapon ==========
     public Dictionary<int, WeaponAttributesData> WeaponAttributesDict = new Dictionary<int, WeaponAttributesData>();
@@ -43,6 +44,8 @@ public partial class DataManager : Singleton<DataManager>
 
     // ========== Enemy ==========
     public Dictionary<int, EnemyMainData> EnemyMainDict = new Dictionary<int, EnemyMainData>();
+    // 同一敌人各生命阶段的完整属性；0为无阶段。EnemyMainDict保留无阶段/第一阶段的默认入口。
+    public Dictionary<int, Dictionary<int, EnemyMainData>> EnemyPhaseDict = new Dictionary<int, Dictionary<int, EnemyMainData>>();
     public Dictionary<int, EnemySkillMainData> EnemySkillMainDict = new Dictionary<int, EnemySkillMainData>();
     public Dictionary<string, EnemySkillEffectData> EnemySkillEffectDict = new Dictionary<string, EnemySkillEffectData>();
     public Dictionary<string, EnemySkillParamData> EnemySkillParamDict = new Dictionary<string, EnemySkillParamData>();

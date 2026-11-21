@@ -1,7 +1,6 @@
 #if ROGUELIKE_SAVE_TESTS
 using NUnit.Framework;
 
-[NonParallelizable]
 public sealed class HitEffectStyleTests
 {
     private sealed class CountingRandom : IBattleRandomSource

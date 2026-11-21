@@ -37,7 +37,6 @@ public static class UiChartSync
         SyncHitEffects();
     }
 
-    [MenuItem("Tools/UI/同步命中特效配表")]
     public static void SyncHitEffects()
     {
         string sourceRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI"));
@@ -52,6 +51,8 @@ public static class UiChartSync
         string prompt = Path.Combine(timelineRoot, BattleActionStyle.FileName);
         string enemyActions = Path.Combine(timelineRoot, EnemyActionTemplates.FileName);
         string effects = Path.Combine(timelineRoot, BattlePresentationConfiguration.EffectFileName);
+        string attacks = Path.Combine(timelineRoot, BattleAttackAnimationTable.FileName);
+        BattleAttackAnimationTable.ReadFile(attacks);
         BattleActionStyle.ReadFile(prompt);
         BattlePresentationConfiguration.ReadEffects(effects);
         EnemyActionTemplates.ReadFile(enemyActions, BattleSkillPresentationTemplates.ReadFile(templates));
@@ -65,7 +66,7 @@ public static class UiChartSync
             if (!File.Exists(Path.Combine(artSourceRoot, file))) throw new FileNotFoundException("缺少命中特效贴图：" + file);
         string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattleTimelineSettings.Folder);
         Directory.CreateDirectory(directory);
-        foreach (string file in new[] { main, source, shake, textureTable, templates, enemyActions, prompt, effects })
+        foreach (string file in new[] { main, source, shake, textureTable, templates, enemyActions, prompt, effects, attacks })
         {
             string target = Path.Combine(directory, Path.GetFileName(file));
             File.Copy(file, target, true);
@@ -93,12 +94,17 @@ public static class UiChartSync
         string exit = Path.Combine(sourceRoot, UIGoldenDissolveStyle.FileName);
         string variant = Path.Combine(sourceRoot, UICardVariantStyle.FileName);
         string appearance = Path.Combine(sourceRoot, EnemyAppearanceTable.FileName);
+        string characterAppearance = Path.Combine(sourceRoot, CharacterCardSwitchTable.FileName);
+        string infoPopup = Path.Combine(sourceRoot, BattleInfoPopupStyle.FileName);
         UICardEntranceStyle.ReadFile(entrance); UIGoldenDissolveStyle.ReadFile(exit);
         UICardVariantStyle.ReadFile(variant);
+        BattleInfoPopupStyle.ReadFile(infoPopup);
         EnemyAppearanceTable.ReadFile(appearance).ValidateRuntimeReferences(
             Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets")));
+        CharacterCardSwitchTable.ReadFile(characterAppearance).ValidateRuntimeReferences(
+            Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets")));
         string target = Path.Combine(Application.streamingAssetsPath, "Data", "UI"); Directory.CreateDirectory(target);
-        foreach (string source in new[] { entrance, exit, variant, appearance })
+        foreach (string source in new[] { entrance, exit, variant, appearance, characterAppearance, infoPopup })
         {
             string destination = Path.Combine(target, Path.GetFileName(source));
             File.Copy(source, destination, true); File.SetLastWriteTimeUtc(destination, File.GetLastWriteTimeUtc(source));
@@ -139,6 +145,11 @@ public static class UiChartSync
         BattleTimelineSettings.ReadFile(main);
         string statusSource = Path.Combine(Path.GetDirectoryName(source), BattlefieldStatusPopupStyle.FileName);
         BattlefieldStatusPopupStyle.ReadFile(statusSource);
+        string statusNameSource = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source), "..",
+            UIStatusNamePopupStyle.Folder, UIStatusNamePopupStyle.FileName));
+        UIStatusNamePopupStyle.ReadFile(statusNameSource);
+        string orbitSource = Path.Combine(Path.GetDirectoryName(statusNameSource), UICardOrbitArrowStyle.FileName);
+        UICardOrbitArrowStyle.ReadFile(orbitSource);
         string colorSource = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source), "..", ElementColorPalette.FileName));
         ElementColorPalette.ReadFile(colorSource);
         string effectSource = Path.Combine(Path.GetDirectoryName(source), BattlePresentationConfiguration.EffectFileName);
@@ -152,6 +163,14 @@ public static class UiChartSync
         string statusTarget = Path.Combine(directory, BattlefieldStatusPopupStyle.FileName);
         File.Copy(statusSource, statusTarget, true);
         File.SetLastWriteTimeUtc(statusTarget, File.GetLastWriteTimeUtc(statusSource));
+        string statusNameTarget = Path.Combine(Application.streamingAssetsPath, "Data", "UI",
+            UIStatusNamePopupStyle.Folder, UIStatusNamePopupStyle.FileName);
+        Directory.CreateDirectory(Path.GetDirectoryName(statusNameTarget));
+        File.Copy(statusNameSource, statusNameTarget, true);
+        File.SetLastWriteTimeUtc(statusNameTarget, File.GetLastWriteTimeUtc(statusNameSource));
+        string orbitTarget = Path.Combine(Path.GetDirectoryName(statusNameTarget), UICardOrbitArrowStyle.FileName);
+        File.Copy(orbitSource, orbitTarget, true);
+        File.SetLastWriteTimeUtc(orbitTarget, File.GetLastWriteTimeUtc(orbitSource));
         string colorTarget = Path.Combine(Application.streamingAssetsPath, "Data", "UI", ElementColorPalette.FileName);
         File.Copy(colorSource, colorTarget, true);
         File.SetLastWriteTimeUtc(colorTarget, File.GetLastWriteTimeUtc(colorSource));

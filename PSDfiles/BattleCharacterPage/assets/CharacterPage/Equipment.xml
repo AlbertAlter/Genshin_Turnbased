@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1008,665">
+  <displayList>
+    <text id="n0_equip" name="heading" xy="0,0" size="680,51" font="Microsoft YaHei" fontSize="36" color="#4C4236" text="当前装备" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n1_equip" name="sampleLabel" xy="818,7" size="190,38" font="Microsoft YaHei" fontSize="19" color="#6C6255" text="布局示例" align="right" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n2_equip" name="slot0" xy="0,80" size="1008,142" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <graph id="n3_equip" name="iconWell0" xy="24,110" size="80,80" type="rect" fillColor="#B8AD9B" lineSize="0" touchable="false" corner="9,9,9,9" />
+    <text id="n4_equip" name="iconLabel0" xy="24,110" size="80,80" font="Microsoft YaHei" fontSize="30" color="#F1E7D5" text="武" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n5_equip" name="kind0" xy="129,94" size="800,27" font="Microsoft YaHei" fontSize="19" color="#6C6255" text="武器" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n6_equip" name="name0" xy="129,124" size="800,38" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="弓" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n7_equip" name="summary0" xy="129,171" size="825,29" font="Microsoft YaHei" fontSize="22" color="#6C6255" text="显示武器名称、等级与精炼等信息" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <graph id="n8_equip" name="slot1" xy="0,246" size="1008,142" type="rect" fillColor="#D3CBB9" lineSize="1" touchable="false" corner="12,12,12,12" lineColor="#B5AA96" />
+    <graph id="n9_equip" name="iconWell1" xy="24,276" size="80,80" type="rect" fillColor="#B8AD9B" lineSize="0" touchable="false" corner="9,9,9,9" />
+    <text id="n10_equip" name="iconLabel1" xy="24,276" size="80,80" font="Microsoft YaHei" fontSize="30" color="#F1E7D5" text="套" align="center" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n11_equip" name="kind1" xy="129,260" size="800,27" font="Microsoft YaHei" fontSize="19" color="#6C6255" text="圣遗物" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+    <text id="n12_equip" name="name1" xy="129,290" size="800,38" font="Microsoft YaHei" fontSize="28" color="#4C4236" text="套装效果" align="left" vAlign="middle" autoSize="none" touchable="false" bold="true" singleLine="true" />
+    <text id="n13_equip" name="summary1" xy="129,337" size="825,29" font="Microsoft YaHei" fontSize="22" color="#6C6255" text="显示已装备的套装、件数与生效效果" align="left" vAlign="middle" autoSize="none" touchable="false" singleLine="true" />
+  </displayList>
+</component>
