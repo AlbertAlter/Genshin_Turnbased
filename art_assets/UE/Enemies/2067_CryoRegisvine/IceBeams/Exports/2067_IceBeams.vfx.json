@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/IceBeams/2067_IceBeams",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/IceBeams/Blender/2067_IceBeams.blend",
+  "file": "Enemies/2067_CryoRegisvine/IceBeams/Exports/2067_IceBeams.vfx.bytes",
+  "meshes": 5,
+  "tracks": 124,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 414028
+}

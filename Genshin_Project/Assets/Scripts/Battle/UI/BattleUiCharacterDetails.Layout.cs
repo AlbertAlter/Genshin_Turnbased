@@ -33,10 +33,7 @@ public sealed partial class BattleUiCharacterDetails
         Fill(panel, Color.clear, true);
         var frame = Instantiate(framePrefab, panel, false);
         Stretch((RectTransform)frame.transform);
-        frame.framePath = SceneArt + "CharacterPage/角色边框_1536x864@1x.png";
-        frame.borderPixels = Vector4.one * 48;
         frame.BindOpeningDecoration(opening => Fill(Region("Details background", opening, 423f / 1536, 0, 1, 1), new Color32(197, 190, 175, 255)));
-        frame.Reload();
 
         var side = Region("Portrait column", panel, 0, 0, .275f, 1);
         var heading = Region("Title", side, .10f, .90f, .91f, .98f);

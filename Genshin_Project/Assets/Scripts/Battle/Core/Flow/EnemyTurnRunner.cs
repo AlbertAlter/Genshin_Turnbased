@@ -16,7 +16,7 @@ internal sealed class EnemyTurnRunner
         return true;
     }
 
-    internal IEnumerator Execute(IReadOnlyList<EnemyBattleController> enemies, Func<bool> canContinue)
+    internal IEnumerator Execute(IReadOnlyList<EnemyBattleController> enemies, Func<bool> canContinue, Func<bool> waitingForArrival = null)
     {
         foreach (var enemy in enemies)
             if (enemy != null) enemy.BeginEnemyTurn();
@@ -26,8 +26,11 @@ internal sealed class EnemyTurnRunner
         try
         {
             LogManager.Log(LogCategory.Enemy, $"敌方本回合可分配行动次数={pool.RemainingActions}");
-            while (_activePool == pool && canContinue() && pool.TryTakeNext(out var actor))
+            while (_activePool == pool && canContinue())
             {
+                while (BattlePause.IsPaused && _activePool == pool && canContinue()) yield return null;
+                while (waitingForArrival?.Invoke() == true && _activePool == pool && canContinue()) yield return null;
+                if (_activePool != pool || !canContinue() || !pool.TryTakeNext(out var actor)) break;
                 LogManager.Log(LogCategory.Enemy,
                     $"敌方行动分配：{actor.EnemyID} 位置={actor.Entity.SlotPosition}，剩余次数={pool.RemainingActions}");
                 var action = BattleExecution.Run(() => actor.TakeEnemyActionAsync(pool.LastSelectionIsLastGuaranteedAction));

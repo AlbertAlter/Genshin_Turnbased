@@ -1,0 +1,18 @@
+{
+  "key": "Characters/1017_Ningguang/ChargedAttack/Ningguang_ChargedAttack",
+  "source": "art_assets/UE/Characters/1017_Ningguang/ChargedAttack/Blender/Ningguang_ChargedAttack.blend",
+  "file": "Characters/1017_Ningguang/ChargedAttack/Exports/Ningguang_ChargedAttack.vfx.bytes",
+  "meshes": 4,
+  "tracks": 68,
+  "frames": 64,
+  "duration": 2.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "MainRelease": 0.3,
+    "OrbitDepartureStart": 0.3333333333333333,
+    "MainContact": 0.7333333333333333,
+    "Cleared": 2.1
+  },
+  "bytes": 56355
+}

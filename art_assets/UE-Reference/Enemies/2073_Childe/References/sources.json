@@ -1,0 +1,334 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Childe#Abilities",
+  "media": [
+    {
+      "title": "Childe Celestial Voyager.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/6/6b/Childe_Celestial_Voyager.gif/revision/latest?cb=20211108030013",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Celestial_Voyager.gif",
+      "duration": 7.840000000000005,
+      "size": 7071865,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "Whale/两次接触与鲸体"
+    },
+    {
+      "title": "Childe Celestial Voyager Phase 3.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/af/Childe_Celestial_Voyager_Phase_3.gif/revision/latest?cb=20211108105427",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Celestial_Voyager_Phase_3.gif",
+      "duration": 7.760000000000005,
+      "size": 6590231,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "Whale/两次接触与鲸体"
+    },
+    {
+      "title": "Childe Cutting Torrent End String.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bc/Childe_Cutting_Torrent_End_String.gif/revision/latest?cb=20211108030017",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Cutting_Torrent_End_String.gif",
+      "duration": 5.520000000000003,
+      "size": 5513509,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ArrowVolley/水箭与拖尾"
+    },
+    {
+      "title": "Childe Cutting Torrent Phase 3.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/7/71/Childe_Cutting_Torrent_Phase_3.gif/revision/latest?cb=20211108104326",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Cutting_Torrent_Phase_3.gif",
+      "duration": 4.000000000000002,
+      "size": 3581943,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ArrowVolley/水箭与拖尾"
+    },
+    {
+      "title": "Childe Dark Leap Phase 2.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e5/Childe_Dark_Leap_Phase_2.gif/revision/latest?cb=20211108055547",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Dark_Leap_Phase_2.gif",
+      "duration": 6.800000000000004,
+      "size": 6017100,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "LightningLeap/雷跃接触"
+    },
+    {
+      "title": "Childe Dark Leap Phase 3.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/80/Childe_Dark_Leap_Phase_3.gif/revision/latest?cb=20211108104850",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Dark_Leap_Phase_3.gif",
+      "duration": 8.080000000000005,
+      "size": 6995117,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "LightningLeap/雷跃接触"
+    },
+    {
+      "title": "Childe Displacement.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bd/Childe_Displacement.gif/revision/latest?cb=20211108055604",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Displacement.gif",
+      "duration": 4.240000000000002,
+      "size": 3612528,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "PhantomDashes/原作突进动势；幻影为项目改编"
+    },
+    {
+      "title": "Childe Displacement Phase 3.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/7/76/Childe_Displacement_Phase_3.gif/revision/latest?cb=20211108104930",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Displacement_Phase_3.gif",
+      "duration": 7.760000000000005,
+      "size": 6704246,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "PhantomDashes/原作突进动势；幻影为项目改编"
+    },
+    {
+      "title": "Childe Electro Shield.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/ff/Childe_Electro_Shield.gif/revision/latest?cb=20211108055612",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Electro_Shield.gif",
+      "duration": 3.520000000000002,
+      "size": 3188146,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/盾与反击"
+    },
+    {
+      "title": "Childe Electro Shield Counter.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/2/2c/Childe_Electro_Shield_Counter.gif/revision/latest?cb=20211108055609",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Electro_Shield_Counter.gif",
+      "duration": 4.080000000000002,
+      "size": 3657509,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/盾与反击"
+    },
+    {
+      "title": "Childe Flash of Havoc.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/4/4e/Childe_Flash_of_Havoc.gif/revision/latest?cb=20211108030038",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Flash_of_Havoc.gif",
+      "duration": 10.800000000000008,
+      "size": 9231308,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "Airstrike/上射与落箭"
+    },
+    {
+      "title": "Childe Flicker.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/6/62/Childe_Flicker.gif/revision/latest?cb=20211108055621",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Flicker.gif",
+      "duration": 2.480000000000001,
+      "size": 2364948,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "CrossSlash/交叉雷刃"
+    },
+    {
+      "title": "Childe Hydro Shield.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e6/Childe_Hydro_Shield.gif/revision/latest?cb=20211108025935",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Hydro_Shield.gif",
+      "duration": 3.1200000000000014,
+      "size": 2751494,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/盾与反击"
+    },
+    {
+      "title": "Childe Hydro Shield Counter.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/fd/Childe_Hydro_Shield_Counter.gif/revision/latest?cb=20211108025926",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Hydro_Shield_Counter.gif",
+      "duration": 5.280000000000003,
+      "size": 4956545,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/盾与反击"
+    },
+    {
+      "title": "Childe Raging Tide 5.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9b/Childe_Raging_Tide_5.gif/revision/latest?cb=20211108055635",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Raging_Tide_5.gif",
+      "duration": 4.640000000000002,
+      "size": 4344400,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "RagingTide/雷刃五连"
+    },
+    {
+      "title": "Childe Shark Onslaught.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d9/Childe_Shark_Onslaught.gif/revision/latest?cb=20211108025947",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Shark_Onslaught.gif",
+      "duration": 4.400000000000002,
+      "size": 4397478,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "SharkWave/鲨形水浪"
+    },
+    {
+      "title": "Childe Solo Electro.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/92/Childe_Solo_Electro.gif/revision/latest?cb=20211108055653",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Solo_Electro.gif",
+      "duration": 2.2400000000000007,
+      "size": 2157154,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/反击斩击"
+    },
+    {
+      "title": "Childe Solo Hydro.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9f/Childe_Solo_Hydro.gif/revision/latest?cb=20211108025950",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Solo_Hydro.gif",
+      "duration": 2.800000000000001,
+      "size": 2580296,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "ShieldCounter/反击斩击"
+    },
+    {
+      "title": "Childe Twin Strikes.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/14/Childe_Twin_Strikes.gif/revision/latest?cb=20211108105237",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Twin_Strikes.gif",
+      "duration": 3.520000000000002,
+      "size": 3086540,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "TwinStrikes/两次挥斩"
+    },
+    {
+      "title": "Childe Vortex of Turmoil.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d5/Childe_Vortex_of_Turmoil.gif/revision/latest?cb=20211108105319",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Childe_Vortex_of_Turmoil.gif",
+      "duration": 7.760000000000005,
+      "size": 7192429,
+      "metadata_verified": true,
+      "animation_viewed": false,
+      "local_gif_saved": false,
+      "use": "PiercingVortex/水刃旋转"
+    }
+  ],
+  "static_frames": [
+    {
+      "effect": "SharkWave",
+      "frames": [
+        {
+          "file": "SharkWave_01200ms.png",
+          "time_ms": 1200
+        },
+        {
+          "file": "SharkWave_02320ms.png",
+          "time_ms": 2320
+        },
+        {
+          "file": "SharkWave_03440ms.png",
+          "time_ms": 3440
+        }
+      ],
+      "viewed": true,
+      "local_gif_saved": false,
+      "viewed_scope": "Three original static frames visually inspected; full animation not played.",
+      "source_media": "Childe Shark Onslaught.gif"
+    },
+    {
+      "effect": "RapidFire",
+      "frames": [
+        {
+          "file": "RapidFire_01520ms.png",
+          "time_ms": 1520
+        },
+        {
+          "file": "RapidFire_02880ms.png",
+          "time_ms": 2880
+        },
+        {
+          "file": "RapidFire_04320ms.png",
+          "time_ms": 4320
+        }
+      ],
+      "viewed": true,
+      "local_gif_saved": false,
+      "viewed_scope": "Three original static frames visually inspected; full animation not played.",
+      "source_media": "Childe Cutting Torrent End String.gif"
+    },
+    {
+      "effect": "Whale",
+      "frames": [
+        {
+          "file": "Whale_02160ms.png",
+          "time_ms": 2160
+        },
+        {
+          "file": "Whale_04080ms.png",
+          "time_ms": 4080
+        },
+        {
+          "file": "Whale_06080ms.png",
+          "time_ms": 6080
+        }
+      ],
+      "viewed": true,
+      "local_gif_saved": false,
+      "viewed_scope": "Three original static frames visually inspected; full animation not played.",
+      "source_media": "Childe Celestial Voyager.gif"
+    }
+  ],
+  "inspection_limits": [
+    "Only nine extracted PNG frames inspected. No complete GIF played or saved locally.",
+    "RapidFire frames do not establish the full long trail: it is an explicit project requirement.",
+    "Whale body is partly obscured in the selected middle frame; full silhouette is not visually verified.",
+    "Skill hit counts and targets follow current project tables; original attack repetitions are not copied."
+  ],
+  "audio": [
+    {
+      "url": "https://www.youtube.com/watch?v=ooKZCGzUx98",
+      "title": "Childe (Solo) Boss Guide - Genshin Impact",
+      "use": "原作各项攻击、水雷断流、盾与反击声音的后续核对入口",
+      "listened": false,
+      "downloaded": false,
+      "timecodes": null
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=6lPqi_A1Gjc",
+      "title": "How to EASILY beat Childe Boss (Guide & Walkthrough)",
+      "use": "原作水箭、鲸形巨浪、雷刃与突进声音核对入口",
+      "listened": false,
+      "downloaded": false,
+      "timecodes": null
+    }
+  ],
+  "alternative_audio_candidates": [
+    {
+      "url": "https://opengameart.org/content/metal-impact-sounds",
+      "use": "金属弹刀候选；最终选用文件及许可待确认",
+      "downloaded": false,
+      "listened": false
+    },
+    {
+      "url": "https://opengameart.org/content/medieval-sound-effects-weapon-impacts",
+      "use": "金属弹刀候选；最终选用文件及许可待确认",
+      "downloaded": false,
+      "listened": false
+    }
+  ],
+  "project_decisions": [
+    "Hydro/Electro Riptide reuses playable Tartaglia card symbol.",
+    "Hydro/Electro shield states select existing public shield membrane; bar uses real gameplay values.",
+    "Phase 2 dash: body stationary, phantom makes three impacts. Phase 3 dash: same phantom, two impacts."
+  ]
+}

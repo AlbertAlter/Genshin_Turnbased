@@ -304,6 +304,7 @@ namespace GenshinTurnBased.Tests.EditMode
         private sealed class PromptRecorder : IBattleResultPresentationPlayer
         {
             internal readonly List<BattlePresentationResult> Results = new List<BattlePresentationResult>();
+            internal readonly List<(long sequence, BattlePresentationCue cue)> Cues = new List<(long, BattlePresentationCue)>();
             public void Begin(BattlePresentationRequest request, Action impact) => impact();
             public void ShowResult(BattlePresentationRequest request, Action finish) => finish();
             public void Cancel(BattlePresentationRequest request) { }
@@ -312,6 +313,9 @@ namespace GenshinTurnBased.Tests.EditMode
             public Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
             {
                 Results.AddRange(sequence.Results);
+                foreach (var cue in BattlePresentationTimeline.Build(sequence, result => result.Data is DamageEventData
+                    ? new BattlePresentationTiming(jitter: .07, hitTemplate: new BattleHitTemplate("PhaseBatch", new[] { .12 }, .2))
+                    : new BattlePresentationTiming())) Cues.Add((sequence.ID, cue));
                 return Task.CompletedTask;
             }
         }
@@ -320,6 +324,7 @@ namespace GenshinTurnBased.Tests.EditMode
         [TestCase(3, 3, "OnEnd", false)]
         [TestCase(0, 3, "OnEnd", false)]
         [TestCase(1, 1, "OnItsTurn", false)]
+        [TestCase(3, 3, "OnItsTurn", false)]
         [TestCase(1, 1, "OnItsTurn", true)]
         [TestCase(0, 3, "OnItsTurn", true)]
         public void OverlappingMines_UseExistingElementOrder_AndPromptPerSourceEffect(int sourceCount, int prompts,
@@ -372,6 +377,16 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(hits.Select(r => r.Header.HitId).Distinct().Count(), Is.EqualTo(3));
             Assert.That(hits.Select(r => ((DamageEventData)r.Data).Source.SourceStatusApplyOrder),
                 Is.EqualTo(instances.Select(s => s.ApplyOrder)));
+            var impacts = player.Cues.Where(c => c.cue.Result.Data is DamageEventData d && d.Subject == center
+                && d.Source.SourceEffectID == blast.StatusEffectID2 && !c.cue.IsAnticipation).ToList();
+            Assert.That(impacts.Select(c => c.sequence).Distinct().Count(), Is.EqualTo(sourceCount == 1 ? 1 : 3));
+            Assert.That(impacts.Select(c => BattleAttackAnimationTimeline.PresentationHitKey(c.cue)).Distinct().Count(),
+                Is.EqualTo(sourceCount == 1 ? 1 : 3));
+            if (sourceCount == 1)
+            {
+                Assert.That(impacts.Select(c => c.cue.Time).Distinct().Count(), Is.EqualTo(1));
+                Assert.That(impacts.Select(c => c.cue.Block).Distinct().Count(), Is.EqualTo(1));
+            }
             Assert.That(hits.Select(r => ((DamageEventData)r.Data).Source.ReactionType),
                 Is.EqualTo(new[] { ReactionType.Vaporize, ReactionType.None, ReactionType.None }));
             Assert.That(center.GetAura("Hydro"), Is.Null);

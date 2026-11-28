@@ -254,7 +254,7 @@ internal sealed class NightweaverWeaponCount : CountStatusHandler
         });
         state.Listen<StatusEventData>(status, owner, BattleEventKind.StatusRemoved, (_, removed) =>
         {
-            if (removed.Host == owner && (removed.StatusId == "ST_Weapon_4322102" || removed.StatusId == "ST_Weapon_4322103")
+            if (ReferenceEquals(removed.Host, owner) && (removed.StatusId == "ST_Weapon_4322102" || removed.StatusId == "ST_Weapon_4322103")
                 && status.RuntimeValue == 1f && !HasBoth(status)) Revoke(status);
         });
     }

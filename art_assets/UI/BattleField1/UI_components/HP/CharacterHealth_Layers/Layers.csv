@@ -1,0 +1,8 @@
+﻿Name,File,OrderBackToFront,Left,Top,Width,Height,OffsetLeft,OffsetTop,BlendMode,Clipping,Opacity,FillOpacity,StaticOpacityBaked,VectorBoundsNormalized,TextureScale
+“矩形 3”的投影,01_DropShadow.png,1,286,308,227,22,0,1,MULTIPLY,False,255,66,True,False,1
+“矩形 3”的外描边,02_OuterStroke.png,2,287,307,225,20,1,0,NORMAL,False,255,255,True,False,1
+矩形 3,03_BaseShape.png,3,289,309,219,14,3,2,NORMAL,False,255,255,True,True,4
+上阴影,04_UpperShadow.png,4,289,309,220,15,3,2,MULTIPLY,True,255,161,True,False,1
+下阴影,05_LowerShadow.png,5,289,309,220,15,3,2,MULTIPLY,True,255,97,True,False,1
+血条上方柔光（角色,06_UpperSoftLight.png,6,294,312,212,5,8,5,SOFT_LIGHT,True,255,255,True,False,1
+血条下方阴影（角色,07_LowerSoftLight.png,7,294,318,212,6,8,11,SOFT_LIGHT,True,255,255,True,False,1

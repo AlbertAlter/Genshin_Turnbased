@@ -9,6 +9,20 @@ namespace GenshinTurnBased.Tests.EditMode
     public sealed class ElementColorPaletteTests
     {
         [Test]
+        public void ReactionColors_UseIncomingElementOrOneFixedTableColor()
+        {
+            var palette = ElementColorPalette.Load();
+            Assert.That(palette.TryGetReactionColor(ReactionType.Melt, "Pyro", out var pyro), Is.True);
+            Assert.That(palette.TryGetReactionColor(ReactionType.Melt, "Cryo", out var cryo), Is.True);
+            Assert.That(pyro, Is.EqualTo(palette.GetColor("Pyro")));
+            Assert.That(cryo, Is.EqualTo(palette.GetColor("Cryo")));
+            palette.TryGetReactionColor(ReactionType.Overloaded, "Pyro", out var first);
+            palette.TryGetReactionColor(ReactionType.Overloaded, "Electro", out var second);
+            Assert.That(first, Is.EqualTo(second));
+            Assert.That(palette.TryGetReactionColor(ReactionType.Melt, "", out _), Is.False);
+        }
+
+        [Test]
         public void PaletteIsSharedByElementKey_WithoutChangingConfiguredColor()
         {
             var palette = ElementColorPalette.Parse(Entries());

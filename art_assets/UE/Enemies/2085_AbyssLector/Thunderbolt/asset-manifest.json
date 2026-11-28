@@ -1,0 +1,1249 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/Thunderbolt/视觉需求.md",
+  "variants": {
+    "2085_Thunderbolt_2Bolts": {
+      "effect": "2085_Thunderbolt_2Bolts",
+      "source": "Blender/2085_Thunderbolt_2Bolts.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/Thunderbolt/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning0": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_Lightning0.fbx",
+          "objects": [
+            "PART_BranchedBolt0.001"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.36849190294742584,
+            0.0,
+            4.610311500960961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt0.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.36849190294742584,
+              7.511150323935567e-07,
+              4.610311500960961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning1": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_Lightning1.fbx",
+          "objects": [
+            "PART_BranchedBolt1.001"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.275507315993309,
+            0.0,
+            4.602855276898481
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt1.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.275507315993309,
+              7.499002716016001e-07,
+              4.602855276898481
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch0": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_BoltBranch0.fbx",
+          "objects": [
+            "PART_BoltBranch0.001"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359928846359,
+            0.0,
+            0.6687910556793213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch0.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359928846359,
+              1.0895985269598896e-07,
+              0.6687910556793213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch1": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_BoltBranch1.fbx",
+          "objects": [
+            "PART_BoltBranch1.001"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856360077857971,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch1.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856360077857971,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch2": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_BoltBranch2.fbx",
+          "objects": [
+            "PART_BoltBranch2.001"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359630823135,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch2.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359630823135,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch3": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_BoltBranch3.fbx",
+          "objects": [
+            "PART_BoltBranch3.001"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359779834747,
+            0.0,
+            0.6687914133071899
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch3.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359779834747,
+              1.0895993796111725e-07,
+              0.6687914133071899
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch4": {
+          "file": "Exports/2085_Thunderbolt_2Bolts_BoltBranch4.fbx",
+          "objects": [
+            "PART_BoltBranch4.001"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.785636018961668,
+            0.0,
+            0.6687913313508034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch4.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.785636018961668,
+              1.0895993085568989e-07,
+              0.6687913313508034
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 35,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_Thunderbolt_2Bolts.wav"
+      }
+    },
+    "2085_Thunderbolt_3Bolts": {
+      "effect": "2085_Thunderbolt_3Bolts",
+      "source": "Blender/2085_Thunderbolt_3Bolts.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/Thunderbolt/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning0": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_Lightning0.fbx",
+          "objects": [
+            "PART_BranchedBolt0.002"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.36849190294742584,
+            0.0,
+            4.610311500960961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt0.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.36849190294742584,
+              7.511150323935567e-07,
+              4.610311500960961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning1": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_Lightning1.fbx",
+          "objects": [
+            "PART_BranchedBolt1.002"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.275507315993309,
+            0.0,
+            4.602855276898481
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt1.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.275507315993309,
+              7.499002716016001e-07,
+              4.602855276898481
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch0": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_BoltBranch0.fbx",
+          "objects": [
+            "PART_BoltBranch0.002"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359928846359,
+            0.0,
+            0.6687910556793213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch0.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359928846359,
+              1.0895985269598896e-07,
+              0.6687910556793213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch1": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_BoltBranch1.fbx",
+          "objects": [
+            "PART_BoltBranch1.002"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856360077857971,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch1.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856360077857971,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch2": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_BoltBranch2.fbx",
+          "objects": [
+            "PART_BoltBranch2.002"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359630823135,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch2.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359630823135,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch3": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_BoltBranch3.fbx",
+          "objects": [
+            "PART_BoltBranch3.002"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359779834747,
+            0.0,
+            0.6687914133071899
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch3.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359779834747,
+              1.0895993796111725e-07,
+              0.6687914133071899
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch4": {
+          "file": "Exports/2085_Thunderbolt_3Bolts_BoltBranch4.fbx",
+          "objects": [
+            "PART_BoltBranch4.002"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.785636018961668,
+            0.0,
+            0.6687913313508034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch4.002": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.785636018961668,
+              1.0895993085568989e-07,
+              0.6687913313508034
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 52,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 52,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_Thunderbolt_3Bolts.wav"
+      }
+    },
+    "2085_Thunderbolt_4Bolts": {
+      "effect": "2085_Thunderbolt_4Bolts",
+      "source": "Blender/2085_Thunderbolt_4Bolts.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/Thunderbolt/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning0": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_Lightning0.fbx",
+          "objects": [
+            "PART_BranchedBolt0.003"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.36849190294742584,
+            0.0,
+            4.610311500960961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt0.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.36849190294742584,
+              7.511150323935567e-07,
+              4.610311500960961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning1": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_Lightning1.fbx",
+          "objects": [
+            "PART_BranchedBolt1.003"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.275507315993309,
+            0.0,
+            4.602855276898481
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt1.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.275507315993309,
+              7.499002716016001e-07,
+              4.602855276898481
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch0": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_BoltBranch0.fbx",
+          "objects": [
+            "PART_BoltBranch0.003"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359928846359,
+            0.0,
+            0.6687910556793213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch0.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359928846359,
+              1.0895985269598896e-07,
+              0.6687910556793213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch1": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_BoltBranch1.fbx",
+          "objects": [
+            "PART_BoltBranch1.003"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856360077857971,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch1.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856360077857971,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch2": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_BoltBranch2.fbx",
+          "objects": [
+            "PART_BoltBranch2.003"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359630823135,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch2.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359630823135,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch3": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_BoltBranch3.fbx",
+          "objects": [
+            "PART_BoltBranch3.003"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359779834747,
+            0.0,
+            0.6687914133071899
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch3.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359779834747,
+              1.0895993796111725e-07,
+              0.6687914133071899
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch4": {
+          "file": "Exports/2085_Thunderbolt_4Bolts_BoltBranch4.fbx",
+          "objects": [
+            "PART_BoltBranch4.003"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.785636018961668,
+            0.0,
+            0.6687913313508034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch4.003": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.785636018961668,
+              1.0895993085568989e-07,
+              0.6687913313508034
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 52,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 69,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 69,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_Thunderbolt_4Bolts.wav"
+      }
+    }
+  }
+}

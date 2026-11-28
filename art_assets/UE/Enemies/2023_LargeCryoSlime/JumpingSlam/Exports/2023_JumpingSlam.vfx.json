@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2023_LargeCryoSlime/JumpingSlam/2023_JumpingSlam",
+  "source": "art_assets/UE/Enemies/2023_LargeCryoSlime/JumpingSlam/Blender/2023_JumpingSlam.blend",
+  "file": "Enemies/2023_LargeCryoSlime/JumpingSlam/Exports/2023_JumpingSlam.vfx.bytes",
+  "meshes": 3,
+  "tracks": 16,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 82050
+}

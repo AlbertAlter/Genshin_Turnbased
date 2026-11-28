@@ -18,6 +18,7 @@ public sealed class RoguelikeGameService : IRoguelikeGameService
     public RoguelikeShopService Shop { get; }
     internal RoguelikeFlowService Flow => flow;
     internal IRoguelikeItemCatalog Items => items;
+    internal RoguelikeNodeContentCatalog NodeContents { get; }
 
     public RoguelikeGameService(RoguelikeSaveService saves, IRoguelikeRouteRules routes,
         IRoguelikeEquipmentCatalog equipment, IRoguelikeItemCatalog items,
@@ -27,6 +28,7 @@ public sealed class RoguelikeGameService : IRoguelikeGameService
         this.saves = saves ?? throw new ArgumentNullException(nameof(saves));
         this.items = items ?? throw new ArgumentNullException(nameof(items));
         this.characters = characters ?? throw new ArgumentNullException(nameof(characters));
+        NodeContents = nodeContents;
         flow = new RoguelikeFlowService(saves, routes, nodeContents, nodeRewards);
         inventory = new RoguelikeInventoryService(flow, equipment, items);
         Shop = new RoguelikeShopService(flow, inventory,
@@ -66,7 +68,7 @@ public sealed class RoguelikeGameService : IRoguelikeGameService
         var catalog = data.GetWishCatalog(nodeContents.StageIds);
         var game = new RoguelikeGameService(saves, routes, equipment, items, characters,
             CardBackCatalog.FromStreamingAssets(), RoguelikeShopCatalog.LoadFromStreamingAssets(items), nodeContents: nodeContents, nodeRewards: nodeRewards);
-        game.battlePreparation = new RoguelikeBattlePreparation(nodeContents, equipment, new DataManagerRoguelikeEnemyCatalog(data));
+        game.battlePreparation = new RoguelikeBattlePreparation(nodeContents, equipment, new DataManagerRoguelikeEnemyCatalog(data), data.GetArtifactConfig());
         game.Wishes = new RoguelikeWishService(game.flow, game.inventory, catalog, equipment, items, characters,
             data.WeaponAttributesDict.Values, wishPhase, rules: wishRules, random: wishRandom,
             characterOverview: data.GetCharacterOverview);
@@ -167,7 +169,11 @@ public sealed class RoguelikeGameService : IRoguelikeGameService
     // Node/battle/reward modules keep ownership of content and actual outcomes; UI only calls after success.
     public RoguelikeSaveResult EnterNode(string stepId, RoguelikeNodeSelection node) => Execute(() => flow.EnterNode(stepId, node));
     public RoguelikeSaveResult BeginBattle(string stepId, string battleId) => Execute(() => flow.BeginBattle(stepId, battleId));
+    public RoguelikeSaveResult BeginEventBattle(string stepId, string battleId) => Execute(() => flow.BeginEventBattle(stepId, battleId));
+    public RoguelikeSaveResult SkipEvent(string stepId) => Execute(() => flow.SkipEvent(stepId));
     public RoguelikeSaveResult RecordBattleVictory(string stepId) => Execute(() => flow.RecordBattleVictory(stepId), refreshAppearance: true);
+    public RoguelikeSaveResult RecordBattleResult(string stepId, bool victory, int eventEnemyKills = 0)
+        => Execute(() => flow.RecordBattleResult(stepId, victory, eventEnemyKills), refreshAppearance: victory);
     public RoguelikeSaveResult SavePendingReward(string stepId, PendingRewardData pending) => Execute(() => flow.SavePendingReward(stepId, pending));
     public RoguelikeSaveResult CompleteChapter(string stepId) => Execute(() => flow.CompleteChapter(stepId));
     public RoguelikeSaveResult SaveCompletedChapterToSlot(string stepId, int slot, bool overwriteConfirmed = false)
@@ -203,6 +209,9 @@ public sealed class RoguelikeGameService : IRoguelikeGameService
             ApplyAcquisition(draft, outcome);
             if (!isEvent && current.Data.Snapshot.PendingNodeReward != null)
                 draft.AddItems(current.Data.Snapshot.PendingNodeReward.Items);
+            // 与节点完成同次原子入账，重复ReturnToRoute会被StepId拒绝。额外事件奖励只在返回路线后显示。
+            if (!isEvent && !current.Data.Flow.BattleDefeated && current.Data.Flow.Node.Kind == RoguelikeNodeKind.Event && NodeContents != null)
+                draft.AddItems(NodeContents.EventRewards(current.Data.Flow.Node.ContentId, current.Data.Flow.EventEnemyKills));
             var result = draft.ExportSnapshot();
             if (isEvent) return flow.CompleteEvent(stepId, result);
             result.PendingRewardData = null;

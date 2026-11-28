@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/Blizzard/2067_Blizzard",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/Blizzard/Blender/2067_Blizzard.blend",
+  "file": "Enemies/2067_CryoRegisvine/Blizzard/Exports/2067_Blizzard.vfx.bytes",
+  "meshes": 3,
+  "tracks": 75,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 228002
+}

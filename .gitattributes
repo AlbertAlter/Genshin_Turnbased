@@ -17,3 +17,27 @@
 *.ttc filter=lfs diff=lfs merge=lfs -text
 *.otf filter=lfs diff=lfs merge=lfs -text
 *.psd filter=lfs diff=lfs merge=lfs -text
+
+# 美术源目录的二进制素材；网页、脚本和配置继续作为普通文本管理。
+art_assets/**/*.png filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.webp filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.gif filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.tga filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.exr filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.hdr filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.webm filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.mov filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.wav filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.ogg filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.flac filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.blend filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.blend1 filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.glb filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.bin filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.bytes filter=lfs diff=lfs merge=lfs -text
+art_assets/**/*.docx filter=lfs diff=lfs merge=lfs -text

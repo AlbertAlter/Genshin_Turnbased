@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1028_Mona/StellarisPhantasm/Mona_StellarisPhantasm_WithStateHandoff",
+  "source": "art_assets/UE/Characters/1028_Mona/StellarisPhantasm/Blender/Mona_StellarisPhantasm_WithStateHandoff.blend",
+  "file": "Characters/1028_Mona/StellarisPhantasm/Exports/Mona_StellarisPhantasm_WithStateHandoff.vfx.bytes",
+  "meshes": 44,
+  "tracks": 176,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 251005
+}

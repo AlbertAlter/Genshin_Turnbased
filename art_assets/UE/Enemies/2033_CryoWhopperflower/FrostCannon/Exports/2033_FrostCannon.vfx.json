@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2033_CryoWhopperflower/FrostCannon/2033_FrostCannon",
+  "source": "art_assets/UE/Enemies/2033_CryoWhopperflower/FrostCannon/Blender/2033_FrostCannon.blend",
+  "file": "Enemies/2033_CryoWhopperflower/FrostCannon/Exports/2033_FrostCannon.vfx.bytes",
+  "meshes": 8,
+  "tracks": 270,
+  "frames": 170,
+  "duration": 5.633333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.633333333333334
+  },
+  "bytes": 958951
+}

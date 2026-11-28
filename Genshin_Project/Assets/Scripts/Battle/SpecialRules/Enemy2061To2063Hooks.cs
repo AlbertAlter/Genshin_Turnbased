@@ -45,7 +45,7 @@ public static class Enemy2061To2063Hooks
             if (!(host is BattleEntity owner)) return;
             // 只跟随这次绑定的眩晕。若它被提前解除，正常结束父状态，让表里的恢复行动结算。
             StunRemovals.Add(s, BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved, (_, fact) => {
-                if (fact.Host == owner && fact.StatusId == PublicControlStates.EnemyStun
+                if (ReferenceEquals(fact.Host, owner) && fact.StatusId == PublicControlStates.EnemyStun
                     && s.BoundStatuses.Exists(child => child.ApplyOrder == fact.InstanceId))
                     owner.RemoveStatusInstance(s, "CoreStunEnded");
             }, s.ApplyOrder, () => owner.IsAlive && s.IsActive && !s.DeathCleanupPending));

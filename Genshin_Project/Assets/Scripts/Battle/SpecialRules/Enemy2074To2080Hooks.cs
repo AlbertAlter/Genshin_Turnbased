@@ -60,7 +60,7 @@ public static class Enemy2074To2080Hooks
         BattleSpecialRules.RegisterStatusLifecycle(id, (s, host) => {
             var clock = new Clock { Due = Turn + delay }; Clocks.Add(s, clock);
             if (firstAction) clock.Action = BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionStarted, (_, action) => {
-                if (action.Subject != host) return;
+                if (!ReferenceEquals(action.Subject, host)) return;
                 clock.First = false; clock.Action?.Dispose();
             }, s.ApplyOrder, () => s.IsActive);
         }, (s, _) => { if (Clocks.TryGetValue(s, out var clock)) clock.Action?.Dispose(); Clocks.Remove(s); });

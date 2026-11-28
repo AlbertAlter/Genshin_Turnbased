@@ -1,0 +1,54 @@
+{
+  "effect": "Noelle / shared native gold sword and soft profiles",
+  "parts": {
+    "Noelle_GoldSword": {
+      "file": "Noelle_GoldSword.fbx",
+      "radius": 1.0042429412290608,
+      "vertices": 288,
+      "triangles": 422,
+      "alpha": [
+        0.0,
+        0.949999988079071
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Noelle_GoldSword_FacetedRGBA"
+      ]
+    },
+    "Noelle_SweptRibbon": {
+      "file": "Noelle_SweptRibbon.fbx",
+      "radius": 0.7071067811865476,
+      "vertices": 225,
+      "triangles": 384,
+      "alpha": [
+        0.0,
+        0.47999998927116394
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Noelle_SweptRibbon_RGBA"
+      ]
+    },
+    "Noelle_GroupContactSurface": {
+      "file": "Noelle_GroupContactSurface.fbx",
+      "radius": 0.7071067811865476,
+      "vertices": 225,
+      "triangles": 384,
+      "alpha": [
+        0.0,
+        0.4000000059604645
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Noelle_GroupContactSurface_RGBA"
+      ]
+    }
+  },
+  "scope": "Static reusable geometry only. Source pose history deforms the sweep profile; it is not a baked whole-target effect.",
+  "fps": 30,
+  "units": "1 Blender unit = 1 meter; reference art scale 100 design pixels per unit",
+  "axes": "Blender X right, Z up, -Y towards viewer; FBX -Z forward / Y up",
+  "runtimeConnected": false,
+  "reference": "Nine separate cards with actual fronts, frames, backs and sides; all used images packed. Reference objects never exported.",
+  "vertexColor": "VFXColor POINT RGBA, LINEAR export; soft edge alpha and material groups retained. Blender object alpha/reveal and authored clocks require later explicit runtime reconstruction; no Unity integration performed."
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>元素反应 · 元素栏动画</title>
+  <link rel="stylesheet" href="../CardAnimation/card-animation-preview.css">
+  <link rel="stylesheet" href="element-reaction-preview.css">
+  <script src="../CardAnimation/battle-preview-scene.js" defer></script>
+  <script src="element-aura-motion.js" defer></script>
+  <script src="element-reaction-cases.js" defer></script>
+  <script src="element-reaction-preview.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="title"><span class="diamond" aria-hidden="true"></span><h1>元素反应<span>元素栏动画</span></h1></div>
+    <p>BattleField1</p>
+    <div class="toolbar-actions"><button id="clean-view" type="button">纯画面</button></div>
+  </header>
+  <main id="viewport" aria-label="元素栏动画战斗场景">
+    <div id="arena-fit"><div id="arena">
+      <img class="battle-background" src="../../BattleBG/1_BG.png" alt="" draggable="false">
+      <div class="battle-vignette"></div>
+      <div id="enemy-hud" class="enemy-hud"></div>
+      <div class="round-label"><span>第一回合</span><small>我方行动</small></div>
+      <div id="cards"></div>
+      <div id="aura-layer" aria-label="元素附着与反应"></div>
+      <div id="party-hud" class="party-hud"></div>
+      <div class="battle-actions" aria-hidden="true">
+        <span class="ap"><small>行动点</small>64 <i>/ 100</i></span>
+        <div class="skill-discs">
+          <span><img src="../../Skill_Icon/%23Normal/1_1.png" alt=""><small>普通攻击</small></span>
+          <span><img src="../../Skill_Icon/1015/1015_S02.png" alt=""><small>元素战技</small></span>
+          <span><img src="../../Skill_Icon/1015/1015_S03.png" alt=""><small>元素爆发</small></span>
+        </div>
+      </div>
+    </div></div>
+    <div id="load-status" role="status">正在加载项目素材…</div>
+    <button id="exit-clean" type="button" hidden>返回控件 · Esc</button>
+  </main>
+  <section id="playback" aria-label="元素反应播放控件">
+    <div class="playback-row">
+      <div class="transport"><button id="play" class="primary" type="button" disabled>播放</button><button id="pause" type="button" disabled>暂停</button><button id="stop" type="button" disabled>复位</button></div>
+      <div class="timeline"><label for="seek" id="playback-status" role="status">加载中</label><input id="seek" type="range" min="0" max="1000" value="0" aria-label="动画进度"><output id="time">0.00 s</output></div>
+      <label class="speed-label">速度<select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+      <label class="check"><input id="loop" type="checkbox">循环</label>
+    </div>
+    <div class="reaction-controls">
+      <label>反应目标<select id="target"></select></label>
+      <span id="reaction-result" class="reaction-result"></span>
+    </div>
+    <div id="cases" class="presets" aria-label="反应示例"></div>
+    <p class="help"><span id="description"></span><span>示例结果回放 · 空格 暂停 / 继续 · R 重播 · Esc 复位</span></p>
+  </section>
+</body>
+</html>

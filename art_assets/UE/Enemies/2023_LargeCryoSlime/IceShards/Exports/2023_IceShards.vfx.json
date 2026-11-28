@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2023_LargeCryoSlime/IceShards/2023_IceShards",
+  "source": "art_assets/UE/Enemies/2023_LargeCryoSlime/IceShards/Blender/2023_IceShards.blend",
+  "file": "Enemies/2023_LargeCryoSlime/IceShards/Exports/2023_IceShards.vfx.bytes",
+  "meshes": 15,
+  "tracks": 102,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 207187
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2083_PrimoGeovishap/InfusedStones/2083_InfusedStones_Cryo",
+  "source": "art_assets/UE/Enemies/2083_PrimoGeovishap/InfusedStones/Blender/2083_InfusedStones_Cryo.blend",
+  "file": "Enemies/2083_PrimoGeovishap/InfusedStones/Exports/2083_InfusedStones_Cryo.vfx.bytes",
+  "meshes": 4,
+  "tracks": 234,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 530407
+}

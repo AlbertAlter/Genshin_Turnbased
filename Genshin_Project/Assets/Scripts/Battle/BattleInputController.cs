@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 战斗输入控制（正式组件，最终保留，挂场景任意物体上）。
 /// 职责：
-///  1. 键盘输入：Q/W/E = 普攻/重击/战技，1~4 = 对应角色爆发，A/D = 目标左右切换，
+///  1. 键盘输入统一读取ProjectKeyBindings；以下为默认值：Q/W/E = 普攻/重击/战技，1~4 = 对应角色爆发，A/D = 目标左右切换，
 ///               空格 = 确认目标（选择中）/结束回合（非选择），X/Esc = 取消
 ///  2. 目标选择状态机（含 SkillPhase 多段技能推进）
 ///  3. UI 操作接口（UIBattleController 按钮调用，与键盘同一套逻辑）
@@ -14,10 +14,10 @@ using UnityEngine;
 public class BattleInputController : MonoBehaviour
 {
     public BattleUiLayout selectionLayout;
-    /// <summary>提示表现层预留：只发送lang key，尚未创建提示跳字UI。</summary>
+    /// <summary>Only emits a Lang key. BattleUiFloatingTips subscribes to the battle-level shared channel.</summary>
     public event Action<string> TipRequested;
     private readonly HashSet<object> uiInputOwners = new HashSet<object>();
-    public bool IsUiInputBlocked => uiInputOwners.Count != 0;
+    public bool IsUiInputBlocked => uiInputOwners.Count != 0 || BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed;
 
     /// <summary>弹窗按持有者阻止操作；关闭旧界面不会解锁其他界面。</summary>
     public void SetUiInputBlocked(object owner, bool blocked)
@@ -62,6 +62,7 @@ public class BattleInputController : MonoBehaviour
 
     void Update()
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return;
         var bm = BattleManager.Instance;
         if (bm == null) return;
 
@@ -90,47 +91,47 @@ public class BattleInputController : MonoBehaviour
         {
             // ===== 目标选择阶段 =====
             // Screen direction is resolved from the scene, never inferred from enemy slot numbers.
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+            if (ProjectKeyBindings.Down(BattleShortcut.Previous) || ProjectKeyBindings.Down(BattleShortcut.Next))
             {
-                if (Input.GetKeyDown(KeyCode.A))
+                if (ProjectKeyBindings.Down(BattleShortcut.Previous))
                     MoveSelection(-1);
-                else if (Input.GetKeyDown(KeyCode.D))
+                else if (ProjectKeyBindings.Down(BattleShortcut.Next))
                     MoveSelection(1);
             }
-            else if (Input.GetKeyDown(KeyCode.Space)) UIConfirmSelection();
-            else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
+            else if (ProjectKeyBindings.Down(BattleShortcut.Confirm)) UIConfirmSelection();
+            else if (Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel))
             {
                 UICancelSelection();
             }
             // 键盘与鼠标共用入口；数字键始终代表角色槽位，不代表当前待施放者。
-            else if (Input.GetKeyDown(KeyCode.Q)) UIEnterSelectSkill(0);
-            else if (Input.GetKeyDown(KeyCode.W)) UIEnterSelectSkill(1);
-            else if (Input.GetKeyDown(KeyCode.E)) UIEnterSelectSkill(2);
-            else if (Input.GetKeyDown(KeyCode.Alpha1)) UIEnterBurstBySlot(0);
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) UIEnterBurstBySlot(1);
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) UIEnterBurstBySlot(2);
-            else if (Input.GetKeyDown(KeyCode.Alpha4)) UIEnterBurstBySlot(3);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Normal)) UIEnterSelectSkill(0);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Heavy)) UIEnterSelectSkill(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Skill)) UIEnterSelectSkill(2);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst1)) UIEnterBurstBySlot(0);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst2)) UIEnterBurstBySlot(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst3)) UIEnterBurstBySlot(2);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst4)) UIEnterBurstBySlot(3);
             return;
         }
 
         // ===== 非选择阶段 =====
         if (bm.CurrentPhase == TurnPhase.AllyAction)
         {
-            if (Input.GetKeyDown(KeyCode.Q)) UIEnterSelectSkill(0);
-            else if (Input.GetKeyDown(KeyCode.W)) UIEnterSelectSkill(1);
-            else if (Input.GetKeyDown(KeyCode.E)) UIEnterSelectSkill(2);
+            if (ProjectKeyBindings.Down(BattleShortcut.Normal)) UIEnterSelectSkill(0);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Heavy)) UIEnterSelectSkill(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Skill)) UIEnterSelectSkill(2);
             //1234=四槽角色爆发（接口文档：可点击任意角色能量槽或主键盘1234，能量符合要求时进入对应爆发目标选择，该角色无需出战，2026-08-14）
-            else if (Input.GetKeyDown(KeyCode.Alpha1)) UIEnterBurstBySlot(0);
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) UIEnterBurstBySlot(1);
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) UIEnterBurstBySlot(2);
-            else if (Input.GetKeyDown(KeyCode.Alpha4)) UIEnterBurstBySlot(3);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst1)) UIEnterBurstBySlot(0);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst2)) UIEnterBurstBySlot(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst3)) UIEnterBurstBySlot(2);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Burst4)) UIEnterBurstBySlot(3);
         }
 
         // 空格 = 结束回合（非选择阶段）
         // 空格 = 结束回合（2026-08-14）：换人界面等 UI 拦截状态已在 Update 开头屏蔽，此处无需再判断
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (ProjectKeyBindings.Down(BattleShortcut.Confirm))
             UIEndTurn();
-        else if (Input.GetKeyDown(KeyCode.X))
+        else if (ProjectKeyBindings.Down(BattleShortcut.Cancel))
             UICancelSelection();
     }
 
@@ -140,12 +141,12 @@ public class BattleInputController : MonoBehaviour
         if (BattleExecution.IsBusy || _waitingForResolution) return false;
         //施放者：默认当前出战；1234爆发可指定任意角色（无需出战，2026-08-14）
         var ally = specifiedAlly != null ? specifiedAlly : bm.GetActiveAlly();
-        if (ally == null) return false;
+        if (ally == null) { NotifyTip(BattleTipKeys.NoActiveCharacter); return false; }
 
-        string reason = ally.GetBlockReason(skill);
-        if (reason != null)
+        if (ally.TryGetBlockReason(skill, out string reason, out string reasonKey))
         {
             LogManager.Log(LogCategory.Action, $"{SkillNames[skill]}不可用：{reason}");
+            NotifyTip(reasonKey);
             return false;
         }
 
@@ -448,11 +449,11 @@ public class BattleInputController : MonoBehaviour
     {
         if (bm == null || slot < 0 || slot >= bm.AllySlotCount) return false;
         var ally = bm.GetAllyBySlot(slot);
-        if (ally == null || ally.Entity == null || !ally.Entity.IsOnField) return false;
-        string reason = ally.GetBlockReason(3);
-        if (reason != null)
+        if (ally == null || ally.Entity == null) { NotifyTip("tip_character_unavailable"); return false; }
+        if (ally.TryGetBlockReason(3, out string reason, out string reasonKey))
         {
             LogManager.Log(LogCategory.Action, $"角色{slot +1}爆发不可用：{reason}");
+            NotifyTip(reasonKey);
             return false;
         }
         if (_selecting)
@@ -467,6 +468,7 @@ public class BattleInputController : MonoBehaviour
     private bool CanAcceptAction(BattleManager bm) => isActiveAndEnabled && bm != null
         && !IsUiInputBlocked
         && !bm.IsBattleOver && bm.CurrentPhase == TurnPhase.AllyAction
+        && !bm.IsFreeForcedSwitchPending
         && !BattleExecution.IsBusy && !_waitingForResolution;
 
     // ================= UI操作接口（UIBattleController 调用，与键盘同一套逻辑） =================

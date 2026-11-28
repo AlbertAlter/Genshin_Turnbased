@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1021_Noelle/EnhancedChargedAttack/Noelle_EnhancedChargedAttack",
+  "source": "art_assets/UE/Characters/1021_Noelle/EnhancedChargedAttack/Blender/Noelle_EnhancedChargedAttack.blend",
+  "file": "Characters/1021_Noelle/EnhancedChargedAttack/Exports/Noelle_EnhancedChargedAttack.vfx.bytes",
+  "meshes": 5,
+  "tracks": 28,
+  "frames": 49,
+  "duration": 1.6,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "OneUnifiedActualGroupContact": 0.6333333333333333,
+    "Clear": 1.6
+  },
+  "bytes": 133326
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2066_GeoHypostasis/SummonPillars/2066_SummonPillars",
+  "source": "art_assets/UE/Enemies/2066_GeoHypostasis/SummonPillars/Blender/2066_SummonPillars.blend",
+  "file": "Enemies/2066_GeoHypostasis/SummonPillars/Exports/2066_SummonPillars.vfx.bytes",
+  "meshes": 3,
+  "tracks": 54,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 111096
+}

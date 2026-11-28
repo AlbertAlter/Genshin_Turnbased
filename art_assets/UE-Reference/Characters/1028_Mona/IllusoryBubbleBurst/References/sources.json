@@ -1,0 +1,41 @@
+[
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E8%8E%AB%E5%A8%9C",
+    "image_url": "https://patchwiki.biligame.com/images/ys/b/ba/2gx1uqfwn0kmynhj3kth8z2aecejo0s.gif",
+    "title": "星命定轨.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码118帧、3.54秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "查找实际受击破泡画面；施放演示不等同于已观看完整破泡过程。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\mona-references\\Mona_StellarisPhantasm_Observation.png",
+    "decoded_frames": 118,
+    "duration_seconds": 3.54,
+    "sampled_frames": [
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      31,
+      36,
+      41,
+      46,
+      51,
+      56,
+      61,
+      66,
+      71,
+      76,
+      81,
+      86,
+      92,
+      97,
+      102,
+      107,
+      112,
+      117
+    ]
+  }
+]

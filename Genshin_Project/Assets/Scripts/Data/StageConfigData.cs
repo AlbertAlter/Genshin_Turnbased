@@ -24,6 +24,26 @@ public class StageEnemySetup
     public int EnemyID;          // 敌人ID（0=空位）
     public int Level;            // 等级 1-100
     public int Slot;             // 敌方位置 1-5（1=最右）
+    public float HPMultiplier = 1f;
+    public float ATKMultiplier = 1f;
+    public float InitialHPPercent = 100f;
+    public int AIProfileID;
+    public bool IgnoreForVictory;
+    public List<StageEnemyStatusSetup> InitialStatuses = new List<StageEnemyStatusSetup>();
+}
+
+[Serializable]
+public class StageEnemyStatusSetup
+{
+    public string StatusID;
+    public int Turns;
+}
+
+[Serializable]
+public class StageWaveSetup
+{
+    public int Wave = 1;
+    public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();
 }
 
 [Serializable]
@@ -33,6 +53,11 @@ public class StageSetupData
     public int BattleID = 1;                              // 战斗背景编号，对应 BattleBG/{BattleID}_BG.png
     public List<StageAllySetup> Allies = new List<StageAllySetup>();      // 我方队伍（最多4）
     public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();   // 敌方阵容（最多5）
+    public List<StageWaveSetup> Waves = new List<StageWaveSetup>(); // 空集合兼容原单波Enemies。
+    public int MaxRound;
+    public string WinCondition, LoseCondition; // EventBattleConfig only; empty uses the normal defaults.
+    public string ConditionKey; // 可选的条件说明Lang key；仅展示，不作为胜负表达式。
+    public List<StageTrialSetup> Trials = new List<StageTrialSetup>();
     public float EnemyHPMultiplier = 1f;
     public float EnemyATKMultiplier = 1f;
     public string InitialEnergyMode = "Percent";   // Percent=百分比 / Fixed=固定数值

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1030_Tartaglia/HavocMelee/Tartaglia_HavocMelee_MainOnly",
+  "source": "art_assets/UE/Characters/1030_Tartaglia/HavocMelee/Blender/Tartaglia_HavocMelee_MainOnly.blend",
+  "file": "Characters/1030_Tartaglia/HavocMelee/Exports/Tartaglia_HavocMelee_MainOnly.vfx.bytes",
+  "meshes": 7,
+  "tracks": 98,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 337720
+}

@@ -1,0 +1,284 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2012_DendroSamachurl\\DendroField\\视觉需求.md",
+  "variants": {
+    "2012_DendroField": {
+      "effect": "2012_DendroField",
+      "source": "Blender/2012_DendroField.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2012_DendroSamachurl\\DendroField\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/2012_DendroField_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/2012_DendroField_ContinuousGround.fbx",
+          "objects": [
+            "PART_Dendro_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Dendro_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/2012_DendroField_GroundPattern0.fbx",
+          "objects": [
+            "PART_Dendro_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.174220085144043,
+            0.0,
+            10.361742496490479
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Dendro_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.174220085144043,
+              1.6987323760986328e-06,
+              10.361742496490479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/2012_DendroField_GroundPattern1.fbx",
+          "objects": [
+            "PART_Dendro_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.015108108520508,
+            0.0,
+            10.635203838348389
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Dendro_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.015108108520508,
+              1.7285346984863281e-06,
+              10.635203838348389
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/2012_DendroField_GroundPattern2.fbx",
+          "objects": [
+            "PART_Dendro_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.05208396911621,
+            0.0,
+            9.461855411529541
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Dendro_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.05208396911621,
+              1.5348196029663086e-06,
+              9.461855411529541
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Leaf": {
+          "file": "Exports/2012_DendroField_Leaf.fbx",
+          "objects": [
+            "PART_DriftingLeafBlade",
+            "PART_LeafMidrib"
+          ],
+          "vertices": 28,
+          "triangles": 30,
+          "dimensions": [
+            0.23999999463558197,
+            0.06799999810755253,
+            0.550000011920929
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DriftingLeafBlade": [
+              "Leaf"
+            ],
+            "PART_LeafMidrib": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 28,
+            "triangles": 30,
+            "dimensions": [
+              0.23999999463558197,
+              0.06800008378922939,
+              0.550000011920929
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 65,
+      "focus": [
+        4.534999847412109,
+        0.125,
+        0.33500000834465027
+      ],
+      "elementAppearance": "Dendro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2012_DendroField.wav"
+      },
+      "coveragePreviews": {
+        "04_Single": "Preview/2012_DendroField_04_Single.png",
+        "05_Adjacent": "Preview/2012_DendroField_05_Adjacent.png",
+        "06_Separated": "Preview/2012_DendroField_06_Separated.png",
+        "07_Clear": "Preview/2012_DendroField_07_Clear.png"
+      }
+    }
+  }
+}

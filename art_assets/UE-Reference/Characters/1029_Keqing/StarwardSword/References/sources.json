@@ -1,0 +1,41 @@
+[
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E5%88%BB%E6%99%B4",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/11/aabtv3d7jixirkngwc39xdsvufcqtta.gif",
+    "title": "天街巡游.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码103帧、4.12秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "起手、八次连斩和终结斩的原作节拍、方向与雷光；适度压暗为项目适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\keqing-references\\Keqing_StarwardSword_Observation.png",
+    "decoded_frames": 103,
+    "duration_seconds": 4.12,
+    "sampled_frames": [
+      0,
+      4,
+      9,
+      13,
+      18,
+      22,
+      27,
+      31,
+      35,
+      40,
+      44,
+      49,
+      53,
+      58,
+      62,
+      67,
+      71,
+      75,
+      80,
+      84,
+      89,
+      93,
+      98,
+      102
+    ]
+  }
+]

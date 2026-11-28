@@ -1,0 +1,514 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/HavocMelee/视觉需求.md",
+  "variants": {
+    "Tartaglia_HavocMelee_MainOnly": {
+      "effect": "Tartaglia_HavocMelee_MainOnly",
+      "source": "Blender/Tartaglia_HavocMelee_MainOnly.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/HavocMelee/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_HavocMelee_MainOnly_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_HavocMelee_MainOnly_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_HavocMelee_MainOnly_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Wisp": {
+          "file": "Exports/Tartaglia_HavocMelee_MainOnly_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneGroupMeleeWater": {
+          "file": "Exports/Tartaglia_HavocMelee_MainOnly_OneGroupMeleeWater.fbx",
+          "objects": [
+            "PART_OneWholeGroupHydroMeleeBody",
+            "PART_OneSharpMeleeBladeEdge",
+            "PART_OneContinuousMeleeWaterWake"
+          ],
+          "vertices": 2231,
+          "triangles": 3840,
+          "dimensions": [
+            8.537714958190918,
+            0.4000000059604645,
+            3.954468846321106
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -4.4670000076293945,
+        -0.23999999463558197,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "groupBladeTargetIndices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "groupBladeContact": 25,
+      "contract": "ONE continuous water blade covers all actual enemy centres at one main contact25. Combined variant has two later independent Riptide centres35/48; only those centre marks fade, neighbour1 persists. No delayed per-enemy main hit or repeated giant slash.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_HavocMelee_MainOnly.wav"
+      }
+    },
+    "Tartaglia_HavocMelee_WithRiptides": {
+      "effect": "Tartaglia_HavocMelee_WithRiptides",
+      "source": "Blender/Tartaglia_HavocMelee_WithRiptides.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/HavocMelee/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Wisp": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneGroupMeleeWater": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_OneGroupMeleeWater.fbx",
+          "objects": [
+            "PART_OneWholeGroupHydroMeleeBody",
+            "PART_OneSharpMeleeBladeEdge",
+            "PART_OneContinuousMeleeWaterWake"
+          ],
+          "vertices": 2231,
+          "triangles": 3840,
+          "dimensions": [
+            8.537714958190918,
+            0.4000000059604645,
+            3.954468846321106
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/Tartaglia_HavocMelee_WithRiptides_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -6.054999828338623,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ],
+            [
+              -2.765000104904175,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        },
+        {
+          "frame": 48,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 48,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 48,
+          "element": "Hydro",
+          "origin": [
+            -1.215000033378601,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -2.765000104904175,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -1.215000033378601,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -4.4670000076293945,
+        -0.23999999463558197,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "groupBladeTargetIndices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "groupBladeContact": 25,
+      "contract": "ONE continuous water blade covers all actual enemy centres at one main contact25. Combined variant has two later independent Riptide centres35/48; only those centre marks fade, neighbour1 persists. No delayed per-enemy main hit or repeated giant slash.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_HavocMelee_WithRiptides.wav"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2068_PyroRegisvine/Spin/2068_Spin_Action",
+  "source": "art_assets/UE/Enemies/2068_PyroRegisvine/Spin/Blender/2068_Spin_Action.blend",
+  "file": "Enemies/2068_PyroRegisvine/Spin/Exports/2068_Spin_Action.vfx.bytes",
+  "meshes": 7,
+  "tracks": 64,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 227359
+}

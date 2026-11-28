@@ -15,6 +15,12 @@ public interface IRoguelikeBattleRuntime
     void StopBattle();
 }
 
+/// <summary>只读实际战斗计数，和胜负结果一起保存，不从UI或敌阵行数估算。</summary>
+public interface IRoguelikeEventBattleStatistics
+{
+    int EventEnemyKills { get; }
+}
+
 public sealed class RoguelikeBattleOutcome
 {
     public string RunId { get; private set; }
@@ -32,7 +38,7 @@ public sealed class RoguelikeBattleOutcome
 
 /// <summary>
 /// UI 无关的战斗数据/生命周期适配器。先由 flow.BeginBattle 保存恢复点，再 TryStart(flow.Resume().Data)。
-/// 胜利只推进到结算步骤，不自动领奖或返回某界面；失败保留战前档。
+/// 胜负均推进到结算步骤，不自动领奖或切界面；战败结算后保留节点供重新编队。
 /// 重试/离开时先 StopBattle，旧运行器的迟到回调会被丢弃。
 /// </summary>
 public sealed class RoguelikeBattleAdapter : IRoguelikeBattlePort, IDisposable
@@ -123,7 +129,7 @@ public sealed class RoguelikeBattleAdapter : IRoguelikeBattlePort, IDisposable
     private void PublishOutcome(Session attempt)
     {
         if (!ReferenceEquals(session, attempt)) return;
-        var result = attempt.Victory.Value ? CommitVictory(attempt) : RoguelikeSaveResult.Success("战败，保留战前恢复点。");
+        var result = CommitOutcome(attempt);
         LastOutcome = new RoguelikeBattleOutcome(attempt.Setup, attempt.Victory.Value, result);
         var outcome = LastOutcome;
         if (Ended == null) return;
@@ -132,19 +138,28 @@ public sealed class RoguelikeBattleAdapter : IRoguelikeBattlePort, IDisposable
             catch (Exception exception) { Debug.LogException(exception); }
     }
 
-    /// <summary>胜利已发生但存档失败时，只重试提交，不重开战斗，也不再广播一次自然结束。</summary>
+    /// <summary>兼容胜利专用调用方；重试仅提交原结果，不重开战斗或广播第二次自然结束。</summary>
     public RoguelikeSaveResult RetryVictoryCommit()
     {
-        if (disposed || session == null || session.Starting || session.Victory != true || session.Committed)
+        if (session?.Victory != true)
             return Invalid("当前没有需要重新提交的胜利结果。");
-        var result = CommitVictory(session);
-        LastOutcome = new RoguelikeBattleOutcome(session.Setup, true, result);
+        return RetryOutcomeCommit();
+    }
+
+    /// <summary>重试胜负结果落盘；不会重开战斗、重播自然结束或重复生成奖励。</summary>
+    public RoguelikeSaveResult RetryOutcomeCommit()
+    {
+        if (disposed || session == null || session.Starting || !session.Victory.HasValue || session.Committed)
+            return Invalid("当前没有需要重新提交的战斗结果。");
+        var result = CommitOutcome(session);
+        LastOutcome = new RoguelikeBattleOutcome(session.Setup, session.Victory.Value, result);
         return result;
     }
 
-    private RoguelikeSaveResult CommitVictory(Session attempt)
+    private RoguelikeSaveResult CommitOutcome(Session attempt)
     {
-        var result = flow.RecordBattleVictory(attempt.Setup.StepId);
+        var result = flow.RecordBattleResult(attempt.Setup.StepId, attempt.Victory.Value,
+            (runtime as IRoguelikeEventBattleStatistics)?.EventEnemyKills ?? 0);
         if (result.Succeeded) attempt.Committed = true;
         return result;
     }

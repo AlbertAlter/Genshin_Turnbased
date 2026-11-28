@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2071_Stormterror/RiftGround/2071_RiftGround_Trigger",
+  "source": "art_assets/UE/Enemies/2071_Stormterror/RiftGround/Blender/2071_RiftGround_Trigger.blend",
+  "file": "Enemies/2071_Stormterror/RiftGround/Exports/2071_RiftGround_Trigger.vfx.bytes",
+  "meshes": 1,
+  "tracks": 16,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 54686
+}

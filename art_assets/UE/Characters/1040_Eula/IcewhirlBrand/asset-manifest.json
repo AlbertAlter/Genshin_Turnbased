@@ -1,0 +1,404 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1040_Eula/IcewhirlBrand/视觉需求.md",
+  "variants": {
+    "Eula_IcewhirlBrand_1Sword": {
+      "effect": "Eula_IcewhirlBrand_1Sword",
+      "source": "Blender/Eula_IcewhirlBrand_1Sword.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/IcewhirlBrand/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Eula_IcewhirlBrand_1Sword_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Eula_IcewhirlBrand_1Sword_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Eula_IcewhirlBrand_1Sword_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "IcewhirlSword": {
+          "file": "Exports/Eula_IcewhirlBrand_1Sword_IcewhirlSword.fbx",
+          "objects": [
+            "PART_IcewhirlFacetedBlade"
+          ],
+          "vertices": 140,
+          "triangles": 276,
+          "dimensions": [
+            0.46658599376678467,
+            0.14000000804662704,
+            1.8291377425193787
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_IcewhirlFacetedBlade": [
+              "EulaPaleLightMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 140,
+            "triangles": 276,
+            "dimensions": [
+              0.46658599376678467,
+              0.14000030606985092,
+              1.8291377425193787
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 36,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        20
+      ],
+      "hero_frame": 31,
+      "focus": [
+        -1.215000033378601,
+        0.10000000149011612,
+        -0.6850000023841858
+      ],
+      "detailScale": 14,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "previewConsumedGrimheart": 1,
+      "previewSameTarget": true,
+      "contract": "One sword per actual consumed layer, up to two; repeated actual target is valid. The main hold slash is absent from this independent source.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_IcewhirlBrand_1Sword.wav"
+      }
+    },
+    "Eula_IcewhirlBrand_2Swords": {
+      "effect": "Eula_IcewhirlBrand_2Swords",
+      "source": "Blender/Eula_IcewhirlBrand_2Swords.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/IcewhirlBrand/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Eula_IcewhirlBrand_2Swords_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Eula_IcewhirlBrand_2Swords_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Eula_IcewhirlBrand_2Swords_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "IcewhirlSword": {
+          "file": "Exports/Eula_IcewhirlBrand_2Swords_IcewhirlSword.fbx",
+          "objects": [
+            "PART_IcewhirlFacetedBlade"
+          ],
+          "vertices": 140,
+          "triangles": 276,
+          "dimensions": [
+            0.46658599376678467,
+            0.14000000804662704,
+            1.8291377425193787
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_IcewhirlFacetedBlade": [
+              "EulaPaleLightMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 140,
+            "triangles": 276,
+            "dimensions": [
+              0.46658599376678467,
+              0.14000030606985092,
+              1.8291377425193787
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 36,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 47,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        20,
+        31
+      ],
+      "hero_frame": 31,
+      "focus": [
+        -1.215000033378601,
+        0.10000000149011612,
+        -0.6850000023841858
+      ],
+      "detailScale": 14,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "previewConsumedGrimheart": 2,
+      "previewSameTarget": true,
+      "contract": "One sword per actual consumed layer, up to two; repeated actual target is valid. The main hold slash is absent from this independent source.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_IcewhirlBrand_2Swords.wav"
+      }
+    }
+  }
+}

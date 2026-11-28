@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1031_Diona/SignatureMixField/Diona_SignatureMixField_Trigger",
+  "source": "art_assets/UE/Characters/1031_Diona/SignatureMixField/Blender/Diona_SignatureMixField_Trigger.blend",
+  "file": "Characters/1031_Diona/SignatureMixField/Exports/Diona_SignatureMixField_Trigger.vfx.bytes",
+  "meshes": 4,
+  "tracks": 76,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 139453
+}

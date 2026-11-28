@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E8%BE%9B%E7%84%B1",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/17/dg2jylcy4lzij5cfvgjorfocoaaowe8.gif",
+    "title": "热情拂扫.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码173帧、6.92秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "原作三档护盾外观与火焰轮廓；公共护盾承载、全队独立保护按项目执行。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\xinyan-references\\Xinyan_SweepingFervor_Observation.png",
+    "decoded_frames": 173,
+    "duration_seconds": 6.92,
+    "sampled_frames": [
+      0,
+      7,
+      15,
+      22,
+      30,
+      37,
+      45,
+      52,
+      60,
+      67,
+      75,
+      82,
+      90,
+      97,
+      105,
+      112,
+      120,
+      127,
+      135,
+      142,
+      150,
+      157,
+      165,
+      172
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E8%BE%9B%E7%84%B1",
+    "title": "七圣召唤·辛焱",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已读取对应卡牌资料页；没有取得或观看七圣召唤动态战斗画面，卡牌图片与文字不作为动态演出证明。",
+    "use": "辅助搜索卡牌场景的技能与状态表现，参考构图和遮挡；角色战斗实机仍是本次原作视觉依据。"
+  }
+]

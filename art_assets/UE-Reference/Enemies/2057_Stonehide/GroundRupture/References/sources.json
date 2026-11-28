@@ -1,0 +1,34 @@
+{
+  "reference_page": "https://genshin-impact.fandom.com/wiki/Stonehide_Lawachurl#Abilities",
+  "verification": "已核对能力条目文本，并通过Fandom媒体API取得原作动图文件与直链；本轮仅登记链接，未下载、播放完整动图或逐帧核对岩晶造型。",
+  "project_design": "技能1强化时每拳命中后各追加一次邻位岩爆；技能4为我方整片地面三轮碎裂爆发、岩元素色裂缝，并允许岩晶冒出；冲撞复用向右出屏与原位左侧快速淡入回场。项目hit数与覆盖范围以当前表和用户要求为准。",
+  "references": [
+    {
+      "title": "Geo Lawachurl Punches",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geo_Lawachurl_Punches.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/c/c2/Geo_Lawachurl_Punches.gif/revision/latest?cb=20211207093246",
+      "purpose": "后续查看原作拳击及强化追加地面岩爆的造型与衔接。",
+      "local_file": null,
+      "downloaded": false,
+      "animation_viewed": false
+    },
+    {
+      "title": "Geo Lawachurl Shockwave",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geo_Lawachurl_Shockwave.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/be/Geo_Lawachurl_Shockwave.gif/revision/latest?cb=20211207093249",
+      "purpose": "技能4原作岩爆冲击参考，后续制作时查看砸地、岩力爆裂及末次收尾的观感；不引用七圣召唤角色牌大招。",
+      "local_file": null,
+      "downloaded": false,
+      "animation_viewed": false
+    },
+    {
+      "title": "Geo Lawachurl Dash",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geo_Lawachurl_Dash.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/8/83/Geo_Lawachurl_Dash.gif/revision/latest?cb=20211207093236",
+      "purpose": "原作冲撞参考入口；本项目仍沿用已经确定的公共卡牌向右出屏与回场动作。",
+      "local_file": null,
+      "downloaded": false,
+      "animation_viewed": false
+    }
+  ]
+}

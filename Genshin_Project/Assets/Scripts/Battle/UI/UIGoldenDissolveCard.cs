@@ -106,7 +106,7 @@ public sealed class UIGoldenDissolveCard : MonoBehaviour
     private void Update()
     {
         if (!IsPlaying || Paused) return;
-        Elapsed = Mathf.Min(style.TotalDuration, Elapsed + Mathf.Max(0, style.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime));
+        Elapsed = Mathf.Min(style.TotalDuration, Elapsed + Mathf.Max(0, style.UseUnscaledTime ? BattlePause.DeltaTime : BattlePause.ScaledDeltaTime));
         ApplyFrame();
         if (Elapsed >= style.TotalDuration) Finish();
     }

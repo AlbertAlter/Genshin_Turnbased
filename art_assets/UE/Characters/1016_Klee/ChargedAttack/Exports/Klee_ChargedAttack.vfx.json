@@ -1,0 +1,18 @@
+{
+  "key": "Characters/1016_Klee/ChargedAttack/Klee_ChargedAttack",
+  "source": "art_assets/UE/Characters/1016_Klee/ChargedAttack/Blender/Klee_ChargedAttack.blend",
+  "file": "Characters/1016_Klee/ChargedAttack/Exports/Klee_ChargedAttack.vfx.bytes",
+  "meshes": 4,
+  "tracks": 21,
+  "frames": 46,
+  "duration": 1.5,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "MarkAppears": 0.03333333333333333,
+    "Fire": 0.26666666666666666,
+    "OneGroupContact": 0.3333333333333333,
+    "Cleared": 1.5
+  },
+  "bytes": 66324
+}

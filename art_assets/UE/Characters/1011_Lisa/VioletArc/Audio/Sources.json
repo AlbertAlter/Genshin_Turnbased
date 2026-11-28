@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-23",
+  "scope": "Source audio candidates for this effect; not runtime event bindings",
+  "files": [
+    {
+      "file": "Lisa_ChargeStart_01.wav",
+      "purpose": "聚能起手短段",
+      "seconds": 0.65,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -3.358,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/chargestart.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 8.088,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.000000s to 0.650000s",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Lisa_Charge_Loop_01.wav",
+      "purpose": "可选持续聚能底声",
+      "seconds": 2.0,
+      "loop": true,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/charge.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 4.133312,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt from 0.5s; 2s loop with 0.05s linear crossfade",
+        "peak ceiling -1dBFS, gain 0.918156; no upward normalization"
+      ]
+    },
+    {
+      "file": "Lisa_CastUp_01.wav",
+      "purpose": "向上放电短段",
+      "seconds": 0.7,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/powerup.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 2.109604,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.095625s to 0.795625s",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.892972; no upward normalization"
+      ]
+    },
+    {
+      "file": "Lisa_Strike_01.wav",
+      "purpose": "落雷接触，短促电击",
+      "seconds": 0.284917,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/groundhit.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.284917,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.985496; no upward normalization"
+      ]
+    },
+    {
+      "file": "Lisa_Strike_02.wav",
+      "purpose": "落雷较重备选",
+      "seconds": 1.067,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/hit.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 2.20575,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.000313s to 1.067313s",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.991443; no upward normalization"
+      ]
+    },
+    {
+      "file": "Lisa_Crackle_Loop_01.wav",
+      "purpose": "短电流循环，供余电或持续电场使用",
+      "seconds": 0.45,
+      "loop": true,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -21.93,
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/crackleelectricityloop.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.500313,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt from 0s; 0.45s loop with 0.02s linear crossfade"
+      ]
+    }
+  ]
+}

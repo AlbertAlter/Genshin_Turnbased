@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1021_Noelle/SweepingTimeCast/Noelle_SweepingTimeCast",
+  "source": "art_assets/UE/Characters/1021_Noelle/SweepingTimeCast/Blender/Noelle_SweepingTimeCast.blend",
+  "file": "Characters/1021_Noelle/SweepingTimeCast/Exports/Noelle_SweepingTimeCast.vfx.bytes",
+  "meshes": 5,
+  "tracks": 28,
+  "frames": 55,
+  "duration": 1.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "OneUnifiedActualGroupContact": 0.6666666666666666,
+    "Clear": 1.8
+  },
+  "bytes": 127142
+}

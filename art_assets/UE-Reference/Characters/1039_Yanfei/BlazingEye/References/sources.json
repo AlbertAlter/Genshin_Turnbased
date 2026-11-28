@@ -1,0 +1,32 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E7%83%9F%E7%BB%AF",
+    "image_url": "https://patchwiki.biligame.com/images/ys/5/5c/79srd1j50p1wg5unmboq9xsfu55r8fh.gif",
+    "title": "普通攻击·火漆制印.gif",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已读取角色页并核对GIF入口，未下载或完整观看；具体核对边界见用途。",
+    "use": "检索重击与天赋气质，尚未专门核对法兽灼眼实机片段。"
+  },
+  {
+    "source_type": "官方角色资料",
+    "page_url": "https://wiki.hoyolab.com/pc/genshin/entry/24?lang=en-us",
+    "title": "HoYoWiki·Yanfei",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "检索确认官方角色页入口，未作为实机动态核对。",
+    "use": "角色与技能资料检索，项目目标、Count和AP仍沿当前项目。"
+  },
+  {
+    "source_type": "官方角色演示／音画参考",
+    "page_url": "https://www.youtube.com/watch?v=y43rmAQ-l_M",
+    "title": "New Character Demo - \"Yanfei: Legal Expertise\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "已核对官方发布者、标题与入口；未完整观看、逐段试听或截取音频。视频含配乐与语音，未确认独立纯技能音源。",
+    "use": "检索本项动作和音色，不提供未经核对的时间点。"
+  }
+]

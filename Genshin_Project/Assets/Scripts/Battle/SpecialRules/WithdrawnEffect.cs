@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 
-/// <summary>角色、敌人共用的永久退场效果。复用死亡清理规则，以Withdrawn声明替代Death。</summary>
+/// <summary>
+/// 角色、敌人共用的永久退场效果，ST_Flee自然结束与奇怪丘丘人共用此入口。
+/// 复用死亡清理规则，以Withdrawn声明替代Death；后续撤离特效消费WithdrawnEventData真实目标，
+/// 不在特效回调重复撤离、增加击杀或再次检查事件计数。
+/// </summary>
 public static class WithdrawnEffect
 {
     public static int Execute(IReadOnlyList<BattleEntity> targets, BattleEntity source = null)

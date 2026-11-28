@@ -95,8 +95,8 @@ internal sealed class PlumageWeaponCount : CountStatusHandler
     public override CountDamageContribution PrepareDamage(StatusInstance status, object host, CountDamageContext context)
     {
         var call = Current.Value;
-        if (call != null && call.Owner == host && call.Status == status && !call.Disposed
-            && context.Attacker == host && context.DamageType == "Heavy" && context.EffectExecutionID > 0
+        if (call != null && ReferenceEquals(call.Owner, host) && call.Status == status && !call.Disposed
+            && ReferenceEquals(context.Attacker, host) && context.DamageType == "Heavy" && context.EffectExecutionID > 0
             && call.Executions.TryGetValue(context.EffectExecutionID, out string effect) && effect == context.EffectID)
             call.Effects[context.EffectExecutionID] = context.EffectID;
         return null; // 不在单hit消费，也不把增伤误放到基础伤害乘区。

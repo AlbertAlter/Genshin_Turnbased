@@ -1,0 +1,13 @@
+{
+  "key": "Characters/1018_Beidou/StormbreakerDischarge/Beidou_Stormbreaker_CombinedPreview",
+  "source": "art_assets/UE/Characters/1018_Beidou/StormbreakerDischarge/Blender/Beidou_Stormbreaker_CombinedPreview.blend",
+  "file": "Characters/1018_Beidou/StormbreakerDischarge/Exports/Beidou_Stormbreaker_CombinedPreview.vfx.bytes",
+  "meshes": 8,
+  "tracks": 33,
+  "frames": 289,
+  "duration": 9.6,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {},
+  "bytes": 182766
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2080_Frostarm/JumpingSlam/2080_JumpingSlam_Overall",
+  "source": "art_assets/UE/Enemies/2080_Frostarm/JumpingSlam/Blender/2080_JumpingSlam_Overall.blend",
+  "file": "Enemies/2080_Frostarm/JumpingSlam/Exports/2080_JumpingSlam_Overall.vfx.bytes",
+  "meshes": 8,
+  "tracks": 91,
+  "frames": 396,
+  "duration": 13.166666666666666,
+  "loopStart": 1.8,
+  "loopEnd": 6.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 1.0,
+    "Loop_A_start": 1.8,
+    "Loop_B_start": 6.6,
+    "Exit_example_any_phase": 12.0,
+    "Clear": 13.166666666666666
+  },
+  "bytes": 1311220
+}

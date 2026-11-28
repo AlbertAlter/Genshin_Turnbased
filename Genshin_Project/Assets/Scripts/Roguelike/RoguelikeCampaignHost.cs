@@ -14,8 +14,9 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     [SerializeField] private TMP_FontAsset font;
     [SerializeField] private UIAdaptiveFrame framePrefab;
     [SerializeField] private UIRewardPopup rewardPopupPrefab;
+    [SerializeField] private ProjectSettingsView settingsPrefab;
     [SerializeField] private bool english;
-    [SerializeField] private string battleScene, rosterScene, wishScene, shopScene;
+    [SerializeField] private string battleScene, rosterScene, wishScene, shopScene, eventScene;
     private enum RosterPage { Characters, Bag, Formation, BeforeBattle }
     private RosterPage rosterPage;
     private RoguelikePlayableRoutes routes;
@@ -29,9 +30,13 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     private RoguelikeCampaignScreen screen;
     private UIPageTransition transition;
     private Func<bool> destinationReady;
+    private ProjectSettingsOverlay settings;
+    private BattleUiPauseMenu pauseMenu;
+    private BattleEventConditionView battleEventConditions;
 
     private void Awake()
     {
+        english = ProjectUserSettings.English(english);
         if (Current != null) { Destroy(gameObject); return; }
         Current = this; home = gameObject.scene.name;
         DontDestroyOnLoad(gameObject); SceneManager.sceneLoaded += SceneReady;
@@ -46,12 +51,16 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     private void OnDestroy()
     {
         if (Current != this) return;
+        CancelEventRewardRouteNotification();
         SceneManager.sceneLoaded -= SceneReady; routes?.ReleaseArt(); CampaignUiTables.Clear(); ReleaseBattle(); ReleaseRewardPresentation(); Current = null;
     }
     private string L(string key, params object[] args) => DataManager.Instance.GetLangText(key, english, args);
     private void SceneReady(Scene scene, LoadSceneMode mode)
     {
         if (mode != LoadSceneMode.Single) return;
+        CancelEventRewardRouteNotification();
+        english = ProjectUserSettings.English(english);
+        settings?.Close(false); settings = null; pauseMenu = null; battleEventConditions = null;
         ReleaseRewardPresentation();
         loaded = scene.name; failure = null; screen = null; destinationReady = null;
         handlingSceneReady = true;
@@ -70,7 +79,8 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
                 if (menu) Menu(); else Progress();
                 destinationReady = () => screen != null && screen.Ready;
                 UIPageNavigation.Create(canvas.ContentFrame, () => Act(() => { if (menu) ExitGame(); else ExitOptions(); }),
-                    () => rewardPopup?.TryNavigateBack() == true || screen.TryNavigateBack(), () => loading || rewardsWaiting || failure != null, () => false);
+                    () => rewardPopup?.TryNavigateBack() == true || screen.TryNavigateBack(),
+                    () => loading || rewardsWaiting || failure != null || settings?.IsOpen == true, () => false);
             }
             else if (loaded == battleScene)
             {
@@ -79,9 +89,32 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
                     throw new InvalidOperationException("战斗场景未显式绑定流程入口和内容框。");
                 screen = new RoguelikeCampaignScreen(binding.navigationMount, font, Act, framePrefab);
                 var runtime = binding.runtime; runtime.enabled = false;
+                var cardViews = runtime.GetComponent<BattleUiAnimatedCards>();
+                if (cardViews != null && cardViews.factory != null)
+                    cardViews.factory.BindAppearance(Game.Appearance.IsReady ? Game.Appearance : null);
+                pauseMenu = runtime.GetComponent<BattleUiPauseMenu>();
+                pauseMenu?.BindCampaign(() => Act(() => { menu = true; Go(home); }),
+                    () => !loading && !rewardsWaiting && rewardPopup?.IsOpen != true && failure == null);
+                if (rewardPopupPrefab != null)
+                {
+                    rewardPopup = Instantiate(rewardPopupPrefab, binding.navigationMount, false);
+                    rewardPopup.Failed += RewardPresentationFailed;
+                }
+                var voice = runtime.GetComponent<CharacterBattleVoice>();
+                if (voice != null) voice.deferVictoryToRewards = true;
+                if (runtime.flowPresentation != null) runtime.flowPresentation.deferResultToRewards = true;
+                var tips = runtime.GetComponent<BattleUiFloatingTips>();
+                if (tips != null) tips.english = english;
+                UIPageNavigation.Create(binding.navigationMount, () => Act(Home),
+                    () => rewardPopup?.TryNavigateBack() == true || battleEventConditions?.TryNavigateBack() == true,
+                    () => loading || rewardsWaiting && rewardPopup?.IsOpen != true || pauseMenu?.IsOpen == true
+                        || runtime.GetComponent<BattleManager>() is { IsBattleRunning: true, IsBattleOver: false }, () => false);
                 runtime.characterDetails?.SetEnglish(english);
+                var popups = runtime.GetComponent<BattlefieldDamagePopupController>();
+                if (popups != null) popups.english = english;
                 battle = Game.CreateBattleAdapter(runtime); battle.Ended += Ended;
                 Check(battle.TryStart(Read()));
+                BindBattleEventConditions(binding);
                 destinationReady = () => outcome != null || (BattleManager.Instance != null && BattleManager.Instance.IsAwaitingAllyInput);
                 BattleControls();
             }
@@ -95,11 +128,12 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     }
     internal void ReportBindingFailure(Exception error) => failure = error.Message;
     internal Action AttachNavigation(RectTransform contentFrame, Func<bool> ready, Func<bool> tryBack = null,
-        Func<bool> showExit = null, Vector2? buttonInset = null)
+        Func<bool> showExit = null, Vector2? buttonInset = null, Action onLeave = null)
     {
         screen = new RoguelikeCampaignScreen(contentFrame, font, Act, framePrefab);
-        Action leave = () => Act(Home);
-        UIPageNavigation.Create(contentFrame, leave, tryBack, () => loading || failure != null, showExit, buttonInset);
+        Action leave = () => Act(onLeave ?? Home);
+        UIPageNavigation.Create(contentFrame, leave, () => screen?.TryNavigateBack() == true || tryBack?.Invoke() == true,
+            () => loading || failure != null, showExit, buttonInset);
         destinationReady = ready; return leave;
     }
     internal static Action AttachStandaloneNavigation(RectTransform contentFrame, Func<bool> tryBack = null,
@@ -117,7 +151,7 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     }
     private void Act(Action command)
     {
-        if (loading || rewardsWaiting || rewardPopup?.IsOpen == true) return;
+        if (loading || rewardsWaiting || rewardPopup?.IsOpen == true || eventRewardRouteNotification != null) return;
         try { command(); }
         catch (Exception error) { Debug.LogException(error, this); screen?.Notice(error.Message); }
     }
@@ -207,8 +241,12 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
     private void Progress()
     {
         var context = Read(); var step = context.Flow;
-        if (step.Step == RoguelikeFlowStep.Node && step.Node.Kind != RoguelikeNodeKind.Event && !routeOverview)
-        { Roster(RosterPage.BeforeBattle); return; }
+        if (step.Step == RoguelikeFlowStep.Node && !routeOverview)
+        {
+            if (step.Node.Kind == RoguelikeNodeKind.Event) EventPage();
+            else Roster(RosterPage.BeforeBattle);
+            return;
+        }
         screen.Page(L("btn_main_chapter", context.Snapshot.CurrentChapterId));
         screen.Back(L("btn_main_exit"), ExitOptions);
         switch (step.Step)
@@ -216,6 +254,7 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
             case RoguelikeFlowStep.Route:
             case RoguelikeFlowStep.Node when routeOverview:
                 screen.RoutePage();
+                screen.RouteSettings(L("btn_settings_open"), OpenSettings);
                 screen.RouteNavigation(context.Snapshot.Inventory.Items.Find(item => item.ItemId == RoguelikeWishService.FateItemId)?.Quantity ?? 0,
                     new[] { L("btn_main_exit"), L("ui_wish_title"), L("btn_main_shop"), L("btn_characters"), L("btn_inventory"), L("btn_main_party_setup") },
                     ExitOptions, () => Go(wishScene), () => Go(shopScene), () => Roster(RosterPage.Characters),
@@ -230,15 +269,16 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
                 });
                 if (step.Step == RoguelikeFlowStep.Route && routes.ValidateChapterCompletion(context.Snapshot).Succeeded)
                     screen.Choice(L("btn_main_complete_chapter"), () => { Check(Game.CompleteChapter(step.StepId)); Progress(); });
+                if (step.Step == RoguelikeFlowStep.Route) NotifyEventRewardWhenRouteReady();
                 break;
             case RoguelikeFlowStep.Node:
-                if (step.Node.Kind == RoguelikeNodeKind.Event) { screen.Notice(L("tip_main_event_unavailable")); break; }
+                if (step.Node.Kind == RoguelikeNodeKind.Event) { EventPage(); break; }
                 Roster(RosterPage.BeforeBattle); break;
             case RoguelikeFlowStep.Battle:
                 screen.Choice(L("btn_main_resume_battle"), () => Go(battleScene)); break;
             case RoguelikeFlowStep.Settlement:
                 if (context.Snapshot.PendingRewardData != null) { screen.Notice(L("tip_main_reward_unavailable")); break; }
-                // 本场胜利已持久化。重启后同样走此入口，失败则保留待发清单并允许重试。
+                // 本场结果已持久化。重启后同样走此入口，保存失败保留待发清单供重试。
                 var returned = Game.ReturnToRoute(step.StepId);
                 if (!returned.Succeeded)
                 {
@@ -247,8 +287,12 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
                     screen.Choice(L("btn_inventory"), () => Roster(RosterPage.Bag));
                     break;
                 }
+                QueueEventRewardForRoute(context);
+                routeOverview = true;
                 Progress();
-                PresentNodeRewards(context.Snapshot.PendingNodeReward?.Items);
+                PresentNodeRewards(context.Snapshot.PendingNodeReward?.Items,
+                    context.ResumePoint == RoguelikeResumePoint.BattleVictory || context.ResumePoint == RoguelikeResumePoint.BattleDefeat
+                        ? context.Flow.BattleDefeated : (bool?)null);
                 break;
             case RoguelikeFlowStep.ChapterCompleted: Slots(true, context.Snapshot.CurrentChapterId + 1); break;
         }
@@ -267,31 +311,90 @@ public sealed partial class RoguelikeCampaignHost : MonoBehaviour
         else if (rosterPage == RosterPage.BeforeBattle)
         {
             var original = Read();
-            view.ShowFormation(original.Flow.Node.ContentId, () => Act(() =>
+            // 普通、精英、Boss与事件战斗都通过同一个当前节点解析入口，事件会解析其实际BattleID。
+            var encounterBattle = Game.NodeContents.Resolve(original.Snapshot.CurrentChapterId, original.Flow.Node);
+            Check(encounterBattle);
+            string caption = original.Flow.Node.ContentId;
+            if (original.Flow.Node.Kind == RoguelikeNodeKind.Event)
+            {
+                var encounter = Game.NodeContents.ResolveEvent(original.Snapshot.CurrentChapterId, original.Flow.Node);
+                Check(encounter); caption = L(encounter.Data.TitleKey);
+            }
+            view.ShowFormation(caption, () => Act(() =>
             {
                 var current = Read();
                 if (current.RunId != original.RunId || current.Flow.Step != RoguelikeFlowStep.Node ||
                     current.Flow.Node.NodeId != original.Flow.Node.NodeId) throw new InvalidOperationException(L("tip_main_progress_changed"));
-                Check(Game.BeginBattle(current.Flow.StepId, Guid.NewGuid().ToString("N"))); Go(battleScene);
-            }), BackFromPreBattle);
+                ConfirmPreparedBattle(current, encounterBattle.Data);
+            }), BackFromPreBattle, encounterBattle.Data.Waves.SelectMany(w => w.Enemies).Select(enemy => enemy.EnemyID),
+                encounterBattle.Data.Trials, BattleConditionText(encounterBattle.Data.ConditionKey, encounterBattle.Data));
         }
         else view.ShowCharacterList();
     }
-    private void Ended(RoguelikeBattleOutcome result) { outcome = result; if (screen != null) BattleControls(); }
+    private void Ended(RoguelikeBattleOutcome result)
+    {
+        battleEventConditions?.Clear();
+        pauseMenu?.Resume();
+        outcome = result;
+        if (screen == null) return;
+        if (result.ProgressCommit.Succeeded) BeginBattleRewards();
+        else BattleControls();
+    }
     private void BattleControls()
     {
         screen.Clear();
         if (failure != null) screen.Notice(failure);
-        if (outcome?.Victory == true && !outcome.ProgressCommit.Succeeded)
+        if (outcome != null && !outcome.ProgressCommit.Succeeded)
         {
             screen.Notice(outcome.ProgressCommit.Message);
-            screen.Choice(L("btn_main_retry_save"), () => { Check(battle.RetryVictoryCommit()); Home(); });
+            screen.Choice(L("btn_main_retry_save"), () =>
+            {
+                var saved = battle.RetryOutcomeCommit();
+                outcome = battle.LastOutcome;
+                Check(saved); BeginBattleRewards();
+            });
         }
         else if (outcome != null)
         {
-            if (!outcome.Victory) screen.Choice(L("btn_main_retry_battle"), () => { Check(Game.RetryCurrentBattle()); Go(battleScene); });
-            screen.Choice(L("btn_main_back_to_route"), Home);
+            if (!outcome.Victory)
+            {
+                screen.Choice(L("btn_main_retry_battle"), RetryResolvedBattle);
+                screen.Choice(L("btn_battle_adjust_party"), () => Roster(RosterPage.BeforeBattle));
+            }
+            screen.Choice(L("btn_main_back_to_route"), BackFromPreBattle);
         }
-        else screen.SceneBack(Home);
+        // 战斗进行时使用公共暂停菜单；避免旧返回按钮与右上暂停重叠。
+    }
+
+    private void RetryResolvedBattle()
+    {
+        var current = Read();
+        if (current.Flow.Step != RoguelikeFlowStep.Node) throw new InvalidOperationException(L("tip_main_progress_changed"));
+        var encounter = Game.NodeContents.Resolve(current.Snapshot.CurrentChapterId, current.Flow.Node);
+        Check(encounter); ConfirmPreparedBattle(current, encounter.Data);
+    }
+
+    private void ConfirmPreparedBattle(RoguelikeFlowContext current, StageSetupData setup)
+    {
+        var required = BattleEventObjective.RequiredCharacterKills(setup.WinCondition);
+        var party = current.Flow.Node.BattlePartyCharacterIds ?? current.Snapshot.PartyCharacterIds;
+        if (required.CharacterID <= 0 || party.Contains(required.CharacterID)) { BeginPreparedBattle(current); return; }
+        string name = DataManager.Instance.GetUiName(UiNameKind.Character, required.CharacterID, required.CharacterID.ToString(), english);
+        screen.Confirmation(L("ui_battle_preflight_title"), L("ui_battle_preflight_missing_character", name, required.Amount),
+            L("btn_battle_enter_anyway"), L("btn_battle_back_to_formation"), () =>
+            {
+                var latest = Read();
+                if (latest.RunId != current.RunId || latest.Flow.StepId != current.Flow.StepId)
+                    throw new InvalidOperationException(L("tip_main_progress_changed"));
+                BeginPreparedBattle(latest);
+            }, () => { screen.CloseWindow(); if (loaded != rosterScene) Roster(RosterPage.BeforeBattle); });
+    }
+
+    private void BeginPreparedBattle(RoguelikeFlowContext current)
+    {
+        var begin = current.Flow.Node.Kind == RoguelikeNodeKind.Event
+            ? Game.BeginEventBattle(current.Flow.StepId, Guid.NewGuid().ToString("N"))
+            : Game.BeginBattle(current.Flow.StepId, Guid.NewGuid().ToString("N"));
+        Check(begin); Go(battleScene);
     }
 }

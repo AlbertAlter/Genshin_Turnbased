@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2084_AbyssHerald/TorrentialShock/2084_TorrentialShock",
+  "source": "art_assets/UE/Enemies/2084_AbyssHerald/TorrentialShock/Blender/2084_TorrentialShock.blend",
+  "file": "Enemies/2084_AbyssHerald/TorrentialShock/Exports/2084_TorrentialShock.vfx.bytes",
+  "meshes": 8,
+  "tracks": 49,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 256945
+}

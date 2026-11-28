@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E8%BF%AA%E5%A5%A5%E5%A8%9C",
+    "image_url": "https://patchwiki.biligame.com/images/ys/0/06/i51llv5lsaoxp7hs4ns9f2ygey71k4o.gif",
+    "title": "最烈特调.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码117帧、3.51秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "领域地面、冰气酒雾、图案与循环退出；放在敌方全体卡牌下方为用户指定适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\diona-references\\Diona_SignatureMix_Observation.png",
+    "decoded_frames": 117,
+    "duration_seconds": 3.51,
+    "sampled_frames": [
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      61,
+      66,
+      71,
+      76,
+      81,
+      86,
+      91,
+      96,
+      101,
+      106,
+      111,
+      116
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E8%BF%AA%E5%A5%A5%E5%A8%9C",
+    "title": "七圣召唤·迪奥娜",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已找到卡牌资料入口；技能图标及文字不作为动态演出证明，未观看七圣召唤战斗实机。",
+    "use": "辅助搜索卡牌场景的对应技能或状态效果，参考构图与遮挡，不照搬其目标、数值及触发规则。"
+  }
+]

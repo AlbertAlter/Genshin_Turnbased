@@ -1,0 +1,282 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 0b515ddbc4c44c38a242234818a100ec
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 0
+  m_AmbientIntensity: 1
+  m_SkyboxMaterial: {fileID: 0}
+--- !u!1 &1000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001}
+  - component: {fileID: 1002}
+  - component: {fileID: 1010}
+  - component: {fileID: 1011}
+  - component: {fileID: 1012}
+  - component: {fileID: 1013}
+  - component: {fileID: 1014}
+  - component: {fileID: 1015}
+  - component: {fileID: 1016}
+  - component: {fileID: 1017}
+  m_Layer: 0
+  m_Name: Skill Effects Preview Services
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!4 &1001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 860bb6e9b0f06634caccc57d4c9eeec9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  sharedCanvas: {fileID: 9101000003}
+  cardFactory: {fileID: 1010}
+  player: {fileID: 1011}
+  burningAreaPlayer: {fileID: 1013}
+  fullPreview: {fileID: 1014}
+  effectShader: {fileID: 4800000, guid: 7d4d8e60a3cc8e245b3bcc88ded48081, type: 3}
+  controlsFont: {fileID: 12800000, guid: 450464c243909cd43b6b3c57a58ed5e1, type: 3}
+  cardSize: {x: 197, y: 338}
+  stagePosition: {x: 230, y: -45}
+  stageScale: 0.7
+  initialEffect: 3
+  cards:
+  - side: 1
+    id: 2020
+    slot: 2
+    position: {x: -276.5, y: 135}
+  - side: 1
+    id: 2010
+    slot: 4
+    position: {x: -605.5, y: 135}
+  - side: 1
+    id: 2008
+    slot: 5
+    position: {x: -779.5, y: -68}
+  - side: 1
+    id: 2014
+    slot: 3
+    position: {x: -450.5, y: -69}
+  - side: 1
+    id: 2005
+    slot: 1
+    position: {x: -121.5, y: -69}
+  - side: 0
+    id: 1012
+    slot: 4
+    position: {x: 699.5, y: 135}
+  - side: 0
+    id: 1010
+    slot: 2
+    position: {x: 370.5, y: 135}
+  - side: 0
+    id: 1011
+    slot: 3
+    position: {x: 536.5, y: -68}
+  - side: 0
+    id: 1009
+    slot: 1
+    position: {x: 207.5, y: -68}
+--- !u!114 &1010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec6a675ad5884cdfa71cf529c8d67295, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &1011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9823336ec59003746aa9c59657069a0b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  automaticClock: 0
+--- !u!114 &1013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9823336ec59003746aa9c59657069a0b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  automaticClock: 0
+--- !u!114 &1014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a6efdce8a844ff9e8877b5c557234a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  motion: {fileID: 1015}
+  airborne: {fileID: 1017}
+  popups: {fileID: 1016}
+  Paused: 0
+  Amount: 1234
+  Critical: 0
+--- !u!114 &1015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db39d89222234f228df17aade870ce2f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  AutomaticClock: 0
+  Paused: 0
+--- !u!114 &1016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8805eb1a3945e5a006291ceef51489, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  layout: {fileID: 0}
+  numberFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  reactionFont: {fileID: 0}
+  statusNames: {fileID: 0}
+  english: 0
+--- !u!114 &1017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91706260e3004e22af849213c5cf81a0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  AutomaticClock: 0
+  Paused: 0
+--- !u!20 &1012
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.16, g: 0.15, b: 0.14, a: 1}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5
+  m_Depth: -100
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_AllowMSAA: 0
+--- !u!1001 &9101000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+--- !u!224 &9101000002 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 101, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+  m_PrefabInstance: {fileID: 9101000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9101000003 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 104, guid: 89da907d373a4b0f83ee228e6d0a22f1, type: 3}
+  m_PrefabInstance: {fileID: 9101000001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d26d9ecc3dc4d60804b7e2eae1bda64, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1001}
+  - {fileID: 9101000002}

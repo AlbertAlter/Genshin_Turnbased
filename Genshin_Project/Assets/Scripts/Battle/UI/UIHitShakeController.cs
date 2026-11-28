@@ -23,6 +23,8 @@ public sealed class UIHitShakeController : MonoBehaviour
     private readonly Channel screen = new Channel();
     public int ActiveScreenImpulses => screen.Impulses.Count;
     public void BindScreen(RectTransform canvas) => screen.Root = canvas;
+    public bool CanPulseScreen(long playback, long session, long execution, string effect, int hit, string profile)
+        => screen.Impulses.Count == 0 || screenHits.Contains((playback, session, execution, effect ?? "", hit, profile));
     public void RegisterCard(RectTransform root)
     {
         if (root != null && !cards.ContainsKey(root)) cards.Add(root, new Channel { Root = root });
@@ -127,6 +129,6 @@ public sealed class UIHitShakeController : MonoBehaviour
         screen.Impulses.RemoveAll(item => playback < 0 || item.Playback == playback);
         screenHits.RemoveWhere(key => playback < 0 || key.Item1 == playback); Advance(0);
     }
-    private void LateUpdate() { if (AutomaticClock) Advance(Time.unscaledDeltaTime); }
+    private void LateUpdate() { if (AutomaticClock) Advance(BattlePause.DeltaTime); }
     private void OnDisable() => Cancel(-1);
 }

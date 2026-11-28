@@ -1,0 +1,28 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Rhodeia_of_Loch#Abilities",
+  "visual_sources": [
+    {
+      "title": "Oceanid The Myriad Wilds.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Oceanid_The_Myriad_Wilds.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1d/Oceanid_The_Myriad_Wilds.gif/revision/latest?cb=20211204091006",
+      "size_bytes": 5013222,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    }
+  ],
+  "audio_sources": [
+    {
+      "title": "Oceanid Achievements & Mimics Guide",
+      "url": "https://www.youtube.com/watch?v=4_B0eeWvuwU",
+      "use": "纯水幻形召唤声音的后续核对入口；非公共音效成品",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；未播放完整动图，未保存GIF，未截取音频。用户指定的项目复用与改编见视觉需求，不能当作原作逐帧还原。",
+  "implementation_status": "Requirements only. No new VFX model, renderer, animation hook or runtime table mapping added.",
+  "project_scope": "纯水式聚合显现提炼成公共召唤出现，六种已配敌人召唤入口共用；按召唤物元素换色，非所有召唤都复制水球或原作平台流程。"
+}

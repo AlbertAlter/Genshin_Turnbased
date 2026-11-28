@@ -81,6 +81,11 @@ public partial class DataManager
             : fallbackName ?? string.Empty;
     }
 
+    /// <summary>实际生命阶段覆盖Boss通用文案；没有Boss名称时沿用敌人界面名称。</summary>
+    public BossUiText GetBossUiText(int enemyID, int phase, string fallbackName, bool english = false)
+        => BossUiText.Resolve(LangDict, enemyID, phase,
+            GetUiName(UiNameKind.Enemy, enemyID, fallbackName, english), english);
+
     internal string GetStatusIconDescriptionText(StatusInstance status, object host, bool english = false)
     {
         string key = "status_icon_" + status.StatusID2 + "_desc";
@@ -229,7 +234,11 @@ public partial class DataManager
             string chinese = sheet.Cells[row, chineseColumn].Text;
             string english = sheet.Cells[row, englishColumn].Text;
             if (key.Length == 0 && string.IsNullOrWhiteSpace(chinese) && string.IsNullOrWhiteSpace(english)) continue;
-            if (key.Length == 0 || string.IsNullOrWhiteSpace(chinese) || string.IsNullOrWhiteSpace(english))
+            // 某些阶段原作没有副标题；显式空条目用于关闭该Boss的通用副标题。
+            bool emptyBossSubtitle = string.Equals(sheet.Name, "lang_ui_boss", StringComparison.Ordinal)
+                && key.StartsWith("boss_", StringComparison.Ordinal) && key.EndsWith("_subtitle", StringComparison.Ordinal)
+                && string.IsNullOrWhiteSpace(chinese) && string.IsNullOrWhiteSpace(english);
+            if (key.Length == 0 || !emptyBossSubtitle && (string.IsNullOrWhiteSpace(chinese) || string.IsNullOrWhiteSpace(english)))
                 throw new TableValidationException($"{fileName}/{sheet.Name}第{row}行须填写key、chinese、english。");
             if (LangDict.ContainsKey(key)) throw new TableValidationException($"{fileName}/{sheet.Name}重复key：" + key);
             LangDict.Add(key, new LangEntry { Chinese = chinese, English = english });

@@ -1,0 +1,105 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitutes from attributed existing fire sources, not original game audio. Optional very quiet idle, no new loop on healing or attack. PCM/waveform checks only, not auditioned. No Unity/Wwise events.",
+  "files": [
+    {
+      "file": "Bennett_Field_Build.wav",
+      "purpose": "全队一片鼓舞领域建立的短暖火声，不逐卡重复",
+      "seconds": 0.38,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.05,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_FireBurst_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.380000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -11.45772680942611,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Fireball",
+      "creator": "Julien Matthey; uploaded by diligentcircle",
+      "sourcePage": "https://opengameart.org/content/fireball-1",
+      "sourceFile": "https://opengameart.org/sites/default/files/105016__julien-matthey__jm-fx-fireball-01.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.306146s to 0.956146s",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.908213; no upward normalization"
+      ]
+    },
+    {
+      "file": "Bennett_Field_QuietLoop.wav",
+      "purpose": "可选低量暖火星底声，整片领域只一份",
+      "seconds": 1.92,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": true,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/BurningArea_Crackle_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.200000..2.200000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.07",
+        "80ms linear overlap crossfade; continuous source head follows tail"
+      ],
+      "peakDbFS": -34.22334704428539,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Fire Crackling",
+      "creator": "AntumDeluge",
+      "sourcePage": "https://opengameart.org/content/fire-crackling",
+      "sourceFile": "https://opengameart.org/sites/default/files/fire-1.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ],
+      "waveformSeam": {
+        "wrapStep": 2.1362304687500087e-06,
+        "internalStep99_5": 0.0008245849609375
+      }
+    },
+    {
+      "file": "Bennett_Field_Exit.wav",
+      "purpose": "红圈淡去的短余火尾声",
+      "seconds": 0.7,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/BurningArea_Crackle_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 1.600000..2.300000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.12",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -33.547135930282394,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Fire Crackling",
+      "creator": "AntumDeluge",
+      "sourcePage": "https://opengameart.org/content/fire-crackling",
+      "sourceFile": "https://opengameart.org/sites/default/files/fire-1.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    }
+  ]
+}

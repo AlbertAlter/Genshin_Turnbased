@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-26",
+  "scope": "Source SFX candidates only; no Wwise/Unity event bindings",
+  "files": [
+    {
+      "file": "Klee_Dumpty_Throw.wav",
+      "purpose": "大型炸弹投掷",
+      "seconds": 0.16804166666666667,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -4.108160433800641,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1009_Amber\\ArrowRain\\Audio\\ArrowRain_Launch_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.126021s from listed local source",
+        "gain 0.7",
+        "resample speed 0.75 (pitch changes with speed)",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.1,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-1.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Klee_Dumpty_BounceHit.wav",
+      "purpose": "前两次真实接触短声；按实际接触调用",
+      "seconds": 0.36,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -9.369345844030079,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\general\\Explosion\\Audio\\Explosion_Light_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.360000s from listed local source",
+        "gain 0.5",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": null,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion2.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Klee_Dumpty_FinalBreak.wav",
+      "purpose": "最后命中与本体爆散；诡雷纯落地不追加爆炸声",
+      "seconds": 0.95,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -7.730162742992349,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\general\\Explosion\\Audio\\Explosion_Standard_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.950000s from listed local source",
+        "gain 0.6",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 1.84,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion3.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

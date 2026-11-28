@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2071_Stormterror/Tornado/2071_Tornado",
+  "source": "art_assets/UE/Enemies/2071_Stormterror/Tornado/Blender/2071_Tornado.blend",
+  "file": "Enemies/2071_Stormterror/Tornado/Exports/2071_Tornado.vfx.bytes",
+  "meshes": 1,
+  "tracks": 8,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 49318
+}

@@ -1,0 +1,14 @@
+{
+  "recorded": "2026-11-27",
+  "basis": "用户要求：我方敌人共用的盾膜破碎；造型沿现有项目公共膜",
+  "original_audio_reference": {
+    "url": "https://www.youtube.com/watch?v=ooKZCGzUx98",
+    "title": "Childe (Solo) Boss Guide - Genshin Impact",
+    "use": "原作各项攻击、水雷断流、盾与反击声音的后续核对入口",
+    "listened": false,
+    "downloaded": false,
+    "timecodes": null
+  },
+  "reuse": "Project UICardShield membrane, mask, border and current element tint",
+  "status": "Requirements only. No shatter asset, audio extraction or runtime break renderer produced."
+}

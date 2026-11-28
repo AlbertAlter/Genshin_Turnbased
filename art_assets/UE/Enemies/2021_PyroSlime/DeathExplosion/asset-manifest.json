@@ -1,0 +1,262 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2021_PyroSlime\\DeathExplosion\\视觉需求.md",
+  "variants": {
+    "2021_DeathExplosion": {
+      "effect": "2021_DeathExplosion",
+      "source": "Blender/2021_DeathExplosion.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2021_PyroSlime\\DeathExplosion\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2021_DeathExplosion_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 960,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Mist": {
+          "file": "Exports/2021_DeathExplosion_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 960,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Spark": {
+          "file": "Exports/2021_DeathExplosion_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 24,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Flame": {
+          "file": "Exports/2021_DeathExplosion_Flame.fbx",
+          "objects": [
+            "PART_FlamePetal"
+          ],
+          "vertices": 160,
+          "dimensions": [
+            1.0678298622369766,
+            0.8722918331623077,
+            1.1399999856948853
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 302,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 160,
+            "triangles": 302,
+            "dimensions": [
+              1.0678298622369766,
+              0.8722920119762421,
+              1.1400001782088012
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FlamePetal": [
+              "ExplosionNativeRGBA"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "ExplosionCloud": {
+          "file": "Exports/2021_DeathExplosion_ExplosionCloud.fbx",
+          "objects": [
+            "PART_FireCloud"
+          ],
+          "vertices": 108,
+          "dimensions": [
+            2.1136903762817383,
+            2.1150479316711426,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 192,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              2.1136903762817383,
+              2.1150482296943665,
+              2.0000003576278687
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireCloud": [
+              "ExplosionNativeRGBA"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "ExplosionSmoke": {
+          "file": "Exports/2021_DeathExplosion_ExplosionSmoke.fbx",
+          "objects": [
+            "PART_SmokeWisp"
+          ],
+          "vertices": 108,
+          "dimensions": [
+            2.1136903762817383,
+            2.1150479316711426,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 192,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              2.1136903762817383,
+              2.1150482296943665,
+              2.0000003576278687
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmokeWisp": [
+              "ExplosionNativeRGBA"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 14,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "hero_frame": 19,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Pyro",
+      "artOnly": true,
+      "reuse": "general/Explosion actual native parts, tier 1, own card center",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2021_DeathExplosion.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

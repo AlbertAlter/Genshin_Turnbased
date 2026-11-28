@@ -26,7 +26,19 @@ public static class VentiScriptHooks
     private const string C4ID = "ST_Venti_C4";
     private const string C6ElementDebuffID = "ST_Venti_C6Debuff2";
     private static readonly string[] AbsorptionPriority = { "Pyro", "Hydro", "Electro", "Cryo" };
-    private sealed class BurstMemory { internal string Element; }
+    internal sealed class BurstMemory { internal string Element; internal long AbsorbedHit; }
+    /// <summary>Display-only hit snapshot. The locking hit may finish its absorption after damage was recorded;
+    /// earlier hits never acquire that later element, and queued results survive status removal.</summary>
+    public sealed class BurstVisual
+    {
+        public long InstanceId { get; }
+        private readonly BurstMemory memory;
+        private readonly long hit;
+        private readonly string capturedElement;
+        internal BurstVisual(long instance, long hitId, BurstMemory state)
+        { InstanceId = instance; hit = hitId; memory = state; capturedElement = state.Element; }
+        public string Element => capturedElement ?? (hit != 0 && memory.AbsorbedHit == hit ? memory.Element : null);
+    }
     private sealed class ElementMemory { internal string Element; }
     private sealed class Subscription { internal IDisposable Value; }
     private static readonly ConditionalWeakTable<StatusInstance, BurstMemory> Bursts
@@ -146,6 +158,15 @@ public static class VentiScriptHooks
         return burst != null && Bursts.TryGetValue(burst, out var memory) ? memory.Element : null;
     }
 
+    public static BurstVisual CaptureBurstVisual(DamageResolvedEvent hit)
+    {
+        if (hit == null || hit.DamageType == "Reaction" || hit.Source?.CountsAsHit != true) return null;
+        var burst = GetHitBurst(hit);
+        if (burst == null || !Bursts.TryGetValue(burst, out var memory)) return null;
+        long hitId = hit.RuntimeHitID != 0 ? hit.RuntimeHitID : hit.Declaration?.Header.HitId ?? BattleEventHub.CurrentHitId;
+        return new BurstVisual(burst.ApplyOrder, hitId, memory);
+    }
+
     private static StatusInstance ResolveBurst(StatusInstance status)
     {
         if (status?.Caster == null || !status.IsActive) return null;
@@ -192,6 +213,7 @@ public static class VentiScriptHooks
                     && reaction.InvolvedElements.Contains(element))
                 {
                     memory.Element = element;
+                    memory.AbsorbedHit = BattleEventHub.CurrentHitId;
                     return;
                 }
     }

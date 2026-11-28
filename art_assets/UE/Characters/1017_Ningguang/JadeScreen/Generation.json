@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-26",
+  "purpose": "One independent transparent pillar for two fixed-proportion supports; screen and span assembled separately.",
+  "prompt": "Use case: stylized-concept. Asset type: original transparent 2D ornate pillar sprite for a golden jade magic screen in a card-battle game. One SINGLE narrow tall COLUMN, perfectly straight front orthographic view, entire object visible with at least 12 percent transparent clearance above and below. A light ethereal gold-and-ivory magical structure: small layered stepped gold cap at the top, a squared decorative maze/key-pattern bracket just beneath it, slim translucent pale warm-jade shaft, a restrained gold collar near the lower end, a suspended pointed faceted golden ornament at the bottom. Thin elegant Chinese-inspired angular fretwork and a few carved curling cloud accents; clear broad forms readable at small scale, sophisticated game VFX painted finish with restrained soft glow. The pillar will later be reused at both sides of a wide screen, so it must be independent: NO screen panel, NO horizontal crossbeam, NO second column, NO archway, NO pedestal ground, NO temple architecture, NO environment, NO floating unrelated particles. Narrow vertical centered design, translucent cream/jade surfaces and amber-gold ornament, small pale highlights, avoid thick solid dark brown stone. TRUE transparent background, preserve all empty spaces and soft alpha glow, no white/black backing, no rectangle, no text/logo/watermark. Tall portrait composition.",
+  "file": "Exports/Ningguang_JadePillar.png",
+  "reference": "Original screen observations inform stepped gold caps, cloud decoration and transparent jade; no extracted or traced original artwork."
+}

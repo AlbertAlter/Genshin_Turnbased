@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>Battle identity adapter only. All card appearance and media are owned by UICardFactory.</summary>
 [DisallowMultipleComponent]
 [AddComponentMenu("Battle UI/Card Requests")]
-public sealed class BattleUiAnimatedCards : MonoBehaviour, IBattleEnemyExitView
+public sealed class BattleUiAnimatedCards : MonoBehaviour, IBattleEnemyExitView, IBattleVisualCompletion
 {
     public BattleUiLayout layout;
     public BattleManager battle;
@@ -27,6 +27,11 @@ public sealed class BattleUiAnimatedCards : MonoBehaviour, IBattleEnemyExitView
         public BattleUiCardBinding Binding; public RectTransform OwnedBehind, OwnedFront;
     }
     private readonly Dictionary<BattleUiCardBinding, Card> playing = new Dictionary<BattleUiCardBinding, Card>();
+    public bool HasPendingVisuals
+    {
+        get { foreach (var card in playing.Values) if (card.ExitCompleted != null ||
+            (card.Exit != null && card.Exit.isActiveAndEnabled && card.Exit.IsPlaying)) return true; return false; }
+    }
     public bool TryGetCard(BattleUiCardBinding binding, out UICardView view)
     {
         view = playing.TryGetValue(binding, out var card) && card.Exit == null ? card.View : null;
@@ -85,7 +90,7 @@ public sealed class BattleUiAnimatedCards : MonoBehaviour, IBattleEnemyExitView
             }
             // Actual control owns the pause, independently of the currently visible ice/stars.
             card.View.SetAnimationFrozen(this, FrozenReactionHandler.IsFrozen(entity)
-                || AllyControlRelease.GetOldest(entity).Exists);
+                || AllyControlRelease.GetOldest(entity).Exists || BattleUiFreezeSource.IsStunned(entity));
             if (card.View.Ready)
             {
                 binding.shieldLayer = card.View.Appearance.ShieldLayer;

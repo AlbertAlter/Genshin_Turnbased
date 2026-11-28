@@ -97,7 +97,7 @@ internal static class WeaponShieldCreationHooks
     {
         var status = c?.Status; var recipient = c?.Recipient ?? c?.StatusHost as BattleEntity;
         if (status?.WeaponContext?.WeaponID != weapon || !Member(recipient) || !recipient.IsAlive
-            || status.Host != recipient || status.Caster != status.WeaponContext.Equipper || !status.IsActive) return false;
+            || !ReferenceEquals(status.Host, recipient) || status.Caster != status.WeaponContext.Equipper || !status.IsActive) return false;
         var parent = weapon == 3224 && Parents.TryGetValue(status, out var saved) ? saved : WeaponHooks.OwnStatus(status, parentID);
         if (parent == null || !parent.IsActive || parent.StatusID2 != parentID
             || !parent.BoundStatuses.Contains(status) || !parent.WeaponContext.Equipper.HasStatusInstance(parent)
@@ -108,7 +108,7 @@ internal static class WeaponShieldCreationHooks
     private static void SaveParent(StatusInstance status, object host)
     {
         var c = ScriptHookContext.Current; var owner = status.WeaponContext?.Equipper;
-        if (owner == null || host != owner || status.Caster != owner || status.WeaponContext.WeaponID != 3224
+        if (owner == null || !ReferenceEquals(host, owner) || status.Caster != owner || status.WeaponContext.WeaponID != 3224
             || c?.Status?.StatusID2 != "ST_Weapon_4322402" || c.ExecutingStatusEffectID != 432240201
             || c.Status.Caster != owner || c.Status.WeaponContext?.WeaponID != 3224
             || c.Status.WeaponContext.SourceInstanceID != status.WeaponContext.SourceInstanceID)
@@ -124,7 +124,7 @@ internal static class WeaponShieldCreationHooks
     {
         if (parent?.StatusID2 != Parent) return false;
         foreach (var child in parent.BoundStatuses)
-            if (child.IsActive && child.Host == recipient && child.StatusID2 == effect.Param1 && recipient.HasStatusInstance(child)) return true;
+            if (child.IsActive && ReferenceEquals(child.Host, recipient) && child.StatusID2 == effect.Param1 && recipient.HasStatusInstance(child)) return true;
         return false;
     }
     private static void SaveChild(StatusInstance child, object host)

@@ -1,0 +1,445 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomExplosion/视觉需求.md",
+  "variants": {
+    "Mona_PhantomExplosion_OccupiedAnchor": {
+      "effect": "Mona_PhantomExplosion_OccupiedAnchor",
+      "source": "Blender/Mona_PhantomExplosion_OccupiedAnchor.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomExplosion/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "CurvedMonaWaterShard": {
+          "file": "Exports/Mona_PhantomExplosion_OccupiedAnchor_CurvedMonaWaterShard.fbx",
+          "objects": [
+            "PART_CurvedTransparentWaterShard"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.5623646005988121,
+            0.07363212388008833,
+            1.0771739482879639
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 23,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 23,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 23,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 23,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -1.1699999570846558
+          ],
+          "kind": "one actual fixed-field phantom group explosion"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "contract": "One explosion at the original phantom slot, even empty. No retargeted blast centre and no marked-card bubble rupture. Existing other phantom instances are not removed.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomExplosion_OccupiedAnchor.wav"
+      }
+    },
+    "Mona_PhantomExplosion_EmptyAnchor": {
+      "effect": "Mona_PhantomExplosion_EmptyAnchor",
+      "source": "Blender/Mona_PhantomExplosion_EmptyAnchor.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomExplosion/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "CurvedMonaWaterShard": {
+          "file": "Exports/Mona_PhantomExplosion_EmptyAnchor_CurvedMonaWaterShard.fbx",
+          "objects": [
+            "PART_CurvedTransparentWaterShard"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.5623646005988121,
+            0.07363212388008833,
+            1.0771739482879639
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 23,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 23,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 23,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -1.1699999570846558
+          ],
+          "kind": "one actual fixed-field phantom group explosion"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "contract": "One explosion at the original phantom slot, even empty. No retargeted blast centre and no marked-card bubble rupture. Existing other phantom instances are not removed.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomExplosion_EmptyAnchor.wav"
+      }
+    }
+  }
+}

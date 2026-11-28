@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2054_BlazingAxe/FierySlam/2054_FierySlam",
+  "source": "art_assets/UE/Enemies/2054_BlazingAxe/FierySlam/Blender/2054_FierySlam.blend",
+  "file": "Enemies/2054_BlazingAxe/FierySlam/Exports/2054_FierySlam.vfx.bytes",
+  "meshes": 4,
+  "tracks": 51,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 243026
+}

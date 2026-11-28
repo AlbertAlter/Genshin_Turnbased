@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1024_Fischl/MidnightPhantasmagoria/Fischl_MidnightPhantasmagoria_SingleTarget",
+  "source": "art_assets/UE/Characters/1024_Fischl/MidnightPhantasmagoria/Blender/Fischl_MidnightPhantasmagoria_SingleTarget.blend",
+  "file": "Characters/1024_Fischl/MidnightPhantasmagoria/Exports/Fischl_MidnightPhantasmagoria_SingleTarget.vfx.bytes",
+  "meshes": 27,
+  "tracks": 109,
+  "frames": 210,
+  "duration": 6.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 6.966666666666667
+  },
+  "bytes": 545230
+}

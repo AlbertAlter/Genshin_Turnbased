@@ -1,0 +1,13 @@
+﻿PSDName,Kind,File,Parent,OrderBackToFront,Left,Top,Width,Height,OffsetLeft,OffsetTop,Opacity,FillOpacity,StaticOpacityBaked,Visible,BlendMode,Clipping,HasMask,BakedComposite,VectorBoundsNormalized,TextureScale
+敌人血条,group,HealthBar/HealthBar_Composite.png,.,1,312,401,176,19,0,17,255,255,True,True,PASS_THROUGH,False,False,True,False,1
+“矩形 3”的投影,pixel,HealthBar/01_DropShadow.png,HealthBar,1,312,401,176,19,0,0,255,66,True,True,MULTIPLY,False,False,False,False,1
+“矩形 3”的外描边,pixel,HealthBar/02_OuterStroke.png,HealthBar,2,314,401,172,15,2,0,255,255,True,True,NORMAL,False,False,False,False,1
+矩形 3,shape,HealthBar/03_BaseShape.png,HealthBar,3,315,402,168,11,3,1,255,255,True,True,NORMAL,False,False,False,True,4
+上阴影,pixel,HealthBar/04_UpperShadow.png,HealthBar,4,315,403,169,11,3,2,255,161,True,True,MULTIPLY,True,False,False,False,1
+下阴影,pixel,HealthBar/05_LowerShadow.png,HealthBar,5,315,403,169,11,3,2,255,97,True,True,MULTIPLY,True,False,False,False,1
+血条上方柔光（角色,pixel,HealthBar/06_UpperSoftLight.png,HealthBar,6,319,405,162,4,7,4,255,255,True,True,SOFT_LIGHT,True,False,False,False,1
+血条下方阴影（角色,pixel,HealthBar/07_LowerSoftLight.png,HealthBar,7,318,411,162,5,6,10,255,255,True,True,SOFT_LIGHT,True,False,False,False,1
+血槽,group,FilledSlot/FilledSlot_Composite.png,.,2,318,384,13,13,6,0,255,255,True,True,PASS_THROUGH,False,False,True,False,1
+“血槽”的外描边,pixel,FilledSlot/01_SlotOuterStroke.png,FilledSlot,1,318,384,13,13,0,0,255,255,True,True,NORMAL,False,False,False,False,1
+血槽,shape,FilledSlot/02_FilledSlot.png,FilledSlot,2,320,385,9,9,2,1,255,255,True,True,NORMAL,False,False,False,True,4
+空血槽,pixel,03_EmptySlot.png,.,3,334,384,13,13,22,0,255,255,True,True,NORMAL,False,False,False,False,1

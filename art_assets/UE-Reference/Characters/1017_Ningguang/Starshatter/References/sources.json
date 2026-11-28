@@ -1,0 +1,40 @@
+[
+  {
+    "file": "01_爆发宝石展开_0.4s.png",
+    "page_url": "https://theinformalgamer.wordpress.com/2021/02/28/genshin-impact-best-ningguang-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/02/ezgif.com-gif-maker-1-min-1.gif",
+    "bytes": 382994,
+    "downloaded": "2026-11-26",
+    "use": "爆发多枚切面宝石展开，原始动图第4帧；蓝色护盾等不属于爆发",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "time_ms": 400,
+    "extraction": "仅解码对应帧并保存PNG，无裁切、绘制或生成内容"
+  },
+  {
+    "file": "02_爆发多宝石飞行_1.1s.png",
+    "page_url": "https://theinformalgamer.wordpress.com/2021/02/28/genshin-impact-best-ningguang-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/02/ezgif.com-gif-maker-1-min-1.gif",
+    "bytes": 345189,
+    "downloaded": "2026-11-26",
+    "use": "多枚宝石独立飞行与尾光，原始动图第11帧；蓝色护盾等不属于爆发",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "time_ms": 1100,
+    "extraction": "仅解码对应帧并保存PNG，无裁切、绘制或生成内容"
+  },
+  {
+    "page_url": "https://theinformalgamer.wordpress.com/2021/02/28/genshin-impact-best-ningguang-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/02/ezgif.com-gif-maker-1-min-1.gif",
+    "bytes": 1146498,
+    "downloaded": false,
+    "use": "原页面明确标为元素爆发，用于整体展开和转向节奏参考",
+    "type": "原作实机动图",
+    "modified": false,
+    "former_local_file": "03_爆发原始实机动图.gif",
+    "title": "03_爆发原始实机动图",
+    "storage": "link_only",
+    "previously_downloaded_on": "2026-11-26",
+    "local_file_removed_on": "2026-11-26"
+  }
+]

@@ -1,0 +1,510 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/LightningOrbs/视觉需求.md",
+  "variants": {
+    "2085_LightningOrbs_ThreeOrbs": {
+      "effect": "2085_LightningOrbs_ThreeOrbs",
+      "source": "Blender/2085_LightningOrbs_ThreeOrbs.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/LightningOrbs/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_LightningOrbs_ThreeOrbs_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_LightningOrbs_ThreeOrbs_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_LightningOrbs_ThreeOrbs_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DarkElectroOrb": {
+          "file": "Exports/2085_LightningOrbs_ThreeOrbs_DarkElectroOrb.fbx",
+          "objects": [
+            "PART_SaturatedDarkVioletOrb",
+            "PART_OrbSurfaceElectricCurl_0",
+            "PART_OrbSurfaceElectricCurl_1",
+            "PART_OrbSurfaceElectricCurl_2"
+          ],
+          "vertices": 997,
+          "triangles": 1696,
+          "dimensions": [
+            0.6488220989704132,
+            0.5400000214576721,
+            0.6578668355941772
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SaturatedDarkVioletOrb": [
+              "Solid"
+            ],
+            "PART_OrbSurfaceElectricCurl_0": [
+              "Soft"
+            ],
+            "PART_OrbSurfaceElectricCurl_1": [
+              "Soft"
+            ],
+            "PART_OrbSurfaceElectricCurl_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 997,
+            "triangles": 1696,
+            "dimensions": [
+              0.6488220989704132,
+              0.5400000810623169,
+              0.6578668355941772
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 32,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 48,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 64,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        10,
+        26,
+        42
+      ],
+      "hero_frame": 30,
+      "focus": [
+        -0.7710236310958862,
+        -0.08,
+        -0.09545177221298218
+      ],
+      "detailScale": 11.038702807426452,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_LightningOrbs_ThreeOrbs.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2085_LightningOrbs_EightOrbs": {
+      "effect": "2085_LightningOrbs_EightOrbs",
+      "source": "Blender/2085_LightningOrbs_EightOrbs.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/LightningOrbs/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_LightningOrbs_EightOrbs_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_LightningOrbs_EightOrbs_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_LightningOrbs_EightOrbs_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DarkElectroOrb": {
+          "file": "Exports/2085_LightningOrbs_EightOrbs_DarkElectroOrb.fbx",
+          "objects": [
+            "PART_SaturatedDarkVioletOrb",
+            "PART_OrbSurfaceElectricCurl_0",
+            "PART_OrbSurfaceElectricCurl_1",
+            "PART_OrbSurfaceElectricCurl_2"
+          ],
+          "vertices": 997,
+          "triangles": 1696,
+          "dimensions": [
+            0.6488220989704132,
+            0.5400000214576721,
+            0.6578668355941772
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SaturatedDarkVioletOrb": [
+              "Solid"
+            ],
+            "PART_OrbSurfaceElectricCurl_0": [
+              "Soft"
+            ],
+            "PART_OrbSurfaceElectricCurl_1": [
+              "Soft"
+            ],
+            "PART_OrbSurfaceElectricCurl_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 997,
+            "triangles": 1696,
+            "dimensions": [
+              0.6488220989704132,
+              0.5400000810623169,
+              0.6578668355941772
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 36,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 43,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 50,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 57,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 64,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 71,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 78,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 85,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        10,
+        17,
+        24,
+        31,
+        38,
+        45,
+        52,
+        59
+      ],
+      "hero_frame": 25,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_LightningOrbs_EightOrbs.wav"
+      }
+    }
+  }
+}

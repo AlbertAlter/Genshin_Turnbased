@@ -1,0 +1,31 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E8%83%A1%E6%A1%83",
+    "title": "胡桃·六命与角色资料",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已读取角色页并核对其中动图入口；未下载或完整观看动图，具体视觉核对边界见用途。",
+    "use": "六命资料及角色蝴蝶气质；未确认独立六命实机片段，蝶光为用户指定。"
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E8%83%A1%E6%A1%83",
+    "title": "七圣召唤·胡桃",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已读取卡牌资料页，未观看七圣召唤动态战斗；卡牌图标和文字不作为实机动态证明。",
+    "use": "辅助检索卡牌范围内的构图与标记，当前项目目标与命中段数沿本项目。"
+  },
+  {
+    "source_type": "官方角色演示／音画参考",
+    "page_url": "https://www.youtube.com/watch?v=qrH9vMZBwAk",
+    "title": "Character Demo - \"Hu Tao: Let the Living Beware\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "已核对官方发布者、视频标题和入口，未完整观看或逐段试听，未截取音频；视频包含配乐及角色语音，未确认可独立分离的技能音源。",
+    "use": "检索本项动作的原作音色和视觉气质，不作为已经准备好的纯音效。未提供未经核对的时间点。"
+  }
+]

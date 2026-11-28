@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1034_Albedo/C4NormalBloom/Albedo_C4NormalBloom",
+  "source": "art_assets/UE/Characters/1034_Albedo/C4NormalBloom/Blender/Albedo_C4NormalBloom.blend",
+  "file": "Characters/1034_Albedo/C4NormalBloom/Exports/Albedo_C4NormalBloom.vfx.bytes",
+  "meshes": 14,
+  "tracks": 17,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 30401
+}

@@ -1,0 +1,287 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/ShieldFlamePulse/视觉需求.md",
+  "variants": {
+    "Xinyan_ShieldFlamePulse": {
+      "effect": "Xinyan_ShieldFlamePulse",
+      "source": "Blender/Xinyan_ShieldFlamePulse.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/ShieldFlamePulse/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xinyan_ShieldFlamePulse_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xinyan_ShieldFlamePulse_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Xinyan_ShieldFlamePulse_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/Xinyan_ShieldFlamePulse_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Yanfei_SourceFlowingFlameVolume"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeGroupFireSweep": {
+          "file": "Exports/Xinyan_ShieldFlamePulse_OneWholeGroupFireSweep.fbx",
+          "objects": [
+            "PART_OneSweptFlameLayer_0",
+            "PART_OneSweptFlameLayer_1",
+            "PART_OneSweptFlameLayer_2"
+          ],
+          "vertices": 2037,
+          "triangles": 3456,
+          "dimensions": [
+            8.329419136047363,
+            0.05000000074505806,
+            1.0345639735460281
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneSweptFlameLayer_0": [
+              "Yanfei_SourceFlowingFlameVolume"
+            ],
+            "PART_OneSweptFlameLayer_1": [
+              "Soft"
+            ],
+            "PART_OneSweptFlameLayer_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2037,
+            "triangles": 3456,
+            "dimensions": [
+              8.329419136047363,
+              0.050000125260226014,
+              1.0345639735460281
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "element": "Pyro",
+          "kind": "one actual whole-group shield pulse",
+          "mainSweeps": 1
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 26,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 11,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_ShieldFlamePulse.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    }
+  }
+}

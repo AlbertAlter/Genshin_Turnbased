@@ -1,0 +1,1799 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2065_ElectroHypostasis/LightningCage/视觉需求.md",
+  "variants": {
+    "2065_LightningCage_State": {
+      "effect": "2065_LightningCage_State",
+      "source": "Blender/2065_LightningCage_State.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2065_ElectroHypostasis/LightningCage/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CageColumn": {
+          "file": "Exports/2065_LightningCage_State_CageColumn.fbx",
+          "objects": [
+            "PART_SlenderElectroCagePillar"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.2617929130792618,
+            0.2640487998723984,
+            3.299999952316284
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SlenderElectroCagePillar": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.2617929130792618,
+              0.26404933631420135,
+              3.299999952316284
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_0_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_0_0.fbx",
+          "objects": [
+            "PART_CageArc_0_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6188459992408752,
+            0.5022947331890464,
+            0.12221813201904297
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_0_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6188459992408752,
+              0.5022947462275624,
+              0.12221819162368774
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_0_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_0_1.fbx",
+          "objects": [
+            "PART_CageArc_0_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6188459992408752,
+            0.5022947331890464,
+            0.12221813201904297
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_0_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6188459992408752,
+              0.5022947452962399,
+              0.12221822142601013
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_1_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_1_0.fbx",
+          "objects": [
+            "PART_CageArc_1_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.2324872016906738,
+            0.0,
+            0.14208418130874634
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_1_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.2324872016906738,
+              2.9802322387695312e-08,
+              0.14208418130874634
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_1_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_1_1.fbx",
+          "objects": [
+            "PART_CageArc_1_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.2324872016906738,
+            0.0,
+            0.14208418130874634
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_1_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.2324872016906738,
+              0.0,
+              0.14208418130874634
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_2_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_2_0.fbx",
+          "objects": [
+            "PART_CageArc_2_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6204885840415955,
+            0.5022947331890464,
+            0.1426602602005005
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_2_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6204885840415955,
+              0.502294747158885,
+              0.14266031980514526
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_2_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_2_1.fbx",
+          "objects": [
+            "PART_CageArc_2_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6204885840415955,
+            0.5022947331890464,
+            0.1426602303981781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_2_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6204885840415955,
+              0.502294747158885,
+              0.14266031980514526
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_3_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_3_0.fbx",
+          "objects": [
+            "PART_CageArc_3_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6191598176956177,
+            0.5022947052493691,
+            0.11774200201034546
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_3_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6191598176956177,
+              0.5022947117686272,
+              0.11774206161499023
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_3_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_3_1.fbx",
+          "objects": [
+            "PART_CageArc_3_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6191598176956177,
+            0.5022947052493691,
+            0.11774203181266785
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_3_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6191598176956177,
+              0.5022947117686272,
+              0.11774212121963501
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_4_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_4_0.fbx",
+          "objects": [
+            "PART_CageArc_4_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.232575535774231,
+            0.0,
+            0.14388322830200195
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_4_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.232575535774231,
+              0.0,
+              0.14388322830200195
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_4_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_4_1.fbx",
+          "objects": [
+            "PART_CageArc_4_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.232575535774231,
+            0.0,
+            0.14388322830200195
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_4_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.232575535774231,
+              0.0,
+              0.14388322830200195
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_5_0": {
+          "file": "Exports/2065_LightningCage_State_CageArc_5_0.fbx",
+          "objects": [
+            "PART_CageArc_5_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6202061772346497,
+            0.5022947052493691,
+            0.13579994440078735
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_5_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6202061772346497,
+              0.5022947126999497,
+              0.13580000400543213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_5_1": {
+          "file": "Exports/2065_LightningCage_State_CageArc_5_1.fbx",
+          "objects": [
+            "PART_CageArc_5_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6202061772346497,
+            0.5022947052493691,
+            0.13580000400543213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_5_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6202061772346497,
+              0.5022947126999497,
+              0.1358000934123993
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "scope": "Editable source art, actual-target sample only; no business hooks, tables, publishing or runtime player.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2065_LightningCage_State.wav"
+      }
+    },
+    "2065_LightningCage_Trigger": {
+      "effect": "2065_LightningCage_Trigger",
+      "source": "Blender/2065_LightningCage_Trigger.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2065_ElectroHypostasis/LightningCage/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2065_LightningCage_Trigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2065_LightningCage_Trigger_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2065_LightningCage_Trigger_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning0": {
+          "file": "Exports/2065_LightningCage_Trigger_Lightning0.fbx",
+          "objects": [
+            "PART_BranchedBolt0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.36849190294742584,
+            0.0,
+            4.610311500960961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.36849190294742584,
+              7.511150323935567e-07,
+              4.610311500960961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning1": {
+          "file": "Exports/2065_LightningCage_Trigger_Lightning1.fbx",
+          "objects": [
+            "PART_BranchedBolt1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.275507315993309,
+            0.0,
+            4.602855276898481
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.275507315993309,
+              7.499002716016001e-07,
+              4.602855276898481
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch0": {
+          "file": "Exports/2065_LightningCage_Trigger_BoltBranch0.fbx",
+          "objects": [
+            "PART_BoltBranch0"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359928846359,
+            0.0,
+            0.6687910556793213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359928846359,
+              1.0895985269598896e-07,
+              0.6687910556793213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch1": {
+          "file": "Exports/2065_LightningCage_Trigger_BoltBranch1.fbx",
+          "objects": [
+            "PART_BoltBranch1"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856360077857971,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856360077857971,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch2": {
+          "file": "Exports/2065_LightningCage_Trigger_BoltBranch2.fbx",
+          "objects": [
+            "PART_BoltBranch2"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359630823135,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359630823135,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch3": {
+          "file": "Exports/2065_LightningCage_Trigger_BoltBranch3.fbx",
+          "objects": [
+            "PART_BoltBranch3"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359779834747,
+            0.0,
+            0.6687914133071899
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359779834747,
+              1.0895993796111725e-07,
+              0.6687914133071899
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch4": {
+          "file": "Exports/2065_LightningCage_Trigger_BoltBranch4.fbx",
+          "objects": [
+            "PART_BoltBranch4"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.785636018961668,
+            0.0,
+            0.6687913313508034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.785636018961668,
+              1.0895993085568989e-07,
+              0.6687913313508034
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 16,
+      "focus": [
+        3.677811861038208,
+        -0.08,
+        3.5622029304504395
+      ],
+      "detailScale": 10.047193128797742,
+      "scope": "Editable source art, actual-target sample only; no business hooks, tables, publishing or runtime player.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2065_LightningCage_Trigger.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 26,
+        "selectedFrame": 16,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2065_LightningCage_Overall": {
+      "effect": "2065_LightningCage_Overall",
+      "source": "Blender/2065_LightningCage_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2065_ElectroHypostasis/LightningCage/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2065_LightningCage_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2065_LightningCage_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2065_LightningCage_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageColumn": {
+          "file": "Exports/2065_LightningCage_Overall_CageColumn.fbx",
+          "objects": [
+            "PART_SlenderElectroCagePillar"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.2617929130792618,
+            0.2640487998723984,
+            3.299999952316284
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SlenderElectroCagePillar": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.2617929130792618,
+              0.26404933631420135,
+              3.299999952316284
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_0_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_0_0.fbx",
+          "objects": [
+            "PART_CageArc_0_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6188459992408752,
+            0.5022947331890464,
+            0.12221813201904297
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_0_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6188459992408752,
+              0.5022947462275624,
+              0.12221819162368774
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_0_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_0_1.fbx",
+          "objects": [
+            "PART_CageArc_0_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6188459992408752,
+            0.5022947331890464,
+            0.12221813201904297
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_0_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6188459992408752,
+              0.5022947452962399,
+              0.12221822142601013
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_1_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_1_0.fbx",
+          "objects": [
+            "PART_CageArc_1_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.2324872016906738,
+            0.0,
+            0.14208418130874634
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_1_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.2324872016906738,
+              2.9802322387695312e-08,
+              0.14208418130874634
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_1_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_1_1.fbx",
+          "objects": [
+            "PART_CageArc_1_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.2324872016906738,
+            0.0,
+            0.14208418130874634
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_1_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.2324872016906738,
+              0.0,
+              0.14208418130874634
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_2_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_2_0.fbx",
+          "objects": [
+            "PART_CageArc_2_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6204885840415955,
+            0.5022947331890464,
+            0.1426602602005005
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_2_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6204885840415955,
+              0.502294747158885,
+              0.14266031980514526
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_2_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_2_1.fbx",
+          "objects": [
+            "PART_CageArc_2_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6204885840415955,
+            0.5022947331890464,
+            0.1426602303981781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_2_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6204885840415955,
+              0.502294747158885,
+              0.14266031980514526
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_3_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_3_0.fbx",
+          "objects": [
+            "PART_CageArc_3_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6191598176956177,
+            0.5022947052493691,
+            0.11774200201034546
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_3_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6191598176956177,
+              0.5022947117686272,
+              0.11774206161499023
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_3_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_3_1.fbx",
+          "objects": [
+            "PART_CageArc_3_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6191598176956177,
+            0.5022947052493691,
+            0.11774203181266785
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_3_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6191598176956177,
+              0.5022947117686272,
+              0.11774212121963501
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_4_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_4_0.fbx",
+          "objects": [
+            "PART_CageArc_4_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.232575535774231,
+            0.0,
+            0.14388322830200195
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_4_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.232575535774231,
+              0.0,
+              0.14388322830200195
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_4_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_4_1.fbx",
+          "objects": [
+            "PART_CageArc_4_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.232575535774231,
+            0.0,
+            0.14388322830200195
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_4_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.232575535774231,
+              0.0,
+              0.14388322830200195
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_5_0": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_5_0.fbx",
+          "objects": [
+            "PART_CageArc_5_0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6202061772346497,
+            0.5022947052493691,
+            0.13579994440078735
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_5_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6202061772346497,
+              0.5022947126999497,
+              0.13580000400543213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CageArc_5_1": {
+          "file": "Exports/2065_LightningCage_Overall_CageArc_5_1.fbx",
+          "objects": [
+            "PART_CageArc_5_1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.6202061772346497,
+            0.5022947052493691,
+            0.13580000400543213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CageArc_5_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.6202061772346497,
+              0.5022947126999497,
+              0.1358000934123993
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning0": {
+          "file": "Exports/2065_LightningCage_Overall_Lightning0.fbx",
+          "objects": [
+            "PART_BranchedBolt0"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.36849190294742584,
+            0.0,
+            4.610311500960961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.36849190294742584,
+              7.511150323935567e-07,
+              4.610311500960961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Lightning1": {
+          "file": "Exports/2065_LightningCage_Overall_Lightning1.fbx",
+          "objects": [
+            "PART_BranchedBolt1"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            0.275507315993309,
+            0.0,
+            4.602855276898481
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BranchedBolt1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              0.275507315993309,
+              7.499002716016001e-07,
+              4.602855276898481
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch0": {
+          "file": "Exports/2065_LightningCage_Overall_BoltBranch0.fbx",
+          "objects": [
+            "PART_BoltBranch0"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359928846359,
+            0.0,
+            0.6687910556793213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359928846359,
+              1.0895985269598896e-07,
+              0.6687910556793213
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch1": {
+          "file": "Exports/2065_LightningCage_Overall_BoltBranch1.fbx",
+          "objects": [
+            "PART_BoltBranch1"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856360077857971,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856360077857971,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch2": {
+          "file": "Exports/2065_LightningCage_Overall_BoltBranch2.fbx",
+          "objects": [
+            "PART_BoltBranch2"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359630823135,
+            0.0,
+            0.6687912940979004
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359630823135,
+              1.0895990953940782e-07,
+              0.6687912940979004
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch3": {
+          "file": "Exports/2065_LightningCage_Overall_BoltBranch3.fbx",
+          "objects": [
+            "PART_BoltBranch3"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.7856359779834747,
+            0.0,
+            0.6687914133071899
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.7856359779834747,
+              1.0895993796111725e-07,
+              0.6687914133071899
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BoltBranch4": {
+          "file": "Exports/2065_LightningCage_Overall_BoltBranch4.fbx",
+          "objects": [
+            "PART_BoltBranch4"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.785636018961668,
+            0.0,
+            0.6687913313508034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BoltBranch4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.785636018961668,
+              1.0895993085568989e-07,
+              0.6687913313508034
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 68,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "scope": "Editable source art, actual-target sample only; no business hooks, tables, publishing or runtime player.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2065_LightningCage_Overall.wav"
+      }
+    }
+  }
+}

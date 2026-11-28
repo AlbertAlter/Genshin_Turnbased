@@ -1,0 +1,110 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2067_CryoRegisvine/CoreRegeneration/视觉需求.md",
+  "variants": {
+    "2067_CoreRegeneration": {
+      "effect": "2067_CoreRegeneration",
+      "source": "Blender/2067_CoreRegeneration.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2067_CryoRegisvine/CoreRegeneration/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2067_CoreRegeneration_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2067_CoreRegeneration_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 22,
+      "focus": [
+        -4.505000114440918,
+        -0.08000000566244125,
+        -1.1399999856948853
+      ],
+      "detailScale": 6.8,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2067_CoreRegeneration.wav"
+      }
+    }
+  }
+}

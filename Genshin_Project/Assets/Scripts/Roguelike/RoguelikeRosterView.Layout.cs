@@ -304,7 +304,7 @@ public sealed partial class RoguelikeRosterView
         FitLine(Label(subtitle, meta, 20), 14).color = Muted;
         if (element != null)
         {
-            var icon = Image(DetailArtPath + "element" + element + ".png", text);
+            var icon = Image(ElementColorPalette.ElementIconPath(element), text);
             UICharacterAbilityIcon.ApplyElementColor(icon, element);
             Place((RectTransform)icon.transform, 0, 56, 22, 22);
         }

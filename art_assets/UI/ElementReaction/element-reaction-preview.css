@@ -1,0 +1,23 @@
+/* Scene geometry and card/HUD appearance are shared with the basic battle preview. */
+#playback{flex-shrink:0;max-height:36vh;overflow:auto}
+.transport{min-width:198px}
+.speed-label{font-size:12px;line-height:1.45;flex-shrink:0}
+.reaction-controls{display:flex;align-items:center;gap:22px;margin-top:11px;min-height:33px}
+.reaction-controls>label:first-child{display:flex;align-items:center;gap:10px;white-space:nowrap;color:var(--gold);font-size:12px}
+.reaction-controls select{min-width:225px}
+.reaction-result{margin-left:auto;color:var(--muted);font-size:12px}
+#cases{gap:6px;flex-wrap:wrap}
+#cases button{padding:5px 12px;font-size:12px}
+#cases button[aria-pressed=true]{background:#dcc89e;color:#352d24;border-color:#efdbb0}
+#aura-layer{position:absolute;inset:0;z-index:80;pointer-events:none}
+.element-aura-layer{position:absolute;width:0;height:0;isolation:isolate}
+.aura-symbol{position:absolute;left:0;top:0;width:39px;height:41px;display:block;pointer-events:none;will-change:transform,opacity}
+.aura-glyph{position:absolute;inset:0;overflow:hidden}
+.aura-glyph img{position:absolute;left:-100%;top:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(39px 0 0 var(--element-color))}
+.aura-burst{position:absolute;left:0;top:0;width:65px;height:65px;opacity:0;pointer-events:none}
+.aura-burst::before{content:"";position:absolute;inset:4px;border:1.5px solid var(--burst-color);border-radius:50%;box-shadow:0 0 7px var(--burst-color),inset 0 0 6px var(--burst-color)}
+.aura-burst::after{content:"";position:absolute;inset:7px;background:radial-gradient(ellipse,#fff9eada,var(--burst-color) 12%,transparent 64%);mix-blend-mode:screen}
+.aura-burst i{position:absolute;left:50%;top:50%;width:2px;height:13px;border-radius:50%;background:#fff7de;box-shadow:0 0 4px var(--burst-color);transform:rotate(var(--angle)) translateY(-42px)}
+body.clean #playback,body.clean .toolbar{display:none}
+@media(max-width:900px){.reaction-result{display:none}.reaction-controls{gap:16px}.toolbar p{display:none}#playback{max-height:43vh}.help{font-size:11px}.playback-row{flex-wrap:wrap;gap:10px}.timeline{order:3;flex-basis:100%}.speed-label{margin-left:auto;flex:none}.check{flex:none}}
+@media(max-width:600px){.reaction-controls{flex-wrap:wrap;gap:8px 16px}.reaction-controls select{min-width:170px}#cases button{padding:4px 9px}.transport{min-width:0}.help>span:last-child{display:none}}

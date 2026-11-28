@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/IcetideVortexTap/Eula_IcetideVortexTap",
+  "source": "art_assets/UE/Characters/1040_Eula/IcetideVortexTap/Blender/Eula_IcetideVortexTap.blend",
+  "file": "Characters/1040_Eula/IcetideVortexTap/Exports/Eula_IcetideVortexTap.vfx.bytes",
+  "meshes": 5,
+  "tracks": 47,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 117613
+}

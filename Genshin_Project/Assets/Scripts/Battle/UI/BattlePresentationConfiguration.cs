@@ -85,9 +85,13 @@ public sealed class BattlePresentationConfiguration
             && enemyActions?.Find(enemyHit.Source.SourceSkillID) is BattleHitTemplate enemyTemplate
             && enemyTemplate.AttackType != "Support")
             template = enemyTemplate;
-        if (template != null && item?.HitInterval != null) template = template.WithUniformInterval(item.HitInterval.Value);
         var attack = BattleAttackAnimationHooks.Resolve(result, Attacks?.Find(result.EffectID));
-        if (result.Data is DamageEventData actual && attack != null && attack.SelfAnimation != 1)
+        if (BattleReactionEffectPlan.TryGetReaction(result, out _)) template = null;
+        // A declared attack timeline is authoritative; old generic timing/intervals remain fallbacks.
+        if (result.Data is DamageEventData hit && attack?.Timeline != null)
+            template = attack.Timeline.WithContext(hit.SourceWeaponType, hit.DamageType);
+        else if (template != null && item?.HitInterval != null) template = template.WithUniformInterval(item.HitInterval.Value);
+        if (result.Data is DamageEventData actual && attack != null && attack.Timeline == null && (attack.SelfAnimation != 1 || attack.NativeLeadSeconds > 0))
         {
             if (template == null) template = new BattleHitTemplate("Attack/" + result.EffectID, new[] { (double)attack.Windup },
                 item?.HitInterval ?? HitInterval, 0, actual.SourceWeaponType, actual.DamageType, attack.Duration);

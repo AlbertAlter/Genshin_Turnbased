@@ -27,7 +27,7 @@ public sealed class UICardEntrance : MonoBehaviour
     private void Update()
     {
         if (!IsPlaying || Paused) return;
-        elapsed += Mathf.Max(0, style.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime);
+        elapsed += Mathf.Max(0, style.Unscaled ? BattlePause.DeltaTime : BattlePause.ScaledDeltaTime);
         if (elapsed < delay) return;
         float progress = style.Duration <= 0 ? 1 : Mathf.Clamp01((elapsed - delay) / style.Duration);
         Apply(progress);

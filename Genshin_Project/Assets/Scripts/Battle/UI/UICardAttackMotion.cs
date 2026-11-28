@@ -51,7 +51,7 @@ public static class CardAttackMotionMath
         return t <= 0.3f ? Between(t, 0, 0.3f, 0, 1) : t <= 0.65f ? Between(t, 0.3f, 0.65f, 1, 0.8f) : Between(t, 0.65f, 1, 0.8f, 0);
     }
     public static float CastHaloOpacity(float progress, float strength)
-        => progress <= 0 || progress >= 1 ? 0 : Mathf.Sin(progress * Mathf.PI) * 0.65f * Mathf.Clamp(strength, 0, 1.5f);
+        => progress <= 0 || progress >= 1 ? 0 : Mathf.Sin(progress * Mathf.PI) * Mathf.Min(1, 0.72f * Mathf.Clamp(strength, 0, 1.5f));
     public static CardAttackPose Hit(int kind, Vector2 size, float age, float direction, uint seed, float strength = 1)
     {
         if (kind == 1 || age < 0 || age >= HitDuration(kind)) return CardAttackPose.Rest;
@@ -77,9 +77,18 @@ public sealed class UICardAttackMotion : MonoBehaviour
     private readonly List<Motion> motions = new List<Motion>();
     private readonly Dictionary<Graphic, UIShakeMeshOffset> graphics = new Dictionary<Graphic, UIShakeMeshOffset>();
     private readonly Dictionary<Graphic, RectTransform> roots = new Dictionary<Graphic, RectTransform>();
-    private readonly Dictionary<RectTransform, UICardCastHalo> halos = new Dictionary<RectTransform, UICardCastHalo>();
+    private sealed class CastHalos
+    {
+        public UICardCastHalo Back, Front;
+        public bool Ready => Back != null && Front != null;
+        public void Sample(float progress, float strength) { Back.Sample(progress, strength); Front.Sample(progress, strength); }
+    }
+    private readonly Dictionary<RectTransform, CastHalos> halos = new Dictionary<RectTransform, CastHalos>();
+    private Material haloMaterial;
     private long nextID;
     public int ActiveCount => motions.Count;
+    public bool HasActiveHits => motions.Exists(m => m.Hit != 0);
+    public bool HasHit(RectTransform root) => root != null && motions.Exists(m => m.Hit != 0 && m.Root == root);
     public long PlaySelf(long playback, RectTransform root, BattleAttackAnimationSpec spec, float direction, float windup,
         bool autoRelease, Action<Exception> finished)
     {
@@ -87,14 +96,46 @@ public sealed class UICardAttackMotion : MonoBehaviour
         Remove(m => m.Root == root && m.Hit == 0);
         var item = new Motion { ID = ++nextID, Playback = playback, Root = root, Spec = spec, Direction = direction,
             Windup = Mathf.Max(0, windup), AutoRelease = autoRelease, Finish = finished };
-        if (spec.SelfAnimation == 5 && (!halos.TryGetValue(root, out var halo) || halo == null))
-        {
-            var go = new GameObject("CastingTripleHalo", typeof(RectTransform), typeof(CanvasRenderer), typeof(UICardCastHalo));
-            go.transform.SetParent(root, false); halo = go.GetComponent<UICardCastHalo>(); halo.raycastTarget = false; halo.maskable = false;
-            var rect = halo.rectTransform; rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one; rect.sizeDelta = Vector2.zero; rect.anchoredPosition = Vector2.zero;
-            halos[root] = halo;
-        }
+        if (spec.SelfAnimation == 5) EnsureHalos(root);
         motions.Add(item); Collect(root); Apply(); return item.ID;
+    }
+    private void EnsureHalos(RectTransform root)
+    {
+        var card = root.GetComponent<UICardFrameView>();
+        if (card == null || card.BackEffects == null || card.FrontEffects == null || card.BackEffects == card.FrontEffects)
+            throw new InvalidOperationException("施法光环需要公共卡牌的前后特效挂点。");
+        if (halos.TryGetValue(root, out var current))
+        {
+            if (current.Ready && current.Back.transform.parent == card.BackEffects && current.Front.transform.parent == card.FrontEffects) return;
+            ReleaseHalos(current); halos.Remove(root);
+        }
+        if (haloMaterial == null)
+        {
+            var shader = Resources.Load<Shader>("UI/CardCastHalo");
+            if (shader == null) throw new InvalidOperationException("缺少 UI/CardCastHalo 光环着色器。");
+            haloMaterial = new Material(shader) { name = "Cast halo screen blend", hideFlags = HideFlags.HideAndDontSave };
+        }
+        var pair = new CastHalos();
+        try
+        {
+            pair.Back = CreateHalo(root, card.BackEffects, true);
+            pair.Front = CreateHalo(root, card.FrontEffects, false);
+            halos[root] = pair;
+        }
+        catch { ReleaseHalos(pair); throw; }
+    }
+    private UICardCastHalo CreateHalo(RectTransform card, RectTransform parent, bool rear)
+    {
+        var go = new GameObject(rear ? "CastingHaloBehind" : "CastingHaloFront", typeof(RectTransform), typeof(CanvasRenderer), typeof(UICardCastHalo));
+        go.layer = parent.gameObject.layer; go.transform.SetParent(parent, false);
+        var halo = go.GetComponent<UICardCastHalo>(); var rect = halo.rectTransform;
+        rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one; rect.offsetMin = rect.offsetMax = Vector2.zero;
+        halo.Bind(card, rear, haloMaterial); return halo;
+    }
+    private static void ReleaseHalos(CastHalos pair)
+    {
+        if (pair.Back != null) { pair.Back.gameObject.SetActive(false); Destroy(pair.Back.gameObject); }
+        if (pair.Front != null) { pair.Front.gameObject.SetActive(false); Destroy(pair.Front.gameObject); }
     }
     public void Impact(long id)
     {
@@ -177,9 +218,9 @@ public sealed class UICardAttackMotion : MonoBehaviour
             if (entry.Key == null || entry.Value == null) { graphics.Remove(entry.Key); roots.Remove(entry.Key); continue; }
             entry.Value.SetWorldDelta(this, roots.TryGetValue(entry.Key, out var root) && root != null && deltas.TryGetValue(root, out var delta) ? delta : Matrix4x4.identity);
         }
-        foreach (var entry in new List<KeyValuePair<RectTransform, UICardCastHalo>>(halos))
+        foreach (var entry in new List<KeyValuePair<RectTransform, CastHalos>>(halos))
         {
-            if (entry.Key == null || entry.Value == null) { halos.Remove(entry.Key); continue; }
+            if (entry.Key == null || !entry.Value.Ready) { ReleaseHalos(entry.Value); halos.Remove(entry.Key); continue; }
             if (casting.TryGetValue(entry.Key, out var sample)) entry.Value.Sample(sample.progress, sample.strength);
             else entry.Value.Sample(1, 0);
         }
@@ -190,12 +231,13 @@ public sealed class UICardAttackMotion : MonoBehaviour
         var removed = motions.FindAll(predicate); motions.RemoveAll(predicate); Apply(); foreach (var m in removed) Finish(m);
     }
     public void Cancel(long playback) => Remove(m => playback < 0 || m.Playback == playback);
-    private void LateUpdate() { if (AutomaticClock) Advance(Time.unscaledDeltaTime); }
+    private void LateUpdate() { if (AutomaticClock) Advance(BattlePause.DeltaTime); }
     private void OnDisable()
     {
         Cancel(-1); foreach (var effect in graphics.Values) if (effect != null) effect.ClearWorldDelta(this);
         graphics.Clear(); roots.Clear();
-        foreach (var halo in halos.Values) if (halo != null) Destroy(halo.gameObject);
+        foreach (var halo in halos.Values) ReleaseHalos(halo);
         halos.Clear();
+        if (haloMaterial != null) Destroy(haloMaterial); haloMaterial = null;
     }
 }

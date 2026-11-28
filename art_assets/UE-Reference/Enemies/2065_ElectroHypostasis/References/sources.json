@@ -1,0 +1,77 @@
+{
+  "enemy_id": 2065,
+  "name": "无相之雷",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Electro_Hypostasis#Abilities",
+  "verification": "能力条目及MediaWiki媒体地址已核对；未播放完整动图，GIF仅在线链接。视频与音效候选未试听、截取或下载。普通无相版本，未将至纯版本作为主参考。",
+  "visual_sources": [
+    {
+      "title": "Electro Hypostasis Missiles.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/89/Electro_Hypostasis_Missiles.gif/revision/latest?cb=20211128091301",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Electro_Hypostasis_Missiles.gif",
+      "purpose": "雷晶投射原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Hypostasis Clap.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/ae/Electro_Hypostasis_Clap.gif/revision/latest?cb=20211128091325",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Electro_Hypostasis_Clap.gif",
+      "purpose": "合掌原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Hypostasis Rock Scissors Paper.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/c/c2/Electro_Hypostasis_Rock_Scissors_Paper.gif/revision/latest?cb=20211128091309",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Electro_Hypostasis_Rock_Scissors_Paper.gif",
+      "purpose": "猜拳连击原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Hypostasis Tremors.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/6/6d/Electro_Hypostasis_Tremors.gif/revision/latest?cb=20211128091318",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Electro_Hypostasis_Tremors.gif",
+      "purpose": "雷潮状态与触发原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Hypostasis Cage.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/2/2d/Electro_Hypostasis_Cage.gif/revision/latest?cb=20211128091321",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Electro_Hypostasis_Cage.gif",
+      "purpose": "雷电囚笼原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=prh-uCubCWE",
+      "purpose": "各项技能的原作声音对照；片段时间待试听定位",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "原作对照入口，未提取或声明音频再分发许可"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/electricity-game-sound-pack",
+      "license_page_label": "CC0（页面检索标注，尚未下载文件核对）",
+      "purpose": "电流接触与循环电弧候选",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": "本机art_assets下未找到本批对应技能可直接引用的松散音频源；只记录当前设备检索结果，不推断其他设备的制作状态。"
+}

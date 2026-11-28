@@ -1,0 +1,289 @@
+{
+  "category": "general",
+  "effect": "Explosion",
+  "blenderVersion": "5.3.0",
+  "source": "Blender/General_Explosions.blend",
+  "defaultScene": "02_Explosion",
+  "axes": "Blender: Z up, X right, -Y toward viewer. FBX: Y up, -Z forward.",
+  "origin": "Contact point, not feet or center of the bounding box.",
+  "controls": "Authoring preview: CTRL TargetCount (1..5), MainTargetSlot (1..5), RangeScale (0.5..2). Production must use the real skill target list and card positions, not these manual preview inputs. One shared effect supports all five ranges.",
+  "reference": {
+    "background": "art_assets/BattleBG/1_BG.png",
+    "layout": "BattleField1 saved nine-card centers: five enemies, four allies, staggered rows.",
+    "cards": [
+      {
+        "side": "Enemy",
+        "id": 2008,
+        "x": 180.5,
+        "y": 608,
+        "slot": 5
+      },
+      {
+        "side": "Enemy",
+        "id": 2010,
+        "x": 354.5,
+        "y": 405,
+        "slot": 4
+      },
+      {
+        "side": "Enemy",
+        "id": 2014,
+        "x": 509.5,
+        "y": 609,
+        "slot": 3
+      },
+      {
+        "side": "Enemy",
+        "id": 2020,
+        "x": 683.5,
+        "y": 405,
+        "slot": 2
+      },
+      {
+        "side": "Enemy",
+        "id": 2005,
+        "x": 838.5,
+        "y": 609,
+        "slot": 1
+      },
+      {
+        "side": "Character_Bare",
+        "id": 1009,
+        "x": 1167.5,
+        "y": 608,
+        "slot": 1
+      },
+      {
+        "side": "Character_Bare",
+        "id": 1023,
+        "x": 1330.5,
+        "y": 405,
+        "slot": 2
+      },
+      {
+        "side": "Character_Bare",
+        "id": 1020,
+        "x": 1496.5,
+        "y": 608,
+        "slot": 3
+      },
+      {
+        "side": "Character_Bare",
+        "id": 1026,
+        "x": 1659.5,
+        "y": 405,
+        "slot": 4
+      }
+    ],
+    "cardSize": [
+      1.97,
+      3.38
+    ],
+    "alignment": "One target: its card center. Multiple targets: center line of their combined bounds. Reference window defaults to enemy slots 2,3,4. Unity supplies actual positions.",
+    "camera": "Frontal 16:9 full-battle view; starts at 21.6-unit width, automatically fits a larger chosen range.",
+    "backgroundDepth": 40,
+    "packed": true,
+    "exported": false
+  },
+  "layers": [
+    "Flash",
+    "Fire",
+    "Shockwave",
+    "Sparks",
+    "Smoke",
+    "Debris"
+  ],
+  "variants": [
+    {
+      "id": "Impact",
+      "scene": "01_Impact",
+      "frames": [
+        1,
+        25
+      ],
+      "fps": 30,
+      "seconds": 0.8,
+      "nominalRadius": 2.85,
+      "targetCount": 3,
+      "targetSlots": [
+        2,
+        3,
+        4
+      ],
+      "mainTargetSlot": 3,
+      "sourceContactOrigin": [
+        -4.409999847412109,
+        0.0,
+        0.33000001311302185
+      ],
+      "targetCenterReach": 2.6813,
+      "counts": {
+        "fire": 5,
+        "sparks": 9,
+        "smoke": 2,
+        "debris": 0,
+        "billows": 2
+      },
+      "meshObjects": 34,
+      "peakVisibleMeshes": 24,
+      "depthLayers": {
+        "Back": {
+          "offset": 3.6275,
+          "meshes": 14
+        },
+        "Contact": {
+          "offset": -1.0475,
+          "meshes": 4
+        },
+        "Front": {
+          "offset": -2.43,
+          "meshes": 16
+        }
+      },
+      "maximumEvaluatedRadius": 6.26,
+      "firstAndLastFrameClear": true
+    },
+    {
+      "id": "Explosion",
+      "scene": "02_Explosion",
+      "frames": [
+        1,
+        40
+      ],
+      "fps": 30,
+      "seconds": 1.3,
+      "nominalRadius": 3.25,
+      "targetCount": 3,
+      "targetSlots": [
+        2,
+        3,
+        4
+      ],
+      "mainTargetSlot": 3,
+      "sourceContactOrigin": [
+        -4.409999847412109,
+        0.0,
+        0.33000001311302185
+      ],
+      "targetCenterReach": 2.6813,
+      "counts": {
+        "fire": 9,
+        "sparks": 15,
+        "smoke": 4,
+        "debris": 4,
+        "billows": 4
+      },
+      "meshObjects": 59,
+      "peakVisibleMeshes": 43,
+      "depthLayers": {
+        "Back": {
+          "offset": 4.0875,
+          "meshes": 25
+        },
+        "Contact": {
+          "offset": -1.1875,
+          "meshes": 5
+        },
+        "Front": {
+          "offset": -2.75,
+          "meshes": 29
+        }
+      },
+      "maximumEvaluatedRadius": 7.026,
+      "firstAndLastFrameClear": true
+    },
+    {
+      "id": "LargeBlast",
+      "scene": "03_LargeBlast",
+      "frames": [
+        1,
+        52
+      ],
+      "fps": 30,
+      "seconds": 1.7,
+      "nominalRadius": 3.6,
+      "targetCount": 3,
+      "targetSlots": [
+        2,
+        3,
+        4
+      ],
+      "mainTargetSlot": 3,
+      "sourceContactOrigin": [
+        -4.409999847412109,
+        0.0,
+        0.33000001311302185
+      ],
+      "targetCenterReach": 2.6813,
+      "counts": {
+        "fire": 13,
+        "sparks": 21,
+        "smoke": 6,
+        "debris": 6,
+        "billows": 4
+      },
+      "meshObjects": 80,
+      "peakVisibleMeshes": 57,
+      "depthLayers": {
+        "Back": {
+          "offset": 4.49,
+          "meshes": 34
+        },
+        "Contact": {
+          "offset": -1.31,
+          "meshes": 5
+        },
+        "Front": {
+          "offset": -3.03,
+          "meshes": 41
+        }
+      },
+      "maximumEvaluatedRadius": 7.789,
+      "firstAndLastFrameClear": true
+    }
+  ],
+  "depthLayerContract": "Back is behind the target-card plane, Contact is the core impact glow, Front overlays the card. Rear fire/shockwave/smoke are naturally occluded by the reference card; hierarchy and DepthLayer properties are retained in one-shot FBX.",
+  "parts": {
+    "FlashCore": {
+      "vertices": 108,
+      "triangles": 192,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "FlamePetal": {
+      "vertices": 160,
+      "triangles": 302,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "FireCloud": {
+      "vertices": 108,
+      "triangles": 192,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "ShockwaveBrokenRing": {
+      "vertices": 476,
+      "triangles": 672,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "SparkStreak": {
+      "vertices": 24,
+      "triangles": 36,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "SmokeWisp": {
+      "vertices": 108,
+      "triangles": 192,
+      "vertexColors": "VFXColor / RGBA"
+    },
+    "EmberFragment": {
+      "vertices": 5,
+      "triangles": 6,
+      "vertexColors": "VFXColor / RGBA"
+    }
+  },
+  "exportPolicy": "Exports contains seven reusable component meshes and three baked maximum-capacity (5 target) one-shot reference clips. The editable source defaults to 3 targets. Unity uses shared parts with the actual target list. No camera, light, simulation cache, cards or background.",
+  "lowerFill": "Three independent lower fire billows supplement radial flames; size and density remain independent of group bounds.",
+  "rangeContract": "One set of common parts, not five copies. Compute spread from actual selected card positions. Move fire/spark emission points and adjust active count while keeping individual shapes; resize the shockwave footprint. Preview drivers support all counts 1..5 without script auto-execution.",
+  "runtime": "Art assets only. Production playback takes committed real skill targets, derives count 1..5 and positions from that list, then drives one shared effect. Future public Unity playback owns pooling, pause, cancel and cleanup. No damage or target-selection calculation in these assets.",
+  "materialLimitations": "Blender procedural noise, alpha and glow are not Unity shaders. FBX preserves geometry, transforms, animations and VFXColor; native runtime transparent/emissive materials still required.",
+  "validation": "Evaluated all frames of all three Blender scenes; first/last frames contain no visible geometry. No Unity importer/render verification."
+}

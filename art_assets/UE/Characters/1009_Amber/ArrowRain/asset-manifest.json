@@ -1,0 +1,575 @@
+{
+  "characterID": 1009,
+  "effect": "ArrowRain",
+  "blenderVersion": "5.3.0",
+  "sourceProjects": {
+    "statusLifetime": "Blender/Amber_BurningArea.blend",
+    "statusAction": "Blender/Amber_ArrowRain.blend"
+  },
+  "triggerContracts": {
+    "statusLifetime": "Start/restore by status instance; sustain while present; fade on removal. Do not restart on action.",
+    "statusAction": "Play arrows and contact flames once for each committed action of that status. Does not own the burning field."
+  },
+  "flight": {
+    "direction": "viewer-side outside -> shared burn footprint; camera-normal plus positive screen-up pitch",
+    "screenUpDegrees": 12,
+    "arrowCounts": {
+      "3Targets": 12,
+      "4Targets": 16
+    },
+    "maxLiveArrows": 4,
+    "hitScatter": "Stratified randomized disk points across the exact same footprint used by the burning area, normalized radius <=0.98",
+    "flightFrames": [
+      6,
+      7
+    ],
+    "launchJitterFrames": [
+      -0.5,
+      0.5
+    ],
+    "fps": 30,
+    "frames": [
+      1,
+      64
+    ]
+  },
+  "burnField": {
+    "shape": "Circle/ellipse centered on selected card rectangle bounds; each semi-axis equals 58% of the corresponding full bound size plus 0.15 units margin",
+    "sharedFootprint": "TARGET_AREA_SharedFootprint + BurnRadius/BurnRadiusY; used identically by flame placement and arrow landings",
+    "layer": "Behind card faces; in front of background",
+    "behavior": "Sustained through the entire loop, independent of the arrow volley",
+    "emitters": {
+      "3Targets": 7,
+      "4Targets": 9
+    },
+    "boundary": "Soft irregular scorch fade plus sparse broken ember arcs",
+    "placement": "Random bounded disk points, minimum spacing; staggered 40-frame flame renewals"
+  },
+  "previewControls": {
+    "object": "CTRL_AmberArrowRain",
+    "TargetCount": "3 or 4 consecutive enemy slots",
+    "StartSlot": "1..3, clamped so the full window fits in slots 1..5",
+    "UpAngleDegrees": "0..35 degrees toward camera screen-up, default 12"
+  },
+  "runtimeContract": "Supply actual selected target card transforms. Repeat the reusable arrow, flame, and impact assets per target; do not use an overall area scale to decide target membership.",
+  "exports": {
+    "Amber_Arrow.fbx": "Soft emissive energy arrow, local +Y points at the tip before FBX axis conversion; no solid wood/metal/fletching parts.",
+    "Amber_FlameTongue.fbx": "Static 3D flame mesh with VFXColor RGBA. Rebuild emissive/transparent material in Unity.",
+    "Amber_ImpactFlame.fbx": "Static small radial impact flame assembly.",
+    "Amber_BurningArea.fbx": "Reusable circular burn footprint: soft scorch, broken ember arcs and seven sparse flame tongues. Spread emitter positions with radius; keep flame sizes independent.",
+    "Amber_ArrowRain_MotionStudy.fbx": "Baked 3-target reference animation; no reference cards/background/controls.",
+    "Amber_ArrowRain_4Targets.fbx": "Baked 4-target reference animation; no reference cards/background/controls.",
+    "Amber_BurningAreaLoop.fbx": "Sustained 3-target circular field only; no arrows or impact bursts.",
+    "Amber_BurningAreaLoop_4Targets.fbx": "Sustained 4-target circular field only; no arrows or impact bursts."
+  },
+  "limitations": [
+    "Blender node materials, procedural noise and compositor bloom are not Unity materials.",
+    "Card/reference images are packed in the blend, excluded from all FBX exports.",
+    "This is an art study, not a Unity-integrated effect. Emitted arrows do not compute hits."
+  ],
+  "meshes": {
+    "Arrow_LuminousSpine": {
+      "vertices": 60,
+      "triangles": 96
+    },
+    "Arrow_SoftFlameEnvelope": {
+      "vertices": 60,
+      "triangles": 96
+    },
+    "ASSET_FlameTongue": {
+      "vertices": 48,
+      "triangles": 86
+    },
+    "Impact_Petal_0": {
+      "vertices": 48,
+      "triangles": 86
+    },
+    "Impact_Petal_1": {
+      "vertices": 48,
+      "triangles": 86
+    },
+    "Impact_Petal_2": {
+      "vertices": 48,
+      "triangles": 86
+    },
+    "Impact_Petal_3": {
+      "vertices": 48,
+      "triangles": 86
+    },
+    "Impact_Petal_4": {
+      "vertices": 48,
+      "triangles": 86
+    }
+  },
+  "sourceStillValidation": {
+    "Amber_ArrowRain": {
+      "poster": "Preview/Amber_ArrowRain_Current.png",
+      "frame": 35,
+      "sourceScene": "Amber_ArrowRain_StateAction",
+      "sourceFrameRange": [
+        1,
+        64
+      ],
+      "scope": "Existing saved legacy stage; no new lifecycle or gameplay changes.",
+      "nonBlackRenderChecked": true,
+      "meanRGB": [
+        101.74430555555556,
+        119.36638117283951,
+        116.40118055555556
+      ],
+      "sourceReopened": true,
+      "referenceBacks": 9,
+      "referenceEdges": 9,
+      "packedUsedImages": 12,
+      "originalObjectsAndLayoutUnchanged": true,
+      "originalSavedFrame": 35,
+      "videosGenerated": false,
+      "rearInspection": "Preview/Amber_ArrowRain_CardBackCheck.png"
+    },
+    "Amber_BurningArea": {
+      "poster": "Preview/Amber_BurningArea_Current.png",
+      "frame": 35,
+      "sourceFrameRange": [
+        1,
+        313
+      ],
+      "sourceReopened": true
+    }
+  },
+  "referenceCardCompletion": {
+    "helper": "tools/blender/reference_card_shell.py",
+    "frontsAndFrames": "Existing nine meshes and transforms preserved.",
+    "backs": "Nine rounded default card backs, packed UI_Gcg_CardBack_01.png.",
+    "edges": "Nine rounded reference shells, 0.048 m plus tiny rear-depth separation; attached to existing frame parenting.",
+    "exportScope": "Reference geometry is excluded from effect exports; existing FBX files unchanged."
+  },
+  "sourceLifecycle": {
+    "source": "Blender/Amber_BurningArea.blend",
+    "sourceFrames": [
+      1,
+      313
+    ],
+    "appearanceFrames": [
+      1,
+      25
+    ],
+    "loopFrames": [
+      25,
+      145
+    ],
+    "duplicateLoopEndpoints": [
+      145,
+      265
+    ],
+    "removalExampleFrames": [
+      265,
+      313
+    ],
+    "originalBakedFrames": [
+      1,
+      120
+    ],
+    "duplicateSourceEndpoint": 121,
+    "nlaActors": [
+      "BurnEmitter_00",
+      "GroundFlame_00",
+      "BurnEmitter_01",
+      "GroundFlame_01",
+      "BurnEmitter_02",
+      "GroundFlame_02",
+      "BurnEmitter_03",
+      "GroundFlame_03",
+      "BurnEmitter_04",
+      "GroundFlame_04",
+      "BurnEmitter_05",
+      "GroundFlame_05",
+      "BurnEmitter_06",
+      "GroundFlame_06",
+      "BurnEmitter_07",
+      "GroundFlame_07",
+      "BurnEmitter_08",
+      "GroundFlame_08",
+      "GroundEmber_00",
+      "GroundEmber_01",
+      "GroundEmber_02",
+      "GroundEmber_03"
+    ],
+    "profiles": [
+      {
+        "object": "BurnField_SoftScorch",
+        "role": "soft ground scorch / broken rim",
+        "periodFrames": null,
+        "phaseOffset": 0.0,
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "BurnField_BrokenEmberBoundary",
+        "role": "soft ground scorch / broken rim",
+        "periodFrames": null,
+        "phaseOffset": 0.0,
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "GroundFlame_00",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.1,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_01",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.425,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_02",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.75,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_03",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.075,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_04",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.4,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_05",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.725,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_06",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.05,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_07",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.375,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundFlame_08",
+        "role": "sparse flame",
+        "periodFrames": 40.0,
+        "phaseOffset": 0.7,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundEmber_00",
+        "role": "remaining ember",
+        "periodFrames": 30.0,
+        "phaseOffset": 0.0,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundEmber_01",
+        "role": "remaining ember",
+        "periodFrames": 30.0,
+        "phaseOffset": 0.3,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundEmber_02",
+        "role": "remaining ember",
+        "periodFrames": 30.0,
+        "phaseOffset": 0.6,
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "GroundEmber_03",
+        "role": "remaining ember",
+        "periodFrames": 30.0,
+        "phaseOffset": 0.9,
+        "stopNewBirthsOnRemoval": true
+      }
+    ],
+    "noise": "Closed circle in 4D noise input space; native expressions, common PlaybackSpeed.",
+    "lifecycleToggle": "LifecyclePreview",
+    "scope": "Source art only; committed arrows, native FBX and Unity unchanged."
+  },
+  "sourceLifecycleValidation": {
+    "source": "art_assets/UE/Characters/1009_Amber/ArrowRain/Blender/Amber_BurningArea.blend",
+    "sourceFrames": [
+      1,
+      313
+    ],
+    "loopSamples": [
+      {
+        "speed": 0.5,
+        "frames": [
+          25.0,
+          265.0
+        ],
+        "worldMatrixError": 0.0
+      },
+      {
+        "speed": 1.0,
+        "frames": [
+          25.0,
+          145.0
+        ],
+        "worldMatrixError": 0.0
+      },
+      {
+        "speed": 2.0,
+        "frames": [
+          25.0,
+          85.0
+        ],
+        "worldMatrixError": 0.0
+      }
+    ],
+    "originalKeyframeWorldMatrixError": 0.0,
+    "originalMotionSampleFrames": [
+      "1",
+      "15",
+      "35",
+      "70",
+      "119",
+      "120"
+    ],
+    "stopNewBirthChecks": [
+      {
+        "object": "GroundFlame_00",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 197.0
+      },
+      {
+        "object": "GroundFlame_01",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 184.0
+      },
+      {
+        "object": "GroundFlame_02",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 211.0
+      },
+      {
+        "object": "GroundFlame_03",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 198.0
+      },
+      {
+        "object": "GroundFlame_04",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 185.0
+      },
+      {
+        "object": "GroundFlame_05",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 212.0
+      },
+      {
+        "object": "GroundFlame_06",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 199.0
+      },
+      {
+        "object": "GroundFlame_07",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 186.0
+      },
+      {
+        "object": "GroundFlame_08",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 213.0
+      },
+      {
+        "object": "GroundEmber_00",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 181.0
+      },
+      {
+        "object": "GroundEmber_01",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 202.0
+      },
+      {
+        "object": "GroundEmber_02",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 193.0
+      },
+      {
+        "object": "GroundEmber_03",
+        "releaseFrame": 178.4,
+        "lastEmissionEnd": 184.0
+      },
+      {
+        "object": "GroundFlame_00",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 277.0
+      },
+      {
+        "object": "GroundFlame_01",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 264.0
+      },
+      {
+        "object": "GroundFlame_02",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 291.0
+      },
+      {
+        "object": "GroundFlame_03",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 278.0
+      },
+      {
+        "object": "GroundFlame_04",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 265.0
+      },
+      {
+        "object": "GroundFlame_05",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 292.0
+      },
+      {
+        "object": "GroundFlame_06",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 279.0
+      },
+      {
+        "object": "GroundFlame_07",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 266.0
+      },
+      {
+        "object": "GroundFlame_08",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 293.0
+      },
+      {
+        "object": "GroundEmber_00",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 271.0
+      },
+      {
+        "object": "GroundEmber_01",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 262.0
+      },
+      {
+        "object": "GroundEmber_02",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 283.0
+      },
+      {
+        "object": "GroundEmber_03",
+        "releaseFrame": 255.2,
+        "lastEmissionEnd": 274.0
+      }
+    ],
+    "countChecks": [
+      {
+        "targetCount": 3,
+        "startSlot": 1,
+        "activeFlames": 7
+      },
+      {
+        "targetCount": 3,
+        "startSlot": 2,
+        "activeFlames": 7
+      },
+      {
+        "targetCount": 3,
+        "startSlot": 3,
+        "activeFlames": 7
+      },
+      {
+        "targetCount": 3,
+        "startSlot": 4,
+        "activeFlames": 7
+      },
+      {
+        "targetCount": 3,
+        "startSlot": 5,
+        "activeFlames": 7
+      },
+      {
+        "targetCount": 4,
+        "startSlot": 1,
+        "activeFlames": 9
+      },
+      {
+        "targetCount": 4,
+        "startSlot": 2,
+        "activeFlames": 9
+      },
+      {
+        "targetCount": 4,
+        "startSlot": 3,
+        "activeFlames": 9
+      },
+      {
+        "targetCount": 4,
+        "startSlot": 4,
+        "activeFlames": 9
+      },
+      {
+        "targetCount": 4,
+        "startSlot": 5,
+        "activeFlames": 9
+      }
+    ],
+    "nativeDrivers": 180,
+    "autoexecDisabled": true,
+    "packedImages": 12,
+    "noUnityWrites": true,
+    "noVideo": true,
+    "noExportRegeneration": true,
+    "stills": [
+      {
+        "frame": 1,
+        "file": "Preview/Amber_BurningArea_00_Clear.png"
+      },
+      {
+        "frame": 8,
+        "file": "Preview/Amber_BurningArea_01_Scorch.png"
+      },
+      {
+        "frame": 18,
+        "file": "Preview/Amber_BurningArea_02_Ignite.png"
+      },
+      {
+        "frame": 35,
+        "file": "Preview/Amber_BurningArea_Current.png"
+      },
+      {
+        "frame": 145,
+        "file": "Preview/Amber_BurningArea_03_Loop.png"
+      },
+      {
+        "frame": 277,
+        "file": "Preview/Amber_BurningArea_04_Release.png"
+      },
+      {
+        "frame": 299,
+        "file": "Preview/Amber_BurningArea_05_RemainingHeat.png"
+      },
+      {
+        "frame": 313,
+        "file": "Preview/Amber_BurningArea_06_Clear.png"
+      }
+    ],
+    "fourTargetStill": "Preview/Amber_BurningArea_FourTargets.png"
+  }
+}

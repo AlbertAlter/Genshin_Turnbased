@@ -1,0 +1,51 @@
+[
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E8%8E%AB%E5%A8%9C",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/1f/kpxwlqwj0dqwb2xx4cfv1g1n1o8k6gg.gif",
+    "title": "水中幻愿.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码140帧、5.64秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "虚影水形、透明层次、周期脉动与退出；卡面范围和独立多份为本项目适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\mona-references\\Mona_PhantomExplosion_Observation.png",
+    "decoded_frames": 140,
+    "duration_seconds": 5.64,
+    "sampled_frames": [
+      0,
+      6,
+      12,
+      18,
+      24,
+      30,
+      36,
+      42,
+      48,
+      54,
+      60,
+      66,
+      73,
+      79,
+      85,
+      91,
+      97,
+      103,
+      109,
+      115,
+      121,
+      127,
+      133,
+      139
+    ]
+  },
+  {
+    "page_url": "https://www.sportskeeda.com/esports/5-reasons-mona-beloved-genshin-impact-community",
+    "image_url": "https://staticg.sportskeeda.com/editor/2021/04/6a878-16177535352730-800.jpg",
+    "title": "莫娜虚影原作游戏截图（文章配图）",
+    "downloaded": true,
+    "verification": "已实际查看静态游戏截图，可见沙漏状空心水体、上方水冠和内部卷水；静图不证明运动与退出。不是重制渲染或技能图标。",
+    "analysis_sheet": "codex_worktable/enemy_vfx/mona-references/Mona_Phantom_Screenshot.jpg",
+    "use": "仅为水体结构参考，未导出为本项目贴图。",
+    "recorded": "2026-11-28"
+  }
+]

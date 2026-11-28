@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1033_Xinyan/RiffRevolutionFlames/Xinyan_RiffRevolutionFlames_Trigger",
+  "source": "art_assets/UE/Characters/1033_Xinyan/RiffRevolutionFlames/Blender/Xinyan_RiffRevolutionFlames_Trigger.blend",
+  "file": "Characters/1033_Xinyan/RiffRevolutionFlames/Exports/Xinyan_RiffRevolutionFlames_Trigger.vfx.bytes",
+  "meshes": 6,
+  "tracks": 139,
+  "frames": 105,
+  "duration": 3.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.466666666666667
+  },
+  "bytes": 282012
+}

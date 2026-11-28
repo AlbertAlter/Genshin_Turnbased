@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/Spin/2067_Spin_Trigger",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/Spin/Blender/2067_Spin_Trigger.blend",
+  "file": "Enemies/2067_CryoRegisvine/Spin/Exports/2067_Spin_Trigger.vfx.bytes",
+  "meshes": 3,
+  "tracks": 60,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 217274
+}

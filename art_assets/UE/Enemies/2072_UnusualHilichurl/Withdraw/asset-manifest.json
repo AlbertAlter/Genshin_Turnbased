@@ -1,0 +1,87 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Withdraw/视觉需求.md",
+  "variants": {
+    "2072_Withdraw": {
+      "effect": "2072_Withdraw",
+      "source": "Blender/2072_Withdraw.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Withdraw/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Trail": {
+          "file": "Exports/2072_Withdraw_Trail.fbx",
+          "objects": [
+            "PART_TaperedTrail"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.2149999961256981,
+            0.0,
+            1.0067684701643884
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedTrail": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.2149999961256981,
+              1.6402339442223024e-07,
+              1.0067684701643884
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 3,
+          "kind": "real Withdrawn result; one short left shift + fade, never return",
+          "movementCardWidths": 0.36
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 12,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 7,
+      "contract": "Snapshot the withdrawn entity appearance and pose; release slot separately; never on ST_Flee application or early removal. No card restoration on completion/cancel.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2072_Withdraw.wav"
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    }
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "scope": "matching substitute sound candidates; no Wwise or Unity bindings",
+  "files": [
+    {
+      "file": "Launch.wav",
+      "role": "Launch",
+      "source": {
+        "local": "F:\\Genshin_Turnbased\\art_assets\\UE\\Characters\\1009_Amber\\ArrowRain\\Audio\\ArrowRain_Launch_01.wav",
+        "page": "https://opengameart.org/content/swishes-sound-pack",
+        "url": "https://opengameart.org/sites/default/files/swishes.zip",
+        "author": "artisticdude",
+        "license": "CC0-1.0",
+        "origin": "existing project CC0 candidate",
+        "sourceProcessing": [
+          "decoded/resampled to 48000 Hz stereo PCM16",
+          "3ms entrance / 20ms exit anti-click fade",
+          "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+        ]
+      },
+      "seconds": 0.12602083333333333,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "downward peak ceiling -6.2 dBFS",
+        "gain ceiling 0.62",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ],
+      "originalGameAudio": false,
+      "listened": false,
+      "verification": "decoded; nonempty PCM; source and license recorded; subjective listening pending"
+    },
+    {
+      "file": "Contact.wav",
+      "role": "Contact",
+      "source": {
+        "category": "earth",
+        "page": "https://opengameart.org/content/earth-element-magic-spell",
+        "url": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell_3.ogg",
+        "author": "qubodup",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\earth_Earth Element Magic Spell_3.ogg",
+        "listened": false,
+        "intendedUse": "roots/ground crumbling candidate; replaces metallic ping for earth/stone/dirt effects"
+      },
+      "seconds": 1.8857708333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "downward peak ceiling -6.2 dBFS",
+        "gain ceiling 0.7",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ],
+      "originalGameAudio": false,
+      "listened": false,
+      "verification": "decoded; nonempty PCM; source and license recorded; subjective listening pending"
+    },
+    {
+      "file": "2082_RockSpikes_Pyro_Contact.wav",
+      "role": "Contact",
+      "source": {
+        "local": "F:\\Genshin_Turnbased\\art_assets\\UE\\Characters\\1009_Amber\\ArrowRain\\Audio\\ArrowRain_FireBurst_01.wav",
+        "page": "https://opengameart.org/content/fireball-1",
+        "url": "https://opengameart.org/sites/default/files/105016__julien-matthey__jm-fx-fireball-01.wav",
+        "author": "Julien Matthey; uploaded by diligentcircle",
+        "license": "CC0-1.0",
+        "origin": "existing project CC0 candidate",
+        "sourceProcessing": [
+          "decoded/resampled to 48000 Hz stereo PCM16",
+          "excerpt 0.306146s to 0.956146s",
+          "3ms entrance / 20ms exit anti-click fade",
+          "peak ceiling -1dBFS, gain 0.908213; no upward normalization"
+        ]
+      },
+      "seconds": 0.65,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "gain ceiling 0.6",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Pyro_Contact_earth.wav",
+      "role": "material-specific contact",
+      "source": {
+        "category": "earth",
+        "page": "https://opengameart.org/content/earth-element-magic-spell",
+        "url": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell_3.ogg",
+        "author": "qubodup",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\earth_Earth Element Magic Spell_3.ogg",
+        "listened": false,
+        "intendedUse": "roots/ground crumbling candidate; replaces metallic ping for earth/stone/dirt effects"
+      },
+      "seconds": 1.8857708333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "separate material contact; one main sound per cue group",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Hydro_Contact.wav",
+      "role": "Contact",
+      "source": {
+        "category": "bubble",
+        "page": "https://opengameart.org/content/bubble-sound-effects",
+        "url": "https://opengameart.org/sites/default/files/bubbles-single2.wav",
+        "author": "BMacZero",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\bubble_bubbles-single2.wav",
+        "listened": false
+      },
+      "seconds": 0.43566666666666665,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "gain ceiling 0.6",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Hydro_Contact_earth.wav",
+      "role": "material-specific contact",
+      "source": {
+        "category": "earth",
+        "page": "https://opengameart.org/content/earth-element-magic-spell",
+        "url": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell_3.ogg",
+        "author": "qubodup",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\earth_Earth Element Magic Spell_3.ogg",
+        "listened": false,
+        "intendedUse": "roots/ground crumbling candidate; replaces metallic ping for earth/stone/dirt effects"
+      },
+      "seconds": 1.8857708333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "separate material contact; one main sound per cue group",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Electro_Contact.wav",
+      "role": "Contact",
+      "source": {
+        "local": "F:\\Genshin_Turnbased\\art_assets\\UE\\Characters\\1011_Lisa\\VioletArc\\Audio\\Lisa_Strike_01.wav",
+        "page": "https://opengameart.org/content/electricity-game-sound-pack",
+        "url": "https://opengameart.org/sites/default/files/groundhit.wav",
+        "author": "faxcorp",
+        "license": "CC0-1.0",
+        "origin": "existing project CC0 candidate",
+        "sourceProcessing": [
+          "decoded/resampled to 48000 Hz stereo PCM16",
+          "3ms entrance / 20ms exit anti-click fade",
+          "peak ceiling -1dBFS, gain 0.985496; no upward normalization"
+        ]
+      },
+      "seconds": 0.28491666666666665,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "gain ceiling 0.6",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Electro_Contact_earth.wav",
+      "role": "material-specific contact",
+      "source": {
+        "category": "earth",
+        "page": "https://opengameart.org/content/earth-element-magic-spell",
+        "url": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell_3.ogg",
+        "author": "qubodup",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\earth_Earth Element Magic Spell_3.ogg",
+        "listened": false,
+        "intendedUse": "roots/ground crumbling candidate; replaces metallic ping for earth/stone/dirt effects"
+      },
+      "seconds": 1.8857708333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "separate material contact; one main sound per cue group",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Cryo_Contact.wav",
+      "role": "Contact",
+      "source": {
+        "local": "F:\\Genshin_Turnbased\\soundtrack\\SFX\\Freeze_02_Crack.wav",
+        "page": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+        "url": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+        "author": "Joseph SARDIN",
+        "license": "CC0-1.0",
+        "sourceProcessing": "project Freeze_02_Crack: original 0.027..0.327s, presence +2 dB"
+      },
+      "seconds": 0.3,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "gain ceiling 0.6",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    },
+    {
+      "file": "2082_RockSpikes_Cryo_Contact_earth.wav",
+      "role": "material-specific contact",
+      "source": {
+        "category": "earth",
+        "page": "https://opengameart.org/content/earth-element-magic-spell",
+        "url": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell_3.ogg",
+        "author": "qubodup",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\earth_Earth Element Magic Spell_3.ogg",
+        "listened": false,
+        "intendedUse": "roots/ground crumbling candidate; replaces metallic ping for earth/stone/dirt effects"
+      },
+      "seconds": 1.8857708333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "originalGameAudio": false,
+      "listened": false,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "separate material contact; one main sound per cue group",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ]
+    }
+  ]
+}

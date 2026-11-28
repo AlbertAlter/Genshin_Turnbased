@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>卡牌动作 · 战斗预览</title>
+  <link rel="stylesheet" href="card-animation-preview.css">
+  <script src="card-motion.js" defer></script>
+  <script src="card-charge.js" defer></script>
+  <script src="card-status.js" defer></script>
+  <script src="battle-preview-scene.js" defer></script>
+  <script src="card-animation-preview.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="title"><span class="diamond" aria-hidden="true"></span><h1>卡牌动作<span>战斗预览</span></h1></div>
+    <p>BattleField1 · 4 角色 / 5 敌人</p>
+    <div class="toolbar-actions"><button id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings">调参</button><button id="clean-view" type="button" aria-pressed="false">纯画面</button></div>
+  </header>
+
+  <main id="viewport" aria-label="完整战斗画面，播放预览，不提供战斗操作">
+    <div id="arena-fit">
+      <div id="arena">
+        <img class="battle-background" src="../../BattleBG/1_BG.png" alt="" draggable="false">
+        <div class="battle-vignette"></div>
+        <div id="enemy-hud" class="enemy-hud"></div>
+        <div class="round-label"><span>第一回合</span><small>我方行动</small></div>
+        <div id="cards"></div>
+        <div id="effect-layer" aria-hidden="true"><canvas id="charge-layer" width="349" height="490"></canvas></div>
+        <div id="action-prompt" class="action-prompt" hidden><img id="prompt-avatar" alt=""><span><small id="prompt-side">角色行动</small><strong id="prompt-name"></strong></span></div>
+        <div id="party-hud" class="party-hud"></div>
+        <div class="battle-actions" aria-hidden="true">
+          <span class="ap"><small>行动点</small>64 <i>/ 100</i></span>
+          <div class="skill-discs"><span><img src="../../Skill_Icon/%23Normal/1_1.png" alt=""><small>普通攻击</small></span><span><img src="../../Skill_Icon/1015/1015_S02.png" alt=""><small>元素战技</small></span><span><img src="../../Skill_Icon/1015/1015_S03.png" alt=""><small>元素爆发</small></span></div>
+        </div>
+        <div class="field-caption">动画示意 · 不结算伤害</div>
+      </div>
+    </div>
+    <div id="load-status" role="status">正在加载项目素材…</div>
+    <button id="exit-clean" type="button" hidden>返回控件 · Esc</button>
+  </main>
+
+  <section id="playback" aria-label="动画播放控件">
+    <div class="playback-row">
+      <div class="transport"><button id="play" class="primary" type="button" disabled>播放</button><button id="pause" type="button" disabled>暂停</button><button id="stop" type="button" disabled>复位</button><button id="demo" type="button" disabled>连播示例</button></div>
+      <div class="timeline"><label for="seek" id="playback-status">准备就绪</label><input id="seek" type="range" min="0" max="1000" value="0" aria-label="动画进度"><output id="time">0.00 / 0.64 s</output></div>
+      <label class="speed-label">速度<select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+      <label class="check"><input id="loop" type="checkbox">循环</label>
+    </div>
+    <div class="participants" aria-label="动画参与者">
+      <label for="source"><span id="source-label">施加者</span><select id="source"></select></label>
+      <label for="target"><span id="target-label">获得状态</span><select id="target"></select></label>
+      <span id="participant-hint">可选双方阵营 · 更改后重播当前动作</span>
+    </div>
+    <div class="animation-modes" aria-label="动画类别"><button type="button" data-mode="attack" aria-pressed="false">攻击与动作</button><button type="button" data-mode="status" aria-pressed="true">施加状态</button></div>
+    <div id="presets" class="presets" aria-label="选择并播放动作"></div>
+    <div id="status-presets" class="presets" aria-label="选择状态施加方案"></div>
+    <div id="settings" hidden>
+      <div class="settings-grid">
+        <label>动作时长 <output id="duration-value"></output><input id="duration" type="range" min="0.3" max="5" step="0.01" value="0.64"></label>
+        <label>动作幅度 <output id="strength-value"></output><input id="strength" type="range" min="0" max="180" step="5" value="100"></label>
+        <label>前倾角度 <output id="tilt-value"></output><input id="tilt" type="range" min="0" max="20" step="0.5" value="8"></label>
+        <label>命中时点 <output id="contact-value"></output><input id="contact" type="range" min="25" max="70" step="1" value="44"></label>
+        <label>目标版停靠间距 <output id="gap-value"></output><input id="gap" type="range" min="0" max="90" step="1" value="18"></label>
+      </div>
+      <div class="settings-foot"><div class="checks"><label class="check"><input id="hit-effects" type="checkbox" checked>命中特效</label><label class="check"><input id="hit-reaction" type="checkbox" checked>受击动作</label><label class="check"><input id="screen-shake" type="checkbox" checked>重击震屏</label><label class="check"><input id="damage-numbers" type="checkbox" checked>示意跳字</label></div><button id="reset" type="button">恢复默认</button></div>
+    </div>
+    <div id="charge-controls" hidden><label class="check"><input id="hold-charge" type="checkbox" checked>状态持续存在</label><button id="release-charge" type="button">预览释放</button><button id="cancel-charge" type="button">移除 / 打断</button><span>8 条细动线向卡牌中心收束 · 仅预览</span></div>
+    <p class="help"><span id="description"></span><span>空格 暂停 / 继续 · R 重播 · Esc 复位 / 退出纯画面</span></p>
+  </section>
+</body>
+</html>

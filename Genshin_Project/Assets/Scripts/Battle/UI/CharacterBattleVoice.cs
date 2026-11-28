@@ -6,11 +6,17 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 [DisallowMultipleComponent]
-public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacterVoiceSequenceView
+public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacterVoiceSequenceView, IBattleVisualCompletion
 {
     public BattleManager battle;
     [Range(0, 1)] public float voiceVolume = 1;
     public AudioMixerGroup output;
+    public bool deferVictoryToRewards;
+    public bool IsRewardVoicePlaying => victorySource != null && victorySource.isPlaying;
+    public bool HasPendingVisuals
+    {
+        get { foreach (var source in speakers.Values) if (source != null && source.isPlaying) return true; return false; }
+    }
     private CharacterVoiceTable table;
     private readonly System.Random soundRandom = new System.Random(); // Cosmetic only.
     private readonly Dictionary<int, AudioSource> speakers = new Dictionary<int, AudioSource>();
@@ -22,6 +28,7 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
     private float appliedVolume = -1;
     private Vector3 previousMouse;
     private bool inputWasHeld;
+    private readonly HashSet<AudioSource> pauseHeld = new();
 
     protected override void OnEnable()
     {
@@ -45,6 +52,7 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
     public override void Present(long playbackID, BattlePresentationCue cue, Action<Exception> completed)
     {
         StopIdle();
+        if (deferVictoryToRewards && cue.Result.Data is BattleEndedEventData) { completed(null); return; }
         string path = cue.CharacterVoicePath;
         var source = Play(path, playbackID, cue.CharacterVoiceKey);
         // Scene transition is allowed after the winning line finishes (or skip/cancel releases it).
@@ -55,10 +63,23 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
         else completed(null);
     }
 
+    /// <summary>Campaign reward overlay calls this after all skill/death visuals have drained.</summary>
+    public void PlayRewardVoice()
+    {
+        if (table == null || battle == null || player == null || !player.VoicesEnabled) return;
+        var eligible = new List<int>();
+        foreach (var ally in battle.Allies)
+            if (ally?.Entity != null && ally.Entity.IsAlive && table.Action(ally.Entity.EntityID, CharacterVoiceAction.Win).Count > 0)
+                eligible.Add(ally.Entity.EntityID);
+        if (eligible.Count == 0) return;
+        StopIdle(); int actor = eligible[soundRandom.Next(eligible.Count)];
+        victorySource = Play(CharacterVoicePlan.Pick(actor, table.Action(actor, CharacterVoiceAction.Win), soundRandom.Next), 0, nameof(CharacterVoiceAction.Win));
+    }
+
     private AudioSource Play(string path, long playbackID, string key)
     {
         if (path == null) return null;
-        if (voiceVolume <= 0)
+        if (voiceVolume * ProjectUserSettings.Voice * ProjectUserSettings.Master <= 0)
         {
             LogManager.Log(LogCategory.Voice, $"跳过 {key} {path}，语音音量为 0。");
             return null;
@@ -79,7 +100,7 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
                 source.playOnAwake = false; source.spatialBlend = 0; speakers.Add(actor, source);
             }
             source.outputAudioMixerGroup = output;
-            source.volume = Mathf.Clamp01(voiceVolume);
+            source.volume = Mathf.Clamp01(voiceVolume) * ProjectUserSettings.Voice;
             source.clip = clip; owners[actor] = playbackID; source.Play();
             if (LogManager.IsEnabled(LogCategory.Voice))
             {
@@ -133,21 +154,30 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
 
     private void Update()
     {
+        if (BattlePause.IsPaused)
+        {
+            foreach (var source in speakers.Values)
+                if (source != null && source.isPlaying && pauseHeld.Add(source)) source.Pause();
+            return;
+        }
+        foreach (var source in pauseHeld) if (source != null) source.UnPause();
+        pauseHeld.Clear();
         bool held = Input.anyKey || Input.touchCount > 0 || Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
         Vector3 mouse = Input.mousePosition;
         if (held || Input.anyKeyDown || inputWasHeld || mouse != previousMouse || Input.mouseScrollDelta != Vector2.zero) NotifyPlayerInput();
         previousMouse = mouse; inputWasHeld = held;
-        if (appliedVolume != voiceVolume)
+        float userVolume = voiceVolume * ProjectUserSettings.Voice;
+        if (appliedVolume != userVolume)
         {
-            appliedVolume = voiceVolume;
-            foreach (var s in speakers.Values) s.volume = Mathf.Clamp01(voiceVolume);
+            appliedVolume = userVolume;
+            foreach (var s in speakers.Values) s.volume = Mathf.Clamp01(userVolume);
         }
         if (victoryDone != null && (victorySource == null || !victorySource.isPlaying)) FinishVictory();
         int turn = battle != null && battle.IsAwaitingAllyInput ? battle.TurnCount : 0;
         bool canCount = table != null && Application.isFocused && player != null && player.VoicesEnabled
             && !BattleExecution.IsBusy && Time.timeScale > 0;
         if (turn == 0 || !canCount) StopIdle();
-        if (!idleTimer.Advance(turn, canCount, Time.unscaledTimeAsDouble, table?.IdleWaitSeconds ?? 0)) return;
+        if (!idleTimer.Advance(turn, canCount, BattlePause.UnscaledTimeAsDouble, table?.IdleWaitSeconds ?? 0)) return;
         var active = battle.GetActiveAlly()?.Entity;
         if (active == null || !active.IsOnField) return;
         foreach (var s in speakers.Values) if (s.isPlaying) return;
@@ -177,7 +207,7 @@ public sealed class CharacterBattleVoice : BattleSkillTrackBehaviour, ICharacter
         base.OnDisable();
         foreach (var source in speakers.Values) Destroy(source.gameObject);
         foreach (var clip in clips.Values) Destroy(clip);
-        speakers.Clear(); owners.Clear(); clips.Clear(); table = null;
+        speakers.Clear(); owners.Clear(); clips.Clear(); pauseHeld.Clear(); table = null;
     }
 }
 

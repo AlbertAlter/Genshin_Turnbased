@@ -1,0 +1,16 @@
+{
+  "key": "general/SummonAppearance/SummonAppearance_Pyro",
+  "source": "art_assets/UE/general/SummonAppearance/Blender/SummonAppearance_Pyro.blend",
+  "file": "general/SummonAppearance/Exports/SummonAppearance_Pyro.vfx.bytes",
+  "meshes": 4,
+  "tracks": 54,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 152580
+}

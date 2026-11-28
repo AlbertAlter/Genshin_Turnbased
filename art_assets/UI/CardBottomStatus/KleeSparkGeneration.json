@@ -1,0 +1,16 @@
+{
+  "asset": "KleeSpark.png",
+  "method": "built-in image_gen",
+  "date": "2026-11-26",
+  "edit_target": "art_assets/Skill_Icon/1016/1016_T01.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/BaronBunny.png",
+    "art_assets/UI/CardBottomStatus/JumpyDumptyMine.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Asset type: a single colored Genshin-inspired card-bottom status icon for Klee's Explosive Spark. Input image 1 is the edit target: the official monochrome 1016_T01 passive talent glyph. Input images 2 and 3 are style references only: existing colored card-bottom icons Baron Bunny and Jumpy Dumpty Mine. Edit the target glyph: remove its separate arrow in the lower-right completely, keeping the main round explosive-spark/bomb silhouette and the swept flaming sparks from the original talent icon recognizable and close to its original proportions and orientation. Color the remaining glyph with warm cream and pale gold in the rounded core, orange-gold and warm red on the flame/spark shapes, deep reddish brown contour lines and restrained painted shadow bands, matching the clean readable Genius Invokation TCG-style icons in references 2 and 3. Abstract icon, no realistic rendering. Keep clear chunky shapes readable at tiny UI size. Main subject fits within a circular footprint, centered on the square canvas with modest consistent padding. The subject's interior uses solid colored shapes and dark shadow patches rather than transparent holes. Outside the subject is genuinely transparent. No arrow, no plus symbol, no badge, no number, no text, no additional flower or bunny or character. Do not draw a circular background disc. Preserve the original explosive-spark identity, with only the requested arrow removal and coloring plus appropriate outlines and simple shading.",
+  "status_id": 4101606,
+  "status_id2": "ST_Klee_Spark",
+  "count_mode": "Value",
+  "count_source": "KleeSparkCount.RuntimeIntValue (0-3)",
+  "show_zero": true
+}

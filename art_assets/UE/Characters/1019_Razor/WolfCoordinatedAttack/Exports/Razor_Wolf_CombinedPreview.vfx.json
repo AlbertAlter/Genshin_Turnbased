@@ -1,0 +1,13 @@
+{
+  "key": "Characters/1019_Razor/WolfCoordinatedAttack/Razor_Wolf_CombinedPreview",
+  "source": "art_assets/UE/Characters/1019_Razor/WolfCoordinatedAttack/Blender/Razor_Wolf_CombinedPreview.blend",
+  "file": "Characters/1019_Razor/WolfCoordinatedAttack/Exports/Razor_Wolf_CombinedPreview.vfx.bytes",
+  "meshes": 7,
+  "tracks": 28,
+  "frames": 307,
+  "duration": 10.2,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {},
+  "bytes": 180641
+}

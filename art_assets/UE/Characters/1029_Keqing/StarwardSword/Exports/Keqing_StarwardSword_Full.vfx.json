@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1029_Keqing/StarwardSword/Keqing_StarwardSword_Full",
+  "source": "art_assets/UE/Characters/1029_Keqing/StarwardSword/Blender/Keqing_StarwardSword_Full.blend",
+  "file": "Characters/1029_Keqing/StarwardSword/Exports/Keqing_StarwardSword_Full.vfx.bytes",
+  "meshes": 39,
+  "tracks": 187,
+  "frames": 132,
+  "duration": 4.366666666666666,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.366666666666666
+  },
+  "bytes": 409381
+}

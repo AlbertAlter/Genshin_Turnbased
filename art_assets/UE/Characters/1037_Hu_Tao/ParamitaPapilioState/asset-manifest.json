@@ -1,0 +1,685 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/ParamitaPapilioState/视觉需求.md",
+  "variants": {
+    "HuTao_ParamitaPapilioState": {
+      "effect": "HuTao_ParamitaPapilioState",
+      "source": "Blender/HuTao_ParamitaPapilioState.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/ParamitaPapilioState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/HuTao_ParamitaPapilioState_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyWing-1": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ButterflyWing-1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_-1",
+            "PART_ButterflyWingVein_-1_0",
+            "PART_ButterflyWingVein_-1_1",
+            "PART_ButterflyWingVein_-1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_-1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyWing1": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ButterflyWing1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_1",
+            "PART_ButterflyWingVein_1_0",
+            "PART_ButterflyWingVein_1_1",
+            "PART_ButterflyWingVein_1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyBody": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ButterflyBody.fbx",
+          "objects": [
+            "PART_FireButterflySlenderBody"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.05354434251785278,
+            0.04987088218331337,
+            0.3100000023841858
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflySlenderBody": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.05354434251785278,
+              0.0498709324747324,
+              0.3100000023841858
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyShortTrail": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ButterflyShortTrail.fbx",
+          "objects": [
+            "PART_ButterflyActualCurveTrail"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.035999998450279236,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ButterflyActualCurveTrail": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.035999998450279236,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ParamitaMicroGlow": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ParamitaMicroGlow.fbx",
+          "objects": [
+            "PART_ParamitaTransitionMicroGlow"
+          ],
+          "vertices": 577,
+          "triangles": 1104,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "Local zero; authored soft radial glow, no icon, texture or reference card.",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ParamitaTransitionMicroGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 577,
+            "triangles": 1104,
+            "rgba": true,
+            "triangulated": true,
+            "originZero": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_ParamitaPapilioState.wav"
+      },
+      "readabilityValidation": {
+        "source": "art_assets/UE/Characters/1037_Hu_Tao/ParamitaPapilioState/Blender/HuTao_ParamitaPapilioState.blend",
+        "butterflies": 9,
+        "curveFamilies": 4,
+        "butterflySize": 0.38,
+        "modifiedCurveActors": 9,
+        "curveFollowingTrailActors": 27,
+        "loopFrames": [
+          25,
+          169
+        ],
+        "maximumLoopWorldMatrixError": 1.4891706098012556e-17,
+        "maximumLoopAlphaError": 0.0,
+        "delayedMiasmaFraction": 0.25,
+        "exitSamples": [
+          {
+            "releaseFrame": 139.6,
+            "wingsClearAt": 167.6,
+            "butterfliesClearAt": 171.8,
+            "miasmaClearAt": 174.7
+          },
+          {
+            "releaseFrame": 249.2,
+            "wingsClearAt": 277.2,
+            "butterfliesClearAt": 281.4,
+            "miasmaClearAt": 284.3
+          }
+        ],
+        "nativeDrivers": 612,
+        "autoexecDisabled": true,
+        "referenceTransformsPreserved": 38,
+        "stills": [
+          {
+            "frame": 1,
+            "file": "Preview/HuTao_ParamitaPapilioState_00_Clear.png"
+          },
+          {
+            "frame": 8,
+            "file": "Preview/HuTao_ParamitaPapilioState_01_WarmArrival.png"
+          },
+          {
+            "frame": 25,
+            "file": "Preview/HuTao_ParamitaPapilioState_02_LoopStart.png"
+          },
+          {
+            "frame": 70,
+            "file": "Preview/HuTao_ParamitaPapilioState_01_Overall.png"
+          },
+          {
+            "frame": 169,
+            "file": "Preview/HuTao_ParamitaPapilioState_03_Loop.png"
+          },
+          {
+            "frame": 325,
+            "file": "Preview/HuTao_ParamitaPapilioState_04_Release.png"
+          },
+          {
+            "frame": 342,
+            "file": "Preview/HuTao_ParamitaPapilioState_05_LastMiasma.png"
+          },
+          {
+            "frame": 348,
+            "file": "Preview/HuTao_ParamitaPapilioState_06_Clear.png"
+          }
+        ],
+        "noPartGeometryOrExportsChanged": true,
+        "noVideo": true,
+        "noUnityWrites": true,
+        "referenceBoundary": "GuideToAfterlife original GIF still not retrieved fully; this change follows the supplied card-orbit specification and inspected source frames, without a new claim of original-motion observation.",
+        "scope": "Orbit-only checks before transition additions; current full-source checks are in transitionValidation."
+      },
+      "coveragePreviews": {
+        "1帧": "Preview/HuTao_ParamitaPapilioState_00_Clear.png",
+        "8帧": "Preview/HuTao_ParamitaPapilioState_01_WarmArrival.png",
+        "13帧": "Preview/HuTao_ParamitaPapilioState_07_ArrivalPeak.png",
+        "25帧": "Preview/HuTao_ParamitaPapilioState_02_LoopStart.png",
+        "70帧": "Preview/HuTao_ParamitaPapilioState_01_Overall.png",
+        "169帧": "Preview/HuTao_ParamitaPapilioState_03_Loop.png",
+        "325帧": "Preview/HuTao_ParamitaPapilioState_04_Release.png",
+        "334帧": "Preview/HuTao_ParamitaPapilioState_08_ExitEmbers.png",
+        "342帧": "Preview/HuTao_ParamitaPapilioState_05_LastMiasma.png",
+        "348帧": "Preview/HuTao_ParamitaPapilioState_06_Clear.png",
+        "起手细节": "Preview/HuTao_ParamitaPapilioState_Arrival_Detail.png",
+        "余火细节": "Preview/HuTao_ParamitaPapilioState_Embers_Detail.png",
+        "早退时刻": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_AtEnd.png",
+        "早退收尾": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_Tail.png",
+        "早退后段": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_Late.png"
+      },
+      "transitionValidation": {
+        "source": "art_assets/UE/Characters/1037_Hu_Tao/ParamitaPapilioState/Blender/HuTao_ParamitaPapilioState.blend",
+        "holder": "REFERENCE_Card_5_1037",
+        "boundRoots": 41,
+        "trackedObjects": 191,
+        "maximumHolderMoveOrRotateError": 2.384185791015625e-07,
+        "arrivalSamples": [
+          {
+            "frame": 1,
+            "alpha": 0.0
+          },
+          {
+            "frame": 5,
+            "alpha": 0.19033114612102509
+          },
+          {
+            "frame": 9,
+            "alpha": 0.42210718989372253
+          },
+          {
+            "frame": 13,
+            "alpha": 0.5199999809265137
+          },
+          {
+            "frame": 20,
+            "alpha": 0.2531929910182953
+          },
+          {
+            "frame": 25,
+            "alpha": 0.0
+          },
+          {
+            "frame": 70,
+            "alpha": 0.0
+          },
+          {
+            "frame": 169,
+            "alpha": 0.0
+          }
+        ],
+        "exitSamples": [
+          {
+            "releaseFrame": 139.6,
+            "peakSampleFrame": 160.6,
+            "clearByFrame": 173.2
+          },
+          {
+            "releaseFrame": 249.2,
+            "peakSampleFrame": 270.2,
+            "clearByFrame": 282.8
+          },
+          {
+            "releaseFrame": 313.0,
+            "peakSampleFrame": 334.0,
+            "clearByFrame": 346.6
+          }
+        ],
+        "embers": [
+          {
+            "object": "ParamitaExitEmber_0",
+            "onsetTailFraction": 0.23,
+            "endingTailFraction": 0.88,
+            "host": "ButterflyCurve_0_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_0_1"
+          },
+          {
+            "object": "ParamitaExitEmber_1",
+            "onsetTailFraction": 0.255,
+            "endingTailFraction": 0.905,
+            "host": "ButterflyCurve_1_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_1_1"
+          },
+          {
+            "object": "ParamitaExitEmber_2",
+            "onsetTailFraction": 0.28,
+            "endingTailFraction": 0.93,
+            "host": "ButterflyCurve_2_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_2_1"
+          },
+          {
+            "object": "ParamitaExitEmber_3",
+            "onsetTailFraction": 0.30500000000000005,
+            "endingTailFraction": 0.88,
+            "host": "ButterflyCurve_3_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_3_1"
+          },
+          {
+            "object": "ParamitaExitEmber_4",
+            "onsetTailFraction": 0.23,
+            "endingTailFraction": 0.905,
+            "host": "ButterflyCurve_4_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_4_1"
+          },
+          {
+            "object": "ParamitaExitEmber_5",
+            "onsetTailFraction": 0.255,
+            "endingTailFraction": 0.93,
+            "host": "ButterflyCurve_5_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_5_1"
+          },
+          {
+            "object": "ParamitaExitEmber_6",
+            "onsetTailFraction": 0.28,
+            "endingTailFraction": 0.88,
+            "host": "ButterflyCurve_6_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_6_1"
+          },
+          {
+            "object": "ParamitaExitEmber_7",
+            "onsetTailFraction": 0.30500000000000005,
+            "endingTailFraction": 0.905,
+            "host": "ButterflyCurve_7_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_7_1"
+          },
+          {
+            "object": "ParamitaExitEmber_8",
+            "onsetTailFraction": 0.23,
+            "endingTailFraction": 0.93,
+            "host": "ButterflyCurve_8_1",
+            "particleClock": "STATE_ALPHA_Articulated_ButterflyBody_8_1"
+          }
+        ],
+        "nativeDrivers": 662,
+        "autoexecDisabled": true,
+        "originalPartGeometryPreserved": 11,
+        "newPart": {
+          "file": "Exports/HuTao_ParamitaPapilioState_ParamitaMicroGlow.fbx",
+          "objects": [
+            "PART_ParamitaTransitionMicroGlow"
+          ],
+          "vertices": 577,
+          "triangles": 1104,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "Local zero; authored soft radial glow, no icon, texture or reference card.",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ParamitaTransitionMicroGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 577,
+            "triangles": 1104,
+            "rgba": true,
+            "triangulated": true,
+            "originZero": true
+          }
+        },
+        "stills": [
+          {
+            "frame": 1,
+            "file": "Preview/HuTao_ParamitaPapilioState_00_Clear.png"
+          },
+          {
+            "frame": 8,
+            "file": "Preview/HuTao_ParamitaPapilioState_01_WarmArrival.png"
+          },
+          {
+            "frame": 13,
+            "file": "Preview/HuTao_ParamitaPapilioState_07_ArrivalPeak.png"
+          },
+          {
+            "frame": 25,
+            "file": "Preview/HuTao_ParamitaPapilioState_02_LoopStart.png"
+          },
+          {
+            "frame": 70,
+            "file": "Preview/HuTao_ParamitaPapilioState_01_Overall.png"
+          },
+          {
+            "frame": 169,
+            "file": "Preview/HuTao_ParamitaPapilioState_03_Loop.png"
+          },
+          {
+            "frame": 325,
+            "file": "Preview/HuTao_ParamitaPapilioState_04_Release.png"
+          },
+          {
+            "frame": 334,
+            "file": "Preview/HuTao_ParamitaPapilioState_08_ExitEmbers.png"
+          },
+          {
+            "frame": 342,
+            "file": "Preview/HuTao_ParamitaPapilioState_05_LastMiasma.png"
+          },
+          {
+            "frame": 348,
+            "file": "Preview/HuTao_ParamitaPapilioState_06_Clear.png"
+          }
+        ],
+        "transitionsOnly": true,
+        "noPersistentParticleAdditions": true,
+        "noVideo": true,
+        "noUnityWrites": true,
+        "loopFrames": [
+          25,
+          169
+        ],
+        "loopObjects": 201,
+        "maximumLoopWorldMatrixError": 1.4891706098012556e-17,
+        "maximumLoopAlphaError": 0.0,
+        "earlyRemovalValidation": {
+          "before": [
+            {
+              "frame": 56,
+              "bodyEnvelope": 0.2499999850988388,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.0,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 59,
+              "bodyEnvelope": 0.33762457966804504,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.04194621741771698,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 62,
+              "bodyEnvelope": 0.4003322124481201,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.07800604403018951,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 70,
+              "bodyEnvelope": 0.44573643803596497,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.13528358936309814,
+              "maximumEmber": 0.44524478912353516
+            }
+          ],
+          "after": [
+            {
+              "frame": 56,
+              "bodyEnvelope": 0.2499999850988388,
+              "warmAlpha": 0.3145984411239624,
+              "maximumMist": 0.0,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 59,
+              "bodyEnvelope": 0.22508305311203003,
+              "warmAlpha": 0.1572992354631424,
+              "maximumMist": 0.0,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 62,
+              "bodyEnvelope": 0.20016610622406006,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.0,
+              "maximumEmber": 0.0
+            },
+            {
+              "frame": 70,
+              "bodyEnvelope": 0.13372093439102173,
+              "warmAlpha": 0.0,
+              "maximumMist": 0.0,
+              "maximumEmber": 0.11131119728088379
+            }
+          ],
+          "startFrame": 50,
+          "exitFrame": 56,
+          "birthFrozenAtRemoval": true,
+          "lateMistBirthsPrevented": true,
+          "warmFadeFrames": 6,
+          "neverStartedInputs": {
+            "startFrame": 80,
+            "exitFrame": 56
+          },
+          "neverStartedRemainsClear": true,
+          "stills": [
+            {
+              "frame": 56,
+              "startFrame": 50,
+              "exitFrame": 56,
+              "file": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_AtEnd.png"
+            },
+            {
+              "frame": 59,
+              "startFrame": 50,
+              "exitFrame": 56,
+              "file": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_Tail.png"
+            },
+            {
+              "frame": 70,
+              "startFrame": 50,
+              "exitFrame": 56,
+              "file": "Preview/HuTao_ParamitaPapilioState_EarlyRemoval_Late.png"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

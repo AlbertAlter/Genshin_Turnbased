@@ -87,7 +87,7 @@ public sealed class BattleUiStatusRiseView : MonoBehaviour, IBattlePresentationV
     {
         for (int i = active.Count - 1; i >= 0; i--)
         {
-            var burst = active[i]; burst.Age += Time.unscaledDeltaTime;
+            var burst = active[i]; burst.Age += BattlePause.DeltaTime;
             float t = Mathf.Clamp01(burst.Age / burst.Duration);
             foreach (var graphic in burst.Graphics) if (graphic != null) graphic.SetProgress(t);
             if (t >= 1) Finish(i);

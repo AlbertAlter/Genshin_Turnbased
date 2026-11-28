@@ -44,7 +44,7 @@ internal static class WeaponRosterHooks
     {
         if (parent?.StatusID2 != "ST_Weapon_4321101" || effect.StatusEffectID != 432110101) return false;
         foreach (var child in parent.BoundStatuses)
-            if (child.IsActive && child.Host == target && child.StatusID2 == effect.Param1 && target.HasStatusInstance(child)) return true;
+            if (child.IsActive && ReferenceEquals(child.Host, target) && child.StatusID2 == effect.Param1 && target.HasStatusInstance(child)) return true;
         return false;
     }
 

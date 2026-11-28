@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2059_CicinMage/Summon/2059_Summon",
+  "source": "art_assets/UE/Enemies/2059_CicinMage/Summon/Blender/2059_Summon.blend",
+  "file": "Enemies/2059_CicinMage/Summon/Exports/2059_Summon.vfx.bytes",
+  "meshes": 3,
+  "tracks": 108,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 175095
+}

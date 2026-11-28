@@ -1,0 +1,40 @@
+[
+  {
+    "file": "01_地刺生出原作截帧.png",
+    "source_image_url": "https://patchwiki.biligame.com/images/ys/8/84/3u8qwa71tbrtp8td4iz1bvcq2vozy1b.gif",
+    "page_url": "https://wiki.biligame.com/ys/冰霜骗骗花",
+    "downloaded": "2026-11-26",
+    "type": "原作实机GIF完整帧提取PNG",
+    "frame_index_zero_based": 38,
+    "timestamp_seconds": 1.23,
+    "cropped": false,
+    "retouched": false,
+    "source_resized": false,
+    "dimensions": [
+      425,
+      239
+    ],
+    "extraction": "源GIF接收前2097152字节；PIL未开启截断图像容错，完整解码48帧，仅导出其中完整帧。完整GIF未保存。",
+    "use": "地面刺出时的冰蓝亮部、细长冰晶与破地位置；前景角色周围的白色环形轨迹不纳入地刺造型。",
+    "reference_download_policy": "WIN-13407CC8: slow animations may remain as source links; no full animation download required."
+  },
+  {
+    "file": "02_地刺晶簇原作截帧.png",
+    "source_image_url": "https://patchwiki.biligame.com/images/ys/8/84/3u8qwa71tbrtp8td4iz1bvcq2vozy1b.gif",
+    "page_url": "https://wiki.biligame.com/ys/冰霜骗骗花",
+    "downloaded": "2026-11-26",
+    "type": "原作实机GIF完整帧提取PNG",
+    "frame_index_zero_based": 41,
+    "timestamp_seconds": 1.32,
+    "cropped": false,
+    "retouched": false,
+    "source_resized": false,
+    "dimensions": [
+      425,
+      239
+    ],
+    "extraction": "源GIF接收前2097152字节；PIL未开启截断图像容错，完整解码48帧，仅导出其中完整帧。完整GIF未保存。",
+    "use": "交错倾斜的尖锐菱面冰刃、半透晶面、深色边缘与亮白细棱；前景角色周围的白色环形轨迹不纳入地刺造型。",
+    "reference_download_policy": "WIN-13407CC8: slow animations may remain as source links; no full animation download required."
+  }
+]

@@ -157,7 +157,7 @@ public sealed class BattleUiShields : MonoBehaviour, IBattleUiShields
                 revealEdgeWidth >= 0 ? revealEdgeWidth : Settings.Number("RevealEdgeWidth"),
                 revealEdgeOpacity >= 0 ? revealEdgeOpacity : Settings.Number("RevealEdgeOpacity"));
     }
-    private void Update() { if (automaticClock && !paused) Advance(Time.unscaledDeltaTime); }
+    private void Update() { if (automaticClock && !paused) Advance(BattlePause.DeltaTime); }
     public void Advance(float deltaTime)
     {
         if (!Ready) return;

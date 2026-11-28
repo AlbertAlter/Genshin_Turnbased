@@ -44,6 +44,11 @@ public sealed class BattleBossRosterView : MonoBehaviour
     BattleUiCombatHudSource source;
     BattlefieldHealthBar bossHealth;
     BattleEntity displayed;
+    TMP_Text nameText, levelText, titleText;
+    StreamingSpriteReference avatar;
+    int displayedPhase, displayedLevel;
+    bool displayedEnglish;
+    Dictionary<string, LangEntry> displayedLang;
     bool showStatuses;
     readonly List<CardBar> bars = new List<CardBar>();
 
@@ -54,6 +59,18 @@ public sealed class BattleBossRosterView : MonoBehaviour
         source = hud;
         showStatuses = statuses;
         bossHealth = panel.GetComponentInChildren<BattlefieldHealthBar>(true);
+        foreach (var binding in panel.GetComponentsInChildren<PsdUiBinding>(true))
+        {
+            switch (binding.bindingKey)
+            {
+                case "EnemyName": nameText = binding.GetComponent<TMP_Text>(); break;
+                case "EnemyLevel": levelText = binding.GetComponent<TMP_Text>(); break;
+                case "EnemyTitle": titleText = binding.GetComponent<TMP_Text>(); break;
+                case "EnemyAvatar":
+                    avatar = binding.GetComponent<StreamingSpriteReference>() ?? binding.GetComponentInChildren<StreamingSpriteReference>(true);
+                    break;
+            }
+        }
         if (layout != null)
             foreach (var health in roster.GetComponentsInChildren<BattlefieldHealthBar>(true))
             {
@@ -91,26 +108,33 @@ public sealed class BattleBossRosterView : MonoBehaviour
         }
         roster.gameObject.SetActive(boss == null);
         panel.gameObject.SetActive(boss != null);
-        if (displayed == boss) return;
-        displayed = boss;
-        if (boss == null) return;
+        bool changed = displayed != boss;
+        if (boss == null) { displayed = null; return; }
         var dataManager = DataManager.Instance;
-        string fallbackName = dataManager.EnemyMainDict.TryGetValue(boss.EntityID, out var data)
-            ? data.EnemyName : $"敌人 {boss.EntityID}";
-        string name = dataManager.GetUiName(UiNameKind.Enemy, boss.EntityID, fallbackName);
-        foreach (var binding in panel.GetComponentsInChildren<PsdUiBinding>(true))
+        if (dataManager == null) return;
+        displayed = boss;
+        int phase = boss.EnemyCtrl?.CurrentPhaseData?.Phase ?? 0;
+        bool english = ProjectUserSettings.English();
+        if (changed || displayedPhase != phase || displayedEnglish != english
+            || displayedLevel != boss.Level || displayedLang != dataManager.LangDict)
         {
-            switch (binding.bindingKey)
+            string fallbackName = dataManager.EnemyMainDict.TryGetValue(boss.EntityID, out var data)
+                ? data.EnemyName : $"敌人 {boss.EntityID}";
+            var text = dataManager.GetBossUiText(boss.EntityID, phase, fallbackName, english);
+            if (nameText != null) nameText.text = text.Name;
+            if (levelText != null) levelText.text = $"Lv.{boss.Level}";
+            if (titleText != null)
             {
-                case "EnemyName": binding.GetComponent<TMP_Text>().text = name; break;
-                case "EnemyLevel": binding.GetComponent<TMP_Text>().text = $"Lv.{boss.Level}"; break;
-                case "EnemyTitle": binding.gameObject.SetActive(false); break;
-                case "EnemyAvatar":
-                    var image = binding.GetComponent<StreamingSpriteReference>() ?? binding.GetComponentInChildren<StreamingSpriteReference>(true);
-                    if (image != null) image.SetResolvedPath($"art_assets/Enemy_Icon/{boss.EntityID}_01.png");
-                    break;
+                titleText.text = text.Subtitle;
+                titleText.gameObject.SetActive(!string.IsNullOrWhiteSpace(text.Subtitle));
             }
+            displayedPhase = phase;
+            displayedEnglish = english;
+            displayedLevel = boss.Level;
+            displayedLang = dataManager.LangDict;
         }
+        if (!changed) return;
+        if (avatar != null) avatar.SetResolvedPath($"art_assets/Enemy_Icon/{boss.EntityID}_01.png");
         if (bossHealth != null)
         {
             bossHealth.side = BattleSide.Enemy;

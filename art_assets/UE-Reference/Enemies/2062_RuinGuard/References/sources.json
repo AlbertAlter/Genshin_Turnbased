@@ -1,0 +1,33 @@
+{
+  "enemy_id": 2062,
+  "name": "遗迹守卫",
+  "checked_date": "2026-11-26",
+  "page": "https://genshin-impact.fandom.com/wiki/Ruin_Guard#Abilities",
+  "verification": "能力条目与MediaWiki媒体元数据；未下载或播放动图",
+  "sources": [
+    {
+      "title": "Ruin Guard Punch and Jump Combo.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/fa/Ruin_Guard_Punch_and_Jump_Combo.gif/revision/latest?cb=20211208043718",
+      "purpose": "两次拳击与后续跳砸的原作动作参考；卡牌下落复用项目公共重砸",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Ruin Guard Beyblade.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/3/3f/Ruin_Guard_Beyblade.gif/revision/latest?cb=20211208043711",
+      "purpose": "旋转逼近的动作及旋转击打观感，五段取项目配置",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Ruin Guard Missiles.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/c/c9/Ruin_Guard_Missiles.gif/revision/latest?cb=20211208043714",
+      "purpose": "机械导弹、发射、尾焰与接触参考，轨迹沿用项目公共弹道需求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ]
+}

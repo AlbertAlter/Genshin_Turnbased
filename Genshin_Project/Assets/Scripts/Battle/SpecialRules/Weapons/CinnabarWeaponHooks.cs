@@ -82,7 +82,7 @@ internal static class CinnabarWeaponHooks
     {
         var frame = Current.Value;
         var owner = status?.WeaponContext?.Equipper;
-        if (frame == null || frame.Closed || owner == null || owner != host || owner != status.Caster
+        if (frame == null || frame.Closed || owner == null || !ReferenceEquals(owner, host) || owner != status.Caster
             || status.WeaponContext.WeaponID != 3038 || c.Attacker != owner || c.Target.Side == owner.Side
             || c.DamageType != "Skill" || c.EffectID != frame.Effect || c.EffectExecutionID != frame.Execution
             || (c.SourceKind != ReactionSourceKind.CharacterSkill && c.SourceKind != ReactionSourceKind.StatusEffect))

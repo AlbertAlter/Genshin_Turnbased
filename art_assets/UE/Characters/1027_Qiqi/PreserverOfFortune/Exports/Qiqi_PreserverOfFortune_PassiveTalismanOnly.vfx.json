@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1027_Qiqi/PreserverOfFortune/Qiqi_PreserverOfFortune_PassiveTalismanOnly",
+  "source": "art_assets/UE/Characters/1027_Qiqi/PreserverOfFortune/Blender/Qiqi_PreserverOfFortune_PassiveTalismanOnly.blend",
+  "file": "Characters/1027_Qiqi/PreserverOfFortune/Exports/Qiqi_PreserverOfFortune_PassiveTalismanOnly.vfx.bytes",
+  "meshes": 1,
+  "tracks": 1,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 8808
+}

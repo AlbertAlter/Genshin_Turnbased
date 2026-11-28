@@ -1,0 +1,611 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2048_HydroPotioneer\\PotionThrow\\视觉需求.md",
+  "variants": {
+    "2048_PotionThrow_Throw": {
+      "effect": "2048_PotionThrow_Throw",
+      "source": "Blender/2048_PotionThrow_Throw.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2048_HydroPotioneer\\PotionThrow\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2048_PotionThrow_Throw_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2048_PotionThrow_Throw_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2048_PotionThrow_Throw_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2048_PotionThrow_Throw_Projectile.fbx",
+          "objects": [
+            "PART_HydroPotionGlassBody",
+            "PART_HydroPotionLiquid",
+            "PART_HydroPotionCork",
+            "PART_HydroPotionGlassGleam"
+          ],
+          "vertices": 117,
+          "triangles": 204,
+          "dimensions": [
+            0.4164559841156006,
+            0.4128980338573456,
+            0.5999999940395355
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroPotionGlassBody": [
+              "Ice"
+            ],
+            "PART_HydroPotionLiquid": [
+              "Ice"
+            ],
+            "PART_HydroPotionCork": [
+              "StoneMetal"
+            ],
+            "PART_HydroPotionGlassGleam": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 117,
+            "triangles": 204,
+            "dimensions": [
+              0.4164559841156006,
+              0.41289812326431274,
+              0.6000000238418579
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 35,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        7
+      ],
+      "hero_frame": 11,
+      "focus": [
+        -3.1962448358535767,
+        -0.08,
+        0.17409489303827286
+      ],
+      "elementAppearance": "Hydro",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2048_PotionThrow_Throw.wav"
+      },
+      "detailScale": 5.0,
+      "posterSelection": {
+        "previousFrame": 24,
+        "selectedFrame": 11,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2048_PotionThrow_Overall": {
+      "effect": "2048_PotionThrow_Overall",
+      "source": "Blender/2048_PotionThrow_Overall.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2048_HydroPotioneer\\PotionThrow\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2048_PotionThrow_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2048_PotionThrow_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2048_PotionThrow_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wave": {
+          "file": "Exports/2048_PotionThrow_Overall_Wave.fbx",
+          "objects": [
+            "PART_SoftWaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.063961386680603,
+            0.0,
+            2.063999891281128
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.063961386680603,
+              3.362682434726594e-07,
+              2.063999891281128
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2048_PotionThrow_Overall_Projectile.fbx",
+          "objects": [
+            "PART_HydroPotionGlassBody",
+            "PART_HydroPotionLiquid",
+            "PART_HydroPotionCork",
+            "PART_HydroPotionGlassGleam"
+          ],
+          "vertices": 117,
+          "triangles": 204,
+          "dimensions": [
+            0.4164559841156006,
+            0.4128980338573456,
+            0.5999999940395355
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroPotionGlassBody": [
+              "Ice"
+            ],
+            "PART_HydroPotionLiquid": [
+              "Ice"
+            ],
+            "PART_HydroPotionCork": [
+              "StoneMetal"
+            ],
+            "PART_HydroPotionGlassGleam": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 117,
+            "triangles": 204,
+            "dimensions": [
+              0.4164559841156006,
+              0.41289812326431274,
+              0.6000000238418579
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/2048_PotionThrow_Overall_ContinuousGround.fbx",
+          "objects": [
+            "PART_Hydro_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/2048_PotionThrow_Overall_GroundPattern0.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern0"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.208014488220215,
+            0.0,
+            6.015874624252319
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.208014488220215,
+              9.834766387939453e-07,
+              6.015874624252319
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/2048_PotionThrow_Overall_GroundPattern1.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern1"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.208014488220215,
+            0.0,
+            6.015854120254517
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.208014488220215,
+              9.834766387939453e-07,
+              6.015854120254517
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/2048_PotionThrow_Overall_GroundPattern2.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern2"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.207877159118652,
+            0.0,
+            6.015819311141968
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.207877159118652,
+              9.834766387939453e-07,
+              6.015819311141968
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 35,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        7
+      ],
+      "hero_frame": 85,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Hydro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          35,
+          47
+        ],
+        "loop": [
+          47,
+          191
+        ],
+        "repeatEndpoint": 191,
+        "twoCycles": [
+          47,
+          335
+        ],
+        "exitExample": [
+          335,
+          370
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2048_PotionThrow_Overall.wav"
+      }
+    }
+  }
+}

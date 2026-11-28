@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/CoreRegeneration/2067_CoreRegeneration",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/CoreRegeneration/Blender/2067_CoreRegeneration.blend",
+  "file": "Enemies/2067_CryoRegisvine/CoreRegeneration/Exports/2067_CoreRegeneration.vfx.bytes",
+  "meshes": 2,
+  "tracks": 23,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 22857
+}

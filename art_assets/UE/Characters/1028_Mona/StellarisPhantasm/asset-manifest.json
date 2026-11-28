@@ -1,0 +1,407 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1028_Mona/StellarisPhantasm/视觉需求.md",
+  "variants": {
+    "Mona_StellarisPhantasm_CastOnly": {
+      "effect": "Mona_StellarisPhantasm_CastOnly",
+      "source": "Blender/Mona_StellarisPhantasm_CastOnly.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/StellarisPhantasm/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralStar": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCastAstrolabe": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_OneCastAstrolabe.fbx",
+          "objects": [
+            "PART_CastAstrolabeRing_0",
+            "PART_CastAstrolabeRing_1",
+            "PART_AuthoredAstrolabeMinorTick_0",
+            "PART_AuthoredAstrolabeMinorTick_1",
+            "PART_AuthoredAstrolabeMinorTick_2",
+            "PART_AuthoredAstrolabeMinorTick_3",
+            "PART_AuthoredAstrolabeMinorTick_4",
+            "PART_AuthoredAstrolabeMinorTick_5",
+            "PART_AuthoredAstrolabeMinorTick_6",
+            "PART_AuthoredAstrolabeMinorTick_7",
+            "PART_AuthoredAstrolabeMinorTick_8",
+            "PART_AuthoredAstrolabeMinorTick_9",
+            "PART_AuthoredAstrolabeMinorTick_10",
+            "PART_AuthoredAstrolabeMinorTick_11",
+            "PART_AuthoredAstrolabeMinorTick_12",
+            "PART_AuthoredAstrolabeMinorTick_13",
+            "PART_AuthoredAstrolabeMinorTick_14",
+            "PART_AuthoredAstrolabeMinorTick_15",
+            "PART_AuthoredAstrolabeMinorTick_16",
+            "PART_AuthoredAstrolabeMinorTick_17",
+            "PART_AuthoredAstrolabeMinorTick_18",
+            "PART_AuthoredAstrolabeMinorTick_19"
+          ],
+          "vertices": 4186,
+          "triangles": 6912,
+          "dimensions": [
+            2.0279958248138428,
+            0.013000000268220901,
+            2.0280001163482666
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterMirror": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_StarryWaterMirror.fbx",
+          "objects": [
+            "PART_OneThinStarryBlueWaterReflection"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave0": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_StarryWaterWave0.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_0"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.410380363464355,
+            0.0,
+            0.6698288321495056
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave1": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_StarryWaterWave1.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_1"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.418754577636719,
+            0.0,
+            0.6938439384102821
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave2": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_StarryWaterWave2.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_2"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.41466236114502,
+            0.0,
+            0.7179617211222649
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave3": {
+          "file": "Exports/Mona_StellarisPhantasm_CastOnly_StarryWaterWave3.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_3"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.413952350616455,
+            0.0,
+            0.7419978380203247
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 28,
+          "soundRole": "bubble",
+          "kind": "cast state-application visual only; NO direct hit or automatic bubble rupture"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 28,
+      "focus": [
+        -4.4670000076293945,
+        -0.18000000715255737,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_StellarisPhantasm_CastOnly.wav"
+      }
+    },
+    "Mona_StellarisPhantasm_WithStateHandoff": {
+      "effect": "Mona_StellarisPhantasm_WithStateHandoff",
+      "source": "Blender/Mona_StellarisPhantasm_WithStateHandoff.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/StellarisPhantasm/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralBubbleMembrane": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_AstralBubbleMembrane.fbx",
+          "objects": [
+            "PART_TransparentAstralBubble"
+          ],
+          "vertices": 544,
+          "triangles": 1024,
+          "dimensions": [
+            1.8799999952316284,
+            0.4000000059604645,
+            3.0799999237060547
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "BubbleCurvedEdges": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_BubbleCurvedEdges.fbx",
+          "objects": [
+            "PART_MonaBubbleColdEdge_0",
+            "PART_MonaBubbleColdEdge_1",
+            "PART_BubblePearlReflection_0",
+            "PART_BubblePearlReflection_1",
+            "PART_BubblePearlReflection_2"
+          ],
+          "vertices": 2331,
+          "triangles": 3936,
+          "dimensions": [
+            1.807969093322754,
+            0.040000006556510925,
+            2.887492299079895
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OmenConstellationLines": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_OmenConstellationLines.fbx",
+          "objects": [
+            "PART_AuthoredAstralLink_0_1",
+            "PART_AuthoredAstralLink_1_2",
+            "PART_AuthoredAstralLink_2_3",
+            "PART_AuthoredAstralLink_3_4",
+            "PART_AuthoredAstralLink_4_5",
+            "PART_AuthoredAstralLink_5_6",
+            "PART_AuthoredAstralLink_2_4",
+            "PART_AuthoredAstralLink_1_5",
+            "PART_AuthoredOpenAstrolabeArc_0",
+            "PART_AuthoredOpenAstrolabeArc_1"
+          ],
+          "vertices": 1638,
+          "triangles": 2688,
+          "dimensions": [
+            1.7218880653381348,
+            0.0,
+            2.357974648475647
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "AstralStar": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCastAstrolabe": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_OneCastAstrolabe.fbx",
+          "objects": [
+            "PART_CastAstrolabeRing_0",
+            "PART_CastAstrolabeRing_1",
+            "PART_AuthoredAstrolabeMinorTick_0",
+            "PART_AuthoredAstrolabeMinorTick_1",
+            "PART_AuthoredAstrolabeMinorTick_2",
+            "PART_AuthoredAstrolabeMinorTick_3",
+            "PART_AuthoredAstrolabeMinorTick_4",
+            "PART_AuthoredAstrolabeMinorTick_5",
+            "PART_AuthoredAstrolabeMinorTick_6",
+            "PART_AuthoredAstrolabeMinorTick_7",
+            "PART_AuthoredAstrolabeMinorTick_8",
+            "PART_AuthoredAstrolabeMinorTick_9",
+            "PART_AuthoredAstrolabeMinorTick_10",
+            "PART_AuthoredAstrolabeMinorTick_11",
+            "PART_AuthoredAstrolabeMinorTick_12",
+            "PART_AuthoredAstrolabeMinorTick_13",
+            "PART_AuthoredAstrolabeMinorTick_14",
+            "PART_AuthoredAstrolabeMinorTick_15",
+            "PART_AuthoredAstrolabeMinorTick_16",
+            "PART_AuthoredAstrolabeMinorTick_17",
+            "PART_AuthoredAstrolabeMinorTick_18",
+            "PART_AuthoredAstrolabeMinorTick_19"
+          ],
+          "vertices": 4186,
+          "triangles": 6912,
+          "dimensions": [
+            2.0279958248138428,
+            0.013000000268220901,
+            2.0280001163482666
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterMirror": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_StarryWaterMirror.fbx",
+          "objects": [
+            "PART_OneThinStarryBlueWaterReflection"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave0": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_StarryWaterWave0.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_0"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.410380363464355,
+            0.0,
+            0.6698288321495056
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave1": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_StarryWaterWave1.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_1"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.418754577636719,
+            0.0,
+            0.6938439384102821
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave2": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_StarryWaterWave2.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_2"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.41466236114502,
+            0.0,
+            0.7179617211222649
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "StarryWaterWave3": {
+          "file": "Exports/Mona_StellarisPhantasm_WithStateHandoff_StarryWaterWave3.fbx",
+          "objects": [
+            "PART_ThinRollingStarryWater_3"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            8.413952350616455,
+            0.0,
+            0.7419978380203247
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 28,
+          "soundRole": "bubble",
+          "kind": "cast state-application visual only; NO direct hit or automatic bubble rupture"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 28,
+      "focus": [
+        -4.4670000076293945,
+        -0.18000000715255737,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_StellarisPhantasm_WithStateHandoff.wav"
+      }
+    }
+  }
+}

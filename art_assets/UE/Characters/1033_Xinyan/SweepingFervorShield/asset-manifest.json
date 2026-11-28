@@ -1,0 +1,1124 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+  "variants": {
+    "Xinyan_SweepingFervorShield_Tier1": {
+      "effect": "Xinyan_SweepingFervorShield_Tier1",
+      "source": "Blender/Xinyan_SweepingFervorShield_Tier1.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RockTriangle": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier1_RockTriangle.fbx",
+          "objects": [
+            "PART_ObservedOpenStageTriangle"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.37109604477882385,
+            0.0,
+            0.3959999829530716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ObservedOpenStageTriangle": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.37109604477882385,
+              6.451658229877921e-08,
+              0.3959999829530716
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PublicPyroMembrane": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier1_PublicPyroMembrane.fbx",
+          "objects": [
+            "PART_ProjectPSDShieldPyroMembrane"
+          ],
+          "vertices": 3185,
+          "triangles": 6144,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ProjectPSDShieldPyroMembrane": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 3185,
+            "triangles": 6144,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "previewShieldTier": 1,
+      "publicMembraneSource": "art_assets/UI/shield/shieldcard.png + shieldbar.png + shieldcard_mask.png sampled into RGBA; same surface as general/ShieldBreak.",
+      "realBreakResource": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Pyro.blend",
+      "contract": "Three single shield tiers, independent holder instances. Public genuine-break resource is reused only on committed break; this source shows ordinary fade. Only the actual Xinyan-held shield emits the separate attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_SweepingFervorShield_Tier1.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1033_Xinyan/SweepingFervorShield/Blender/Xinyan_SweepingFervorShield_Tier1.blend",
+        "driversConverted": 12,
+        "legacyExpressions": 12,
+        "numericComparisons": 408,
+        "maximumFormulaError": 5.960464477539063e-08,
+        "nativeDrivers": 36,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xinyan_SweepingFervorShield_Tier1_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Xinyan_SweepingFervorShield_Tier2": {
+      "effect": "Xinyan_SweepingFervorShield_Tier2",
+      "source": "Blender/Xinyan_SweepingFervorShield_Tier2.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RockTriangle": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier2_RockTriangle.fbx",
+          "objects": [
+            "PART_ObservedOpenStageTriangle"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.37109604477882385,
+            0.0,
+            0.3959999829530716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ObservedOpenStageTriangle": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.37109604477882385,
+              6.451658229877921e-08,
+              0.3959999829530716
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PublicPyroMembrane": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier2_PublicPyroMembrane.fbx",
+          "objects": [
+            "PART_ProjectPSDShieldPyroMembrane"
+          ],
+          "vertices": 3185,
+          "triangles": 6144,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ProjectPSDShieldPyroMembrane": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 3185,
+            "triangles": 6144,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "previewShieldTier": 2,
+      "publicMembraneSource": "art_assets/UI/shield/shieldcard.png + shieldbar.png + shieldcard_mask.png sampled into RGBA; same surface as general/ShieldBreak.",
+      "realBreakResource": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Pyro.blend",
+      "contract": "Three single shield tiers, independent holder instances. Public genuine-break resource is reused only on committed break; this source shows ordinary fade. Only the actual Xinyan-held shield emits the separate attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_SweepingFervorShield_Tier2.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1033_Xinyan/SweepingFervorShield/Blender/Xinyan_SweepingFervorShield_Tier2.blend",
+        "driversConverted": 16,
+        "legacyExpressions": 16,
+        "numericComparisons": 544,
+        "maximumFormulaError": 5.960464477539063e-08,
+        "nativeDrivers": 46,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xinyan_SweepingFervorShield_Tier2_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Xinyan_SweepingFervorShield_Tier3": {
+      "effect": "Xinyan_SweepingFervorShield_Tier3",
+      "source": "Blender/Xinyan_SweepingFervorShield_Tier3.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RockTriangle": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier3_RockTriangle.fbx",
+          "objects": [
+            "PART_ObservedOpenStageTriangle"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.37109604477882385,
+            0.0,
+            0.3959999829530716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ObservedOpenStageTriangle": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.37109604477882385,
+              6.451658229877921e-08,
+              0.3959999829530716
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PublicPyroMembrane": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Tier3_PublicPyroMembrane.fbx",
+          "objects": [
+            "PART_ProjectPSDShieldPyroMembrane"
+          ],
+          "vertices": 3185,
+          "triangles": 6144,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ProjectPSDShieldPyroMembrane": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 3185,
+            "triangles": 6144,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "previewShieldTier": 3,
+      "publicMembraneSource": "art_assets/UI/shield/shieldcard.png + shieldbar.png + shieldcard_mask.png sampled into RGBA; same surface as general/ShieldBreak.",
+      "realBreakResource": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Pyro.blend",
+      "contract": "Three single shield tiers, independent holder instances. Public genuine-break resource is reused only on committed break; this source shows ordinary fade. Only the actual Xinyan-held shield emits the separate attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_SweepingFervorShield_Tier3.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1033_Xinyan/SweepingFervorShield/Blender/Xinyan_SweepingFervorShield_Tier3.blend",
+        "driversConverted": 20,
+        "legacyExpressions": 20,
+        "numericComparisons": 680,
+        "maximumFormulaError": 5.960464477539063e-08,
+        "nativeDrivers": 56,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xinyan_SweepingFervorShield_Tier3_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Xinyan_SweepingFervorShield_PartyTier3": {
+      "effect": "Xinyan_SweepingFervorShield_PartyTier3",
+      "source": "Blender/Xinyan_SweepingFervorShield_PartyTier3.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RockTriangle": {
+          "file": "Exports/Xinyan_SweepingFervorShield_PartyTier3_RockTriangle.fbx",
+          "objects": [
+            "PART_ObservedOpenStageTriangle"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.37109604477882385,
+            0.0,
+            0.3959999829530716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ObservedOpenStageTriangle": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.37109604477882385,
+              6.451658229877921e-08,
+              0.3959999829530716
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PublicPyroMembrane": {
+          "file": "Exports/Xinyan_SweepingFervorShield_PartyTier3_PublicPyroMembrane.fbx",
+          "objects": [
+            "PART_ProjectPSDShieldPyroMembrane"
+          ],
+          "vertices": 3185,
+          "triangles": 6144,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ProjectPSDShieldPyroMembrane": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 3185,
+            "triangles": 6144,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "previewShieldTier": 3,
+      "publicMembraneSource": "art_assets/UI/shield/shieldcard.png + shieldbar.png + shieldcard_mask.png sampled into RGBA; same surface as general/ShieldBreak.",
+      "realBreakResource": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Pyro.blend",
+      "contract": "Three single shield tiers, independent holder instances. Public genuine-break resource is reused only on committed break; this source shows ordinary fade. Only the actual Xinyan-held shield emits the separate attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_SweepingFervorShield_PartyTier3.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1033_Xinyan/SweepingFervorShield/Blender/Xinyan_SweepingFervorShield_PartyTier3.blend",
+        "driversConverted": 80,
+        "legacyExpressions": 80,
+        "numericComparisons": 2720,
+        "maximumFormulaError": 5.960464477539063e-08,
+        "nativeDrivers": 221,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xinyan_SweepingFervorShield_PartyTier3_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Xinyan_SweepingFervorShield_Overall": {
+      "effect": "Xinyan_SweepingFervorShield_Overall",
+      "source": "Blender/Xinyan_SweepingFervorShield_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1033_Xinyan/SweepingFervorShield/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Yanfei_SourceFlowingFlameVolume"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RockTriangle": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_RockTriangle.fbx",
+          "objects": [
+            "PART_ObservedOpenStageTriangle"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.37109604477882385,
+            0.0,
+            0.3959999829530716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ObservedOpenStageTriangle": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.37109604477882385,
+              6.451658229877921e-08,
+              0.3959999829530716
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PublicPyroMembrane": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_PublicPyroMembrane.fbx",
+          "objects": [
+            "PART_ProjectPSDShieldPyroMembrane"
+          ],
+          "vertices": 3185,
+          "triangles": 6144,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ProjectPSDShieldPyroMembrane": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 3185,
+            "triangles": 6144,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeGroupFireSweep": {
+          "file": "Exports/Xinyan_SweepingFervorShield_Overall_OneWholeGroupFireSweep.fbx",
+          "objects": [
+            "PART_OneSweptFlameLayer_0",
+            "PART_OneSweptFlameLayer_1",
+            "PART_OneSweptFlameLayer_2"
+          ],
+          "vertices": 2037,
+          "triangles": 3456,
+          "dimensions": [
+            8.329419136047363,
+            0.05000000074505806,
+            1.0345639735460281
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneSweptFlameLayer_0": [
+              "Yanfei_SourceFlowingFlameVolume"
+            ],
+            "PART_OneSweptFlameLayer_1": [
+              "Soft"
+            ],
+            "PART_OneSweptFlameLayer_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2037,
+            "triangles": 3456,
+            "dimensions": [
+              8.329419136047363,
+              0.050000125260226014,
+              1.0345639735460281
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 82,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 82,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 82,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 82,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 82,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 82,
+          "element": "Pyro",
+          "kind": "one actual whole-group shield pulse",
+          "mainSweeps": 1
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Sweeping173f/6.92s and Riff82f/3.28s decoded in memory;24 samples each observed. Fire sweep, thin orange shield, open triangular motifs, initial pale physical hit and later separated tall fire jets observed. Detailed tier-by-tier shapes and natural expiry not confirmed; shield tier differences are restrained authored adaptations.",
+      "materialPorting": "Native noise/flow shader needs explicit later material reconstruction; state shader flow follows a closed periodic path. FBX exports static geometry/RGBA, not complete shader animation.",
+      "scope": "Source art only. No shield assignment, damage, turn ticking, tier threshold, table or Unity modifications.",
+      "previewShieldTier": 3,
+      "publicMembraneSource": "art_assets/UI/shield/shieldcard.png + shieldbar.png + shieldcard_mask.png sampled into RGBA; same surface as general/ShieldBreak.",
+      "realBreakResource": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Pyro.blend",
+      "contract": "Three single shield tiers, independent holder instances. Public genuine-break resource is reused only on committed break; this source shows ordinary fade. Only the actual Xinyan-held shield emits the separate attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xinyan_SweepingFervorShield_Overall.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged.",
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1033_Xinyan/SweepingFervorShield/Blender/Xinyan_SweepingFervorShield_Overall.blend",
+        "driversConverted": 20,
+        "legacyExpressions": 20,
+        "numericComparisons": 680,
+        "maximumFormulaError": 5.960464477539063e-08,
+        "nativeDrivers": 392,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xinyan_SweepingFervorShield_Overall_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

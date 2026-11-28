@@ -1,0 +1,29 @@
+[
+  {
+    "file": "00_原作实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/b5/Dendro_Samachurl_Venomous_Vines.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Dendro_Samachurl#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "bytes": 2021312,
+    "width": 480,
+    "height": 270,
+    "frame_count": 43,
+    "duration_seconds": 3.44,
+    "modified": false,
+    "use": "荆棘粗绿藤、卷曲结构与橙红尖刺；用于彩色对象图标造型参考"
+  },
+  {
+    "file": "01_荆棘造型截帧.png",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/b5/Dendro_Samachurl_Venomous_Vines.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Dendro_Samachurl#Abilities",
+    "source_file": "00_原作实机.webp",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 34,
+    "timestamp_seconds": 2.72,
+    "cropped": false,
+    "retouched": false,
+    "use": "荆棘粗绿藤、卷曲结构与橙红尖刺；用于彩色对象图标造型参考"
+  }
+]

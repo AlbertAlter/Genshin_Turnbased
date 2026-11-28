@@ -19,9 +19,9 @@ public sealed class RoguelikeWishTile : MonoBehaviour
     private Action selected;
     private RoguelikeWishPrize displayedPrize;
     private RoguelikeWishReward displayedReward;
+    private bool hasCover;
 
     public const string WeaponIconFolder = "art_assets/Weapon_Icon/";
-    internal const string DefaultCardBack = "art_assets/CardBack/UI_Gcg_CardBack_01.png";
 
     public static string WeaponBackdropPath(int stars) => UICardFactory.WeaponArtFolder + "Background/" +
         (stars == 5 ? "5_Gold.png" : stars == 4 ? "4_Purple.png" : "3_Blue.png");
@@ -88,15 +88,17 @@ public sealed class RoguelikeWishTile : MonoBehaviour
 
     internal void SetCover(Sprite sprite)
     {
-        if (cover == null || sprite == null) return;
+        if (cover == null) return;
+        hasCover = sprite != null;
         cover.SetCover(sprite);
+        cover.gameObject.SetActive(hasCover);
     }
 
     internal void Reveal(bool animate)
     {
         // The back sits above the complete front. Dissolving it uncovers both art and frame.
         if (card != null) card.gameObject.SetActive(true);
-        if (animate && cover != null && cover.Play(displayedPrize.Stars, ShowFront)) return;
+        if (animate && hasCover && cover != null && cover.Play(displayedPrize.Stars, ShowFront)) return;
         ShowFront();
     }
 
@@ -105,7 +107,12 @@ public sealed class RoguelikeWishTile : MonoBehaviour
 
     private void ShowFront()
     {
-        if (cover != null) cover.gameObject.SetActive(false);
+        if (cover != null)
+        {
+            cover.gameObject.SetActive(false);
+            cover.SetCover(null);
+        }
+        hasCover = false;
         if (caption != null) caption.enabled = !string.IsNullOrEmpty(caption.text);
         if (button != null) button.interactable = selected != null;
     }

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1038_Rosaria/RitesOfTerminationState/Rosaria_RitesOfTerminationState_Overall",
+  "source": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Blender/Rosaria_RitesOfTerminationState_Overall.blend",
+  "file": "Characters/1038_Rosaria/RitesOfTerminationState/Exports/Rosaria_RitesOfTerminationState_Overall.vfx.bytes",
+  "meshes": 16,
+  "tracks": 227,
+  "frames": 375,
+  "duration": 12.466666666666667,
+  "loopStart": 1.2333333333333334,
+  "loopEnd": 6.033333333333333,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.6333333333333333,
+    "Loop_A_start": 1.2333333333333334,
+    "Loop_B_start": 6.033333333333333,
+    "Exit_example_any_phase": 11.3,
+    "Clear": 12.466666666666667
+  },
+  "bytes": 2744165
+}

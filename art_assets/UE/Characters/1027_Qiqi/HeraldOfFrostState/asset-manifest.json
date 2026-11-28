@@ -1,0 +1,1467 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/HeraldOfFrostState/视觉需求.md",
+  "variants": {
+    "Qiqi_HeraldOfFrostState_State": {
+      "effect": "Qiqi_HeraldOfFrostState_State",
+      "source": "Blender/Qiqi_HeraldOfFrostState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/HeraldOfFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldColdSphere": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldColdSphere.fbx",
+          "objects": [
+            "PART_ClearColdHeraldShell"
+          ],
+          "vertices": 312,
+          "triangles": 576,
+          "dimensions": [
+            0.49000000953674316,
+            0.49000000953674316,
+            0.49000000953674316
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ClearColdHeraldShell": [
+              "QiqiThinIceShell"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 312,
+            "triangles": 576,
+            "dimensions": [
+              0.49000000953674316,
+              0.4900000989437103,
+              0.4900000989437103
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldDeepCore": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldDeepCore.fbx",
+          "objects": [
+            "PART_StructuredDeepBlueRuneCore"
+          ],
+          "vertices": 220,
+          "triangles": 400,
+          "dimensions": [
+            0.257999986410141,
+            0.257999996538274,
+            0.257999986410141
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_StructuredDeepBlueRuneCore": [
+              "QiqiDeepColdEmission"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 220,
+            "triangles": 400,
+            "dimensions": [
+              0.257999986410141,
+              0.25800004741176963,
+              0.2580000311136246
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldReadableSeal": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldReadableSeal.fbx",
+          "objects": [
+            "PART_AuthoredColdSealStroke_0",
+            "PART_AuthoredColdSealStroke_1",
+            "PART_AuthoredColdSealStroke_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.17426500469446182,
+            0.0,
+            0.2575666606426239
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredColdSealStroke_0": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_1": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.17426500469446182,
+              5.960464477539063e-08,
+              0.2575666606426239
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldWhiteColdCrescents": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldWhiteColdCrescents.fbx",
+          "objects": [
+            "PART_WhiteColdCrescent_0",
+            "PART_ThinWhiteColdCrescentSpine_0",
+            "PART_WhiteColdCrescent_1",
+            "PART_ThinWhiteColdCrescentSpine_1",
+            "PART_WhiteColdCrescent_2",
+            "PART_ThinWhiteColdCrescentSpine_2"
+          ],
+          "vertices": 2058,
+          "triangles": 3456,
+          "dimensions": [
+            0.6294085085391998,
+            0.017999976873397827,
+            0.6248980760574341
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhiteColdCrescent_0": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_0": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_1": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_1": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_2": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2058,
+            "triangles": 3456,
+            "dimensions": [
+              0.6294085085391998,
+              0.018000096082687378,
+              0.6248981058597565
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldSoftHalo": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldSoftHalo.fbx",
+          "objects": [
+            "PART_ThinColdHeraldHalo"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinColdHeraldHalo": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldFrostMote": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_State_HeraldFrostMote.fbx",
+          "objects": [
+            "PART_SmallHeraldFrostCrystal"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04759497195482254,
+            0.04759497195482254,
+            0.17000000178813934
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallHeraldFrostCrystal": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04759497195482254,
+              0.04759499989449978,
+              0.17000001668930054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 65,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One actual holder card5; quiet arbitrary-phase exit, no auto transfer to another teammate. Healing response keeps the same orb. Periodic contact does not depend on orbit count and does not restart or duplicate it.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_HeraldOfFrostState_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1027_Qiqi/HeraldOfFrostState/Blender/Qiqi_HeraldOfFrostState_State.blend",
+        "driversConverted": 20,
+        "legacyExpressions": 20,
+        "numericComparisons": 720,
+        "maximumFormulaError": 3.720478458646426e-08,
+        "nativeDrivers": 140,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          65.0,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          65,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Qiqi_HeraldOfFrostState_State_01_Overall.png",
+        "stillFrame": 65,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Qiqi_HeraldOfFrostState_HealResponse": {
+      "effect": "Qiqi_HeraldOfFrostState_HealResponse",
+      "source": "Blender/Qiqi_HeraldOfFrostState_HealResponse.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/HeraldOfFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldColdSphere": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldColdSphere.fbx",
+          "objects": [
+            "PART_ClearColdHeraldShell"
+          ],
+          "vertices": 312,
+          "triangles": 576,
+          "dimensions": [
+            0.49000000953674316,
+            0.49000000953674316,
+            0.49000000953674316
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ClearColdHeraldShell": [
+              "QiqiThinIceShell"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 312,
+            "triangles": 576,
+            "dimensions": [
+              0.49000000953674316,
+              0.4900000989437103,
+              0.4900000989437103
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldDeepCore": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldDeepCore.fbx",
+          "objects": [
+            "PART_StructuredDeepBlueRuneCore"
+          ],
+          "vertices": 220,
+          "triangles": 400,
+          "dimensions": [
+            0.257999986410141,
+            0.257999996538274,
+            0.257999986410141
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_StructuredDeepBlueRuneCore": [
+              "QiqiDeepColdEmission"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 220,
+            "triangles": 400,
+            "dimensions": [
+              0.257999986410141,
+              0.25800004741176963,
+              0.2580000311136246
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldReadableSeal": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldReadableSeal.fbx",
+          "objects": [
+            "PART_AuthoredColdSealStroke_0",
+            "PART_AuthoredColdSealStroke_1",
+            "PART_AuthoredColdSealStroke_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.17426500469446182,
+            0.0,
+            0.2575666606426239
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredColdSealStroke_0": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_1": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.17426500469446182,
+              5.960464477539063e-08,
+              0.2575666606426239
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldWhiteColdCrescents": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldWhiteColdCrescents.fbx",
+          "objects": [
+            "PART_WhiteColdCrescent_0",
+            "PART_ThinWhiteColdCrescentSpine_0",
+            "PART_WhiteColdCrescent_1",
+            "PART_ThinWhiteColdCrescentSpine_1",
+            "PART_WhiteColdCrescent_2",
+            "PART_ThinWhiteColdCrescentSpine_2"
+          ],
+          "vertices": 2058,
+          "triangles": 3456,
+          "dimensions": [
+            0.6294085085391998,
+            0.017999976873397827,
+            0.6248980760574341
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhiteColdCrescent_0": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_0": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_1": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_1": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_2": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2058,
+            "triangles": 3456,
+            "dimensions": [
+              0.6294085085391998,
+              0.018000096082687378,
+              0.6248981058597565
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldSoftHalo": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldSoftHalo.fbx",
+          "objects": [
+            "PART_ThinColdHeraldHalo"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinColdHeraldHalo": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldFrostMote": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_HealResponse_HeraldFrostMote.fbx",
+          "objects": [
+            "PART_SmallHeraldFrostCrystal"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04759497195482254,
+            0.04759497195482254,
+            0.17000000178813934
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallHeraldFrostCrystal": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04759497195482254,
+              0.04759499989449978,
+              0.17000001668930054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 89,
+          "kind": "one light herald response to an already-confirmed heal; public green target particles not duplicated",
+          "soundRole": "swish"
+        },
+        {
+          "frame": 233,
+          "kind": "one light herald response to an already-confirmed heal; public green target particles not duplicated",
+          "soundRole": "swish"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 65,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One actual holder card5; quiet arbitrary-phase exit, no auto transfer to another teammate. Healing response keeps the same orb. Periodic contact does not depend on orbit count and does not restart or duplicate it.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav",
+          "Contact_swish.wav": "Qiqi_HeraldOfFrostState_HealResponse_Contact_swish.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_HeraldOfFrostState_HealResponse.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1027_Qiqi/HeraldOfFrostState/Blender/Qiqi_HeraldOfFrostState_HealResponse.blend",
+        "driversConverted": 20,
+        "legacyExpressions": 20,
+        "numericComparisons": 720,
+        "maximumFormulaError": 3.720478458646426e-08,
+        "nativeDrivers": 140,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          65.0,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          65,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Qiqi_HeraldOfFrostState_HealResponse_01_Overall.png",
+        "stillFrame": 65,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Qiqi_HeraldOfFrostState_PeriodicAttack": {
+      "effect": "Qiqi_HeraldOfFrostState_PeriodicAttack",
+      "source": "Blender/Qiqi_HeraldOfFrostState_PeriodicAttack.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/HeraldOfFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldColdSphere": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldColdSphere.fbx",
+          "objects": [
+            "PART_ClearColdHeraldShell"
+          ],
+          "vertices": 312,
+          "triangles": 576,
+          "dimensions": [
+            0.49000000953674316,
+            0.49000000953674316,
+            0.49000000953674316
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ClearColdHeraldShell": [
+              "QiqiThinIceShell"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 312,
+            "triangles": 576,
+            "dimensions": [
+              0.49000000953674316,
+              0.4900000989437103,
+              0.4900000989437103
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldDeepCore": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldDeepCore.fbx",
+          "objects": [
+            "PART_StructuredDeepBlueRuneCore"
+          ],
+          "vertices": 220,
+          "triangles": 400,
+          "dimensions": [
+            0.257999986410141,
+            0.257999996538274,
+            0.257999986410141
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_StructuredDeepBlueRuneCore": [
+              "QiqiDeepColdEmission"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 220,
+            "triangles": 400,
+            "dimensions": [
+              0.257999986410141,
+              0.25800004741176963,
+              0.2580000311136246
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldReadableSeal": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldReadableSeal.fbx",
+          "objects": [
+            "PART_AuthoredColdSealStroke_0",
+            "PART_AuthoredColdSealStroke_1",
+            "PART_AuthoredColdSealStroke_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.17426500469446182,
+            0.0,
+            0.2575666606426239
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredColdSealStroke_0": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_1": [
+              "Soft"
+            ],
+            "PART_AuthoredColdSealStroke_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.17426500469446182,
+              5.960464477539063e-08,
+              0.2575666606426239
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldWhiteColdCrescents": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldWhiteColdCrescents.fbx",
+          "objects": [
+            "PART_WhiteColdCrescent_0",
+            "PART_ThinWhiteColdCrescentSpine_0",
+            "PART_WhiteColdCrescent_1",
+            "PART_ThinWhiteColdCrescentSpine_1",
+            "PART_WhiteColdCrescent_2",
+            "PART_ThinWhiteColdCrescentSpine_2"
+          ],
+          "vertices": 2058,
+          "triangles": 3456,
+          "dimensions": [
+            0.6294085085391998,
+            0.017999976873397827,
+            0.6248980760574341
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhiteColdCrescent_0": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_0": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_1": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_1": [
+              "Soft"
+            ],
+            "PART_WhiteColdCrescent_2": [
+              "Soft"
+            ],
+            "PART_ThinWhiteColdCrescentSpine_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2058,
+            "triangles": 3456,
+            "dimensions": [
+              0.6294085085391998,
+              0.018000096082687378,
+              0.6248981058597565
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldSoftHalo": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldSoftHalo.fbx",
+          "objects": [
+            "PART_ThinColdHeraldHalo"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinColdHeraldHalo": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HeraldFrostMote": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_PeriodicAttack_HeraldFrostMote.fbx",
+          "objects": [
+            "PART_SmallHeraldFrostCrystal"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04759497195482254,
+            0.04759497195482254,
+            0.17000000178813934
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallHeraldFrostCrystal": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04759497195482254,
+              0.04759499989449978,
+              0.17000001668930054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 89,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "element": "Cryo",
+          "kind": "one actual periodic attack contact group; no additional herald instance or orbit-derived hit"
+        },
+        {
+          "frame": 233,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 233,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 233,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 233,
+          "element": "Cryo",
+          "kind": "one actual periodic attack contact group; no additional herald instance or orbit-derived hit"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 65,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One actual holder card5; quiet arbitrary-phase exit, no auto transfer to another teammate. Healing response keeps the same orb. Periodic contact does not depend on orbit count and does not restart or duplicate it.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_HeraldOfFrostState_PeriodicAttack.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1027_Qiqi/HeraldOfFrostState/Blender/Qiqi_HeraldOfFrostState_PeriodicAttack.blend",
+        "driversConverted": 20,
+        "legacyExpressions": 20,
+        "numericComparisons": 720,
+        "maximumFormulaError": 3.720478458646426e-08,
+        "nativeDrivers": 500,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          65.0,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          65,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Qiqi_HeraldOfFrostState_PeriodicAttack_01_Overall.png",
+        "stillFrame": 65,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Qiqi_HeraldOfFrostState_AttackContact": {
+      "effect": "Qiqi_HeraldOfFrostState_AttackContact",
+      "source": "Blender/Qiqi_HeraldOfFrostState_AttackContact.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/HeraldOfFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_AttackContact_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_AttackContact_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Qiqi_HeraldOfFrostState_AttackContact_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 22,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 22,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 22,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 22,
+          "element": "Cryo",
+          "kind": "one actual periodic attack contact group; no additional herald instance or orbit-derived hit"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 23,
+      "focus": [
+        -4.4670000076293945,
+        0.12000000476837158,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One actual holder card5; quiet arbitrary-phase exit, no auto transfer to another teammate. Healing response keeps the same orb. Periodic contact does not depend on orbit count and does not restart or duplicate it.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_HeraldOfFrostState_AttackContact.wav"
+      }
+    }
+  }
+}

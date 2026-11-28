@@ -1,0 +1,3153 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+  "variants": {
+    "2083_PrimordialShower_Pyro": {
+      "effect": "2083_PrimordialShower_Pyro",
+      "source": "Blender/2083_PrimordialShower_Pyro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Pyro_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Pyro_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Pyro_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Pyro_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Pyro.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    },
+    "2083_PrimordialShower_Pyro_Counter": {
+      "effect": "2083_PrimordialShower_Pyro_Counter",
+      "source": "Blender/2083_PrimordialShower_Pyro_Counter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2083_PrimordialShower_Pyro_Counter_Projectile.fbx",
+          "objects": [
+            "PART_ReflectedElementFragment"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000953674324
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ReflectedElementFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500001344877944
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "kind": "example committed shield counter only; public stun follows actual self-hit"
+        }
+      ],
+      "launchFrames": [
+        37
+      ],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Pyro_Counter_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Pyro_Counter.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    },
+    "2083_PrimordialShower_Hydro": {
+      "effect": "2083_PrimordialShower_Hydro",
+      "source": "Blender/2083_PrimordialShower_Hydro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Hydro_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Hydro_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Hydro_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2083_PrimordialShower_Hydro_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2083_PrimordialShower_Hydro_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 4.2,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Hydro_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Hydro.wav"
+      }
+    },
+    "2083_PrimordialShower_Hydro_Counter": {
+      "effect": "2083_PrimordialShower_Hydro_Counter",
+      "source": "Blender/2083_PrimordialShower_Hydro_Counter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2083_PrimordialShower_Hydro_Counter_Projectile.fbx",
+          "objects": [
+            "PART_ReflectedElementFragment"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000953674324
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ReflectedElementFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500001344877944
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 4.2,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "kind": "example committed shield counter only; public stun follows actual self-hit"
+        }
+      ],
+      "launchFrames": [
+        37
+      ],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Hydro_Counter_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Hydro_Counter.wav"
+      }
+    },
+    "2083_PrimordialShower_Cryo": {
+      "effect": "2083_PrimordialShower_Cryo",
+      "source": "Blender/2083_PrimordialShower_Cryo.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Cryo_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Cryo_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Cryo_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharedBurstCrystal_30": {
+          "file": "Exports/2083_PrimordialShower_Cryo_SharedBurstCrystal_30.fbx",
+          "objects": [
+            "PART_SharedBurstCrystal_30"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SharedBurstCrystal_30": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500000868040743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Cryo_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Cryo.wav"
+      }
+    },
+    "2083_PrimordialShower_Cryo_Counter": {
+      "effect": "2083_PrimordialShower_Cryo_Counter",
+      "source": "Blender/2083_PrimordialShower_Cryo_Counter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharedBurstCrystal_30": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_SharedBurstCrystal_30.fbx",
+          "objects": [
+            "PART_SharedBurstCrystal_30"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SharedBurstCrystal_30": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500000868040743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2083_PrimordialShower_Cryo_Counter_Projectile.fbx",
+          "objects": [
+            "PART_ReflectedElementFragment"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000953674324
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ReflectedElementFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500001344877944
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "kind": "example committed shield counter only; public stun follows actual self-hit"
+        }
+      ],
+      "launchFrames": [
+        37
+      ],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Cryo_Counter_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Cryo_Counter.wav"
+      }
+    },
+    "2083_PrimordialShower_Electro": {
+      "effect": "2083_PrimordialShower_Electro",
+      "source": "Blender/2083_PrimordialShower_Electro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Electro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Electro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Electro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Electro_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Electro_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Electro_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_30": {
+          "file": "Exports/2083_PrimordialShower_Electro_GroupBlade_30.fbx",
+          "objects": [
+            "PART_ElectroBody_30",
+            "PART_ElectroBrightEdge_30"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            6.557672023773193,
+            0.0,
+            0.6081138998270035
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ElectroBody_30": [
+              "Soft"
+            ],
+            "PART_ElectroBrightEdge_30": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              6.557672023773193,
+              9.907432207967304e-08,
+              0.6081138998270035
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DecorativeX_30": {
+          "file": "Exports/2083_PrimordialShower_Electro_DecorativeX_30.fbx",
+          "objects": [
+            "PART_DecorativeX_30"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            3.606656312942505,
+            0.0,
+            0.21990761533379555
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DecorativeX_30": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              3.606656312942505,
+              3.582749563690868e-08,
+              0.21990761533379555
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Electro_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Electro.wav"
+      }
+    },
+    "2083_PrimordialShower_Electro_Counter": {
+      "effect": "2083_PrimordialShower_Electro_Counter",
+      "source": "Blender/2083_PrimordialShower_Electro_Counter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2083_PrimoGeovishap/PrimordialShower/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_0": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_AncientCurvedGlyph_0.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_0"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.869603633880615,
+            0.0,
+            4.26920485496521
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.869603633880615,
+              6.854534149169922e-07,
+              4.26920485496521
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_1": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_AncientCurvedGlyph_1.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_1"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            7.4695751667022705,
+            0.0,
+            4.7091217041015625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              7.4695751667022705,
+              7.748603820800781e-07,
+              4.7091217041015625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AncientCurvedGlyph_2": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_AncientCurvedGlyph_2.fbx",
+          "objects": [
+            "PART_AncientCurvedGlyph_2"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            8.069546699523926,
+            0.0,
+            5.149039030075073
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AncientCurvedGlyph_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              8.069546699523926,
+              8.344650268554688e-07,
+              5.149039030075073
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_30": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_GroupBlade_30.fbx",
+          "objects": [
+            "PART_ElectroBody_30",
+            "PART_ElectroBrightEdge_30"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            6.557672023773193,
+            0.0,
+            0.6081138998270035
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ElectroBody_30": [
+              "Soft"
+            ],
+            "PART_ElectroBrightEdge_30": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              6.557672023773193,
+              9.907432207967304e-08,
+              0.6081138998270035
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DecorativeX_30": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_DecorativeX_30.fbx",
+          "objects": [
+            "PART_DecorativeX_30"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            3.606656312942505,
+            0.0,
+            0.21990761533379555
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DecorativeX_30": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              3.606656312942505,
+              3.582749563690868e-08,
+              0.21990761533379555
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2083_PrimordialShower_Electro_Counter_Projectile.fbx",
+          "objects": [
+            "PART_ReflectedElementFragment"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000953674324
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ReflectedElementFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500001344877944
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 51,
+          "kind": "example committed shield counter only; public stun follows actual self-hit"
+        }
+      ],
+      "launchFrames": [
+        37
+      ],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Whole ground spread with ancient curved glyphs, not a fan breath. Counter variant is a separate committed-result demonstration, never inferred from presence of a shield.",
+      "depthContracts": [
+        {
+          "componentPrefix": "AncientCurvedGlyph",
+          "behindAllCards": true,
+          "frames": [
+            20,
+            30,
+            45
+          ]
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2083_PrimordialShower_Electro_Counter_Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2083_PrimordialShower_Electro_Counter.wav"
+      }
+    }
+  }
+}

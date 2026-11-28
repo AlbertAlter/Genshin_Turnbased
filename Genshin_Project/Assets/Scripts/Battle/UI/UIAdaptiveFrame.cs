@@ -21,6 +21,7 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
     [SerializeField, Tooltip("可选的背景 Image，与边框等大，使用边框开口作为遮罩。")]
     private Image[] openingMasks = Array.Empty<Image>();
     public bool Ready => frameImage != null && frameImage.sprite != null;
+    public string Error { get; private set; }
 
     private RectTransform visuals;
     private Image fillImage, frameImage;
@@ -57,13 +58,13 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
         {
             if (!StreamingAssetSpriteLoader.TryBuildRequestUrl(framePath, out string url))
             {
-                Debug.LogWarning("自适应边框的 StreamingAssets 路径无效：" + framePath, this);
+                Fail("自适应边框的 StreamingAssets 路径无效：" + framePath);
                 return;
             }
             var uri = new Uri(url);
             if (!uri.IsFile || !File.Exists(uri.LocalPath))
             {
-                Debug.LogWarning("自适应边框未发布：" + framePath, this);
+                Fail("自适应边框未发布：" + framePath);
                 return;
             }
             var texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
@@ -81,8 +82,7 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
             catch (Exception error)
             {
                 if (loadedSprite == null) Release(texture);
-                Clear();
-                Debug.LogWarning("自适应边框加载失败：" + error.Message, this);
+                Fail("自适应边框加载失败：" + error.Message);
             }
             return;
         }
@@ -104,11 +104,20 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
             try { Build(); }
             catch (Exception error)
             {
-                Clear(false);
-                Debug.LogWarning("自适应边框创建失败：" + error.Message, this);
+                Fail("自适应边框创建失败：" + error.Message, false);
             }
-        }, error => Debug.LogWarning(error, this));
+        }, error =>
+        {
+            if (isActiveAndEnabled && version == expectedVersion) Fail(error, false);
+        });
         request = null;
+    }
+
+    private void Fail(string message, bool stopRequest = true)
+    {
+        Clear(stopRequest);
+        Error = message;
+        Debug.LogWarning(message, this);
     }
 
     private void Build()
@@ -244,6 +253,7 @@ public sealed class UIAdaptiveFrame : MonoBehaviour
     private void Clear(bool stopRequest = true)
     {
         version++;
+        Error = null;
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.delayCall -= RefreshEditor;
 #endif

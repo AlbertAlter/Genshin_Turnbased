@@ -1,0 +1,417 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1032_Zhongli/StoneSteleAppear/视觉需求.md",
+  "variants": {
+    "Zhongli_StoneSteleAppear_OccupiedSlot": {
+      "effect": "Zhongli_StoneSteleAppear_OccupiedSlot",
+      "source": "Blender/Zhongli_StoneSteleAppear_OccupiedSlot.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1032_Zhongli/StoneSteleAppear/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Shard": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneFlatToppedStele": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_OneFlatToppedStele.fbx",
+          "objects": [
+            "PART_FlatTopAlignedStele",
+            "PART_VeryThinAlignedSteleFoot",
+            "PART_SteleInsetDarkFrontPanel"
+          ],
+          "vertices": 72,
+          "triangles": 132,
+          "dimensions": [
+            0.699999988079071,
+            0.5299999713897705,
+            4.199999809265137
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SteleMineralInlay": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_SteleMineralInlay.fbx",
+          "objects": [
+            "PART_SteleVerticalEdge_-1_0",
+            "PART_SteleVerticalEdge_-1_1",
+            "PART_AuthoredSteleInsetVein_-1_0",
+            "PART_AuthoredSteleInsetVein_-1_1",
+            "PART_AuthoredSteleInsetVein_-1_2",
+            "PART_AuthoredSteleInsetVein_-1_3",
+            "PART_SteleVerticalEdge_1_0",
+            "PART_SteleVerticalEdge_1_1",
+            "PART_AuthoredSteleInsetVein_1_0",
+            "PART_AuthoredSteleInsetVein_1_1",
+            "PART_AuthoredSteleInsetVein_1_2",
+            "PART_AuthoredSteleInsetVein_1_3"
+          ],
+          "vertices": 812,
+          "triangles": 1248,
+          "dimensions": [
+            0.5040000081062317,
+            0.5199999809265137,
+            3.9199999421834946
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "FallingRockChip": {
+          "file": "Exports/Zhongli_StoneSteleAppear_OccupiedSlot_FallingRockChip.fbx",
+          "objects": [
+            "PART_SmallDarkRockChip"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.15000000596046448,
+            0.10999999940395355,
+            0.1599999964237213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Planet108f/3.24s and Dominus228f/6.84s decoded in memory;24 samples each observed. Dark interlocking cubic mass with amber seams, accelerating diagonal descent, one bright impact and debris; tall flat stone pillar with gold surface lines visible. Authored block assembly and vein curves are not traced original model/texture; exact carvings not confirmed.",
+      "scope": "Source art only. No Unity, tables or gameplay changes.",
+      "hero_frame": 25,
+      "focus": [
+        -4.505000114440918,
+        0.23999999463558197,
+        0.46000003814697266
+      ],
+      "detailScale": 7,
+      "recordedSteleAnchor": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "selectedEmptySlot": false,
+      "columnDimensions": [
+        0.63,
+        0.47,
+        4.2
+      ],
+      "footDimensions": [
+        0.7,
+        0.53,
+        0.11
+      ],
+      "contract": "One flat top and same-axis very thin foot; no extra cap or diamond base. At the selected occupied/empty field slot behind cards, then quiet visual handoff to existing bottom icon; no new attack on fade or persistent large column. Later actual resonance reuses general/GeoResonance.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Zhongli_StoneSteleAppear_OccupiedSlot.wav"
+      }
+    },
+    "Zhongli_StoneSteleAppear_EmptySlot": {
+      "effect": "Zhongli_StoneSteleAppear_EmptySlot",
+      "source": "Blender/Zhongli_StoneSteleAppear_EmptySlot.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1032_Zhongli/StoneSteleAppear/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Shard": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneFlatToppedStele": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_OneFlatToppedStele.fbx",
+          "objects": [
+            "PART_FlatTopAlignedStele",
+            "PART_VeryThinAlignedSteleFoot",
+            "PART_SteleInsetDarkFrontPanel"
+          ],
+          "vertices": 72,
+          "triangles": 132,
+          "dimensions": [
+            0.699999988079071,
+            0.5299999713897705,
+            4.199999809265137
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SteleMineralInlay": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_SteleMineralInlay.fbx",
+          "objects": [
+            "PART_SteleVerticalEdge_-1_0",
+            "PART_SteleVerticalEdge_-1_1",
+            "PART_AuthoredSteleInsetVein_-1_0",
+            "PART_AuthoredSteleInsetVein_-1_1",
+            "PART_AuthoredSteleInsetVein_-1_2",
+            "PART_AuthoredSteleInsetVein_-1_3",
+            "PART_SteleVerticalEdge_1_0",
+            "PART_SteleVerticalEdge_1_1",
+            "PART_AuthoredSteleInsetVein_1_0",
+            "PART_AuthoredSteleInsetVein_1_1",
+            "PART_AuthoredSteleInsetVein_1_2",
+            "PART_AuthoredSteleInsetVein_1_3"
+          ],
+          "vertices": 812,
+          "triangles": 1248,
+          "dimensions": [
+            0.5040000081062317,
+            0.5199999809265137,
+            3.9199999421834946
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "FallingRockChip": {
+          "file": "Exports/Zhongli_StoneSteleAppear_EmptySlot_FallingRockChip.fbx",
+          "objects": [
+            "PART_SmallDarkRockChip"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.15000000596046448,
+            0.10999999940395355,
+            0.1599999964237213
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Planet108f/3.24s and Dominus228f/6.84s decoded in memory;24 samples each observed. Dark interlocking cubic mass with amber seams, accelerating diagonal descent, one bright impact and debris; tall flat stone pillar with gold surface lines visible. Authored block assembly and vein curves are not traced original model/texture; exact carvings not confirmed.",
+      "scope": "Source art only. No Unity, tables or gameplay changes.",
+      "hero_frame": 25,
+      "focus": [
+        -4.505000114440918,
+        0.23999999463558197,
+        0.46000003814697266
+      ],
+      "detailScale": 7,
+      "recordedSteleAnchor": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "selectedEmptySlot": true,
+      "columnDimensions": [
+        0.63,
+        0.47,
+        4.2
+      ],
+      "footDimensions": [
+        0.7,
+        0.53,
+        0.11
+      ],
+      "contract": "One flat top and same-axis very thin foot; no extra cap or diamond base. At the selected occupied/empty field slot behind cards, then quiet visual handoff to existing bottom icon; no new attack on fade or persistent large column. Later actual resonance reuses general/GeoResonance.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Zhongli_StoneSteleAppear_EmptySlot.wav"
+      }
+    }
+  }
+}

@@ -43,8 +43,15 @@ public sealed class BattlePresentationCue
     public double Time { get; internal set; }
     public BattlePresentationTiming Timing { get; }
     public int Block { get; internal set; }
+    internal long StatusBatchLane { get; set; }
+    internal int StatusBatchBlock { get; set; }
+    internal int StatusBatchOrder { get; set; }
+    internal string StatusBatchEffectKey { get; set; }
     // Visual grouping only: resolved targets of one logical hit, without changing cue order/times.
     public IReadOnlyList<BattlePresentationResult> HitResults { get; internal set; }
+    // Text stays independent of the optional hit-effects module; these are committed reaction facts.
+    public IReadOnlyList<BattlePresentationResult> ReactionPopups { get; internal set; }
+    public bool DefersReactionPopup { get; internal set; }
     public bool LeadsHit { get; internal set; }
     public int VisualHitIndex { get; internal set; }
     public int VisualHitCount { get; internal set; } = 1;
@@ -83,6 +90,86 @@ public static class BattlePresentationTimeline
 
     public static IReadOnlyList<BattlePresentationCue> Build(BattlePresentationSequence sequence,
         Func<BattlePresentationResult, BattlePresentationTiming> settings = null)
+    {
+        if (sequence == null || !sequence.IsSealed) throw new InvalidOperationException("仅播放已关闭的正式结果序列。");
+        foreach (var result in sequence.Results)
+            if (result.StatusBatchID != 0) return BuildStatusBatches(sequence, settings);
+        return BuildLinear(sequence, settings);
+    }
+
+    private static IReadOnlyList<BattlePresentationCue> BuildStatusBatches(BattlePresentationSequence sequence,
+        Func<BattlePresentationResult, BattlePresentationTiming> settings)
+    {
+        var output = new List<BattlePresentationCue>();
+        double cursor = 0;
+        int block = 0;
+        var records = sequence.Results;
+        for (int i = 0; i < records.Count;)
+        {
+            long batch = records[i].StatusBatchID;
+            var segment = new List<BattlePresentationResult>();
+            do { segment.Add(records[i++]); } while (i < records.Count && records[i].StatusBatchID == batch);
+            if (batch == 0)
+            {
+                var linear = BuildLinear(BattlePresentationSequence.ForTimeline(segment), settings);
+                int last = block;
+                foreach (var cue in linear)
+                { cue.Time += cursor; cue.Block += block; last = Math.Max(last, cue.Block); output.Add(cue); }
+                foreach (var cue in linear) cursor = Math.Max(cursor, cue.Time);
+                block = last+1;
+                continue;
+            }
+            var lanes = new Dictionary<long, List<BattlePresentationResult>>();
+            foreach (var record in segment)
+            {
+                if (!lanes.TryGetValue(record.StatusBatchMemberID, out var lane))
+                    lanes.Add(record.StatusBatchMemberID, lane = new List<BattlePresentationResult>());
+                lane.Add(record);
+            }
+            double end = cursor;
+            foreach (var lane in lanes)
+            {
+                BattlePresentationTiming Timing(BattlePresentationResult r)
+                {
+                    var value = settings?.Invoke(r) ?? new BattlePresentationTiming();
+                    // Matching members share their impact clock, independent of per-declaration cosmetic jitter.
+                    return new BattlePresentationTiming(value.HitIntervalSeconds, 0, value.XRandomMode,
+                        value.YRandomMode, value.MediumRandomScale, value.HitTemplate, value.AnimationSeconds) {
+                        AttackAnimation = value.AttackAnimation, HasAttackAnimationSnapshot = value.HasAttackAnimationSnapshot };
+                }
+                var cues = BuildLinear(BattlePresentationSequence.ForTimeline(lane.Value), Timing);
+                int order = 0;
+                var executions = new Dictionary<(long,long,string),string>();
+                var effectCounts = new Dictionary<string,int>();
+                foreach (var cue in cues)
+                {
+                    cue.StatusBatchLane = lane.Key; cue.StatusBatchBlock = cue.Block; cue.StatusBatchOrder = order++;
+                    if (cue.Result.Data is DamageEventData)
+                    {
+                        var key = ExecutionKey(cue.Result);
+                        if (!executions.TryGetValue(key,out var visualKey))
+                        {
+                            string effect = cue.Result.EffectID ?? string.Empty;
+                            effectCounts.TryGetValue(effect,out int count);
+                            visualKey = effect+"/BatchEffect/"+count;
+                            executions.Add(key,visualKey); effectCounts[effect] = count+1;
+                        }
+                        cue.StatusBatchEffectKey = visualKey;
+                    }
+                    cue.Block = block; cue.Time += cursor;
+                    end = Math.Max(end, cue.Time); output.Add(cue);
+                }
+            }
+            cursor = end;
+            block++;
+        }
+        output.Sort((a,b) => a.Block != b.Block ? a.Block.CompareTo(b.Block) : a.Time != b.Time ? a.Time.CompareTo(b.Time)
+            : a.IsAnticipation != b.IsAnticipation ? (a.IsAnticipation ? -1 : 1) : a.Result.Order.CompareTo(b.Result.Order));
+        return output.AsReadOnly();
+    }
+
+    private static IReadOnlyList<BattlePresentationCue> BuildLinear(BattlePresentationSequence sequence,
+        Func<BattlePresentationResult, BattlePresentationTiming> settings)
     {
         if (sequence == null || !sequence.IsSealed) throw new InvalidOperationException("仅播放已关闭的正式结果序列。");
         var cues = new List<BattlePresentationCue>();
@@ -227,7 +314,36 @@ public static class BattlePresentationTimeline
         cues.AddRange(launches);
         cues.Sort((a, b) => a.Block != b.Block ? a.Block.CompareTo(b.Block) : a.Time != b.Time ? a.Time.CompareTo(b.Time)
             : a.IsAnticipation != b.IsAnticipation ? (a.IsAnticipation ? -1 : 1) : a.Result.Order.CompareTo(b.Result.Order));
+        AttachReactionPopups(cues);
         return cues.AsReadOnly();
+    }
+
+    // Reactions may be declared before damage. Dispatch their text with the real target hit,
+    // so a visual recovery barrier delays the impact and its text together. No VFX dependency.
+    private static void AttachReactionPopups(List<BattlePresentationCue> cues)
+    {
+        var impacts = new Dictionary<(long, long, long, BattleSide?, int), BattlePresentationCue>();
+        foreach (var cue in cues)
+        {
+            if (cue.IsAnticipation || cue.IsEnemyExit || !(cue.Result.Data is DamageEventData damage) || !damage.HitLanded) continue;
+            var h = cue.Result.Header;
+            if (h.EffectExecutionId == 0 || h.HitId == 0) continue;
+            var key = (h.SessionId, h.EffectExecutionId, h.HitId, cue.Result.TargetSide, cue.Result.TargetSlot);
+            // The original hit is the contact anchor; a derived reaction is only a fallback.
+            if (!impacts.TryGetValue(key, out var prior) ||
+                ((DamageEventData)prior.Result.Data).Source.SourceKind == ReactionSourceKind.DerivedReaction &&
+                damage.Source.SourceKind != ReactionSourceKind.DerivedReaction) impacts[key] = cue;
+        }
+        var attached = new Dictionary<BattlePresentationCue, List<BattlePresentationResult>>();
+        foreach (var cue in cues)
+        {
+            if (!(cue.Result.Data is ReactionEventData reaction) || reaction.Reaction == ReactionType.None) continue;
+            var h = cue.Result.Header;
+            if (!impacts.TryGetValue((h.SessionId, h.EffectExecutionId, h.HitId, cue.Result.TargetSide, cue.Result.TargetSlot), out var impact)) continue;
+            if (!attached.TryGetValue(impact, out var list)) attached.Add(impact, list = new List<BattlePresentationResult>());
+            list.Add(cue.Result); cue.DefersReactionPopup = true;
+        }
+        foreach (var item in attached) item.Key.ReactionPopups = item.Value.AsReadOnly();
     }
 
     private static bool CanShareEffect(BattlePresentationResult result)

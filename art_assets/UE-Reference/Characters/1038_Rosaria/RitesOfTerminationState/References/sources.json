@@ -1,0 +1,32 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E7%BD%97%E8%8E%8E%E8%8E%89%E4%BA%9A",
+    "image_url": "https://patchwiki.biligame.com/images/ys/2/2e/9r2bm54zyg770rp0qfspzydk4ugjuuy.gif",
+    "title": "终命的圣礼.gif",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已读取角色页并核对GIF直链，未下载或完整观看动图。具体视觉核对边界见用途。",
+    "use": "核对冰枪与留场气质，尚未专门核对原作自然到期全过程。中间锚点、空场地维持与独立多份领域按项目实际状态。"
+  },
+  {
+    "source_type": "官方角色资料",
+    "page_url": "https://wiki.hoyolab.com/pc/genshin/entry/33?lang=en-us",
+    "title": "HoYoWiki·Rosaria",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "检索确认官方角色页入口，未以资料页代替实机动态核对。",
+    "use": "核对角色技能名称及后续原作参考入口，项目范围和持续行为仍以当前项目为准。"
+  },
+  {
+    "source_type": "官方角色演示／音画参考",
+    "page_url": "https://www.youtube.com/watch?v=KJwOW1zS8UM",
+    "title": "New Character Demo - \"Rosaria: No Overtime, Ever\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "已核对官方发布者、标题与入口；未完整观看、逐段试听或截取音频，视频含配乐与语音。",
+    "use": "检索该项动作和音色；尚未确认可独立分离的技能音源，不提供未经核对的时间点。"
+  }
+]

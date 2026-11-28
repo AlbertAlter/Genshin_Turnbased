@@ -1,0 +1,14 @@
+{
+  "File": "10_SlotOuterStroke.png",
+  "Source": "血槽1/Stroke",
+  "Position": "Outside",
+  "Size": 2.0,
+  "Color": [
+    85,
+    60,
+    59
+  ],
+  "Opacity": 100.0,
+  "LogicalSize": 13,
+  "TextureScale": 4
+}

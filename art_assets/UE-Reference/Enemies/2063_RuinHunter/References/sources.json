@@ -1,0 +1,36 @@
+{
+  "enemy_id": 2063,
+  "name": "遗迹猎者",
+  "checked_date": "2026-11-26",
+  "page": "https://genshin-impact.fandom.com/wiki/Ruin_Hunter#Abilities",
+  "verification": "能力条目与MediaWiki媒体元数据；未下载或播放完整动图",
+  "sources": [
+    {
+      "title": "Ruin Hunter Airborne State.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Ruin_Hunter_Airborne_State.gif/revision/latest?cb=20211208043503",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Ruin_Hunter_Airborne_State.gif",
+      "purpose": "原作升空动作入口；自身周围非元素气流为用户指定的项目持续状态表现",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Ruin Hunter Bombardment.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/07/Ruin_Hunter_Bombardment.gif/revision/latest?cb=20211208043519",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Ruin_Hunter_Bombardment.gif",
+      "purpose": "原作八枚轰炸参考；模型复用2062机械导弹，轨迹使用项目公共弹道，相邻目标按项目表",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Ruin Hunter Rapid Fire.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d2/Ruin_Hunter_Rapid_Fire.gif/revision/latest?cb=20211208043551",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Ruin_Hunter_Rapid_Fire.gif",
+      "purpose": "原作速射与四轮短促射击参考，机枪闪光、弹迹、接触按用户要求卡牌化适配",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ]
+}

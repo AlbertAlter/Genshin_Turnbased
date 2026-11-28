@@ -1,0 +1,948 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+  "variants": {
+    "Eula_LightfallSwordState_Zero": {
+      "effect": "Eula_LightfallSwordState_Zero",
+      "source": "Blender/Eula_LightfallSwordState_Zero.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "LightfallBlade": {
+          "file": "Exports/Eula_LightfallSwordState_Zero_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 160,
+          "triangles": 310,
+          "dimensions": [
+            0.5081669688224792,
+            0.19499999657273293,
+            1.6486014127731323
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_LightfallSwordState_Zero_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_LightfallSwordState_Zero_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_LightfallSwordState_Zero_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.91347736120224
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_LightfallSwordState_Zero_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        2.6750001907348633,
+        0.10000000149011612,
+        -0.030000030994415283
+      ],
+      "detailScale": 8,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "0 is a present sword. Count is independent from existence; C6 initial5 is not five gain animations. Multiple uses two independent art instances, not merged count.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_LightfallSwordState_Zero.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordState/Blender/Eula_LightfallSwordState_Zero.blend",
+        "driversConverted": 16,
+        "legacyExpressions": 16,
+        "numericComparisons": 544,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 109,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Eula_LightfallSwordState_Zero_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Eula_LightfallSwordState_Standard": {
+      "effect": "Eula_LightfallSwordState_Standard",
+      "source": "Blender/Eula_LightfallSwordState_Standard.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "LightfallBlade": {
+          "file": "Exports/Eula_LightfallSwordState_Standard_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 160,
+          "triangles": 310,
+          "dimensions": [
+            0.5081669688224792,
+            0.19499999657273293,
+            1.6486014127731323
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_LightfallSwordState_Standard_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_LightfallSwordState_Standard_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_LightfallSwordState_Standard_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.91347736120224
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_LightfallSwordState_Standard_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        2.6750001907348633,
+        0.10000000149011612,
+        -0.030000030994415283
+      ],
+      "detailScale": 8,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "0 is a present sword. Count is independent from existence; C6 initial5 is not five gain animations. Multiple uses two independent art instances, not merged count.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_LightfallSwordState_Standard.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordState/Blender/Eula_LightfallSwordState_Standard.blend",
+        "driversConverted": 16,
+        "legacyExpressions": 16,
+        "numericComparisons": 544,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 109,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Eula_LightfallSwordState_Standard_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Eula_LightfallSwordState_Full": {
+      "effect": "Eula_LightfallSwordState_Full",
+      "source": "Blender/Eula_LightfallSwordState_Full.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "LightfallBlade": {
+          "file": "Exports/Eula_LightfallSwordState_Full_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 160,
+          "triangles": 310,
+          "dimensions": [
+            0.5081669688224792,
+            0.19499999657273293,
+            1.6486014127731323
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_LightfallSwordState_Full_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_LightfallSwordState_Full_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_LightfallSwordState_Full_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.91347736120224
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_LightfallSwordState_Full_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        2.6750001907348633,
+        0.10000000149011612,
+        -0.030000030994415283
+      ],
+      "detailScale": 8,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "0 is a present sword. Count is independent from existence; C6 initial5 is not five gain animations. Multiple uses two independent art instances, not merged count.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_LightfallSwordState_Full.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordState/Blender/Eula_LightfallSwordState_Full.blend",
+        "driversConverted": 16,
+        "legacyExpressions": 16,
+        "numericComparisons": 544,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 109,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Eula_LightfallSwordState_Full_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Eula_LightfallSwordState_Multiple": {
+      "effect": "Eula_LightfallSwordState_Multiple",
+      "source": "Blender/Eula_LightfallSwordState_Multiple.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "LightfallBlade": {
+          "file": "Exports/Eula_LightfallSwordState_Multiple_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 160,
+          "triangles": 310,
+          "dimensions": [
+            0.5081669688224792,
+            0.19499999657273293,
+            1.6486014127731323
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_LightfallSwordState_Multiple_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_LightfallSwordState_Multiple_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_LightfallSwordState_Multiple_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.91347736120224
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_LightfallSwordState_Multiple_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        2.6750001907348633,
+        0.10000000149011612,
+        -0.030000030994415283
+      ],
+      "detailScale": 8,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "0 is a present sword. Count is independent from existence; C6 initial5 is not five gain animations. Multiple uses two independent art instances, not merged count.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_LightfallSwordState_Multiple.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordState/Blender/Eula_LightfallSwordState_Multiple.blend",
+        "driversConverted": 32,
+        "legacyExpressions": 32,
+        "numericComparisons": 1088,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 216,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Eula_LightfallSwordState_Multiple_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Eula_LightfallSwordState_StackFeedback": {
+      "effect": "Eula_LightfallSwordState_StackFeedback",
+      "source": "Blender/Eula_LightfallSwordState_StackFeedback.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/LightfallSwordState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "LightfallBlade": {
+          "file": "Exports/Eula_LightfallSwordState_StackFeedback_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 160,
+          "triangles": 310,
+          "dimensions": [
+            0.5081669688224792,
+            0.19499999657273293,
+            1.6486014127731323
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_LightfallSwordState_StackFeedback_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_LightfallSwordState_StackFeedback_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_LightfallSwordState_StackFeedback_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.91347736120224
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_LightfallSwordState_StackFeedback_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 23,
+          "soundRole": "swish",
+          "kind": "art-only committed stack gain demonstration"
+        },
+        {
+          "frame": 42,
+          "soundRole": "swish",
+          "kind": "art-only committed stack gain demonstration"
+        },
+        {
+          "frame": 62,
+          "soundRole": "swish",
+          "kind": "art-only committed stack gain demonstration"
+        },
+        {
+          "frame": 85,
+          "soundRole": "swish",
+          "kind": "art-only committed stack gain demonstration"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        2.6750001907348633,
+        0.10000000149011612,
+        -0.030000030994415283
+      ],
+      "detailScale": 8,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "Separate feedback sample 0→1→2→29→30, then unchanged30. No growth pulse at unchanged30; no gameplay random or layer modification.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_LightfallSwordState_StackFeedback.wav"
+      }
+    }
+  }
+}

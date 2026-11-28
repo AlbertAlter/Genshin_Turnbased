@@ -1,0 +1,283 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2068_PyroRegisvine/FireRain/视觉需求.md",
+  "variants": {
+    "2068_FireRain": {
+      "effect": "2068_FireRain",
+      "source": "Blender/2068_FireRain.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2068_PyroRegisvine/FireRain/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2068_FireRain_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2068_FireRain_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2068_FireRain_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2068_FireRain_Projectile.fbx",
+          "objects": [
+            "PART_FireballWarmCore",
+            "PART_FireballPetal0",
+            "PART_FireballPetal1",
+            "PART_FireballPetal2",
+            "PART_FireballPetal3",
+            "PART_FireballPetal4"
+          ],
+          "vertices": 447,
+          "triangles": 696,
+          "dimensions": [
+            0.6655475795269012,
+            0.6536219120025635,
+            0.581782877445221
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireballWarmCore": [
+              "Solid"
+            ],
+            "PART_FireballPetal0": [
+              "Soft"
+            ],
+            "PART_FireballPetal1": [
+              "Soft"
+            ],
+            "PART_FireballPetal2": [
+              "Soft"
+            ],
+            "PART_FireballPetal3": [
+              "Soft"
+            ],
+            "PART_FireballPetal4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 447,
+            "triangles": 696,
+            "dimensions": [
+              0.6655475497245789,
+              0.6536218822002411,
+              0.581782877445221
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 23,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 35,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 47,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 59,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 71,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 83,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 95,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 107,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        7,
+        19,
+        31,
+        43,
+        55,
+        67,
+        79,
+        91
+      ],
+      "hero_frame": 19,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "reuse": "2034 PyroWhopperflower fireball construction; independent actual-target arc and contact sequence",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2068_FireRain.wav"
+      }
+    }
+  }
+}

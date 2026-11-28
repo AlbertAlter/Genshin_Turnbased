@@ -1,0 +1,94 @@
+{
+  "enemy_id": 2069,
+  "name": "北风之狼",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Andrius#Abilities",
+  "verification": "仅核对MediaWiki媒体条目与直链，未播放完整GIF。GIF仅保留在线链接；音效未试听或下载。",
+  "user_overrides": [
+    "试炼卡底图标使用正面狼头，获得认可后卡底试炼消失",
+    "认可为石壁狼头刻纹与循环流光，本次仅写Blender需求",
+    "爪击同时三道刀光，仍对应一次实际hit",
+    "冰风刃的刃面垂直屏幕并略上仰；轨迹从狼连接实际目标"
+  ],
+  "visual_sources": [
+    {
+      "effect": "冰霜爪击",
+      "title": "Andrius Wolf Slash Cryo.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f5/Andrius_Wolf_Slash_Cryo.gif/revision/latest?cb=20211109015631",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Andrius_Wolf_Slash_Cryo.gif",
+      "purpose": "原作轮廓与元素材质参考，项目朝向、范围与次数以用户要求及实际表为准",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "风刃爪击",
+      "title": "Andrius Wolf Slash Anemo.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/c/ce/Andrius_Wolf_Slash_Anemo.gif/revision/latest?cb=20211109015627",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Andrius_Wolf_Slash_Anemo.gif",
+      "purpose": "原作轮廓与元素材质参考，项目朝向、范围与次数以用户要求及实际表为准",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "冰风刃·冰质感",
+      "title": "Andrius Ice Waves.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/84/Andrius_Ice_Waves.gif/revision/latest?cb=20211109015638",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Andrius_Ice_Waves.gif",
+      "purpose": "原作轮廓与元素材质参考，项目朝向、范围与次数以用户要求及实际表为准",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "冰风刃·风质感",
+      "title": "Andrius Wind Blades.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/0/02/Andrius_Wind_Blades.gif/revision/latest?cb=20211109015701",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Andrius_Wind_Blades.gif",
+      "purpose": "原作轮廓与元素材质参考，项目朝向、范围与次数以用户要求及实际表为准",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "approval_motif_reference": {
+    "title": "奔狼领石壁狼头纹样",
+    "url": null,
+    "gameplay_candidate": "https://www.youtube.com/watch?v=SKl9pkYA8DU",
+    "verification": "未确认清晰的正面石壁特写，视频仅为场景核对入口，尚未观看定位；不用其他游戏狼徽或头像替代原作石刻。",
+    "downloaded": false,
+    "animation_viewed": false,
+    "local_file": null
+  },
+  "icon_reference": {
+    "identity_file": "art_assets/Enemy_Icon/2069_01.png",
+    "style_file": "art_assets/UI/CardBottomStatus/PyroAgentClone.png",
+    "viewed": true,
+    "final_file": "art_assets/UI/CardBottomStatus/AndriusTrial.png",
+    "prompt_record": "art_assets/UI/CardBottomStatus/AndriusGeneration.json"
+  },
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=9Czmm8XaOHE",
+      "purpose": "爪击、冰刃、风刃声音对照；认可是项目状态，视频不证明原作有对应同名音效",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "未提取或声明再分发许可"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/air-whoosh",
+      "purpose": "已有风切候选，冰粒接触层待另选",
+      "verification": "本轮打开页面403，未试听或下载，未核对音频及许可文件",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": "沿用本批本设备检查：art_assets未找到可直接用于本项的松散音源；不代表其他设备或后续制作状态。"
+}

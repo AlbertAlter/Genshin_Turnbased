@@ -3,7 +3,7 @@
     "SchemaVersion": 2,
     "SaveId": "4dc4a2bad5eb498f984e13face51ea32",
     "CreatedAt": "2026-11-20T22:06:37.6678441+08:00",
-    "UpdatedAt": "2026-11-20T23:04:07.9958158+08:00",
+    "UpdatedAt": "2026-11-23T22:31:26.7273016+08:00",
     "GameVersion": "1.0"
   },
   "RunId": "493cabe76dc54fb0971d0c9caad9d9e5",
@@ -12,7 +12,7 @@
   "SourceSlotIndex": 0,
   "CurrentChapterId": 1,
   "ResumePoint": 1,
-  "PendingBattleId": "ea244e8f13744245aed9cde227b648a9",
+  "PendingBattleId": "f62b99dca31d4ce1b15bc2a4a0a360b2",
   "LastSaveReason": 9,
   "Snapshot": {
     "Characters": [
@@ -33,7 +33,7 @@
       },
       {
         "CharacterID": 1010,
-        "Level": 1,
+        "Level": 20,
         "Experience": 0,
         "Ascension": 0,
         "ConstellationLevel": 0,
@@ -48,8 +48,8 @@
       },
       {
         "CharacterID": 1011,
-        "Level": 1,
-        "Experience": 0,
+        "Level": 15,
+        "Experience": 106,
         "Ascension": 0,
         "ConstellationLevel": 0,
         "SkillLevels": [
@@ -63,7 +63,7 @@
       },
       {
         "CharacterID": 1014,
-        "Level": 1,
+        "Level": 20,
         "Experience": 0,
         "Ascension": 0,
         "ConstellationLevel": 0,
@@ -108,7 +108,7 @@
       },
       {
         "CharacterID": 1016,
-        "Level": 1,
+        "Level": 20,
         "Experience": 0,
         "Ascension": 0,
         "ConstellationLevel": 0,
@@ -119,7 +119,28 @@
           1
         ],
         "EquippedWeaponInstanceId": "02c859de426f486d984636a333b85c8c",
-        "EquippedArtifacts": []
+        "EquippedArtifacts": [
+          {
+            "Slot": 1,
+            "ArtifactInstanceId": "2b7b98d36eaf49da9f8d7b0098f422dd"
+          },
+          {
+            "Slot": 2,
+            "ArtifactInstanceId": "4539f5f1c25643aa80ca0520500e7352"
+          },
+          {
+            "Slot": 3,
+            "ArtifactInstanceId": "3315435fb22c4283bf900e4289f58dad"
+          },
+          {
+            "Slot": 4,
+            "ArtifactInstanceId": "8b16041ec1914bfda05434f42357cdfc"
+          },
+          {
+            "Slot": 5,
+            "ArtifactInstanceId": "9951644e0aeb4387aa74f62d45d1eaf9"
+          }
+        ]
       }
     ],
     "CharacterVitals": [
@@ -194,28 +215,20 @@
     "Inventory": {
       "Items": [
         {
-          "ItemId": "660101",
-          "Quantity": 104
-        },
-        {
           "ItemId": "660201",
-          "Quantity": 78
+          "Quantity": 129
         },
         {
           "ItemId": "660301",
-          "Quantity": 98
+          "Quantity": 162
         },
         {
           "ItemId": "660401",
-          "Quantity": 8
+          "Quantity": 16
         },
         {
           "ItemId": "680103",
-          "Quantity": 68250
-        },
-        {
-          "ItemId": "660501",
-          "Quantity": 17
+          "Quantity": 116400
         },
         {
           "ItemId": "680102",
@@ -232,6 +245,14 @@
         {
           "ItemId": "6102101",
           "Quantity": 1
+        },
+        {
+          "ItemId": "660101",
+          "Quantity": 17
+        },
+        {
+          "ItemId": "660501",
+          "Quantity": 4
         }
       ],
       "Weapons": [
@@ -555,17 +576,831 @@
           }
         }
       ],
-      "Artifacts": []
+      "Artifacts": [
+        {
+          "InstanceId": "4539f5f1c25643aa80ca0520500e7352",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 2,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonusFlat",
+            "MainAttributeValue": 28.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 239.0,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.05103,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "3315435fb22c4283bf900e4289f58dad",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "EMBonus",
+                "Value": 18.648,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 16.205,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritRate",
+                "Value": 0.03501,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.06561,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "2b7b98d36eaf49da9f8d7b0098f422dd",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 13.6150007,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.06561,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "ed4bcbb309d240e8809f432717f2a3c3",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "EMBonus",
+                "Value": 16.317,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.04664,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.04536,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.0729,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "008d9173c7b74bdbb1df80dca50b856f",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "RechargeBonus",
+            "MainAttributeValue": 0.058,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "CritRate",
+                "Value": 0.0389,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.05103,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 15.56,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "8b16041ec1914bfda05434f42357cdfc",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 4,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.0583,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritRate",
+                "Value": 0.03112,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "6bac4888df4948cbbc48bcbccebe54b5",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 5,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.05832,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 15.56,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 209.125,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.05103,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "b7b726acc2c54942a9155c1ffc16b5a1",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 17.5050011,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 16.205,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.0518400036,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "e6851bf2049249c6937cd23da9066c6e",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 16.205,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.0648,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "EMBonus",
+                "Value": 18.648,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.058319997,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "41b3bec697fe4bccb053016576639b67",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritDMG",
+                "Value": 0.0777,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.0583,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "c17f4e2dd57d401984a5a3c8f1688862",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "DEFBonus",
+            "MainAttributeValue": 0.066,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 15.56,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "9951644e0aeb4387aa74f62d45d1eaf9",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 5,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "CritDMG",
+            "MainAttributeValue": 0.07,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.05103,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 17.5050011,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.0583,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.05832,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "80eaaff8fcf64afcb5193fee77df0b04",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 2,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonusFlat",
+            "MainAttributeValue": 28.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 209.125,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "839dc99da18a43c0b3dd1ea902f50927",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 4,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "CryoDMGBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.0729,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritDMG",
+                "Value": 0.0621599965,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "0e8db6279fce48918119b62266dca1e3",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 5,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HealBonus",
+            "MainAttributeValue": 0.04,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04664,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.0729,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "fc0963426b5b4fb89325177d5ef073de",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 5,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.04536,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritDMG",
+                "Value": 0.0699299946,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.05247,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "a8e3ccf87f4147f5b7fda0016ff5907a",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 1,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonusFlat",
+            "MainAttributeValue": 430.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 23.15,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.0583,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.05103,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "8832f2efc66d446d8f173b5322d3faf4",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 298.75,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritDMG",
+                "Value": 0.05439,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.0648,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 20.835,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "3e3fbb31cd604bf284e9b2386ba707ea",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 2,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonusFlat",
+            "MainAttributeValue": 28.0,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.05832,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritRate",
+                "Value": 0.0272299983,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "722cd54a96dc4e74a494449b0f79bcd4",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 15.56,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonus",
+                "Value": 0.04664,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritRate",
+                "Value": 0.03501,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.04536,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "1ae7f4b4fc01434ca7f97736fd45121f",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 18.52,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "DEFBonus",
+                "Value": 0.06561,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 268.875,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "6ae912f4c0274da4a9154f9ee4dc2fcc",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "HPBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 23.15,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 19.45,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "RechargeBonus",
+                "Value": 0.05832,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "7ed8a29841f14a0a8244bfec7e051404",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "DEFBonus",
+            "MainAttributeValue": 0.066,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 239.0,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04081,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 17.5050011,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "0a99a57cb6ea41709a2ad3e1c66c1180",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 4,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "DEFBonus",
+            "MainAttributeValue": 0.066,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "DEFBonusFlat",
+                "Value": 16.205,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 209.125,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "ATKBonusFlat",
+                "Value": 15.56,
+                "RollCount": 1
+              }
+            ]
+          }
+        },
+        {
+          "InstanceId": "9164e49c345a4936b35fac95559aac03",
+          "ArtifactSetID": 505,
+          "Experience": 0,
+          "IsLocked": false,
+          "Artifact": {
+            "Star": 3,
+            "Slot": 3,
+            "Level": 0,
+            "MaxLevel": 12,
+            "MainAttributeType": "ATKBonus",
+            "MainAttributeValue": 0.052,
+            "SecondaryAttributes": [
+              {
+                "AttributeType": "HPBonusFlat",
+                "Value": 268.875,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "CritDMG",
+                "Value": 0.05439,
+                "RollCount": 1
+              },
+              {
+                "AttributeType": "HPBonus",
+                "Value": 0.04664,
+                "RollCount": 1
+              }
+            ]
+          }
+        }
+      ]
     },
     "CurrentChapterId": 1,
-    "CurrentStageIndex": 5,
-    "CurrentNodeId": "14",
+    "CurrentStageIndex": 8,
+    "CurrentNodeId": "25",
     "ClearedNodeIds": [
       "1",
       "3",
       "5",
       "7",
-      "10"
+      "10",
+      "14",
+      "17",
+      "22"
     ],
     "UnlockedAscensions": null,
     "SelectedRouteNodeIds": [
@@ -574,7 +1409,10 @@
       "5",
       "7",
       "10",
-      "14"
+      "14",
+      "17",
+      "22",
+      "25"
     ],
     "UsedNodeContentIds": [
       "RB101",
@@ -582,12 +1420,15 @@
       "RB102",
       "RB106",
       "RB137",
-      "RB103"
+      "RB103",
+      "RB116",
+      "RB110",
+      "RB136"
     ],
     "PendingRewardData": null,
     "PendingNodeReward": null,
     "RunSeed": 1637671619,
-    "RandomStep": 67,
+    "RandomStep": 70,
     "WishProgress": {
       "CharacterSinceFive": 13,
       "CharacterSinceFour": 6,
@@ -945,12 +1786,12 @@
     "CompletedChapterNodeCounts": null,
     "Flow": {
       "Step": 2,
-      "StepId": "0f412dfacf184b17b7c79e231636ac08",
+      "StepId": "62d3be36be014989bab6e02cf247b129",
       "Node": {
-        "NodeId": "14",
-        "StageIndex": 5,
-        "Kind": 0,
-        "ContentId": "RB103",
+        "NodeId": "25",
+        "StageIndex": 8,
+        "Kind": 2,
+        "ContentId": "RB136",
         "IsChapterFinalBoss": false
       },
       "AppearanceParticipants": null

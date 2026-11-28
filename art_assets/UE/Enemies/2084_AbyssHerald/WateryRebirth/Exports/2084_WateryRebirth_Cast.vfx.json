@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2084_AbyssHerald/WateryRebirth/2084_WateryRebirth_Cast",
+  "source": "art_assets/UE/Enemies/2084_AbyssHerald/WateryRebirth/Blender/2084_WateryRebirth_Cast.blend",
+  "file": "Enemies/2084_AbyssHerald/WateryRebirth/Exports/2084_WateryRebirth_Cast.vfx.bytes",
+  "meshes": 6,
+  "tracks": 79,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 311254
+}

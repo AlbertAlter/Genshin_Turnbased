@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/IcetideVortexHold/Eula_IcetideVortexHold",
+  "source": "art_assets/UE/Characters/1040_Eula/IcetideVortexHold/Blender/Eula_IcetideVortexHold.blend",
+  "file": "Characters/1040_Eula/IcetideVortexHold/Exports/Eula_IcetideVortexHold.vfx.bytes",
+  "meshes": 5,
+  "tracks": 77,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 147002
+}

@@ -37,4 +37,19 @@ public class ActionPointManager
         LogManager.Log(LogCategory.AP, $"ÏûºÄ {cost} µã£¬Ê£Óà {CurrentAP}");
         return true;
     }
+
+    /// <summary>Restore shared AP; optional overflow preserves the amount above MaxAP, bounded by int.MaxValue.</summary>
+    public int RecoverAP(int amount, bool allowOverflow = false, BattleEntity actor = null)
+    {
+        if (amount < 0) throw new System.ArgumentOutOfRangeException(nameof(amount));
+        int before = CurrentAP;
+        long next = (long)before + amount;
+        CurrentAP = allowOverflow ? (int)System.Math.Min(int.MaxValue, next)
+            : System.Math.Max(before, (int)System.Math.Min(MaxAP, next));
+        var battle = BattleManager.Instance;
+        if (CurrentAP != before && battle != null && System.Object.ReferenceEquals(battle.APManager, this))
+            BattleEventHub.Publish(new ResourceEventData("AP", "SharedAP", null, before, CurrentAP, amount,
+                ResourceChangeReason.Gain, true, actor: actor, teamHost: battle.AllyTeam));
+        return CurrentAP - before;
+    }
 }

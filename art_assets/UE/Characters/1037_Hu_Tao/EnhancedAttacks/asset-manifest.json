@@ -1,0 +1,1485 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/EnhancedAttacks/视觉需求.md",
+  "variants": {
+    "HuTao_EnhancedAttacks_Normal": {
+      "effect": "HuTao_EnhancedAttacks_Normal",
+      "source": "Blender/HuTao_EnhancedAttacks_Normal.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/EnhancedAttacks/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_SoftContactGlow": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "Spark": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_TaperedSpark": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "Flame": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_LayeredFlameTongue": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyWing-1": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_ButterflyWing-1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_-1",
+            "PART_ButterflyWingVein_-1_0",
+            "PART_ButterflyWingVein_-1_1",
+            "PART_ButterflyWingVein_-1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyWingVein_-1_0": 0,
+              "PART_ButterflyWingVein_-1_1": 0,
+              "PART_ButterflyWingVein_-1_2": 0,
+              "PART_FireButterflyWing_-1": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyWing1": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_ButterflyWing1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_1",
+            "PART_ButterflyWingVein_1_0",
+            "PART_ButterflyWingVein_1_1",
+            "PART_ButterflyWingVein_1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyWingVein_1_0": 0,
+              "PART_ButterflyWingVein_1_1": 0,
+              "PART_ButterflyWingVein_1_2": 0,
+              "PART_FireButterflyWing_1": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyBody": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_ButterflyBody.fbx",
+          "objects": [
+            "PART_FireButterflySlenderBody"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.05354434251785278,
+            0.04987088218331337,
+            0.3100000023841858
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_FireButterflySlenderBody": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyShortTrail": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_ButterflyShortTrail.fbx",
+          "objects": [
+            "PART_ButterflyActualCurveTrail"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.035999998450279236,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyActualCurveTrail": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "OneEnhancedAttack": {
+          "file": "Exports/HuTao_EnhancedAttacks_Normal_OneEnhancedAttack.fbx",
+          "objects": [
+            "PART_HuTaoFireBlade_Skirt",
+            "PART_HuTaoFireBlade_Core",
+            "PART_HuTaoFireBlade_Edge"
+          ],
+          "vertices": 2619,
+          "triangles": 4608,
+          "dimensions": [
+            2.0990147590637207,
+            0.024000000208616257,
+            1.4059074819087982
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2619,
+            "triangles": 4608,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_HuTaoFireBlade_Core": 31,
+              "PART_HuTaoFireBlade_Edge": 31,
+              "PART_HuTaoFireBlade_Skirt": 31
+            },
+            "uvPreserved": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.18000000715255737,
+            -0.28999999165534973
+          ],
+          "element": "Pyro",
+          "purpose": "one default visual contact; actual hit list remains external"
+        }
+      ],
+      "launchFrames": [
+        9
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 20,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "contactFrame": 20,
+      "launchFrame": 9,
+      "bladeClearFrame": 36,
+      "defaultSelectedTargetIndices": [
+        2
+      ],
+      "previewSelectionFields": [
+        "PreviewTarget1",
+        "PreviewTarget2",
+        "PreviewTarget3",
+        "PreviewTarget4",
+        "PreviewTarget5"
+      ],
+      "authoredTargetMasks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "oneMainSweep": true,
+      "layerParts": [
+        "Skirt",
+        "Core",
+        "Edge"
+      ],
+      "maskMorphsPerLayer": 30,
+      "constantParticleAndStrokeSize": true,
+      "afterfireCurveSamples": [
+        0.12850184497720013,
+        0.20703280569977595,
+        0.284433911287121,
+        0.3609724414086183
+      ],
+      "sourceMaterialContract": "VFXColor RGBA, UV U curve progress and V cross-section; native head/tail reveal and width masking. Blender shaders are not Unity shaders.",
+      "gatherFrames": [],
+      "contract": "Default current skill: one target, one contact at20. Arbitrary reference subsets share one continuous blade; only selected targets receive small local contact art. Runtime must supply actual positions and targets; no damage, status or timeline changes.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_EnhancedAttacks_Normal.wav"
+      },
+      "sweepValidation": {
+        "source": "art_assets/UE/Characters/1037_Hu_Tao/EnhancedAttacks/Blender/HuTao_EnhancedAttacks_Normal.blend",
+        "targetMasks": [
+          {
+            "mask": 0,
+            "count": 0,
+            "maximumVertexError": 0.0
+          },
+          {
+            "mask": 1,
+            "count": 1,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 2,
+            "count": 1,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 3,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 4,
+            "count": 1,
+            "maximumVertexError": 0.0
+          },
+          {
+            "mask": 5,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 6,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 7,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 8,
+            "count": 1,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 9,
+            "count": 2,
+            "maximumVertexError": 2.4027400458748785e-07
+          },
+          {
+            "mask": 10,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 11,
+            "count": 3,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 12,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 13,
+            "count": 3,
+            "maximumVertexError": 2.385349660155493e-07
+          },
+          {
+            "mask": 14,
+            "count": 3,
+            "maximumVertexError": 1.6858739404357614e-07
+          },
+          {
+            "mask": 15,
+            "count": 4,
+            "maximumVertexError": 2.4027400458748785e-07
+          },
+          {
+            "mask": 16,
+            "count": 1,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 17,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 18,
+            "count": 2,
+            "maximumVertexError": 2.385349660155493e-07
+          },
+          {
+            "mask": 19,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 20,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 21,
+            "count": 3,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 22,
+            "count": 3,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 23,
+            "count": 4,
+            "maximumVertexError": 2.4027400458748785e-07
+          },
+          {
+            "mask": 24,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 25,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 26,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 27,
+            "count": 4,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 28,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 29,
+            "count": 4,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 30,
+            "count": 4,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 31,
+            "count": 5,
+            "maximumVertexError": 2.6656007498500226e-07
+          }
+        ],
+        "phaseSamples": [
+          {
+            "frame": 1,
+            "head": 0.0,
+            "tail": -0.07999999821186066,
+            "width": 0.20000000298023224,
+            "alpha": 0.0
+          },
+          {
+            "frame": 6,
+            "head": 0.0,
+            "tail": -0.07999999821186066,
+            "width": 0.20000000298023224,
+            "alpha": 0.0
+          },
+          {
+            "frame": 9,
+            "head": 0.0,
+            "tail": -0.07999999821186066,
+            "width": 0.27272728085517883,
+            "alpha": 0.1666666716337204
+          },
+          {
+            "frame": 12,
+            "head": 0.17516355216503143,
+            "tail": -0.07999999821186066,
+            "width": 0.4909090995788574,
+            "alpha": 0.6666668057441711
+          },
+          {
+            "frame": 14,
+            "head": 0.3581228256225586,
+            "tail": -0.07999999821186066,
+            "width": 0.636363685131073,
+            "alpha": 1.0
+          },
+          {
+            "frame": 16,
+            "head": 0.5736027956008911,
+            "tail": -0.07999999821186066,
+            "width": 0.7818182110786438,
+            "alpha": 1.0
+          },
+          {
+            "frame": 18,
+            "head": 0.8154803514480591,
+            "tail": -0.07999999821186066,
+            "width": 0.9272727370262146,
+            "alpha": 1.0
+          },
+          {
+            "frame": 19,
+            "head": 0.9450917840003967,
+            "tail": -0.07999999821186066,
+            "width": 1.0,
+            "alpha": 1.0
+          },
+          {
+            "frame": 20,
+            "head": 1.0800000429153442,
+            "tail": -0.07999999821186066,
+            "width": 1.0,
+            "alpha": 1.0
+          },
+          {
+            "frame": 23,
+            "head": 1.0800000429153442,
+            "tail": 0.12850184738636017,
+            "width": 0.8687499761581421,
+            "alpha": 0.8125
+          },
+          {
+            "frame": 29,
+            "head": 1.0800000429153442,
+            "tail": 0.5868296027183533,
+            "width": 0.606249988079071,
+            "alpha": 0.4375
+          },
+          {
+            "frame": 36,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          },
+          {
+            "frame": 38,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          },
+          {
+            "frame": 65,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          },
+          {
+            "frame": 120,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          }
+        ],
+        "nativeDrivers": 583,
+        "autoexecDisabled": true,
+        "sourceReopened": true,
+        "contactFrame": 20,
+        "defaultSelectedIndices": [
+          2
+        ],
+        "oneContinuousBlade": true,
+        "stageAndSavedInputsPreserved": true,
+        "noTargetImage": "Preview/HuTao_EnhancedAttacks_Normal_NoTargets.png",
+        "referenceOnlyImage": "codex_worktable/hutao_enhanced_attacks/HuTao_EnhancedAttacks_Normal_ReferenceOnly.png",
+        "noVideo": true,
+        "noUnityWrites": true
+      },
+      "coveragePreviews": {
+        "1帧": "Preview/HuTao_EnhancedAttacks_Normal_00_Clear.png",
+        "10帧": "Preview/HuTao_EnhancedAttacks_Normal_04_Prepare.png",
+        "14帧": "Preview/HuTao_EnhancedAttacks_Normal_05_ReleaseStart.png",
+        "18帧": "Preview/HuTao_EnhancedAttacks_Normal_06_Accelerate.png",
+        "20帧": "Preview/HuTao_EnhancedAttacks_Normal_01_Overall.png",
+        "26帧": "Preview/HuTao_EnhancedAttacks_Normal_07_TrailingFire.png",
+        "34帧": "Preview/HuTao_EnhancedAttacks_Normal_08_ThinTail.png",
+        "52帧": "Preview/HuTao_EnhancedAttacks_Normal_09_Butterflies.png",
+        "120帧": "Preview/HuTao_EnhancedAttacks_Normal_10_Clear.png",
+        "其他单体": "Preview/HuTao_EnhancedAttacks_Normal_Targets_SingleOtherSlot.png",
+        "两人": "Preview/HuTao_EnhancedAttacks_Normal_Targets_TwoTargets.png",
+        "三人": "Preview/HuTao_EnhancedAttacks_Normal_Targets_ThreeTargets.png",
+        "四人": "Preview/HuTao_EnhancedAttacks_Normal_Targets_FourTargets.png",
+        "五人": "Preview/HuTao_EnhancedAttacks_Normal_Targets_FiveTargets.png",
+        "不相邻": "Preview/HuTao_EnhancedAttacks_Normal_Targets_NonAdjacent.png",
+        "空选": "Preview/HuTao_EnhancedAttacks_Normal_NoTargets.png"
+      },
+      "sizeValidation": {
+        "sizeSamples": [
+          {
+            "mask": 1,
+            "maximumStrokeWidthError": 0.0,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 3,
+            "maximumStrokeWidthError": 1.128875803946272e-08,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 7,
+            "maximumStrokeWidthError": 8.034525289524197e-08,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 15,
+            "maximumStrokeWidthError": 9.874508954954564e-08,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 31,
+            "maximumStrokeWidthError": 1.94150898469303e-07,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 21,
+            "maximumStrokeWidthError": 6.695762877484412e-08,
+            "maximumParticleScaleError": 0.0
+          }
+        ],
+        "strokeWidthAndParticlesDoNotScaleWithTargetCount": true,
+        "chargedReleaseAcceleration": null,
+        "sourceSaved": false
+      },
+      "staticValidation": {
+        "firstLastRGBDifference": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "noTargetsRGBDifference": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "partCount": 8,
+        "videoGenerated": false
+      },
+      "savedPreviewSelection": [
+        2
+      ],
+      "cueScope": "Contact20 records the current single-target skill; checkbox subsets are source-art demonstrations, not extra gameplay or sound events."
+    },
+    "HuTao_EnhancedAttacks_Charged": {
+      "effect": "HuTao_EnhancedAttacks_Charged",
+      "source": "Blender/HuTao_EnhancedAttacks_Charged.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/EnhancedAttacks/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_SoftContactGlow": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "Spark": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_TaperedSpark": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "Flame": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_LayeredFlameTongue": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyWing-1": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_ButterflyWing-1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_-1",
+            "PART_ButterflyWingVein_-1_0",
+            "PART_ButterflyWingVein_-1_1",
+            "PART_ButterflyWingVein_-1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyWingVein_-1_0": 0,
+              "PART_ButterflyWingVein_-1_1": 0,
+              "PART_ButterflyWingVein_-1_2": 0,
+              "PART_FireButterflyWing_-1": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyWing1": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_ButterflyWing1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_1",
+            "PART_ButterflyWingVein_1_0",
+            "PART_ButterflyWingVein_1_1",
+            "PART_ButterflyWingVein_1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyWingVein_1_0": 0,
+              "PART_ButterflyWingVein_1_1": 0,
+              "PART_ButterflyWingVein_1_2": 0,
+              "PART_FireButterflyWing_1": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyBody": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_ButterflyBody.fbx",
+          "objects": [
+            "PART_FireButterflySlenderBody"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.05354434251785278,
+            0.04987088218331337,
+            0.3100000023841858
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_FireButterflySlenderBody": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "ButterflyShortTrail": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_ButterflyShortTrail.fbx",
+          "objects": [
+            "PART_ButterflyActualCurveTrail"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.035999998450279236,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_ButterflyActualCurveTrail": 0
+            },
+            "uvPreserved": null
+          }
+        },
+        "OneEnhancedAttack": {
+          "file": "Exports/HuTao_EnhancedAttacks_Charged_OneEnhancedAttack.fbx",
+          "objects": [
+            "PART_HuTaoFireBlade_Skirt",
+            "PART_HuTaoFireBlade_Core",
+            "PART_HuTaoFireBlade_Edge"
+          ],
+          "vertices": 2619,
+          "triangles": 4608,
+          "dimensions": [
+            2.0612887144088745,
+            0.024000000208616257,
+            2.1440341472625732
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2619,
+            "triangles": 4608,
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true,
+            "shapeKeyCounts": {
+              "PART_HuTaoFireBlade_Core": 31,
+              "PART_HuTaoFireBlade_Edge": 31,
+              "PART_HuTaoFireBlade_Skirt": 31
+            },
+            "uvPreserved": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.18000000715255737,
+            -0.5849999785423279
+          ],
+          "element": "Pyro",
+          "purpose": "one default visual contact; actual hit list remains external"
+        }
+      ],
+      "launchFrames": [
+        14
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 20,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "contactFrame": 20,
+      "launchFrame": 14,
+      "bladeClearFrame": 38,
+      "defaultSelectedTargetIndices": [
+        2
+      ],
+      "previewSelectionFields": [
+        "PreviewTarget1",
+        "PreviewTarget2",
+        "PreviewTarget3",
+        "PreviewTarget4",
+        "PreviewTarget5"
+      ],
+      "authoredTargetMasks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "oneMainSweep": true,
+      "layerParts": [
+        "Skirt",
+        "Core",
+        "Edge"
+      ],
+      "maskMorphsPerLayer": 30,
+      "constantParticleAndStrokeSize": true,
+      "afterfireCurveSamples": [
+        0.07450197232875914,
+        0.14710187715492667,
+        0.21847813592577936,
+        0.2889580889168602
+      ],
+      "sourceMaterialContract": "VFXColor RGBA, UV U curve progress and V cross-section; native head/tail reveal and width masking. Blender shaders are not Unity shaders.",
+      "gatherFrames": [
+        6,
+        18
+      ],
+      "contract": "Default current skill: one target, one contact at20. Arbitrary reference subsets share one continuous blade; only selected targets receive small local contact art. Runtime must supply actual positions and targets; no damage, status or timeline changes.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_EnhancedAttacks_Charged.wav"
+      },
+      "sweepValidation": {
+        "source": "art_assets/UE/Characters/1037_Hu_Tao/EnhancedAttacks/Blender/HuTao_EnhancedAttacks_Charged.blend",
+        "targetMasks": [
+          {
+            "mask": 0,
+            "count": 0,
+            "maximumVertexError": 0.0
+          },
+          {
+            "mask": 1,
+            "count": 1,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 2,
+            "count": 1,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 3,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 4,
+            "count": 1,
+            "maximumVertexError": 0.0
+          },
+          {
+            "mask": 5,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 6,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 7,
+            "count": 3,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 8,
+            "count": 1,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 9,
+            "count": 2,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 10,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 11,
+            "count": 3,
+            "maximumVertexError": 2.385349660155493e-07
+          },
+          {
+            "mask": 12,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 13,
+            "count": 3,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 14,
+            "count": 3,
+            "maximumVertexError": 1.6858739404357614e-07
+          },
+          {
+            "mask": 15,
+            "count": 4,
+            "maximumVertexError": 2.457562461863554e-07
+          },
+          {
+            "mask": 16,
+            "count": 1,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 17,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 18,
+            "count": 2,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 19,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 20,
+            "count": 2,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 21,
+            "count": 3,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 22,
+            "count": 3,
+            "maximumVertexError": 2.388837865275353e-07
+          },
+          {
+            "mask": 23,
+            "count": 4,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 24,
+            "count": 2,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 25,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 26,
+            "count": 3,
+            "maximumVertexError": 2.384185791015625e-07
+          },
+          {
+            "mask": 27,
+            "count": 4,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 28,
+            "count": 3,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 29,
+            "count": 4,
+            "maximumVertexError": 2.6656007498500226e-07
+          },
+          {
+            "mask": 30,
+            "count": 4,
+            "maximumVertexError": 2.4027400458748785e-07
+          },
+          {
+            "mask": 31,
+            "count": 5,
+            "maximumVertexError": 2.6656007498500226e-07
+          }
+        ],
+        "phaseSamples": [
+          {
+            "frame": 1,
+            "head": 0.04500000178813934,
+            "tail": -0.07999999821186066,
+            "width": 0.6200000047683716,
+            "alpha": 0.0
+          },
+          {
+            "frame": 6,
+            "head": 0.04500000178813934,
+            "tail": -0.07999999821186066,
+            "width": 0.6200000047683716,
+            "alpha": 0.0
+          },
+          {
+            "frame": 9,
+            "head": 0.04500000178813934,
+            "tail": -0.07999999821186066,
+            "width": 0.45500001311302185,
+            "alpha": 0.375
+          },
+          {
+            "frame": 12,
+            "head": 0.04500000178813934,
+            "tail": -0.07999999821186066,
+            "width": 0.28999996185302734,
+            "alpha": 0.75
+          },
+          {
+            "frame": 14,
+            "head": 0.04500000178813934,
+            "tail": -0.07999999821186066,
+            "width": 0.18000000715255737,
+            "alpha": 1.0
+          },
+          {
+            "frame": 16,
+            "head": 0.1373152732849121,
+            "tail": -0.07999999821186066,
+            "width": 0.4533333480358124,
+            "alpha": 1.0
+          },
+          {
+            "frame": 18,
+            "head": 0.46916964650154114,
+            "tail": -0.07999999821186066,
+            "width": 0.7266666889190674,
+            "alpha": 1.0
+          },
+          {
+            "frame": 19,
+            "head": 0.7380133867263794,
+            "tail": -0.07999999821186066,
+            "width": 0.8633333444595337,
+            "alpha": 1.0
+          },
+          {
+            "frame": 20,
+            "head": 1.0800000429153442,
+            "tail": -0.07999999821186066,
+            "width": 1.0,
+            "alpha": 1.0
+          },
+          {
+            "frame": 23,
+            "head": 1.0800000429153442,
+            "tail": 0.07450196892023087,
+            "width": 0.8833333253860474,
+            "alpha": 0.8333333134651184
+          },
+          {
+            "frame": 29,
+            "head": 1.0800000429153442,
+            "tail": 0.4966217577457428,
+            "width": 0.6500000357627869,
+            "alpha": 0.4999999403953552
+          },
+          {
+            "frame": 36,
+            "head": 1.0800000429153442,
+            "tail": 0.9677127599716187,
+            "width": 0.3777777850627899,
+            "alpha": 0.1111111119389534
+          },
+          {
+            "frame": 38,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          },
+          {
+            "frame": 65,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          },
+          {
+            "frame": 120,
+            "head": 1.0800000429153442,
+            "tail": 1.100000023841858,
+            "width": 0.29999998211860657,
+            "alpha": 0.0
+          }
+        ],
+        "nativeDrivers": 591,
+        "autoexecDisabled": true,
+        "sourceReopened": true,
+        "contactFrame": 20,
+        "defaultSelectedIndices": [
+          2
+        ],
+        "oneContinuousBlade": true,
+        "stageAndSavedInputsPreserved": true,
+        "noTargetImage": "Preview/HuTao_EnhancedAttacks_Charged_NoTargets.png",
+        "referenceOnlyImage": "codex_worktable/hutao_enhanced_attacks/HuTao_EnhancedAttacks_Charged_ReferenceOnly.png",
+        "noVideo": true,
+        "noUnityWrites": true
+      },
+      "coveragePreviews": {
+        "1帧": "Preview/HuTao_EnhancedAttacks_Charged_00_Clear.png",
+        "10帧": "Preview/HuTao_EnhancedAttacks_Charged_04_Prepare.png",
+        "14帧": "Preview/HuTao_EnhancedAttacks_Charged_05_ReleaseStart.png",
+        "18帧": "Preview/HuTao_EnhancedAttacks_Charged_06_Accelerate.png",
+        "20帧": "Preview/HuTao_EnhancedAttacks_Charged_01_Overall.png",
+        "26帧": "Preview/HuTao_EnhancedAttacks_Charged_07_TrailingFire.png",
+        "34帧": "Preview/HuTao_EnhancedAttacks_Charged_08_ThinTail.png",
+        "52帧": "Preview/HuTao_EnhancedAttacks_Charged_09_Butterflies.png",
+        "120帧": "Preview/HuTao_EnhancedAttacks_Charged_10_Clear.png",
+        "其他单体": "Preview/HuTao_EnhancedAttacks_Charged_Targets_SingleOtherSlot.png",
+        "两人": "Preview/HuTao_EnhancedAttacks_Charged_Targets_TwoTargets.png",
+        "三人": "Preview/HuTao_EnhancedAttacks_Charged_Targets_ThreeTargets.png",
+        "四人": "Preview/HuTao_EnhancedAttacks_Charged_Targets_FourTargets.png",
+        "五人": "Preview/HuTao_EnhancedAttacks_Charged_Targets_FiveTargets.png",
+        "不相邻": "Preview/HuTao_EnhancedAttacks_Charged_Targets_NonAdjacent.png",
+        "重击蓄势细节": "Preview/HuTao_EnhancedAttacks_Charged_Prepare_Detail.png",
+        "空选": "Preview/HuTao_EnhancedAttacks_Charged_NoTargets.png"
+      },
+      "gatherValidation": [
+        {
+          "frame": 1,
+          "alpha": 0.0,
+          "scale": [
+            0.3199999928474426,
+            0.3199999928474426,
+            0.3199999928474426
+          ]
+        },
+        {
+          "frame": 6,
+          "alpha": 0.0,
+          "scale": [
+            0.3199999928474426,
+            0.3199999928474426,
+            0.3199999928474426
+          ]
+        },
+        {
+          "frame": 10,
+          "alpha": 1.0,
+          "scale": [
+            0.20999999344348907,
+            0.20999999344348907,
+            0.20999999344348907
+          ]
+        },
+        {
+          "frame": 14,
+          "alpha": 1.0,
+          "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+          ]
+        },
+        {
+          "frame": 18,
+          "alpha": 0.0,
+          "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+          ]
+        },
+        {
+          "frame": 20,
+          "alpha": 0.0,
+          "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+          ]
+        },
+        {
+          "frame": 120,
+          "alpha": 0.0,
+          "scale": [
+            0.10000000149011612,
+            0.10000000149011612,
+            0.10000000149011612
+          ]
+        }
+      ],
+      "sizeValidation": {
+        "sizeSamples": [
+          {
+            "mask": 1,
+            "maximumStrokeWidthError": 0.0,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 3,
+            "maximumStrokeWidthError": 1.1968802915429677e-07,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 7,
+            "maximumStrokeWidthError": 2.0585695503783086e-07,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 15,
+            "maximumStrokeWidthError": 1.0177554776724662e-07,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 31,
+            "maximumStrokeWidthError": 5.5715551283697096e-08,
+            "maximumParticleScaleError": 0.0
+          },
+          {
+            "mask": 21,
+            "maximumStrokeWidthError": 5.773544398124386e-08,
+            "maximumParticleScaleError": 0.0
+          }
+        ],
+        "strokeWidthAndParticlesDoNotScaleWithTargetCount": true,
+        "chargedReleaseAcceleration": {
+          "firstTwoReleaseFrames": 0.09231527149677277,
+          "lastTwoReleaseFrames": 0.6108303964138031
+        },
+        "sourceSaved": false
+      },
+      "staticValidation": {
+        "firstLastRGBDifference": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "noTargetsRGBDifference": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "partCount": 8,
+        "videoGenerated": false
+      },
+      "savedPreviewSelection": [
+        2
+      ],
+      "cueScope": "Contact20 records the current single-target skill; checkbox subsets are source-art demonstrations, not extra gameplay or sound events."
+    }
+  }
+}

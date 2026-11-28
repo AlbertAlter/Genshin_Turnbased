@@ -1,0 +1,1052 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+  "variants": {
+    "2082_DoubleSlam_Geo": {
+      "effect": "2082_DoubleSlam_Geo",
+      "source": "Blender/2082_DoubleSlam_Geo.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2082_DoubleSlam_Geo_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2082_DoubleSlam_Geo_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2082_DoubleSlam_Geo_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        2.8899999260902405,
+        -0.08,
+        0.18925005197525024
+      ],
+      "detailScale": 7.31809777577718,
+      "restoreCardIndex": 2,
+      "originalCardPosition": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2082_DoubleSlam_Geo.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    },
+    "2082_DoubleSlam_Pyro": {
+      "effect": "2082_DoubleSlam_Pyro",
+      "source": "Blender/2082_DoubleSlam_Pyro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2082_DoubleSlam_Pyro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2082_DoubleSlam_Pyro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2082_DoubleSlam_Pyro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        2.8899999260902405,
+        -0.08,
+        0.18925005197525024
+      ],
+      "detailScale": 7.31809777577718,
+      "restoreCardIndex": 2,
+      "originalCardPosition": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2082_DoubleSlam_Pyro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2082_DoubleSlam_Pyro.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    },
+    "2082_DoubleSlam_Hydro": {
+      "effect": "2082_DoubleSlam_Hydro",
+      "source": "Blender/2082_DoubleSlam_Hydro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2082_DoubleSlam_Hydro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2082_DoubleSlam_Hydro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2082_DoubleSlam_Hydro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        2.8899999260902405,
+        -0.08,
+        0.18925005197525024
+      ],
+      "detailScale": 7.31809777577718,
+      "restoreCardIndex": 2,
+      "originalCardPosition": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2082_DoubleSlam_Hydro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2082_DoubleSlam_Hydro.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    },
+    "2082_DoubleSlam_Electro": {
+      "effect": "2082_DoubleSlam_Electro",
+      "source": "Blender/2082_DoubleSlam_Electro.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2082_DoubleSlam_Electro_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2082_DoubleSlam_Electro_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2082_DoubleSlam_Electro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        2.8899999260902405,
+        -0.08,
+        0.18925005197525024
+      ],
+      "detailScale": 7.31809777577718,
+      "restoreCardIndex": 2,
+      "originalCardPosition": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2082_DoubleSlam_Electro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2082_DoubleSlam_Electro.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    },
+    "2082_DoubleSlam_Cryo": {
+      "effect": "2082_DoubleSlam_Cryo",
+      "source": "Blender/2082_DoubleSlam_Cryo.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2082_Geovishap/DoubleSlam/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2082_DoubleSlam_Cryo_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2082_DoubleSlam_Cryo_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2082_DoubleSlam_Cryo_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharedBurstCrystal_27": {
+          "file": "Exports/2082_DoubleSlam_Cryo_SharedBurstCrystal_27.fbx",
+          "objects": [
+            "PART_SharedBurstCrystal_27"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SharedBurstCrystal_27": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500000868040743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharedBurstCrystal_65": {
+          "file": "Exports/2082_DoubleSlam_Cryo_SharedBurstCrystal_65.fbx",
+          "objects": [
+            "PART_SharedBurstCrystal_65"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5156121850013733,
+            0.480238139629364,
+            1.4500000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SharedBurstCrystal_65": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5156121850013733,
+              0.4802383780479431,
+              1.4500000868040743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        2.9079923033714294,
+        -0.08,
+        0.10289204120635986
+      ],
+      "detailScale": 6.955777943929036,
+      "restoreCardIndex": 2,
+      "originalCardPosition": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2082_DoubleSlam_Cryo_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2082_DoubleSlam_Cryo.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    }
+  }
+}

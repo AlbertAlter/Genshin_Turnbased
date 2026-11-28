@@ -1,0 +1,58 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E7%94%98%E9%9B%A8",
+    "image_url": "https://patchwiki.biligame.com/images/ys/7/79/k5lt89fg241snzmsl8j5db2ydsff0ve.gif",
+    "title": "降众天华.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码135帧、5.4秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "原作冰锥落击观感；冰锥造型与向下运动优先沿冰法基础落冰需求复用，实际次数按项目。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\ganyu-references\\Ganyu_CelestialShower_Observation.png",
+    "decoded_frames": 135,
+    "duration_seconds": 5.4,
+    "sampled_frames": [
+      0,
+      6,
+      12,
+      17,
+      23,
+      29,
+      35,
+      41,
+      47,
+      52,
+      58,
+      64,
+      70,
+      76,
+      82,
+      87,
+      93,
+      99,
+      105,
+      111,
+      117,
+      122,
+      128,
+      134
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E7%94%98%E9%9B%A8",
+    "title": "七圣召唤·甘雨",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已读取对应卡牌资料页；未观看七圣召唤动态战斗画面，卡牌图标及文字不作为动态演出证明。",
+    "use": "辅助搜索霜华矢、冰莲与降众天华的卡牌构图，角色战斗实机仍是本次原作造型依据。"
+  },
+  {
+    "source_type": "项目复用需求",
+    "project_reference": "art_assets/UE-Reference/Enemies/2030_CryoMage/FallingIceSpike/视觉需求.md",
+    "title": "冰法基础冰刺下落",
+    "verification": "已完整阅读；当前工作区未找到成品模型，不确认另一设备的制作状态。",
+    "use": "共用凝结、竖直加速下落、接触碎冰和寒雾收尾；甘雨另按真实相邻范围及三次触发组织。"
+  }
+]

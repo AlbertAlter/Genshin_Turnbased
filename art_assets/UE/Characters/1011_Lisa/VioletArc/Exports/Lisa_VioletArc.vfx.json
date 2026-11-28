@@ -1,0 +1,24 @@
+{
+  "key": "Characters/1011_Lisa/VioletArc/Lisa_VioletArc",
+  "source": "art_assets/UE/Characters/1011_Lisa/VioletArc/Blender/Lisa_VioletArc.blend",
+  "file": "Characters/1011_Lisa/VioletArc/Exports/Lisa_VioletArc.vfx.bytes",
+  "meshes": 123,
+  "tracks": 127,
+  "frames": 60,
+  "duration": 1.9666666666666666,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start_Clear": 0.0,
+    "Palm_Gather": 0.06666666666666667,
+    "Upward_SNAP": 0.3333333333333333,
+    "Quiet_Anticipation": 0.4666666666666667,
+    "Leader_SNAP": 0.6,
+    "ALL_OCCUPIED_ENEMIES_CONTACT": 0.6333333333333333,
+    "Restrike": 0.7333333333333333,
+    "Residual_Sparks": 0.9333333333333333,
+    "Clear": 1.1333333333333333,
+    "End_Clear": 1.9666666666666666
+  },
+  "bytes": 259144
+}

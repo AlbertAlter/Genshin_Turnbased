@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2062_RuinGuard/SeekingMissiles/2062_SeekingMissiles",
+  "source": "art_assets/UE/Enemies/2062_RuinGuard/SeekingMissiles/Blender/2062_SeekingMissiles.blend",
+  "file": "Enemies/2062_RuinGuard/SeekingMissiles/Exports/2062_SeekingMissiles.vfx.bytes",
+  "meshes": 14,
+  "tracks": 300,
+  "frames": 170,
+  "duration": 5.633333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.633333333333334
+  },
+  "bytes": 715327
+}

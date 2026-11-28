@@ -1,0 +1,400 @@
+{
+  "characterID": 1010,
+  "name": "Kaeya",
+  "effect": "GlacialWaltz",
+  "fps": 30,
+  "preview": "Preview/Kaeya_GlacialWaltz_Overall.mp4",
+  "source": {
+    "state": "Blender/Kaeya_GlacialWaltz_State.blend",
+    "effect": "Blender/Kaeya_GlacialWaltz_Effect.blend"
+  },
+  "blenderVersion": "5.3.0",
+  "scenes": {
+    "overallPreview": "01_Kaeya_GlacialWaltz_OrbitAndTriggers",
+    "state": "02_Kaeya_SustainedOrbit_Lifecycle",
+    "effect": "03_Kaeya_SingleTriggeredEffect"
+  },
+  "timing": {
+    "demoFrames": [
+      1,
+      180
+    ],
+    "orbitPeriodFrames": 72,
+    "loopFrames": [
+      1,
+      73
+    ],
+    "triggerFrames": [
+      46,
+      94,
+      142
+    ],
+    "contactFrames": [
+      61,
+      109,
+      157
+    ],
+    "clearFrame": 180,
+    "singleEffectFrames": [
+      1,
+      44
+    ],
+    "singleContactFrame": 16
+  },
+  "rotation": "Clockwise as seen on the X/Z card plane. Entire projected shot curve has clockwise signed curvature, not just a matching initial tangent.",
+  "look": "Lit translucent ice with glossy IOR1.31 reflections, softened edges, variable roughness, milky trapped ice and interior fissures; visible cold mist and grains surround each icicle and follow the flight; shatter, powder and short cold flash at impact.",
+  "controls": {
+    "demo": "CTRL_KaeyaGlacialWaltz",
+    "loop": "CTRL_KaeyaOrbitLoop",
+    "properties": [
+      "IcicleCount",
+      "OrbitSeconds",
+      "Direction",
+      "RadiusX",
+      "DepthRadius",
+      "TiltHeight",
+      "CenterHeight",
+      "IcicleSize",
+      "ArcBend",
+      "FlightFrames",
+      "TargetSlot"
+    ]
+  },
+  "exports": {
+    "Kaeya_FrostMist.fbx": "Single soft, irregular, vertex-alpha cold wisp; origin zero. Shared by the formal state and flight renderer.",
+    "Kaeya_FrostGrain.fbx": "Single crystalline grain at origin; shared by the formal orbit and flight renderer.",
+    "Kaeya_Icicle.fbx": "Reusable static local-Z-forward crystalline mesh; place at current orbit position and orient along the path tangent.",
+    "Kaeya_Orbit_3Icicles.fbx": "Continuous 3-icicle state loop at local origin, 2.4 seconds, duplicated endpoint.",
+    "Kaeya_Orbit_4Icicles.fbx": "Continuous C6 visual 4-icicle loop at local origin, same orbit direction and duration.",
+    "Kaeya_IceImpact.fbx": "Reusable single-target shatter, contact local frame 2, clears by frame 25; target origin is zero.",
+    "Kaeya_GlacialWaltz_Effect.fbx": "ONE clockwise shot with flight mist/grains and matching shatter, frames1..44, contact16; no sustained orbit geometry. Baked source/target are authoring references.",
+    "Kaeya_GlacialWaltz_Demo.fbx": "Combined reference, 3 independently triggered projectiles. No cards, camera, or authoring controls."
+  },
+  "flightContract": {
+    "path": "Degree-elevated quadratic stored as cubic P0,P1,P2,P3. P1 follows current clockwise orbit tangent; P2=P1+(P3-P0)/3. Select a departure icicle with negative projected cross(tangent,target-P0), preserving clockwise curvature throughout the arc.",
+    "timing": "u=clamp(t/flightDuration,0,1)^1.6. Trail samples previous times on the SAME path. One actual trigger gives one launch and one contact.",
+    "orbit": "Never restart orbit phase on trigger. Briefly hide only the departing slot and reform it on the continuously advancing orbit.",
+    "targeting": "Use actual status caster/orbit host and actual trigger target; never choose an enemy from this demo layout."
+  },
+  "materials": "VFXColor RGBA on every effect mesh. Body blends transparent and lit Principled surfaces at vertex alpha0.66, IOR1.31/coat/variable roughness; ice interior and mist use separate soft noisy transparency. Recreate these materials in Unity; FBX does not carry Blender shader graphs.",
+  "reference": {
+    "packed": true,
+    "exported": false,
+    "layout": "Existing nine-card battle positions; Kaeya replaces the first friendly example card."
+  },
+  "scope": "Art assets only. Not bound to Unity combat or the independent Unity effects inspector.",
+  "sourceStillValidation": {
+    "Kaeya_GlacialWaltz_State": {
+      "poster": "Preview/Kaeya_GlacialWaltz_State_Current.png",
+      "frame": 35,
+      "sourceReopened": true,
+      "renderLayerScene": "02_Kaeya_SustainedOrbit_Lifecycle",
+      "renderLayer": "ViewLayer",
+      "sourceFrameRange": [
+        1,
+        217
+      ],
+      "referenceBacks": 9,
+      "referenceEdges": 9,
+      "packedUsedImages": 12,
+      "originalSavedFrame": 35,
+      "videosGenerated": false,
+      "stage": "appearance / uninterrupted loop / arbitrary-phase normal removal",
+      "referenceLayoutUnchanged": true,
+      "effectMeshGeometryUnchanged": true
+    },
+    "Kaeya_GlacialWaltz_Effect": {
+      "poster": "Preview/Kaeya_GlacialWaltz_Effect_Current.png",
+      "frame": 10,
+      "scope": "Native Blender render after power-expression repair; original artwork, camera, reference layout and exports retained."
+    }
+  },
+  "compositorRepair": "Bind Render Layers to the retained scene and its actual ViewLayer before splitting/saving. No source geometry, target path or layout rebuild.",
+  "referenceCardCompletion": {
+    "helper": "tools/blender/reference_card_shell.py",
+    "frontsAndFrames": "Existing nine meshes and transforms preserved.",
+    "backs": "Nine rounded default card backs, packed UI_Gcg_CardBack_01.png.",
+    "edges": "Nine rounded reference shells, 0.048 m plus tiny rear-depth separation; attached to existing frame parenting.",
+    "exportScope": "Reference geometry is excluded from effect exports; existing FBX files unchanged."
+  },
+  "sourceLifecycle": {
+    "scene": "02_Kaeya_SustainedOrbit_Lifecycle",
+    "fps": 30,
+    "sourceFrames": [
+      1,
+      217
+    ],
+    "appearanceFrames": [
+      1,
+      25
+    ],
+    "loopFrames": [
+      25,
+      97
+    ],
+    "duplicateLoopEndpoints": [
+      97,
+      169
+    ],
+    "removalExampleFrames": [
+      181,
+      217
+    ],
+    "arbitraryPhaseExit": true,
+    "uninterruptedOrbitClock": true,
+    "lifecycleToggle": "LifecyclePreview",
+    "notes": "LifecyclePreview=0 restores the uninterrupted source loop. Old FBX loop frames1..73 remain pure loops. ReleaseAtSeconds is an authoring example, not a status duration or runtime event."
+  },
+  "sourceLifecycleValidation": {
+    "originalLoopPoseSamples": 6,
+    "lifecycleCountSamples": [
+      {
+        "count": 3,
+        "frame": 1,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 8,
+        "alpha": [
+          0.0,
+          0.20558445155620575
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 18,
+        "alpha": [
+          0.369020938873291,
+          0.7944154739379883
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 25,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 97,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 169,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 181,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 199,
+        "alpha": [
+          0.25925928354263306,
+          0.5558662414550781
+        ]
+      },
+      {
+        "count": 3,
+        "frame": 217,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 1,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 8,
+        "alpha": [
+          0.0,
+          0.20558445155620575
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 18,
+        "alpha": [
+          0.369020938873291,
+          0.7944154739379883
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 25,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 97,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 169,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 181,
+        "alpha": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 199,
+        "alpha": [
+          0.25925928354263306,
+          0.5558662414550781
+        ]
+      },
+      {
+        "count": 4,
+        "frame": 217,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "arbitraryExitSamples": [
+      {
+        "releaseFrame": 132.4,
+        "poseAtReleaseUnchanged": true,
+        "clearFrame": 168.4
+      },
+      {
+        "releaseFrame": 191.2,
+        "poseAtReleaseUnchanged": true,
+        "clearFrame": 227.2
+      }
+    ],
+    "loopEndpointSamples": [
+      25,
+      97,
+      169
+    ],
+    "driverValidityChecked": true,
+    "packedReferenceImages": 12,
+    "sourceReopened": true,
+    "stills": [
+      {
+        "frame": 1,
+        "file": "Preview/Kaeya_GlacialWaltz_State_00_Clear.png"
+      },
+      {
+        "frame": 8,
+        "file": "Preview/Kaeya_GlacialWaltz_State_01_FrostGather.png"
+      },
+      {
+        "frame": 18,
+        "file": "Preview/Kaeya_GlacialWaltz_State_02_Forming.png"
+      },
+      {
+        "frame": 35,
+        "file": "Preview/Kaeya_GlacialWaltz_State_Current.png"
+      },
+      {
+        "frame": 97,
+        "file": "Preview/Kaeya_GlacialWaltz_State_03_Loop.png"
+      },
+      {
+        "frame": 190,
+        "file": "Preview/Kaeya_GlacialWaltz_State_04_Release.png"
+      },
+      {
+        "frame": 205,
+        "file": "Preview/Kaeya_GlacialWaltz_State_05_RemainingMist.png"
+      },
+      {
+        "frame": 217,
+        "file": "Preview/Kaeya_GlacialWaltz_State_06_Clear.png"
+      }
+    ],
+    "scope": "Blender source only; original FBX parts and formal Unity timeline were not modified.",
+    "autoExecutionDisabledCheck": {
+      "simpleValidDrivers": 1452,
+      "frames": [
+        1,
+        35,
+        181,
+        199,
+        217
+      ],
+      "noEmbeddedScripts": true
+    },
+    "startEndNativePngMeanAbsoluteDifference": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "audioBySource": {
+    "Kaeya_GlacialWaltz_State": [
+      "Kaeya_State_Form.wav",
+      "Kaeya_State_QuietLoop.wav",
+      "Kaeya_State_Exit.wav"
+    ],
+    "Kaeya_GlacialWaltz_Effect": [
+      "Kaeya_Icicle_Depart.wav",
+      "Kaeya_Icicle_Travel.wav",
+      "Kaeya_Icicle_Contact.wav"
+    ]
+  },
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "files": 6,
+    "sourceKind": "CC0 substitutes",
+    "auditioned": false,
+    "runtimeConnected": false
+  },
+  "effectNativeValidation": {
+    "source": "art_assets\\UE\\Characters\\1010_Kaeya\\GlacialWaltz\\Blender\\Kaeya_GlacialWaltz_Effect.blend",
+    "convertedThisRun": 0,
+    "nativeDrivers": 352,
+    "autoexecDisabled": true,
+    "referenceWorldTransformsPreserved": 40,
+    "noExportRegeneration": true,
+    "noVideo": true,
+    "targetAndDurationSamples": 75,
+    "legacyPythonPowerDrivers": 145,
+    "legacyInspection": "codex_worktable/character_native_audit/sources.jsonl",
+    "powerReplacement": "Mathematically equivalent pow calls; 352 current native drivers valid without Python autoexec."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1039_Yanfei/BrillianceState/Yanfei_BrillianceState_Overall",
+  "source": "art_assets/UE/Characters/1039_Yanfei/BrillianceState/Blender/Yanfei_BrillianceState_Overall.blend",
+  "file": "Characters/1039_Yanfei/BrillianceState/Exports/Yanfei_BrillianceState_Overall.vfx.bytes",
+  "meshes": 16,
+  "tracks": 165,
+  "frames": 396,
+  "duration": 13.166666666666666,
+  "loopStart": 1.8,
+  "loopEnd": 6.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 1.0,
+    "Loop_A_start": 1.8,
+    "Loop_B_start": 6.6,
+    "Exit_example_any_phase": 12.0,
+    "Clear": 13.166666666666666
+  },
+  "bytes": 1391555
+}

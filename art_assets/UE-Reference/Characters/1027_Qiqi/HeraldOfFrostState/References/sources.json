@@ -1,0 +1,41 @@
+[
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E4%B8%83%E4%B8%83",
+    "image_url": "https://patchwiki.biligame.com/images/ys/9/94/7o0sjc7y60fo0ehjjeqylay0v6myj60.gif",
+    "title": "仙法·寒病鬼差.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码224帧、8.96秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "符球、冰光、符纹与环绕动势；卡牌前后遮挡和自身挂点为项目适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\qiqi-references\\Qiqi_HeraldOfFrost_Observation.png",
+    "decoded_frames": 224,
+    "duration_seconds": 8.96,
+    "sampled_frames": [
+      0,
+      10,
+      19,
+      29,
+      39,
+      48,
+      58,
+      68,
+      78,
+      87,
+      97,
+      107,
+      116,
+      126,
+      136,
+      145,
+      155,
+      165,
+      175,
+      184,
+      194,
+      204,
+      213,
+      223
+    ]
+  }
+]

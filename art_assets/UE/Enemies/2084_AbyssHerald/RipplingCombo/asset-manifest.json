@@ -1,0 +1,1389 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/RipplingCombo/视觉需求.md",
+  "variants": {
+    "2084_RipplingCombo_2Hits": {
+      "effect": "2084_RipplingCombo_2Hits",
+      "source": "Blender/2084_RipplingCombo_2Hits.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/RipplingCombo/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_RipplingCombo_2Hits_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_RipplingCombo_2Hits_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_RipplingCombo_2Hits_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_RipplingCombo_2Hits_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_15": {
+          "file": "Exports/2084_RipplingCombo_2Hits_GroupBlade_15.fbx",
+          "objects": [
+            "PART_HydroBody_15",
+            "PART_HydroBrightEdge_15"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_15": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_32": {
+          "file": "Exports/2084_RipplingCombo_2Hits_GroupBlade_32.fbx",
+          "objects": [
+            "PART_HydroBody_32",
+            "PART_HydroBrightEdge_32"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_32": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_32": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 32,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 33,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_RipplingCombo_2Hits.wav"
+      }
+    },
+    "2084_RipplingCombo_3Hits": {
+      "effect": "2084_RipplingCombo_3Hits",
+      "source": "Blender/2084_RipplingCombo_3Hits.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/RipplingCombo/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_RipplingCombo_3Hits_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_RipplingCombo_3Hits_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_RipplingCombo_3Hits_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_RipplingCombo_3Hits_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_15": {
+          "file": "Exports/2084_RipplingCombo_3Hits_GroupBlade_15.fbx",
+          "objects": [
+            "PART_HydroBody_15",
+            "PART_HydroBrightEdge_15"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_15": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_32": {
+          "file": "Exports/2084_RipplingCombo_3Hits_GroupBlade_32.fbx",
+          "objects": [
+            "PART_HydroBody_32",
+            "PART_HydroBrightEdge_32"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_32": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_32": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_49": {
+          "file": "Exports/2084_RipplingCombo_3Hits_GroupBlade_49.fbx",
+          "objects": [
+            "PART_HydroBody_49",
+            "PART_HydroBrightEdge_49"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_49": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_49": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 32,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 49,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 50,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_RipplingCombo_3Hits.wav"
+      }
+    },
+    "2084_RipplingCombo_4Hits": {
+      "effect": "2084_RipplingCombo_4Hits",
+      "source": "Blender/2084_RipplingCombo_4Hits.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/RipplingCombo/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_RipplingCombo_4Hits_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_RipplingCombo_4Hits_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_RipplingCombo_4Hits_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_RipplingCombo_4Hits_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_15": {
+          "file": "Exports/2084_RipplingCombo_4Hits_GroupBlade_15.fbx",
+          "objects": [
+            "PART_HydroBody_15",
+            "PART_HydroBrightEdge_15"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_15": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_32": {
+          "file": "Exports/2084_RipplingCombo_4Hits_GroupBlade_32.fbx",
+          "objects": [
+            "PART_HydroBody_32",
+            "PART_HydroBrightEdge_32"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_32": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_32": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_49": {
+          "file": "Exports/2084_RipplingCombo_4Hits_GroupBlade_49.fbx",
+          "objects": [
+            "PART_HydroBody_49",
+            "PART_HydroBrightEdge_49"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_49": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_49": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_66": {
+          "file": "Exports/2084_RipplingCombo_4Hits_GroupBlade_66.fbx",
+          "objects": [
+            "PART_HydroBody_66",
+            "PART_HydroBrightEdge_66"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_66": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_66": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 32,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 49,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 66,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 67,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_RipplingCombo_4Hits.wav"
+      }
+    },
+    "2084_RipplingCombo_5Hits": {
+      "effect": "2084_RipplingCombo_5Hits",
+      "source": "Blender/2084_RipplingCombo_5Hits.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/RipplingCombo/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_RipplingCombo_5Hits_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_RipplingCombo_5Hits_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_RipplingCombo_5Hits_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_RipplingCombo_5Hits_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_15": {
+          "file": "Exports/2084_RipplingCombo_5Hits_GroupBlade_15.fbx",
+          "objects": [
+            "PART_HydroBody_15",
+            "PART_HydroBrightEdge_15"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_15": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_32": {
+          "file": "Exports/2084_RipplingCombo_5Hits_GroupBlade_32.fbx",
+          "objects": [
+            "PART_HydroBody_32",
+            "PART_HydroBrightEdge_32"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_32": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_32": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_49": {
+          "file": "Exports/2084_RipplingCombo_5Hits_GroupBlade_49.fbx",
+          "objects": [
+            "PART_HydroBody_49",
+            "PART_HydroBrightEdge_49"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_49": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_49": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_66": {
+          "file": "Exports/2084_RipplingCombo_5Hits_GroupBlade_66.fbx",
+          "objects": [
+            "PART_HydroBody_66",
+            "PART_HydroBrightEdge_66"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_66": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_66": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_83": {
+          "file": "Exports/2084_RipplingCombo_5Hits_GroupBlade_83.fbx",
+          "objects": [
+            "PART_HydroBody_83",
+            "PART_HydroBrightEdge_83"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_83": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_83": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 32,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 49,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 66,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 83,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 84,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_RipplingCombo_5Hits.wav"
+      }
+    }
+  }
+}

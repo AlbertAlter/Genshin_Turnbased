@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E9%98%BF%E8%B4%9D%E5%A4%9A",
+    "image_url": "https://patchwiki.biligame.com/images/ys/9/96/q4mj5hml70npft9lpb6lxgxoexw7v6x.gif",
+    "title": "创生法·拟造阳华.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码181帧、5.43秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "阳华俯视花形、领域外圈、地面岩纹与持续阶段。双方中央和外圈覆盖敌我全体为用户指定适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\albedo-references\\Albedo_SolarIsotoma_Observation.png",
+    "decoded_frames": 181,
+    "duration_seconds": 5.43,
+    "sampled_frames": [
+      0,
+      8,
+      16,
+      23,
+      31,
+      39,
+      47,
+      55,
+      63,
+      70,
+      78,
+      86,
+      94,
+      102,
+      110,
+      117,
+      125,
+      133,
+      141,
+      149,
+      157,
+      164,
+      172,
+      180
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E9%98%BF%E8%B4%9D%E5%A4%9A",
+    "title": "七圣召唤·阿贝多",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已读取对应卡牌资料页；未观看七圣召唤战斗实机，卡牌插画、技能图标及文字不作为动态演出证据。",
+    "use": "辅助搜索阳华及爆发的卡牌场景展示，参考构图、遮挡；不照搬其目标、数值或触发规则。"
+  }
+]

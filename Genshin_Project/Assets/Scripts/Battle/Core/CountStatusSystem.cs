@@ -102,6 +102,11 @@ public static class CountStatusSystem
         Register(YanfeiScriptHooks.Brilliance, new YanfeiBrillianceCount());
         Register(EulaScriptHooks.Heart, new EulaGrimheartCount());
         Register(EulaScriptHooks.Sword, new EulaLightfallCount());
+        Register(AyakaScriptHooks.C1Counter, new AyakaAttackCounter());
+        Register(YoimiyaScriptHooks.Combo, new YoimiyaCounter(int.MaxValue));
+        Register(YoimiyaScriptHooks.Explosions, new YoimiyaCounter(3));
+        Register(SayuScriptHooks.Roll, new SayuRollCounter());
+        Register(SaraScriptHooks.Counter, new SaraFeatherCounter());
         Register(Enemy2021To2030Hooks.Growth, new Enemy2021To2030Hooks.Counter(3, 3));
         Register(Enemy2021To2030Hooks.Charge, new Enemy2021To2030Hooks.Counter(0, 8));
         Register(Enemy2061To2063Hooks.Core, new Enemy2061To2063Hooks.CoreCounter());

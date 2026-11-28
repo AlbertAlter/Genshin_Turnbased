@@ -42,7 +42,19 @@ public sealed partial class RoguelikeSaveRepository
     {
         using var transaction = BeginTransaction();
         var read = LoadAppearance(); if (!read.Succeeded) return read;
+        if (!string.IsNullOrEmpty(id) && !read.Data.UnlockedCardBackIds.Contains(id))
+            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "卡背尚未解锁。");
         read.Data.SelectedCardBackId = id ?? "";
+        return SaveAtomically(paths.AppearancePath, read.Data, PlayerAppearanceRules.Validate);
+    }
+    public RoguelikeSaveResult UnlockCardBack(string id)
+    {
+        using var transaction = BeginTransaction();
+        var read = LoadAppearance(); if (!read.Succeeded) return read;
+        if (string.IsNullOrWhiteSpace(id) || read.Data.UnlockedCardBackIds.Contains(id) || read.Data.AvailableCardBackChoices < 1)
+            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "卡背已解锁或没有可用的通关选择次数。");
+        read.Data.UnlockedCardBackIds.Add(id); read.Data.SpentCardBackChoices++;
+        read.Data.SelectedCardBackId = id;
         return SaveAtomically(paths.AppearancePath, read.Data, PlayerAppearanceRules.Validate);
     }
     public RoguelikeSaveResult RestoreAppearanceBackup(bool confirmed)

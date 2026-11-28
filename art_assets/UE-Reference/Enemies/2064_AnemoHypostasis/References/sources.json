@@ -1,0 +1,81 @@
+{
+  "enemy_id": 2064,
+  "name": "无相之风",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Anemo_Hypostasis#Abilities",
+  "verification": "核对能力条目及MediaWiki媒体元数据；本轮未播放完整动图，不保存本地GIF。音效参考仅定位入口，未试听或截取。",
+  "visual_sources": [
+    {
+      "title": "Anemo Hypostasis Crystalfly.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a9/Anemo_Hypostasis_Crystalfly.gif/revision/latest?cb=20211203112640",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Anemo_Hypostasis_Crystalfly.gif",
+      "purpose": "晶蝶外壳、目标底部风涌与后续风刃；两hit及击飞时序以项目表为准",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Anemo Hypostasis Clap.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/c/cb/Anemo_Hypostasis_Clap.gif/revision/latest?cb=20220607133348",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Anemo_Hypostasis_Clap.gif",
+      "purpose": "方块外壳折叠合拢的原作参考，群体卡牌范围采用项目适配",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Anemo Hypostasis Meteors.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/2/20/Anemo_Hypostasis_Meteors.gif/revision/latest?cb=20211203112644",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Anemo_Hypostasis_Meteors.gif",
+      "purpose": "三枚外壳上抛及陨落，不添加原作上升气流拾取等未配置机制",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Anemo Hypostasis Tornadoes.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/7/7a/Anemo_Hypostasis_Tornadoes.gif/revision/latest?cb=20211203112655",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Anemo_Hypostasis_Tornadoes.gif",
+      "purpose": "原作风流观感参考入口；自身气流包裹、卡牌浮动及实际目标位置一次触发遵从用户项目要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=fWrwV-Ny9ck",
+      "purpose": "四项技能的原作声音对照入口，具体片段时间待试听确定",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "仅作为原作对照；未取得或声明音频再分发许可，未提取"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/air-whoosh",
+      "purpose": "短风涌、风刃、合掌夹合、陨落及目标龙卷触发的空气层候选",
+      "license_page_label": "CC0（检索页标注；尚未下载文件或核对具体音频）",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/wind-whoosh-loop",
+      "purpose": "自身龙卷状态的循环风声候选，接缝与起退场尚待试听",
+      "license_page_label": "CC0（检索页标注；尚未下载文件或核对具体音频）",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": {
+    "searched": ["art_assets下现有WAV/OGG/MP3及Sources.json", "StreamingAssets内名称含风、wind、gust、whoosh、hypostasis、anemo、tornado的松散音频"],
+    "result": "本机未找到可直接指向本次2064技能的现成音源文件；文档所列的art_assets/UE源工程目录本机当前不存在，不据此声称其他设备未制作音效。"
+  }
+}

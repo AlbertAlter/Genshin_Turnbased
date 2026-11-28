@@ -89,11 +89,17 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
-        public void DefeatAndLateCallback_DoNotOverwriteCheckpointOrRetry()
+        public void DefeatSettlesWithoutClearingNode_AndLateCallbackCannotAffectRetry()
         {
             string step = Current().Flow.StepId;
             adapter.TryStart(Current()); var previous = runtime.Complete; previous(false);
-            Assert.That(Current().Flow.StepId, Is.EqualTo(step));
+            Assert.That(Current().Flow.Step, Is.EqualTo(RoguelikeFlowStep.Settlement));
+            Assert.That(Current().Flow.BattleDefeated, Is.True);
+            Assert.That(Current().Flow.StepId, Is.Not.EqualTo(step));
+            Assert.That(flow.CompleteNode(Current().Flow.StepId, Current().Snapshot).Succeeded, Is.True);
+            Assert.That(Current().Flow.Step, Is.EqualTo(RoguelikeFlowStep.Node));
+            Assert.That(Current().Snapshot.ClearedNodeIds, Does.Not.Contain("battle-node"));
+            Assert.That(flow.BeginBattle(Current().Flow.StepId, "battle-retry").Succeeded, Is.True);
             Assert.That(adapter.StopBattle().Succeeded, Is.True);
             Assert.That(adapter.TryStart(Current()).Succeeded, Is.True);
             previous(true);
@@ -119,7 +125,24 @@ namespace GenshinTurnBased.Tests.EditMode
             Assert.That(adapter.LastOutcome.ProgressCommit.Succeeded, Is.False);
             fileSystem.FailReplace = false;
             Assert.That(adapter.RetryVictoryCommit().Succeeded, Is.True);
+            Assert.That(adapter.LastOutcome.ProgressCommit.Succeeded, Is.True);
             Assert.That(adapter.RetryVictoryCommit().Succeeded, Is.False);
+            Assert.That(ended, Is.EqualTo(1)); Assert.That(runtime.Starts, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void FailedDefeatSave_RetriesSameOutcomeWithoutAnotherBattleOrEndEvent()
+        {
+            int ended = 0; adapter.Ended += result => ended++;
+            adapter.TryStart(Current()); fileSystem.FailReplace = true; runtime.Complete(false);
+            Assert.That(adapter.LastOutcome.ProgressCommit.Succeeded, Is.False);
+            Assert.That(Current().Flow.Step, Is.EqualTo(RoguelikeFlowStep.Battle));
+            fileSystem.FailReplace = false;
+            Assert.That(adapter.RetryOutcomeCommit().Succeeded, Is.True);
+            Assert.That(adapter.LastOutcome.ProgressCommit.Succeeded, Is.True);
+            Assert.That(adapter.LastOutcome.Victory, Is.False);
+            Assert.That(Current().Flow.BattleDefeated, Is.True);
+            Assert.That(adapter.RetryOutcomeCommit().Succeeded, Is.False);
             Assert.That(ended, Is.EqualTo(1)); Assert.That(runtime.Starts, Is.EqualTo(1));
         }
 

@@ -1,0 +1,431 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2060_PyroAgent\\CloneAmbush\\视觉需求.md",
+  "variants": {
+    "2060_CloneAmbush": {
+      "effect": "2060_CloneAmbush",
+      "source": "Blender/2060_CloneAmbush.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2060_PyroAgent\\CloneAmbush\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2060_CloneAmbush_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2060_CloneAmbush_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2060_CloneAmbush_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/2060_CloneAmbush_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AgentPhantom": {
+          "file": "Exports/2060_CloneAmbush_AgentPhantom.fbx",
+          "objects": [
+            "PART_PhantomHood",
+            "PART_PhantomDimRedRimHood",
+            "PART_PhantomTorso",
+            "PART_PhantomDimRedRimTorso",
+            "PART_PhantomCapeLeft",
+            "PART_PhantomDimRedRimCapeLeft",
+            "PART_PhantomCapeRight",
+            "PART_PhantomDimRedRimCapeRight",
+            "PART_PhantomLeftSleeve",
+            "PART_PhantomDimRedRimLeftSleeve",
+            "PART_PhantomRaisedSleeve",
+            "PART_PhantomDimRedRimRaisedSleeve",
+            "PART_PhantomLeftGlove",
+            "PART_PhantomDimRedRimLeftGlove",
+            "PART_PhantomRightGlove",
+            "PART_PhantomDimRedRimRightGlove",
+            "PART_PhantomLeftLeg",
+            "PART_PhantomDimRedRimLeftLeg",
+            "PART_PhantomRightLeg",
+            "PART_PhantomDimRedRimRightLeg",
+            "PART_PhantomLeftBoot",
+            "PART_PhantomDimRedRimLeftBoot",
+            "PART_PhantomRightBoot",
+            "PART_PhantomDimRedRimRightBoot",
+            "PART_PhantomMaskFacet-1",
+            "PART_PhantomEmberEye-1",
+            "PART_PhantomCoatFold-1",
+            "PART_PhantomMaskFacet1",
+            "PART_PhantomEmberEye1",
+            "PART_PhantomCoatFold1",
+            "PART_PhantomBelt",
+            "PART_PhantomHeldBlade",
+            "PART_PhantomHeldBladeHotEdge"
+          ],
+          "vertices": 844,
+          "triangles": 1138,
+          "dimensions": [
+            1.7088143229484558,
+            0.16999999433755875,
+            2.4771149158477783
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PhantomHood": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimHood": [
+              "Soft"
+            ],
+            "PART_PhantomTorso": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimTorso": [
+              "Soft"
+            ],
+            "PART_PhantomCapeLeft": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimCapeLeft": [
+              "Soft"
+            ],
+            "PART_PhantomCapeRight": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimCapeRight": [
+              "Soft"
+            ],
+            "PART_PhantomLeftSleeve": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimLeftSleeve": [
+              "Soft"
+            ],
+            "PART_PhantomRaisedSleeve": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimRaisedSleeve": [
+              "Soft"
+            ],
+            "PART_PhantomLeftGlove": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimLeftGlove": [
+              "Soft"
+            ],
+            "PART_PhantomRightGlove": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimRightGlove": [
+              "Soft"
+            ],
+            "PART_PhantomLeftLeg": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimLeftLeg": [
+              "Soft"
+            ],
+            "PART_PhantomRightLeg": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimRightLeg": [
+              "Soft"
+            ],
+            "PART_PhantomLeftBoot": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimLeftBoot": [
+              "Soft"
+            ],
+            "PART_PhantomRightBoot": [
+              "Soft"
+            ],
+            "PART_PhantomDimRedRimRightBoot": [
+              "Soft"
+            ],
+            "PART_PhantomMaskFacet-1": [
+              "Soft"
+            ],
+            "PART_PhantomEmberEye-1": [
+              "Soft"
+            ],
+            "PART_PhantomCoatFold-1": [
+              "Soft"
+            ],
+            "PART_PhantomMaskFacet1": [
+              "Soft"
+            ],
+            "PART_PhantomEmberEye1": [
+              "Soft"
+            ],
+            "PART_PhantomCoatFold1": [
+              "Soft"
+            ],
+            "PART_PhantomBelt": [
+              "Soft"
+            ],
+            "PART_PhantomHeldBlade": [
+              "Soft"
+            ],
+            "PART_PhantomHeldBladeHotEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 33,
+            "vertices": 844,
+            "triangles": 1138,
+            "dimensions": [
+              1.7088143229484558,
+              0.16999994963407516,
+              2.4771149158477783
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PhantomSlash": {
+          "file": "Exports/2060_CloneAmbush_PhantomSlash.fbx",
+          "objects": [
+            "PART_PhantomContactDarkBlade",
+            "PART_PhantomContactRedEdge"
+          ],
+          "vertices": 574,
+          "triangles": 960,
+          "dimensions": [
+            0.6709049940109253,
+            0.0,
+            2.4365519285202026
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PhantomContactDarkBlade": [
+              "Soft"
+            ],
+            "PART_PhantomContactRedEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 574,
+            "triangles": 960,
+            "dimensions": [
+              0.6709049940109253,
+              3.9696466558325483e-07,
+              2.4365519285202026
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 12,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 29,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 46,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 63,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 96,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 96,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "elementAppearance": "Pyro",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2060_CloneAmbush.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    }
+  }
+}

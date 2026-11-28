@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2083_PrimoGeovishap/ClawWhirlwind/2083_ClawWhirlwind_Claw",
+  "source": "art_assets/UE/Enemies/2083_PrimoGeovishap/ClawWhirlwind/Blender/2083_ClawWhirlwind_Claw.blend",
+  "file": "Enemies/2083_PrimoGeovishap/ClawWhirlwind/Exports/2083_ClawWhirlwind_Claw.vfx.bytes",
+  "meshes": 5,
+  "tracks": 34,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 164863
+}

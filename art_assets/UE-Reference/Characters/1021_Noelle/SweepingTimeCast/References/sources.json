@@ -1,0 +1,54 @@
+[
+  {
+    "file": "01_大扫除环扫_2.35s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+    "downloaded": "2026-11-26",
+    "use": "大扫除施放环扫与长岩剑动作。本项目施放仅1个统一全体hit，不复制原作伤害段数。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 47,
+    "time_ms": 2350,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      323,
+      182
+    ],
+    "frames": 1,
+    "bytes": 56202
+  },
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+    "downloaded": false,
+    "use": "前段施放，后段强化普攻与原作持续转圈重击。剑体与动势参考；三项具体卡牌演出以视觉需求为准。",
+    "type": "原作实机动图",
+    "modified": false,
+    "format": "GIF",
+    "size": [
+      323,
+      182
+    ],
+    "frames": 236,
+    "bytes": 8316186,
+    "former_local_file": "02_大扫除原作实机动图.gif",
+    "title": "02_大扫除原作实机动图",
+    "storage": "link_only",
+    "previously_downloaded_on": "2026-11-26",
+    "local_file_removed_on": "2026-11-26"
+  },
+  {
+    "type": "本批动图核对限制",
+    "motionReview": {
+      "name": "SweepingTime",
+      "page": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+      "url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+      "note": "Observe cast and golden sword/normal attack motion; depth charged slam is project-specific and not inferred from the original spinning charged attack.",
+      "downloaded": false,
+      "error": "Reference download exceeded bounded analysis time",
+      "inspection": "Use already available stills; do not claim motion observation from a failed request."
+    },
+    "inspection": "Existing original-game frames inspected; bounded online GIF request timed out. No claim of complete motion viewing."
+  }
+]

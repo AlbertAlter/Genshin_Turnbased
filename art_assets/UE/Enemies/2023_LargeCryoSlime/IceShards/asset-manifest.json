@@ -1,0 +1,255 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2023_LargeCryoSlime\\IceShards\\视觉需求.md",
+  "variants": {
+    "2023_IceShards": {
+      "effect": "2023_IceShards",
+      "source": "Blender/2023_IceShards.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2023_LargeCryoSlime\\IceShards\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2023_IceShards_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Mist": {
+          "file": "Exports/2023_IceShards_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Shard": {
+          "file": "Exports/2023_IceShards_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "Projectile": {
+          "file": "Exports/2023_IceShards_Projectile.fbx",
+          "objects": [
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0",
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody"
+          ],
+          "vertices": 577,
+          "triangles": 472,
+          "dimensions": [
+            0.3516828268766403,
+            0.3426828235387802,
+            1.2300001680850983
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 577,
+            "triangles": 472,
+            "dimensions": [
+              0.3516828268766403,
+              0.34268301725387573,
+              1.2300001978874207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce": [
+              "Native_Kaeya_Ice_TransientFrostMist"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody": [
+              "Native_Kaeya_Ice_TranslucentIOR131"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "hero_frame": 28,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "elementAppearance": "Cryo",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2023_IceShards.wav"
+      },
+      "launchFrames": [
+        7
+      ]
+    }
+  }
+}

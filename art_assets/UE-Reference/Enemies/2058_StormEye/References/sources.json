@@ -1,0 +1,34 @@
+{
+  "reference_page": "https://genshin-impact.fandom.com/wiki/Eye_of_the_Storm#Abilities",
+  "verification": "已核对能力条目，并通过Fandom媒体API确认下列文件与直链存在；本轮只登记链接，未下载或播放完整动图，不作为已经逐帧核对的视觉证据。",
+  "project_design": "技能1在实际释放阶段从我方全体上方自由落体，单独于跳起重砸；技能3持续主体仅环绕自身，触发时从当前气流向我方全体吹出一次风暴。",
+  "references": [
+    {
+      "title": "Eye of the Storm Vacuum Crash",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Eye_of_the_Storm_Vacuum_Crash.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/9/99/Eye_of_the_Storm_Vacuum_Crash.gif/revision/latest?cb=20211215104446",
+      "purpose": "坠落及风元素接触的原作参考入口；全体范围和自由落体卡牌动作以项目需求为准。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Eye of the Storm Domain of the Wild Wind 1",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Eye_of_the_Storm_Domain_of_the_Wild_Wind_1.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/4/4a/Eye_of_the_Storm_Domain_of_the_Wild_Wind_1.gif/revision/latest?cb=20211215104450",
+      "purpose": "狂风领域气流形态参考入口，自身持续环绕与触发吹出按项目重组。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Eye of the Storm Domain of the Wild Wind 2",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Eye_of_the_Storm_Domain_of_the_Wild_Wind_2.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/3/31/Eye_of_the_Storm_Domain_of_the_Wild_Wind_2.gif/revision/latest?cb=20211215104440",
+      "purpose": "狂风领域另一段原作媒体入口，后续制作时查看气流展开及持续观感。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ]
+}

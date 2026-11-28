@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1030_Tartaglia/HavocRanged/Tartaglia_HavocRanged_MainOnly",
+  "source": "art_assets/UE/Characters/1030_Tartaglia/HavocRanged/Blender/Tartaglia_HavocRanged_MainOnly.blend",
+  "file": "Characters/1030_Tartaglia/HavocRanged/Exports/Tartaglia_HavocRanged_MainOnly.vfx.bytes",
+  "meshes": 9,
+  "tracks": 104,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 272862
+}

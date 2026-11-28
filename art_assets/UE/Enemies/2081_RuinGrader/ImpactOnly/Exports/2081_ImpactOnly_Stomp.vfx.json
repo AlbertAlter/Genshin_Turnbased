@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2081_RuinGrader/ImpactOnly/2081_ImpactOnly_Stomp",
+  "source": "art_assets/UE/Enemies/2081_RuinGrader/ImpactOnly/Blender/2081_ImpactOnly_Stomp.blend",
+  "file": "Enemies/2081_RuinGrader/ImpactOnly/Exports/2081_ImpactOnly_Stomp.vfx.bytes",
+  "meshes": 5,
+  "tracks": 33,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 137005
+}

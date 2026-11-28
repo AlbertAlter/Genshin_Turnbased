@@ -61,8 +61,7 @@ public sealed class RoguelikeWishView : MonoBehaviour
     private UICardView featuredCard;
     private UIFloatingTip tip;
     private RoguelikeWishIssue pageIssue;
-    private Sprite sharedCover;
-    private string loadedCoverPath;
+    private readonly UICardBack cardBack = new UICardBack();
     private Coroutine reveal;
     private bool showingResults;
     private bool submitting;
@@ -325,17 +324,10 @@ public sealed class RoguelikeWishView : MonoBehaviour
     private IEnumerator RevealInOrder()
     {
         yield return null;
-        string path = cards.SelectedCardBackPath;
-        if (string.IsNullOrEmpty(path)) path = RoguelikeWishTile.DefaultCardBack;
-        if (path != loadedCoverPath)
-        {
-            ReleaseCover();
-            yield return LoadCover(path);
-            if (sharedCover == null && path != RoguelikeWishTile.DefaultCardBack)
-                yield return LoadCover(RoguelikeWishTile.DefaultCardBack);
-        }
-        foreach (var tile in rewards) tile.SetCover(sharedCover);
-        if (cardBackHold > 0f) yield return new WaitForSecondsRealtime(cardBackHold);
+        yield return cardBack.PrepareFromAppearance(game?.Appearance);
+        cardBack.TryGetSprite(out var coverSprite);
+        foreach (var tile in rewards) tile.SetCover(coverSprite);
+        if (coverSprite != null && cardBackHold > 0f) yield return new WaitForSecondsRealtime(cardBackHold);
         foreach (var tile in rewards)
         {
             while (!tile.FrontPrepared) yield return null;
@@ -352,6 +344,7 @@ public sealed class RoguelikeWishView : MonoBehaviour
         if (!showingResults || reveal == null || DetailOpen) return;
         StopReveal();
         foreach (var tile in rewards) tile.Reveal(false);
+        cardBack.Release();
         ShowReturn();
     }
 
@@ -413,7 +406,7 @@ public sealed class RoguelikeWishView : MonoBehaviour
         Clear(tabs);
         if (featuredFour != null) featuredFour.Clear();
         Clear(rewards);
-        ReleaseCover();
+        cardBack.Release();
         showingResults = false;
         resultPool = null;
         resultStepId = null;
@@ -433,18 +426,7 @@ public sealed class RoguelikeWishView : MonoBehaviour
         featuredCard = null;
     }
 
-    private void ReleaseCover()
-    {
-        if (sharedCover != null) { Destroy(sharedCover.texture); Destroy(sharedCover); }
-        sharedCover = null;
-        loadedCoverPath = null;
-    }
-
-    private IEnumerator LoadCover(string path) => StreamingAssetSpriteLoader.Load(path, sprite =>
-    {
-        sharedCover = sprite;
-        loadedCoverPath = path;
-    }, error => Debug.LogWarning(error, this));
+    private void OnDestroy() => cardBack.Dispose();
 
     internal static RoguelikeWishTile Spawn(RoguelikeWishTile template, Transform parent)
     {

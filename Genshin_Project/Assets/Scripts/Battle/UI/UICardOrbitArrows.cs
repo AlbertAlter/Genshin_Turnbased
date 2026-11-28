@@ -55,8 +55,8 @@ public sealed class UICardOrbitArrows : MonoBehaviour
         if (!Ready || back == null || front == null || !target.gameObject.activeInHierarchy) { Hide(); return; }
         if (!Paused || stopping)
         {
-            elapsed += Time.unscaledDeltaTime;
-            if (stopping) stopAge += Time.unscaledDeltaTime;
+            elapsed += BattlePause.DeltaTime;
+            if (stopping) stopAge += BattlePause.DeltaTime;
             else if (duration > 0 && elapsed >= duration) { Stop(); if (stopping) stopAge = elapsed - duration; }
         }
         if (stopping && stopAge >= style.FadeOut) Hide(); else Render();

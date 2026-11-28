@@ -1,0 +1,11 @@
+﻿Name,File,Left,Top,Width,Height,BlendMode,Clipping,Opacity,FillOpacity,StaticOpacityBaked,Visible,TextureScale
+矩形 7,00_HiddenReference.png,5,335,840,17,NORMAL,False,255,255,True,False,4
+“矩形 3”的投影,01_DropShadow.png,4,341,843,20,MULTIPLY,False,255,66,True,True,1
+“矩形 3”的外描边,02_OuterStroke.png,6,341,839,16,NORMAL,False,255,255,True,True,1
+矩形 3,03_BaseShape.png,8,342,835,13,NORMAL,False,255,255,True,True,4
+上阴影,04_UpperShadow.png,8,343,835,12,MULTIPLY,True,255,161,True,True,1
+下阴影,05_LowerShadow.png,8,343,835,12,MULTIPLY,True,255,97,True,True,1
+血条上方柔光,06_UpperSoftLight.png,8,345,836,4,SOFT_LIGHT,True,255,255,True,True,1
+血条下方阴影,07_LowerSoftLight.png,12,352,830,4,SOFT_LIGHT,True,255,255,True,True,1
+血槽1,08_FilledSlot.png,13,323,9,9,NORMAL,False,255,255,True,True,4
+血槽2（空,09_EmptySlot.png,27,321,13,13,NORMAL,False,255,255,True,True,1

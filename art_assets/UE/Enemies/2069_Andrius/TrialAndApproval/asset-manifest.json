@@ -1,0 +1,152 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/TrialAndApproval/视觉需求.md",
+  "variants": {
+    "2069_TrialAndApproval": {
+      "effect": "2069_TrialAndApproval",
+      "source": "Blender/2069_TrialAndApproval.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/TrialAndApproval/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2069_TrialAndApproval_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WolfStoneLinework": {
+          "file": "Exports/2069_TrialAndApproval_WolfStoneLinework.fbx",
+          "objects": [
+            "PART_AuthoredWolfStoneLine_0",
+            "PART_AuthoredWolfStoneLine_1",
+            "PART_AuthoredWolfStoneLine_2",
+            "PART_AuthoredWolfStoneLine_3",
+            "PART_AuthoredWolfStoneLine_4"
+          ],
+          "vertices": 203,
+          "triangles": 288,
+          "dimensions": [
+            1.5778439044952393,
+            0.0,
+            2.1487690806388855
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWolfStoneLine_0": [
+              "Soft"
+            ],
+            "PART_AuthoredWolfStoneLine_1": [
+              "Soft"
+            ],
+            "PART_AuthoredWolfStoneLine_2": [
+              "Soft"
+            ],
+            "PART_AuthoredWolfStoneLine_3": [
+              "Soft"
+            ],
+            "PART_AuthoredWolfStoneLine_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 203,
+            "triangles": 288,
+            "dimensions": [
+              1.5778439044952393,
+              3.5007889209737186e-07,
+              2.1487690806388855
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        -0.1599999964237213,
+        1.350000023841858
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Authored stone-style wolf linework. Clear original stone-wall closeup remains unconfirmed; not claimed as an exact reconstruction.",
+      "contract": "Actual approval holder, never Andrius automatically. Existing bottom trial icon/count remains a separate UI component.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2069_TrialAndApproval.wav"
+      }
+    }
+  }
+}

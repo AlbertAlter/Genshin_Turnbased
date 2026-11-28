@@ -1,0 +1,40 @@
+[
+  {
+    "file": "00_原作冰片连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Large_Cryo_Slime_Ice_Shards.gif/revision/latest?cb=20220104115945",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "WEBP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 43,
+    "duration_seconds": 3.44,
+    "modified": false,
+    "use": "参考蓝白冰片的尖锐轮廓、发射和碎裂；项目为相邻三目标同轮一段攻击。"
+  },
+  {
+    "file": "01_冰片飞行截帧.png",
+    "source_file": "00_原作冰片连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Large_Cryo_Slime_Ice_Shards.gif/revision/latest?cb=20220104115945",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 24,
+    "timestamp_seconds": 1.92,
+    "cropped": false,
+    "retouched": false,
+    "use": "尖锐冰片与窄长蓝白短迹"
+  },
+  {
+    "file": "02_冰片碎裂截帧.png",
+    "source_file": "00_原作冰片连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Large_Cryo_Slime_Ice_Shards.gif/revision/latest?cb=20220104115945",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 31,
+    "timestamp_seconds": 2.48,
+    "cropped": false,
+    "retouched": false,
+    "use": "冰片接触后的碎晶与薄霜"
+  }
+]

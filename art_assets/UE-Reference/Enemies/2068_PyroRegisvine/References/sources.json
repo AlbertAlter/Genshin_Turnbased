@@ -1,0 +1,89 @@
+{
+  "enemy_id": 2068,
+  "name": "爆炎树",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Pyro_Regisvine#Abilities",
+  "verification": "能力条目与媒体地址已核对，完整GIF未播放，GIF仅在线引用。音效未试听、下载或截取。",
+  "user_overrides": [
+    "射线只做一轮双束交叉扫射，对应原有两hit",
+    "两树头砸只做单体与全体两段命中特效，不做树头或卡牌下砸",
+    "两树扫击只在命中附近显示以对应树卡牌为圆心的弧段",
+    "暴风雪为快速弥漫的寒雾与冰粒，单次全体接触",
+    "爆炎树对应头砸和扫击结构相同，四发火弹及八发火雨保留配表"
+  ],
+  "visual_sources": [
+    {
+      "effect": "头砸命中两段",
+      "title": "Pyro Regisvine Faceplant Single.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/2/2e/Pyro_Regisvine_Faceplant_Single.gif/revision/latest?cb=20240523083917",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Pyro_Regisvine_Faceplant_Single.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "连续火弹",
+      "title": "Pyro Regisvine Rapid Fire.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/3/30/Pyro_Regisvine_Rapid_Fire.gif/revision/latest?cb=20240523083954",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Pyro_Regisvine_Rapid_Fire.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "火种召唤与自爆",
+      "title": null,
+      "url": null,
+      "description_url": null,
+      "purpose": "独立对应GIF未定位，不用其他动作冒充；能力页及视频作为后续形态对照",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "旋转扫击与燃烧地面",
+      "title": "Pyro Regisvine Spin.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/5/5b/Pyro_Regisvine_Spin.gif/revision/latest?cb=20240523084002",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Pyro_Regisvine_Spin.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "火雨",
+      "title": "Pyro Regisvine Rapid Fire.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/3/30/Pyro_Regisvine_Rapid_Fire.gif/revision/latest?cb=20240523083954",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Pyro_Regisvine_Rapid_Fire.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=Xqiob1ojNno",
+      "purpose": "各项原作声音对照，片段时点待试听定位",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "未提取或声明音频再分发许可"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/fire-staff-sound-effects",
+      "license_page_label": "CC0（页面检索标注，尚未下载文件核对）",
+      "purpose": "发射、接触与余焰的替代候选",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": "本机art_assets当前未找到可直接引用到本批技能的松散音源；只记录当前设备结果。"
+}

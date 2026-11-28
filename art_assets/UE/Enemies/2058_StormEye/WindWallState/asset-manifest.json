@@ -1,0 +1,179 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2058_StormEye\\WindWallState\\视觉需求.md",
+  "variants": {
+    "2058_WindWallState": {
+      "effect": "2058_WindWallState",
+      "source": "Blender/2058_WindWallState.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2058_StormEye\\WindWallState\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2058_WindWallState_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HolderWindMain": {
+          "file": "Exports/2058_WindWallState_HolderWindMain.fbx",
+          "objects": [
+            "PART_HolderWindMain"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            2.1754106283187866,
+            1.9297761917114258,
+            0.4359291046857834
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_HolderWindMain": [
+              "Basis",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_HolderWindMain": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              2.1754106283187866,
+              1.9297763109207153,
+              0.43592941761016846
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HolderWindFine": {
+          "file": "Exports/2058_WindWallState_HolderWindFine.fbx",
+          "objects": [
+            "PART_HolderWindFine"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            1.9353659749031067,
+            0.9998639822006226,
+            0.3019585460424423
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_HolderWindFine": [
+              "Basis",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_HolderWindFine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              1.9353659749031067,
+              0.9998640068004718,
+              0.30195870995521545
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Anemo",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2058_WindWallState.wav"
+      }
+    }
+  }
+}

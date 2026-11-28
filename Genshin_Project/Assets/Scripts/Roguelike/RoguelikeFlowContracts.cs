@@ -50,6 +50,14 @@ public sealed class RoguelikeNodeSelection
     public string ContentId;
     // Explicit route/content identity. Not every Boss must be a chapter-ending Boss.
     public bool IsChapterFinalBoss;
+    // 仅由BeginEventBattle固化的实际战斗配置；Kind与ContentId继续标识原事件。
+    public string EventBattleContentId;
+    // 仅本节点使用的出战选择及试用构筑；离开节点随Flow.Node一起清除，不污染十个正式编队。
+    public System.Collections.Generic.List<int> BattlePartyCharacterIds;
+    public System.Collections.Generic.List<int> TrialCharacterIds;
+    public System.Collections.Generic.List<StageTrialSetup> TrialConfigurations;
+    // 战败后保留本节点；固定奖励入账与此标记在同一事务中提交，重试不重复发放。
+    public bool FixedRewardClaimed;
 }
 
 /// <summary>可选的流程恢复数据。旧存档没有该字段时不改变原存档结构的含义。</summary>
@@ -60,6 +68,9 @@ public sealed class RoguelikeFlowData
     public string StepId;
     public RoguelikeNodeSelection Node;
     public System.Collections.Generic.List<AppearanceBattleParticipant> AppearanceParticipants;
+    public int EventEnemyKills;
+    // 旧结算档默认false，继续表示胜利。战败结算发固定奖励后返回原Node，不完成节点。
+    public bool BattleDefeated;
 }
 
 /// <summary>
@@ -96,7 +107,7 @@ public interface IRoguelikeFlowStepHandler
 /// <summary>
 /// 战斗场景接入点：从本次确认的配置及快照构建战斗，不读取队伍预设。
 /// StartBattle 前必须成功调用流程服务 BeginBattle，初始化完成后应用 RoguelikeBattleEntryRules。
-/// 胜利回调携带原 StepId 调用 RecordBattleVictory；失败/重试读取原战前恢复点，不提交战斗中间态。
+/// 胜负回调携带原StepId提交结果与待发奖励；战败结算后保留节点供重新编队，不提交战斗中间态。
 /// </summary>
 public interface IRoguelikeBattlePort
 {

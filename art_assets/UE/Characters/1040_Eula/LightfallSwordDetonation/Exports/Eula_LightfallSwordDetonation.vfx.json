@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/LightfallSwordDetonation/Eula_LightfallSwordDetonation",
+  "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordDetonation/Blender/Eula_LightfallSwordDetonation.blend",
+  "file": "Characters/1040_Eula/LightfallSwordDetonation/Exports/Eula_LightfallSwordDetonation.vfx.bytes",
+  "meshes": 46,
+  "tracks": 126,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 297040
+}

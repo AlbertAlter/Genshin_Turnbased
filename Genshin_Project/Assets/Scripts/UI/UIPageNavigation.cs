@@ -16,6 +16,12 @@ public sealed class UIPageNavigation : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetInput() => escapeFrame = -1;
 
+    public static bool TryConsumeEscape()
+    {
+        if (ProjectKeyBindings.InputSuppressed || !Input.GetKeyDown(KeyCode.Escape) || escapeFrame == Time.frameCount) return false;
+        escapeFrame = Time.frameCount; return true;
+    }
+
     public static UIPageNavigation Create(RectTransform parent, Action leave, Func<bool> tryBack = null,
         Func<bool> blocked = null, Func<bool> showButton = null, Vector2? buttonInset = null)
     {
@@ -47,8 +53,7 @@ public sealed class UIPageNavigation : MonoBehaviour
     {
         // Views can rebuild their content after this component is bound.
         transform.SetAsLastSibling(); RefreshButton();
-        if (!Input.GetKeyDown(KeyCode.Escape) || escapeFrame == Time.frameCount || blocked?.Invoke() == true) return;
-        escapeFrame = Time.frameCount;
+        if (blocked?.Invoke() == true || !TryConsumeEscape()) return;
         if (!DismissInput()) RequestBack();
     }
 

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2028_LargePyroSlime/Fireballs/2028_Fireballs",
+  "source": "art_assets/UE/Enemies/2028_LargePyroSlime/Fireballs/Blender/2028_Fireballs.blend",
+  "file": "Enemies/2028_LargePyroSlime/Fireballs/Exports/2028_Fireballs.vfx.bytes",
+  "meshes": 5,
+  "tracks": 84,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 241459
+}

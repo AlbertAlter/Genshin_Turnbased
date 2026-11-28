@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2063_RuinHunter/Bombardment/2063_Bombardment",
+  "source": "art_assets/UE/Enemies/2063_RuinHunter/Bombardment/Blender/2063_Bombardment.blend",
+  "file": "Enemies/2063_RuinHunter/Bombardment/Exports/2063_Bombardment.vfx.bytes",
+  "meshes": 14,
+  "tracks": 400,
+  "frames": 170,
+  "duration": 5.633333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.633333333333334
+  },
+  "bytes": 936782
+}

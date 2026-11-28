@@ -164,7 +164,7 @@ public static class TartagliaScriptHooks
     }
     private static void StartRules(StatusInstance status, object host)
     {
-        if (status.Caster?.EntityID != 1030 || host != status.Caster) throw new InvalidOperationException("断流规则必须挂在达达利亚本人。");
+        if (status.Caster?.EntityID != 1030 || !ReferenceEquals(host, status.Caster)) throw new InvalidOperationException("断流规则必须挂在达达利亚本人。");
         Owners.Remove(status.Caster);
         Listeners.Add(status, BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, damage) =>
         {

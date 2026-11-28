@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2028_LargePyroSlime/DeathExplosion/2028_DeathExplosion",
+  "source": "art_assets/UE/Enemies/2028_LargePyroSlime/DeathExplosion/Blender/2028_DeathExplosion.blend",
+  "file": "Enemies/2028_LargePyroSlime/DeathExplosion/Exports/2028_DeathExplosion.vfx.bytes",
+  "meshes": 6,
+  "tracks": 37,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 119899
+}

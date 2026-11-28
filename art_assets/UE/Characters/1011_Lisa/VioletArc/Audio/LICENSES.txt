@@ -1,0 +1,10 @@
+Audio sources and license
+
+All source works below are marked CC0 1.0 by their respective source pages.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+Format conversion, excerpts, crossfades and gain changes are listed per file in Sources.json.
+
+Electricity Game Sound Pack
+Creator: faxcorp
+Source: https://opengameart.org/content/electricity-game-sound-pack

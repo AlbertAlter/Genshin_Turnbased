@@ -44,7 +44,7 @@ public static class ZhongliC6Healing
         => status?.ScriptRuntimeState is Memory memory ? memory.Pending.Values.Sum(action => action.Records.Count) : 0;
 
     private static bool Active(StatusInstance state) => state?.IsActive == true
-        && state.StatusID2 == StatusID && state.Host == state.Caster
+        && state.StatusID2 == StatusID && ReferenceEquals(state.Host, state.Caster)
         && state.Caster?.EntityID == 1032 && state.Caster.IsAlive && state.Caster.ConstellationLevel >= 6
         && state.Caster.HasStatusInstance(state);
 

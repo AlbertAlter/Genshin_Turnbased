@@ -1,0 +1,236 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1038_Rosaria/RitesOfTerminationCast/视觉需求.md",
+  "variants": {
+    "Rosaria_RitesOfTerminationCast": {
+      "effect": "Rosaria_RitesOfTerminationCast",
+      "source": "Blender/Rosaria_RitesOfTerminationCast.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1038_Rosaria/RitesOfTerminationCast/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Shard": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LanceShaft": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_LanceShaft.fbx",
+          "objects": [
+            "PART_DarkIceLanceShaft",
+            "PART_OneFacetedLongLancePoint"
+          ],
+          "vertices": 62,
+          "triangles": 116,
+          "dimensions": [
+            0.45611846446990967,
+            0.4248260259628296,
+            4.199999809265137
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LanceWings": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_LanceWings.fbx",
+          "objects": [
+            "PART_IceLanceSweptWing_-1",
+            "PART_IceWingRaisedRidge_-1",
+            "PART_IceLanceSweptWing_1",
+            "PART_IceWingRaisedRidge_1"
+          ],
+          "vertices": 78,
+          "triangles": 112,
+          "dimensions": [
+            1.659999966621399,
+            0.26999999582767487,
+            0.9900000095367432
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LanceColdEdges": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_LanceColdEdges.fbx",
+          "objects": [
+            "PART_LanceColdEdge_0",
+            "PART_LanceColdEdge_1",
+            "PART_LanceColdEdge_2"
+          ],
+          "vertices": 91,
+          "triangles": 120,
+          "dimensions": [
+            1.54697585105896,
+            0.1599999964237213,
+            4.039999887347221
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "FrostMote": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_FrostMote.fbx",
+          "objects": [
+            "PART_TinyLanceFrostCrystal"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.049578092992305756,
+            0.049578092992305756,
+            0.1550000011920929
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneGroupSweep18": {
+          "file": "Exports/Rosaria_RitesOfTerminationCast_OneGroupSweep18.fbx",
+          "objects": [
+            "PART_Rosaria_Sweep",
+            "PART_RosariaColdEdge"
+          ],
+          "vertices": 1134,
+          "triangles": 1920,
+          "dimensions": [
+            4.993364334106445,
+            0.0,
+            1.1401214003562927
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 34,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 34,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 34,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 35,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "recordedAnchorCardIndex": 2,
+      "referenceBoundary": "RavagingConfession original GIF decoded160frames/4.8s;24 samples observed. Burst reference timed out; lance fine shape and insertion are authored interpretation pending original close-up.",
+      "scope": "Source art only. World field anchor remains independent of card occupancy; no Unity, damage, status or table changes.",
+      "contract": "One shared sweep contact, then one planted lance contact at recorded middle slot. Source art session clears at tail; not a gameplay removal or replant.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Rosaria_RitesOfTerminationCast.wav"
+      }
+    }
+  }
+}

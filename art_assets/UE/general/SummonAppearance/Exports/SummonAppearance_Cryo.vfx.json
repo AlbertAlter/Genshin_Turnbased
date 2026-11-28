@@ -1,0 +1,16 @@
+{
+  "key": "general/SummonAppearance/SummonAppearance_Cryo",
+  "source": "art_assets/UE/general/SummonAppearance/Blender/SummonAppearance_Cryo.blend",
+  "file": "general/SummonAppearance/Exports/SummonAppearance_Cryo.vfx.bytes",
+  "meshes": 3,
+  "tracks": 54,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 110984
+}

@@ -1,13 +1,16 @@
 using UnityEngine;
 
 /// <summary>Formal battle adapter; thaw targets its bound entity and uses the shared input/modal gate.</summary>
-public sealed class BattleUiFreezeSource : MonoBehaviour, IBattleUiFreezeSource, IBattleUiControlReleaseSource
+public sealed class BattleUiFreezeSource : MonoBehaviour, IBattleUiFreezeSource, IBattleUiControlReleaseSource, IBattleUiStunSource
 {
     public BattleManager battle;
     public BattleInputController input;
     public BattleEntity Entity { get; private set; }
     public void Bind(BattleEntity entity, BattleManager manager, BattleInputController controller)
     { Entity = entity; battle = manager; input = controller; }
+    public static bool IsStunned(BattleEntity entity) => entity?.IsAlive == true &&
+        entity.HasStatus(PublicControlStates.EnemyStun);
+    public bool Stunned => isActiveAndEnabled && battle != null && IsStunned(Entity);
     public BattleUiFreezeState GetFreeze()
     {
         if (!isActiveAndEnabled || battle == null || Entity == null || !Entity.IsAlive) return default;

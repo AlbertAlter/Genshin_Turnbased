@@ -1,0 +1,435 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2063_RuinHunter\\Bombardment\\视觉需求.md",
+  "variants": {
+    "2063_Bombardment": {
+      "effect": "2063_Bombardment",
+      "source": "Blender/2063_Bombardment.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2063_RuinHunter\\Bombardment\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2063_Bombardment_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2063_Bombardment_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2063_Bombardment_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/2063_Bombardment_Projectile.fbx",
+          "objects": [
+            "PART_MissileSegmentedBronzeShell",
+            "PART_MissileWarmMetalBand",
+            "PART_MissileFin0",
+            "PART_MissileFin1",
+            "PART_MissileFin2",
+            "PART_MissileFin3"
+          ],
+          "vertices": 82,
+          "triangles": 136,
+          "dimensions": [
+            0.6000000238418579,
+            0.6000000238418579,
+            0.8199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MissileSegmentedBronzeShell": [
+              "StoneMetal"
+            ],
+            "PART_MissileWarmMetalBand": [
+              "StoneMetal"
+            ],
+            "PART_MissileFin0": [
+              "StoneMetal"
+            ],
+            "PART_MissileFin1": [
+              "StoneMetal"
+            ],
+            "PART_MissileFin2": [
+              "StoneMetal"
+            ],
+            "PART_MissileFin3": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 82,
+            "triangles": 136,
+            "dimensions": [
+              0.6000000238418579,
+              0.6000000834465027,
+              0.8200000524520874
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "MissileEngine": {
+          "file": "Exports/2063_Bombardment_MissileEngine.fbx",
+          "objects": [
+            "PART_MissileOrangeExhaust",
+            "PART_MissileBrightExhaustCore"
+          ],
+          "vertices": 84,
+          "triangles": 160,
+          "dimensions": [
+            0.18839676678180695,
+            0.18839676678180695,
+            0.6300000250339508
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MissileOrangeExhaust": [
+              "MechanicalExhaust"
+            ],
+            "PART_MissileBrightExhaustCore": [
+              "MechanicalExhaust"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 84,
+            "triangles": 160,
+            "dimensions": [
+              0.18839676678180695,
+              0.1883968636393547,
+              0.6300000548362732
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "MissileSmoke": {
+          "file": "Exports/2063_Bombardment_MissileSmoke.fbx",
+          "objects": [
+            "PART_MissileThinGreySmoke"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MissileThinGreySmoke": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "MissileWarmFlash": {
+          "file": "Exports/2063_Bombardment_MissileWarmFlash.fbx",
+          "objects": [
+            "PART_MechanicalWarmFlash"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MechanicalWarmFlash": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "MechanicalBlastFlame": {
+          "file": "Exports/2063_Bombardment_MechanicalBlastFlame.fbx",
+          "objects": [
+            "PART_MechanicalBlastFlame"
+          ],
+          "vertices": 27,
+          "triangles": 24,
+          "dimensions": [
+            0.6299999952316284,
+            0.5455960035324097,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MechanicalBlastFlame": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 27,
+            "triangles": 24,
+            "dimensions": [
+              0.6299999952316284,
+              0.545596182346344,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 33,
+          "position": [
+            2.8899998664855957,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 47,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 61,
+          "position": [
+            6.179999828338623,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 75,
+          "position": [
+            2.8899998664855957,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 103,
+          "position": [
+            6.179999828338623,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 117,
+          "position": [
+            2.8899998664855957,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 131,
+          "position": [
+            4.534999847412109,
+            -0.07000000029802322,
+            0.33500000834465027
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        6,
+        20,
+        34,
+        48,
+        62,
+        76,
+        90,
+        104
+      ],
+      "hero_frame": 50,
+      "focus": [
+        0.3423435688018799,
+        -0.08,
+        0.8504840731620789
+      ],
+      "elementAppearance": "Physical",
+      "artOnly": true,
+      "detailScale": 12.076931047439574,
+      "appearance": "Mechanical bronze missiles, warm propulsion and impact; physical presentation, no added element.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2063_Bombardment.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 20,
+        "selectedFrame": 50,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

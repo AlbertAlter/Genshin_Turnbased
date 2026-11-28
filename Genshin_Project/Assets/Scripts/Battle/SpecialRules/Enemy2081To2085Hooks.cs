@@ -51,7 +51,7 @@ internal static class Enemy2081To2085Hooks
             DelayCurrentTimer(s);
             if (host is BattleEntity owner)
                 StunListeners.Add(s, BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved, (_, fact) => {
-                    if (fact.Host == owner && fact.StatusId == PublicControlStates.EnemyStun
+                    if (ReferenceEquals(fact.Host, owner) && fact.StatusId == PublicControlStates.EnemyStun
                         && s.BoundStatuses.Exists(child => child.ApplyOrder == fact.InstanceId))
                         owner.RemoveStatusInstance(s, "CoreStunEnded");
                 }, s.ApplyOrder, () => owner.IsAlive && s.IsActive && !s.DeathCleanupPending));

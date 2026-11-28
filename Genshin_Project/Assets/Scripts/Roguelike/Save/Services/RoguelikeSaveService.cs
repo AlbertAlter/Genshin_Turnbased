@@ -242,7 +242,8 @@ public sealed class RoguelikeSaveService
         activeRun.CurrentChapterId = activeRun.Snapshot.CurrentChapterId;
         activeRun.ResumePoint = resumePoint;
         activeRun.LastSaveReason = saveReason;
-        if (resumePoint != RoguelikeResumePoint.BeforeBattle && resumePoint != RoguelikeResumePoint.BattleVictory)
+        if (resumePoint != RoguelikeResumePoint.BeforeBattle && resumePoint != RoguelikeResumePoint.BattleVictory &&
+            resumePoint != RoguelikeResumePoint.BattleDefeat)
             activeRun.PendingBattleId = string.Empty;
         TouchMetadata(activeRun.Metadata);
         return repository.SaveActiveRun(activeRun);
@@ -273,6 +274,9 @@ public sealed class RoguelikeSaveService
     }
 
     public RoguelikeSaveResult SaveAfterBattleVictory(RoguelikeProgressSnapshot snapshot, string battleId)
+        => SaveAfterBattleResult(snapshot, battleId, true);
+
+    public RoguelikeSaveResult SaveAfterBattleResult(RoguelikeProgressSnapshot snapshot, string battleId, bool victory)
     {
         using var transaction = BeginTransaction();
         if (string.IsNullOrWhiteSpace(battleId))
@@ -283,19 +287,19 @@ public sealed class RoguelikeSaveService
         if (activeRun.ResumePoint != RoguelikeResumePoint.BeforeBattle || activeRun.PendingBattleId != battleId)
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.InvalidOperation,
-                "战斗胜利必须对应当前已保存的战前节点。");
+                "战斗结果必须对应当前已保存的战前节点。");
         if (snapshot == null)
             return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.ValidationFailed, "进度快照不能为空。");
         if (snapshot.CurrentChapterId != activeRun.CurrentChapterId)
             return RoguelikeSaveResult.Failure(
                 RoguelikeSaveErrorCode.InvalidOperation,
-                "战斗胜利快照章节与当前临时档章节不一致。");
+                "战斗结果快照章节与当前临时档章节不一致。");
 
         activeRun.Snapshot = RoguelikeSaveJson.DeepClone(snapshot);
         activeRun.CurrentChapterId = activeRun.Snapshot.CurrentChapterId;
-        activeRun.ResumePoint = RoguelikeResumePoint.BattleVictory;
+        activeRun.ResumePoint = victory ? RoguelikeResumePoint.BattleVictory : RoguelikeResumePoint.BattleDefeat;
         activeRun.PendingBattleId = battleId;
-        activeRun.LastSaveReason = RoguelikeSaveReason.BattleVictory;
+        activeRun.LastSaveReason = victory ? RoguelikeSaveReason.BattleVictory : RoguelikeSaveReason.BattleDefeat;
         TouchMetadata(activeRun.Metadata);
         return repository.SaveActiveRun(activeRun);
     }

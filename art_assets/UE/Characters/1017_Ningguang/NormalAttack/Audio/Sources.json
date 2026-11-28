@@ -1,0 +1,63 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitute candidates, not extracted original audio. Persistent StarJade and JadeScreen idle stages are intentionally silent; no fabricated constant sound loop. Not auditioned.",
+  "files": [
+    {
+      "file": "Ningguang_Normal_Release.wav",
+      "purpose": "双宝石的一次短释放破风",
+      "seconds": 0.12602083333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.12,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.42",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -8.535166095861348,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_Normal_Contact.wav",
+      "purpose": "宝石接触的轻岩晶短声；实际接触时低音量调用",
+      "seconds": 0.26,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": [
+        0.55,
+        0.595
+      ],
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/EarthSpell_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.260000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -18.12281020634004,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "file": "00_原作风弹连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f2/Large_Anemo_Slime_Wind_Blast.gif/revision/latest?cb=20220104115942",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Anemo_Slime#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "WEBP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 112,
+    "duration_seconds": 11.2,
+    "modified": false,
+    "use": "参考青绿风弹的吐出、飞行和接触；原作长时间悬浮不照搬，项目按逐发真实目标组织。"
+  },
+  {
+    "file": "01_风弹吐出截帧.png",
+    "source_file": "00_原作风弹连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f2/Large_Anemo_Slime_Wind_Blast.gif/revision/latest?cb=20220104115942",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Anemo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 53,
+    "timestamp_seconds": 5.3,
+    "cropped": false,
+    "retouched": false,
+    "use": "球形青绿旋风与卡牌发射位置参考"
+  },
+  {
+    "file": "02_风弹飞行截帧.png",
+    "source_file": "00_原作风弹连射实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f2/Large_Anemo_Slime_Wind_Blast.gif/revision/latest?cb=20220104115942",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Anemo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 58,
+    "timestamp_seconds": 5.8,
+    "cropped": false,
+    "retouched": false,
+    "use": "半透明风弹、短促旋流与飞行方向参考"
+  }
+]

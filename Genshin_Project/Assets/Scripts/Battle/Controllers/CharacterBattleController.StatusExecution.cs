@@ -313,7 +313,7 @@ public partial class CharacterBattleController
         statusExecution.Complete();
     }
 
-    async Task ExecuteStatusEffectAsync(StatusEffectData statusEff, StatusInstance sourceStatus, object host)
+    internal async Task ExecuteStatusEffectAsync(StatusEffectData statusEff, StatusInstance sourceStatus, object host)
     {
         using var statusExecution = BattleResolutionContext.BeginStatusExecution(sourceStatus, joinCurrentExecution: true);
         await BattleResolutionContext.FlushExecutionStart();
@@ -933,7 +933,8 @@ public partial class CharacterBattleController
                 {
                     BattleEntity target = entry.Target;
                     using var snapshotTarget = StatusFormulaSnapshot.EnterTarget(target);
-                    HitData targetHit = entry.Scale(hit);
+                    HitData targetHit = entry.Scale(BattleSpecialRules.ModifyStatusHit(statusEff.DamageHook,
+                        source, target, hit, GetEffectiveSkillLevel(skillType)));
                     float hitBaseValue = directHits != null
                         ? ResolveDirectHitBase(directHits[hitIndex], statusEff.StatusEffectID2, skillType, statusEff.Element)
                         : StatusFormulaSnapshot.For(Entity, statusEff.StatusEffectID2) != null

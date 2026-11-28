@@ -1,0 +1,1373 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+  "variants": {
+    "2073_Riptide_HydroState": {
+      "effect": "2073_Riptide_HydroState",
+      "source": "Blender/2073_Riptide_HydroState.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/2073_Riptide_HydroState_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/2073_Riptide_HydroState_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Hydro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "runtimeConnected": false,
+      "reuseBoundary": "Shared hydro_riptide_art parts with player1030 now exist. Three-leaf mark is authored from actually observed player burst footage, Hydro/Electro recoloured; enemy attack remains its own one-hit scope, not the player flash triple or adjacent spread.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Riptide_HydroState.wav"
+      }
+    },
+    "2073_Riptide_ElectroState": {
+      "effect": "2073_Riptide_ElectroState",
+      "source": "Blender/2073_Riptide_ElectroState.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/2073_Riptide_ElectroState_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideSymbol": {
+          "file": "Exports/2073_Riptide_ElectroState_ElectroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Electro_AuthoredRiptideLeaf_0",
+            "PART_Electro_RiptideLeafColdRim_0",
+            "PART_Electro_AuthoredRiptideLeaf_1",
+            "PART_Electro_RiptideLeafColdRim_1",
+            "PART_Electro_AuthoredRiptideLeaf_2",
+            "PART_Electro_RiptideLeafColdRim_2",
+            "PART_Electro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Electro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Electro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Electro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "runtimeConnected": false,
+      "reuseBoundary": "Shared hydro_riptide_art parts with player1030 now exist. Three-leaf mark is authored from actually observed player burst footage, Hydro/Electro recoloured; enemy attack remains its own one-hit scope, not the player flash triple or adjacent spread.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2073_Riptide_ElectroState_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "2073_Riptide_ElectroState_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Riptide_ElectroState.wav"
+      }
+    },
+    "2073_Riptide_HydroTrigger": {
+      "effect": "2073_Riptide_HydroTrigger",
+      "source": "Blender/2073_Riptide_HydroTrigger.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_Riptide_HydroTrigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_Riptide_HydroTrigger_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_Riptide_HydroTrigger_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/2073_Riptide_HydroTrigger_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/2073_Riptide_HydroTrigger_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 16,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "element": "Hydro",
+          "origin": [
+            3.7049999237060547,
+            -0.20000000298023224,
+            1.350000023841858
+          ],
+          "targetPositions": [
+            [
+              3.7049999237060547,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 19,
+      "focus": [
+        3.6311771869659424,
+        -0.08,
+        1.3936089277267456
+      ],
+      "detailScale": 5.0,
+      "runtimeConnected": false,
+      "reuseBoundary": "Shared hydro_riptide_art parts with player1030 now exist. Three-leaf mark is authored from actually observed player burst footage, Hydro/Electro recoloured; enemy attack remains its own one-hit scope, not the player flash triple or adjacent spread.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Riptide_HydroTrigger.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 19,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2073_Riptide_ElectroTrigger": {
+      "effect": "2073_Riptide_ElectroTrigger",
+      "source": "Blender/2073_Riptide_ElectroTrigger.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_Riptide_ElectroTrigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_Riptide_ElectroTrigger_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_Riptide_ElectroTrigger_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideWaterBreak": {
+          "file": "Exports/2073_Riptide_ElectroTrigger_ElectroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Electro_RiptideCurvedBlade_0",
+            "PART_Electro_RiptideColdEdge_0",
+            "PART_Electro_RiptideCurvedBlade_1",
+            "PART_Electro_RiptideColdEdge_1",
+            "PART_Electro_RiptideCurvedBlade_2",
+            "PART_Electro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideWaterDrop": {
+          "file": "Exports/2073_Riptide_ElectroTrigger_ElectroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Electro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_RiptideSmallDrop": [
+              "ElectroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 16,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "element": "Electro",
+          "origin": [
+            3.7049999237060547,
+            -0.20000000298023224,
+            1.350000023841858
+          ],
+          "targetPositions": [
+            [
+              3.7049999237060547,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 19,
+      "focus": [
+        3.6311771869659424,
+        -0.08,
+        1.3936089277267456
+      ],
+      "detailScale": 5.0,
+      "runtimeConnected": false,
+      "reuseBoundary": "Shared hydro_riptide_art parts with player1030 now exist. Three-leaf mark is authored from actually observed player burst footage, Hydro/Electro recoloured; enemy attack remains its own one-hit scope, not the player flash triple or adjacent spread.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2073_Riptide_ElectroTrigger_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Riptide_ElectroTrigger.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 19,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2073_Riptide_CoexistOverall": {
+      "effect": "2073_Riptide_CoexistOverall",
+      "source": "Blender/2073_Riptide_CoexistOverall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Riptide/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_Riptide_CoexistOverall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_Riptide_CoexistOverall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_Riptide_CoexistOverall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/2073_Riptide_CoexistOverall_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Hydro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/2073_Riptide_CoexistOverall_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/2073_Riptide_CoexistOverall_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideSymbol": {
+          "file": "Exports/2073_Riptide_CoexistOverall_ElectroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Electro_AuthoredRiptideLeaf_0",
+            "PART_Electro_RiptideLeafColdRim_0",
+            "PART_Electro_AuthoredRiptideLeaf_1",
+            "PART_Electro_RiptideLeafColdRim_1",
+            "PART_Electro_AuthoredRiptideLeaf_2",
+            "PART_Electro_RiptideLeafColdRim_2",
+            "PART_Electro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Electro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Electro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Electro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideWaterBreak": {
+          "file": "Exports/2073_Riptide_CoexistOverall_ElectroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Electro_RiptideCurvedBlade_0",
+            "PART_Electro_RiptideColdEdge_0",
+            "PART_Electro_RiptideCurvedBlade_1",
+            "PART_Electro_RiptideColdEdge_1",
+            "PART_Electro_RiptideCurvedBlade_2",
+            "PART_Electro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Electro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ElectroRiptideWaterDrop": {
+          "file": "Exports/2073_Riptide_CoexistOverall_ElectroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Electro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_RiptideSmallDrop": [
+              "ElectroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 70,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 70,
+          "element": "Hydro",
+          "origin": [
+            3.7049999237060547,
+            -0.20000000298023224,
+            1.350000023841858
+          ],
+          "targetPositions": [
+            [
+              3.7049999237060547,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        },
+        {
+          "frame": 75,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 75,
+          "element": "Electro",
+          "origin": [
+            3.7049999237060547,
+            -0.20000000298023224,
+            1.350000023841858
+          ],
+          "targetPositions": [
+            [
+              3.7049999237060547,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 78,
+      "focus": [
+        3.682126522064209,
+        -0.08,
+        1.3238916099071503
+      ],
+      "detailScale": 5.0,
+      "runtimeConnected": false,
+      "reuseBoundary": "Shared hydro_riptide_art parts with player1030 now exist. Three-leaf mark is authored from actually observed player burst footage, Hydro/Electro recoloured; enemy attack remains its own one-hit scope, not the player flash triple or adjacent spread.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav",
+          "Contact_electro.wav": "2073_Riptide_CoexistOverall_Contact_electro.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Riptide_CoexistOverall.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 70,
+        "selectedFrame": 78,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

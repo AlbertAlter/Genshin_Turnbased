@@ -111,7 +111,7 @@ public static class Enemy2051To2060Hooks
             Entries.Add(status, entry);
             if (id == MageClock)
                 entry.FirstAction = BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionStarted, (_, action) => {
-                    if (action.Subject != host) return;
+                    if (!ReferenceEquals(action.Subject, host)) return;
                     entry.First = false;
                     entry.FirstAction?.Dispose();
                 }, status.ApplyOrder);
@@ -141,7 +141,7 @@ public static class Enemy2051To2060Hooks
             && !e.HasStatus(Charging) && !e.HasStatus(RingShield);
 
     private static bool VisibilityChanged(ScriptHookContext c) => c?.Declaration?.Data is StatusEventData fact
-        && fact.Host == c.Caster && fact.StatusId == PublicControlStates.EnemyStealth;
+        && ReferenceEquals(fact.Host, c.Caster) && fact.StatusId == PublicControlStates.EnemyStealth;
 
     private static void WatchVisibility(StatusInstance status, object host)
     {
@@ -204,7 +204,8 @@ public static class Enemy2051To2060Hooks
         return count >= 4;
     }
 
-    private static int CountClones(FieldPosition field)
+    /// <summary>Read-only count of actual active clone instances; shared by gameplay and the card-bottom display hook.</summary>
+    public static int CountClones(FieldPosition field)
         => field?.StatusList.FindAll(s => s.IsActive && s.StatusID2 == Clone).Count ?? 0;
 
     // 每格共用一次响应。多个债务处理人的分身同池，单位行动完成只移除该格最早一份。

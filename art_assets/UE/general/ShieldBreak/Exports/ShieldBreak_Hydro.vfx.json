@@ -1,0 +1,16 @@
+{
+  "key": "general/ShieldBreak/ShieldBreak_Hydro",
+  "source": "art_assets/UE/general/ShieldBreak/Blender/ShieldBreak_Hydro.blend",
+  "file": "general/ShieldBreak/Exports/ShieldBreak_Hydro.vfx.bytes",
+  "meshes": 58,
+  "tracks": 58,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 546772
+}

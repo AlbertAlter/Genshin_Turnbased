@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1023_Xingqiu/SwordRainVolley/Xingqiu_SwordRainVolley_ThreeSimultaneous",
+  "source": "art_assets/UE/Characters/1023_Xingqiu/SwordRainVolley/Blender/Xingqiu_SwordRainVolley_ThreeSimultaneous.blend",
+  "file": "Characters/1023_Xingqiu/SwordRainVolley/Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous.vfx.bytes",
+  "meshes": 9,
+  "tracks": 48,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 124738
+}

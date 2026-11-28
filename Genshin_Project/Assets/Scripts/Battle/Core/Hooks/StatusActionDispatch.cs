@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,6 +38,28 @@ public static class StatusActionDispatch
             return status.Caster.EnemyCtrl.ExecuteStatusActionsTask(status, actions, host, type, prompts);
         return Task.CompletedTask;
     }
+
+    internal static Task ExecuteBatchAsync(
+        List<(StatusInstance inst, object host, List<StatusActionData> actions)> members,
+        string type, BattleStatusPromptOccurrence prompts,
+        Func<(StatusInstance inst, object host), bool> prepare = null,
+        Action<(StatusInstance inst, object host)> completed = null)
+        => BattleExecution.Run(async () =>
+        {
+            var batch = new BattleStatusPresentationBatch(members.Count > 1);
+            foreach (var item in members)
+            {
+                BattleExecution.ThrowIfCancelled();
+                if (!StatusHostAccess.Contains(item.host, item.inst)) continue;
+                using var lane = batch.Enter(item.inst);
+                var member = (item.inst, item.host);
+                bool execute = prepare?.Invoke(member) ?? true;
+                if (execute && HasExecutor(item.inst.Caster))
+                    await ExecuteTask(item.inst, item.actions, item.host, type, prompts);
+                completed?.Invoke(member);
+                await BattleExecution.Flush();
+            }
+        });
 
     public static void Enqueue(StatusInstance status, List<StatusActionData> actions, object host, string type)
     {

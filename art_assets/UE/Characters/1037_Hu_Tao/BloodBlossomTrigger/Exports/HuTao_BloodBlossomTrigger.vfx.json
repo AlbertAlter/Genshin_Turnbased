@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1037_Hu_Tao/BloodBlossomTrigger/HuTao_BloodBlossomTrigger",
+  "source": "art_assets/UE/Characters/1037_Hu_Tao/BloodBlossomTrigger/Blender/HuTao_BloodBlossomTrigger.blend",
+  "file": "Characters/1037_Hu_Tao/BloodBlossomTrigger/Exports/HuTao_BloodBlossomTrigger.vfx.bytes",
+  "meshes": 19,
+  "tracks": 141,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 385086
+}

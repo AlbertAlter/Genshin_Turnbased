@@ -1,0 +1,72 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Frostarm_Lawachurl#Abilities",
+  "visual_sources": [
+    {
+      "title": "Cryo Lawachurl Punches.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Punches.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/10/Cryo_Lawachurl_Punches.gif/revision/latest?cb=20211207093303",
+      "size_bytes": 3792350,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Lawachurl Cryo Enhanced State.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Cryo_Enhanced_State.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/6/62/Cryo_Lawachurl_Cryo_Enhanced_State.gif/revision/latest?cb=20211207093255",
+      "size_bytes": 3038055,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Lawachurl Dash.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Dash.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/4/4f/Cryo_Lawachurl_Dash.gif/revision/latest?cb=20211207093258",
+      "size_bytes": 3543048,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Lawachurl Charged Punch.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Charged_Punch.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d8/Cryo_Lawachurl_Charged_Punch.gif/revision/latest?cb=20230216104353",
+      "size_bytes": 4179957,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Lawachurl Shockwave.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Shockwave.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Cryo_Lawachurl_Shockwave.gif/revision/latest?cb=20211207093307",
+      "size_bytes": 4546923,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Lawachurl Jumping Slam.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Lawachurl_Jumping_Slam.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/7/71/Cryo_Lawachurl_Jumping_Slam.gif/revision/latest?cb=20211207093301",
+      "size_bytes": 4345758,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    }
+  ],
+  "audio_sources": [
+    {
+      "title": "How to EASILY beat Frostarm Lawachurls in Genshin Impact",
+      "url": "https://www.youtube.com/watch?v=YCL2M8eBV2o",
+      "use": "原作拳击、附铠、冲锋、落地与碎冰声音的后续核对入口",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；未播放完整动图，未保存GIF，未截取音频。用户指定的项目复用与改编见视觉需求，不能当作原作逐帧还原。",
+  "implementation_status": "Requirements only. No new VFX model, renderer, animation hook or runtime table mapping added."
+}

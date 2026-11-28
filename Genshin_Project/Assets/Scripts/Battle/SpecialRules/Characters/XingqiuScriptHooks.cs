@@ -172,7 +172,7 @@ public static class XingqiuScriptHooks
     }
     private static void StartHealing(StatusInstance status,object host)
     {
-        var owner=RequireCaster(status); if(host!=owner) throw new InvalidOperationException("化水为雨监听必须初始化在行秋本人。");
+        var owner=RequireCaster(status); if(!ReferenceEquals(host, owner)) throw new InvalidOperationException("化水为雨监听必须初始化在行秋本人。");
         status.IsPermanent=true; status.RemainingPhaseCount=0;
         Healers.Add(status,BattleEventHub.Subscribe<ResourceEventData>(BattleEventKind.ResourceChanged,(_,fact)=>
         {
@@ -296,7 +296,7 @@ public sealed class XingqiuRainbowCount : CountStatusHandler
     public override void OnCreated(StatusInstance status,object host)
     {
         var owner=XingqiuScriptHooks.RequireCaster(status);
-        if(host!=owner) throw new InvalidOperationException("虹剑势必须赋予行秋本人。");
+        if(!ReferenceEquals(host, owner)) throw new InvalidOperationException("虹剑势必须赋予行秋本人。");
         status.RuntimeIntValue=0; status.StackCount=1; status.IsPermanent=false;
         status.RemainingPhaseCount=owner.ConstellationLevel>=2?5:4; var memory=new Memory();status.CountRuntimeState=memory;
         memory.Listener=BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionCompleted,(header,action)=>

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1021_Noelle/EnhancedNormalAttack/Noelle_EnhancedNormalAttack",
+  "source": "art_assets/UE/Characters/1021_Noelle/EnhancedNormalAttack/Blender/Noelle_EnhancedNormalAttack.blend",
+  "file": "Characters/1021_Noelle/EnhancedNormalAttack/Exports/Noelle_EnhancedNormalAttack.vfx.bytes",
+  "meshes": 5,
+  "tracks": 28,
+  "frames": 34,
+  "duration": 1.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "OneUnifiedActualGroupContact": 0.3,
+    "Clear": 1.1
+  },
+  "bytes": 97819
+}

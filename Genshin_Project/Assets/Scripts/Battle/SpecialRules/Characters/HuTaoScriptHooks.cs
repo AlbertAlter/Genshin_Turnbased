@@ -61,7 +61,7 @@ public static class HuTaoScriptHooks
         });
         BattleSpecialRules.RegisterCondition("HuTao_BlossomDamage", (a, c) => string.IsNullOrEmpty(a)
             && BloomDamage.Value?.Caster == c?.Caster && c?.HitEffectID == "STE_HuTao_BlossomDamage"
-            && BloomDamage.Value.Host == c.Target);
+            && ReferenceEquals(BloomDamage.Value.Host, c.Target));
         BattleSpecialRules.RegisterDamage("HuTao_BlossomMemory()", ValidateDamage, (_, owner, target, hit, level) => hit);
         BattleSpecialRules.RegisterStatusDamage("HuTao_BlossomMemory()", async execution =>
         {
@@ -72,7 +72,7 @@ public static class HuTaoScriptHooks
         BattleSpecialRules.RegisterFixedStatusAmount("HuTao_SkillCost()", (effect, state, host) =>
         {
             RequireSource(state);
-            if (state.StatusID2 != Dance || host != state.Caster || effect.TargetType != "Self" || !DamageProperties.IsTrue(effect.Element))
+            if (state.StatusID2 != Dance || !ReferenceEquals(host, state.Caster) || effect.TargetType != "Self" || !DamageProperties.IsTrue(effect.Element))
                 throw new InvalidOperationException("胡桃扣血只用于蝶舞施加时对自身的True伤害。");
             float hp = state.Caster.CurrentHP;
             return Math.Max(0f, Math.Min(hp * Coefficient(effect.Param1), hp - 1f));
@@ -126,7 +126,7 @@ public static class HuTaoScriptHooks
     private static void CaptureDance(StatusInstance state, object host)
     {
         RequireSource(state);
-        if (host != state.Caster) throw new InvalidOperationException("彼岸蝶舞必须挂胡桃本人。");
+        if (!ReferenceEquals(host, state.Caster)) throw new InvalidOperationException("彼岸蝶舞必须挂胡桃本人。");
         state.Snapshot = new Dictionary<string, float>
         { ["Attack"] = Math.Min(state.Caster.GetFinalHP() * Scalar(state.Caster, "STE_HuTao_FixedAttack", 2), state.Caster.GetTotalBaseATK() * 4f) };
     }
@@ -163,7 +163,7 @@ public static class HuTaoScriptHooks
     private static void StartGuard(StatusInstance state, object host)
     {
         RequireSource(state);
-        if (host != state.Caster) throw new InvalidOperationException("六命监听必须挂胡桃本人。");
+        if (!ReferenceEquals(host, state.Caster)) throw new InvalidOperationException("六命监听必须挂胡桃本人。");
         var memory = new GuardMemory(); state.ScriptRuntimeState = memory;
         memory.Listener = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
         {

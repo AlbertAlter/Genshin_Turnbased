@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2022_LargeAnemoSlime/WindBlasts/2022_WindBlasts",
+  "source": "art_assets/UE/Enemies/2022_LargeAnemoSlime/WindBlasts/Blender/2022_WindBlasts.blend",
+  "file": "Enemies/2022_LargeAnemoSlime/WindBlasts/Exports/2022_WindBlasts.vfx.bytes",
+  "meshes": 9,
+  "tracks": 120,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 457423
+}

@@ -1,0 +1,680 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2057_Stonehide\\GroundRupture\\视觉需求.md",
+  "variants": {
+    "2057_GroundRupture": {
+      "effect": "2057_GroundRupture",
+      "source": "Blender/2057_GroundRupture.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2057_Stonehide\\GroundRupture\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2057_GroundRupture_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2057_GroundRupture_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2057_GroundRupture_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RuptureDarkNetwork": {
+          "file": "Exports/2057_GroundRupture_RuptureDarkNetwork.fbx",
+          "objects": [
+            "PART_RuptureDarkFissure0",
+            "PART_RuptureDarkFissure1",
+            "PART_RuptureDarkFissure2",
+            "PART_RuptureDarkFissure3",
+            "PART_RuptureDarkFissure4",
+            "PART_RuptureDarkFissure5",
+            "PART_RuptureDarkFissure6",
+            "PART_RuptureDarkFissure7",
+            "PART_RuptureDarkFissure8",
+            "PART_RuptureDarkFissure9",
+            "PART_RuptureDarkFissure10",
+            "PART_RuptureDarkFissure11",
+            "PART_RuptureDarkFissure12",
+            "PART_RuptureDarkFissure13",
+            "PART_RuptureDarkFissure14",
+            "PART_RuptureDarkFissure15"
+          ],
+          "vertices": 784,
+          "triangles": 1152,
+          "dimensions": [
+            6.550004959106445,
+            0.0,
+            4.491539239883423
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_RuptureDarkFissure0": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure1": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure2": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure3": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure4": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure5": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure6": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure7": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure8": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure9": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure10": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure11": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure12": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure13": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure14": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureDarkFissure15": [
+              "Basis",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_RuptureDarkFissure0": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure1": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure2": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure3": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure4": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure5": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure6": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure7": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure8": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure9": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure10": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure11": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure12": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure13": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure14": [
+              "Soft"
+            ],
+            "PART_RuptureDarkFissure15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 16,
+            "vertices": 784,
+            "triangles": 1152,
+            "dimensions": [
+              6.550004959106445,
+              7.31764572492466e-07,
+              4.491539239883423
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RuptureInnerLight": {
+          "file": "Exports/2057_GroundRupture_RuptureInnerLight.fbx",
+          "objects": [
+            "PART_RuptureInnerAmber0",
+            "PART_RuptureInnerAmber1",
+            "PART_RuptureInnerAmber2",
+            "PART_RuptureInnerAmber3",
+            "PART_RuptureInnerAmber4",
+            "PART_RuptureInnerAmber5",
+            "PART_RuptureInnerAmber6",
+            "PART_RuptureInnerAmber7",
+            "PART_RuptureInnerAmber8",
+            "PART_RuptureInnerAmber9",
+            "PART_RuptureInnerAmber10",
+            "PART_RuptureInnerAmber11",
+            "PART_RuptureInnerAmber12",
+            "PART_RuptureInnerAmber13",
+            "PART_RuptureInnerAmber14",
+            "PART_RuptureInnerAmber15"
+          ],
+          "vertices": 784,
+          "triangles": 1152,
+          "dimensions": [
+            6.499168157577515,
+            0.0,
+            4.409725904464722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_RuptureInnerAmber0": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber1": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber2": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber3": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber4": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber5": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber6": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber7": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber8": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber9": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber10": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber11": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber12": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber13": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber14": [
+              "Basis",
+              "WidthDouble"
+            ],
+            "PART_RuptureInnerAmber15": [
+              "Basis",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_RuptureInnerAmber0": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber1": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber2": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber3": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber4": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber5": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber6": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber7": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber8": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber9": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber10": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber11": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber12": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber13": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber14": [
+              "Soft"
+            ],
+            "PART_RuptureInnerAmber15": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 16,
+            "vertices": 784,
+            "triangles": 1152,
+            "dimensions": [
+              6.499168157577515,
+              7.184355013123422e-07,
+              4.409725904464722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RuptureCrystal0": {
+          "file": "Exports/2057_GroundRupture_RuptureCrystal0.fbx",
+          "objects": [
+            "PART_RuptureCrystalShape0"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.4362872242927551,
+            0.0032508429139852524,
+            0.7699999734759331
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RuptureCrystalShape0": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.4362872242927551,
+              0.003250968409702182,
+              0.7699999734759331
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RuptureCrystal1": {
+          "file": "Exports/2057_GroundRupture_RuptureCrystal1.fbx",
+          "objects": [
+            "PART_RuptureCrystalShape1"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.35696229338645935,
+            0.002659780438989401,
+            1.0300000235438347
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RuptureCrystalShape1": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.35696229338645935,
+              0.0026599483098834753,
+              1.0300000235438347
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RuptureCrystal2": {
+          "file": "Exports/2057_GroundRupture_RuptureCrystal2.fbx",
+          "objects": [
+            "PART_RuptureCrystalShape2"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.5949371457099915,
+            0.004432967398315668,
+            0.5399999842047691
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RuptureCrystalShape2": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.5949371457099915,
+              0.004433055408298969,
+              0.5399999842047691
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 16,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 38,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 38,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 38,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 38,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 62,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 62,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 62,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 62,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 63,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "elementAppearance": "Geo",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2057_GroundRupture.wav"
+      }
+    }
+  }
+}

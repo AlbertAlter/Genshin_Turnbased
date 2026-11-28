@@ -1,0 +1,91 @@
+{
+  "characterID": 1011,
+  "name": "Lisa",
+  "effect": "VioletArc",
+  "blenderVersion": "5.3.0",
+  "source": "Blender/Lisa_VioletArc.blend",
+  "fps": 30,
+  "frames": [
+    1,
+    60
+  ],
+  "request": "One bolt rises from Lisa palm, then one bolt strikes every occupied enemy-card position simultaneously.",
+  "timing": {
+    "gather": [
+      2,
+      10
+    ],
+    "castUpSnap": [
+      10,
+      11
+    ],
+    "quietPause": [
+      15,
+      18
+    ],
+    "enemyStrikeStart": 19,
+    "allEnemyContactFrame": 20,
+    "clearBy": 35
+  },
+  "motion": "Clamped Bezier gathering and decelerating sparks, one-frame accelerated leaders, asymmetric width-dissolve restrikes. No uniform beam grow/shrink cycle.",
+  "look": "Irregular tapered white-lavender channels, violet corona, separately flashing forks and alternate restrike filaments; short contact flare, broken shock arcs, drifting sparks.",
+  "controls": {
+    "object": "CTRL_LisaVioletArc",
+    "occupiedSlots": [
+      "EnemySlot1",
+      "EnemySlot2",
+      "EnemySlot3",
+      "EnemySlot4",
+      "EnemySlot5"
+    ],
+    "handOffset": [
+      "HandOffsetX",
+      "HandOffsetZ"
+    ],
+    "strikeHeight": "StrikeHeight"
+  },
+  "layout": "Reference card centers follow the current 1920x1080 nine-card layout; slot numbers 1..5 run right-to-left.",
+  "exports": {
+    "Lisa_CastUp.fbx": "Fixed approximate palm origin; gather then one upward snap, frames 1..18.",
+    "Lisa_LightningStrike.fbx": "Local hit origin; one-frame top-to-bottom leader and contact burst; contact local frame 2, frames 1..32.",
+    "Lisa_VioletArc_AllEnemies.fbx": "Five-slot reference animation, all targets contact on frame 20; no cards, cameras or controllers."
+  },
+  "runtimeContract": "Use a fixed approximate hand-area source; no hand tracking is needed. Host supplies occupied enemy anchors. Reuse one strike per actual enemy and share its impact time. Empty slots receive no effect.",
+  "material": "All effect meshes retain VFXColor RGBA. Blender materials and compositor bloom are authoring previews, not Unity materials.",
+  "reference": {
+    "packed": true,
+    "exported": false,
+    "caster": "art_assets/Character_Bare/1011_01.png"
+  },
+  "scope": "Art assets only; not yet bound to formal Unity combat.",
+  "sourceStillValidation": {
+    "Lisa_VioletArc": {
+      "poster": "Preview/Lisa_VioletArc_Current.png",
+      "frame": 20,
+      "sourceReopened": true,
+      "referenceBacks": 9,
+      "referenceEdges": 9,
+      "packedUsedImages": 12,
+      "originalObjectsAndLayoutUnchanged": true,
+      "originalSavedFrame": 20,
+      "sourceFrameRange": [
+        1,
+        60
+      ],
+      "videosGenerated": false,
+      "rearInspection": "Preview/Lisa_VioletArc_CardBackCheck.png",
+      "nonConsecutiveVisibilityChecked": [
+        1,
+        3,
+        5
+      ]
+    }
+  },
+  "referenceCardCompletion": {
+    "helper": "tools/blender/reference_card_shell.py",
+    "frontsAndFrames": "Existing nine meshes and transforms preserved.",
+    "backs": "Nine rounded default card backs, packed UI_Gcg_CardBack_01.png.",
+    "edges": "Nine rounded reference shells, 0.048 m plus tiny rear-depth separation; attached to existing frame parenting.",
+    "exportScope": "Reference geometry is excluded from effect exports; existing FBX files unchanged."
+  }
+}

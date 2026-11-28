@@ -148,7 +148,7 @@ public static class KeqingScriptHooks
         }, root.ApplyOrder, () => Active(root)));
         memory.Listeners.Add(BattleEventHub.Subscribe<StatusEventData>(BattleEventKind.StatusRemoved, (_, removal) =>
         {
-            if (memory.Manual && removal.Host == owner && removal.StatusId == Control
+            if (memory.Manual && ReferenceEquals(removal.Host, owner) && removal.StatusId == Control
                 && root.BoundStatuses.Any(s => s.ApplyOrder == removal.InstanceId)) RequestMark(memory, "Manual", BattleEventHub.Current);
         }, root.ApplyOrder, () => Active(root)));
     }

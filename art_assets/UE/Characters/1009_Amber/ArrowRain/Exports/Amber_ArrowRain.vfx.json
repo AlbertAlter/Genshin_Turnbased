@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1009_Amber/ArrowRain/Amber_ArrowRain",
+  "source": "art_assets/UE/Characters/1009_Amber/ArrowRain/Blender/Amber_ArrowRain.blend",
+  "file": "Characters/1009_Amber/ArrowRain/Exports/Amber_ArrowRain.vfx.bytes",
+  "meshes": 4,
+  "tracks": 200,
+  "frames": 64,
+  "duration": 2.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "One-shot arrows and contact flames": 0.23333333333333334,
+    "Action finishes; sustained field is a separate resource": 2.1
+  },
+  "bytes": 38205
+}

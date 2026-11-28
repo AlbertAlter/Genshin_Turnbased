@@ -1,0 +1,20 @@
+{
+  "key": "general/AbyssMageRite/AbyssMageRite_Hydro",
+  "source": "art_assets/UE/general/AbyssMageRite/Blender/AbyssMageRite_Hydro.blend",
+  "file": "general/AbyssMageRite/Exports/AbyssMageRite_Hydro.vfx.bytes",
+  "meshes": 3,
+  "tracks": 13,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_A_end_exclusive": 5.6,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 28103
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1037_Hu_Tao/C6ButterflyFlash/HuTao_C6ButterflyFlash",
+  "source": "art_assets/UE/Characters/1037_Hu_Tao/C6ButterflyFlash/Blender/HuTao_C6ButterflyFlash.blend",
+  "file": "Characters/1037_Hu_Tao/C6ButterflyFlash/Exports/HuTao_C6ButterflyFlash.vfx.bytes",
+  "meshes": 10,
+  "tracks": 93,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 197635
+}

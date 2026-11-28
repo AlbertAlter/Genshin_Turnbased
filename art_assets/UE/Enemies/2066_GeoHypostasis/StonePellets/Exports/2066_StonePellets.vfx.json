@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2066_GeoHypostasis/StonePellets/2066_StonePellets",
+  "source": "art_assets/UE/Enemies/2066_GeoHypostasis/StonePellets/Blender/2066_StonePellets.blend",
+  "file": "Enemies/2066_GeoHypostasis/StonePellets/Exports/2066_StonePellets.vfx.bytes",
+  "meshes": 7,
+  "tracks": 78,
+  "frames": 130,
+  "duration": 4.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.3
+  },
+  "bytes": 240658
+}

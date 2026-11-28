@@ -1,0 +1,879 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/LayeredFrostState/视觉需求.md",
+  "variants": {
+    "Chongyun_LayeredFrostState_State": {
+      "effect": "Chongyun_LayeredFrostState_State",
+      "source": "Blender/Chongyun_LayeredFrostState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/LayeredFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SpiritSwordBody": {
+          "file": "Exports/Chongyun_LayeredFrostState_State_SpiritSwordBody.fbx",
+          "objects": [
+            "PART_AuthoredFacetedLongSpiritBlade",
+            "PART_SpiritSwordAngularIceGuard",
+            "PART_SpiritSwordCrystallineGrip"
+          ],
+          "vertices": 78,
+          "triangles": 144,
+          "dimensions": [
+            1.2200000286102295,
+            0.26500000059604645,
+            3.609999895095825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredFacetedLongSpiritBlade": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordAngularIceGuard": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordCrystallineGrip": [
+              "ChongyunFacetedBlueSpiritIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 78,
+            "triangles": 144,
+            "dimensions": [
+              1.2200000286102295,
+              0.26500043272972107,
+              3.6099999162755108
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordWhiteEdges": {
+          "file": "Exports/Chongyun_LayeredFrostState_State_SpiritSwordWhiteEdges.fbx",
+          "objects": [
+            "PART_SpiritSwordColdBladeEdge_-1",
+            "PART_SpiritSwordColdBladeEdge_1",
+            "PART_SpiritSwordWhiteSpine"
+          ],
+          "vertices": 175,
+          "triangles": 264,
+          "dimensions": [
+            0.6108724474906921,
+            0.005000010132789612,
+            2.585714123211801
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordColdBladeEdge_-1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordColdBladeEdge_1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordWhiteSpine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 175,
+            "triangles": 264,
+            "dimensions": [
+              0.6108724474906921,
+              0.005000382661819458,
+              2.5857140994630754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordAuthoredSeal": {
+          "file": "Exports/Chongyun_LayeredFrostState_State_SpiritSwordAuthoredSeal.fbx",
+          "objects": [
+            "PART_AuthoredSpiritSwordSeal_0",
+            "PART_AuthoredSpiritSwordSeal_1",
+            "PART_AuthoredSpiritSwordSeal_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.16009414196014404,
+            0.0,
+            1.0569243431091309
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredSpiritSwordSeal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.16009414196014404,
+              1.7881393432617188e-07,
+              1.0569243431091309
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFrostChip": {
+          "file": "Exports/Chongyun_LayeredFrostState_State_SpiritSwordFrostChip.fbx",
+          "objects": [
+            "PART_FiniteSpiritSwordIceChip"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.08414772152900696,
+            0.08487282693386078,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteSpiritSwordIceChip": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.08414772152900696,
+              0.08487287163734436,
+              0.27000001817941666
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 65,
+      "detailScale": 7,
+      "focus": [
+        -4.441666603088379,
+        -0.20000000298023224,
+        4.099999904632568
+      ],
+      "referenceBoundary": "Burst62f/2.48s and skill55f/2.2s fully decoded in memory;24 timestamped samples each inspected. White-blue angular spirit swords and separated descending contacts observed; existing frost field and later teal wind are not copied into burst. Sword mesh/runes authored. Suspended field sword, straight talent fall and C1 per-target falls are project adaptations, not original demonstrations of those paths.",
+      "scope": "Source art only. Tip-zero reusable sword parts, explicit target samples; no card lift, status lifecycle, damage, C6 condition evaluation, Unity/timeline/table changes.",
+      "contract": "One world-field sword above the original three-slot region. Does not follow occupant changes. Small bob, stable downward tip, no spinning drill. Ordinary exit fades quietly, not a talent attack.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Chongyun_LayeredFrostState_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1025_Chongyun/LayeredFrostState/Blender/Chongyun_LayeredFrostState_State.blend",
+        "driversConverted": 18,
+        "legacyExpressions": 18,
+        "numericComparisons": 648,
+        "maximumFormulaError": 4.0935146716769566e-08,
+        "nativeDrivers": 69,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          65.0,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          65,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Chongyun_LayeredFrostState_State_01_Overall.png",
+        "stillFrame": 65,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Chongyun_LayeredFrostState_EmptyAnchor": {
+      "effect": "Chongyun_LayeredFrostState_EmptyAnchor",
+      "source": "Blender/Chongyun_LayeredFrostState_EmptyAnchor.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/LayeredFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SpiritSwordBody": {
+          "file": "Exports/Chongyun_LayeredFrostState_EmptyAnchor_SpiritSwordBody.fbx",
+          "objects": [
+            "PART_AuthoredFacetedLongSpiritBlade",
+            "PART_SpiritSwordAngularIceGuard",
+            "PART_SpiritSwordCrystallineGrip"
+          ],
+          "vertices": 78,
+          "triangles": 144,
+          "dimensions": [
+            1.2200000286102295,
+            0.26500000059604645,
+            3.609999895095825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredFacetedLongSpiritBlade": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordAngularIceGuard": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordCrystallineGrip": [
+              "ChongyunFacetedBlueSpiritIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 78,
+            "triangles": 144,
+            "dimensions": [
+              1.2200000286102295,
+              0.26500043272972107,
+              3.6099999162755108
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordWhiteEdges": {
+          "file": "Exports/Chongyun_LayeredFrostState_EmptyAnchor_SpiritSwordWhiteEdges.fbx",
+          "objects": [
+            "PART_SpiritSwordColdBladeEdge_-1",
+            "PART_SpiritSwordColdBladeEdge_1",
+            "PART_SpiritSwordWhiteSpine"
+          ],
+          "vertices": 175,
+          "triangles": 264,
+          "dimensions": [
+            0.6108724474906921,
+            0.005000010132789612,
+            2.585714123211801
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordColdBladeEdge_-1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordColdBladeEdge_1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordWhiteSpine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 175,
+            "triangles": 264,
+            "dimensions": [
+              0.6108724474906921,
+              0.005000382661819458,
+              2.5857140994630754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordAuthoredSeal": {
+          "file": "Exports/Chongyun_LayeredFrostState_EmptyAnchor_SpiritSwordAuthoredSeal.fbx",
+          "objects": [
+            "PART_AuthoredSpiritSwordSeal_0",
+            "PART_AuthoredSpiritSwordSeal_1",
+            "PART_AuthoredSpiritSwordSeal_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.16009414196014404,
+            0.0,
+            1.0569243431091309
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredSpiritSwordSeal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.16009414196014404,
+              1.7881393432617188e-07,
+              1.0569243431091309
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFrostChip": {
+          "file": "Exports/Chongyun_LayeredFrostState_EmptyAnchor_SpiritSwordFrostChip.fbx",
+          "objects": [
+            "PART_FiniteSpiritSwordIceChip"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.08414772152900696,
+            0.08487282693386078,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteSpiritSwordIceChip": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.08414772152900696,
+              0.08487287163734436,
+              0.27000001817941666
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 65,
+      "detailScale": 7,
+      "focus": [
+        -4.441666603088379,
+        -0.20000000298023224,
+        4.099999904632568
+      ],
+      "referenceBoundary": "Burst62f/2.48s and skill55f/2.2s fully decoded in memory;24 timestamped samples each inspected. White-blue angular spirit swords and separated descending contacts observed; existing frost field and later teal wind are not copied into burst. Sword mesh/runes authored. Suspended field sword, straight talent fall and C1 per-target falls are project adaptations, not original demonstrations of those paths.",
+      "scope": "Source art only. Tip-zero reusable sword parts, explicit target samples; no card lift, status lifecycle, damage, C6 condition evaluation, Unity/timeline/table changes.",
+      "contract": "One world-field sword above the original three-slot region. Does not follow occupant changes. Small bob, stable downward tip, no spinning drill. Ordinary exit fades quietly, not a talent attack.",
+      "emptyFieldDemo": {
+        "cardIndex": 2,
+        "probeFrame": 150,
+        "hiddenAfterFrame": 90
+      },
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Chongyun_LayeredFrostState_EmptyAnchor.wav"
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        1,
+        2,
+        3
+      ],
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1025_Chongyun/LayeredFrostState/Blender/Chongyun_LayeredFrostState_EmptyAnchor.blend",
+        "driversConverted": 18,
+        "legacyExpressions": 18,
+        "numericComparisons": 648,
+        "maximumFormulaError": 4.0935146716769566e-08,
+        "nativeDrivers": 69,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          65.0,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          65,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Chongyun_LayeredFrostState_EmptyAnchor_01_Overall.png",
+        "stillFrame": 65,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Chongyun_LayeredFrostState_HandoffOverall": {
+      "effect": "Chongyun_LayeredFrostState_HandoffOverall",
+      "source": "Blender/Chongyun_LayeredFrostState_HandoffOverall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/LayeredFrostState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordBody": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_SpiritSwordBody.fbx",
+          "objects": [
+            "PART_AuthoredFacetedLongSpiritBlade",
+            "PART_SpiritSwordAngularIceGuard",
+            "PART_SpiritSwordCrystallineGrip"
+          ],
+          "vertices": 78,
+          "triangles": 144,
+          "dimensions": [
+            1.2200000286102295,
+            0.26500000059604645,
+            3.609999895095825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredFacetedLongSpiritBlade": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordAngularIceGuard": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordCrystallineGrip": [
+              "ChongyunFacetedBlueSpiritIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 78,
+            "triangles": 144,
+            "dimensions": [
+              1.2200000286102295,
+              0.26500043272972107,
+              3.6099999162755108
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordWhiteEdges": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_SpiritSwordWhiteEdges.fbx",
+          "objects": [
+            "PART_SpiritSwordColdBladeEdge_-1",
+            "PART_SpiritSwordColdBladeEdge_1",
+            "PART_SpiritSwordWhiteSpine"
+          ],
+          "vertices": 175,
+          "triangles": 264,
+          "dimensions": [
+            0.6108724474906921,
+            0.005000010132789612,
+            2.585714123211801
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordColdBladeEdge_-1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordColdBladeEdge_1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordWhiteSpine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 175,
+            "triangles": 264,
+            "dimensions": [
+              0.6108724474906921,
+              0.005000382661819458,
+              2.5857140994630754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordAuthoredSeal": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_SpiritSwordAuthoredSeal.fbx",
+          "objects": [
+            "PART_AuthoredSpiritSwordSeal_0",
+            "PART_AuthoredSpiritSwordSeal_1",
+            "PART_AuthoredSpiritSwordSeal_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.16009414196014404,
+            0.0,
+            1.0569243431091309
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredSpiritSwordSeal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.16009414196014404,
+              1.7881393432617188e-07,
+              1.0569243431091309
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFrostChip": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_SpiritSwordFrostChip.fbx",
+          "objects": [
+            "PART_FiniteSpiritSwordIceChip"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.08414772152900696,
+            0.08487282693386078,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteSpiritSwordIceChip": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.08414772152900696,
+              0.08487287163734436,
+              0.27000001817941666
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFallWake": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_SpiritSwordFallWake.fbx",
+          "objects": [
+            "PART_ShortSpiritSwordFallWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.18000000715255737,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortSpiritSwordFallWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.18000000715255737,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "IceContactWave": {
+          "file": "Exports/Chongyun_LayeredFrostState_HandoffOverall_IceContactWave.fbx",
+          "objects": [
+            "PART_SpiritSwordContactColdWave"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.0691678524017334,
+            0.0,
+            2.0693516731262207
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordContactColdWave": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.0691678524017334,
+              3.371401504637106e-07,
+              2.0693516731262207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 94,
+          "element": "Cryo",
+          "kind": "one continuous existing sword handoff; no second idle sword left above"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 86,
+      "detailScale": 12,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "referenceBoundary": "Burst62f/2.48s and skill55f/2.2s fully decoded in memory;24 timestamped samples each inspected. White-blue angular spirit swords and separated descending contacts observed; existing frost field and later teal wind are not copied into burst. Sword mesh/runes authored. Suspended field sword, straight talent fall and C1 per-target falls are project adaptations, not original demonstrations of those paths.",
+      "scope": "Source art only. Tip-zero reusable sword parts, explicit target samples; no card lift, status lifecycle, damage, C6 condition evaluation, Unity/timeline/table changes.",
+      "contract": "Same physical motion root hovers, then accelerates down from that pose. No complete fade/re-summon between state and talent attack.",
+      "fallingSpiritBlades": [
+        {
+          "root": "ONE_SameSword_HoverThenTalentFall",
+          "launch": 73,
+          "contact": 94,
+          "tipTarget": [
+            -4.441666603088379,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Chongyun_LayeredFrostState_HandoffOverall.wav"
+      }
+    }
+  }
+}

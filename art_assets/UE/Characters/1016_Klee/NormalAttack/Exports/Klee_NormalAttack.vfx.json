@@ -1,0 +1,17 @@
+{
+  "key": "Characters/1016_Klee/NormalAttack/Klee_NormalAttack",
+  "source": "art_assets/UE/Characters/1016_Klee/NormalAttack/Blender/Klee_NormalAttack.blend",
+  "file": "Characters/1016_Klee/NormalAttack/Exports/Klee_NormalAttack.vfx.bytes",
+  "meshes": 7,
+  "tracks": 50,
+  "frames": 55,
+  "duration": 1.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Throw": 0.06666666666666667,
+    "Impact": 0.6333333333333333,
+    "Cleared": 1.8
+  },
+  "bytes": 139247
+}

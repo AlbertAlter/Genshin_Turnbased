@@ -1,0 +1,43 @@
+{
+  "reference_page": "https://genshin-impact.fandom.com/wiki/Fatui_Electro_Cicin_Mage#Abilities",
+  "verification": "已核对原作能力条目，并通过Fandom媒体API确认文件和直链存在；未下载或播放完整动图，不把地址确认当作已经逐帧核对造型与动态。",
+  "project_design": "雷萤冲袭采用实际雷萤卡牌依次完成最低一级普通攻击前倾的动画表钩子；落雷为公共单次动画；静电区域复用公共雷地面；雷电环绕保留自身电弧而不画圆形护盾。",
+  "references": [
+    {
+      "title": "Electro Cicin Mage Cicin Charge",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Cicin_Mage_Cicin_Charge.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/0/09/Electro_Cicin_Mage_Cicin_Charge.gif/revision/latest?cb=20211212035747",
+      "purpose": "依次指挥雷萤攻击的原作节奏入口；项目只提炼为雷萤卡牌逐只普通攻击前倾。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Cicin Bolt",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Cicin_Bolt.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/d/d6/Electro_Cicin_Bolt.gif/revision/latest?cb=20220114185408",
+      "purpose": "雷萤自身单次雷色攻击参考入口，不在动画钩子中重新调用这项业务技能。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Cicin Mage Thunderbolt",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Cicin_Mage_Thunderbolt.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e0/Electro_Cicin_Mage_Thunderbolt.gif/revision/latest?cb=20211212035756",
+      "purpose": "公共落雷主体、接触及静电残留的原作参考入口；项目地面统一复用公共雷地面。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Electro Cicin Mage Supercharged Shield",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Cicin_Mage_Supercharged_Shield.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/4/4b/Electro_Cicin_Mage_Supercharged_Shield.gif/revision/latest?cb=20211212035753",
+      "purpose": "自身雷电包裹与放电的原作参考入口；用户明确省去圆形护盾，只做环绕电弧。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ]
+}

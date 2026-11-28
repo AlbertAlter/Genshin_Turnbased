@@ -1,0 +1,618 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Whale/视觉需求.md",
+  "variants": {
+    "2073_Whale": {
+      "effect": "2073_Whale",
+      "source": "Blender/2073_Whale.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/Whale/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_Whale_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_Whale_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_Whale_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2073_Whale_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleHeadBody": {
+          "file": "Exports/2073_Whale_WhaleHeadBody.fbx",
+          "objects": [
+            "PART_WhaleHeadBody"
+          ],
+          "vertices": 224,
+          "triangles": 444,
+          "dimensions": [
+            3.0200000405311584,
+            0.9796000123023987,
+            1.5800000429153442
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhaleHeadBody": [
+              "TranslucentWhaleWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 224,
+            "triangles": 444,
+            "dimensions": [
+              3.0200000405311584,
+              0.9796002507209778,
+              1.5800001621246338
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleBendingTail": {
+          "file": "Exports/2073_Whale_WhaleBendingTail.fbx",
+          "objects": [
+            "PART_WhaleBendingTail"
+          ],
+          "vertices": 112,
+          "triangles": 220,
+          "dimensions": [
+            1.850000023841858,
+            0.7440000176429749,
+            1.2000000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhaleBendingTail": [
+              "TranslucentWhaleWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 112,
+            "triangles": 220,
+            "dimensions": [
+              1.850000023841858,
+              0.7440001964569092,
+              1.2000001668930054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleFins": {
+          "file": "Exports/2073_Whale_WhaleFins.fbx",
+          "objects": [
+            "PART_WhalePectoralFin_-1",
+            "PART_WhalePectoralFin_1",
+            "PART_WhaleDorsalFin"
+          ],
+          "vertices": 13,
+          "triangles": 7,
+          "dimensions": [
+            1.2999999821186066,
+            2.440000057220459,
+            1.8299999833106995
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhalePectoralFin_-1": [
+              "Soft"
+            ],
+            "PART_WhalePectoralFin_1": [
+              "Soft"
+            ],
+            "PART_WhaleDorsalFin": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 13,
+            "triangles": 7,
+            "dimensions": [
+              1.2999999821186066,
+              2.4400001764297485,
+              1.8300001621246338
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleTailFlukes": {
+          "file": "Exports/2073_Whale_WhaleTailFlukes.fbx",
+          "objects": [
+            "PART_WhaleTailFluke_-1",
+            "PART_WhaleTailFluke_1"
+          ],
+          "vertices": 8,
+          "triangles": 4,
+          "dimensions": [
+            0.7000000476837158,
+            1.9600000381469727,
+            0.15000000596046448
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhaleTailFluke_-1": [
+              "Soft"
+            ],
+            "PART_WhaleTailFluke_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 8,
+            "triangles": 4,
+            "dimensions": [
+              0.7000000476837158,
+              1.9600000381469727,
+              0.15000032953550146
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleWaterContours": {
+          "file": "Exports/2073_Whale_WhaleWaterContours.fbx",
+          "objects": [
+            "PART_WhaleCurvedSurfaceCurrent_0",
+            "PART_WhaleCurvedSurfaceCurrent_1",
+            "PART_WhaleCurvedSurfaceCurrent_2",
+            "PART_WhaleReadableJawLine"
+          ],
+          "vertices": 196,
+          "triangles": 288,
+          "dimensions": [
+            3.034384787082672,
+            0.453928854316473,
+            0.7810352742671967
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhaleCurvedSurfaceCurrent_0": [
+              "Soft"
+            ],
+            "PART_WhaleCurvedSurfaceCurrent_1": [
+              "Soft"
+            ],
+            "PART_WhaleCurvedSurfaceCurrent_2": [
+              "Soft"
+            ],
+            "PART_WhaleReadableJawLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 196,
+            "triangles": 288,
+            "dimensions": [
+              3.034384787082672,
+              0.45392894372344017,
+              0.7810353636741638
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WhaleEyeGlints": {
+          "file": "Exports/2073_Whale_WhaleEyeGlints.fbx",
+          "objects": [
+            "PART_WhaleWaterEye_-1",
+            "PART_WhaleWaterEye_1"
+          ],
+          "vertices": 140,
+          "triangles": 240,
+          "dimensions": [
+            0.10400009155273438,
+            0.9589098691940308,
+            0.10400000214576721
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhaleWaterEye_-1": [
+              "Solid"
+            ],
+            "PART_WhaleWaterEye_1": [
+              "Solid"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 140,
+            "triangles": 240,
+            "dimensions": [
+              0.10400009155273438,
+              0.9589098691940308,
+              0.104000024497509
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2073_Whale_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2073_Whale_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 3.4,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 78,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 5.2,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 78,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 78,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 78,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 78,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "kind": "one whale rising wave, first real group hit"
+        },
+        {
+          "frame": 78,
+          "kind": "same whale landing, second real group hit"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 81,
+      "focus": [
+        4.336613893508911,
+        -0.08,
+        -1.3112671375274658
+      ],
+      "detailScale": 13.779785580105251,
+      "runtimeConnected": false,
+      "referenceBoundary": "Original rise/occluded mid-frame/landing stills inspected. Full original whale silhouette and continuous GIF were not available; body is authored interpretation, not an extracted original model.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_Whale.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 46,
+        "selectedFrame": 81,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1028_Mona/AstralBubbleOmenState/Mona_AstralBubbleOmenState_OmenEndsFirst",
+  "source": "art_assets/UE/Characters/1028_Mona/AstralBubbleOmenState/Blender/Mona_AstralBubbleOmenState_OmenEndsFirst.blend",
+  "file": "Characters/1028_Mona/AstralBubbleOmenState/Exports/Mona_AstralBubbleOmenState_OmenEndsFirst.vfx.bytes",
+  "meshes": 17,
+  "tracks": 23,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 86818
+}

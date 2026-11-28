@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2057_Stonehide/EmpoweredPunch/2057_EmpoweredPunch",
+  "source": "art_assets/UE/Enemies/2057_Stonehide/EmpoweredPunch/Blender/2057_EmpoweredPunch.blend",
+  "file": "Enemies/2057_Stonehide/EmpoweredPunch/Exports/2057_EmpoweredPunch.vfx.bytes",
+  "meshes": 19,
+  "tracks": 92,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 287097
+}

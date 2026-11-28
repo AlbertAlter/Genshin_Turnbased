@@ -1,0 +1,1451 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/WateryRebirth/视觉需求.md",
+  "variants": {
+    "2084_WateryRebirth_Cast": {
+      "effect": "2084_WateryRebirth_Cast",
+      "source": "Blender/2084_WateryRebirth_Cast.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/WateryRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_WateryRebirth_Cast_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_WateryRebirth_Cast_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_WateryRebirth_Cast_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_WateryRebirth_Cast_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2084_WateryRebirth_Cast_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2084_WateryRebirth_Cast_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 4.2,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 28,
+      "focus": [
+        4.534980535507202,
+        -0.08,
+        0.33500003814697266
+      ],
+      "detailScale": 5.754442579481337,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_WateryRebirth_Cast.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 28,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2084_WateryRebirth_State": {
+      "effect": "2084_WateryRebirth_State",
+      "source": "Blender/2084_WateryRebirth_State.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/WateryRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/2084_WateryRebirth_State_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_0": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_0.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_0"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.266211748123169,
+            0.9764528572559357,
+            0.43545520305633545
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.266211748123169,
+              0.9764529168605804,
+              0.4354553818702698
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_1": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_1.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_1"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9788526892662048,
+            1.079844057559967,
+            0.4535961002111435
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9788526892662048,
+              1.0798441171646118,
+              0.45359624922275543
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_2": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_2.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_2"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9019105434417725,
+            1.0799904465675354,
+            0.453642874956131
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9019105434417725,
+              1.0799905061721802,
+              0.4536430239677429
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_3": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_3.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_3"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2465295791625977,
+            1.0059610605239868,
+            0.4487585425376892
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2465295791625977,
+              1.0059611201286316,
+              0.44875872135162354
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_4": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_4.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_4"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2699134349823,
+            0.8448579907417297,
+            0.45216596126556396
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2699134349823,
+              0.8448580503463745,
+              0.45216602087020874
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_5": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_5.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_5"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.17089581489563,
+            1.0603277087211609,
+            0.45304878056049347
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.17089581489563,
+              1.0603277683258057,
+              0.4530489295721054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_6": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_6.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_6"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.6732411980628967,
+            1.079993188381195,
+            0.45369191467761993
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.6732411980628967,
+              1.0799933075904846,
+              0.4536920636892319
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_7": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_7.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_7"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.1348814964294434,
+            1.0703691244125366,
+            0.45328789949417114
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.1348814964294434,
+              1.0703691840171814,
+              0.45328807830810547
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_8": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_8.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_8"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2699337005615234,
+            0.8804128170013428,
+            0.4511711001396179
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2699337005615234,
+              0.8804128766059875,
+              0.45117127895355225
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_9": {
+          "file": "Exports/2084_WateryRebirth_State_OwnRebirthFlow_9.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_9"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2620657682418823,
+            0.9820080995559692,
+            0.4387501999735832
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_9": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2620657682418823,
+              0.9820081889629364,
+              0.43875033408403397
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_WateryRebirth_State.wav"
+      }
+    },
+    "2084_WateryRebirth_Overall": {
+      "effect": "2084_WateryRebirth_Overall",
+      "source": "Blender/2084_WateryRebirth_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2084_AbyssHerald/WateryRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2084_WateryRebirth_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2084_WateryRebirth_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2084_WateryRebirth_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2084_WateryRebirth_Overall_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_0": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_0.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_0"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.266211748123169,
+            0.9764528572559357,
+            0.43545520305633545
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.266211748123169,
+              0.9764529168605804,
+              0.4354553818702698
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_1": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_1.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_1"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9788526892662048,
+            1.079844057559967,
+            0.4535961002111435
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9788526892662048,
+              1.0798441171646118,
+              0.45359624922275543
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_2": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_2.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_2"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9019105434417725,
+            1.0799904465675354,
+            0.453642874956131
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9019105434417725,
+              1.0799905061721802,
+              0.4536430239677429
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_3": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_3.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_3"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2465295791625977,
+            1.0059610605239868,
+            0.4487585425376892
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2465295791625977,
+              1.0059611201286316,
+              0.44875872135162354
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_4": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_4.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_4"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2699134349823,
+            0.8448579907417297,
+            0.45216596126556396
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2699134349823,
+              0.8448580503463745,
+              0.45216602087020874
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_5": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_5.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_5"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.17089581489563,
+            1.0603277087211609,
+            0.45304878056049347
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.17089581489563,
+              1.0603277683258057,
+              0.4530489295721054
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_6": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_6.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_6"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.6732411980628967,
+            1.079993188381195,
+            0.45369191467761993
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.6732411980628967,
+              1.0799933075904846,
+              0.4536920636892319
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_7": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_7.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_7"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.1348814964294434,
+            1.0703691244125366,
+            0.45328789949417114
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.1348814964294434,
+              1.0703691840171814,
+              0.45328807830810547
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_8": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_8.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_8"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2699337005615234,
+            0.8804128170013428,
+            0.4511711001396179
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2699337005615234,
+              0.8804128766059875,
+              0.45117127895355225
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_9": {
+          "file": "Exports/2084_WateryRebirth_Overall_OwnRebirthFlow_9.fbx",
+          "objects": [
+            "PART_Hydro_OwnRebirthFlow_9"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2620657682418823,
+            0.9820080995559692,
+            0.4387501999735832
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_OwnRebirthFlow_9": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2620657682418823,
+              0.9820081889629364,
+              0.43875033408403397
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2084_WateryRebirth_Overall_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2084_WateryRebirth_Overall_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "waveCenter": [
+            4.534999847412109,
+            0.1899999976158142,
+            0.33500000834465027
+          ],
+          "reach": 4.2,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 28,
+      "focus": [
+        0.1186671257019043,
+        -0.08,
+        -0.08404529094696045
+      ],
+      "detailScale": 13.659328022003173,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2084_WateryRebirth_Overall.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 70,
+        "selectedFrame": 28,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

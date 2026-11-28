@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2040_Geochanter/RockProjectiles/2040_RockProjectiles_Single",
+  "source": "art_assets/UE/Enemies/2040_Geochanter/RockProjectiles/Blender/2040_RockProjectiles_Single.blend",
+  "file": "Enemies/2040_Geochanter/RockProjectiles/Exports/2040_RockProjectiles_Single.vfx.bytes",
+  "meshes": 4,
+  "tracks": 23,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 87609
+}

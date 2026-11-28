@@ -53,6 +53,8 @@ public sealed class RoguelikeWishMusic : MonoBehaviour
         volume = Mathf.Clamp01(PlayerPrefs.GetFloat(VolumeKey, volume));
         muted = PlayerPrefs.GetInt(MutedKey, 0) != 0;
     }
+    private void OnEnable() => ProjectUserSettings.Changed += ApplyUserVolume;
+    private void ApplyUserVolume() { if (channel != null && fade == null) channel.volume = volume * ProjectUserSettings.Music; }
 
     public void SetFeatured(RoguelikeWishPrize prize)
     {
@@ -130,7 +132,7 @@ public sealed class RoguelikeWishMusic : MonoBehaviour
     {
         volume = Mathf.Clamp01(value);
         PlayerPrefs.SetFloat(VolumeKey, volume);
-        if (channel != null && fade == null) channel.volume = volume;
+        if (channel != null && fade == null) channel.volume = volume * ProjectUserSettings.Music;
         RefreshControls();
     }
 
@@ -265,7 +267,7 @@ public sealed class RoguelikeWishMusic : MonoBehaviour
         channel.playOnAwake = false;
         channel.loop = false;
         channel.spatialBlend = 0f;
-        channel.volume = volume;
+        channel.volume = volume * ProjectUserSettings.Music;
         channel.clip = clip;
         loadedCharacterId = id;
         if (Bookmarks.TryGetValue(id, out var bookmark))
@@ -300,6 +302,7 @@ public sealed class RoguelikeWishMusic : MonoBehaviour
 
     private void OnDisable()
     {
+        ProjectUserSettings.Changed -= ApplyUserVolume;
         CancelPlayback();
         if (fade != null) StopCoroutine(fade);
         fade = null;

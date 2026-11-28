@@ -1,0 +1,37 @@
+单手剑普攻组件初稿
+以下记录仅针对最初5张素材；后续武器素材与预览接入请看同目录的“接入说明.txt”。
+生成方式：内置 imagegen。仅制作图片，未修改脚本、场景或配表，未发布到 StreamingAssets。
+所有图片为 RGBA PNG，已检查存在全透明和半透明像素。预览中的黑色区域是透明背景的显示底色，不是黑色底板。可直接在 PS 中打开继续修改；本次不包含分层 PSD。
+
+文件用途
+SwordNormal_Slash_A.png：较浅弧度的刀光主体。
+SwordNormal_Slash_B.png：另一种较上扬、右侧较宽的刀光主体，用于轮廓变化。
+SwordNormal_Glow_A.png：参考 A 生成的独立柔光初稿，需在接入时校准位置和尺寸，并进一步打磨边缘。
+SwordNormal_HitFlash.png：命中瞬间的独立闪光。
+SwordNormal_SparkShard.png：单片光屑，由程序重复发射，不能把它当作已完成的整团粒子动画。
+
+随机与动画
+固定图片不等于固定播放结果。仍可配置独立命中位置、基础角度、角度偏移、等比缩放、小幅非等比拉伸、镜像、透明度、颜色、速度、轮廓选择，以及碎屑数量、方向、尺寸和速度。
+刀光轮廓如果要连续变化，可用弧形网格/UV变形；不是要求把随机全部烘焙进图片。
+镜像时需保证划出方向、拖尾和飞散方向一起调整。
+主体、柔光、闪光、碎屑分别计时；不要把所有组件一起淡入淡出。
+命中位置独立于跳字位置。元素颜色仍使用项目统一色表，不在素材里固定七套颜色。
+这些是供审核的静态图初稿，不代表已经实现划出/擦除、真实辉光或可用的战斗预设。图像尺寸与透明留白不同，接入需要配置有效内容尺寸与定位，不能仅按原图宽高直接等大叠放。
+
+以下为本次提交给内置 imagegen 的完整提示词（顺序按文件对应）：
+
+SwordNormal_Slash_A.png
+Use case: stylized-concept. Asset type: production 2D Unity UI sword-slash VFX sprite, single-handed sword NORMAL attack, component SwordNormal_Slash_A. Generate ONE isolated horizontally oriented shallow swept blade-light arc on genuine transparent RGBA background. Subject: an elegant fast sword cut, narrow long crescent/swoosh roughly 4:1 silhouette, smooth asymmetric curvature, very thin needle-like left tail and fine pointed right leading tip, slightly wider blade-light belly in the right middle. The concave inside has two subtle elongated negative-space cuts / wispy tapered streaks, just enough hand-painted anime game detail, not scratchy. Crisp readable hand-painted luminous shape, premium clean anime fantasy combat VFX, restrained and light rather than a huge heavy magical attack. Palette strictly neutral white to pale grayscale, no hue, no black outlines. White blade with delicate semi-transparent fringes, NO broad glow halo (glow is separate), NO center hit flash, NO particles, no surrounding decoration. Keep the complete arc fully inside a landscape canvas with at least 12% transparent padding on ALL sides. Orthographic flat sprite only. No sword, no character, no card, no environment, no text, no labels, no checkerboard drawn into image, no black or colored backdrop, no drop shadow. This image is a reusable color-tintable texture, not an effect showcase or a composite scene.
+
+SwordNormal_Slash_B.png
+Use case: stylized-concept. Asset type: SINGLE reusable Unity 2D UI sword slash texture, one-handed sword NORMAL attack, variant B. Genuinely transparent RGBA background. Draw ONE extremely clean hand-painted anime-style crescent blade-light stroke, horizontally elongated with a shallow graceful upward sweep, an asymmetrically fuller right middle and sharp tapered endpoints. Compact, nimble, elegant; not a wide heavy crescent moon. ONE unified silhouette with 1-2 long fine negative-space streaks in its inner edge. Crisp clean leading edge, silky translucent trailing edge. Neutral white and pale grayscale only, ready for runtime tinting. The shape should read at 200 pixels wide. NOT furry, NOT grainy, NO noise speckles, NO sketch strokes, NO metallic material, NO ornamental curls, NO sparkles, NO particles, NO hit flash, NO big glow. No black outline. Fit full silhouette inside landscape canvas with generous transparent margins. One sprite only, no text, no labels, no object, no sword, no characters, no background, no checkerboard painted in image. This is an actual isolated VFX production component, not a showcase illustration.
+
+SwordNormal_Glow_A.png
+Use case: precise-object-edit. Input image 1 is the SwordNormal_Slash_A component; derive a SEPARATE matching diffuse glow-only VFX texture. Preserve the overall wide shallow crescent arc direction and asymmetric contour identity, full stroke visible, but REMOVE all sharp white core and all hard interior streaks. Replace the blade with a softly defocused, translucent, neutral white luminous haze following that same curved path. Glow is brightest along the middle curved path, smoothly falling to ZERO alpha outward, with no discernible contour line and no opaque solid shape. Keep the arc delicate, not a giant fog bank. Add generous transparent padding so NO haze touches any image edge. Genuine RGBA transparency; white/grayscale only for runtime tinting. No flash, no particles, no dots, no image background, no checkerboard, no text, no frame, no scene. This output is just the independently tunable soft-glow layer, to be aligned and scaled behind the sharp slash; not a combined slash-plus-glow.
+
+SwordNormal_HitFlash.png
+Use case: stylized-concept. Asset type: isolated Unity 2D UI VFX component SwordNormal_HitFlash. Generate ONE small sharp asymmetric anime sword-impact glint on genuine transparent RGBA background. Centered on a square canvas, generous transparent padding. A tiny brilliant white contact center, two dominant slender diagonal tapered rays running lower-left to upper-right and two shorter unequal counter-rays, plus a very restrained soft translucent white halo only close to center. Fine needle tips. The dominant ray is slightly bent, not a perfectly mathematical cross. Clean premium anime fantasy hit feedback, elegant lightweight normal attack not explosion, no circle, no ring, no magic symbols. Strict neutral white/grayscale with partial transparency. NO surrounding particles (separate component), no slash crescent, no glitter field, no text, no labels, no border, no scene, no black or colored background, no baked checkerboard, no shadow.
+
+SwordNormal_SparkShard.png
+Use case: stylized-concept. Asset type: single particle sprite for Unity sword normal-hit VFX, SwordNormal_SparkShard. Genuine transparent RGBA background. Draw exactly ONE small narrow tapered luminous fragment, horizontally oriented and centered with generous transparent margin. Slim asymmetric elongated pointed quadrilateral/lance shard, about 5:1 length-to-width, bright white core, subtly feathered translucent trailing tip, very slight hand-painted curve and one tiny diagonal facet giving crisp visual character. Minimal crisp anime fantasy light fragment, neutral white to pale gray only, intended to be instanced 3 to 6 times at runtime with independent angle/size/speed. NO complete spark burst, NO multiple fragments, NO surrounding dots, NO rays, NO slash arc, NO large halo, NO rock or crystal shading, NO black outlines. No text, labels, background scene, checkerboard, or shadow.
+

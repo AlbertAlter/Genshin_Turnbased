@@ -1,0 +1,41 @@
+{
+  "purpose": "full-world reusable base and pattern meshes; Blender-only live example coverage",
+  "domain": {
+    "x": [
+      -9.6,
+      9.6
+    ],
+    "z": [
+      -5.4,
+      5.4
+    ]
+  },
+  "vertexData": "VFXColor contains full unmasked base RGBA; no example target mask is baked into alpha",
+  "runtimeCoverage": "Compute max-union coverage from actual status positions; source preview controls and node group are NOT runtime bindings",
+  "ellipseRadii": [
+    1.85,
+    2.35
+  ],
+  "smoothBoundary": [
+    0.62,
+    1.0
+  ],
+  "previewCenters": [
+    [
+      2.075000047683716,
+      0.10000000149011612,
+      -0.6800000071525574
+    ],
+    [
+      3.7049999237060547,
+      0.15000000596046448,
+      1.350000023841858
+    ]
+  ],
+  "previewControls": [
+    "PreviewUseCoverage",
+    "PreviewTarget1",
+    "PreviewTarget2"
+  ],
+  "partInspection": "Reusable library meshes retain unmasked materials. Scene field instances use preview-only material overrides; disable PreviewUseCoverage to inspect the complete field."
+}

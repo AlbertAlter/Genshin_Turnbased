@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2085_AbyssLector/Thunderbolt/2085_Thunderbolt_4Bolts",
+  "source": "art_assets/UE/Enemies/2085_AbyssLector/Thunderbolt/Blender/2085_Thunderbolt_4Bolts.blend",
+  "file": "Enemies/2085_AbyssLector/Thunderbolt/Exports/2085_Thunderbolt_4Bolts.vfx.bytes",
+  "meshes": 10,
+  "tracks": 88,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 365612
+}

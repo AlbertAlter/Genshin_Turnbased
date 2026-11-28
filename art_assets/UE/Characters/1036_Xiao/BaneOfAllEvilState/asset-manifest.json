@@ -1,0 +1,275 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1036_Xiao/BaneOfAllEvilState/视觉需求.md",
+  "variants": {
+    "Xiao_BaneOfAllEvilState": {
+      "effect": "Xiao_BaneOfAllEvilState",
+      "source": "Blender/Xiao_BaneOfAllEvilState.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1036_Xiao/BaneOfAllEvilState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "YakshaMask": {
+          "file": "Exports/Xiao_BaneOfAllEvilState_YakshaMask.fbx",
+          "objects": [
+            "PART_AuthoredDarkYakshaMask",
+            "PART_MaskTaperedHorn_-1",
+            "PART_MaskTaperedHorn_1"
+          ],
+          "vertices": 69,
+          "triangles": 102,
+          "dimensions": [
+            1.5600000619888306,
+            0.3555736839771271,
+            2.0299999713897705
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredDarkYakshaMask": [
+              "XiaoMaskDarkJade"
+            ],
+            "PART_MaskTaperedHorn_-1": [
+              "XiaoMaskDarkJade"
+            ],
+            "PART_MaskTaperedHorn_1": [
+              "XiaoMaskDarkJade"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 69,
+            "triangles": 102,
+            "dimensions": [
+              1.5600000619888306,
+              0.35557401180267334,
+              2.0299999713897705
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "MaskInlaidDetails": {
+          "file": "Exports/Xiao_BaneOfAllEvilState_MaskInlaidDetails.fbx",
+          "objects": [
+            "PART_MaskGoldBrow_-1",
+            "PART_MaskColdEye_-1",
+            "PART_MaskAngularJaw_-1",
+            "PART_MaskGoldBrow_1",
+            "PART_MaskColdEye_1",
+            "PART_MaskAngularJaw_1"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9100934267044067,
+            0.1599999964237213,
+            1.1885857582092285
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_MaskGoldBrow_-1": [
+              "Soft"
+            ],
+            "PART_MaskColdEye_-1": [
+              "Soft"
+            ],
+            "PART_MaskAngularJaw_-1": [
+              "Soft"
+            ],
+            "PART_MaskGoldBrow_1": [
+              "Soft"
+            ],
+            "PART_MaskColdEye_1": [
+              "Soft"
+            ],
+            "PART_MaskAngularJaw_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 126,
+            "triangles": 144,
+            "dimensions": [
+              0.9100934267044067,
+              0.16000006347894669,
+              1.1885858178138733
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AuraWindBand": {
+          "file": "Exports/Xiao_BaneOfAllEvilState_AuraWindBand.fbx",
+          "objects": [
+            "PART_XiaoTwistingWindBand"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.4362841844558716,
+            1.051196575164795,
+            0.7979019861668348
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_XiaoTwistingWindBand": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.4362841844558716,
+              1.0511966943740845,
+              0.7979021389037371
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "KarmicShadow": {
+          "file": "Exports/Xiao_BaneOfAllEvilState_KarmicShadow.fbx",
+          "objects": [
+            "PART_AngularKarmicShadow"
+          ],
+          "vertices": 4,
+          "triangles": 2,
+          "dimensions": [
+            0.12000000104308128,
+            0.0,
+            0.4100000113248825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AngularKarmicShadow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 2,
+            "dimensions": [
+              0.12000000104308128,
+              6.679747599491748e-08,
+              0.4100000113248825
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Bane375frames/11.25s,WindCycling122frames/3.66s,Normal285frames/8.55s decoded in memory;24 samples of each observed. Mask is authored from visible silhouette/colour cues, not copied topology. Normal GIF is unenhanced; enhanced moves follow project requirements, not original plunges.",
+      "scope": "Source art only. No HP ticking, enemy hit on burst cast, teleport/plunge, new C6 attack or Unity/table integration.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiao_BaneOfAllEvilState.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1036_Xiao/BaneOfAllEvilState/Blender/Xiao_BaneOfAllEvilState.blend",
+        "driversConverted": 32,
+        "legacyExpressions": 32,
+        "numericComparisons": 1088,
+        "maximumFormulaError": 3.832668576952969e-08,
+        "nativeDrivers": 116,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xiao_BaneOfAllEvilState_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "key": "general/GeoResonance/GeoResonance",
+  "source": "art_assets/UE/general/GeoResonance/Blender/GeoResonance.blend",
+  "file": "general/GeoResonance/Exports/GeoResonance.vfx.bytes",
+  "meshes": 3,
+  "tracks": 3,
+  "frames": 95,
+  "duration": 3.1333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.1333333333333333
+  },
+  "bytes": 29696
+}

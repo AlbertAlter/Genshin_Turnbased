@@ -1,0 +1,316 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2057_Stonehide\\EmpoweredPunch\\视觉需求.md",
+  "variants": {
+    "2057_EmpoweredPunch": {
+      "effect": "2057_EmpoweredPunch",
+      "source": "Blender/2057_EmpoweredPunch.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2057_Stonehide\\EmpoweredPunch\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2057_EmpoweredPunch_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2057_EmpoweredPunch_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2057_EmpoweredPunch_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GeoPunchGroundRays": {
+          "file": "Exports/2057_EmpoweredPunch_GeoPunchGroundRays.fbx",
+          "objects": [
+            "PART_GeoPunchIrregularGroundRay0",
+            "PART_GeoPunchIrregularGroundRay1",
+            "PART_GeoPunchIrregularGroundRay2",
+            "PART_GeoPunchIrregularGroundRay3",
+            "PART_GeoPunchIrregularGroundRay4",
+            "PART_GeoPunchIrregularGroundRay5",
+            "PART_GeoPunchIrregularGroundRay6",
+            "PART_GeoPunchIrregularGroundRay7",
+            "PART_GeoPunchIrregularGroundRay8",
+            "PART_GeoPunchIrregularGroundRay9",
+            "PART_GeoPunchIrregularGroundRay10",
+            "PART_GeoPunchIrregularGroundRay11",
+            "PART_GeoPunchIrregularGroundRay12",
+            "PART_GeoPunchIrregularGroundRay13",
+            "PART_GeoPunchIrregularGroundRay14"
+          ],
+          "vertices": 630,
+          "triangles": 900,
+          "dimensions": [
+            4.231580018997192,
+            0.0,
+            2.6025563180446625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GeoPunchIrregularGroundRay0": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay1": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay2": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay3": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay4": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay5": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay6": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay7": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay8": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay9": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay10": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay11": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay12": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay13": [
+              "Soft"
+            ],
+            "PART_GeoPunchIrregularGroundRay14": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 15,
+            "vertices": 630,
+            "triangles": 900,
+            "dimensions": [
+              4.231580018997192,
+              4.2401021360660707e-07,
+              2.6025563180446625
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PunchSweep": {
+          "file": "Exports/2057_EmpoweredPunch_PunchSweep.fbx",
+          "objects": [
+            "PART_ShortPhysicalPunchSweep"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.1458680629730225,
+            0.0,
+            1.6461156010627747
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortPhysicalPunchSweep": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.1458680629730225,
+              2.681862625308895e-07,
+              1.6461156010627747
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 43,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 48,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 51,
+      "focus": [
+        3.789182424545288,
+        -0.08,
+        0.28041166067123413
+      ],
+      "elementAppearance": "Geo",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2057_EmpoweredPunch.wav"
+      },
+      "detailScale": 8.404488351609972,
+      "posterSelection": {
+        "previousFrame": 21,
+        "selectedFrame": 51,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

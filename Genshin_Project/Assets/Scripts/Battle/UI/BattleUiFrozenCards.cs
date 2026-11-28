@@ -48,8 +48,9 @@ public sealed class BattleUiFrozenCards : MonoBehaviour
             { Release(entry); entries.Remove(binding); entry = null; }
             if (entry == null)
             {
-                bool airborne = AllyControlRelease.GetOldest(entity).Airborne != null;
-                if (!airborne && (!resources.Ready || !FrozenReactionHandler.IsFrozen(entity))) continue;
+                bool airborne = AllyControlRelease.GetOldest(entity).VisibleAirborne != null;
+                bool stunned = BattleUiFreezeSource.IsStunned(entity);
+                if (!airborne && !stunned && (!resources.Ready || !FrozenReactionHandler.IsFrozen(entity))) continue;
                 var instance = Instantiate(cardPrefab, card.Appearance.FreezeLayer);
                 var source = instance.dataSource as BattleUiFreezeSource;
                 if (source == null || instance.effect == null || instance.clickAudio == null || instance.hitArea == null)

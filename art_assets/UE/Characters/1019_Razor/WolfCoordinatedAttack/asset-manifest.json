@@ -1,0 +1,182 @@
+{
+  "effect": "Razor / WolfCoordinatedAttack",
+  "parts": {
+    "Razor_ClawSweep": {
+      "file": "Razor_ClawSweep.fbx",
+      "radius": 0.7812862960013466,
+      "vertices": 1755,
+      "triangles": 3072,
+      "alpha": [
+        0.0,
+        0.9200000166893005
+      ],
+      "shapeKeys": [
+        "Basis",
+        "Thin",
+        "CurveMore",
+        "SpreadMore"
+      ],
+      "materials": [
+        "Razor_ClawSweep_RGBA"
+      ]
+    }
+  },
+  "example": {
+    "actualTargetIndices": [
+      1,
+      2,
+      3
+    ],
+    "oneMainSweep": true,
+    "localContactCount": 3,
+    "contactSampleSeconds": 0.23,
+    "mergedBounds": [
+      [
+        -6.974999904632568,
+        -0.4099999964237213,
+        -2.1700000762939453
+      ],
+      [
+        -1.845000147819519,
+        -0.4099999964237213,
+        2.869999885559082
+      ]
+    ]
+  },
+  "sharedArm": "../LightningFangState/Exports/Razor_WolfArm.fbx",
+  "publicParts": [
+    "general/LightningStrike/Exports/LightningStrike_Lightning0.fbx",
+    "general/LightningStrike/Exports/LightningStrike_Glow.fbx",
+    "general/LightningStrike/Exports/LightningStrike_Spark.fbx",
+    "general/LightningStrike/Exports/LightningStrike_BoltBranch0.fbx"
+  ],
+  "source": "Blender/Razor_WolfCoordinatedAttack.blend",
+  "preview": "Preview/Razor_WolfCoordinatedAttack_Full.mp4",
+  "controls": {
+    "CTRL_Razor_WolfCoordinatedAttack": [
+      "Description",
+      "Coverage",
+      "Thickness",
+      "Curvature",
+      "LineSpacing",
+      "ContactSize",
+      "TrailOpacity",
+      "ArmSpread",
+      "ArmSize",
+      "SelfMotion",
+      "PlaybackSpeed",
+      "Opacity"
+    ]
+  },
+  "timingBoundary": "Source art only; no formal hit timeline, status, or damage implementation.",
+  "layeredAnimation": "Native UV meshes and exported morph targets; not Live2D SDK. Texture alpha, object visibility, dissolve/reveal and clocks require explicit runtime reconstruction.",
+  "fps": 30,
+  "units": "1 Blender unit = 1 meter; reference art scale 100 design pixels per unit",
+  "axes": "Blender X right, Z up, -Y towards viewer; FBX -Z forward / Y up",
+  "runtimeConnected": false,
+  "reference": "Nine separate cards with actual fronts, frames, backs and sides; all used images packed. Reference objects never exported.",
+  "vertexColor": "VFXColor POINT RGBA, LINEAR export; soft edge alpha and material groups retained. Blender object alpha/reveal and authored clocks require later explicit runtime reconstruction; no Unity integration performed.",
+  "combinedPreview": {
+    "source": "Blender/Razor_Wolf_CombinedPreview.blend",
+    "preview": "Preview/Razor_Wolf_CombinedPreview_Full.mp4",
+    "actionOffsetSeconds": [
+      3.0,
+      4.0
+    ],
+    "stateSource": "../LightningFangState/Blender/Razor_LightningFangState.blend",
+    "stateArmReused": true
+  },
+  "sourceValidation": {
+    "Razor_WolfCoordinatedAttack": {
+      "reopened": true,
+      "referenceCards": 9,
+      "packedImages": 13,
+      "frameEnd": 25,
+      "firstAndFinalClear": true,
+      "oneSweepForThreeTargets": true,
+      "noPersistentWolfTorso": true,
+      "contactSampleSeconds": 0.23
+    },
+    "Razor_Wolf_CombinedPreview": {
+      "reopened": true,
+      "referenceCards": 9,
+      "packedImages": 14,
+      "frameEnd": 307,
+      "firstAndFinalClear": true,
+      "persistentHeadPhaseContinues": true,
+      "sameTwoArms": true,
+      "rightArmUnchanged": true,
+      "leftArmReturnsToCurrentPhase": true,
+      "twoExampleActions": true
+    }
+  },
+  "mediaValidation": [
+    {
+      "source": "Razor_WolfCoordinatedAttack",
+      "video": "Preview/Razor_WolfCoordinatedAttack_Full.mp4",
+      "framesDecoded": 25,
+      "fps": 30.0,
+      "motionSheet": "Preview/Razor_WolfCoordinatedAttack_Full_MotionSheet.png"
+    },
+    {
+      "source": "Razor_Wolf_CombinedPreview",
+      "video": "Preview/Razor_Wolf_CombinedPreview_Full.mp4",
+      "framesDecoded": 307,
+      "fps": 30.0,
+      "motionSheet": "Preview/Razor_Wolf_CombinedPreview_Full_MotionSheet.png"
+    }
+  ],
+  "nativeValidation": {
+    "WolfCoordinatedAttack/Razor_ClawSweep": {
+      "vertices": 1755,
+      "triangles": 3072,
+      "rgba": true,
+      "originZero": true,
+      "radius": 0.7812862960013466,
+      "shapeKeys": [
+        "Basis",
+        "Thin",
+        "CurveMore",
+        "SpreadMore"
+      ],
+      "uv": true
+    }
+  },
+  "targetCoverageInspection": [
+    {
+      "targets": [
+        2
+      ],
+      "mainSweepCount": 1,
+      "localContacts": 1
+    },
+    {
+      "targets": [
+        0,
+        2,
+        4
+      ],
+      "mainSweepCount": 1,
+      "localContacts": 3
+    },
+    {
+      "targets": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "mainSweepCount": 1,
+      "localContacts": 5
+    }
+  ],
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "clips": 3,
+    "auditioned": false,
+    "originalGameAudio": false,
+    "loopWaveformChecks": [],
+    "status": "PCM/waveform checks only; no listening approval and no Unity/Wwise events."
+  }
+}

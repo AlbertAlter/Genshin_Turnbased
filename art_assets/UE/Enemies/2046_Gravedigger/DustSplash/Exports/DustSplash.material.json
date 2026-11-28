@@ -1,0 +1,13 @@
+{
+  "type": "rounded-card-face-decal",
+  "input": "actual target card front rectangle, no frame or HUD",
+  "nativePreviewHalfExtents": [
+    0.96,
+    1.665
+  ],
+  "nativePreviewCornerRadius": 0.11,
+  "depth": "between actual target front and frame; foreground cards naturally occlude the decal",
+  "shaderClip": "rounded rectangle SDF; 0.016 world-unit soft boundary",
+  "exportedParts": "unclipped reusable local blotches, flecks and dust",
+  "requiresRuntimeShaderRebuild": true
+}

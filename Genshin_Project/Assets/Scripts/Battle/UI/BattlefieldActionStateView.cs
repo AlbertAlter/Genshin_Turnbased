@@ -220,7 +220,7 @@ public sealed class BattlefieldActionStateView : MonoBehaviour
     {
         if (graphic == null) return;
         float duration=show ? indicatorFadeIn : indicatorFadeOut;
-        alpha=duration<=0 ? (show ? 1 : 0) : Mathf.MoveTowards(alpha,show ? 1 : 0,Time.unscaledDeltaTime/duration);
+        alpha=duration<=0 ? (show ? 1 : 0) : Mathf.MoveTowards(alpha,show ? 1 : 0,BattlePause.DeltaTime/duration);
         bool visible=show || alpha>0;
         if (graphic.gameObject.activeSelf != visible) graphic.gameObject.SetActive(visible);
         graphic.enabled=visible;

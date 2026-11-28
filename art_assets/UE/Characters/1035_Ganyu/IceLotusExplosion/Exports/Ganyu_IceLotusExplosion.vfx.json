@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1035_Ganyu/IceLotusExplosion/Ganyu_IceLotusExplosion",
+  "source": "art_assets/UE/Characters/1035_Ganyu/IceLotusExplosion/Blender/Ganyu_IceLotusExplosion.blend",
+  "file": "Characters/1035_Ganyu/IceLotusExplosion/Exports/Ganyu_IceLotusExplosion.vfx.bytes",
+  "meshes": 46,
+  "tracks": 322,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 424516
+}

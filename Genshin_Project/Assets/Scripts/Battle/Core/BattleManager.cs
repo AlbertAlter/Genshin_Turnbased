@@ -34,6 +34,7 @@ public partial class BattleManager : MonoBehaviour
     private BattleTeamStatusHost _enemyTeam;
     public BattleTeamStatusHost AllyTeam => GetTeam(BattleSide.Ally);
     public BattleTeamStatusHost EnemyTeam => GetTeam(BattleSide.Enemy);
+    public BattleTeamStatusHost GetExistingTeam(BattleSide side) => side == BattleSide.Ally ? _allyTeam : _enemyTeam;
     public BattleTeamStatusHost GetTeam(BattleSide side)
     {
         if (side == BattleSide.Ally) return _allyTeam ?? (_allyTeam = new BattleTeamStatusHost(side));
@@ -63,8 +64,8 @@ public partial class BattleManager : MonoBehaviour
     public bool IsBattleRunning { get; private set; }
     public bool IsCurrentPhaseReady { get; private set; }
     public bool IsAwaitingAllyInput => IsBattleRunning && !IsBattleOver && CurrentPhase == TurnPhase.AllyAction
-        && IsCurrentPhaseReady && !_allyTurnEnded;
-    public bool IsResolving => BattleExecution.IsBusy;
+        && IsCurrentPhaseReady && !_allyTurnEnded && !IsFreeForcedSwitchPending && !IsEnemyArrivalPending;
+    public bool IsResolving => BattleExecution.IsBusy || IsEnemyArrivalPending;
 
     private IBattleFlowScheduler _flowScheduler;
 
@@ -89,6 +90,8 @@ public partial class BattleManager : MonoBehaviour
         TipRequested?.Invoke(key);
     }
     public bool IsFreeDeathSwitchPending => Frontline.IsFreeDeathSwitchPending;
+    public bool IsFreeForcedSwitchPending => Frontline.IsFreeForcedSwitchPending;
+    internal void RequestFreeSkillReplacement(BattleEntity outgoing) => Frontline.RequestFreeSkillReplacement(outgoing);
     // 第一次进入阶段1是战斗开场，不属于“敌方回合结束→下一回合”的跨回合点。
     private bool _isInitialAllyPreTurn = true;
 
@@ -108,6 +111,7 @@ public partial class BattleManager : MonoBehaviour
             return;
         }
         Instance = this;
+        FlowPresentation.Failed += UnityEngine.Debug.LogException;
         EnsureFlowScheduler();
         ReactionStateSystem.SetDisplayAdapter(new StatusDataReactionStateDisplayAdapter());
     }
@@ -116,6 +120,8 @@ public partial class BattleManager : MonoBehaviour
     {
         using var teardown = StatusRemovalActions.SuppressForCleanup();
         if (Instance != this) return;
+        ReleaseRetiredWaveEnemies();
+        FlowPresentation.Dispose();
         TeamBonuses?.Dispose();
         TeamBonuses = null;
         DisposeTeamHosts();
@@ -159,13 +165,13 @@ public partial class BattleManager : MonoBehaviour
         }
     }
 
-    public void RegisterEnemy(EnemyBattleController enemy)
+    public void RegisterEnemy(EnemyBattleController enemy, bool initialize = true)
     {
         if (enemy != null && !_enemies.Contains(enemy))
         {
             _enemies.Add(enemy);
             AssignToField(enemy.Entity, BattleSide.Enemy);
-            if (IsBattleRunning) enemy.ApplyInitiateStatuses();
+            if (IsBattleRunning && initialize) enemy.ApplyInitiateStatuses();
         }
     }
 
@@ -264,6 +270,7 @@ public partial class BattleManager : MonoBehaviour
     public void StartBattle()
     {
         if (IsBattleRunning) return;
+        FlowPresentation.BeginSession();
         EnsureFlowScheduler();
         IsBattleRunning = true;
         IsCurrentPhaseReady = false;
@@ -289,6 +296,7 @@ public partial class BattleManager : MonoBehaviour
                     actor => data != null && data.CharacterAttributesDict.TryGetValue(actor.EntityID, out var attr)
                         ? attr.Element : string.Empty, AllyTeam, EnemyTeam);
                 BattleSpecialRules.OnBattleReady(this);
+                ApplyWaveEntryStatuses();
                 await BattleExecution.Flush();
                 BattleExecution.ThrowIfCancelled();
                 BattleAttributeInitialization.Complete(openingHealth);
@@ -317,6 +325,8 @@ public partial class BattleManager : MonoBehaviour
     public void ResetBattle()
     {
         using var teardown = StatusRemovalActions.SuppressForCleanup();
+        ClearEnemyWaves();
+        MaxRounds = 0; EndedByRoundLimit = false; eventObjective = null;
         TeamBonuses?.Dispose();
         TeamBonuses = null;
         DisposeTeamHosts();
@@ -381,10 +391,10 @@ public partial class BattleManager : MonoBehaviour
     /// </summary>
     public void EndAllyTurn()
     {
-        if (BattleExecution.IsBusy) return ;
+        if (BattleExecution.IsBusy || IsEnemyArrivalPending) return;
         if (IsBattleRunning && !IsBattleOver && CurrentPhase == TurnPhase.AllyAction)
         {
-            if (IsFreeDeathSwitchPending) return;
+            if (IsFreeForcedSwitchPending) return;
             _allyTurnEnded = true;
         }
     }
@@ -395,7 +405,7 @@ public partial class BattleManager : MonoBehaviour
     //  仅在我方行动阶段（AllyAction）且角色可行动时生效
     // ================================================================
     private bool IsAllyActionPhase => IsBattleRunning && !IsBattleOver && CurrentPhase == TurnPhase.AllyAction;
-    private bool CanPlayerSwitch => !BattleExecution.IsBusy && IsAllyActionPhase;
+    private bool CanPlayerSwitch => !IsResolving && IsAllyActionPhase;
 
     /// <summary>当前出战角色；保留阵亡对象供免费换人流程识别。</summary>
     public CharacterBattleController GetActiveAlly() => Frontline.GetActiveAlly();
@@ -481,7 +491,7 @@ public partial class BattleManager : MonoBehaviour
         {
             int candidate = (normalized + step * offset + slotCount * 2) % slotCount;
             CharacterBattleController ally = GetAllyBySlot(candidate);
-            if (ally != null && ally.Entity != null && ally.Entity.IsOnField)
+            if (Frontline.CanSelectForSwitch(ally))
                 return candidate;
         }
         return normalized;
@@ -532,7 +542,7 @@ public partial class BattleManager : MonoBehaviour
 
     public bool UseNormalAttackBySlot(int slotIndex)
     {
-        if (BattleExecution.IsBusy) return false;
+        if (IsResolving) return false;
         if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "普攻失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"普攻失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
@@ -545,7 +555,7 @@ public partial class BattleManager : MonoBehaviour
 
     public bool UseHeavyAttackBySlot(int slotIndex)
     {
-        if (BattleExecution.IsBusy) return false;
+        if (IsResolving) return false;
         if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "重击失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"重击失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
@@ -558,7 +568,7 @@ public partial class BattleManager : MonoBehaviour
 
     public bool UseSkillBySlot(int slotIndex)
     {
-        if (BattleExecution.IsBusy) return false;
+        if (IsResolving) return false;
         if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "战技失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"战技失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
@@ -571,7 +581,7 @@ public partial class BattleManager : MonoBehaviour
 
     public bool UseBurstBySlot(int slotIndex)
     {
-        if (BattleExecution.IsBusy) return false;
+        if (IsResolving) return false;
         if (!IsBattleRunning || IsBattleOver) { LogManager.Log(LogCategory.Action, "爆发失败：战斗未运行或已结束"); return false; }
         if (CurrentPhase != TurnPhase.AllyAction) { LogManager.Log(LogCategory.Action, $"爆发失败：非我方行动阶段"); return false; }
         var c = GetActiveAlly();
@@ -583,10 +593,11 @@ public partial class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 强制结束战斗（测试用）。
+    /// 停止运行但不发布自然胜负；用于离开战斗、重试及独立调试。
     /// </summary>
     public void StopBattle()
     {
+        ClearEnemyWaves();
         BattleExecution.Cancel();
         IsBattleRunning = false;
         IsCurrentPhaseReady = false;
@@ -601,8 +612,10 @@ public partial class BattleManager : MonoBehaviour
     public void CheckBattleEnd()
     {
         if (IsBattleOver) return;
+        ScheduleEnemyArrivals();
         if (TryCompleteVictory()) return;
         if (BattleDeathResolution.DeferBattleEndCheck()) return;
+        if (eventObjective?.Lose(AllEnemiesDefeated, LivingAllyCount, TurnCount) == true) { CompleteBattle(false); return; }
 
         bool allAlliesDead = true;
         foreach (var a in _allies)
@@ -618,9 +631,10 @@ public partial class BattleManager : MonoBehaviour
     {
         get
         {
+            if (enemyWaves?.HasRequiredPending == true) return false;
             if (_enemies.Count == 0) return withdrawnEnemyCount > 0;
             foreach (var enemy in _enemies)
-                if (enemy?.Entity != null && !enemy.Entity.IsDead) return false;
+                if (enemy?.Entity != null && !enemy.Entity.IsDead && !enemy.HasWithdrawn && RequiredForVictory(enemy)) return false;
             return true;
         }
     }
@@ -628,22 +642,28 @@ public partial class BattleManager : MonoBehaviour
     private bool TryCompleteVictory()
     {
         if (!AllEnemiesDefeated) return false;
-        LogManager.Log(LogCategory.Battle, "胜利！敌方全灭");
-        CompleteBattle(true);
+        // 敌阵（含后续波次/补位）打完后再检查完成条件；失败钩子同样适用最后一批退场。
+        bool victory = (eventObjective?.Win(true, LivingAllyCount, TurnCount) ?? true)
+            && !(eventObjective?.Lose(true, LivingAllyCount, TurnCount) ?? false);
+        LogManager.Log(LogCategory.Battle, victory ? "胜利！敌方全灭" : "敌方已清空，事件条件未达成");
+        CompleteBattle(victory);
         return true;
     }
 
     private void CompleteBattle(bool victory)
     {
         if (IsBattleOver) return;
+        int generation = FlowPresentation.Generation;
         IsBattleOver = true;
         Victory = victory;
         using (BattleResolutionContext.BeginCollection())
         {
             BattleEventHub.Publish(new BattleEndedEventData(victory));
             // 先结清结束时的正式状态响应，再通知原有结算/存档调用者。
-            BattleResolutionContext.AfterResponses(() =>
-                BattleExecution.AfterPresentations(() => OnBattleEnded?.Invoke(victory)));
+            BattleResolutionContext.AfterResponses(() => BattleExecution.AfterRoot(() =>
+            {
+                if (generation == FlowPresentation.Generation && IsBattleOver) OnBattleEnded?.Invoke(victory);
+            }));
         }
     }
 
@@ -667,8 +687,15 @@ public partial class BattleManager : MonoBehaviour
             if (opening.IsFaulted) opening.GetAwaiter().GetResult();
             yield break;
         }
+        if (!IsBattleOver)
+        {
+            yield return BattleExecution.Wait(FlowPresentation.PresentAsync(new BattleFlowNotice(BattleFlowNoticeKind.BattleStart, TurnCount, CurrentWave, WaveCount)));
+            yield return BattleExecution.Wait(FlowPresentation.PresentAsync(new BattleFlowNotice(BattleFlowNoticeKind.WaveStart, TurnCount, CurrentWave, WaveCount)));
+        }
         while (IsBattleRunning)
         {
+            while (IsEnemyArrivalPending && IsBattleRunning && !IsBattleOver) yield return null;
+            while (BattlePause.IsPaused && IsBattleRunning && !IsBattleOver) yield return null;
             // 战斗结束（胜利/失败）：停止阶段推进（2026-08-13）
             if (IsBattleOver)
             {
@@ -679,6 +706,8 @@ public partial class BattleManager : MonoBehaviour
             // 1. 阶段结算等待真实表现完成；默认播放器立即完成，不引入额外帧。
             IsCurrentPhaseReady = false;
             yield return EnterPhase(CurrentPhase);
+            while (IsEnemyArrivalPending && IsBattleRunning && !IsBattleOver) yield return null;
+            while (BattlePause.IsPaused && IsBattleRunning && !IsBattleOver) yield return null;
 
             // 2. 我方行动阶段：先重置所有我方角色的 AP/冷却（每回合开始时 AP 全回复）
             if (CurrentPhase == TurnPhase.AllyAction)
@@ -687,6 +716,12 @@ public partial class BattleManager : MonoBehaviour
                 foreach (var ally in _allies)
                     if (ally != null && ally.Entity != null && ally.Entity.IsAlive)
                         ally.OnTurnStart();
+
+                // Turn-start passives run after shared AP refills, so an overflow recovery is retained.
+                var turnPassives = BattleSpecialRules.NotifyAllyTurnStarted(this);
+                while (!turnPassives.IsCompleted) yield return null;
+                turnPassives.GetAwaiter().GetResult();
+                if (!IsBattleRunning || IsBattleOver) break;
 
                 CharacterBattleController active = GetActiveAlly();
                 if (active?.Entity?.IsOnField != true) RequestTip(BattleTipKeys.NoActiveCharacter);
@@ -700,7 +735,7 @@ public partial class BattleManager : MonoBehaviour
             else
             {
                 IsCurrentPhaseReady = true;
-                yield return new WaitForSeconds(PhaseInterval);
+                yield return BattlePause.WaitForSeconds(PhaseInterval);
             }
 
             if (!IsBattleRunning || IsBattleOver)
@@ -709,13 +744,17 @@ public partial class BattleManager : MonoBehaviour
                 break;
             }
 
+            if (TryFinishRoundLimit()) break;
+
             // 2.5 敌方行动阶段：驱动所有存活敌人行动
             if (CurrentPhase == TurnPhase.EnemyAction)
             {
-                yield return _enemyTurn.Execute(_enemies, () => IsBattleRunning && !IsBattleOver);
+                yield return _enemyTurn.Execute(_enemies, () => IsBattleRunning && !IsBattleOver,
+                    () => IsEnemyArrivalPending);
             }
 
             // 3. 推进到下一阶段
+            while (BattlePause.IsPaused && IsBattleRunning && !IsBattleOver) yield return null;
             IsCurrentPhaseReady = false;
             CurrentPhase = TurnPhaseUtil.Next(CurrentPhase);
             LogManager.Log(LogCategory.Turn, $"Phase -> {CurrentPhase}");

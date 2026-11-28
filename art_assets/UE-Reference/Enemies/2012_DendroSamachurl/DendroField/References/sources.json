@@ -1,0 +1,41 @@
+[
+  {
+    "file": "00_原作实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/58/Dendro_Samachurl_Dendro_Field.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Dendro_Samachurl#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "bytes": 3810260,
+    "width": 480,
+    "height": 270,
+    "frame_count": 82,
+    "duration_seconds": 6.56,
+    "modified": false,
+    "use": "领域的黄绿色气息与飘叶；同时出现的荆棘属于另一技能"
+  },
+  {
+    "file": "01_领域展开截帧.png",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/58/Dendro_Samachurl_Dendro_Field.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Dendro_Samachurl#Abilities",
+    "source_file": "00_原作实机.webp",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 29,
+    "timestamp_seconds": 2.32,
+    "cropped": false,
+    "retouched": false,
+    "use": "领域的黄绿色气息与飘叶；同时出现的荆棘属于另一技能"
+  },
+  {
+    "file": "02_领域持续截帧.png",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/58/Dendro_Samachurl_Dendro_Field.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Dendro_Samachurl#Abilities",
+    "source_file": "00_原作实机.webp",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 74,
+    "timestamp_seconds": 5.92,
+    "cropped": false,
+    "retouched": false,
+    "use": "领域的黄绿色气息与飘叶；同时出现的荆棘属于另一技能"
+  }
+]

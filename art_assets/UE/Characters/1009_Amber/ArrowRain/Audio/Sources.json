@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-23",
+  "scope": "Source audio candidates for this effect; not runtime event bindings",
+  "files": [
+    {
+      "file": "ArrowRain_Launch_01.wav",
+      "purpose": "箭雨起手破风",
+      "seconds": 0.126021,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-1.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.126021,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "ArrowRain_Flight_01.wav",
+      "purpose": "单支箭快速飞行",
+      "seconds": 0.124979,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-10.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.124979,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.902350; no upward normalization"
+      ]
+    },
+    {
+      "file": "ArrowRain_Flight_02.wav",
+      "purpose": "单支箭飞行备选",
+      "seconds": 0.076021,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-12.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.076021,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.907100; no upward normalization"
+      ]
+    },
+    {
+      "file": "ArrowRain_Flight_03.wav",
+      "purpose": "单支箭飞行短变体",
+      "seconds": 0.070833,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-13.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.070833,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.912071; no upward normalization"
+      ]
+    },
+    {
+      "file": "ArrowRain_FireBurst_01.wav",
+      "purpose": "箭雨命中爆焰；也可复用为燃烧区点燃",
+      "seconds": 0.65,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -1.0,
+      "sourceTitle": "Fireball",
+      "creator": "Julien Matthey; uploaded by diligentcircle",
+      "sourcePage": "https://opengameart.org/content/fireball-1",
+      "sourceFile": "https://opengameart.org/sites/default/files/105016__julien-matthey__jm-fx-fireball-01.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 1.962396,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.306146s to 0.956146s",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.908213; no upward normalization"
+      ]
+    },
+    {
+      "file": "BurningArea_Loop_01.wav",
+      "purpose": "持续燃烧区的循环底声",
+      "seconds": 8.0,
+      "loop": true,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -20.152,
+      "sourceTitle": "Fireplace Sound loop",
+      "creator": "PagDev",
+      "sourcePage": "https://opengameart.org/content/fireplace-sound-loop",
+      "sourceFile": "https://opengameart.org/sites/default/files/fire.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 25.726625,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt from 2s; 8s loop with 0.125s linear crossfade"
+      ]
+    },
+    {
+      "file": "BurningArea_Crackle_01.wav",
+      "purpose": "燃烧区零散噼啪或尾声",
+      "seconds": 2.870604,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -11.125,
+      "sourceTitle": "Fire Crackling",
+      "creator": "AntumDeluge",
+      "sourcePage": "https://opengameart.org/content/fire-crackling",
+      "sourceFile": "https://opengameart.org/sites/default/files/fire-1.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 2.870604,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    }
+  ]
+}

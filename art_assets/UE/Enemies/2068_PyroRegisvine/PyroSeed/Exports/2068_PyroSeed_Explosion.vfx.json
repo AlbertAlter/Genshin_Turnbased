@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2068_PyroRegisvine/PyroSeed/2068_PyroSeed_Explosion",
+  "source": "art_assets/UE/Enemies/2068_PyroRegisvine/PyroSeed/Blender/2068_PyroSeed_Explosion.blend",
+  "file": "Enemies/2068_PyroRegisvine/PyroSeed/Exports/2068_PyroSeed_Explosion.vfx.bytes",
+  "meshes": 4,
+  "tracks": 95,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 375577
+}

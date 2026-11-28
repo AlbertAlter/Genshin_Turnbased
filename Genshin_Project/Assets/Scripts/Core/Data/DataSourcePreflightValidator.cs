@@ -21,6 +21,12 @@ public static class DataSourcePreflightValidator
 
     private static readonly Dictionary<string, string[]> OptionalWorkbooks = new Dictionary<string, string[]>(StringComparer.Ordinal)
     {
+        ["ElementAuraMotion.xlsx"] = new[] { "Parameters", "说明" },
+        ["HealEffects.xlsx"] = new[] { "Parameters", "说明" },
+        ["CardBottomStatus.xlsx"] = new[] { "Parameters", "ByStatusID", "说明" },
+        ["StatusUI.xlsx"] = new[] { CardFaceStatusTable.IdSheet, CardFaceStatusTable.TypeSheet, "说明" },
+        ["LisaConductive.xlsx"] = new[] { "Parameters", "说明" },
+        ["CardAppearanceSwitch.xlsx"] = new[] { "Character", "Enemy", "说明" },
         ["lang_StatusIcon.xlsx"] = new[] { "lang_statusiconinfo", "lang_statusicon_weapon", "lang_statusicon_artifact" },
         ["lang_UINames.xlsx"] = new[] { "lang_ui_character", "lang_ui_enemy", "lang_ui_weapon", "lang_ui_artifact",
             "lang_ui_skill", "lang_ui_talent", "lang_ui_constellation" }

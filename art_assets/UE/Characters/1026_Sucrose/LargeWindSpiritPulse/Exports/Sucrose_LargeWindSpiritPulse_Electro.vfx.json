@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1026_Sucrose/LargeWindSpiritPulse/Sucrose_LargeWindSpiritPulse_Electro",
+  "source": "art_assets/UE/Characters/1026_Sucrose/LargeWindSpiritPulse/Blender/Sucrose_LargeWindSpiritPulse_Electro.blend",
+  "file": "Characters/1026_Sucrose/LargeWindSpiritPulse/Exports/Sucrose_LargeWindSpiritPulse_Electro.vfx.bytes",
+  "meshes": 31,
+  "tracks": 76,
+  "frames": 95,
+  "duration": 3.1333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.1333333333333333
+  },
+  "bytes": 415449
+}

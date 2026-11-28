@@ -1,0 +1,1213 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideDetonation/视觉需求.md",
+  "variants": {
+    "Tartaglia_RiptideDetonation_Single": {
+      "effect": "Tartaglia_RiptideDetonation_Single",
+      "source": "Blender/Tartaglia_RiptideDetonation_Single.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideDetonation/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Single_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Single_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Single_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Single_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Single_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 23,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Same Riptide water-break components: single,3actualflashcontacts,adjacentgroup,oroneoriginaldeath-anchor explosion then neighbour mark application. New marks never automatically detonate; no centre merging across independent triggers.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideDetonation_Single.wav"
+      }
+    },
+    "Tartaglia_RiptideDetonation_TripleFlash": {
+      "effect": "Tartaglia_RiptideDetonation_TripleFlash",
+      "source": "Blender/Tartaglia_RiptideDetonation_TripleFlash.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideDetonation/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_RiptideDetonation_TripleFlash_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_RiptideDetonation_TripleFlash_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideDetonation_TripleFlash_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/Tartaglia_RiptideDetonation_TripleFlash_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/Tartaglia_RiptideDetonation_TripleFlash_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 18,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 18,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        },
+        {
+          "frame": 54,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 54,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 38,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Same Riptide water-break components: single,3actualflashcontacts,adjacentgroup,oroneoriginaldeath-anchor explosion then neighbour mark application. New marks never automatically detonate; no centre merging across independent triggers.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideDetonation_TripleFlash.wav"
+      }
+    },
+    "Tartaglia_RiptideDetonation_Adjacent": {
+      "effect": "Tartaglia_RiptideDetonation_Adjacent",
+      "source": "Blender/Tartaglia_RiptideDetonation_Adjacent.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideDetonation/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Adjacent_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Adjacent_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Adjacent_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Adjacent_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/Tartaglia_RiptideDetonation_Adjacent_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -6.054999828338623,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ],
+            [
+              -2.765000104904175,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 23,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Same Riptide water-break components: single,3actualflashcontacts,adjacentgroup,oroneoriginaldeath-anchor explosion then neighbour mark application. New marks never automatically detonate; no centre merging across independent triggers.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideDetonation_Adjacent.wav"
+      }
+    },
+    "Tartaglia_RiptideDetonation_DeathSpread": {
+      "effect": "Tartaglia_RiptideDetonation_DeathSpread",
+      "source": "Blender/Tartaglia_RiptideDetonation_DeathSpread.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideDetonation/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Hydro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterBreak": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_HydroRiptideWaterBreak.fbx",
+          "objects": [
+            "PART_Hydro_RiptideCurvedBlade_0",
+            "PART_Hydro_RiptideColdEdge_0",
+            "PART_Hydro_RiptideCurvedBlade_1",
+            "PART_Hydro_RiptideColdEdge_1",
+            "PART_Hydro_RiptideCurvedBlade_2",
+            "PART_Hydro_RiptideColdEdge_2"
+          ],
+          "vertices": 2730,
+          "triangles": 4608,
+          "dimensions": [
+            1.9540804624557495,
+            0.03999999910593033,
+            1.9924957156181335
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideCurvedBlade_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideCurvedBlade_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideColdEdge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2730,
+            "triangles": 4608,
+            "dimensions": [
+              1.9540804624557495,
+              0.04000032251077812,
+              1.9924957156181335
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideWaterDrop": {
+          "file": "Exports/Tartaglia_RiptideDetonation_DeathSpread_HydroRiptideWaterDrop.fbx",
+          "objects": [
+            "PART_Hydro_RiptideSmallDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.08344903588294983,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_RiptideSmallDrop": [
+              "HydroRiptideSmoothDrop"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 80,
+            "triangles": 140,
+            "dimensions": [
+              0.08774351328611374,
+              0.08344905078411102,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "element": "Hydro",
+          "origin": [
+            -4.505000114440918,
+            -0.20000000298023224,
+            -0.6899999976158142
+          ],
+          "targetPositions": [
+            [
+              -6.054999828338623,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -2.765000104904175,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ],
+          "kind": "one committed Riptide centre; shared player/enemy parts, no extra hits from blades/drops"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 31,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Same Riptide water-break components: single,3actualflashcontacts,adjacentgroup,oroneoriginaldeath-anchor explosion then neighbour mark application. New marks never automatically detonate; no centre merging across independent triggers.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideDetonation_DeathSpread.wav"
+      },
+      "previewCardAlphaMode": "BLENDED with actual front/back face culling; no stippled card reveal",
+      "fadingReferenceCards": [
+        2
+      ]
+    }
+  }
+}

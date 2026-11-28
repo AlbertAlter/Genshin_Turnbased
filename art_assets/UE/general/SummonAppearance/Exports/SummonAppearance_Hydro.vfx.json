@@ -1,0 +1,16 @@
+{
+  "key": "general/SummonAppearance/SummonAppearance_Hydro",
+  "source": "art_assets/UE/general/SummonAppearance/Blender/SummonAppearance_Hydro.blend",
+  "file": "general/SummonAppearance/Exports/SummonAppearance_Hydro.vfx.bytes",
+  "meshes": 5,
+  "tracks": 82,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 118176
+}

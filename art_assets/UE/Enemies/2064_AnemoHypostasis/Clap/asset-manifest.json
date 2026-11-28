@@ -1,0 +1,187 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2064_AnemoHypostasis/Clap/视觉需求.md",
+  "variants": {
+    "2064_Clap": {
+      "effect": "2064_Clap",
+      "source": "Blender/2064_Clap.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2064_AnemoHypostasis/Clap/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/2064_Clap_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShellBlock": {
+          "file": "Exports/2064_Clap_ShellBlock.fbx",
+          "objects": [
+            "PART_HypostasisBevelledShell",
+            "PART_ShellAngularInlay_0",
+            "PART_ShellAngularInlay_1",
+            "PART_ShellAngularInlay_2"
+          ],
+          "vertices": 147,
+          "triangles": 228,
+          "dimensions": [
+            1.153171181678772,
+            1.2865861654281616,
+            1.2502341270446777
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HypostasisBevelledShell": [
+              "HypostasisStone"
+            ],
+            "PART_ShellAngularInlay_0": [
+              "Soft"
+            ],
+            "PART_ShellAngularInlay_1": [
+              "Soft"
+            ],
+            "PART_ShellAngularInlay_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 147,
+            "triangles": 228,
+            "dimensions": [
+              1.153171181678772,
+              1.2865864038467407,
+              1.2502343654632568
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 26,
+          "position": [
+            2.075000047683716,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 26,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 26,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 26,
+          "position": [
+            6.994999885559082,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 26,
+          "kind": "one shared clamp over actual target bounds",
+          "targets": [
+            [
+              2.075000047683716,
+              0.10000000149011612,
+              -0.6800000071525574
+            ],
+            [
+              3.7049999237060547,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              5.364999771118164,
+              0.10000000149011612,
+              -0.6800000071525574
+            ],
+            [
+              6.994999885559082,
+              0.15000000596046448,
+              1.350000023841858
+            ]
+          ]
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 26,
+      "focus": [
+        4.534999847412109,
+        0.125,
+        0.33500000834465027
+      ],
+      "detailScale": 12,
+      "scope": "Editable source art, actual-target sample only; no business hooks, tables, publishing or runtime player.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2064_Clap.wav"
+      }
+    }
+  }
+}

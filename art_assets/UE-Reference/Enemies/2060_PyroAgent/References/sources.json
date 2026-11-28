@@ -1,0 +1,34 @@
+{
+  "reference_page": "https://genshin-impact.fandom.com/wiki/Fatui_Pyro_Agent#Abilities",
+  "verification": "已核对能力条目与媒体API地址；仅登记链接，未下载或播放完整动图，不等于逐帧核对。凯亚冰棱直接复用项目成果，不重新找图。",
+  "project_design": "技能1复用冰棱环绕与离轨；技能2绑定实际隐形状态只留卡绘勾线；分身卡底用黑红简化头像，围袭逐份黑红爆炸，末段临时分身落下加刀光。",
+  "references": [
+    {
+      "title": "Fatui Pyro Agent Spinning Knife Guard Invisibility",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Fatui_Pyro_Agent_Spinning_Knife_Guard_Invisibility.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f0/Fatui_Pyro_Agent_Spinning_Knife_Guard_Invisibility.gif/revision/latest?cb=20211218012144",
+      "purpose": "旋刃及隐身原作入口；勾线按用户指定设计。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Fatui Pyro Agent Blade Ablaze",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Fatui_Pyro_Agent_Blade_Ablaze.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/7/72/Fatui_Pyro_Agent_Blade_Ablaze.gif/revision/latest?cb=20240901061728",
+      "purpose": "连续分身攻击和最后下落参考入口，逐份爆炸及末段分身按项目改编。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Fatui Pyro Agent Clones",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Fatui_Pyro_Agent_Clones.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f2/Fatui_Pyro_Agent_Clones.gif/revision/latest?cb=20240901061730",
+      "purpose": "原作分身识别入口，卡底图标以项目本地2060_01头像简化制作。",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ]
+}

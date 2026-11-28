@@ -14,6 +14,9 @@ public static class RoguelikeSaveJson
     private static bool IsProgressData(Type type) =>
         type == typeof(ActiveRunSaveData) || type == typeof(ChapterEntrySaveData) ||
         type == typeof(RoguelikeProgressSnapshot) || type == typeof(RoguelikeFlowData) || type == typeof(RoguelikeNodeSelection) ||
+        type == typeof(RoguelikeEventEncounter) ||
+        type == typeof(StageSetupData) || type == typeof(System.Collections.Generic.List<StageWaveSetup>) ||
+        type == typeof(System.Collections.Generic.List<StageTrialSetup>) ||
         type == typeof(RoguelikeBattleSetup) || type == typeof(WeaponLoadout) ||
         type == typeof(RoguelikeWishProgress) || type == typeof(RoguelikeWishPlanningData) ||
         type == typeof(RoguelikePendingNodeReward);

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2030_CryoMage/Icicles/2030_Icicles_Trigger",
+  "source": "art_assets/UE/Enemies/2030_CryoMage/Icicles/Blender/2030_Icicles_Trigger.blend",
+  "file": "Enemies/2030_CryoMage/Icicles/Exports/2030_Icicles_Trigger.vfx.bytes",
+  "meshes": 17,
+  "tracks": 82,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 181574
+}

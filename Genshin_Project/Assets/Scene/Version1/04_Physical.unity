@@ -1232,7 +1232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -5666,7 +5666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -11057,7 +11057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -11168,7 +11168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -11279,7 +11279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -12224,7 +12224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -16066,7 +16066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -23558,7 +23558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -34093,12 +34093,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.7
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 1
-  m_fontSizeMin: 8
-  m_fontSizeMax: 24
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 25
+  m_fontSizeMax: 25
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -34210,7 +34210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -38308,7 +38308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -42065,7 +42065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -44595,12 +44595,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.15
-  m_fontSizeBase: 36
+  m_fontSize: 29.16667
+  m_fontSizeBase: 29.16667
   m_fontWeight: 400
-  m_enableAutoSizing: 1
-  m_fontSizeMin: 8
-  m_fontSizeMax: 27
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 29.16667
+  m_fontSizeMax: 29.16667
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -45922,7 +45922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -46033,7 +46033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -46740,7 +46740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -50166,6 +50166,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 9823613014}
+  - component: {fileID: 980000000001}
+  - component: {fileID: 980000000002}
   - component: {fileID: 8902000001}
   - component: {fileID: 8926700001}
   - component: {fileID: 1718145281}
@@ -50204,6 +50207,12 @@ GameObject:
   - component: {fileID: 8991000000}
   - component: {fileID: 9033000001}
   - component: {fileID: 8991000001}
+  - component: {fileID: 8600000300}
+  - component: {fileID: 8600000301}
+  - component: {fileID: 8977301000}
+  - component: {fileID: 810020001}
+  - component: {fileID: 987270001}
+  - component: {fileID: 8991000100}
   m_Layer: 0
   m_Name: BattleRuntime
   m_TagString: Untagged
@@ -50369,6 +50378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StageConfigJson: {fileID: 4900000, guid: 6edfd88434df4d8d94a8ded05cf1caec, type: 3}
   characterDetails: {fileID: 8991000001}
+  flowPresentation: {fileID: 8991000100}
 --- !u!4 &1718145281
 Transform:
   m_ObjectHideFlags: 0
@@ -51571,7 +51581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -52127,7 +52137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -53769,7 +53779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -60158,7 +60168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507c1cb698d750c44abac37b15e9e814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  relativePath: art_assets/Status_Icon/Element/{ElementIcon}.png
+  relativePath: art_assets/ElementSVG/Element_{ElementIcon}.png
   allowCrop: 0
   loadOnEnable: 0
   revealOnLoad: 1
@@ -63644,6 +63654,19 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   InitializationSettings: {fileID: 11400000, guid: 4be15623d06932d4aacf2461f456f6c0, type: 2}
+--- !u!114 &987270001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea6bcb19c1f4ba8843098b79297563c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  preset: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -66466,6 +66489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50417d1659ba4bba9ba5b1382eb3c2e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 8600000003}
   layout: {fileID: 8600000000}
   dataSource: {fileID: 8600000001}
 --- !u!114 &8600000003
@@ -66511,6 +66535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layout: {fileID: 8600000000}
   numberFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  reactionFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
   statusNames: {fileID: 9033000001}
 --- !u!114 &8600000005
 MonoBehaviour:
@@ -68996,6 +69021,26 @@ MonoBehaviour:
   projectFrame: {fileID: 114001, guid: 2f4765a0fbaa452c9801f16950a43fa6, type: 3}
   hintFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
   holdSeconds: 0.45
+  shortcutVisuals:
+  - text: {fileID: 1310304967}
+    shortcut: 0
+  - text: {fileID: 256507745}
+    shortcut: 1
+  - text: {fileID: 1824635047}
+    shortcut: 2
+  - text: {fileID: 1283578782}
+    shortcut: 3
+  - text: {fileID: 476686338}
+    shortcut: 4
+  - text: {fileID: 1668389022}
+    shortcut: 5
+  - text: {fileID: 639626327}
+    shortcut: 6
+  - text: {fileID: 1602487773}
+    shortcut: 9
+  - text: {fileID: 1714106796}
+    shortcut: 11
+
 --- !u!114 &8902000000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69883,3 +69928,165 @@ MonoBehaviour:
   - {fileID: 249043036}
   panelFraction: {x: 0.8, y: 0.8}
   english: 0
+--- !u!114 &8600000300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7783ee4387ab4353819f03d880f8dafd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &8600000301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f40cf76e12b34dc3ba4109e1f8b77da7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  layout: {fileID: 8600000000}
+  battle: {fileID: 8700000000}
+  displayMount: {fileID: 1408812043}
+  targetedAssets: {fileID: 8600000300}
+  targetedLayout:
+    referenceSize: {x: 156, y: 159}
+    centerOffset: {x: 2.5, y: -6.5}
+    referenceCardWidth: 197
+    sizeMultiplier: 1
+    enterSeconds: 0.12
+    settleSeconds: 0.06
+    exitSeconds: 0.12
+    tipTravel: 6
+    tipOvershoot: 1
+    ringStartScale: 1.03
+    idleMotion: 1
+    idleCycleSeconds: 2.8
+    idleScaleAmount: 0.015
+    idleGlowDip: 0.2
+    ringDegreesPerSecond: 8
+    outerGlow: 1
+    glowSize: 81
+    glowSpread: 0
+    glowColor: {r: 0.8901961, g: 0.5655451, b: 0.5655451, a: 0.74}
+  automaticClock: 1
+  talismanAssets: {fileID: 987270001}
+  membraneAssets: {fileID: 9823613012}
+  talismanLayout:
+    referenceSize: {x: 80, y: 100}
+    centerOffset: {x: 0, y: 0}
+    referenceCardWidth: 197
+--- !u!114 &8977301000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3392d28f35d4d178cfca771aa25ba26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8600000003}
+  layout: {fileID: 8600000000}
+  automaticClock: 1
+
+  cards: {fileID: 8901000002}
+--- !u!114 &980000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c01fe4cbf94baab5a31175e0e6f01f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  battle: {fileID: 8700000000}
+  canvas: {fileID: 1408812042}
+  font: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  english: 0
+--- !u!114 &980000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5532ee6a49ee4ab9a2e2ef6809ba39f9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  battle: {fileID: 8700000000}
+  input: {fileID: 8700000001}
+  layout: {fileID: 8600000000}
+  displayMount: {fileID: 1408812043}
+  font: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+--- !u!114 &810020001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db1502345a5b4bb687a64ec5cfefe4c2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  battle: {fileID: 8700000000}
+  input: {fileID: 8700000001}
+  switcher: {fileID: 1718145275}
+  mount: {fileID: 1408812043}
+  font: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  framePrefab: {fileID: 114001, guid: 2f4765a0fbaa452c9801f16950a43fa6, type: 3}
+  settingsPrefab: {fileID: 8103, guid: 515b871d524a4c4a94ec60748743dd2d, type: 3}
+  buttonInset: {x: 30, y: 25}
+--- !u!114 &9823613014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de09ef9ca6b499dbe94e1a403878012, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  player: {fileID: 8600000003}
+  layout: {fileID: 8600000000}
+  battle: {fileID: 8700000000}
+  catalogResourcePath: UI/BattleNativeEffects
+--- !u!114 &8991000100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718145274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdba8d2071e64706aea68ccc4834f4a5, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  source: {fileID: 8800000000}
+  input: {fileID: 8700000001}
+  mount: {fileID: 1408812043}
+  viewPrefab: {fileID: 102, guid: 3d4a019a632a40f9bb9967fab7d78263, type: 3}
+  resultPrefab: {fileID: 114, guid: 995865f68512435297c2ef2cc52d2fab, type: 3}
+  deferResultToRewards: 0
+  visualRoots:
+  - {fileID: 1718145281}
+  - {fileID: 1408812043}

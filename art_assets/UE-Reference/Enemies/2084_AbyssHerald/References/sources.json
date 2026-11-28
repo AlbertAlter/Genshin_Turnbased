@@ -1,0 +1,92 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Abyss_Herald:_Wicked_Torrents#Abilities",
+  "visual_sources": [
+    {
+      "title": "Hydro Herald Tidal Slash Combo 1.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_Tidal_Slash_Combo_1.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f6/Hydro_Herald_Tidal_Slash_Combo_1.gif/revision/latest?cb=20220619043409",
+      "size_bytes": 3492054,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Hydro Herald Tidal Slash Combo 4.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_Tidal_Slash_Combo_4.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bb/Hydro_Herald_Tidal_Slash_Combo_4.gif/revision/latest?cb=20220619043418",
+      "size_bytes": 6088311,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Hydro Herald Aqua Slash.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_Aqua_Slash.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/9/9a/Hydro_Herald_Aqua_Slash.gif/revision/latest?cb=20220619043339",
+      "size_bytes": 6894606,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Hydro Herald Surging Tide.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_Surging_Tide.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1e/Hydro_Herald_Surging_Tide.gif/revision/latest?cb=20220619043351",
+      "size_bytes": 3864775,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Hydro Herald Dark Descent.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_Dark_Descent.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/3/30/Hydro_Herald_Dark_Descent.gif/revision/latest?cb=20220619043345",
+      "size_bytes": 6098346,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Hydro Herald The Wicked Torrents.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Hydro_Herald_The_Wicked_Torrents.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/8/8a/Hydro_Herald_The_Wicked_Torrents.gif/revision/latest?cb=20220619043357",
+      "size_bytes": 6227769,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": [
+        {
+          "file": "WickedTorrents_02800ms.png",
+          "time_ms": 2800,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        },
+        {
+          "file": "WickedTorrents_05600ms.png",
+          "time_ms": 5600,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        }
+      ]
+    }
+  ],
+  "audio_sources": [
+    {
+      "url": "https://www.youtube.com/watch?v=WP2ubyjCRwk",
+      "purpose": "原作水刃、十字水弹、开盾和八道水弹声音核对；作者章节0:40近战、2:05飞刃、2:30水弹、4:15盾状态，未试听",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；完整GIF未播放且不保存本地；下列static_frames仅在另有标记时表示已查看。音效未试听、截取或选定。",
+  "implementation_status": "Requirements only. No VFX asset, runtime hook, scene or table changes."
+}

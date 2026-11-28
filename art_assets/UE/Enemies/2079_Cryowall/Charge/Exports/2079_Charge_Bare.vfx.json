@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2079_Cryowall/Charge/2079_Charge_Bare",
+  "source": "art_assets/UE/Enemies/2079_Cryowall/Charge/Blender/2079_Charge_Bare.blend",
+  "file": "Enemies/2079_Cryowall/Charge/Exports/2079_Charge_Bare.vfx.bytes",
+  "meshes": 3,
+  "tracks": 65,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 278906
+}

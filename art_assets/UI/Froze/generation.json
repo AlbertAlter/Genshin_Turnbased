@@ -1,0 +1,139 @@
+{
+  "mode": "PSD export; no new image generation",
+  "source_psd": "PSDfiles/UI/Battlefield_UI_components.psd",
+  "layering": "Normal ice body -> Screen intact surface -> Color Dodge crack 1 -> Color Dodge crack 2",
+  "images": [
+    {
+      "file": "Ice_01_Intact.png",
+      "psd_layer": "froze/Ice_01_Intact",
+      "blend": "NORMAL",
+      "opacity": 128,
+      "fill_opacity": 255,
+      "static_opacity_baked": true,
+      "clipping": "public full-card silhouette",
+      "original_size": [
+        971,
+        1619
+      ],
+      "transform_box": [
+        285.14175416924036,
+        220.0,
+        487.85824583075964,
+        220.0,
+        487.8582458307596,
+        558.0,
+        285.14175416924036,
+        558.0
+      ],
+      "card_bbox": [
+        288,
+        220,
+        485,
+        558
+      ],
+      "canvas_size": [
+        985,
+        1690
+      ]
+    },
+    {
+      "file": "Ice_Surface.png",
+      "psd_layer": "froze/Ice_Surface",
+      "blend": "SCREEN",
+      "opacity": 128,
+      "fill_opacity": 255,
+      "static_opacity_baked": true,
+      "clipping": "public full-card silhouette",
+      "original_size": [
+        971,
+        1619
+      ],
+      "transform_box": [
+        288.0,
+        220.00000000000003,
+        488.0,
+        220.0,
+        488.0,
+        553.4706488156538,
+        288.0,
+        553.4706488156539
+      ],
+      "card_bbox": [
+        288,
+        220,
+        485,
+        558
+      ],
+      "canvas_size": [
+        985,
+        1690
+      ]
+    },
+    {
+      "file": "Ice_02_Cracked.png",
+      "psd_layer": "froze/Ice_02_Cracked",
+      "blend": "COLOR_DODGE",
+      "opacity": 204,
+      "fill_opacity": 255,
+      "static_opacity_baked": true,
+      "clipping": "public full-card silhouette",
+      "original_size": [
+        972,
+        1619
+      ],
+      "transform_box": [
+        285.0,
+        219.99999999999997,
+        487.92526250772084,
+        219.99999999999997,
+        487.92526250772073,
+        557.9999999999999,
+        285.0,
+        557.9999999999999
+      ],
+      "card_bbox": [
+        288,
+        220,
+        485,
+        558
+      ],
+      "canvas_size": [
+        985,
+        1690
+      ]
+    },
+    {
+      "file": "Ice_03_Fractured.png",
+      "psd_layer": "froze/Ice_03_Fractured",
+      "blend": "COLOR_DODGE",
+      "opacity": 230,
+      "fill_opacity": 255,
+      "static_opacity_baked": true,
+      "clipping": "public full-card silhouette",
+      "original_size": [
+        972,
+        1619
+      ],
+      "transform_box": [
+        288.0,
+        225.93467078189298,
+        484.99999999999994,
+        225.934670781893,
+        484.9999999999999,
+        554.0653292181071,
+        288.0,
+        554.0653292181071
+      ],
+      "card_bbox": [
+        288,
+        220,
+        485,
+        558
+      ],
+      "canvas_size": [
+        985,
+        1690
+      ]
+    }
+  ]
+}

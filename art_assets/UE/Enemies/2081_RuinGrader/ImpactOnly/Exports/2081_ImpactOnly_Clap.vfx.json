@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2081_RuinGrader/ImpactOnly/2081_ImpactOnly_Clap",
+  "source": "art_assets/UE/Enemies/2081_RuinGrader/ImpactOnly/Blender/2081_ImpactOnly_Clap.blend",
+  "file": "Enemies/2081_RuinGrader/ImpactOnly/Exports/2081_ImpactOnly_Clap.vfx.bytes",
+  "meshes": 3,
+  "tracks": 30,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 148071
+}

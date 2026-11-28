@@ -1,0 +1,24 @@
+{
+  "created": "2026-11-27",
+  "asset": "Grimheart.png",
+  "character_id": 1040,
+  "status_id": 4104002,
+  "mode": "built-in image_gen",
+  "use_case": "stylized-concept",
+  "identity_reference": "art_assets/Skill_Icon/1040/1040_C01.png",
+  "style_reference": "art_assets/UI/CardBottomStatus/IceLotus.png",
+  "identity_note": "以优菈官方一命字形的羽翼徽记为形状参考，去掉右下方向箭头后作冰蓝彩色改编；不声称是原作冷酷之心专用贴图。",
+  "prompt": "Use case: stylized-concept.\nAsset type: one Genshin Impact Genius Invokation TCG style card-bottom status icon for Eula's Grimheart / 冷酷之心.\nReference image 1, 1040_C01.png, supplies the official Eula winged frost crest identity: preserve the upper symmetrical flared wings, pointed crest crown, curved lower cheek/blade forms and small lower diamond. Remove the two upward chevrons at the lower right; do not include any arrows or buff-direction marks.\nReference image 2, IceLotus.png, is style only: match its dark blue outline, icy blue/white highlights, readable sculpted shadow facets and restrained painted card-game icon finish; do not include the lotus-flower subject.\nRender the Eula crest as a compact icy blue and silver-white solid emblem, with deep cyan/blue recessed regions and broad controlled highlight/shadow bands. Fill all interior negative spaces with opaque dark blue backing so there are no transparent holes inside the emblem. Keep the official flared crest recognizable and clear at small UI size. Abstract ornamental icon, not realistic, no scenery or weapon model.\nCentered on a square canvas, whole crest fits inside a roughly circular footprint with generous transparent margins. No enclosing circular frame, no text, numbers, count badge, arrows, watermark or extra symbols. Actual transparent background outside the solid crest.",
+  "generated_source": "C:/Users/1/.codex/generated_images/01a1b408-f588-7650-9218-4be6b3dc4f7e/exec-7db8807d-8b58-46d2-9d08-54575f708ff6.png",
+  "saved_paths": [
+    "art_assets/UI/CardBottomStatus/Grimheart.png",
+    "Genshin_Project/Assets/StreamingAssets/art_assets/UI/CardBottomStatus/Grimheart.png"
+  ],
+  "size": [
+    1254,
+    1254
+  ],
+  "format": "RGBA PNG",
+  "transparent_background": true,
+  "display": "一个卡底图标，右下数字读取既有Count的真实0～2层；0隐藏但不删除状态，图片不画数字。"
+}

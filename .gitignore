@@ -5,11 +5,12 @@
 !/.gitignore
 !/.gitattributes
 
-# 只同步以下四个目录
+# 只同步以下五个目录
 !/Genshin_Project/
 !/Docs/
 !/Charts/
 !/PSDfiles/
+!/art_assets/
 
 # Unity 自动生成内容
 Genshin_Project/[Ll]ibrary/

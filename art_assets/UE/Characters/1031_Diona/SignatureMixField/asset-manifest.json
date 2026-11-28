@@ -1,0 +1,764 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1031_Diona/SignatureMixField/视觉需求.md",
+  "variants": {
+    "Diona_SignatureMixField_State": {
+      "effect": "Diona_SignatureMixField_State",
+      "source": "Blender/Diona_SignatureMixField_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1031_Diona/SignatureMixField/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/Diona_SignatureMixField_State_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PawProjectile": {
+          "file": "Exports/Diona_SignatureMixField_State_PawProjectile.fbx",
+          "objects": [
+            "PART_AuthoredIcyPawPad",
+            "PART_IcyPawToe_0",
+            "PART_IcyPawToe_1",
+            "PART_IcyPawToe_2",
+            "PART_IcyPawToe_3"
+          ],
+          "vertices": 452,
+          "triangles": 804,
+          "dimensions": [
+            0.6110225319862366,
+            0.07649999856948853,
+            0.5429542362689972
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "ThinColdHaze": {
+          "file": "Exports/Diona_SignatureMixField_State_ThinColdHaze.fbx",
+          "objects": [
+            "PART_ThinColdHazeVolume"
+          ],
+          "vertices": 144,
+          "triangles": 256,
+          "dimensions": [
+            2.0,
+            0.4000000059604645,
+            1.1200000047683716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WineGroundSoftness": {
+          "file": "Exports/Diona_SignatureMixField_State_WineGroundSoftness.fbx",
+          "objects": [
+            "PART_OneWholeSoftPinkWineGround"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WineFieldBoundary": {
+          "file": "Exports/Diona_SignatureMixField_State_WineFieldBoundary.fbx",
+          "objects": [
+            "PART_PinkWhiteWineFieldBoundary"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            9.737676620483398,
+            0.0,
+            6.839972972869873
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "scope": "Source art only, no real shield/healing, targets or turn phases; no Unity/tables changed.",
+      "referenceBoundary": "IcyPaws104f/4.16s and labelled SignatureMix117f/3.51s decoded in memory;24 samples each observed. Paw trails/shield and expanding cold field are visible. The supplied field footage reads strongly blue-white and fine paw pattern is unclear; requested pink-purple palette and authored pad pattern follow project requirements, not an exact texture reconstruction.",
+      "focus": [
+        -4.4670000076293945,
+        0.25,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "contract": "One enemy-side field behind the entire five-slot group, not one field per enemy and not an allied duplicate. State persists through pulses/empty slots; genuine allied healing remains in the public heal display.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Diona_SignatureMixField_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1031_Diona/SignatureMixField/Blender/Diona_SignatureMixField_State.blend",
+        "driversConverted": 36,
+        "legacyExpressions": 36,
+        "numericComparisons": 1224,
+        "maximumFormulaError": 4.4030010359907834e-08,
+        "nativeDrivers": 220,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Diona_SignatureMixField_State_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Diona_SignatureMixField_Trigger": {
+      "effect": "Diona_SignatureMixField_Trigger",
+      "source": "Blender/Diona_SignatureMixField_Trigger.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1031_Diona/SignatureMixField/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Diona_SignatureMixField_Trigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Diona_SignatureMixField_Trigger_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Diona_SignatureMixField_Trigger_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WinePulse": {
+          "file": "Exports/Diona_SignatureMixField_Trigger_WinePulse.fbx",
+          "objects": [
+            "PART_FiniteWholeWineMistPulse"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteWholeWineMistPulse": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 23,
+      "scope": "Source art only, no real shield/healing, targets or turn phases; no Unity/tables changed.",
+      "referenceBoundary": "IcyPaws104f/4.16s and labelled SignatureMix117f/3.51s decoded in memory;24 samples each observed. Paw trails/shield and expanding cold field are visible. The supplied field footage reads strongly blue-white and fine paw pattern is unclear; requested pink-purple palette and authored pad pattern follow project requirements, not an exact texture reconstruction.",
+      "focus": [
+        -4.4670000076293945,
+        0.12000000476837158,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "contract": "One finite actual field pulse; does not create another persistent field. No invented allied heal targets.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Diona_SignatureMixField_Trigger.wav"
+      }
+    },
+    "Diona_SignatureMixField_Overall": {
+      "effect": "Diona_SignatureMixField_Overall",
+      "source": "Blender/Diona_SignatureMixField_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1031_Diona/SignatureMixField/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Diona_SignatureMixField_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Diona_SignatureMixField_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Diona_SignatureMixField_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Shard": {
+          "file": "Exports/Diona_SignatureMixField_Overall_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PawProjectile": {
+          "file": "Exports/Diona_SignatureMixField_Overall_PawProjectile.fbx",
+          "objects": [
+            "PART_AuthoredIcyPawPad",
+            "PART_IcyPawToe_0",
+            "PART_IcyPawToe_1",
+            "PART_IcyPawToe_2",
+            "PART_IcyPawToe_3"
+          ],
+          "vertices": 452,
+          "triangles": 804,
+          "dimensions": [
+            0.6110225319862366,
+            0.07649999856948853,
+            0.5429542362689972
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "ThinColdHaze": {
+          "file": "Exports/Diona_SignatureMixField_Overall_ThinColdHaze.fbx",
+          "objects": [
+            "PART_ThinColdHazeVolume"
+          ],
+          "vertices": 144,
+          "triangles": 256,
+          "dimensions": [
+            2.0,
+            0.4000000059604645,
+            1.1200000047683716
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WineGroundSoftness": {
+          "file": "Exports/Diona_SignatureMixField_Overall_WineGroundSoftness.fbx",
+          "objects": [
+            "PART_OneWholeSoftPinkWineGround"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WineFieldBoundary": {
+          "file": "Exports/Diona_SignatureMixField_Overall_WineFieldBoundary.fbx",
+          "objects": [
+            "PART_PinkWhiteWineFieldBoundary"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            9.737676620483398,
+            0.0,
+            6.839972972869873
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WinePulse": {
+          "file": "Exports/Diona_SignatureMixField_Overall_WinePulse.fbx",
+          "objects": [
+            "PART_FiniteWholeWineMistPulse"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 89,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 163,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 163,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 163,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 163,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 163,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "scope": "Source art only, no real shield/healing, targets or turn phases; no Unity/tables changed.",
+      "referenceBoundary": "IcyPaws104f/4.16s and labelled SignatureMix117f/3.51s decoded in memory;24 samples each observed. Paw trails/shield and expanding cold field are visible. The supplied field footage reads strongly blue-white and fine paw pattern is unclear; requested pink-purple palette and authored pad pattern follow project requirements, not an exact texture reconstruction.",
+      "focus": [
+        -4.4670000076293945,
+        0.25,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "contract": "One enemy-side field behind the entire five-slot group, not one field per enemy and not an allied duplicate. State persists through pulses/empty slots; genuine allied healing remains in the public heal display.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Diona_SignatureMixField_Overall.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1031_Diona/SignatureMixField/Blender/Diona_SignatureMixField_Overall.blend",
+        "driversConverted": 36,
+        "legacyExpressions": 36,
+        "numericComparisons": 1224,
+        "maximumFormulaError": 4.4030010359907834e-08,
+        "nativeDrivers": 823,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Diona_SignatureMixField_Overall_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1025_Chongyun/RimechaserBlade/Chongyun_RimechaserBlade_ThreeTargets",
+  "source": "art_assets/UE/Characters/1025_Chongyun/RimechaserBlade/Blender/Chongyun_RimechaserBlade_ThreeTargets.blend",
+  "file": "Characters/1025_Chongyun/RimechaserBlade/Exports/Chongyun_RimechaserBlade_ThreeTargets.vfx.bytes",
+  "meshes": 13,
+  "tracks": 30,
+  "frames": 124,
+  "duration": 4.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.1
+  },
+  "bytes": 95851
+}

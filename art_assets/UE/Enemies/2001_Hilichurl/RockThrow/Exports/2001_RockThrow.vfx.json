@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2001_Hilichurl/RockThrow/2001_RockThrow",
+  "source": "art_assets/UE/Enemies/2001_Hilichurl/RockThrow/Blender/2001_RockThrow.blend",
+  "file": "Enemies/2001_Hilichurl/RockThrow/Exports/2001_RockThrow.vfx.bytes",
+  "meshes": 4,
+  "tracks": 23,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 89811
+}

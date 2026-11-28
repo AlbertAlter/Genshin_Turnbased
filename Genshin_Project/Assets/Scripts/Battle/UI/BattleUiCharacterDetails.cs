@@ -79,6 +79,8 @@ public sealed partial class BattleUiCharacterDetails : MonoBehaviour
         RemovePortraitButtons();
     }
 
+    private void OnDestroy() => Close();
+
     private void OnApplicationFocus(bool focused)
     {
         if (!focused) Close();
@@ -169,8 +171,12 @@ public sealed partial class BattleUiCharacterDetails : MonoBehaviour
     // Keep the battle keyboard locked through its Update on the frame that Escape closes the modal.
     private void LateUpdate()
     {
-        if (overlay == null) return;
-        if (!CanInspect || ActorAt(slot) != actor || Input.GetKeyDown(KeyCode.Escape)) Close();
+        if (overlay == null)
+        {
+            if (lockedInput != null) Close();
+            return;
+        }
+        if (!CanInspect || ActorAt(slot) != actor || Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel)) Close();
     }
 
     public void Close()
@@ -197,13 +203,44 @@ public sealed partial class BattleUiCharacterDetails : MonoBehaviour
         var cards = window.GetComponentsInChildren<UICardView>();
         var art = window.GetComponentsInChildren<StreamingSpriteReference>();
         float deadline = Time.realtimeSinceStartup + 10;
-        while (window != null && Time.realtimeSinceStartup < deadline &&
-               ((frame != null && !frame.Ready) || cards.Any(card => card != null && !card.Ready) || art.Any(asset => asset != null && asset.IsLoading)))
+        while (window != null && window == overlay)
+        {
+            string error = frame != null ? frame.Error : null;
+            if (string.IsNullOrEmpty(error))
+                error = cards.FirstOrDefault(card => card != null && !string.IsNullOrEmpty(card.Error))?.Error;
+            if (!string.IsNullOrEmpty(error))
+            {
+                FailOpening(error);
+                yield break;
+            }
+            bool loading = (frame != null && !frame.Ready) || cards.Any(card => card != null && !card.Ready)
+                || art.Any(asset => asset != null && asset.IsLoading);
+            if (!loading) break;
+            if (Time.realtimeSinceStartup >= deadline)
+            {
+                FailOpening("边框、卡牌或图标加载超时。");
+                yield break;
+            }
             yield return null;
-        if (window == null) yield break;
-        Canvas.ForceUpdateCanvases(); yield return null;
+        }
+        if (window == null || window != overlay || !PrepareWindowLayout()) yield break;
+        yield return null;
+        if (window == null || window != overlay) yield break;
         if (visibility != null) visibility.alpha = 1;
         reveal = null;
+    }
+
+    private bool PrepareWindowLayout()
+    {
+        try { Canvas.ForceUpdateCanvases(); return true; }
+        catch (Exception error) { FailOpening(error.Message); return false; }
+    }
+
+    private void FailOpening(string error)
+    {
+        reveal = null;
+        Close();
+        Debug.LogWarning("角色详情打开失败，已关闭详情并释放输入锁：" + error, this);
     }
 
     private void SelectMember(int index)

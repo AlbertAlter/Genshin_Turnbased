@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2077_CryoShaman/IcicleSpike/2077_IcicleSpike_Action",
+  "source": "art_assets/UE/Enemies/2077_CryoShaman/IcicleSpike/Blender/2077_IcicleSpike_Action.blend",
+  "file": "Enemies/2077_CryoShaman/IcicleSpike/Exports/2077_IcicleSpike_Action.vfx.bytes",
+  "meshes": 12,
+  "tracks": 30,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 129534
+}

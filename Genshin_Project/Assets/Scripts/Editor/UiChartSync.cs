@@ -45,6 +45,7 @@ public static class UiChartSync
         BattleTimelineSettings.ReadFile(main);
         string source = Path.Combine(timelineRoot, UIHitEffectStyle.FileName);
         string colors = Path.Combine(sourceRoot, ElementColorPalette.FileName);
+        string auras = Path.Combine(sourceRoot, ElementAuraMotionTable.FileName);
         string shake = Path.Combine(timelineRoot, HitShakeStyle.FileName);
         string textureTable = Path.Combine(timelineRoot, HitEffectTextureStyle.FileName);
         string templates = Path.Combine(timelineRoot, BattleSkillPresentationTemplates.FileName);
@@ -52,12 +53,15 @@ public static class UiChartSync
         string enemyActions = Path.Combine(timelineRoot, EnemyActionTemplates.FileName);
         string effects = Path.Combine(timelineRoot, BattlePresentationConfiguration.EffectFileName);
         string attacks = Path.Combine(timelineRoot, BattleAttackAnimationTable.FileName);
+        string healing = Path.Combine(timelineRoot, HealEffectStyle.FileName);
+        HealEffectStyle.ReadFile(healing);
         BattleAttackAnimationTable.ReadFile(attacks);
         BattleActionStyle.ReadFile(prompt);
         BattlePresentationConfiguration.ReadEffects(effects);
         EnemyActionTemplates.ReadFile(enemyActions, BattleSkillPresentationTemplates.ReadFile(templates));
         UIHitEffectStyle.ReadFile(source);
         ElementColorPalette.ReadFile(colors);
+        ElementAuraMotionTable.ReadFile(auras);
         HitShakeStyle.ReadFile(shake);
         var textureStyle = HitEffectTextureStyle.ReadFile(textureTable);
         string artSourceRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets", "UI", "SlashComponents"));
@@ -66,13 +70,14 @@ public static class UiChartSync
             if (!File.Exists(Path.Combine(artSourceRoot, file))) throw new FileNotFoundException("缺少命中特效贴图：" + file);
         string directory = Path.Combine(Application.streamingAssetsPath, "Data", "UI", BattleTimelineSettings.Folder);
         Directory.CreateDirectory(directory);
-        foreach (string file in new[] { main, source, shake, textureTable, templates, enemyActions, prompt, effects, attacks })
+        foreach (string file in new[] { main, source, shake, textureTable, templates, enemyActions, prompt, effects, attacks, healing })
         {
             string target = Path.Combine(directory, Path.GetFileName(file));
             File.Copy(file, target, true);
             File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(file));
         }
         File.Copy(colors, Path.Combine(Application.streamingAssetsPath, "Data", "UI", ElementColorPalette.FileName), true);
+        File.Copy(auras, Path.Combine(Application.streamingAssetsPath, "Data", "UI", ElementAuraMotionTable.FileName), true);
         string artTargetRoot = Path.Combine(Application.streamingAssetsPath, "art_assets", "UI", "SlashComponents");
         Directory.CreateDirectory(artTargetRoot);
         foreach (string file in textureStyle.Files)
@@ -94,21 +99,51 @@ public static class UiChartSync
         string exit = Path.Combine(sourceRoot, UIGoldenDissolveStyle.FileName);
         string variant = Path.Combine(sourceRoot, UICardVariantStyle.FileName);
         string appearance = Path.Combine(sourceRoot, EnemyAppearanceTable.FileName);
-        string characterAppearance = Path.Combine(sourceRoot, CharacterCardSwitchTable.FileName);
         string infoPopup = Path.Combine(sourceRoot, BattleInfoPopupStyle.FileName);
         UICardEntranceStyle.ReadFile(entrance); UIGoldenDissolveStyle.ReadFile(exit);
         UICardVariantStyle.ReadFile(variant);
         BattleInfoPopupStyle.ReadFile(infoPopup);
-        EnemyAppearanceTable.ReadFile(appearance).ValidateRuntimeReferences(
+        var cardSwitches = CardAppearanceSwitchTables.ReadFile(appearance);
+        cardSwitches.Enemies.ValidateRuntimeReferences(
             Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets")));
-        CharacterCardSwitchTable.ReadFile(characterAppearance).ValidateRuntimeReferences(
+        cardSwitches.Characters.ValidateRuntimeReferences(
             Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "art_assets")));
         string target = Path.Combine(Application.streamingAssetsPath, "Data", "UI"); Directory.CreateDirectory(target);
-        foreach (string source in new[] { entrance, exit, variant, appearance, characterAppearance, infoPopup })
+        foreach (string source in new[] { entrance, exit, variant, appearance, infoPopup })
         {
             string destination = Path.Combine(target, Path.GetFileName(source));
             File.Copy(source, destination, true); File.SetLastWriteTimeUtc(destination, File.GetLastWriteTimeUtc(source));
         }
+        SyncCardFaceUI();
+        SyncCardBottomStatus();
+    }
+
+    public static void SyncCardBottomStatus()
+    {
+        string source = Path.GetFullPath(Path.Combine(Application.dataPath, "../../Charts", CardBottomStatusTable.RelativePath));
+        CardBottomStatusTable.ReadFile(source);
+        string target = Path.Combine(Application.streamingAssetsPath, "Data", CardBottomStatusTable.RelativePath);
+        Directory.CreateDirectory(Path.GetDirectoryName(target));
+        File.Copy(source, target, true); File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(source));
+    }
+
+    public static void SyncCardFaceUI()
+    {
+        string source = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI",
+            CardTargetIndicatorTable.Folder, CardTargetIndicatorTable.FileName));
+        CardTargetIndicatorTable.ReadFile(source);
+        string target = Path.Combine(Application.streamingAssetsPath, "Data", "UI", CardTargetIndicatorTable.Folder,
+            CardTargetIndicatorTable.FileName);
+        Directory.CreateDirectory(Path.GetDirectoryName(target));
+        File.Copy(source, target, true); File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(source));
+        string mapping = Path.Combine(Path.GetDirectoryName(source), CardFaceStatusTable.FileName);
+        CardFaceStatusTable.ReadFile(mapping);
+        string mappingTarget = Path.Combine(Path.GetDirectoryName(target), CardFaceStatusTable.FileName);
+        File.Copy(mapping, mappingTarget, true); File.SetLastWriteTimeUtc(mappingTarget, File.GetLastWriteTimeUtc(mapping));
+        string conductive = Path.Combine(Path.GetDirectoryName(source), CardFaceConductiveTable.FileName);
+        CardFaceConductiveTable.ReadFile(conductive);
+        string conductiveTarget = Path.Combine(Path.GetDirectoryName(target), CardFaceConductiveTable.FileName);
+        File.Copy(conductive, conductiveTarget, true); File.SetLastWriteTimeUtc(conductiveTarget, File.GetLastWriteTimeUtc(conductive));
     }
 
     // Shared by the existing art/config/hit-effect menus; never changes scene transforms.
@@ -141,6 +176,8 @@ public static class UiChartSync
         string source = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Charts", "UI",
             BattleTimelineSettings.Folder, BattlefieldDamagePopupStyle.FileName));
         BattlefieldDamagePopupStyle.ReadFile(source);
+        string healing = Path.Combine(Path.GetDirectoryName(source), HealEffectStyle.FileName);
+        HealEffectStyle.ReadFile(healing);
         string main = Path.Combine(Path.GetDirectoryName(source), BattleTimelineSettings.FileName);
         BattleTimelineSettings.ReadFile(main);
         string statusSource = Path.Combine(Path.GetDirectoryName(source), BattlefieldStatusPopupStyle.FileName);
@@ -160,6 +197,7 @@ public static class UiChartSync
         string target = Path.Combine(directory, BattlefieldDamagePopupStyle.FileName);
         File.Copy(source, target, true);
         File.SetLastWriteTimeUtc(target, File.GetLastWriteTimeUtc(source));
+        File.Copy(healing, Path.Combine(directory, HealEffectStyle.FileName), true);
         string statusTarget = Path.Combine(directory, BattlefieldStatusPopupStyle.FileName);
         File.Copy(statusSource, statusTarget, true);
         File.SetLastWriteTimeUtc(statusTarget, File.GetLastWriteTimeUtc(statusSource));

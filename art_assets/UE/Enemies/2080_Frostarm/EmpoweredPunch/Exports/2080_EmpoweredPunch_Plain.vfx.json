@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2080_Frostarm/EmpoweredPunch/2080_EmpoweredPunch_Plain",
+  "source": "art_assets/UE/Enemies/2080_Frostarm/EmpoweredPunch/Blender/2080_EmpoweredPunch_Plain.blend",
+  "file": "Enemies/2080_Frostarm/EmpoweredPunch/Exports/2080_EmpoweredPunch_Plain.vfx.bytes",
+  "meshes": 3,
+  "tracks": 30,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 145018
+}

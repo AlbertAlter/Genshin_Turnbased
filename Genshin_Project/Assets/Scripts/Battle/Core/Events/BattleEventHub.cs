@@ -10,7 +10,7 @@ public enum BattleEventKind
     ActionStarted, ActionCompleted, DamageResolved, HPChanged, HealResolved,
     ReactionOccurred, ResourceChanged, SwitchResolved, ElementContactResolved,
     AuraChanged, StatusAdded, StatusRemoved, ShieldChanged, Death, APSpent, NightSoulBurst, BattleEnded, ShieldGranted,
-    MoonCageConcerto, ActionPrompt, ShieldResistedStatus, Withdrawn
+    MoonCageConcerto, ActionPrompt, ShieldResistedStatus, Withdrawn, Summoned
 }
 
 /// <summary>胜负已正式确定；不用于手动StopBattle、取消或重置，不借状态OnEnd替代。</summary>
@@ -115,6 +115,11 @@ public abstract class BattleEventData
 
 public sealed class DamageEventData : BattleEventData
 {
+    /// <summary>Committed source status identities used by conditional visuals after the action has finished.</summary>
+    public IReadOnlyList<int> SourceActiveStatusIDs {get;}
+    /// <summary>Unique source status values at commit time; ambiguous multi-instance values are omitted.</summary>
+    public IReadOnlyDictionary<string,float> SourceStatusValues {get;}
+    public VentiScriptHooks.BurstVisual VentiBurstVisual { get; }
     public float TargetMaxHP { get; }
     public int ActiveAllyIdAtHit { get; }
     public bool FromIndependentEnemyStatus { get; }
@@ -150,7 +155,30 @@ public sealed class DamageEventData : BattleEventData
     public IReadOnlyList<OverallShieldProtection> OverallShieldProtections { get; }
     public DamageEventData(DamageResolvedEvent value) : base(BattleEventKind.DamageResolved, value.Target)
     {
+        var activeSourceStatuses=new List<int>();
+        var sourceValues=new Dictionary<string,float>(StringComparer.Ordinal);
+        var ambiguousSourceValues=new HashSet<int>();
+        if(value.Source?.SourceEntity!=null)foreach(var status in value.Source.SourceEntity.StatusDict.Values)
+        {
+            if(!status.IsActive||status.MainData==null)continue;
+            int id=status.MainData.StatusID;string prefix=id.ToString(System.Globalization.CultureInfo.InvariantCulture)+":";
+            if(activeSourceStatuses.Contains(id))
+            {
+                if(ambiguousSourceValues.Add(id))
+                {
+                    var remove=new List<string>();foreach(string key in sourceValues.Keys)if(key.StartsWith(prefix,StringComparison.Ordinal))remove.Add(key);
+                    foreach(string key in remove)sourceValues.Remove(key);
+                }
+                continue;
+            }
+            activeSourceStatuses.Add(id);
+            sourceValues.Add(prefix+"Value",status.RuntimeValue);
+            if(status.Snapshot!=null)foreach(var pair in status.Snapshot)sourceValues[prefix+"Snapshot/"+pair.Key]=pair.Value;
+        }
+        SourceActiveStatusIDs=activeSourceStatuses.AsReadOnly();
+        SourceStatusValues=new System.Collections.ObjectModel.ReadOnlyDictionary<string,float>(sourceValues);
         source = value.Source?.Snapshot() ?? DamageSourceInfo.CreateUnknown();
+        VentiBurstVisual = VentiScriptHooks.CaptureBurstVisual(value);
         if (value.Target != null && value.Target.Side == BattleSide.Ally)
         {
             TargetMaxHP = value.Target.GetFinalHP();
@@ -217,6 +245,8 @@ public sealed class ReactionEventData : BattleEventData
     public int SourceId { get; }
     public string EffectId { get; }
     public IReadOnlyList<string> Elements { get; }
+    /// <summary>常规反应解析器在首项保存来袭元素；可变色反应读取此快照，固定色反应不依赖它。SourceElement是角色固有元素。</summary>
+    public string TriggerElement => Elements.Count > 0 ? Elements[0] : string.Empty;
     public string SourceElement { get; }
     public bool SourceHadNightSoulBlessing { get; }
     public bool SourceWasPartyMember { get; }
@@ -308,9 +338,21 @@ public sealed class WithdrawnEventData : BattleEventData
     { Source = source; }
 }
 
+/// <summary>Only the successful public summon commit emits this fact; ordinary registration does not.</summary>
+public sealed class SummonedEventData : BattleEventData
+{
+    public int SummonerID {get;}
+    public BattleSide Side {get;}
+    public int Slot {get;}
+    public SummonedEventData(BattleEntity entity,BattleEntity summoner) : base(BattleEventKind.Summoned,entity)
+    {SummonerID=summoner?.EntityID??0;Side=entity.Side;Slot=entity.SlotPosition;}
+}
+
 public sealed class StatusEventData : BattleEventData
 {
     public string StatusId { get; }
+    public int StatusNumericId { get; }
+    public double? CountValue { get; }
     public long InstanceId { get; }
     public long SourceEffectExecutionId { get; }
     public object Host { get; }
@@ -326,22 +368,26 @@ public sealed class StatusEventData : BattleEventData
             host is BattleTeamStatusHost ? null : host as BattleEntity ?? status.Caster)
     {
         StatusId = status.StatusID2; InstanceId = status.ApplyOrder; Host = host; Reason = reason;
+        StatusNumericId = status.MainData?.StatusID ?? 0;
         SourceEffectExecutionId = status.SourceEffectExecutionId;
         StatusName = status.MainData?.StatusName ?? string.Empty;
         StatusType = status.MainData?.StatusType ?? string.Empty;
+        if(string.Equals(StatusType,"Count",StringComparison.OrdinalIgnoreCase))CountValue=status.RuntimeValue;
         Display = status.MainData?.Display ?? 0;
         if (host is BattleEntity entity) { HostSide = entity.Side; HostSlot = entity.SlotPosition; }
         else if (host is FieldPosition field) { HostSide = field.Side; HostSlot = field.SlotIndex; }
+        else if (host is BattleTeamStatusHost team) { HostSide = team.Side; HostSlot = 0; }
         // 队伍宿主没有个人卡牌，不投影到施加者或每位受益角色。
     }
 }
 
 public sealed class DeathEventData : BattleEventData
 {
+    public int SummonerID {get;}
     private readonly DamageSourceInfo source;
     public DamageSourceInfo Source => source.Snapshot();
     public DeathEventData(DamageResolvedEvent damage) : base(BattleEventKind.Death, damage.Target)
-    { source = damage.Source?.Snapshot() ?? DamageSourceInfo.CreateUnknown(); }
+    { source = damage.Source?.Snapshot() ?? DamageSourceInfo.CreateUnknown(); SummonerID=damage.Target?.Summoner?.EntityID??0; }
 }
 
 public sealed class BattleDeclaration
@@ -520,6 +566,8 @@ public static class BattleEventHub
     {
         if (result == null || result.Dispatched || result.Header.SessionId != session) return;
         result.Dispatched = true;
+        // Event objectives count committed facts before victory checks, never Record-only plans or duplicate Dispatch.
+        BattleManager.Instance?.RecordEventObjective(result);
         // 只复制已正式提交的结果；Record阶段的治疗计划等不能进入动画队列。
         BattleExecution.RecordCommittedDeclaration(result);
         using (result.ResolutionContext.Enter())

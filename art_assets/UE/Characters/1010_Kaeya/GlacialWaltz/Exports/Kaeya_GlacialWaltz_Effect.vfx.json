@@ -1,0 +1,13 @@
+{
+  "key": "Characters/1010_Kaeya/GlacialWaltz/Kaeya_GlacialWaltz_Effect",
+  "source": "art_assets/UE/Characters/1010_Kaeya/GlacialWaltz/Blender/Kaeya_GlacialWaltz_Effect.blend",
+  "file": "Characters/1010_Kaeya/GlacialWaltz/Exports/Kaeya_GlacialWaltz_Effect.vfx.bytes",
+  "meshes": 57,
+  "tracks": 167,
+  "frames": 44,
+  "duration": 1.4333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {},
+  "bytes": 104461
+}

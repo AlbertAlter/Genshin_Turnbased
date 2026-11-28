@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1038_Rosaria/RitesOfTerminationCast/Rosaria_RitesOfTerminationCast",
+  "source": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationCast/Blender/Rosaria_RitesOfTerminationCast.blend",
+  "file": "Characters/1038_Rosaria/RitesOfTerminationCast/Exports/Rosaria_RitesOfTerminationCast.vfx.bytes",
+  "meshes": 15,
+  "tracks": 109,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 210415
+}

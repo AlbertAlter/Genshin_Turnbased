@@ -1,0 +1,15 @@
+{
+  "key": "Characters/1009_Amber/ArrowRain/Amber_BurningArea",
+  "source": "art_assets/UE/Characters/1009_Amber/ArrowRain/Blender/Amber_BurningArea.blend",
+  "file": "Characters/1009_Amber/ArrowRain/Exports/Amber_BurningArea.vfx.bytes",
+  "meshes": 4,
+  "tracks": 15,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Sustained field: all frames remain burning": 0.0
+  },
+  "bytes": 51900
+}

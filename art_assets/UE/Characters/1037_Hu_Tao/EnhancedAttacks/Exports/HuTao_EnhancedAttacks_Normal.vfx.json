@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1037_Hu_Tao/EnhancedAttacks/HuTao_EnhancedAttacks_Normal",
+  "source": "art_assets/UE/Characters/1037_Hu_Tao/EnhancedAttacks/Blender/HuTao_EnhancedAttacks_Normal.blend",
+  "file": "Characters/1037_Hu_Tao/EnhancedAttacks/Exports/HuTao_EnhancedAttacks_Normal.vfx.bytes",
+  "meshes": 16,
+  "tracks": 77,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 270445
+}

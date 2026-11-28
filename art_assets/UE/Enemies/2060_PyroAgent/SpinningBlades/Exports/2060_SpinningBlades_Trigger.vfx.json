@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2060_PyroAgent/SpinningBlades/2060_SpinningBlades_Trigger",
+  "source": "art_assets/UE/Enemies/2060_PyroAgent/SpinningBlades/Blender/2060_SpinningBlades_Trigger.blend",
+  "file": "Enemies/2060_PyroAgent/SpinningBlades/Exports/2060_SpinningBlades_Trigger.vfx.bytes",
+  "meshes": 7,
+  "tracks": 32,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 139230
+}

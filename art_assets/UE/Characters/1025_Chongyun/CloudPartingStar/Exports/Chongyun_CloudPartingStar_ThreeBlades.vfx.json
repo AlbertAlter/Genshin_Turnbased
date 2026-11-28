@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1025_Chongyun/CloudPartingStar/Chongyun_CloudPartingStar_ThreeBlades",
+  "source": "art_assets/UE/Characters/1025_Chongyun/CloudPartingStar/Blender/Chongyun_CloudPartingStar_ThreeBlades.blend",
+  "file": "Characters/1025_Chongyun/CloudPartingStar/Exports/Chongyun_CloudPartingStar_ThreeBlades.vfx.bytes",
+  "meshes": 13,
+  "tracks": 90,
+  "frames": 124,
+  "duration": 4.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.1
+  },
+  "bytes": 212902
+}

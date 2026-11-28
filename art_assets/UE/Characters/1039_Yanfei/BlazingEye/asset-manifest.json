@@ -1,0 +1,229 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1039_Yanfei/BlazingEye/视觉需求.md",
+  "variants": {
+    "Yanfei_BlazingEye": {
+      "effect": "Yanfei_BlazingEye",
+      "source": "Blender/Yanfei_BlazingEye.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1039_Yanfei/BlazingEye/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Yanfei_BlazingEye_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Yanfei_BlazingEye_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Yanfei_BlazingEye_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/Yanfei_BlazingEye_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Yanfei_SourceFlowingFlameVolume"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 16,
+          "position": [
+            -4.441666603088379,
+            -0.07000000029802322,
+            0.6700000166893005
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 16,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 18,
+      "focus": [
+        -4.441666603088379,
+        0.13333334028720856,
+        0.6700000166893005
+      ],
+      "detailScale": 10,
+      "materialPorting": "Flowing fire uses native procedural noise/normal erosion plus object opacity. FBX is reusable static geometry/RGBA, not a complete animated shader; later integration must explicitly rebuild shading and clock.",
+      "referenceBoundary": "DoneDeal original GIF decoded47frames/1.88s;24 sampled frames observed. Normal/charged and SignedEdict bounded downloads timed out. Those forms are authored adaptations, not exact original reconstruction.",
+      "scope": "Source art only, no Unity/tables/gameplay. Seals stay in the existing bottom-status counter; no orbiting seal count or copied original model.",
+      "contract": "One actual group contact. BlazingEye is a separate follow-up burst, never a second stamp, critical roll or recursive proc.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Yanfei_BlazingEye.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    }
+  }
+}

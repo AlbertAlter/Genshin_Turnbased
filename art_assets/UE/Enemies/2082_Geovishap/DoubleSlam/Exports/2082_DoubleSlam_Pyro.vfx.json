@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2082_Geovishap/DoubleSlam/2082_DoubleSlam_Pyro",
+  "source": "art_assets/UE/Enemies/2082_Geovishap/DoubleSlam/Blender/2082_DoubleSlam_Pyro.blend",
+  "file": "Enemies/2082_Geovishap/DoubleSlam/Exports/2082_DoubleSlam_Pyro.vfx.bytes",
+  "meshes": 3,
+  "tracks": 62,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 201123
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "page_url": "https://genshin-impact.fandom.com/wiki/File:Ripple_of_Fate_Charged_Preview.gif",
+    "catalog_url": "https://genshin-impact.fandom.com/wiki/Category%3AMona_Talent_Preview_GIFs",
+    "image_url": null,
+    "title": "Ripple of Fate Charged Preview.gif",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "检索目录确认存在独立重击演示条目；文件页访问受限，未取得直接图片地址，也未观看或逐帧核对完整重击。不得用普通攻击演示冒充重击。",
+    "use": "制作时观看独立重击的蓄势、主体水形、方向、接触水花和消散。"
+  },
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E8%8E%AB%E5%A8%9C",
+    "title": "莫娜原作技能页：因果点破·重击",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已核对重击技能条目；技能文字不能替代视觉演示。",
+    "use": "核对重击身份；完整视觉需结合原作重击实机。"
+  },
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E8%8E%AB%E5%A8%9C",
+    "image_url": "https://patchwiki.biligame.com/images/ys/7/7e/7fygfp3rxpb7lqc51l9xl7a8ragpa9m.gif",
+    "title": "普通攻击资料动图后段水形辅助参考（不是独立重击演示）",
+    "downloaded": true,
+    "local_gif_retained": false,
+    "verification": "内存解码90帧／3.61秒，实际查看24张标时截帧；后段能看见抬起水形，但无目标接触，不能替代独立重击全过程。",
+    "analysis_sheet": "codex_worktable/enemy_vfx/mona-references/normal/Mona_NormalAttack_Observation.png",
+    "use": "仅辅助水形、色彩与透明层次；独立重击来源仍受限。",
+    "recorded": "2026-11-28"
+  }
+]

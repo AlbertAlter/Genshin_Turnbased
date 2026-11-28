@@ -1,0 +1,19 @@
+{
+  "key": "Characters/1017_Ningguang/Starshatter/Ningguang_Starshatter",
+  "source": "art_assets/UE/Characters/1017_Ningguang/Starshatter/Blender/Ningguang_Starshatter.blend",
+  "file": "Characters/1017_Ningguang/Starshatter/Exports/Ningguang_Starshatter.vfx.bytes",
+  "meshes": 4,
+  "tracks": 204,
+  "frames": 70,
+  "duration": 2.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "OwnerReleaseStart": 0.26666666666666666,
+    "ScreenExtrasStart": 0.4,
+    "FirstContact": 0.7333333333333333,
+    "LastExampleContact": 0.9666666666666667,
+    "Cleared": 2.3
+  },
+  "bytes": 155315
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1016_Klee/JumpyDumpty/Klee_JumpyDumpty",
+  "source": "art_assets/UE/Characters/1016_Klee/JumpyDumpty/Blender/Klee_JumpyDumpty.blend",
+  "file": "Characters/1016_Klee/JumpyDumpty/Exports/Klee_JumpyDumpty.vfx.bytes",
+  "meshes": 9,
+  "tracks": 147,
+  "frames": 100,
+  "duration": 3.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Throw": 0.1,
+    "Contact1": 0.7666666666666667,
+    "Contact2": 1.3333333333333333,
+    "FinalContactAndBreakup": 1.8333333333333333,
+    "AllMinesLanded": 2.6333333333333333,
+    "Cleared": 3.3
+  },
+  "bytes": 345292
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2068_PyroRegisvine/PyroSeed/2068_PyroSeed_State",
+  "source": "art_assets/UE/Enemies/2068_PyroRegisvine/PyroSeed/Blender/2068_PyroSeed_State.blend",
+  "file": "Enemies/2068_PyroRegisvine/PyroSeed/Exports/2068_PyroSeed_State.vfx.bytes",
+  "meshes": 1,
+  "tracks": 9,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 85000
+}

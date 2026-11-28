@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2082_Geovishap/RockSpikes/2082_RockSpikes_Geo",
+  "source": "art_assets/UE/Enemies/2082_Geovishap/RockSpikes/Blender/2082_RockSpikes_Geo.blend",
+  "file": "Enemies/2082_Geovishap/RockSpikes/Exports/2082_RockSpikes_Geo.vfx.bytes",
+  "meshes": 4,
+  "tracks": 184,
+  "frames": 240,
+  "duration": 7.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 7.966666666666667
+  },
+  "bytes": 1052781
+}

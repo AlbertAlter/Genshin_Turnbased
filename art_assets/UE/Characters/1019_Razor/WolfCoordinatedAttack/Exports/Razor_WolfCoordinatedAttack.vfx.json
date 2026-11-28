@@ -1,0 +1,15 @@
+{
+  "key": "Characters/1019_Razor/WolfCoordinatedAttack/Razor_WolfCoordinatedAttack",
+  "source": "art_assets/UE/Characters/1019_Razor/WolfCoordinatedAttack/Blender/Razor_WolfCoordinatedAttack.blend",
+  "file": "Characters/1019_Razor/WolfCoordinatedAttack/Exports/Razor_WolfCoordinatedAttack.vfx.bytes",
+  "meshes": 6,
+  "tracks": 15,
+  "frames": 25,
+  "duration": 0.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "OneActualGroupContact": 0.23333333333333334
+  },
+  "bytes": 84023
+}

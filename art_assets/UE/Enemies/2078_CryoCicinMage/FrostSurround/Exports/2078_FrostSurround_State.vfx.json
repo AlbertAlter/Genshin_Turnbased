@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2078_CryoCicinMage/FrostSurround/2078_FrostSurround_State",
+  "source": "art_assets/UE/Enemies/2078_CryoCicinMage/FrostSurround/Blender/2078_FrostSurround_State.blend",
+  "file": "Enemies/2078_CryoCicinMage/FrostSurround/Exports/2078_FrostSurround_State.vfx.bytes",
+  "meshes": 2,
+  "tracks": 26,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 175579
+}

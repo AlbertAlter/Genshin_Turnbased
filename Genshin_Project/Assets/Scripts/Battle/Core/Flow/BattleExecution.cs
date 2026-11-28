@@ -63,6 +63,8 @@ public static class BattleExecution
         public IBattlePresentationPlayer Player;
         public readonly BattlePresentationSequence Results = new BattlePresentationSequence();
         public readonly List<Action> AfterPresentations = new List<Action>();
+        public readonly List<Action> AfterRoot = new List<Action>();
+        public readonly List<Action> RootCancelled = new List<Action>();
         public Gate Gate;
         public bool Skip;
     }
@@ -152,6 +154,7 @@ public static class BattleExecution
         var resolution = BattleEventHub.BeginResolution();
         var session = new Session { Player = _player };
         Action[] completions = Array.Empty<Action>();
+        bool succeeded = false;
         _running = session;
         CurrentSession.Value = session;
         try
@@ -164,6 +167,7 @@ public static class BattleExecution
             ThrowIfCancelled();
             completions = session.AfterPresentations.ToArray();
             session.AfterPresentations.Clear();
+            succeeded = true;
         }
         catch
         {
@@ -176,9 +180,11 @@ public static class BattleExecution
             if (ReferenceEquals(_running, session)) _running = null;
             session.Cancellation.Dispose();
             resolution.Dispose();
+            if (!succeeded) foreach (Action cancelled in session.RootCancelled) cancelled?.Invoke();
         }
         // 完成通知不继承已关闭的结果/声明帧，调用者可以安全切场景或开始下一场。
         foreach (Action completion in completions) completion();
+        foreach (Action completion in session.AfterRoot) completion();
     }
 
     public static async Task RunInline(Func<Task> execute)
@@ -189,6 +195,7 @@ public static class BattleExecution
         try
         {
             ThrowIfCancelled();
+            await BattlePause.WaitUntilResumed(CurrentSession.Value?.Cancellation.Token ?? default);
             await execute();
             await Flush();
         }
@@ -246,6 +253,7 @@ public static class BattleExecution
                     if (session.Skip) gate.ImpactReached();
                     else session.Player.Begin(request, gate.ImpactReached);
                     await gate.Impact;
+                    await BattlePause.WaitUntilResumed(session.Cancellation.Token);
                     ThrowIfCancelled();
                     BattlePresentationRequest previous = CurrentPresentation.Value;
                     CurrentPresentation.Value = request;
@@ -255,6 +263,7 @@ public static class BattleExecution
                     if (session.Skip) gate.FinishedPlaying();
                     else session.Player.ShowResult(request, gate.FinishedPlaying);
                     await gate.Finished;
+                    await BattlePause.WaitUntilResumed(session.Cancellation.Token);
                     ThrowIfCancelled();
                 }
                 catch
@@ -301,6 +310,15 @@ public static class BattleExecution
         if (CurrentSession.Value?.Player is IBattleResultPresentationPlayer)
             CurrentSession.Value.AfterPresentations.Add(completed);
         else completed();
+    }
+    /// <summary>Always follows the complete root chain, including with the headless/immediate player.</summary>
+    public static void AfterRoot(Action completed, Action cancelled = null)
+    {
+        if (completed == null) return;
+        var session = CurrentSession.Value ?? _running;
+        if (session == null) { completed(); return; }
+        session.AfterRoot.Add(completed);
+        if (cancelled != null) session.RootCancelled.Add(cancelled);
     }
     public static void ThrowIfCancelled() => CurrentSession.Value?.Cancellation.Token.ThrowIfCancellationRequested();
 

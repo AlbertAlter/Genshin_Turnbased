@@ -1,0 +1,19 @@
+{
+  "recorded": "2026-11-27",
+  "visual_basis": "用户指定：单根从屏幕长出来的冰刺及对应特效。根部位于目标屏幕平面，尖端向观察者伸出。",
+  "original_game_visual_claim": false,
+  "local_reference_media": [],
+  "audio_candidates": [
+    {
+      "title": "Ice & Electricity Magic",
+      "url": "https://opengameart.org/content/ice-electricity-magic",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license_listed": "CC-BY 3.0",
+      "purpose": "凝冰、生长、冰刺接触及碎冰尾声的候选音源；具体文件尚未选定",
+      "metadata_checked": true,
+      "downloaded": false,
+      "listened": false
+    }
+  ],
+  "status": "Requirements only. No model, animation, selected sound file or runtime playback produced."
+}

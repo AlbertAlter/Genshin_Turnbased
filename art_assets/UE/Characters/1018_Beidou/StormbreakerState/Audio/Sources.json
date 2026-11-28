@@ -1,0 +1,106 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "Existing CC0 electric sources; low-volume idle candidate is optional. No original-game extraction or audition; no Unity/Wwise events.",
+  "files": [
+    {
+      "file": "Beidou_Beasts_Appear.wav",
+      "purpose": "雷兽建立的短起手电流，整份状态一次",
+      "seconds": 0.4,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.08,
+      "localSource": "art_assets/UE/Characters/1011_Lisa/VioletArc/Audio/Lisa_ChargeStart_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.400000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.45",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -11.256345904046906,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/chargestart.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.000000s to 0.650000s",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Beidou_Beasts_QuietLoop.wav",
+      "purpose": "可选极低量电流底声；按一份状态维持，不按两只雷兽重复叠加",
+      "seconds": 0.37,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": true,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1011_Lisa/VioletArc/Audio/Lisa_Crackle_Loop_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.450000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.08",
+        "80ms linear overlap crossfade; continuous source head follows tail"
+      ],
+      "peakDbFS": -44.65541757485761,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/crackleelectricityloop.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt from 0s; 0.45s loop with 0.02s linear crossfade"
+      ],
+      "waveformSeam": {
+        "wrapStep": 1.46484375e-05,
+        "internalStep99_5": 0.00125732421875
+      }
+    },
+    {
+      "file": "Beidou_Beasts_Exit.wav",
+      "purpose": "雷兽退出的短促余电衰减",
+      "seconds": 0.28,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1011_Lisa/VioletArc/Audio/Lisa_ChargeStart_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.280000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.22",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -20.591505102317615,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/chargestart.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt 0.000000s to 0.650000s",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    }
+  ]
+}

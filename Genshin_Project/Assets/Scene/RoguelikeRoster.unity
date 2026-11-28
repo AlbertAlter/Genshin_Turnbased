@@ -170,6 +170,12 @@ MonoBehaviour:
   sidePanelDesignWidth: 560
   resizeSeconds: 0.25
   constellationColumnGap: 30
+  formationEnemyPreviewButtonBounds:
+    serializedVersion: 2
+    x: 1640
+    y: 240
+    width: 208
+    height: 48
   english: 0
 --- !u!114 &8104
 MonoBehaviour:

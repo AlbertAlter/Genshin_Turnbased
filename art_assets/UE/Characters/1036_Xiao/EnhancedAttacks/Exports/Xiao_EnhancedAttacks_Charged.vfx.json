@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1036_Xiao/EnhancedAttacks/Xiao_EnhancedAttacks_Charged",
+  "source": "art_assets/UE/Characters/1036_Xiao/EnhancedAttacks/Blender/Xiao_EnhancedAttacks_Charged.blend",
+  "file": "Characters/1036_Xiao/EnhancedAttacks/Exports/Xiao_EnhancedAttacks_Charged.vfx.bytes",
+  "meshes": 6,
+  "tracks": 48,
+  "frames": 80,
+  "duration": 2.6333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.6333333333333333
+  },
+  "bytes": 113160
+}

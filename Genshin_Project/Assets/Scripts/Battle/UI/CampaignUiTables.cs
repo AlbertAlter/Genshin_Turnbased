@@ -31,6 +31,7 @@ internal static class CampaignUiTables
 
         Load(BattlefieldAnimationParameters.Load);
         Load(ElementColorPalette.Load);
+        Load(HealEffectStyle.Load);
         Load(BattlefieldDamagePopupStyle.Load);
         Load(BattlefieldStatusPopupStyle.Load);
         Load(BattleInfoPopupStyle.Load);

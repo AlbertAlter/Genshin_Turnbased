@@ -1,0 +1,99 @@
+{
+  "enemy_id": 2070,
+  "name": "纯水精灵",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Rhodeia_of_Loch#Abilities",
+  "scope": "水幻形死亡水弹制作需求，未制作或接入新模型；本体扣血已在源／运行攻击动画表显式配置公共最轻受击，未修改伤害业务或场景",
+  "user_requirements": [
+    "死亡召唤物爆炸按原作水弹造型",
+    "纯水本体扣血仅最轻档受击"
+  ],
+  "original_vs_project": "原作蛙、雀死亡留下Water Bomb；本项目现有2601～2608共用4260001死亡爆炸，本次只适配视觉，未改种类或真实攻击范围。",
+  "visual_sources": [
+    {
+      "title": "Oceanid Water Bomb.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/6/66/Oceanid_Water_Bomb.gif/revision/latest?cb=20211204091014",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Oceanid_Water_Bomb.gif",
+      "pages": [
+        "https://genshin-impact.fandom.com/wiki/Hydro_Mimic_Frog#Abilities",
+        "https://genshin-impact.fandom.com/wiki/Hydro_Mimic_Finch#Abilities"
+      ],
+      "purpose": "聚水、悬浮水球、膨胀、爆开和碎散的原作造型对照",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "verification": "已查看六张在线抽帧的静态对照图，核对聚水、成球、膨胀、爆开环状水浪与末端碎水。未完整播放动图，连续运动尚未验收。",
+      "frames": [
+        {
+          "file": "WaterBomb_frame_0000ms.png",
+          "time_ms": 0,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        },
+        {
+          "file": "WaterBomb_frame_1200ms.png",
+          "time_ms": 1200,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        },
+        {
+          "file": "WaterBomb_frame_2400ms.png",
+          "time_ms": 2400,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        },
+        {
+          "file": "WaterBomb_frame_2800ms.png",
+          "time_ms": 2800,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        },
+        {
+          "file": "WaterBomb_frame_3200ms.png",
+          "time_ms": 3200,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        },
+        {
+          "file": "WaterBomb_frame_3600ms.png",
+          "time_ms": 3600,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "source": "online GIF; not saved locally"
+        }
+      ]
+    },
+    {
+      "title": "Oceanid Frog — KQM TCL",
+      "url": "https://library.keqingmains.com/enemy-data/bosses/overworld-bosses/oceanid/oceanid-frog",
+      "purpose": "原作蛙死亡后形成范围水弹的观察资料；不搬其数值或即时玩法",
+      "page_read": true
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "title": "Oceanid Achievements & Mimics Guide",
+      "url": "https://www.youtube.com/watch?v=4_B0eeWvuwU",
+      "purpose": "聚水、膨胀、水爆、水滴尾声的原作声音对照",
+      "verification": "检索元信息提到蛙／雀死亡水弹；打开视频页失败，未试听、截取或定位时间点。",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "未提取音频，未声明音频再分发许可"
+    }
+  ],
+  "local_audio_search": "沿用本批本设备已有检查：art_assets未找到可直接引用到本项的松散音源；不代表其他设备状态。",
+  "technical_mapping": {
+    "death_blast": "426000102 / STE_HydroMimic_Death；全体一次0.3*ATK，1U；来源为每个实际死亡幻形。",
+    "body_hp_loss": "420700102 / STE_Oceanid_MimicLoss；独立True伤害，18%本体最终最大生命；受击按实际提交结果。",
+    "body_visual": "源／运行AttackAnimations.xlsx已取消STE_Oceanid_MimicLoss的Sword_Normal预设，显式HitAnimation=2、SelfAnimation=1；刀光和动画钩子留空，震屏方向空、幅度0；保留原基础数值与时序。局部OOXML及回读检查通过，未做Excel原生打开或Unity视觉验收。",
+    "battle_end": "沿现有胜利优先与取消流程，未执行的死亡爆炸不得补演。"
+  }
+}

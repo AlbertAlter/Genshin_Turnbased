@@ -142,7 +142,7 @@ public sealed class BattlefieldSelectionPresentation : MonoBehaviour
         bool select = _input != null && _input.IsSelectionVisible;
         bool active = swap || select;
         var caster = select && !swap && _input.Selector.TargetsField ? _input.PendingAlly?.Entity : null;
-        float dt = Time.unscaledDeltaTime;
+        float dt = BattlePause.DeltaTime;
         float outSeconds = _timelineExit != null ? _timelineExitSeconds : _outSeconds;
         _phase = Step(_phase, active, active ? _inSeconds : outSeconds, dt);
         float darkness = Mathf.SmoothStep(0, _dimmerAlpha, _phase);

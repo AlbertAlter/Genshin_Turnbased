@@ -1,0 +1,71 @@
+[
+  {
+    "file": "01_原作金色剑光与弧光.png",
+    "page_url": "https://www.hoyolab.com/article/5643701",
+    "image_url": "https://upload-os-bbs.hoyolab.com/upload/2022/06/25/87440989/6ce14da393491425652ef2f46564c924_7328576813998229106.png",
+    "downloaded": "2026-11-26",
+    "use": "金色剑光、弧光与柔边，只参考质感，不从单帧判断完整攻击次数。",
+    "type": "原作实机截图",
+    "modified": false,
+    "format": "PNG",
+    "size": [
+      1280,
+      602
+    ],
+    "frames": 1,
+    "bytes": 1276248
+  },
+  {
+    "file": "02_强化挥剑_4.7s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+    "downloaded": "2026-11-26",
+    "use": "强化普通攻击的剑体与金色轨迹；屏幕平面内小规模旋转为项目适配。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 94,
+    "time_ms": 4700,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      323,
+      182
+    ],
+    "frames": 1,
+    "bytes": 66793,
+    "source_image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif"
+  },
+  {
+    "file": "03_强化挥剑收势_5.5s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+    "downloaded": "2026-11-26",
+    "use": "强化挥剑收势与余光。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 110,
+    "time_ms": 5500,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      323,
+      182
+    ],
+    "frames": 1,
+    "bytes": 66561,
+    "source_image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif"
+  },
+  {
+    "type": "本批动图核对限制",
+    "motionReview": {
+      "name": "SweepingTime",
+      "page": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+      "url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+      "note": "Observe cast and golden sword/normal attack motion; depth charged slam is project-specific and not inferred from the original spinning charged attack.",
+      "downloaded": false,
+      "error": "Reference download exceeded bounded analysis time",
+      "inspection": "Use already available stills; do not claim motion observation from a failed request."
+    },
+    "inspection": "Existing original-game frames inspected; bounded online GIF request timed out. No claim of complete motion viewing."
+  }
+]

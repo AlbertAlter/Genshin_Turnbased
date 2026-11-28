@@ -1,0 +1,402 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/SharkWave/视觉需求.md",
+  "variants": {
+    "2073_SharkWave": {
+      "effect": "2073_SharkWave",
+      "source": "Blender/2073_SharkWave.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/SharkWave/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_SharkWave_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_SharkWave_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_SharkWave_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2073_SharkWave_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharedWaterFront": {
+          "file": "Exports/2073_SharkWave_SharedWaterFront.fbx",
+          "objects": [
+            "PART_SharedBreakingWaterFront"
+          ],
+          "vertices": 567,
+          "triangles": 960,
+          "dimensions": [
+            6.83905553817749,
+            0.0,
+            1.0399999916553497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SharedBreakingWaterFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 567,
+            "triangles": 960,
+            "dimensions": [
+              6.83905553817749,
+              1.6943748804010283e-07,
+              1.0399999916553497
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharkRidgeWater": {
+          "file": "Exports/2073_SharkWave_SharkRidgeWater.fbx",
+          "objects": [
+            "PART_TranslucentCurledSharkWaterRidge_0",
+            "PART_TranslucentCurledSharkWaterRidge_1",
+            "PART_TranslucentCurledSharkWaterRidge_2"
+          ],
+          "vertices": 1323,
+          "triangles": 2304,
+          "dimensions": [
+            5.771999835968018,
+            0.1899999938905239,
+            1.4516000151634216
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TranslucentCurledSharkWaterRidge_0": [
+              "Soft"
+            ],
+            "PART_TranslucentCurledSharkWaterRidge_1": [
+              "Soft"
+            ],
+            "PART_TranslucentCurledSharkWaterRidge_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 1323,
+            "triangles": 2304,
+            "dimensions": [
+              5.771999835968018,
+              0.1900002360343933,
+              1.4516000151634216
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SharkWaveFoam": {
+          "file": "Exports/2073_SharkWave_SharkWaveFoam.fbx",
+          "objects": [
+            "PART_BreakingWhiteWaterLip_0",
+            "PART_CurvedWaterFold_0_0",
+            "PART_CurvedWaterFold_0_1",
+            "PART_BreakingWhiteWaterLip_1",
+            "PART_CurvedWaterFold_1_0",
+            "PART_CurvedWaterFold_1_1",
+            "PART_BreakingWhiteWaterLip_2",
+            "PART_CurvedWaterFold_2_0",
+            "PART_CurvedWaterFold_2_1"
+          ],
+          "vertices": 3087,
+          "triangles": 5184,
+          "dimensions": [
+            5.868985652923584,
+            0.12999999150633812,
+            1.4439512193202972
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BreakingWhiteWaterLip_0": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_0_1": [
+              "Soft"
+            ],
+            "PART_BreakingWhiteWaterLip_1": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_1_1": [
+              "Soft"
+            ],
+            "PART_BreakingWhiteWaterLip_2": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedWaterFold_2_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 9,
+            "vertices": 3087,
+            "triangles": 5184,
+            "dimensions": [
+              5.868985652923584,
+              0.13000022806227207,
+              1.4439512193202972
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FoamDroplet": {
+          "file": "Exports/2073_SharkWave_FoamDroplet.fbx",
+          "objects": [
+            "PART_SmallFoamWaterDrop"
+          ],
+          "vertices": 63,
+          "triangles": 108,
+          "dimensions": [
+            0.08728617057204247,
+            0.08863269537687302,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallFoamWaterDrop": [
+              "Solid"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 63,
+            "triangles": 108,
+            "dimensions": [
+              0.08728617057204247,
+              0.08863271027803421,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 30,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 30,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 25,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "runtimeConnected": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_SharkWave.wav"
+      }
+    }
+  }
+}

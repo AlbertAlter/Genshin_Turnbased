@@ -1,0 +1,347 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/FrostflakeCharge/视觉需求.md",
+  "variants": {
+    "Ganyu_FrostflakeCharge_Release": {
+      "effect": "Ganyu_FrostflakeCharge_Release",
+      "source": "Blender/Ganyu_FrostflakeCharge_Release.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/FrostflakeCharge/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/Ganyu_FrostflakeCharge_Release_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FrostGrain": {
+          "file": "Exports/Ganyu_FrostflakeCharge_Release_FrostGrain.fbx",
+          "objects": [
+            "PART_FourProngedFrostGrain"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.18000000715255737,
+            0.0,
+            0.2199999988079071
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FourProngedFrostGrain": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 8,
+            "triangles": 6,
+            "dimensions": [
+              0.18000000715255737,
+              3.584254670840892e-08,
+              0.2199999988079071
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "CelestialShower135f/5.4s,Normal343f/13.72s,Trail91f/3.64s decoded in memory and24 samples each observed. Normal includes actual two-stage frostflake near10–12.5s. Lotus natural expiry is NOT shown. Pearl scrolls, petals and expiry art are authored interpretations, not traced original topology/texture.",
+      "scope": "Source art only; real state, targets, C6 and counts are not executed. No Unity/tables changed.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Ganyu_FrostflakeCharge_Release.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1035_Ganyu/FrostflakeCharge/Blender/Ganyu_FrostflakeCharge_Release.blend",
+        "driversConverted": 44,
+        "legacyExpressions": 44,
+        "numericComparisons": 1496,
+        "maximumFormulaError": 8.587145483573977e-08,
+        "nativeDrivers": 126,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Ganyu_FrostflakeCharge_Release_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Ganyu_FrostflakeCharge_Interrupted": {
+      "effect": "Ganyu_FrostflakeCharge_Interrupted",
+      "source": "Blender/Ganyu_FrostflakeCharge_Interrupted.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/FrostflakeCharge/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/Ganyu_FrostflakeCharge_Interrupted_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FrostGrain": {
+          "file": "Exports/Ganyu_FrostflakeCharge_Interrupted_FrostGrain.fbx",
+          "objects": [
+            "PART_FourProngedFrostGrain"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.18000000715255737,
+            0.0,
+            0.2199999988079071
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FourProngedFrostGrain": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 8,
+            "triangles": 6,
+            "dimensions": [
+              0.18000000715255737,
+              3.584254670840892e-08,
+              0.2199999988079071
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "CelestialShower135f/5.4s,Normal343f/13.72s,Trail91f/3.64s decoded in memory and24 samples each observed. Normal includes actual two-stage frostflake near10–12.5s. Lotus natural expiry is NOT shown. Pearl scrolls, petals and expiry art are authored interpretations, not traced original topology/texture.",
+      "scope": "Source art only; real state, targets, C6 and counts are not executed. No Unity/tables changed.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Ganyu_FrostflakeCharge_Interrupted.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1035_Ganyu/FrostflakeCharge/Blender/Ganyu_FrostflakeCharge_Interrupted.blend",
+        "driversConverted": 44,
+        "legacyExpressions": 44,
+        "numericComparisons": 1496,
+        "maximumFormulaError": 8.587145483573977e-08,
+        "nativeDrivers": 126,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Ganyu_FrostflakeCharge_Interrupted_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

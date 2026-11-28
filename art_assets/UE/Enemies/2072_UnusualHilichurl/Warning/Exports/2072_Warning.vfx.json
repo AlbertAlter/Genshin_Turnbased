@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2072_UnusualHilichurl/Warning/2072_Warning",
+  "source": "art_assets/UE/Enemies/2072_UnusualHilichurl/Warning/Blender/2072_Warning.blend",
+  "file": "Enemies/2072_UnusualHilichurl/Warning/Exports/2072_Warning.vfx.bytes",
+  "meshes": 2,
+  "tracks": 2,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 6820
+}

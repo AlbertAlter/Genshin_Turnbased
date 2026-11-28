@@ -155,7 +155,7 @@ public partial class EnemyBattleController : MonoBehaviour
     ///   TotalATK = BaseATK(曲线,按ATK_Curve) × ATK_coeff
     /// 抗性/增伤直接读 Enemy_Main。
     /// </summary>
-    public void InitEnemy(int enemyID, int level)
+    public void InitEnemy(int enemyID, int level, bool initialize = true)
     {
         ResetRuntimeState();
         EnemyID = enemyID;
@@ -212,7 +212,7 @@ public partial class EnemyBattleController : MonoBehaviour
             LoadDefaultPattern(main.Phase);
 
             LogManager.Log(LogCategory.Enemy, $"{enemyID} lv{level} initialized: HP={entity.TotalHP} (cur {entity.CurrentHP}) ATK={entity.TotalATK}");
-            if (BattleManager.Instance?.IsBattleRunning == true) ApplyInitiateStatuses();
+            if (initialize && BattleManager.Instance?.IsBattleRunning == true) ApplyInitiateStatuses();
         }
         else
         {

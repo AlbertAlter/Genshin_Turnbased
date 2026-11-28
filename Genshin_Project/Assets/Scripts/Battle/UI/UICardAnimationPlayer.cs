@@ -34,7 +34,7 @@ public sealed class UICardAnimationPlayer : MonoBehaviour
     private void Update()
     {
         if (paused || target == null || !target.isActiveAndEnabled || Clip == null || !Clip.Ready) return;
-        clock += Time.unscaledDeltaTime * Mathf.Max(0, speed);
+        clock += BattlePause.DeltaTime * Mathf.Max(0, speed);
         clock %= Clip.Timeline.Duration;
         Present();
     }

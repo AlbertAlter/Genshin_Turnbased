@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1039_Yanfei/ChargedAttack/Yanfei_ChargedAttack_4Seals",
+  "source": "art_assets/UE/Characters/1039_Yanfei/ChargedAttack/Blender/Yanfei_ChargedAttack_4Seals.blend",
+  "file": "Characters/1039_Yanfei/ChargedAttack/Exports/Yanfei_ChargedAttack_4Seals.vfx.bytes",
+  "meshes": 26,
+  "tracks": 92,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 180248
+}

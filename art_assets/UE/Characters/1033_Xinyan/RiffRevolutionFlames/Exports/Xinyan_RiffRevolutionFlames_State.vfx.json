@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1033_Xinyan/RiffRevolutionFlames/Xinyan_RiffRevolutionFlames_State",
+  "source": "art_assets/UE/Characters/1033_Xinyan/RiffRevolutionFlames/Blender/Xinyan_RiffRevolutionFlames_State.blend",
+  "file": "Characters/1033_Xinyan/RiffRevolutionFlames/Exports/Xinyan_RiffRevolutionFlames_State.vfx.bytes",
+  "meshes": 1,
+  "tracks": 10,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 34162
+}

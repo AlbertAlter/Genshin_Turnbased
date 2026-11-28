@@ -154,7 +154,7 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
         {
             if (selectionLane != null)
             {
-                selectionFadeTime += Time.unscaledDeltaTime;
+                selectionFadeTime += BattlePause.DeltaTime;
                 selectionLane.Opacity.alpha = FadeAlpha(selectionFadeTime, style.Fade);
                 if (selectionLane.Opacity.alpha <= 0) ClearSelection();
             }
@@ -179,7 +179,7 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
 
         if (selectionTime < style.Reveal)
         {
-            selectionTime = Mathf.Min(selectionTime + Time.unscaledDeltaTime, style.Reveal);
+            selectionTime = Mathf.Min(selectionTime + BattlePause.DeltaTime, style.Reveal);
             SetReveal(lane, selectionTime, style.Reveal);
         }
     }
@@ -200,7 +200,7 @@ public sealed class BattleActionPromptView : BattleSkillTrackBehaviour, IBattleS
     private void Tick(Lane lane, bool right)
     {
         if (lane.Current == null) { if (lane.Queue.Count != 0) Begin(lane, right); else return; }
-        lane.Time += Time.unscaledDeltaTime;
+        lane.Time += BattlePause.DeltaTime;
         var style = lane.Current.Style;
         SetReveal(lane, lane.Time, style.Reveal);
         float endHold = style.Reveal + style.Hold;

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2070_Oceanid/SummonMimics/2070_SummonMimics",
+  "source": "art_assets/UE/Enemies/2070_Oceanid/SummonMimics/Blender/2070_SummonMimics.blend",
+  "file": "Enemies/2070_Oceanid/SummonMimics/Exports/2070_SummonMimics.vfx.bytes",
+  "meshes": 5,
+  "tracks": 164,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 186687
+}

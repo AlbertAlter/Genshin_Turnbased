@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1014_Barbara/MelodyLoop/Barbara_MelodyLoop",
+  "source": "art_assets/UE/Characters/1014_Barbara/MelodyLoop/Blender/Barbara_MelodyLoop.blend",
+  "file": "Characters/1014_Barbara/MelodyLoop/Exports/Barbara_MelodyLoop.vfx.bytes",
+  "meshes": 6,
+  "tracks": 33,
+  "frames": 313,
+  "duration": 10.4,
+  "loopStart": 0.6,
+  "loopEnd": 4.6,
+  "markers": {
+    "Appearance": 0.0,
+    "LoopStart": 0.6,
+    "Cycle1End_REPEAT": 4.6,
+    "Cycle2End_REPEAT": 8.6,
+    "FractionalPhaseExit": 9.2,
+    "Cleared": 10.4
+  },
+  "bytes": 339137
+}

@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-26",
+  "scope": "Source SFX candidates only; no Wwise/Unity event bindings",
+  "files": [
+    {
+      "file": "Barbara_Miracle_Stars.wav",
+      "purpose": "一次治疗绽放的星光音色替代候选",
+      "seconds": 2.414875,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -12.792044506427466,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1014_Barbara\\ShiningMiracle\\Audio\\Sources\\Magic4_PCM.wav",
+      "processing": [
+        "excerpt 0.000000s to 2.414875s from listed local source",
+        "gain 1.3",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.25,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Magic Spell SFX",
+      "creator": "JaggedStone",
+      "sourcePage": "https://opengameart.org/content/magic-spell-sfx",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceFile": "https://opengameart.org/sites/default/files/magical_4.ogg"
+    },
+    {
+      "file": "Barbara_Miracle_Water.wav",
+      "purpose": "整体治疗水光接触；四人共用一次",
+      "seconds": 1.3810833333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -8.709146332556,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1014_Barbara\\ShiningMiracle\\Audio\\Sources\\splash_01_PCM.wav",
+      "processing": [
+        "excerpt 0.000000s to 1.381083s from listed local source",
+        "gain 0.38",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.29,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "40 CC0 water / splash / slime SFX",
+      "creator": "rubberduck",
+      "sourcePage": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+      "sourceFile": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceMember": "splash_01.ogg"
+    }
+  ]
+}

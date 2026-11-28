@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>Only this adapter knows combat entities/events; the aura display consumes IBattleUiAuraSource.</summary>
 [AddComponentMenu("Battle UI/Data/Combat Auras")]
-public sealed class BattleUiCombatAuraSource : MonoBehaviour, IBattleUiAuraSource
+public sealed class BattleUiCombatAuraSource : MonoBehaviour, IBattleUiAuraSource, IBattleUiAuraIdentitySource
 {
     private readonly Dictionary<BattleEntity, ElementAuraDisplayOrder> states = new Dictionary<BattleEntity, ElementAuraDisplayOrder>();
     private IDisposable subscription;
@@ -47,6 +47,8 @@ public sealed class BattleUiCombatAuraSource : MonoBehaviour, IBattleUiAuraSourc
         state.Synchronize(initial);
         return state.Elements;
     }
+    public object GetAuraOwner(BattleSide side, int slot)
+        => isActiveAndEnabled && BattleManager.Instance != null ? BattleManager.Instance.GetEntityByPosition(side, slot) : null;
     private void ResetSession() { states.Clear(); Subscribe(); }
     private void OnDisable()
     {

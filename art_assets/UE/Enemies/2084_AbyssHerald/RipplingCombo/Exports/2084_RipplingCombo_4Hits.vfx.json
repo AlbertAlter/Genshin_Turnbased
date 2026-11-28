@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2084_AbyssHerald/RipplingCombo/2084_RipplingCombo_4Hits",
+  "source": "art_assets/UE/Enemies/2084_AbyssHerald/RipplingCombo/Blender/2084_RipplingCombo_4Hits.blend",
+  "file": "Enemies/2084_AbyssHerald/RipplingCombo/Exports/2084_RipplingCombo_4Hits.vfx.bytes",
+  "meshes": 6,
+  "tracks": 84,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 414207
+}

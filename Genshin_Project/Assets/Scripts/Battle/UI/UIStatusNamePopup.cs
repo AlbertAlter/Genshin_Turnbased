@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>Reusable, pooled status-name overlay. Callers supply committed text and the actual card rectangle.</summary>
 [DisallowMultipleComponent]
-public sealed class UIStatusNamePopup : MonoBehaviour
+public sealed class UIStatusNamePopup : MonoBehaviour, IBattleVisualCompletion
 {
     public Canvas canvas;
     public TMP_FontAsset font;
@@ -26,6 +26,7 @@ public sealed class UIStatusNamePopup : MonoBehaviour
     private UIStatusNamePopupStyle style;
     private RectTransform layer;
     private readonly List<Item> active = new List<Item>();
+    public bool HasPendingVisuals => active.Count > 0;
     private readonly Stack<Item> pool = new Stack<Item>();
     private Material textMaterial;
 
@@ -54,6 +55,11 @@ public sealed class UIStatusNamePopup : MonoBehaviour
         EnsureLayer();
         while (active.Count >= style.MaxVisible) Recycle(0);
         Item item = pool.Count > 0 ? pool.Pop() : CreateItem();
+        // Pooled popups are inactive and may still hold the previous message's wrapping geometry.
+        // Measure this request only after its current parent/child rectangles have been applied.
+        item.Visibility.alpha = 0;
+        item.Rect.localScale = Vector3.one;
+        item.Rect.gameObject.SetActive(true);
         var text = item.Text;
         text.font = font; text.fontSize = style.FontSize; text.fontStyle = FontStyles.Normal; text.fontWeight = FontWeight.Regular;
         text.fontSharedMaterial = TextMaterial();
@@ -62,15 +68,18 @@ public sealed class UIStatusNamePopup : MonoBehaviour
         text.enableAutoSizing = false; text.enableWordWrapping = true; text.overflowMode = TextOverflowModes.Overflow;
         // TMP lineSpacing is in em-percent units. Match the CSS line-height instead of adding it to the font's native leading.
         text.lineSpacing = 100 * (style.LineHeight - font.faceInfo.lineHeight / Mathf.Max(1, font.faceInfo.pointSize));
-        Vector2 preferred = text.GetPreferredValues(message, Mathf.Infinity, Mathf.Infinity);
-        Vector2 size = style.Size(preferred.x, 1);
+        Vector2 preferred = text.GetPreferredValues(message, style.MaxWidth - style.PaddingX * 2, Mathf.Infinity);
+        float measuredWidth = Mathf.Ceil(preferred.x) + 1; // Avoid a fractional-pixel wrap at an exact glyph boundary.
+        Vector2 size = style.Size(measuredWidth, 1);
         item.Rect.sizeDelta = size;
         var content = (RectTransform)text.transform;
         content.anchorMin = Vector2.zero; content.anchorMax = Vector2.one;
         content.offsetMin = new Vector2(style.PaddingX, style.PaddingY);
         content.offsetMax = new Vector2(-style.PaddingX, -style.PaddingY);
+        item.Rect.ForceUpdateRectTransforms();
+        content.ForceUpdateRectTransforms();
         text.ForceMeshUpdate(true);
-        size = style.Size(preferred.x, text.textInfo.lineCount);
+        size = style.Size(measuredWidth, text.textInfo.lineCount);
         item.Rect.sizeDelta = size;
 
         Rect rect = card.rect;
@@ -78,7 +87,7 @@ public sealed class UIStatusNamePopup : MonoBehaviour
         Vector2 anchor = layer.InverseTransformPoint(point);
         float height = layer.InverseTransformVector(card.TransformVector(Vector3.up * rect.height)).magnitude;
         float? previousTop = null;
-        float now = Time.unscaledTime;
+        float now = BattlePause.UnscaledTime;
         foreach (var previous in active)
         {
             if (previous.Card != card || previous.Rect == null || now - previous.StartTime >= previous.Style.Lifetime) continue;
@@ -96,7 +105,7 @@ public sealed class UIStatusNamePopup : MonoBehaviour
         => item.CardHeight * item.Style.RiseHeightRatio * item.Style.RiseProgress(now - item.StartTime);
     private void LateUpdate()
     {
-        float now = Time.unscaledTime;
+        float now = BattlePause.UnscaledTime;
         for (int i = active.Count - 1; i >= 0; i--)
         {
             var item = active[i];

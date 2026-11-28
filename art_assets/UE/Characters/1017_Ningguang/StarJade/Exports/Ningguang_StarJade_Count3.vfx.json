@@ -1,0 +1,22 @@
+{
+  "key": "Characters/1017_Ningguang/StarJade/Ningguang_StarJade_Count3",
+  "source": "art_assets/UE/Characters/1017_Ningguang/StarJade/Blender/Ningguang_StarJade.blend",
+  "file": "Characters/1017_Ningguang/StarJade/Exports/Ningguang_StarJade_Count3.vfx.bytes",
+  "meshes": 3,
+  "tracks": 18,
+  "frames": 481,
+  "duration": 16.0,
+  "loopStart": 0.6,
+  "loopEnd": 5.6,
+  "markers": {
+    "Appear": 0.0,
+    "LoopStart": 0.6,
+    "Cycle1Repeat": 5.6,
+    "Cycle2Repeat": 10.6,
+    "CountZero": 12.533333333333333,
+    "CountReturns": 13.4,
+    "ArbitraryPhaseExit": 14.366666666666667,
+    "Cleared": 16.0
+  },
+  "bytes": 201055
+}

@@ -1,0 +1,390 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/PulseBombs/视觉需求.md",
+  "variants": {
+    "2071_PulseBombs": {
+      "effect": "2071_PulseBombs",
+      "source": "Blender/2071_PulseBombs.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/PulseBombs/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2071_PulseBombs_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2071_PulseBombs_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "VortexBody": {
+          "file": "Exports/2071_PulseBombs_VortexBody.fbx",
+          "objects": [
+            "PART_BlueTransparentPulseEnvelope"
+          ],
+          "vertices": 420,
+          "triangles": 784,
+          "dimensions": [
+            1.3200000524520874,
+            1.3200000524520874,
+            1.3200000524520874
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BlueTransparentPulseEnvelope": [
+              "Solid"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 420,
+            "triangles": 784,
+            "dimensions": [
+              1.3200000524520874,
+              1.3200002908706665,
+              1.3200002908706665
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "VortexCore": {
+          "file": "Exports/2071_PulseBombs_VortexCore.fbx",
+          "objects": [
+            "PART_CyanConcentratedVortexCore"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CyanConcentratedVortexCore": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "VortexCurls": {
+          "file": "Exports/2071_PulseBombs_VortexCurls.fbx",
+          "objects": [
+            "PART_WhiteCyanVortexCurl_0",
+            "PART_WhiteCyanVortexCurl_1",
+            "PART_WhiteCyanVortexCurl_2"
+          ],
+          "vertices": 1365,
+          "triangles": 2304,
+          "dimensions": [
+            1.5638436079025269,
+            1.1381743550300598,
+            1.5620086789131165
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WhiteCyanVortexCurl_0": [
+              "Soft"
+            ],
+            "PART_WhiteCyanVortexCurl_1": [
+              "Soft"
+            ],
+            "PART_WhiteCyanVortexCurl_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 1365,
+            "triangles": 2304,
+            "dimensions": [
+              1.5638436079025269,
+              1.138174593448639,
+              1.562008798122406
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2071_PulseBombs_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2071_PulseBombs_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 36,
+          "position": [
+            2.075000047683716,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 36,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 36,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 36,
+          "waveCenter": [
+            3.7149999141693115,
+            0.1899999976158142,
+            -0.0033333301544189453
+          ],
+          "reach": 3.5,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 76,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 76,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 76,
+          "position": [
+            6.994999885559082,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 76,
+          "waveCenter": [
+            5.354999542236328,
+            0.1899999976158142,
+            0.6733333468437195
+          ],
+          "reach": 3.5,
+          "layer": "below ALL card fronts/backs/frames"
+        }
+      ],
+      "launchFrames": [
+        13,
+        53
+      ],
+      "hero_frame": 57,
+      "focus": [
+        1.4974420070648193,
+        -0.08,
+        -0.0033333301544189453
+      ],
+      "detailScale": 13.285778215196396,
+      "contract": "Two actual three-target groups for PulseBombs; one actual full-group orb for RendingVortex. Charge stays with existing public charge component.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2071_PulseBombs.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 28,
+        "selectedFrame": 57,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

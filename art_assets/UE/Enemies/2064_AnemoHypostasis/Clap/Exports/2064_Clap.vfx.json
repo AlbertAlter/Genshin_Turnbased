@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2064_AnemoHypostasis/Clap/2064_Clap",
+  "source": "art_assets/UE/Enemies/2064_AnemoHypostasis/Clap/Blender/2064_Clap.blend",
+  "file": "Enemies/2064_AnemoHypostasis/Clap/Exports/2064_Clap.vfx.bytes",
+  "meshes": 5,
+  "tracks": 139,
+  "frames": 110,
+  "duration": 3.6333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.6333333333333333
+  },
+  "bytes": 118130
+}

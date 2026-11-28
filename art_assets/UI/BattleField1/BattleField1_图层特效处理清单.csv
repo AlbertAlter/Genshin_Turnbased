@@ -1,0 +1,18 @@
+﻿PSD图层或特效,是否单独导出,推荐处理,原因
+角色或敌人头像与卡牌智能对象,否,使用工程已有正式资源,PSD只负责位置和预览
+文字投影描边内阴影,否,TextMeshPro材质统一实现,文字内容会在运行时变化
+头像矩形6的遮罩,否,Unity Mask或自定义材质,遮罩必须跟随动态头像
+头像矩形6的可见描边与辉光,通常否,合并为一张PortraitFrame公共PNG,只有需要单独动画时才拆层
+状态图标椭圆1,否,使用DeepBrownCircle与LightBrownCircle叠放,当前PSD重复44次但不再导出
+血条矩形3或矩形7,否,Unity Image与Mask,血量和护盾必须动态填充
+血条上方柔光与下方阴影,否,合并成一张HpBarOverlay公共PNG或用材质,不需要上下各导一张
+血槽1与血槽2,通常否,Unity原生小标记或合并进血条框,不会独立变化
+BurstKey_BG,否,使用两个公共圆组件,按键文字另用TMP
+Icon_BG2外发光,否,使用LightBrownCircle作为外圈,不再导出BurstFrameOuter
+技能按钮描边与圆形底纹,否,使用两个公共圆组件叠放,技能图标和动态遮罩作为独立子层
+Invalid_Normal与Invalid_Burst,否,Unity半透明禁用层或材质,需动态切换
+角色牌投影外发光内阴影,通常否,合成CardSelectionGlow.png公共覆盖层,只有各部分独立动画才拆开
+元素盾高光阴影,否,合并为护盾框覆盖图或由材质生成,护盾填充本体必须由Unity控制
+换人按钮图标Switch_Btn,是,只导出图标本体,按钮圆底使用两个公共圆组件
+取消按钮圆形与斜线,否,圆底使用两个公共圆组件且斜线由Unity生成,不需要PNG
+背景内部固定光效与内阴影,否,直接烘焙进BattleBackground.png,若需要独立运动或明暗变化才拆层

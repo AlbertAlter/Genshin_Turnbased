@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2034_PyroWhopperflower/Fireballs/2034_Fireballs_Charged10",
+  "source": "art_assets/UE/Enemies/2034_PyroWhopperflower/Fireballs/Blender/2034_Fireballs_Charged10.blend",
+  "file": "Enemies/2034_PyroWhopperflower/Fireballs/Exports/2034_Fireballs_Charged10.vfx.bytes",
+  "meshes": 5,
+  "tracks": 280,
+  "frames": 170,
+  "duration": 5.633333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.633333333333334
+  },
+  "bytes": 980983
+}

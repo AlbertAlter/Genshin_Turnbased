@@ -1,0 +1,205 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/C4NormalBloom/视觉需求.md",
+  "variants": {
+    "Albedo_C4NormalBloom": {
+      "effect": "Albedo_C4NormalBloom",
+      "source": "Blender/Albedo_C4NormalBloom.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/C4NormalBloom/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Shard": {
+          "file": "Exports/Albedo_C4NormalBloom_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "TransientRockFlower": {
+          "file": "Exports/Albedo_C4NormalBloom_TransientRockFlower.fbx",
+          "objects": [
+            "PART_TransientPetal0_FacetedPetal",
+            "PART_TransientPetal0_MineralEdge",
+            "PART_TransientPetal1_FacetedPetal",
+            "PART_TransientPetal1_MineralEdge",
+            "PART_TransientPetal2_FacetedPetal",
+            "PART_TransientPetal2_MineralEdge",
+            "PART_TransientPetal3_FacetedPetal",
+            "PART_TransientPetal3_MineralEdge",
+            "PART_TransientPetal4_FacetedPetal",
+            "PART_TransientPetal4_MineralEdge",
+            "PART_TransientPetal5_FacetedPetal",
+            "PART_TransientPetal5_MineralEdge"
+          ],
+          "vertices": 336,
+          "triangles": 468,
+          "dimensions": [
+            1.6111223697662354,
+            0.10499999672174454,
+            1.6393790245056152
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TransientPetal0_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal0_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal1_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal1_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal2_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal2_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal3_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal3_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal4_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal4_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal5_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal5_MineralEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 336,
+            "triangles": 468,
+            "dimensions": [
+              1.6111223697662354,
+              0.10500026249883376,
+              1.6393790245056152
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BloomLightPoint": {
+          "file": "Exports/Albedo_C4NormalBloom_BloomLightPoint.fbx",
+          "objects": [
+            "PART_ShortGoldBloomCore"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortGoldBloomCore": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "enhanced normal overlay; no second hit"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 21,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Solar181f/5.43s and burst225f/6.75s decoded in memory;24 samples of each observed. Six-petal dark flower/gold edges and separate rising-rock eruption followed by gold flowers are visible. Top-down fine pattern/natural expiry not confirmed; source geometry is authored, not traced original topology/textures.",
+      "scope": "Source art only, no Unity/tables/real counters or target selection.",
+      "contract": "Half scale, restrained alpha/chips. Overlay belongs to the actual enhanced normal contact; no second attack or extra hit.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Albedo_C4NormalBloom.wav"
+      }
+    }
+  }
+}

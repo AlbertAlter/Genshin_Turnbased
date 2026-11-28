@@ -1,0 +1,82 @@
+{
+  "source": "PSDfiles/UI/Battlefield_UI_components.psd",
+  "group": "元素盾",
+  "bounds": [
+    308,
+    389,
+    488,
+    411
+  ],
+  "layers": [
+    {
+      "Name": "“矩形 3”的投影",
+      "File": "01_DropShadow.png",
+      "Left": 0,
+      "Bottom": 0,
+      "Width": 180,
+      "Height": 22,
+      "Opacity": 255,
+      "FillOpacity": 66,
+      "BlendMode": "MULTIPLY",
+      "Clipping": false,
+      "StaticOpacityBaked": true,
+      "FollowsAmount": true
+    },
+    {
+      "Name": "矩形 3",
+      "File": "02_BaseShape.png",
+      "Left": 3,
+      "Bottom": 6,
+      "Width": 172,
+      "Height": 14,
+      "Opacity": 255,
+      "FillOpacity": 255,
+      "BlendMode": "NORMAL",
+      "Clipping": false,
+      "StaticOpacityBaked": true,
+      "FollowsAmount": true
+    },
+    {
+      "Name": "血条上方柔光",
+      "File": "03_UpperSoftLight.png",
+      "Left": 8,
+      "Bottom": 14,
+      "Width": 163,
+      "Height": 4,
+      "Opacity": 255,
+      "FillOpacity": 255,
+      "BlendMode": "SOFT_LIGHT",
+      "Clipping": true,
+      "StaticOpacityBaked": true,
+      "FollowsAmount": true
+    },
+    {
+      "Name": "血条下方阴影",
+      "File": "04_LowerSoftLight.png",
+      "Left": 9,
+      "Bottom": 5,
+      "Width": 163,
+      "Height": 4,
+      "Opacity": 179,
+      "FillOpacity": 255,
+      "BlendMode": "SOFT_LIGHT",
+      "Clipping": true,
+      "StaticOpacityBaked": true,
+      "FollowsAmount": true
+    },
+    {
+      "Name": "图层 1",
+      "File": "05_InnerShadow.png",
+      "Left": 4,
+      "Bottom": 6,
+      "Width": 172,
+      "Height": 14,
+      "Opacity": 255,
+      "FillOpacity": 161,
+      "BlendMode": "MULTIPLY",
+      "Clipping": false,
+      "StaticOpacityBaked": true,
+      "FollowsAmount": true
+    }
+  ]
+}

@@ -207,7 +207,7 @@ internal sealed class WeaponPendingAPCount : CountStatusHandler
     public override CountDamageContribution PrepareDamage(StatusInstance status, object host, CountDamageContext c)
     {
         var group = Current.Value;
-        if (group != null && !group.Closed && group.Owner == host && c.Attacker == host && Attack(c.DamageType)
+        if (group != null && !group.Closed && ReferenceEquals(group.Owner, host) && ReferenceEquals(c.Attacker, host) && Attack(c.DamageType)
             && c.Target.Side != c.Attacker.Side && c.SourceKind != ReactionSourceKind.DerivedReaction
             && group.Executions.TryGetValue(c.EffectExecutionID, out string effect) && effect == c.EffectID)
             Reserve(group, status);

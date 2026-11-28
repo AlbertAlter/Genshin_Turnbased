@@ -10780,6 +10780,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 9101000003}
   - component: {fileID: 1777433684}
   - component: {fileID: 1777433683}
   - component: {fileID: 1777433681}
@@ -10796,6 +10797,7 @@ GameObject:
   - component: {fileID: 8912300001}
   - component: {fileID: 8991000000}
   - component: {fileID: 9033000001}
+  - component: {fileID: 8977301000}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -13879,6 +13881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layout: {fileID: 8901000000}
   numberFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
+  reactionFont: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
   statusNames: {fileID: 9033000001}
 --- !u!114 &8901000003
 MonoBehaviour:
@@ -14032,3 +14035,34 @@ MonoBehaviour:
   canvas: {fileID: 1777433683}
   font: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
   sortingOrderOffset: 110
+--- !u!114 &8977301000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3392d28f35d4d178cfca771aa25ba26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8901000001}
+  layout: {fileID: 8901000000}
+  automaticClock: 1
+--- !u!114 &9101000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777433679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de09ef9ca6b499dbe94e1a403878012, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  player: {fileID: 8901000001}
+  layout: {fileID: 8901000000}
+  battle: {fileID: 0}
+  catalogResourcePath: UI/BattleNativeEffects

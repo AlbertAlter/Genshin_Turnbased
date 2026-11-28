@@ -23,6 +23,7 @@ public sealed class CardBackDefinition
 /// <summary>Injectable catalog, independent of menus, scenes and unlock UI.</summary>
 public sealed class CardBackCatalog
 {
+    public const string DefaultId = "UI_Gcg_CardBack_01";
     private readonly Dictionary<string, string> entries = new Dictionary<string, string>(StringComparer.Ordinal);
     public CardBackCatalog(IEnumerable<CardBackDefinition> definitions = null)
     {
@@ -91,12 +92,23 @@ public sealed class PlayerAppearanceService : ICardAppearanceSource
     /// <summary>Empty ID restores the application's default back. A selected back must exist in the supplied catalog.</summary>
     public RoguelikeSaveResult SelectCardBack(string id)
     {
+        if (id == CardBackCatalog.DefaultId) id = "";
         id = id ?? "";
         if (id.Length > 0 && !cardBacks.TryGetPath(id, out _))
             return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "未登记的卡背ID：" + id);
         var saved = repository.SaveSelectedCardBack(id); if (!saved.Succeeded) return saved;
         var refresh = Refresh();
         return refresh.Succeeded ? saved : RoguelikeSaveResult.Success("卡背已保存；读取刷新待重试：" + refresh.Message);
+    }
+    /// <summary>One real, deduplicated chapter clear grants one choice. Unlock and equip are one atomic cosmetic save.</summary>
+    public RoguelikeSaveResult UnlockCardBack(string id)
+    {
+        if (id == CardBackCatalog.DefaultId) return SelectCardBack("");
+        if (!cardBacks.TryGetPath(id, out _))
+            return RoguelikeSaveResult.Failure(RoguelikeSaveErrorCode.InvalidOperation, "未登记的卡背ID：" + id);
+        var saved = repository.UnlockCardBack(id); if (!saved.Succeeded) return saved;
+        var refresh = Refresh();
+        return refresh.Succeeded ? saved : RoguelikeSaveResult.Success("卡背已解锁；读取刷新待重试：" + refresh.Message);
     }
     /// <summary>Other chapter modes may call this too. Each real clear needs a new completionId; retries reuse the original ID.</summary>
     public RoguelikeSaveResult RecordChapterBossVictory(string completionId, IReadOnlyList<AppearanceBattleParticipant> participants)

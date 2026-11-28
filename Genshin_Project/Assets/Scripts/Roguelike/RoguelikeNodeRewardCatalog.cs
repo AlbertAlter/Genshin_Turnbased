@@ -58,6 +58,7 @@ public sealed class RoguelikeNodeRewardCatalog
 
     internal RoguelikePendingNodeReward Capture(RoguelikeProgressSnapshot snapshot)
     {
+        if (snapshot.Flow?.Node?.FixedRewardClaimed == true) return null;
         int stage = checked(snapshot.CurrentChapterId * 100 + snapshot.CurrentStageIndex + 1);
         if (!rewards.TryGetValue(stage, out var list)) throw new InvalidDataException($"缺少 R{stage} 的节点奖励。");
         var pending = new RoguelikePendingNodeReward

@@ -31,6 +31,17 @@ public sealed class StatusHealExecution
 /// </summary>
 public static class BattleSpecialRules
 {
+    private static readonly List<(Func<BattleEntity, bool> CanReturn, Action<BattleEntity> Return)> OffFieldSwitches
+        = new List<(Func<BattleEntity, bool>, Action<BattleEntity>)>();
+    internal static void RegisterOffFieldSwitch(Func<BattleEntity, bool> canReturn, Action<BattleEntity> prepare)
+        => OffFieldSwitches.Add((canReturn, prepare));
+    internal static bool CanReturnBySwitch(BattleEntity owner)
+        => owner?.IsAlive == true && OffFieldSwitches.Exists(rule => rule.CanReturn(owner));
+    internal static void PrepareOffFieldSwitch(BattleEntity owner)
+    {
+        foreach (var rule in OffFieldSwitches)
+            if (rule.CanReturn(owner)) { rule.Return(owner); return; }
+    }
     internal delegate bool ForcedCriticalRule(BattleEntity attacker, BattleEntity target, string effectID, string element, StatusEffectData statusEffect);
     private static readonly List<ForcedCriticalRule> ForcedCriticalRules = new List<ForcedCriticalRule>();
 
@@ -91,6 +102,7 @@ public static class BattleSpecialRules
         = new List<Func<BattleEntity, SkillMainData, IDisposable>>();
     private static readonly List<Action<BattleEntity, SkillMainData, BattleDeclaration>> SkillSettled
         = new List<Action<BattleEntity, SkillMainData, BattleDeclaration>>();
+    private static readonly List<Action<BattleManager>> AllyTurnStarted = new List<Action<BattleManager>>();
     private static readonly List<Func<BattleEntity, bool>> EnemyActionBlockers
         = new List<Func<BattleEntity, bool>>();
     private static readonly List<Func<BattleEntity, float, float>> HPDamageGuards
@@ -247,6 +259,11 @@ public static class BattleSpecialRules
         RosariaScriptHooks.Register();
         YanfeiScriptHooks.Register();
         EulaScriptHooks.Register();
+        AyakaScriptHooks.Register();
+        YoimiyaScriptHooks.Register();
+        SayuScriptHooks.Register();
+        KazuhaScriptHooks.Register();
+        SaraScriptHooks.Register();
         KaeyaScriptHooks.Register();
         WeaponHooks.Register();
         ArtifactHooks.RegisterSpecialRules();
@@ -426,6 +443,12 @@ public static class BattleSpecialRules
         => SkillExecutionScopes.Add(begin);
     internal static void RegisterSkillSettled(Action<BattleEntity, SkillMainData, BattleDeclaration> settled)
         => SkillSettled.Add(settled);
+    internal static void RegisterAllyTurnStarted(Action<BattleManager> started) => AllyTurnStarted.Add(started);
+    internal static Task NotifyAllyTurnStarted(BattleManager battle)
+        => BattleExecution.Run(async () => {
+            foreach (var started in AllyTurnStarted) started(battle);
+            await BattleExecution.Flush();
+        });
     /// <summary>
     /// 真实我方行动全部效果及ActionCompleted的响应结清之后调用，仍在技能作用域内。
     /// 不伪造第二次行为声明；回调提交的状态行动继续由原执行队列清算。
@@ -442,6 +465,21 @@ public static class BattleSpecialRules
     /// <summary>被动Buff的只读参数覆盖，不是额外伤害效果，不得在查询中执行状态行动。</summary>
     internal static void RegisterBuffScalar(string hook, Func<StatusEffectData, StatusInstance, float> resolve)
         => BuffScalarRules.Add(hook, resolve);
+    private static readonly Dictionary<string, Func<StatusEffectData, StatusInstance, float>> EnergyScalarRules
+        = new Dictionary<string, Func<StatusEffectData, StatusInstance, float>>(StringComparer.Ordinal);
+    /// <summary>回能钩子只提供本次非负数值；模式、上限和声明仍由公共GainEnergy入口处理。</summary>
+    internal static void RegisterEnergyScalar(string hook, Func<StatusEffectData, StatusInstance, float> resolve)
+        => EnergyScalarRules.Add(hook, resolve);
+    public static bool TryResolveEnergyScalar(StatusEffectData effect, StatusInstance status, out float value)
+    {
+        value = 0f;
+        if (effect?.EffectType != "GainEnergy" || string.IsNullOrWhiteSpace(effect.DamageHook)
+            || !EnergyScalarRules.TryGetValue(effect.DamageHook.Trim(), out var resolve)) return false;
+        value = resolve(effect, status);
+        if (float.IsNaN(value) || float.IsInfinity(value) || value < 0f)
+            throw new InvalidOperationException("GainEnergy钩子必须返回有限非负数值：" + effect.DamageHook);
+        return true;
+    }
     public static bool TryResolveBuffScalar(StatusEffectData effect, StatusInstance status, out float value)
     {
         value = 0f;
@@ -482,6 +520,7 @@ public static class BattleSpecialRules
     {
         if (string.IsNullOrWhiteSpace(hook)) return;
         if (effectType == "Heal" && HasStatusHealHandler(hook)) return;
+        if (effectType == "GainEnergy" && EnergyScalarRules.ContainsKey(hook.Trim())) return;
         if ((effectType == "Buff" || effectType == "Debuff") && BuffScalarRules.ContainsKey(hook.Trim())) return;
         GetDamageRule(hook).Validate(hook, caster, effectType);
     }

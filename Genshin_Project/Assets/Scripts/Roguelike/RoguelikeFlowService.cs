@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// 肉鸽主流程骨架：控制步骤、固定奖励待发记录和持久化提交，不加载场景、不配置队伍或执行战斗。
-/// 战斗：EnterNode -> BeginBattle -> RecordBattleVictory -> CompleteNode。
-/// 事件：EnterNode -> CompleteEvent -> CompleteNode。具体模块从 Resume 获取上下文并接管当前步骤。
+/// 战斗：EnterNode -> BeginBattle -> RecordBattleResult -> CompleteNode；战败结算后返回同一Node。
+/// 遭遇事件：EnterNode -> BeginEventBattle -> 战斗结算，或SkipEvent无奖励完成。
+/// CompleteEvent保留给其他事件结果提交。具体模块从Resume获取上下文并接管当前步骤。
 /// 所有写入先落盘，失败不会在本服务留下已推进的内存状态。
 /// </summary>
 public sealed class RoguelikeFlowService
@@ -64,7 +66,7 @@ public sealed class RoguelikeFlowService
         }
         // 兼容接入固定奖励前已停在胜利/事件结算的档；先固化清单，再允许返回路线。
         if (save.Snapshot.Flow.Step == RoguelikeFlowStep.Settlement &&
-            save.Snapshot.PendingNodeReward == null && nodeRewards != null)
+            save.Snapshot.PendingNodeReward == null && save.Snapshot.Flow.Node?.FixedRewardClaimed != true && nodeRewards != null)
         {
             save.Snapshot.PendingNodeReward = nodeRewards.Capture(save.Snapshot);
             var captured = saves.SaveActiveRun(save, save.Snapshot, save.ResumePoint, RoguelikeSaveReason.PendingRewardGenerated);
@@ -96,6 +98,10 @@ public sealed class RoguelikeFlowService
             return Invalid("章节末尾Boss标记只能用于Boss节点。");
         var snapshot = current.Data.Snapshot;
         var node = RoguelikeSaveJson.DeepClone(selection);
+        node.EventBattleContentId = null;
+        node.FixedRewardClaimed = false;
+        node.BattlePartyCharacterIds = node.TrialCharacterIds = null;
+        node.TrialConfigurations = null;
         if (snapshot.ClearedNodeIds.Contains(node.NodeId)) return Invalid("节点已经完成，不能重复进入。");
         var previous = RoguelikeSaveJson.DeepClone(snapshot);
         if (nodeContents != null)
@@ -115,12 +121,59 @@ public sealed class RoguelikeFlowService
 
     /// <summary>先保存，再由调用者通过 IRoguelikeBattlePort 启动；队伍配置不由流程层生成或修改。</summary>
     public RoguelikeSaveResult BeginBattle(string stepId, string battleId)
+        => BeginBattle(stepId, battleId, false);
+
+    /// <summary>事件页迎战、编队保存之后显式调用；保留Event节点身份，不伪装成普通战斗。</summary>
+    public RoguelikeSaveResult BeginEventBattle(string stepId, string battleId)
+        => BeginBattle(stepId, battleId, true);
+
+    /// <summary>战前专用事务：试用选择只存当前节点；纯自有队伍继续保存到原编队预设。</summary>
+    internal RoguelikeSaveResult<RoguelikeFlowContext> SaveBattleParty(string stepId,
+        IEnumerable<int> characterIds, IEnumerable<int> trialIds, int preset)
     {
         using var transaction = BeginSaveTransaction();
         var current = RequireStep(stepId, RoguelikeFlowStep.Node);
         if (!current.Succeeded) return current;
         var snapshot = current.Data.Snapshot;
-        if (snapshot.Flow.Node.Kind == RoguelikeNodeKind.Event) return Invalid("事件节点不能直接进入战斗步骤。");
+        var party = characterIds?.ToList(); var trials = trialIds?.ToList() ?? new List<int>();
+        if (party == null || party.Count < 1 || party.Count > 4 || party.Distinct().Count() != party.Count ||
+            party.Any(id => id <= 0) || trials.Distinct().Count() != trials.Count || trials.Any(id => !party.Contains(id)))
+            return Failure<RoguelikeFlowContext>(Invalid("本场队伍或试用选择无效。"));
+        var stage = nodeContents?.Resolve(snapshot.CurrentChapterId, snapshot.Flow.Node);
+        if (stage == null || !stage.Succeeded) return Failure<RoguelikeFlowContext>(stage ?? Invalid("缺少本场战斗配置。"));
+        var allowed = stage.Data.Trials.ToDictionary(t => t.CharacterID);
+        if (trials.Any(id => !allowed.ContainsKey(id)) || party.Any(id => !trials.Contains(id) && !snapshot.Characters.Any(c => c.CharacterID == id)))
+            return Failure<RoguelikeFlowContext>(Invalid("选择了本场不可用的角色。"));
+        if (trials.Count == 0)
+        {
+            var roster = new RoguelikeChapterRuntime(snapshot);
+            roster.SetParty(party, preset);
+            snapshot = roster.ExportSnapshot();
+        }
+        snapshot.Flow.Node.BattlePartyCharacterIds = party;
+        snapshot.Flow.Node.TrialCharacterIds = trials;
+        snapshot.Flow.Node.TrialConfigurations = RoguelikeSaveJson.DeepClone(trials.Select(id => allowed[id]).ToList());
+        snapshot.Flow.StepId = Guid.NewGuid().ToString("N");
+        var save = saves.SaveActiveRun(snapshot, current.Data.ResumePoint, RoguelikeSaveReason.EquipmentChanged);
+        return save.Succeeded ? Resume() : Failure<RoguelikeFlowContext>(save);
+    }
+
+    private RoguelikeSaveResult BeginBattle(string stepId, string battleId, bool eventBattle)
+    {
+        using var transaction = BeginSaveTransaction();
+        var current = RequireStep(stepId, RoguelikeFlowStep.Node);
+        if (!current.Succeeded) return current;
+        var snapshot = current.Data.Snapshot;
+        bool isEvent = snapshot.Flow.Node.Kind == RoguelikeNodeKind.Event;
+        if (isEvent != eventBattle) return Invalid("请通过当前节点对应的战斗入口进入。");
+        if (eventBattle)
+        {
+            var encounter = nodeContents?.ResolveEvent(snapshot.CurrentChapterId, snapshot.Flow.Node);
+            if (encounter == null) return Invalid("尚未配置事件战斗模块。");
+            if (!encounter.Succeeded) return encounter;
+            if (string.IsNullOrEmpty(encounter.Data.BattleContentId)) return Invalid("事件战斗尚未开放。");
+            snapshot.Flow.Node.EventBattleContentId = encounter.Data.BattleContentId;
+        }
         if (string.IsNullOrWhiteSpace(battleId)) return Invalid("battleId 不能为空。");
         snapshot.Flow = NewStep(RoguelikeFlowStep.Battle, snapshot.Flow.Node);
         // Freeze actual party equipment before entering combat, including allies who may die during this battle.
@@ -139,13 +192,34 @@ public sealed class RoguelikeFlowService
         return saves.SaveBeforeBattle(snapshot, battleId);
     }
 
-    public RoguelikeSaveResult RecordBattleVictory(string stepId)
+    /// <summary>离开遭遇：无奖励地完成节点，一次提交；不经过会补发固定奖励的结算步骤。</summary>
+    public RoguelikeSaveResult SkipEvent(string stepId)
+    {
+        using var transaction = BeginSaveTransaction();
+        var current = RequireStep(stepId, RoguelikeFlowStep.Node);
+        if (!current.Succeeded) return current;
+        var snapshot = current.Data.Snapshot;
+        var encounter = nodeContents?.ResolveEvent(snapshot.CurrentChapterId, snapshot.Flow.Node);
+        if (encounter == null) return Invalid("尚未配置事件模块。");
+        if (!encounter.Succeeded) return encounter;
+        if (snapshot.PendingNodeReward != null || snapshot.PendingRewardData != null)
+            return Invalid("已有待结算奖励，不能跳过事件。");
+        snapshot.ClearedNodeIds.Add(snapshot.Flow.Node.NodeId);
+        snapshot.Flow = NewStep(RoguelikeFlowStep.Route);
+        return saves.SaveActiveRun(snapshot, RoguelikeResumePoint.ChapterRoute, RoguelikeSaveReason.EventCompleted);
+    }
+
+    public RoguelikeSaveResult RecordBattleVictory(string stepId, int eventEnemyKills = 0)
+        => RecordBattleResult(stepId, true, eventEnemyKills);
+
+    public RoguelikeSaveResult RecordBattleResult(string stepId, bool victory, int eventEnemyKills = 0)
     {
         using var transaction = BeginSaveTransaction();
         var current = RequireStep(stepId, RoguelikeFlowStep.Battle);
         if (!current.Succeeded) return current;
         var snapshot = current.Data.Snapshot;
-        if (snapshot.Flow.Node.IsChapterFinalBoss)
+        if (eventEnemyKills < 0) return Invalid("事件击杀数不能为负数。");
+        if (victory && snapshot.Flow.Node.IsChapterFinalBoss)
         {
             if (snapshot.Flow.AppearanceParticipants == null) return Invalid("章底Boss战缺少战前参战记录，不能猜测外观奖励对象。");
             if (snapshot.AppearanceAwards == null) snapshot.AppearanceAwards = new List<AppearanceBossAward>();
@@ -157,9 +231,11 @@ public sealed class RoguelikeFlowService
             });
         }
         snapshot.Flow = NewStep(RoguelikeFlowStep.Settlement, snapshot.Flow.Node);
+        snapshot.Flow.EventEnemyKills = eventEnemyKills;
+        snapshot.Flow.BattleDefeated = !victory;
         snapshot.PendingNodeReward = nodeRewards?.Capture(snapshot);
-        // 不回写战斗中间态；胜利和待发奖励清单一起落盘，退出后仍可继续结算。
-        return saves.SaveAfterBattleVictory(snapshot, current.Data.BattleId);
+        // 不回写战斗中间态；胜负与待发清单一起落盘，恢复后也只入账一次。
+        return saves.SaveAfterBattleResult(snapshot, current.Data.BattleId, victory);
     }
 
     public RoguelikeSaveResult CompleteEvent(string stepId, RoguelikeProgressSnapshot eventResult)
@@ -241,7 +317,13 @@ public sealed class RoguelikeFlowService
         if (snapshot.PendingRewardData != null) return Invalid("奖励尚未领取，不能完成节点。");
         if (snapshot.PendingNodeReward != null && !fixedRewardGranted)
             return Invalid("固定节点奖励尚未入账，不能完成节点。");
+        if (fixedRewardGranted) current.Data.Flow.Node.FixedRewardClaimed = true;
         snapshot.PendingNodeReward = null;
+        if (current.Data.Flow.BattleDefeated)
+        {
+            snapshot.Flow = NewStep(RoguelikeFlowStep.Node, current.Data.Flow.Node);
+            return saves.SaveActiveRun(snapshot, RoguelikeResumePoint.ChapterRoute, RoguelikeSaveReason.RewardChosen);
+        }
         snapshot.ClearedNodeIds.Add(current.Data.Flow.Node.NodeId);
         snapshot.Flow = NewStep(RoguelikeFlowStep.Route);
         return saves.SaveActiveRun(snapshot, RoguelikeResumePoint.ChapterRoute, RoguelikeSaveReason.RewardChosen);

@@ -33,6 +33,11 @@ public sealed class HitEffectsPreview : MonoBehaviour
     private Canvas previewCanvas;
     private BattleUiLayout sceneLayout;
     private BattleUiHitEffects hitModule;
+    private BattleUiHealEffects healModule;
+    private BattlefieldDamagePopupController healingPopups;
+    private bool playingHealing;
+    private int healingTarget = 6;
+    private bool healingLights = true, healingNumbers = true;
     private int previewTab;
 
     private static readonly string[] Elements = { "Physical", "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro" };
@@ -150,6 +155,11 @@ public sealed class HitEffectsPreview : MonoBehaviour
         shieldPanel.Bind(shields, numberFont);
         shieldPanel.revealEnabled = previewShieldReveal;
         shieldPanel.loopAppearance = loopShieldAppearance;
+        // 预览只显式装配公共表现模块，不创建实体或伪造HealResolved业务声明。
+        healModule = gameObject.AddComponent<BattleUiHealEffects>();
+        healModule.layout = sceneLayout; healModule.automaticClock = false;
+        healingPopups = gameObject.AddComponent<BattlefieldDamagePopupController>();
+        healingPopups.layout = sceneLayout; healingPopups.numberFont = numberFont; healingPopups.AutomaticClock = false;
     }
     private void BuildCard(int index, RectTransform parent, Vector2 position, int id)
     {
@@ -166,24 +176,26 @@ public sealed class HitEffectsPreview : MonoBehaviour
     {
         hits = 0; rate = amount = 0;
         if (!int.TryParse(hitsText, out hits) || hits < 1 || hits > 100) inputError = "hit 数请输入 1～100 的整数。";
-        else if (!float.TryParse(critText, NumberStyles.Float, CultureInfo.InvariantCulture, out rate) || float.IsNaN(rate) || rate < 0 || rate > 100)
+        else if (previewTab != 2 && (!float.TryParse(critText, NumberStyles.Float, CultureInfo.InvariantCulture, out rate) || float.IsNaN(rate) || rate < 0 || rate > 100))
             inputError = "暴击率请输入 0～100（百分比）。";
         else if (!float.TryParse(amountText, NumberStyles.Float, CultureInfo.InvariantCulture, out amount) || float.IsNaN(amount) || float.IsInfinity(amount) || amount < 0)
             inputError = "示例伤害请输入非负有限数字。";
         else { inputError = null; rate /= 100; return true; }
         return false;
     }
-    private IEnumerable<int> Targets()
+    private IEnumerable<int> Targets() => Targets(target);
+    private IEnumerable<int> Targets(int selection)
     {
-        if (target == 0) { for (int i = 4; i < 9; i++) yield return i; }
-        else if (target >= 1 && target <= 5) yield return target + 3;
-        else if (target == 6) { for (int i = 0; i < 4; i++) yield return i; }
-        else if (target >= 7 && target <= 10) yield return target - 7;
-        else if (target == 12) { for (int i = 5; i <= 7; i++) yield return i; }
+        if (selection == 0) { for (int i = 4; i < 9; i++) yield return i; }
+        else if (selection >= 1 && selection <= 5) yield return selection + 3;
+        else if (selection == 6) { for (int i = 0; i < 4; i++) yield return i; }
+        else if (selection >= 7 && selection <= 10) yield return selection - 7;
+        else if (selection == 12) { for (int i = 5; i <= 7; i++) yield return i; }
         else { for (int i = 0; i < 9; i++) yield return i; }
     }
     private void Replay()
     {
+        if (previewTab == 2) { ReplayHealing(); return; }
         if (!ready || error != null || !TryInputs(out int count, out float rate, out float amount)) return;
         Stop();
         playingHits = count; playingNumbers = showNumbers; playingProfile = effects.Get((HitEffectWeapon)weapon, attack == 1);
@@ -247,12 +259,38 @@ public sealed class HitEffectsPreview : MonoBehaviour
     }
     private void Stop()
     {
+        healModule?.Cancel(-1); healingPopups?.Cancel(-1); playingHealing = false;
         running = paused = false; elapsed = 0; nextCue = nextFlight = nextVisual = 0; cues.Clear(); visualCues.Clear();
         if (shake != null) shake.Cancel(-1);
         hitModule?.Clear();
         foreach (var flight in flights) if (flight.Graphic != null) Destroy(flight.Graphic.gameObject);
         foreach (var popup in popups) if (popup.Text != null) Destroy(popup.Text.gameObject);
         flights.Clear(); popups.Clear();
+    }
+    private void ReplayHealing()
+    {
+        if (!ready || error != null || !TryInputs(out int count, out _, out float amount)) return;
+        Stop(); playingHealing = true; playingPopup = popupStyle;
+        playingSeed = newSeedEachPlay ? unchecked((int)HitEffectMath.Mix((uint)fixedSeed ^ (uint)++playIndex)) : fixedSeed;
+        for (int hit = 0; hit < count; hit++)
+            foreach (int index in Targets(healingTarget))
+                cues.Add(new Cue { Hit = hit, Target = index, Time = hit * (float)timing.HitInterval,
+                    Amount = amount, Seed = HitEffectMath.CueSeed(playingSeed, hit, index) });
+        endTime = (count - 1) * (float)timing.HitInterval + Mathf.Max(healModule.Lifetime, popupStyle.Lifetime);
+        running = true;
+    }
+    private void AdvanceHealing(float seconds)
+    {
+        // 先推进已有表现，再让本帧到达的请求从零时刻出生；暂停时不调用此处。
+        healModule.Advance(seconds); healingPopups.Advance(seconds);
+        while (nextCue < cues.Count && cues[nextCue].Time <= elapsed)
+        {
+            var cue = cues[nextCue++]; BattleSide side = cue.Target < 4 ? BattleSide.Ally : BattleSide.Enemy;
+            int slot = cue.Target < 4 ? cue.Target + 1 : cue.Target - 3;
+            if (healingLights) healModule.TryPlay(side, slot, playIndex, cue.Seed);
+            if (healingNumbers) healingPopups.TryShowHealing(side, slot, cue.Amount, cue.Seed);
+        }
+        if (elapsed >= endTime + .4f) { running = false; if (autoReplay) ReplayHealing(); }
     }
     private void Spawn(Cue cue)
     {
@@ -293,6 +331,7 @@ public sealed class HitEffectsPreview : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && running) paused = !paused;
         if (!running || paused) return;
         elapsed += Time.unscaledDeltaTime;
+        if (playingHealing) { AdvanceHealing(Time.unscaledDeltaTime); return; }
         float flightDuration = playingFlightDuration;
         while (nextFlight < visualCues.Count && visualCues[nextFlight].Cue.Time - flightDuration <= elapsed)
         {
@@ -336,7 +375,29 @@ public sealed class HitEffectsPreview : MonoBehaviour
         var toggle = new GUIStyle(skin.toggle) { fontSize = 21 };
         var field = new GUIStyle(skin.textField) { fontSize = 21 };
         GUILayout.BeginArea(new UnityEngine.Rect(24, 12, 1872, previewTab == 0 ? 290 : 252), GUI.skin.box);
-        previewTab = GUILayout.Toolbar(previewTab, new[] { "命中特效预览", "护盾与扫光预览" }, button);
+        int selectedTab = GUILayout.Toolbar(previewTab, new[] { "命中特效预览", "护盾与扫光预览", "治疗光芒与跳字预览" }, button);
+        if (selectedTab != previewTab) { Stop(); previewTab = selectedTab; }
+        if (previewTab == 2)
+        {
+            GUILayout.Label("同一公共治疗组件；正式战斗识别HealResolved目标。此页只播放示例，不修改生命。", label);
+            healingTarget = GUILayout.SelectionGrid(healingTarget, TargetLabels, TargetLabels.Length, button);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("次数", label); hitsText = GUILayout.TextField(hitsText, 3, field, GUILayout.Width(70));
+            GUILayout.Label("示例实际回血", label); amountText = GUILayout.TextField(amountText, 12, field, GUILayout.Width(120));
+            healingLights = GUILayout.Toggle(healingLights, "绿色光芒", toggle);
+            healingNumbers = GUILayout.Toggle(healingNumbers, "+治疗跳字", toggle);
+            autoReplay = GUILayout.Toggle(autoReplay, "循环", toggle);
+            newSeedEachPlay = GUILayout.Toggle(newSeedEachPlay, "新随机样式", toggle);
+            GUILayout.EndHorizontal(); GUILayout.BeginHorizontal(); GUI.enabled = ready;
+            if (GUILayout.Button("播放 / 重播 [R]", button)) ReplayHealing();
+            if (GUILayout.Button(paused ? "继续 [空格]" : "暂停 [空格]", button) && running) paused = !paused;
+            if (GUILayout.Button("停止", button)) Stop();
+            if (GUILayout.Button("重读运行时配表", button))
+            { Stop(); ReadSettings(); healModule?.ReloadConfiguration(); healingPopups?.ReloadConfiguration(); }
+            GUI.enabled = true; GUILayout.EndHorizontal();
+            GUILayout.Label(inputError ?? error ?? $"{elapsed:F2}s / {endTime:F2}s；零实际回血不出数字，光芒仍可单独预览。", label);
+            GUILayout.EndArea(); skin.font = savedFont; GUI.matrix = oldMatrix; return;
+        }
         if (previewTab == 1)
         {
             if (shieldPanel != null) shieldPanel.DrawMain(label, button, toggle);

@@ -1,0 +1,34 @@
+{
+  "generator": "built-in image_gen",
+  "created": "2026-11-26",
+  "file": "MutantElectroCharge.png",
+  "related_status": {
+    "id": 4202902,
+    "id2": "ST_MutantElectroSlime_Charge"
+  },
+  "style_references": [
+    "art_assets/Enemy_Icon/2029_01.png"
+  ],
+  "prompt": "Edit image 1 into a much simpler replacement status icon. Discard its orb, gemstone body and all encircling arcs: the complete subject must be just ONE plain, bold, easily recognized zigzag LIGHTNING BOLT. Use image 2 only for the Mutant Electro Slime's own body colors: soft warm golden yellow, pale creamy yellow highlights and restrained ochre shading. Do not copy the slime's face, silhouette or background. The lightning is a broad continuous angular filled shape, two clear zigzag bends, tapered lower tip, nearly upright with a slight natural diagonal. Flat concise hand-painted game UI symbol; thin dark ochre contour, one broad subtle highlight and one simple shadow face at most. Quiet yellow palette only, no purple, violet or blue. No orb, crystal, ring, frame, surrounding lightning, small sparks, glow, badge, text, numbers, eyes, face or other objects. Center the single bolt in a square transparent canvas, about 62–68% of canvas height and 40–46% width, entirely within the centered circular safe area, generous transparent margins. Genuine transparent background with crisp antialiased edges. Readable as a simple yellow lightning symbol at 32 pixels. Preserve actual alpha outside the symbol.",
+  "usage": "变异雷史莱姆蓄电卡底图标；公共组件按Value显示真实整数计数，0值保留有效状态图标。",
+  "runtime_binding": "本次补入CardBottomStatus.xlsx映射并发布运行资源；三维高压电弧仍为独立视觉需求。",
+  "unity_visual_validation": false,
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "qa": {
+    "visible_alpha_threshold": 8,
+    "visible_pixels_outside_inscribed_circle": 0,
+    "max_radius_ratio": 0.7426233636256205,
+    "preview_sizes": [
+      32,
+      48,
+      64
+    ],
+    "alpha_preserved": true
+  },
+  "runtime_meta_guid": "610b9dc449ff490c936fa38d53a86165",
+  "source_color_reference": "art_assets/Enemy_Icon/2029_01.png",
+  "subject": "变异雷史莱姆自身黄色的简洁雷电符号"
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2069_Andrius/TrialAndApproval/2069_TrialAndApproval",
+  "source": "art_assets/UE/Enemies/2069_Andrius/TrialAndApproval/Blender/2069_TrialAndApproval.blend",
+  "file": "Enemies/2069_Andrius/TrialAndApproval/Exports/2069_TrialAndApproval.vfx.bytes",
+  "meshes": 6,
+  "tracks": 10,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 28982
+}

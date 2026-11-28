@@ -1,0 +1,70 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Ruin_Grader#Abilities",
+  "visual_sources": [
+    {
+      "title": "Ruin Grader Clap.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Ruin_Grader_Clap.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/4/49/Ruin_Grader_Clap.gif/revision/latest?cb=20211208043642",
+      "size_bytes": 5051590,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Ruin Grader Stomp.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Ruin_Grader_Stomp.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a6/Ruin_Grader_Stomp.gif/revision/latest?cb=20211208043704",
+      "size_bytes": 5070984,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Ruin Grader Focused Laser.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Ruin_Grader_Focused_Laser.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/50/Ruin_Grader_Focused_Laser.gif/revision/latest?cb=20211208043648",
+      "size_bytes": 4852811,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": [
+        {
+          "file": "FocusedLaser_02500ms.png",
+          "time_ms": 2500,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        },
+        {
+          "file": "FocusedLaser_05000ms.png",
+          "time_ms": 5000,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        }
+      ]
+    }
+  ],
+  "audio_sources": [
+    {
+      "url": "https://www.youtube.com/watch?v=UDS07jOv_u4",
+      "purpose": "原作重机接触及聚焦激光声音核对；作者章节0:47与2:30为战斗，非已确认激光时间码",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    },
+    {
+      "url": "https://opengameart.org/content/laser-beam",
+      "purpose": "持续光束声替代候选",
+      "license_listed": "CC0",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；完整GIF未播放且不保存本地；下列static_frames仅在另有标记时表示已查看。音效未试听、截取或选定。",
+  "implementation_status": "Requirements only. No VFX asset, runtime hook, scene or table changes."
+}

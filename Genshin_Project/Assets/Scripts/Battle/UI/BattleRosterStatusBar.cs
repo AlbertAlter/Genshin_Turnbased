@@ -54,10 +54,10 @@ public sealed class BattleRosterStatusBar : MonoBehaviour
         var battle = BattleManager.Instance;
         var entity = battle != null ? battle.GetEntityByPosition(side, position) : null;
         if (entity == null || !entity.IsAlive || !entity.IsOnField) entity = null;
-        if (entity != occupant || Time.unscaledTime >= nextRefresh)
+        if (entity != occupant || BattlePause.UnscaledTime >= nextRefresh)
         {
             occupant = entity;
-            nextRefresh = Time.unscaledTime + .1f;
+            nextRefresh = BattlePause.UnscaledTime + .1f;
             var statuses = entity?.GetStatusList(); // Sorted by the actual instance's ApplyOrder, oldest first.
             int used = 0;
             for (int i = (statuses?.Count ?? 0) - 1; i >= 0 && used < capacity; i--)
@@ -76,7 +76,7 @@ public sealed class BattleRosterStatusBar : MonoBehaviour
         foreach (var badge in badges)
             if (badge.status != null)
                 badge.group.alpha = !badge.status.IsPermanent && badge.status.RemainingPhaseCount == 1
-                    ? .35f + .65f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 4f)) : 1f;
+                    ? .35f + .65f * Mathf.Abs(Mathf.Sin(BattlePause.UnscaledTime * 4f)) : 1f;
     }
 
     void Show(Badge badge, StatusInstance status, BattleEntity entity)

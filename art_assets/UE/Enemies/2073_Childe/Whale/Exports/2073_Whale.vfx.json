@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2073_Childe/Whale/2073_Whale",
+  "source": "art_assets/UE/Enemies/2073_Childe/Whale/Blender/2073_Whale.blend",
+  "file": "Enemies/2073_Childe/Whale/Exports/2073_Whale.vfx.bytes",
+  "meshes": 18,
+  "tracks": 171,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 581762
+}

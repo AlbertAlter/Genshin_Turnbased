@@ -1,0 +1,52 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E8%BE%BE%E8%BE%BE%E5%88%A9%E4%BA%9A",
+    "image_url": "https://patchwiki.biligame.com/images/ys/6/64/g91gm3psmcay4t9mr1z4mnh91i1tbi0.gif",
+    "title": "极恶技·尽灭闪.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码66帧、6.6秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "原作爆发资料入口，用于查找近战尽灭水光的挥斩、水刃与收尾；尚未确认该动图是否同时包含两种姿态。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\tartaglia-references\\Tartaglia_Havoc_Observation.png",
+    "decoded_frames": 66,
+    "duration_seconds": 6.6,
+    "sampled_frames": [
+      0,
+      3,
+      6,
+      8,
+      11,
+      14,
+      17,
+      20,
+      23,
+      25,
+      28,
+      31,
+      34,
+      37,
+      40,
+      42,
+      45,
+      48,
+      51,
+      54,
+      57,
+      59,
+      62,
+      65
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E8%BE%BE%E8%BE%BE%E5%88%A9%E4%BA%9A",
+    "image_url": null,
+    "title": "七圣召唤·达达利亚角色卡",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已核对卡牌资料页；页面的技能图标和文字不作为动态演出证明，未取得或观看七圣召唤战斗实机。",
+    "use": "搜索对应卡牌的断流附属标记及两种爆发实机，辅助卡面构图、遮挡和显示位置；不套用七圣的数值、目标或触发规则。"
+  }
+]

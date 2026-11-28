@@ -8,6 +8,9 @@ public sealed class PlayerAppearanceData
 {
     public int SchemaVersion = 1;
     public string SelectedCardBackId = "";
+    public List<string> UnlockedCardBackIds = new List<string>();
+    public int SpentCardBackChoices;
+    public int AvailableCardBackChoices => Math.Max(0, GrantedCompletions.Count - SpentCardBackChoices);
     public List<AppearanceFrameProgress> Characters = new List<AppearanceFrameProgress>();
     public List<AppearanceFrameProgress> Weapons = new List<AppearanceFrameProgress>();
     public List<string> GrantedCompletions = new List<string>();
@@ -45,9 +48,16 @@ public static class PlayerAppearanceRules
     {
         if (data == null || data.SchemaVersion != 1)
             return RoguelikeSaveResult.Failure(data != null && data.SchemaVersion > 1 ? RoguelikeSaveErrorCode.UnsupportedSchema : RoguelikeSaveErrorCode.ValidationFailed, "外观存档版本无效。");
+        // Older cosmetic saves have neither field. Preserve their already selected card back.
+        data.UnlockedCardBackIds ??= new List<string>();
+        if (!string.IsNullOrWhiteSpace(data.SelectedCardBackId) && !data.UnlockedCardBackIds.Contains(data.SelectedCardBackId))
+            data.UnlockedCardBackIds.Add(data.SelectedCardBackId);
         if (!ValidFrames(data.Characters) || !ValidFrames(data.Weapons) || data.GrantedCompletions == null ||
             data.GrantedCompletions.Any(string.IsNullOrWhiteSpace) || data.GrantedCompletions.Distinct(StringComparer.Ordinal).Count() != data.GrantedCompletions.Count)
             return Invalid("外观存档包含无效等级或重复身份。");
+        if (data.SpentCardBackChoices < 0 || data.SpentCardBackChoices > data.GrantedCompletions.Count ||
+            data.UnlockedCardBackIds.Any(string.IsNullOrWhiteSpace) || data.UnlockedCardBackIds.Distinct(StringComparer.Ordinal).Count() != data.UnlockedCardBackIds.Count)
+            return Invalid("卡背解锁记录或剩余选择次数无效。");
         return RoguelikeSaveResult.Success();
     }
     public static RoguelikeSaveResult Validate(AppearanceBossAward award)

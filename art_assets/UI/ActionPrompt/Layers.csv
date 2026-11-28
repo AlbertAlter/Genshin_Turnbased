@@ -1,0 +1,5 @@
+﻿Group,PSDLayer,File,PSDBounds,Opacity,FillOpacity,Blend,Clipped,ExportAlpha
+敌人行动显示,“1009_04”的外描边 1,OuterRing.png,"(1744, 220, 1852, 328)",255,255,NORMAL,False,Alpha x 1 (255/255)
+敌人行动显示,“1009_04”的外描边,InnerRing.png,"(1751, 227, 1845, 321)",255,255,NORMAL,False,Alpha x 1 (255/255)
+角色行动显示,1009_04,PortraitMask.png,"(81, 232, 161, 312)",255,255,NORMAL,False,Alpha x 1 (255/255)
+角色行动显示,PaimonEmblem_LightBrown,PaimonEmblem.png,"(364, 147, 509, 299)",128,255,NORMAL,True,Alpha x 128/255; clip to frame opening in Unity

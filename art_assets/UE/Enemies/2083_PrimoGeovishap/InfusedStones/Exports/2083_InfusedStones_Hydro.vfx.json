@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2083_PrimoGeovishap/InfusedStones/2083_InfusedStones_Hydro",
+  "source": "art_assets/UE/Enemies/2083_PrimoGeovishap/InfusedStones/Blender/2083_InfusedStones_Hydro.blend",
+  "file": "Enemies/2083_PrimoGeovishap/InfusedStones/Exports/2083_InfusedStones_Hydro.vfx.bytes",
+  "meshes": 5,
+  "tracks": 140,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 641366
+}

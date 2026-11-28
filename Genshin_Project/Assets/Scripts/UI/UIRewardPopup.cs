@@ -46,7 +46,11 @@ public sealed class UIRewardPopup : MonoBehaviour
     private RectTransform content;
     private ScrollRect scroll;
     private Button dismiss;
-    private TMP_Text heading, hint;
+    private TMP_Text heading, hint, resultDetail;
+    private float resultElapsed;
+    private bool battleResult;
+    private Vector3 headingScale;
+    private Vector2 headingPosition;
     private Coroutine request;
     private bool prepared, closing;
     private Vector2 lastViewportSize;
@@ -65,14 +69,25 @@ public sealed class UIRewardPopup : MonoBehaviour
 
     /// <summary>Returns whether a request was accepted. Busy/disabled/unbound views reject it without any business side effects.</summary>
     public bool TryShow(IReadOnlyList<UIRewardPopupItem> rewards, string title, string closeHint)
+        => Show(rewards, title, closeHint, null, false);
+
+    /// <summary>Battle outcome and already-committed rewards share one overlay. Failure may have no items.</summary>
+    public bool TryShowBattleResult(IReadOnlyList<UIRewardPopupItem> rewards, string title, string detail, string closeHint)
+        => Show(rewards ?? Array.Empty<UIRewardPopupItem>(), title, closeHint, detail, true);
+
+    private bool Show(IReadOnlyList<UIRewardPopupItem> rewards, string title, string closeHint, string detail, bool result)
     {
         if (!isActiveAndEnabled || IsOpen || font == null || headingMount == null || itemsViewport == null || hintMount == null ||
-            rewards == null || rewards.Count == 0) return false;
+            rewards == null || !result && rewards.Count == 0) return false;
         foreach (var item in rewards) if (item == null) return false;
         items = new UIRewardPopupItem[rewards.Count];
         for (int i = 0; i < items.Length; i++) items[i] = rewards[i];
         EnsureContent();
         heading.text = title ?? ""; hint.text = closeHint ?? "";
+        battleResult = result; resultElapsed = 0;
+        heading.fontSize = result ? 54 : 44;
+        resultDetail.text = detail ?? ""; resultDetail.gameObject.SetActive(result && !string.IsNullOrWhiteSpace(detail));
+        heading.rectTransform.localScale = headingScale; heading.rectTransform.anchoredPosition = headingPosition;
         LastError = null; IsOpen = true; closing = prepared = false;
         group.alpha = 0; group.blocksRaycasts = group.interactable = true;
         transform.SetAsLastSibling();
@@ -84,7 +99,12 @@ public sealed class UIRewardPopup : MonoBehaviour
     {
         if (heading != null) return;
         heading = Label(headingMount, 44, titleColor);
+        headingScale = headingMount.localScale; headingPosition = headingMount.anchoredPosition;
         hint = Label(hintMount, 24, textColor);
+        var detailRect = Rect(headingMount, "Battle result detail");
+        detailRect.anchorMin = detailRect.anchorMax = new Vector2(.5f, 0);
+        detailRect.sizeDelta = new Vector2(1000, 40); detailRect.anchoredPosition = new Vector2(0, -22);
+        resultDetail = Label(detailRect, 25, textColor); resultDetail.gameObject.SetActive(false);
         foreach (bool right in new[] { false, true })
         {
             var line = Rect(headingMount, "Title rule");
@@ -105,7 +125,7 @@ public sealed class UIRewardPopup : MonoBehaviour
 
     private IEnumerator Prepare()
     {
-        foreach (string path in TileArt)
+        foreach (string path in items.Length == 0 ? Array.Empty<string>() : TileArt)
         {
             yield return Load(path);
             if (images[path] == null)
@@ -136,6 +156,11 @@ public sealed class UIRewardPopup : MonoBehaviour
     {
         ClearCells();
         float width = Mathf.Max(1, itemsViewport.rect.width), height = Mathf.Max(1, itemsViewport.rect.height);
+        if (items.Length == 0)
+        {
+            content.sizeDelta = new Vector2(width, height); content.anchoredPosition = Vector2.zero;
+            scroll.velocity = Vector2.zero; lastViewportSize = itemsViewport.rect.size; return;
+        }
         float size = Mathf.Min(Mathf.Max(1, iconSize), width), gapX = Mathf.Max(0, spacing.x), gapY = Mathf.Max(0, spacing.y);
         int columns = Mathf.Min(items.Length, Mathf.Max(1, Mathf.FloorToInt((width + gapX) / (size + gapX))));
         int rows = (items.Length + columns - 1) / columns;
@@ -191,6 +216,13 @@ public sealed class UIRewardPopup : MonoBehaviour
         if (prepared && !closing && lastViewportSize != itemsViewport.rect.size) LayoutItems();
         float target = closing ? 0 : prepared ? 1 : 0;
         group.alpha = Mathf.MoveTowards(group.alpha, target, fadeSeconds <= 0 ? 1 : Time.unscaledDeltaTime / fadeSeconds);
+        if (battleResult && prepared && !closing)
+        {
+            resultElapsed += Time.unscaledDeltaTime;
+            var frame = BattleFlowBannerFrame.Sample(resultElapsed, .24f, float.MaxValue, 0);
+            heading.rectTransform.localScale = headingScale * frame.Scale;
+            heading.rectTransform.anchoredPosition = headingPosition + Vector2.up * frame.Offset;
+        }
         if (closing && group.alpha <= 0)
         {
             ResetView(); Closed?.Invoke();

@@ -1,0 +1,72 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Fatui_Cryo_Cicin_Mage#Abilities",
+  "visual_sources": [
+    {
+      "title": "Cryo Cicin Mage Summon Cicins.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Cicin_Mage_Summon_Cicins.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/c/cc/Cryo_Cicin_Mage_Summon_Cicins.gif/revision/latest?cb=20211212035815",
+      "size_bytes": 4511294,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Cicin Mage Cicin Encirclement.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Cicin_Mage_Cicin_Encirclement.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/19/Cryo_Cicin_Mage_Cicin_Encirclement.gif/revision/latest?cb=20211212035803",
+      "size_bytes": 3911703,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Cicin Mage Cicin Disruption.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Cicin_Mage_Cicin_Disruption.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/c/c7/Cryo_Cicin_Mage_Cicin_Disruption.gif/revision/latest?cb=20211212035800",
+      "size_bytes": 4268859,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Cicin Mage Cryo Shield.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Cicin_Mage_Cryo_Shield.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/6/65/Cryo_Cicin_Mage_Cryo_Shield.gif/revision/latest?cb=20211212035809",
+      "size_bytes": 5203797,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    },
+    {
+      "title": "Cryo Cicin Mage Cryo Blast.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Cryo_Cicin_Mage_Cryo_Blast.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/8/87/Cryo_Cicin_Mage_Cryo_Blast.gif/revision/latest?cb=20211212035806",
+      "size_bytes": 4302947,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false
+    }
+  ],
+  "audio_sources": [
+    {
+      "title": "How To Destroy Cryo Cicin Mage Shield (2 Ways)",
+      "url": "https://www.youtube.com/watch?v=VanN4eUciII",
+      "use": "原作盾建立／破盾声音核对入口；不冒称涵盖所有攻击",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    },
+    {
+      "title": "Ice & Electricity Magic",
+      "url": "https://opengameart.org/content/ice-electricity-magic",
+      "use": "冰粒、冷气、冰晶接触的替代音效候选",
+      "license_listed": "CC-BY 3.0",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；未播放完整动图，未保存GIF，未截取音频。用户指定的项目复用与改编见视觉需求，不能当作原作逐帧还原。",
+  "implementation_status": "Requirements only. No new VFX model, renderer, animation hook or runtime table mapping added."
+}

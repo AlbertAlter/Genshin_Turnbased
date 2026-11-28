@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2071_Stormterror/PulseBombs/2071_PulseBombs",
+  "source": "art_assets/UE/Enemies/2071_Stormterror/PulseBombs/Blender/2071_PulseBombs.blend",
+  "file": "Enemies/2071_Stormterror/PulseBombs/Exports/2071_PulseBombs.vfx.bytes",
+  "meshes": 9,
+  "tracks": 54,
+  "frames": 170,
+  "duration": 5.633333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.633333333333334
+  },
+  "bytes": 257161
+}

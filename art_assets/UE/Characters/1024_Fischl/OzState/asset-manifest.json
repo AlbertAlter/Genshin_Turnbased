@@ -1,0 +1,597 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/OzState/视觉需求.md",
+  "variants": {
+    "Fischl_OzState_UpperSlot": {
+      "effect": "Fischl_OzState_UpperSlot",
+      "source": "Blender/Fischl_OzState_UpperSlot.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/OzState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "OzBody": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_OzState_UpperSlot_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -2.765000104904175,
+        -0.10999999940395355,
+        3.640000104904175
+      ],
+      "detailScale": 5,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "contract": "One field-owned Oz; approximately2/3 card-width wings, independent wing roots/flight feathers/tail lag. Upper/lower slots use their outer side; empty occupant never removes the field body. Appearance, stable repeat and arbitrary-phase exit are separate from an attack.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_OzState_UpperSlot.wav"
+      }
+    },
+    "Fischl_OzState_LowerSlot": {
+      "effect": "Fischl_OzState_LowerSlot",
+      "source": "Blender/Fischl_OzState_LowerSlot.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/OzState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "OzBody": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_OzState_LowerSlot_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        -0.10999999940395355,
+        -2.890000104904175
+      ],
+      "detailScale": 5,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "contract": "One field-owned Oz; approximately2/3 card-width wings, independent wing roots/flight feathers/tail lag. Upper/lower slots use their outer side; empty occupant never removes the field body. Appearance, stable repeat and arbitrary-phase exit are separate from an attack.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_OzState_LowerSlot.wav"
+      }
+    },
+    "Fischl_OzState_EmptyAnchor": {
+      "effect": "Fischl_OzState_EmptyAnchor",
+      "source": "Blender/Fischl_OzState_EmptyAnchor.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/OzState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "OzBody": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_OzState_EmptyAnchor_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -2.765000104904175,
+        -0.10999999940395355,
+        3.640000104904175
+      ],
+      "detailScale": 5,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "contract": "One field-owned Oz; approximately2/3 card-width wings, independent wing roots/flight feathers/tail lag. Upper/lower slots use their outer side; empty occupant never removes the field body. Appearance, stable repeat and arbitrary-phase exit are separate from an attack.",
+      "emptyFieldDemo": {
+        "cardIndex": 3,
+        "probeFrame": 150,
+        "hiddenAfterFrame": 90
+      },
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_OzState_EmptyAnchor.wav"
+      }
+    }
+  }
+}

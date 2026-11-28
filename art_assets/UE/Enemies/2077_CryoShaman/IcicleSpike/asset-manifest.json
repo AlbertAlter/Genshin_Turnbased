@@ -1,0 +1,1093 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2077_CryoShaman/IcicleSpike/视觉需求.md",
+  "variants": {
+    "2077_IcicleSpike_Action": {
+      "effect": "2077_IcicleSpike_Action",
+      "source": "Blender/2077_IcicleSpike_Action.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2077_CryoShaman/IcicleSpike/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2077_IcicleSpike_Action_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2077_IcicleSpike_Action_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2077_IcicleSpike_Action_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SingleScreenNormalIceSpike": {
+          "file": "Exports/2077_IcicleSpike_Action_SingleScreenNormalIceSpike.fbx",
+          "objects": [
+            "PART_SingleScreenNormalIceSpike",
+            "PART_ScreenSpikeMilkyInnerIce",
+            "PART_ScreenSpikeColdFacet_0",
+            "PART_ScreenSpikeColdFacet_1",
+            "PART_ScreenSpikeColdFacet_2",
+            "PART_ScreenSpikeColdFacet_3",
+            "PART_ScreenSpikeColdFacet_4",
+            "PART_ScreenSpikeInternalFissure"
+          ],
+          "vertices": 172,
+          "triangles": 226,
+          "dimensions": [
+            0.9281019568443298,
+            0.8644286394119263,
+            2.3489999771118164
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SingleScreenNormalIceSpike": [
+              "SingleSpikeClearIce"
+            ],
+            "PART_ScreenSpikeMilkyInnerIce": [
+              "SingleSpikeMilkyCore"
+            ],
+            "PART_ScreenSpikeColdFacet_0": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_1": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_2": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_3": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_4": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeInternalFissure": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 8,
+            "vertices": 172,
+            "triangles": 226,
+            "dimensions": [
+              0.9281019568443298,
+              0.8644290268421173,
+              2.349000047528463
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ScreenSpikeShedIceChip": {
+          "file": "Exports/2077_IcicleSpike_Action_ScreenSpikeShedIceChip.fbx",
+          "objects": [
+            "PART_ScreenSpikeShedIceChip"
+          ],
+          "vertices": 4,
+          "triangles": 4,
+          "dimensions": [
+            0.17999999970197678,
+            0.07000000029802322,
+            0.1900000050663948
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ScreenSpikeShedIceChip": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 4,
+            "dimensions": [
+              0.17999999970197678,
+              0.07000003382563591,
+              0.1900000125169754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 21,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 22,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "contract": "ONE root-anchored ice spike grows along -Y screen normal, slight cant; field stays independent.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2077_IcicleSpike_Action.wav"
+      }
+    },
+    "2077_IcicleSpike_State": {
+      "effect": "2077_IcicleSpike_State",
+      "source": "Blender/2077_IcicleSpike_State.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2077_CryoShaman/IcicleSpike/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/2077_IcicleSpike_State_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2077_IcicleSpike_State_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/2077_IcicleSpike_State_ContinuousGround.fbx",
+          "objects": [
+            "PART_Cryo_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/2077_IcicleSpike_State_GroundPattern0.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.174220085144043,
+            0.0,
+            10.361742496490479
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.174220085144043,
+              1.6987323760986328e-06,
+              10.361742496490479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/2077_IcicleSpike_State_GroundPattern1.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.015108108520508,
+            0.0,
+            10.635203838348389
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.015108108520508,
+              1.7285346984863281e-06,
+              10.635203838348389
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/2077_IcicleSpike_State_GroundPattern2.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.05208396911621,
+            0.0,
+            9.461855411529541
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.05208396911621,
+              1.5348196029663086e-06,
+              9.461855411529541
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "contract": "ONE root-anchored ice spike grows along -Y screen normal, slight cant; field stays independent.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2077_IcicleSpike_State.wav"
+      }
+    },
+    "2077_IcicleSpike_Trigger": {
+      "effect": "2077_IcicleSpike_Trigger",
+      "source": "Blender/2077_IcicleSpike_Trigger.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2077_CryoShaman/IcicleSpike/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2077_IcicleSpike_Trigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2077_IcicleSpike_Trigger_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2077_IcicleSpike_Trigger_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 15,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 22,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "contract": "ONE root-anchored ice spike grows along -Y screen normal, slight cant; field stays independent.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2077_IcicleSpike_Trigger.wav"
+      }
+    },
+    "2077_IcicleSpike_Overall": {
+      "effect": "2077_IcicleSpike_Overall",
+      "source": "Blender/2077_IcicleSpike_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2077_CryoShaman/IcicleSpike/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2077_IcicleSpike_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2077_IcicleSpike_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2077_IcicleSpike_Overall_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SingleScreenNormalIceSpike": {
+          "file": "Exports/2077_IcicleSpike_Overall_SingleScreenNormalIceSpike.fbx",
+          "objects": [
+            "PART_SingleScreenNormalIceSpike",
+            "PART_ScreenSpikeMilkyInnerIce",
+            "PART_ScreenSpikeColdFacet_0",
+            "PART_ScreenSpikeColdFacet_1",
+            "PART_ScreenSpikeColdFacet_2",
+            "PART_ScreenSpikeColdFacet_3",
+            "PART_ScreenSpikeColdFacet_4",
+            "PART_ScreenSpikeInternalFissure"
+          ],
+          "vertices": 172,
+          "triangles": 226,
+          "dimensions": [
+            0.9281019568443298,
+            0.8644286394119263,
+            2.3489999771118164
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SingleScreenNormalIceSpike": [
+              "SingleSpikeClearIce"
+            ],
+            "PART_ScreenSpikeMilkyInnerIce": [
+              "SingleSpikeMilkyCore"
+            ],
+            "PART_ScreenSpikeColdFacet_0": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_1": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_2": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_3": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeColdFacet_4": [
+              "Soft"
+            ],
+            "PART_ScreenSpikeInternalFissure": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 8,
+            "vertices": 172,
+            "triangles": 226,
+            "dimensions": [
+              0.9281019568443298,
+              0.8644290268421173,
+              2.349000047528463
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ScreenSpikeShedIceChip": {
+          "file": "Exports/2077_IcicleSpike_Overall_ScreenSpikeShedIceChip.fbx",
+          "objects": [
+            "PART_ScreenSpikeShedIceChip"
+          ],
+          "vertices": 4,
+          "triangles": 4,
+          "dimensions": [
+            0.17999999970197678,
+            0.07000000029802322,
+            0.1900000050663948
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ScreenSpikeShedIceChip": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 4,
+            "dimensions": [
+              0.17999999970197678,
+              0.07000003382563591,
+              0.1900000125169754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/2077_IcicleSpike_Overall_ContinuousGround.fbx",
+          "objects": [
+            "PART_Cryo_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/2077_IcicleSpike_Overall_GroundPattern0.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.174220085144043,
+            0.0,
+            10.361742496490479
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.174220085144043,
+              1.6987323760986328e-06,
+              10.361742496490479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/2077_IcicleSpike_Overall_GroundPattern1.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.015108108520508,
+            0.0,
+            10.635203838348389
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.015108108520508,
+              1.7285346984863281e-06,
+              10.635203838348389
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/2077_IcicleSpike_Overall_GroundPattern2.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.05208396911621,
+            0.0,
+            9.461855411529541
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.05208396911621,
+              1.5348196029663086e-06,
+              9.461855411529541
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 21,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 8,
+      "contract": "ONE root-anchored ice spike grows along -Y screen normal, slight cant; field stays independent.",
+      "phases": {
+        "appear": [
+          27,
+          51
+        ],
+        "loop": [
+          51,
+          195
+        ],
+        "repeatEndpoint": 195,
+        "twoCycles": [
+          51,
+          339
+        ],
+        "exitExample": [
+          357,
+          392
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2077_IcicleSpike_Overall.wav"
+      }
+    }
+  }
+}

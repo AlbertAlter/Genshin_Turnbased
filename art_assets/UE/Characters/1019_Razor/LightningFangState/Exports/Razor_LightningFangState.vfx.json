@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1019_Razor/LightningFangState/Razor_LightningFangState",
+  "source": "art_assets/UE/Characters/1019_Razor/LightningFangState/Blender/Razor_LightningFangState.blend",
+  "file": "Characters/1019_Razor/LightningFangState/Exports/Razor_LightningFangState.vfx.bytes",
+  "meshes": 5,
+  "tracks": 12,
+  "frames": 307,
+  "duration": 10.2,
+  "loopStart": 0.6,
+  "loopEnd": 4.6,
+  "markers": {
+    "Appearance": 0.0,
+    "LoopStart": 0.6,
+    "Cycle1Repeat": 4.6,
+    "Cycle2Repeat": 8.6,
+    "ArbitraryPhaseExit": 8.866666666666667,
+    "Clear": 10.2
+  },
+  "bytes": 127339
+}

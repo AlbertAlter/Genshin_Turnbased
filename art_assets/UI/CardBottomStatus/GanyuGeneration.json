@@ -1,0 +1,18 @@
+{
+  "asset": "IceLotus.png",
+  "method": "built-in image_gen",
+  "date": "2026-11-26",
+  "edit_target": "art_assets/Skill_Icon/1035/1035_S01.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/SolarIsotoma.png",
+    "art_assets/UI/CardBottomStatus/StoneStele.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Asset type: a single transparent colored card-bottom status icon for Ganyu's Ice Lotus. Image 1 is the official local Ganyu elemental-skill glyph and the SHAPE EDIT TARGET. Images 2 and 3 are STYLE REFERENCES ONLY: existing Solar Isotoma and Stone Stele colored card-bottom icons. Preserve the official Ice Lotus silhouette and recognizable upright layered lotus-petal arrangement from image 1, including its curved outer petals and delicate lower support, while removing unrelated background or faint long vertical UI lines. Turn the white glyph into a compact stylized crystalline ice lotus in pale icy cyan, snow white and medium glacier blue, with deep blue contours, clear facet highlights, and 2-3 painted shadow bands. Match the lightly dimensional outlined Genius Invokation TCG-like icon style of the provided references. Abstract readable game UI emblem, not a realistic flower or glass product rendering. Keep the main petals filled with solid readable color, preserving only deliberate small gaps between petal layers; genuinely transparent exterior background. Center the lotus within a roughly circular footprint on a square canvas with modest padding. No stem extending out of the symbol, no flower pot, full circular background disc, frame, text, numbers, arrows, count badge, character, scenery, or gold Geo flower/pillar copied from the style references. Deliver only one pale-blue Ice Lotus icon; no baked numbers.",
+  "status_id": 4103505,
+  "status_id2": "ST_Ganyu_Lotus",
+  "count_mode": "Instances",
+  "show_count": false,
+  "count_hook": null,
+  "host": "actual selected enemy FieldPosition; persists while active on an empty slot; only one Ice Lotus for the caster",
+  "display_note": "The bottom icon is display only. Natural OnEnd damage is separate from replacement or ordinary cleanup."
+}

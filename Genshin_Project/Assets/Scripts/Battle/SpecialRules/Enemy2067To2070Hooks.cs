@@ -49,7 +49,9 @@ public static class Enemy2067To2070Hooks
         BattleSpecialRules.RegisterCondition("RegisvineRegenReady", (_, c) => c?.Caster?.HasStatus("ST_CryoRegisvine_RegenReady") == true
             && !c.Caster.HasStatus("ST_CryoRegisvine_Core"));
         BattleSpecialRules.RegisterCondition("RegisvineNormal", (_, c) => c?.Caster?.HasStatus("ST_CryoRegisvine_RegenReady") != true);
-        BattleSpecialRules.RegisterCondition("RegisvineCanSeed", (_, c) => AdjacentEmpty(c?.Caster).Count > 0);
+        BattleSpecialRules.RegisterCondition("RegisvineCanSeed", (_, c) => AdjacentEmpty(c?.Caster).Count > 0
+            && BattleManager.Instance?.Enemies.Any(enemy => enemy?.Entity?.IsOnField == true
+                && enemy.Entity.EntityID == 2610) == false);
         BattleSpecialRules.RegisterCount("EnemyAdjacentEmptyCount", owner => AdjacentEmpty(owner).Count);
         BattleSpecialRules.RegisterTargets("EnemyAdjacentEmpty()", (_, owner) => AdjacentEmpty(owner));
         BattleSpecialRules.RegisterTargets("WolfActionActor()", (_, owner) => ActorPosition(ScriptHookContext.Current?.Target));
@@ -106,7 +108,7 @@ public static class Enemy2067To2070Hooks
     {
         var memory = new Memory(); Memories.Add(status, memory);
         memory.Listener = BattleEventHub.Subscribe<ActionEventData>(BattleEventKind.ActionStarted, (_, action) => {
-            if (action.Subject == host) Request(status, host, "WolfReleaseInterlude()", action.Subject, BattleEventHub.Current);
+            if (ReferenceEquals(action.Subject, host)) Request(status, host, "WolfReleaseInterlude()", action.Subject, BattleEventHub.Current);
         }, status.ApplyOrder, () => status.IsActive && status.Caster?.IsAlive == true);
     }
     private static void Stop(StatusInstance status, object host)

@@ -45,7 +45,7 @@ public static class XinyanScriptHooks
             return "STE_Xinyan_Shield" + state.RuntimeIntValue;
         });
         BattleSpecialRules.RegisterCondition("Xinyan_OwnShield", (arg, context) => string.IsNullOrEmpty(arg)
-            && Active(context?.Status) && context.Status.StatusID2 == Shield && context.Status.Host == context.Caster
+            && Active(context?.Status) && context.Status.StatusID2 == Shield && ReferenceEquals(context.Status.Host, context.Caster)
             && HasShield(context.Status));
         BattleSpecialRules.RegisterCondition("Xinyan_Critical", (arg, context) => string.IsNullOrEmpty(arg)
             && Active(context?.Status) && context.Status.StatusID2 == CriticalRule
@@ -98,7 +98,7 @@ public static class XinyanScriptHooks
             && fact.Source.SourceEntity == owner && fact.Subject != null && fact.Subject.Side != owner.Side;
     private static void StartCriticalRule(StatusInstance state, object host)
     {
-        if (host != state.Caster || state.Caster?.EntityID != 1033)
+        if (!ReferenceEquals(host, state.Caster) || state.Caster?.EntityID != 1033)
             throw new InvalidOperationException("辛焱一命监听状态必须初始化在本人身上。");
         state.ScriptRuntimeState = BattleEventHub.Subscribe<DamageEventData>(BattleEventKind.DamageResolved, (_, fact) =>
         {

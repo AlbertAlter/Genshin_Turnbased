@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/Spin/2067_Spin_State",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/Spin/Blender/2067_Spin_State.blend",
+  "file": "Enemies/2067_CryoRegisvine/Spin/Exports/2067_Spin_State.vfx.bytes",
+  "meshes": 6,
+  "tracks": 21,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 505412
+}

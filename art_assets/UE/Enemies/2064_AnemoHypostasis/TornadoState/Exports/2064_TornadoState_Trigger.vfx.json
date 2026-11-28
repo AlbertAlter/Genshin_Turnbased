@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2064_AnemoHypostasis/TornadoState/2064_TornadoState_Trigger",
+  "source": "art_assets/UE/Enemies/2064_AnemoHypostasis/TornadoState/Blender/2064_TornadoState_Trigger.blend",
+  "file": "Enemies/2064_AnemoHypostasis/TornadoState/Exports/2064_TornadoState_Trigger.vfx.bytes",
+  "meshes": 1,
+  "tracks": 30,
+  "frames": 110,
+  "duration": 3.6333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.6333333333333333
+  },
+  "bytes": 79316
+}

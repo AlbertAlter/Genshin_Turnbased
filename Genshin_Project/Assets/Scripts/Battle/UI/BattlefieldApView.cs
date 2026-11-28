@@ -77,7 +77,7 @@ public sealed class BattlefieldApView : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (boundSource != null) Present(boundSource.GetAP(), Time.unscaledTime);
+        if (boundSource != null) Present(boundSource.GetAP(), BattlePause.UnscaledTime);
     }
 
     public void Present(BattleUiApState state, float now)

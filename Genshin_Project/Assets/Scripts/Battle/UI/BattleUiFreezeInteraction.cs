@@ -21,7 +21,13 @@ public interface IBattleUiControlReleaseSource
     AllyControlClickResult ClickControl();
 }
 
-/// <summary>Shared card input. Ice follows actual Frozen; airborne clicks use the same shake profile.</summary>
+/// <summary>Optional passive stun display. It provides no click-to-release operation.</summary>
+public interface IBattleUiStunSource
+{
+    bool Stunned { get; }
+}
+
+/// <summary>Shared control view. Frozen/airborne retain their input; actual stun displays the same stars for either side.</summary>
 [DisallowMultipleComponent]
 public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -90,12 +96,14 @@ public sealed class BattleUiFreezeInteraction : MonoBehaviour, IPointerClickHand
         if (Source == null)
         { airborneStars?.SetRemaining(0); if (hitArea != null) hitArea.raycastTarget = false; return; }
         var controls = Source as IBattleUiControlReleaseSource;
-        var airborne = controls?.GetControl().Airborne;
+        var airborne = controls?.GetControl().VisibleAirborne;
         // 先读旧实例。成功解除后即使已经换成下一份控制，第三下仍对应刚解除的实例。
         if (observedAirborne != null && observedAirborne.ControlReleaseClicks != renderedAirborneProgress) Pulse();
         observedAirborne = airborne;
         renderedAirborneProgress = airborne?.ControlReleaseClicks ?? 0;
-        airborneStars?.SetRemaining(airborne == null ? 0 : AllyControlRelease.RequiredClicks - renderedAirborneProgress);
+        bool stunned = (Source as IBattleUiStunSource)?.Stunned == true;
+        airborneStars?.SetRemaining(stunned ? AllyControlRelease.RequiredClicks :
+            airborne == null ? 0 : AllyControlRelease.RequiredClicks - renderedAirborneProgress);
         var state = Source.GetFreeze();
         bool iceAvailable = effect != null && effect.Available;
         if (hitArea != null) hitArea.raycastTarget = isActiveAndEnabled &&

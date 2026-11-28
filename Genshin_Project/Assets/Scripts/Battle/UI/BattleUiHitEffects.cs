@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>Optional textured hit/flight module. Accepts resolved visual commands, never performs damage.</summary>
 [DisallowMultipleComponent]
 [AddComponentMenu("Battle UI/Hit Effects")]
-public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
+public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects, IBattleVisualCompletion
 {
     public BattleUiLayout layout;
     public bool loadOnStart = true;
@@ -27,6 +27,8 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
     private readonly List<Impact> impacts = new List<Impact>();
     private readonly List<Flight> flights = new List<Flight>();
     private readonly List<Pending> pending = new List<Pending>();
+    public bool HasActiveImpacts => pending.Count > 0 || impacts.Count > 0;
+    public bool HasPendingVisuals => pending.Count > 0 || impacts.Count > 0 || flights.Count > 0;
 
     private IEnumerator Start() { started = true; if (loadOnStart) yield return Reload(); }
     private void OnEnable() { if (started && loadOnStart && !Ready && !loading) StartCoroutine(Reload()); }
@@ -166,7 +168,7 @@ public sealed class BattleUiHitEffects : MonoBehaviour, IBattleUiHitEffects
             seed, hit, hitCount, direction, center, span);
         impacts.Add(new Impact { View = effect, Start = startTime, Group = group });
     }
-    private void Update() { if (automaticClock && !paused) SetTime(clock + Time.unscaledDeltaTime); }
+    private void Update() { if (automaticClock && !paused) SetTime(clock + BattlePause.DeltaTime); }
     public void SetTime(float seconds)
     {
         clock = Mathf.Max(0, seconds);

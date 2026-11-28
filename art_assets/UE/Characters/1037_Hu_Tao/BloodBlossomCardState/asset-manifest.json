@@ -1,0 +1,519 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/BloodBlossomCardState/视觉需求.md",
+  "variants": {
+    "HuTao_BloodBlossomCardState_State": {
+      "effect": "HuTao_BloodBlossomCardState_State",
+      "source": "Blender/HuTao_BloodBlossomCardState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/BloodBlossomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AuthoredPlumMark": {
+          "file": "Exports/HuTao_BloodBlossomCardState_State_AuthoredPlumMark.fbx",
+          "objects": [
+            "PART_AuthoredBloodPlumPetal_0",
+            "PART_AuthoredBloodPlumPetal_1",
+            "PART_AuthoredBloodPlumPetal_2",
+            "PART_AuthoredBloodPlumPetal_3",
+            "PART_AuthoredBloodPlumPetal_4",
+            "PART_PlumCenter"
+          ],
+          "vertices": 2170,
+          "triangles": 3648,
+          "dimensions": [
+            1.2521965503692627,
+            0.0,
+            1.2990214824676514
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredBloodPlumPetal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_2": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_3": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_4": [
+              "Soft"
+            ],
+            "PART_PlumCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2170,
+            "triangles": 3648,
+            "dimensions": [
+              1.2521965503692627,
+              2.116374560046097e-07,
+              1.2990214824676514
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "unconfirmedExactMark": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_BloodBlossomCardState_State.wav"
+      }
+    },
+    "HuTao_BloodBlossomCardState_Overall": {
+      "effect": "HuTao_BloodBlossomCardState_Overall",
+      "source": "Blender/HuTao_BloodBlossomCardState_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/BloodBlossomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyWing-1": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_ButterflyWing-1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_-1",
+            "PART_ButterflyWingVein_-1_0",
+            "PART_ButterflyWingVein_-1_1",
+            "PART_ButterflyWingVein_-1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_-1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyWing1": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_ButterflyWing1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_1",
+            "PART_ButterflyWingVein_1_0",
+            "PART_ButterflyWingVein_1_1",
+            "PART_ButterflyWingVein_1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyBody": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_ButterflyBody.fbx",
+          "objects": [
+            "PART_FireButterflySlenderBody"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.05354434251785278,
+            0.04987088218331337,
+            0.3100000023841858
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflySlenderBody": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.05354434251785278,
+              0.0498709324747324,
+              0.3100000023841858
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyShortTrail": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_ButterflyShortTrail.fbx",
+          "objects": [
+            "PART_ButterflyActualCurveTrail"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.035999998450279236,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ButterflyActualCurveTrail": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.035999998450279236,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AuthoredPlumMark": {
+          "file": "Exports/HuTao_BloodBlossomCardState_Overall_AuthoredPlumMark.fbx",
+          "objects": [
+            "PART_AuthoredBloodPlumPetal_0.001",
+            "PART_AuthoredBloodPlumPetal_1.001",
+            "PART_AuthoredBloodPlumPetal_2.001",
+            "PART_AuthoredBloodPlumPetal_3.001",
+            "PART_AuthoredBloodPlumPetal_4.001",
+            "PART_PlumCenter.001"
+          ],
+          "vertices": 2170,
+          "triangles": 3648,
+          "dimensions": [
+            1.2521965503692627,
+            0.0,
+            1.2990214824676514
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredBloodPlumPetal_0.001": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_1.001": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_2.001": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_3.001": [
+              "Soft"
+            ],
+            "PART_AuthoredBloodPlumPetal_4.001": [
+              "Soft"
+            ],
+            "PART_PlumCenter.001": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2170,
+            "triangles": 3648,
+            "dimensions": [
+              1.2521965503692627,
+              2.116374560046097e-07,
+              1.2990214824676514
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 84,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Pyro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "unconfirmedExactMark": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_BloodBlossomCardState_Overall.wav"
+      }
+    }
+  }
+}

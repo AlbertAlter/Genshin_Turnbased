@@ -1,0 +1,6 @@
+﻿Name,File,Left,Bottom,Width,Height,Opacity,FillOpacity,BlendMode,Clipping,StaticOpacityBaked,FollowsAmount
+“矩形 3”的投影,01_DropShadow.png,0,0,180,22,255,66,MULTIPLY,False,True,True
+矩形 3,02_BaseShape.png,3,6,172,14,255,255,NORMAL,False,True,True
+血条上方柔光,03_UpperSoftLight.png,8,14,163,4,255,255,SOFT_LIGHT,True,True,True
+血条下方阴影,04_LowerSoftLight.png,9,5,163,4,179,255,SOFT_LIGHT,True,True,True
+图层 1,05_InnerShadow.png,4,6,172,14,255,161,MULTIPLY,False,True,True

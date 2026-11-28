@@ -1,0 +1,88 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitute candidates, not extracted original audio. Persistent StarJade and JadeScreen idle stages are intentionally silent; no fabricated constant sound loop. Not auditioned.",
+  "files": [
+    {
+      "file": "Ningguang_Charged_Gather.wav",
+      "purpose": "重击主宝石短聚亮",
+      "seconds": 0.45,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/Magic2_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.450000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.36",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -23.313715498184266,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Magic Spell SFX",
+      "creator": "JaggedStone",
+      "sourcePage": "https://opengameart.org/content/magic-spell-sfx",
+      "sourceFile": "https://opengameart.org/sites/default/files/magical_2.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_Charged_Release.wav",
+      "purpose": "主宝石与追加宝石整次释放；不逐枚堆完整声音",
+      "seconds": 0.19389583333333332,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.3,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.6",
+        "Resample speed 0.65; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -5.437126896146484,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_Charged_Contact.wav",
+      "purpose": "重击晶体命中的岩光碎裂候选",
+      "seconds": 0.5,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.73,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/EarthSpell_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.500000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.46",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -7.477319486438953,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

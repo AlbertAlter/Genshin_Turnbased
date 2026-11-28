@@ -1,0 +1,103 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Warning/视觉需求.md",
+  "variants": {
+    "2072_Warning": {
+      "effect": "2072_Warning",
+      "source": "Blender/2072_Warning.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Warning/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RedWarningGraphic": {
+          "file": "Exports/2072_Warning_RedWarningGraphic.fbx",
+          "objects": [
+            "PART_GraphicExclamationStem",
+            "PART_GraphicExclamationDot"
+          ],
+          "vertices": 148,
+          "triangles": 258,
+          "dimensions": [
+            0.15000000596046448,
+            0.02250000089406967,
+            0.8149999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GraphicExclamationStem": [
+              "Soft"
+            ],
+            "PART_GraphicExclamationDot": [
+              "Solid"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 148,
+            "triangles": 258,
+            "dimensions": [
+              0.15000000596046448,
+              0.02250002510845661,
+              0.8150000125169754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.13999998569488525
+      ],
+      "detailScale": 7.8,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2072_Warning.wav"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "key": "Characters/1016_Klee/SparksNSplash/Klee_SparksAttack",
+  "source": "art_assets/UE/Characters/1016_Klee/SparksNSplash/Blender/Klee_SparksAttack.blend",
+  "file": "Characters/1016_Klee/SparksNSplash/Exports/Klee_SparksAttack.vfx.bytes",
+  "meshes": 7,
+  "tracks": 44,
+  "frames": 43,
+  "duration": 1.4,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Fire": 0.06666666666666667,
+    "Contact": 0.23333333333333334,
+    "Cleared": 1.4
+  },
+  "bytes": 69492
+}

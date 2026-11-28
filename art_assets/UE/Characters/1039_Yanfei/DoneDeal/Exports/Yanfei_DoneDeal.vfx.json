@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1039_Yanfei/DoneDeal/Yanfei_DoneDeal",
+  "source": "art_assets/UE/Characters/1039_Yanfei/DoneDeal/Blender/Yanfei_DoneDeal.blend",
+  "file": "Characters/1039_Yanfei/DoneDeal/Exports/Yanfei_DoneDeal.vfx.bytes",
+  "meshes": 15,
+  "tracks": 136,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 203019
+}

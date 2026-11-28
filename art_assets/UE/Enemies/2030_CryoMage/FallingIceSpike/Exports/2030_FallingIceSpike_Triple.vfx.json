@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2030_CryoMage/FallingIceSpike/2030_FallingIceSpike_Triple",
+  "source": "art_assets/UE/Enemies/2030_CryoMage/FallingIceSpike/Blender/2030_FallingIceSpike_Triple.blend",
+  "file": "Enemies/2030_CryoMage/FallingIceSpike/Exports/2030_FallingIceSpike_Triple.vfx.bytes",
+  "meshes": 15,
+  "tracks": 102,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 182313
+}

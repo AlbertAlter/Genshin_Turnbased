@@ -33,10 +33,25 @@ public sealed class BattlePresentationResult
     public BattleSide? SourceSide { get; }
     public int SourceSlot { get; }
     public BattleEntity SourceEntity { get; }
+    // Presentation lanes never replace gameplay execution/hit identities.
+    internal long StatusBatchID { get; }
+    internal long StatusBatchMemberID { get; }
+
+    private BattlePresentationResult(int order, BattlePresentationResult original)
+    {
+        Order = order; Header = original.Header; Data = original.Data;
+        RequestID = original.RequestID; EffectID = original.EffectID; SegmentIndex = original.SegmentIndex;
+        TargetSide = original.TargetSide; TargetSlot = original.TargetSlot;
+        SourceSide = original.SourceSide; SourceSlot = original.SourceSlot; SourceEntity = original.SourceEntity;
+        StatusBatchID = original.StatusBatchID; StatusBatchMemberID = original.StatusBatchMemberID;
+    }
+    internal BattlePresentationResult WithOrder(int order) => new BattlePresentationResult(order, this);
 
     internal BattlePresentationResult(int order, BattleDeclaration declaration, BattlePresentationRequest request)
     {
         Order = order; Header = declaration.Header; Data = declaration.Data;
+        StatusBatchID = BattleStatusPresentationBatch.CurrentBatch;
+        StatusBatchMemberID = BattleStatusPresentationBatch.CurrentMember;
         RequestID = request?.ID ?? 0;
         EffectID = request?.EffectID ?? string.Empty;
         SourceEntity = request?.Source;
@@ -56,14 +71,42 @@ public sealed class BattlePresentationResult
     }
 }
 
+/// <summary>Explicit phase-batch presentation scope. Business events and execution allowances stay independent.</summary>
+internal sealed class BattleStatusPresentationBatch
+{
+    private sealed class Member : IDisposable
+    {
+        internal readonly Member Previous = current.Value;
+        internal readonly long Batch, Instance;
+        internal Member(long batch, long instance) { Batch = batch; Instance = instance; current.Value = this; }
+        public void Dispose() => current.Value = Previous;
+    }
+    private static readonly AsyncLocal<Member> current = new AsyncLocal<Member>();
+    private static long nextID;
+    private readonly long id;
+    internal BattleStatusPresentationBatch(bool parallel) { id = parallel ? Interlocked.Increment(ref nextID) : 0; }
+    internal IDisposable Enter(StatusInstance status) => new Member(id, id == 0 ? 0 : status.ApplyOrder);
+    internal static long CurrentBatch => current.Value?.Batch ?? 0;
+    internal static long CurrentMember => current.Value?.Instance ?? 0;
+
+    internal static long Source(StatusInstance status)
+    {
+        long source = status?.SourceEffectExecutionId ?? 0;
+        // BindStatus children retain their own gameplay source, but share their original application cohort visually.
+        for (var parent = status?.BindingParent; parent != null; parent = parent.BindingParent)
+            if (parent.SourceEffectExecutionId != 0) source = parent.SourceEffectExecutionId;
+        return source;
+    }
+}
+
 /// <summary>一次阶段或一次真实事件内已经显示过的状态批次。仅记提示，独立于结算会话。</summary>
 internal sealed class BattleStatusPromptOccurrence
 {
     private static readonly ConditionalWeakTable<object, BattleStatusPromptOccurrence> events = new();
-    private readonly HashSet<(long sourceEffect, string actionType)> announced = new();
+    private readonly HashSet<(long sourceEffect, string actionType, string statusID)> announced = new();
 
     internal static BattleStatusPromptOccurrence ForEvent(object fact) => events.GetValue(fact, _ => new BattleStatusPromptOccurrence());
-    internal bool TryAnnounce(long source, string actionType) => announced.Add((source, actionType));
+    internal bool TryAnnounce(long source, string actionType, string statusID) => announced.Add((source, actionType, statusID));
 }
 
 /// <summary>一次受控结算的只读结果序列；重复Dispatch不重复收录，Seal后禁止追加。</summary>
@@ -77,7 +120,7 @@ public sealed class BattlePresentationSequence
         bool followsTargetSelection = false, string actionType = null, ScriptHookContext context = null)
     {
         if (actor == null || string.IsNullOrWhiteSpace(name)) return;
-        long source = status?.SourceEffectExecutionId ?? 0;
+        long source = BattleStatusPresentationBatch.Source(status);
         if (source != 0)
         {
             var occurrence = context?.ActionPrompts;
@@ -86,7 +129,7 @@ public sealed class BattlePresentationSequence
                 object fact = actionType == "OnTrigger" ? BattleResolutionContext.StatusActionOccurrence(context) : null;
                 occurrence = BattleStatusPromptOccurrence.ForEvent(fact ?? (object)BattleResolutionContext.CurrentChain ?? this);
             }
-            if (!occurrence.TryAnnounce(source, actionType)) return;
+            if (!occurrence.TryAnnounce(source, actionType, status?.StatusID2)) return;
         }
         var header = BattleEventHub.PresentationHeader();
         if (source == 0 && status != null && !announcedStatuses.Add((status.ApplyOrder, header.ChainScopeId))) return;
@@ -104,6 +147,28 @@ public sealed class BattlePresentationSequence
         results.Add(new BattlePresentationResult(results.Count, declaration, request));
     }
     internal void Seal() => IsSealed = true;
+
+    internal static BattlePresentationSequence ForTimeline(IEnumerable<BattlePresentationResult> records)
+    {
+        var sequence = new BattlePresentationSequence();
+        sequence.results.AddRange(records);
+        sequence.Seal();
+        return sequence;
+    }
+
+    /// <summary>合并同帧的独立只读结果，保留所有身份和提交时快照，不重新分发业务事件。</summary>
+    internal static BattlePresentationSequence Combine(IReadOnlyList<BattlePresentationSequence> sequences)
+    {
+        var combined = new BattlePresentationSequence();
+        foreach (var sequence in sequences)
+        {
+            if (!sequence.IsSealed) throw new InvalidOperationException("不能合并尚未关闭的表现序列。");
+            foreach (var result in sequence.Results)
+                if (combined.identities.Add((result.Header.SessionId, result.Header.EventId)))
+                    combined.results.Add(result.WithOrder(combined.results.Count));
+        }
+        combined.Seal(); return combined;
+    }
 }
 
 /// <summary>可选扩展。旧的逐步播放器仍可工作；结果播放器只消费结算完成的只读序列。</summary>

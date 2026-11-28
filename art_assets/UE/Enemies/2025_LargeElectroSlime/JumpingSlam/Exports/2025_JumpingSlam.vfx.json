@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2025_LargeElectroSlime/JumpingSlam/2025_JumpingSlam",
+  "source": "art_assets/UE/Enemies/2025_LargeElectroSlime/JumpingSlam/Blender/2025_JumpingSlam.blend",
+  "file": "Enemies/2025_LargeElectroSlime/JumpingSlam/Exports/2025_JumpingSlam.vfx.bytes",
+  "meshes": 3,
+  "tracks": 16,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 80832
+}

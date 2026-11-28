@@ -1,0 +1,41 @@
+[
+  {
+    "file": "00_岩萨满冲击波实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 25,
+    "duration_seconds": 2,
+    "bytes": 1005248,
+    "modified": false,
+    "use": "岩萨满图腾柱和单圈圆形岩光；卡牌位置及公共图层为项目指定适配"
+  },
+  {
+    "file": "01_圆形波纹截帧.png",
+    "source_file": "00_岩萨满冲击波实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 13,
+    "timestamp_seconds": 1.04,
+    "cropped": false,
+    "retouched": false,
+    "use": "单圈波纹的金色前沿、覆盖和内侧余光"
+  },
+  {
+    "file": "02_波纹衰减截帧.png",
+    "source_file": "00_岩萨满冲击波实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 17,
+    "timestamp_seconds": 1.36,
+    "cropped": false,
+    "retouched": false,
+    "use": "外扩后明亮前沿减弱与尾光消散"
+  }
+]

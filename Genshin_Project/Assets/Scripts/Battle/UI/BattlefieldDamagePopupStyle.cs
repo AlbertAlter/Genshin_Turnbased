@@ -131,6 +131,15 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
 
     public float FontSizeMultiplier(bool critical) => critical ? CriticalFontSizeMultiplier : 1;
 
+    public static bool IsPositiveFinite(float amount) => amount > 0 && !float.IsNaN(amount) && !float.IsInfinity(amount);
+
+    /// <summary>治疗数字只取已提交的实际回血，不把溢出、生命之契抵扣或HP上限变化当成回血。</summary>
+    public static bool TryGetHealingAmount(HealEventData heal, out float amount)
+    {
+        amount = heal?.Actual ?? 0;
+        return heal?.Subject != null && IsPositiveFinite(amount);
+    }
+
     public override float RiseProgress(float age)
     {
         float fastDuration = RiseDuration > 0 ? RiseDuration : Lifetime;
@@ -159,6 +168,13 @@ public sealed class BattlefieldDamagePopupStyle : BattlefieldPopupStyle
 /// <summary>纯显示的确定性空间采样，不抽取 BattleRandom，也不影响伤害或暴击结果。</summary>
 public static class BattlefieldDamagePopupLayout
 {
+    public static Vector2 Sample(BattlefieldDamagePopupStyle style, BattleEventHeader header, BattlePresentationTiming timing)
+    {
+        Vector2 position = Sample(style, header.SessionId, header.EventId, header.HitId, header.TargetIndex);
+        float Scale(int mode) => mode == 0 ? 0 : mode == 1 ? timing.MediumRandomScale : 1;
+        float x = (style.XMin + style.XMax) * .5f, y = (style.YMin + style.YMax) * .5f;
+        return new Vector2(x + (position.x - x) * Scale(timing.XRandomMode), y + (position.y - y) * Scale(timing.YRandomMode));
+    }
     public static Vector2 Sample(BattlefieldDamagePopupStyle style, long session, long eventId, long hit, int target)
     {
         uint hash = 2166136261;
@@ -180,5 +196,21 @@ public static class BattlefieldDamagePopupLayout
     public static string Format(float amount, int decimals)
     {
         return Math.Round(amount, decimals, MidpointRounding.AwayFromZero).ToString("F" + decimals, CultureInfo.InvariantCulture);
+    }
+}
+
+/// <summary>Reaction text shares the real impact clock and popup motion, but occupies a separate upper lane.</summary>
+public static class BattlefieldReactionPopupLayout
+{
+    public const float FontScale = .85f;
+    public static float SeparationRatio(BattlefieldDamagePopupStyle style)
+        => style.FontHeightRatio * (style.CriticalFontSizeMultiplier + FontScale) * .5f + .025f;
+    public static string LangKey(ReactionType reaction) => "reaction_" + reaction.ToString().ToLowerInvariant();
+    public static Vector2 Position(BattlefieldDamagePopupStyle style, BattleEventHeader impact, BattlePresentationTiming timing, int lane)
+    {
+        var position = BattlefieldDamagePopupLayout.Sample(style, impact, timing);
+        // Stay just left/right of the number's center. Vertical separation is measured in real glyph size by the renderer.
+        position.x += (lane % 2 == 0 ? -.035f : .035f);
+        return position;
     }
 }

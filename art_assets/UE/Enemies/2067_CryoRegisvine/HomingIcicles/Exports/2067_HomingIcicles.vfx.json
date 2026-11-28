@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/HomingIcicles/2067_HomingIcicles",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/HomingIcicles/Blender/2067_HomingIcicles.blend",
+  "file": "Enemies/2067_CryoRegisvine/HomingIcicles/Exports/2067_HomingIcicles.vfx.bytes",
+  "meshes": 15,
+  "tracks": 204,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 505103
+}

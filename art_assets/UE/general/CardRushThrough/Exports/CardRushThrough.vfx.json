@@ -1,0 +1,16 @@
+{
+  "key": "general/CardRushThrough/CardRushThrough",
+  "source": "art_assets/UE/general/CardRushThrough/Blender/CardRushThrough.blend",
+  "file": "general/CardRushThrough/Exports/CardRushThrough.vfx.bytes",
+  "meshes": 3,
+  "tracks": 65,
+  "frames": 95,
+  "duration": 3.1333333333333333,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.1333333333333333
+  },
+  "bytes": 212994
+}

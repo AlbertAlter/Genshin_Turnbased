@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1028_Mona/AstralBubbleOmenState/Mona_AstralBubbleOmenState_BubbleOnly",
+  "source": "art_assets/UE/Characters/1028_Mona/AstralBubbleOmenState/Blender/Mona_AstralBubbleOmenState_BubbleOnly.blend",
+  "file": "Characters/1028_Mona/AstralBubbleOmenState/Exports/Mona_AstralBubbleOmenState_BubbleOnly.vfx.bytes",
+  "meshes": 6,
+  "tracks": 6,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 73775
+}

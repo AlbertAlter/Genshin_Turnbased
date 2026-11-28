@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2024_LargeDendroSlime/Summon/2024_Summon",
+  "source": "art_assets/UE/Enemies/2024_LargeDendroSlime/Summon/Blender/2024_Summon.blend",
+  "file": "Enemies/2024_LargeDendroSlime/Summon/Exports/2024_Summon.vfx.bytes",
+  "meshes": 4,
+  "tracks": 54,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 118608
+}

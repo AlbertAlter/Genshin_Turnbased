@@ -1,0 +1,107 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2041_Hydrogunner\\HealingBubble\\视觉需求.md",
+  "variants": {
+    "2041_HealingBubble": {
+      "effect": "2041_HealingBubble",
+      "source": "Blender/2041_HealingBubble.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2041_Hydrogunner\\HealingBubble\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Bubble": {
+          "file": "Exports/2041_HealingBubble_Bubble.fbx",
+          "objects": [
+            "PART_BubbleWaterMembrane",
+            "PART_BubbleSpecular0",
+            "PART_BubbleSpecular1"
+          ],
+          "vertices": 606,
+          "dimensions": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 1056,
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 606,
+            "triangles": 1056,
+            "dimensions": [
+              0.800000011920929,
+              0.8000001311302185,
+              0.8000001311302185
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BubbleWaterMembrane": [
+              "Glass"
+            ],
+            "PART_BubbleSpecular0": [
+              "Soft"
+            ],
+            "PART_BubbleSpecular1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Hydro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2041_HealingBubble.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

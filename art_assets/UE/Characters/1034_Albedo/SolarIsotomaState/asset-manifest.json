@@ -1,0 +1,1033 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/SolarIsotomaState/视觉需求.md",
+  "variants": {
+    "Albedo_SolarIsotomaState_State": {
+      "effect": "Albedo_SolarIsotomaState_State",
+      "source": "Blender/Albedo_SolarIsotomaState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/SolarIsotomaState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SolarIsotomaFlower": {
+          "file": "Exports/Albedo_SolarIsotomaState_State_SolarIsotomaFlower.fbx",
+          "objects": [
+            "PART_SolarLeaf0_FacetedPetal",
+            "PART_SolarLeaf0_MineralEdge",
+            "PART_SolarLeaf1_FacetedPetal",
+            "PART_SolarLeaf1_MineralEdge",
+            "PART_SolarLeaf2_FacetedPetal",
+            "PART_SolarLeaf2_MineralEdge",
+            "PART_SolarLeaf3_FacetedPetal",
+            "PART_SolarLeaf3_MineralEdge",
+            "PART_SolarLeaf4_FacetedPetal",
+            "PART_SolarLeaf4_MineralEdge",
+            "PART_SolarLeaf5_FacetedPetal",
+            "PART_SolarLeaf5_MineralEdge",
+            "PART_SolarSmallAmberCenter"
+          ],
+          "vertices": 354,
+          "triangles": 500,
+          "dimensions": [
+            2.4567999839782715,
+            0.14000000059604645,
+            2.238851308822632
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolarLeaf0_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf0_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf1_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf1_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf2_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf2_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf3_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf3_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf4_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf4_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf5_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf5_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarSmallAmberCenter": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 13,
+            "vertices": 354,
+            "triangles": 500,
+            "dimensions": [
+              2.4567999839782715,
+              0.14000020921230316,
+              2.238851308822632
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AmberDiamond": {
+          "file": "Exports/Albedo_SolarIsotomaState_State_AmberDiamond.fbx",
+          "objects": [
+            "PART_AmberFloatingDiamond"
+          ],
+          "vertices": 4,
+          "triangles": 2,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            0.18000000715255737
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AmberFloatingDiamond": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 2,
+            "dimensions": [
+              0.07000000029802322,
+              2.9325722294970546e-08,
+              0.18000000715255737
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SolarNearTraces": {
+          "file": "Exports/Albedo_SolarIsotomaState_State_SolarNearTraces.fbx",
+          "objects": [
+            "PART_SolarNearGroundTrace_0",
+            "PART_SolarNearGroundTrace_1",
+            "PART_SolarNearGroundTrace_2",
+            "PART_SolarNearGroundTrace_3",
+            "PART_SolarNearGroundTrace_4",
+            "PART_SolarNearGroundTrace_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            3.0220000743865967,
+            0.0,
+            2.617128610610962
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolarNearGroundTrace_0": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_1": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_2": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_3": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_4": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 126,
+            "triangles": 144,
+            "dimensions": [
+              3.0220000743865967,
+              4.263843607077433e-07,
+              2.617128610610962
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FullBattleBoundary0": {
+          "file": "Exports/Albedo_SolarIsotomaState_State_FullBattleBoundary0.fbx",
+          "objects": [
+            "PART_FullBattleBoundary0"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            22.831665992736816,
+            0.0,
+            8.509255409240723
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FullBattleBoundary0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1351,
+            "triangles": 2304,
+            "dimensions": [
+              22.831665992736816,
+              1.386333565278619e-06,
+              8.509255409240723
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FullBattleBoundary1": {
+          "file": "Exports/Albedo_SolarIsotomaState_State_FullBattleBoundary1.fbx",
+          "objects": [
+            "PART_FullBattleBoundary1"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            22.973674774169922,
+            0.0,
+            8.651254653930664
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FullBattleBoundary1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1351,
+            "triangles": 2304,
+            "dimensions": [
+              22.973674774169922,
+              1.4094681546339416e-06,
+              8.651254653930664
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        0.4300000071525574,
+        0.20000000298023224,
+        0.3299999237060547
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Solar181f/5.43s and burst225f/6.75s decoded in memory;24 samples of each observed. Six-petal dark flower/gold edges and separate rising-rock eruption followed by gold flowers are visible. Top-down fine pattern/natural expiry not confirmed; source geometry is authored, not traced original topology/textures.",
+      "scope": "Source art only, no Unity/tables/real counters or target selection.",
+      "fieldBounds": [
+        [
+          -8.914999961853027,
+          0.20000000298023224,
+          -2.640000104904175
+        ],
+        [
+          8.114999771118164,
+          0.20000000298023224,
+          3.299999952316284
+        ]
+      ],
+      "fieldEllipse": {
+        "center": [
+          -0.40000009536743164,
+          0.20000000298023224,
+          0.3299999237060547
+        ],
+        "radii": [
+          11.398840851800182,
+          4.23762764064803
+        ],
+        "containsCompleteNineCards": true
+      },
+      "contract": "One readable small flower in the gap between actual card groups; an independent ellipse encloses all complete card corners, behind all nine cards. Field occupancy and cosmetic coverage do not execute damage or change host.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Albedo_SolarIsotomaState_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1034_Albedo/SolarIsotomaState/Blender/Albedo_SolarIsotomaState_State.blend",
+        "driversConverted": 44,
+        "legacyExpressions": 44,
+        "numericComparisons": 1496,
+        "maximumFormulaError": 4.4321055214791016e-08,
+        "nativeDrivers": 150,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Albedo_SolarIsotomaState_State_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Albedo_SolarIsotomaState_Overall": {
+      "effect": "Albedo_SolarIsotomaState_Overall",
+      "source": "Blender/Albedo_SolarIsotomaState_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/SolarIsotomaState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SolarIsotomaFlower": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_SolarIsotomaFlower.fbx",
+          "objects": [
+            "PART_SolarLeaf0_FacetedPetal",
+            "PART_SolarLeaf0_MineralEdge",
+            "PART_SolarLeaf1_FacetedPetal",
+            "PART_SolarLeaf1_MineralEdge",
+            "PART_SolarLeaf2_FacetedPetal",
+            "PART_SolarLeaf2_MineralEdge",
+            "PART_SolarLeaf3_FacetedPetal",
+            "PART_SolarLeaf3_MineralEdge",
+            "PART_SolarLeaf4_FacetedPetal",
+            "PART_SolarLeaf4_MineralEdge",
+            "PART_SolarLeaf5_FacetedPetal",
+            "PART_SolarLeaf5_MineralEdge",
+            "PART_SolarSmallAmberCenter"
+          ],
+          "vertices": 354,
+          "triangles": 500,
+          "dimensions": [
+            2.4567999839782715,
+            0.14000000059604645,
+            2.238851308822632
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolarLeaf0_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf0_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf1_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf1_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf2_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf2_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf3_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf3_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf4_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf4_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarLeaf5_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_SolarLeaf5_MineralEdge": [
+              "Soft"
+            ],
+            "PART_SolarSmallAmberCenter": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 13,
+            "vertices": 354,
+            "triangles": 500,
+            "dimensions": [
+              2.4567999839782715,
+              0.14000020921230316,
+              2.238851308822632
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AmberDiamond": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_AmberDiamond.fbx",
+          "objects": [
+            "PART_AmberFloatingDiamond"
+          ],
+          "vertices": 4,
+          "triangles": 2,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            0.18000000715255737
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AmberFloatingDiamond": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 2,
+            "dimensions": [
+              0.07000000029802322,
+              2.9325722294970546e-08,
+              0.18000000715255737
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SolarNearTraces": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_SolarNearTraces.fbx",
+          "objects": [
+            "PART_SolarNearGroundTrace_0",
+            "PART_SolarNearGroundTrace_1",
+            "PART_SolarNearGroundTrace_2",
+            "PART_SolarNearGroundTrace_3",
+            "PART_SolarNearGroundTrace_4",
+            "PART_SolarNearGroundTrace_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            3.0220000743865967,
+            0.0,
+            2.617128610610962
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolarNearGroundTrace_0": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_1": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_2": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_3": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_4": [
+              "Soft"
+            ],
+            "PART_SolarNearGroundTrace_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 126,
+            "triangles": 144,
+            "dimensions": [
+              3.0220000743865967,
+              4.263843607077433e-07,
+              2.617128610610962
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FullBattleBoundary0": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_FullBattleBoundary0.fbx",
+          "objects": [
+            "PART_FullBattleBoundary0"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            22.831665992736816,
+            0.0,
+            8.509255409240723
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FullBattleBoundary0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1351,
+            "triangles": 2304,
+            "dimensions": [
+              22.831665992736816,
+              1.386333565278619e-06,
+              8.509255409240723
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FullBattleBoundary1": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_FullBattleBoundary1.fbx",
+          "objects": [
+            "PART_FullBattleBoundary1"
+          ],
+          "vertices": 1351,
+          "triangles": 2304,
+          "dimensions": [
+            22.973674774169922,
+            0.0,
+            8.651254653930664
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FullBattleBoundary1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1351,
+            "triangles": 2304,
+            "dimensions": [
+              22.973674774169922,
+              1.4094681546339416e-06,
+              8.651254653930664
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "TransientRockFlower": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_TransientRockFlower.fbx",
+          "objects": [
+            "PART_TransientPetal0_FacetedPetal",
+            "PART_TransientPetal0_MineralEdge",
+            "PART_TransientPetal1_FacetedPetal",
+            "PART_TransientPetal1_MineralEdge",
+            "PART_TransientPetal2_FacetedPetal",
+            "PART_TransientPetal2_MineralEdge",
+            "PART_TransientPetal3_FacetedPetal",
+            "PART_TransientPetal3_MineralEdge",
+            "PART_TransientPetal4_FacetedPetal",
+            "PART_TransientPetal4_MineralEdge",
+            "PART_TransientPetal5_FacetedPetal",
+            "PART_TransientPetal5_MineralEdge"
+          ],
+          "vertices": 336,
+          "triangles": 468,
+          "dimensions": [
+            1.6111223697662354,
+            0.10499999672174454,
+            1.6393790245056152
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TransientPetal0_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal0_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal1_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal1_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal2_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal2_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal3_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal3_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal4_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal4_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal5_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal5_MineralEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 336,
+            "triangles": 468,
+            "dimensions": [
+              1.6111223697662354,
+              0.10500026249883376,
+              1.6393790245056152
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BloomLightPoint": {
+          "file": "Exports/Albedo_SolarIsotomaState_Overall_BloomLightPoint.fbx",
+          "objects": [
+            "PART_ShortGoldBloomCore"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortGoldBloomCore": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 75,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 145,
+          "position": [
+            -1.215000033378601,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        0.4300000071525574,
+        0.20000000298023224,
+        0.3299999237060547
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Solar181f/5.43s and burst225f/6.75s decoded in memory;24 samples of each observed. Six-petal dark flower/gold edges and separate rising-rock eruption followed by gold flowers are visible. Top-down fine pattern/natural expiry not confirmed; source geometry is authored, not traced original topology/textures.",
+      "scope": "Source art only, no Unity/tables/real counters or target selection.",
+      "fieldBounds": [
+        [
+          -8.914999961853027,
+          0.20000000298023224,
+          -2.640000104904175
+        ],
+        [
+          8.114999771118164,
+          0.20000000298023224,
+          3.299999952316284
+        ]
+      ],
+      "fieldEllipse": {
+        "center": [
+          -0.40000009536743164,
+          0.20000000298023224,
+          0.3299999237060547
+        ],
+        "radii": [
+          11.398840851800182,
+          4.23762764064803
+        ],
+        "containsCompleteNineCards": true
+      },
+      "contract": "One readable small flower in the gap between actual card groups; an independent ellipse encloses all complete card corners, behind all nine cards. Field occupancy and cosmetic coverage do not execute damage or change host.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Albedo_SolarIsotomaState_Overall.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1034_Albedo/SolarIsotomaState/Blender/Albedo_SolarIsotomaState_Overall.blend",
+        "driversConverted": 44,
+        "legacyExpressions": 44,
+        "numericComparisons": 1496,
+        "maximumFormulaError": 4.4321055214791016e-08,
+        "nativeDrivers": 494,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Albedo_SolarIsotomaState_Overall_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

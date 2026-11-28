@@ -1,0 +1,847 @@
+{
+  "character": 1012,
+  "parts": {
+    "WindArc": 1.0754426652490143,
+    "GustRibbon": 2.236067970835788,
+    "Feather": 0.5,
+    "GroundSigil": 1.245232200128689,
+    "UprushRibbon": 1.3542923618326173,
+    "LiftLine": 1.007174264838335
+  },
+  "sourceFiles": [
+    "Venti_StormEye_State.blend",
+    "Venti_StormEye_Pulse.blend",
+    "Venti_SkywardSonnet.blend",
+    "Venti_WindDomain_State.blend"
+  ],
+  "runtime": "Actual status instances own storm eye; committed hit cues own pulses/updraft; actual ST_Fall_Enemy added by SE_Skill_Venti2 owns the full two-sided horizontal card flip. Allied wind domain VFX is disconnected; its gameplay status is unchanged.",
+  "field": "One group footprint on the battle background ground; screen-normal -Z flow and camera-distance perspective, not per-card vertical columns.",
+  "particles": "Only soft thin wind wisps and trails from Venti_Feather; no elemental icon mesh or texture is used.",
+  "referenceBack": "UICardFactory.DefaultCardBackPath; front/frame/back remain separate reference objects; no cards exported or baked into background.",
+  "windMotion": {
+    "OrbitSpeedVariation": 0.18,
+    "BreathAmount": 0.09,
+    "contract": "Per-ribbon three-wave integrated speed variation bounded to 1 +/- variation; scale varies within 1 +/- BreathAmount. Absolute-time sampling; two-orbit seamless period.",
+    "softEdges": "9 width samples, 64 length steps (24 for wisps); zero-alpha boundaries, smooth end taper and bell-shaped cross fade."
+  },
+  "eyeIntake": {
+    "OrbitSeconds": 1.2,
+    "IntakeCount": 12,
+    "IntakeSeconds": 0.8,
+    "IntakeTurns": 0.85,
+    "IntakeSize": 0.38,
+    "IntakeOpacity": 0.55,
+    "part": "Existing Venti_Feather mesh, accelerating inward spiral with a thin fading trail; no new native model."
+  },
+  "skywardSonnet": {
+    "reference": "HoYoLAB original gameplay screenshots 266614 and251372; sources retained in art_assets/UE-Reference/Characters/1012_Venti/Wind/References/sources.json",
+    "parts": [
+      "GroundSigil",
+      "UprushRibbon",
+      "LiftLine"
+    ],
+    "plane": "Ornamented sigil on background ground; broad short curls and fine lines travel along the normal towards viewer. No elemental icon particles.",
+    "stateLoopSeconds": 7.2,
+    "stateAppearance": "Faint ground ornament, transparent rising lines and subdued curls; distinct from the one-shot release.",
+    "flight": {
+      "contactSeconds": 0.12,
+      "flipSeconds": 0.72,
+      "apexRatio": 0.34,
+      "motion": "Immediate launch impulse, early apex and accelerated fall; angular speed decelerates to a full turn at landing."
+    },
+    "stateRuntimeConnected": false
+  },
+  "sourceStillValidation": {
+    "Venti_StormEye_Pulse": {
+      "poster": "Preview/Venti_StormEye_Pulse_Current.png",
+      "frame": 10,
+      "sourceReopened": true,
+      "sourceFrameRange": [
+        1,
+        24
+      ]
+    },
+    "Venti_StormEye_State": {
+      "poster": "Preview/Venti_StormEye_State_Current.png",
+      "frame": 35,
+      "sourceReopened": true,
+      "sourceFrameRange": [
+        1,
+        217
+      ]
+    }
+  },
+  "audioBySource": {
+    "Venti_StormEye_State": [
+      "Venti_Eye_Form.wav",
+      "Venti_Eye_QuietLoop.wav",
+      "Venti_Eye_Exit.wav"
+    ],
+    "Venti_StormEye_Pulse": [
+      "Venti_Pulse_Expand.wav",
+      "Venti_Pulse_Tail.wav"
+    ],
+    "Venti_SkywardSonnet": [
+      "Venti_Sonnet_Gather.wav",
+      "Venti_Sonnet_Uprush.wav",
+      "Venti_Sonnet_Tail.wav"
+    ],
+    "Venti_WindDomain_State": []
+  },
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "files": 8,
+    "auditioned": false,
+    "originalGameAudio": false,
+    "runtimeConnected": false,
+    "cancelledAlliedFieldExcluded": true
+  },
+  "sourceLifecycle": {
+    "sourceFrames": [
+      1,
+      217
+    ],
+    "appearanceFrames": [
+      1,
+      25
+    ],
+    "loopFrames": [
+      25,
+      97
+    ],
+    "duplicateLoopEndpoints": [
+      97,
+      169
+    ],
+    "removalExampleFrames": [
+      181,
+      217
+    ],
+    "originalBakedLoop": [
+      1,
+      73
+    ],
+    "uninterruptedNlaClock": true,
+    "lifecycleToggle": "LifecyclePreview",
+    "profiles": [
+      {
+        "object": "VFX_WindRibbon_0",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_1",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_2",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_3",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_4",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_5",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindRibbon_6",
+        "role": "outer wind ribbon",
+        "stopNewBirthsOnRemoval": false
+      },
+      {
+        "object": "VFX_WindWisp_0",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_1",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_2",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_3",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_4",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_5",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_6",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_WindWisp_7",
+        "role": "thin wind wisp",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_0_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_0_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_1_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_1_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_2_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_2_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_3_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_3_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_4_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_4_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_5_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_5_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_6_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_6_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_7_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_7_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_8_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_8_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_9_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_9_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_10_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_10_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_11_0",
+        "role": "inward airflow",
+        "stopNewBirthsOnRemoval": true
+      },
+      {
+        "object": "VFX_AirIntake_11_1",
+        "role": "inward airflow tail",
+        "stopNewBirthsOnRemoval": true
+      }
+    ],
+    "scope": "Source art only; actual status lifetime and hit timing remain external.",
+    "source": "Blender/Venti_StormEye_State.blend",
+    "scene": "Venti_State"
+  },
+  "sourceLifecycleValidation": {
+    "originalLoopSamples": [
+      {
+        "frame": 1,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 13,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 25,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 35,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 37,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 49,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 60.4,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 47.2,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 73,
+        "error": 1.1920928955078125e-06
+      }
+    ],
+    "loopEndpointFrames": [
+      25,
+      97,
+      169
+    ],
+    "phaseSamples": [
+      {
+        "frame": 1,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "frame": 8,
+        "alpha": [
+          0.0,
+          0.11878930777311325
+        ]
+      },
+      {
+        "frame": 18,
+        "alpha": [
+          0.0,
+          0.6351842880249023
+        ]
+      },
+      {
+        "frame": 25,
+        "alpha": [
+          0.0,
+          0.8799999952316284
+        ]
+      },
+      {
+        "frame": 97,
+        "alpha": [
+          0.0,
+          0.8799999952316284
+        ]
+      },
+      {
+        "frame": 169,
+        "alpha": [
+          0.0,
+          0.8799999952316284
+        ]
+      },
+      {
+        "frame": 181,
+        "alpha": [
+          0.0,
+          0.8799999952316284
+        ]
+      },
+      {
+        "frame": 199,
+        "alpha": [
+          0.0,
+          0.3630850315093994
+        ]
+      },
+      {
+        "frame": 217,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "playbackSpeedsChecked": [
+      0.5,
+      1.0,
+      1.5
+    ],
+    "arbitraryRemovalChecks": [
+      {
+        "releaseFrame": 132.4,
+        "poseAtReleaseError": 4.470348358154297e-06,
+        "clearFrame": 168.4
+      },
+      {
+        "releaseFrame": 191.2,
+        "poseAtReleaseError": 4.634261131286621e-06,
+        "clearFrame": 227.2
+      }
+    ],
+    "stopNewBirthChecks": [
+      {
+        "object": "VFX_WindWisp_0",
+        "lastAllowedFrame": 181.0
+      },
+      {
+        "object": "VFX_WindWisp_1",
+        "lastAllowedFrame": 194.7507781982422
+      },
+      {
+        "object": "VFX_WindWisp_2",
+        "lastAllowedFrame": 208.50155639648438
+      },
+      {
+        "object": "VFX_WindWisp_3",
+        "lastAllowedFrame": 186.25233459472656
+      },
+      {
+        "object": "VFX_WindWisp_4",
+        "lastAllowedFrame": 200.0030975341797
+      },
+      {
+        "object": "VFX_WindWisp_5",
+        "lastAllowedFrame": 213.75387573242188
+      },
+      {
+        "object": "VFX_WindWisp_6",
+        "lastAllowedFrame": 191.50465393066406
+      },
+      {
+        "object": "VFX_WindWisp_7",
+        "lastAllowedFrame": 205.25543212890625
+      },
+      {
+        "object": "VFX_AirIntake_0_0",
+        "lastAllowedFrame": 193.0
+      },
+      {
+        "object": "VFX_AirIntake_0_1",
+        "lastAllowedFrame": 193.0
+      },
+      {
+        "object": "VFX_AirIntake_1_0",
+        "lastAllowedFrame": 191.0
+      },
+      {
+        "object": "VFX_AirIntake_1_1",
+        "lastAllowedFrame": 191.0
+      },
+      {
+        "object": "VFX_AirIntake_2_0",
+        "lastAllowedFrame": 189.0
+      },
+      {
+        "object": "VFX_AirIntake_2_1",
+        "lastAllowedFrame": 189.0
+      },
+      {
+        "object": "VFX_AirIntake_3_0",
+        "lastAllowedFrame": 187.0
+      },
+      {
+        "object": "VFX_AirIntake_3_1",
+        "lastAllowedFrame": 187.0
+      },
+      {
+        "object": "VFX_AirIntake_4_0",
+        "lastAllowedFrame": 185.0
+      },
+      {
+        "object": "VFX_AirIntake_4_1",
+        "lastAllowedFrame": 185.0
+      },
+      {
+        "object": "VFX_AirIntake_5_0",
+        "lastAllowedFrame": 183.0
+      },
+      {
+        "object": "VFX_AirIntake_5_1",
+        "lastAllowedFrame": 183.0
+      },
+      {
+        "object": "VFX_AirIntake_6_0",
+        "lastAllowedFrame": 181.0
+      },
+      {
+        "object": "VFX_AirIntake_6_1",
+        "lastAllowedFrame": 181.0
+      },
+      {
+        "object": "VFX_AirIntake_7_0",
+        "lastAllowedFrame": 203.0
+      },
+      {
+        "object": "VFX_AirIntake_7_1",
+        "lastAllowedFrame": 203.0
+      },
+      {
+        "object": "VFX_AirIntake_8_0",
+        "lastAllowedFrame": 201.0
+      },
+      {
+        "object": "VFX_AirIntake_8_1",
+        "lastAllowedFrame": 201.0
+      },
+      {
+        "object": "VFX_AirIntake_9_0",
+        "lastAllowedFrame": 199.0
+      },
+      {
+        "object": "VFX_AirIntake_9_1",
+        "lastAllowedFrame": 199.0
+      },
+      {
+        "object": "VFX_AirIntake_10_0",
+        "lastAllowedFrame": 197.0
+      },
+      {
+        "object": "VFX_AirIntake_10_1",
+        "lastAllowedFrame": 197.0
+      },
+      {
+        "object": "VFX_AirIntake_11_0",
+        "lastAllowedFrame": 195.0
+      },
+      {
+        "object": "VFX_AirIntake_11_1",
+        "lastAllowedFrame": 195.0
+      }
+    ],
+    "stills": [
+      {
+        "frame": 1,
+        "file": "Preview/Venti_StormEye_State_00_Clear.png"
+      },
+      {
+        "frame": 8,
+        "file": "Preview/Venti_StormEye_State_01_IntakeGather.png"
+      },
+      {
+        "frame": 18,
+        "file": "Preview/Venti_StormEye_State_02_Forming.png"
+      },
+      {
+        "frame": 35,
+        "file": "Preview/Venti_StormEye_State_Current.png"
+      },
+      {
+        "frame": 97,
+        "file": "Preview/Venti_StormEye_State_03_Loop.png"
+      },
+      {
+        "frame": 190,
+        "file": "Preview/Venti_StormEye_State_04_Release.png"
+      },
+      {
+        "frame": 205,
+        "file": "Preview/Venti_StormEye_State_05_RemainingAir.png"
+      },
+      {
+        "frame": 217,
+        "file": "Preview/Venti_StormEye_State_06_Clear.png"
+      }
+    ],
+    "sourceReopened": true,
+    "sourceMeshes": 39,
+    "packedUsedImages": 12,
+    "scope": "Blender state source only; no effect FBX, one-shot source or Unity changes.",
+    "disabledAutoExecutionCheck": {
+      "simpleValidDrivers": 383,
+      "frames": [
+        1,
+        35,
+        97,
+        181,
+        199,
+        217
+      ],
+      "noEmbeddedScripts": true
+    },
+    "originalLoopComparison": "Alpha for every object and world pose for visible objects; wholly transparent particle reset poses are excluded.",
+    "startEndNativePngMeanAbsoluteDifference": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "elementAbsorptionPreview": {
+    "property": "AbsorbedElement",
+    "values": {
+      "0": "Anemo",
+      "1": "Pyro",
+      "2": "Hydro",
+      "3": "Cryo",
+      "4": "Electro"
+    },
+    "colors": {
+      "1": [
+        0.98,
+        0.2,
+        0.045
+      ],
+      "2": [
+        0.07,
+        0.4,
+        1.0
+      ],
+      "3": [
+        0.3,
+        0.8,
+        1.0
+      ],
+      "4": [
+        0.64,
+        0.16,
+        1.0
+      ]
+    },
+    "fraction": 0.5,
+    "blendWidth": 0.04,
+    "maskAttribute": "Venti_AbsorptionMask",
+    "meshes": 2,
+    "materialAlphaUntouched": true,
+    "motionAndLifetimeUntouched": true,
+    "scope": "Source art material preview only; native part FBX and Unity remain unchanged.",
+    "sources": {
+      "Venti_StormEye_State": {
+        "source": "Blender/Venti_StormEye_State.blend",
+        "stills": [
+          {
+            "element": 0,
+            "label": "Anemo",
+            "frame": 35,
+            "file": "Preview/Venti_StormEye_State_Current.png"
+          },
+          {
+            "element": 1,
+            "label": "Pyro",
+            "frame": 35,
+            "file": "Preview/Venti_StormEye_State_Absorbed_Pyro.png"
+          },
+          {
+            "element": 2,
+            "label": "Hydro",
+            "frame": 35,
+            "file": "Preview/Venti_StormEye_State_Absorbed_Hydro.png"
+          },
+          {
+            "element": 3,
+            "label": "Cryo",
+            "frame": 35,
+            "file": "Preview/Venti_StormEye_State_Absorbed_Cryo.png"
+          },
+          {
+            "element": 4,
+            "label": "Electro",
+            "frame": 35,
+            "file": "Preview/Venti_StormEye_State_Absorbed_Electro.png"
+          }
+        ]
+      },
+      "Venti_StormEye_Pulse": {
+        "source": "Blender/Venti_StormEye_Pulse.blend",
+        "stills": [
+          {
+            "element": 0,
+            "label": "Anemo",
+            "frame": 10,
+            "file": "Preview/Venti_StormEye_Pulse_Current.png"
+          },
+          {
+            "element": 1,
+            "label": "Pyro",
+            "frame": 10,
+            "file": "Preview/Venti_StormEye_Pulse_Absorbed_Pyro.png"
+          },
+          {
+            "element": 2,
+            "label": "Hydro",
+            "frame": 10,
+            "file": "Preview/Venti_StormEye_Pulse_Absorbed_Hydro.png"
+          },
+          {
+            "element": 3,
+            "label": "Cryo",
+            "frame": 10,
+            "file": "Preview/Venti_StormEye_Pulse_Absorbed_Cryo.png"
+          },
+          {
+            "element": 4,
+            "label": "Electro",
+            "frame": 10,
+            "file": "Preview/Venti_StormEye_Pulse_Absorbed_Electro.png"
+          }
+        ]
+      }
+    }
+  },
+  "elementAbsorptionValidation": {
+    "Venti_StormEye_State": {
+      "source": "art_assets/UE/Characters/1012_Venti/Wind/Blender/Venti_StormEye_State.blend",
+      "sourceFrameRange": [
+        1,
+        217
+      ],
+      "nativeDrivers": 387,
+      "autoexecDisabled": true,
+      "elementOptions": 5,
+      "unchangedMotionSamples": 35,
+      "maximumWorldMatrixError": 0.0,
+      "unchangedObjectAlpha": true,
+      "halfMaskMean": 0.5,
+      "defaultElement": 0,
+      "embeddedScripts": 0,
+      "baseline": "codex_worktable\\venti_absorption\\Venti_StormEye_State_Before.png",
+      "noUnityWrites": true,
+      "noVideo": true,
+      "noExportRegeneration": true
+    },
+    "Venti_StormEye_Pulse": {
+      "source": "art_assets/UE/Characters/1012_Venti/Wind/Blender/Venti_StormEye_Pulse.blend",
+      "sourceFrameRange": [
+        1,
+        24
+      ],
+      "nativeDrivers": 4,
+      "autoexecDisabled": true,
+      "elementOptions": 5,
+      "unchangedMotionSamples": 25,
+      "maximumWorldMatrixError": 0.0,
+      "unchangedObjectAlpha": true,
+      "halfMaskMean": 0.5,
+      "defaultElement": 0,
+      "embeddedScripts": 0,
+      "baseline": "codex_worktable\\venti_absorption\\Venti_StormEye_Pulse_Before.png",
+      "noUnityWrites": true,
+      "noVideo": true,
+      "noExportRegeneration": true
+    }
+  },
+  "eyeReferenceDepth": {
+    "Venti_StormEye_State": {
+      "cameraDepthBefore": 24.219999313354492,
+      "cameraDepthAfter": 25.988542391904957,
+      "maximumEffectCameraDepth": 25.68854290552855,
+      "margin": 0.3,
+      "rayScale": 1.0730199687164694,
+      "frameSamples": 212,
+      "cameraAndCardsUnchanged": true,
+      "method": "Reference backdrop moved along perspective rays; image projection retained.",
+      "scope": "Eye/pulse source demonstrations only; updraft ground and runtime untouched.",
+      "projectedBackgroundError": 5.960464477539063e-08,
+      "maximumEffectOrCardMatrixError": 0.0,
+      "checkedMotionFrames": [
+        1,
+        18,
+        35,
+        97,
+        190,
+        205,
+        217
+      ],
+      "nativeDrivers": 387,
+      "autoexecDisabled": true,
+      "noUnityWrites": true,
+      "noVideo": true,
+      "noExportRegeneration": true
+    },
+    "Venti_StormEye_Pulse": {
+      "cameraDepthBefore": 24.219999313354492,
+      "cameraDepthAfter": 31.832316721481448,
+      "maximumEffectCameraDepth": 31.5323170590367,
+      "margin": 0.3,
+      "rayScale": 1.3142988423407966,
+      "frameSamples": 23,
+      "cameraAndCardsUnchanged": true,
+      "method": "Reference backdrop moved along perspective rays; image projection retained.",
+      "scope": "Eye/pulse source demonstrations only; updraft ground and runtime untouched.",
+      "projectedBackgroundError": 2.9802322387695312e-08,
+      "maximumEffectOrCardMatrixError": 0.0,
+      "checkedMotionFrames": [
+        1,
+        5,
+        10,
+        16,
+        24
+      ],
+      "nativeDrivers": 4,
+      "autoexecDisabled": true,
+      "noUnityWrites": true,
+      "noVideo": true,
+      "noExportRegeneration": true
+    }
+  }
+}

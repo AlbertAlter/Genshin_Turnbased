@@ -5,10 +5,12 @@ public readonly struct AllyControlState
 {
     public readonly ReactionStateInstance Frozen;
     public readonly StatusInstance Airborne;
+    // Display all coexisting controls without changing which instance owns the next click.
+    public readonly StatusInstance VisibleAirborne;
     public bool Exists => Frozen != null || Airborne != null;
     public int Clicks => Airborne != null ? Airborne.ControlReleaseClicks : Frozen?.ThawClicks ?? 0;
-    public AllyControlState(ReactionStateInstance frozen, StatusInstance airborne)
-    { Frozen = frozen; Airborne = airborne; }
+    public AllyControlState(ReactionStateInstance frozen, StatusInstance airborne, StatusInstance visibleAirborne = null)
+    { Frozen = frozen; Airborne = airborne; VisibleAirborne = visibleAirborne ?? airborne; }
 }
 
 /// <summary>我方冻结、击飞共用施加顺序。每份实例独立点击三次，最后一次支付10 AP。</summary>
@@ -26,7 +28,7 @@ public static class AllyControlRelease
         {
             if (!status.IsActive || status.DeathCleanupPending) continue;
             if (frozen == null || status.ApplyOrder < frozen.ApplyOrder) return new AllyControlState(null, status);
-            break;
+            return new AllyControlState(frozen, null, status);
         }
         return new AllyControlState(frozen, null);
     }

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1015_Diluc/Dawn/Diluc_Dawn",
+  "source": "art_assets/UE/Characters/1015_Diluc/Dawn/Blender/Diluc_Dawn.blend",
+  "file": "Characters/1015_Diluc/Dawn/Exports/Diluc_Dawn.vfx.bytes",
+  "meshes": 8,
+  "tracks": 76,
+  "frames": 103,
+  "duration": 3.4,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "LateralSourceHit": 0.43333333333333335,
+    "FullyOutOfFrame": 0.9,
+    "IndependentDiveBody": 1.0,
+    "DiveContact": 1.5,
+    "OneGroupExplosion": 1.7,
+    "Cleared": 3.4
+  },
+  "bytes": 528004
+}

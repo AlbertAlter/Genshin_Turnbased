@@ -1,0 +1,18 @@
+{
+  "asset": "SolarIsotoma.png",
+  "method": "built-in image_gen",
+  "date": "2026-11-26",
+  "edit_target": "art_assets/Skill_Icon/1034/1034_S01.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/StoneStele.png",
+    "art_assets/UI/CardBottomStatus/KeqingStiletto.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Asset type: one transparent colored card-bottom icon representing Albedo's Silver status, using the Solar Isotoma symbol explicitly requested by the user. Image 1 is the official local Albedo elemental-skill glyph and is the SHAPE EDIT TARGET; images 2 and 3 are STYLE REFERENCES ONLY, the current Zhongli stone-stele and Keqing stiletto colored status icons. Color and lightly give volume to the exact Solar Isotoma glyph from image 1: preserve its original top-down petal arrangement, central negative-space geometry, pointed outer star/diamond tips, symmetry, and instantly recognizable silhouette. This is a top-down stylized Geo alchemical flower/sigil, not a realistic botanical flower. Use amber gold and warm ochre with deep brown contours, pale cream-gold edge highlights and 2-3 clean faceted shadow bands, matching the outlined Genius Invokation TCG-like painted volume of the existing card-bottom icons. Crisp compact readable silhouette at small UI size. Keep the solid petal faces opaque; preserve deliberate small negative spaces between the glyph parts; truly transparent background outside. Center the symbol within a roughly circular footprint on a square transparent canvas with modest padding. No stem, pot, character, scenery, text, numbers, arrows, counter badge, disc background, frame, extra petals, lightning, or pillar copied from style references. Deliver only one golden Solar Isotoma icon. The UI will draw the actual Silver instance count separately, so absolutely no baked-in digits.",
+  "status_id": 4103402,
+  "status_id2": "ST_Albedo_Silver",
+  "count_hook": "AlbedoSilver",
+  "count_mode": "Instances",
+  "show_count": true,
+  "host": "actual Albedo owner; independently timed normal Silver status instances, not Reckoning Count",
+  "description": "Solar Isotoma glyph explicitly requested for the Silver bottom-state icon; separate original glyph reference from state gameplay identity."
+}

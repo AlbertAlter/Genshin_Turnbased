@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2060_PyroAgent/CloneAmbush/2060_CloneAmbush",
+  "source": "art_assets/UE/Enemies/2060_PyroAgent/CloneAmbush/Blender/2060_CloneAmbush.blend",
+  "file": "Enemies/2060_PyroAgent/CloneAmbush/Exports/2060_CloneAmbush.vfx.bytes",
+  "meshes": 39,
+  "tracks": 158,
+  "frames": 135,
+  "duration": 4.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.466666666666667
+  },
+  "bytes": 495007
+}

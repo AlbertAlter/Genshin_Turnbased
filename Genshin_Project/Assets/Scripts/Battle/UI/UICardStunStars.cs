@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>Remaining release clicks, with tapered trails on a tilted orbit above the card.</summary>
+/// <summary>Shared stars above the card: fixed for actual stun on either side, remaining clicks for ally airborne.</summary>
 [RequireComponent(typeof(CanvasRenderer))]
 public sealed class UICardStunStars : MaskableGraphic
 {
@@ -27,7 +27,7 @@ public sealed class UICardStunStars : MaskableGraphic
 
     private void Update()
     {
-        phase = Mathf.Repeat(phase + Time.unscaledDeltaTime / Mathf.Max(.1f, secondsPerOrbit), 1f);
+        phase = Mathf.Repeat(phase + BattlePause.DeltaTime / Mathf.Max(.1f, secondsPerOrbit), 1f);
         SetVerticesDirty();
     }
 

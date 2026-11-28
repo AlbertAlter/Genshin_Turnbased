@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1023_Xingqiu/SwordRainVolley/Xingqiu_SwordRainVolley_StrongFour",
+  "source": "art_assets/UE/Characters/1023_Xingqiu/SwordRainVolley/Blender/Xingqiu_SwordRainVolley_StrongFour.blend",
+  "file": "Characters/1023_Xingqiu/SwordRainVolley/Exports/Xingqiu_SwordRainVolley_StrongFour.vfx.bytes",
+  "meshes": 9,
+  "tracks": 64,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 143211
+}

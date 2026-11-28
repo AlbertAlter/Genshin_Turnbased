@@ -1,0 +1,141 @@
+[
+  {
+    "file": "01_原作雷兽电纹与护盾.jpg",
+    "page_url": "https://playerassist.com/play-beidou-genshin-impact/",
+    "image_url": "https://playerassist.com/wp-content/uploads/2021/12/beidou-hp-burst-2.jpg",
+    "downloaded": "2026-11-26",
+    "type": "原作游戏画面",
+    "use": "绕身紫色电纹与细丝。球形护盾仅作区别参考，不固定加入基础状态。",
+    "modified": false,
+    "format": "JPEG",
+    "size": [
+      1280,
+      720
+    ],
+    "frames": 1,
+    "bytes": 487906
+  },
+  {
+    "file": "02_斫雷起手_1.3s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8C%97%E6%96%97",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/14/mbuznxmiicpyb1rqhzrvrqs9u5pspqz.gif",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图截帧",
+    "use": "起手展开。水花、感电、数字与背景不纳入效果。",
+    "frame": 13,
+    "time_ms": 1300,
+    "format": "PNG",
+    "size": [
+      328,
+      258
+    ],
+    "modified": true,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, drawing, retouching or generated content.",
+    "bytes": 92516
+  },
+  {
+    "file": "03_雷兽环绕_1.9s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8C%97%E6%96%97",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/14/mbuznxmiicpyb1rqhzrvrqs9u5pspqz.gif",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图截帧",
+    "use": "施放后的绕身雷兽电纹。水史莱姆与其他受击效果不纳入。",
+    "frame": 19,
+    "time_ms": 1900,
+    "format": "PNG",
+    "size": [
+      328,
+      258
+    ],
+    "modified": true,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, drawing, retouching or generated content.",
+    "bytes": 113569
+  },
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E5%8C%97%E6%96%97",
+    "image_url": "https://patchwiki.biligame.com/images/ys/1/14/mbuznxmiicpyb1rqhzrvrqs9u5pspqz.gif",
+    "downloaded": false,
+    "type": "原作实机动图",
+    "use": "原页面标为斫雷，包含施放及持续期间攻击；未完整展示自然到期。",
+    "modified": false,
+    "format": "GIF",
+    "size": [
+      328,
+      258
+    ],
+    "frames": 70,
+    "bytes": 3748853,
+    "former_local_file": "04_斫雷原始实机动图.gif",
+    "title": "04_斫雷原始实机动图",
+    "storage": "link_only",
+    "previously_downloaded_on": "2026-11-26",
+    "local_file_removed_on": "2026-11-26"
+  },
+  {
+    "type": "原作动图解码分析图",
+    "file": "Stormbreaker_State_Observation.png",
+    "analysis": {
+      "name": "Stormbreaker_State",
+      "page": "https://wiki.biligame.com/ys/%E5%8C%97%E6%96%97",
+      "url": "https://patchwiki.biligame.com/images/ys/1/14/mbuznxmiicpyb1rqhzrvrqs9u5pspqz.gif",
+      "downloaded": true,
+      "bytes": 3748853,
+      "decodedFrames": 70,
+      "durationSeconds": 7.0,
+      "sampledSeconds": [
+        0.0,
+        0.3,
+        0.6,
+        0.9,
+        1.2,
+        1.5,
+        1.8,
+        2.1,
+        2.4,
+        2.7,
+        3.0,
+        3.3,
+        3.6,
+        3.9,
+        4.2,
+        4.5,
+        4.8,
+        5.1,
+        5.4,
+        5.7,
+        6.0,
+        6.3,
+        6.6,
+        6.9
+      ],
+      "sampledFrames": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        15,
+        18,
+        21,
+        24,
+        27,
+        30,
+        33,
+        36,
+        39,
+        42,
+        45,
+        48,
+        51,
+        54,
+        57,
+        60,
+        63,
+        66,
+        69
+      ],
+      "originalStorage": "In-memory decode only; original GIF is not retained."
+    },
+    "inspection": "Original clip decoded and sampled; natural expiry absent from state clip."
+  }
+]

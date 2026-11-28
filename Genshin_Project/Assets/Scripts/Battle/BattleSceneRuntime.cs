@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
+public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime, IRoguelikeEventBattleStatistics
 {
+    public int EventEnemyKills => BattleManager.Instance?.EventEnemyKills ?? 0;
     // Legacy test scene creates its manager at startup; bind the explicitly selected voice module then.
     public CharacterBattleVoice characterVoice;
     public BattleUiStatusRiseView statusRise;
@@ -12,6 +13,7 @@ public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
     public BattleActionPromptView actionPrompt;
     public BattlefieldStageViewLoader stageView;
     public BattleUiCharacterDetails characterDetails;
+    public BattleUiFlowPresentation flowPresentation;
     private readonly Dictionary<int, IReadOnlyList<RoguelikeArtifactInstanceData>> detailArtifacts = new();
     private Action<bool> ended;
 
@@ -39,6 +41,7 @@ public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
             gameObject.AddComponent<BattleManager>();
 
         var bm = BattleManager.Instance;
+        if (flowPresentation != null) flowPresentation.BindBattle(bm);
         if (characterVoice != null) characterVoice.battle = bm;
         if (statusRise != null) statusRise.battle = bm;
         if (skillInfo != null)
@@ -57,6 +60,8 @@ public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
     {
         PrepareScene();
         var stage = new StageSetupData { BattleID = setup.BackgroundId, Enemies = setup.Enemies,
+            Waves = setup.Waves,
+            MaxRound = setup.MaxRound, WinCondition = setup.WinCondition, LoseCondition = setup.LoseCondition,
             EnemyHPMultiplier = setup.EnemyHPMultiplier, EnemyATKMultiplier = setup.EnemyATKMultiplier,
             Allies = setup.Allies.Select(ally => new StageAllySetup { CharacterID = ally.Character.CharacterID,
                 Level = ally.Character.Level, Constellation = ally.Character.ConstellationLevel }).ToList() };
@@ -121,10 +126,11 @@ public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
         }
 
         // ---- 创建敌方（按配置的槽位） ----
-        foreach (var e in cfg.Enemies)
-        {
-            SpawnEnemy(bm, e.EnemyID, $"Enemy_{e.EnemyID}", e.Slot, e.Level, cfg.EnemyHPMultiplier, cfg.EnemyATKMultiplier);
-        }
+        var waves = cfg.Waves?.Count > 0 ? cfg.Waves : new List<StageWaveSetup> {
+            new StageWaveSetup { Enemies = cfg.Enemies } };
+        bm.ConfigureEnemyWaves(waves, e => SpawnEnemy(bm, e, cfg.EnemyHPMultiplier, cfg.EnemyATKMultiplier),
+            enemy => { if (enemy != null) Destroy(enemy.gameObject); });
+        bm.ConfigureEventObjectives(cfg.MaxRound, cfg.WinCondition, cfg.LoseCondition);
 
         // 先完成双方实体、真实站位和注册，再挂载构筑。OnApply/BindStatus 的 Self、全队、
         // 敌方目标都依赖这些注册信息；逐人创建时提前应用会漏掉本人或后续成员，不能靠重跑OnApply补救。
@@ -161,21 +167,23 @@ public class BattleSceneRuntime : MonoBehaviour, IRoguelikeBattleRuntime
         }
     }
 
-    private void SpawnEnemy(BattleManager bm, int enemyID, string name, int position, int level, float healthMultiplier, float attackMultiplier)
+    private EnemyBattleController SpawnEnemy(BattleManager bm, StageEnemySetup setup, float healthMultiplier, float attackMultiplier)
     {
-        var enemyGO = new GameObject(name);
+        int enemyID = setup.EnemyID, position = setup.Slot;
+        var enemyGO = new GameObject($"Enemy_{enemyID}");
         var enemyCtrl = enemyGO.AddComponent<EnemyBattleController>();
-        enemyCtrl.InitEnemy(enemyID, level);
+        enemyCtrl.InitEnemy(enemyID, setup.Level, false);
         if (enemyCtrl.Entity != null)
         {
-            enemyCtrl.Entity.TotalHP *= healthMultiplier;
-            enemyCtrl.Entity.CurrentHP = enemyCtrl.Entity.TotalHP;
-            enemyCtrl.Entity.TotalATK *= attackMultiplier;
+            enemyCtrl.Entity.TotalHP *= healthMultiplier * setup.HPMultiplier;
+            enemyCtrl.Entity.CurrentHP = enemyCtrl.Entity.TotalHP * (setup.InitialHPPercent / 100f);
+            enemyCtrl.Entity.TotalATK *= attackMultiplier * setup.ATKMultiplier;
             BattleAttributeInitialization.Prepare(enemyCtrl.Entity);
             enemyCtrl.Entity.Side = BattleSide.Enemy;
             enemyCtrl.Entity.SlotPosition = position;   // 先设位置再注册，避免 AssignToField 用默认0
             LogManager.Log(LogCategory.Enemy, $"{enemyID} 分配位置 pos={position}");
         }
-        bm.RegisterEnemy(enemyCtrl);
+        bm.RegisterEnemy(enemyCtrl, false);
+        return enemyCtrl;
     }
 }

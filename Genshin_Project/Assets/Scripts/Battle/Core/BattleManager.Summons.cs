@@ -42,6 +42,7 @@ public partial class BattleManager
         controller.Entity.SlotPosition = position;
         RegisterEnemy(controller);
         summonedEnemies.Add(controller);
+        BattleEventHub.Publish(new SummonedEventData(controller.Entity,summoner));
         controller.ApplyInitiateStatuses();
         return controller;
     }

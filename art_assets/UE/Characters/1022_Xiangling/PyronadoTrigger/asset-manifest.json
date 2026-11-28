@@ -1,0 +1,775 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/PyronadoTrigger/视觉需求.md",
+  "variants": {
+    "Xiangling_PyronadoTrigger_GroupFive": {
+      "effect": "Xiangling_PyronadoTrigger_GroupFive",
+      "source": "Blender/Xiangling_PyronadoTrigger_GroupFive.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/PyronadoTrigger/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOneCompleteSpear": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoOneCompleteSpear.fbx",
+          "objects": [
+            "PART_PyronadoSpearShaft",
+            "PART_PyronadoSpearGrip",
+            "PART_PyronadoSharpSpearHead",
+            "PART_PyronadoSpearButt",
+            "PART_PyronadoSpearFineBladeEdge"
+          ],
+          "vertices": 90,
+          "triangles": 146,
+          "dimensions": [
+            0.2293698489665985,
+            0.08725744485855103,
+            1.9389999508857727
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSpearShaft": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearGrip": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSharpSpearHead": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearButt": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearFineBladeEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 90,
+            "triangles": 146,
+            "dimensions": [
+              0.2293698489665985,
+              0.08725747466087341,
+              1.9389999508857727
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc0": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoOpenFlameArc0.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl0",
+            "PART_PyronadoThinYellowCurlCore0"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.8041152358055115,
+            0.0,
+            1.040219516842626
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl0": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.8041152358055115,
+              1.6947326501870474e-07,
+              1.040219516842626
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc1": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoOpenFlameArc1.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl1",
+            "PART_PyronadoThinYellowCurlCore1"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.6942881047725677,
+            0.0,
+            0.9812332432484254
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl1": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.6942881047725677,
+              1.5986317787597404e-07,
+              0.9812332432484254
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc2": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoOpenFlameArc2.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl2",
+            "PART_PyronadoThinYellowCurlCore2"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.9902701377868652,
+            0.0,
+            1.1094118386972696
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl2": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.9902701377868652,
+              1.807461196962068e-07,
+              1.1094118386972696
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoSingleSweptSurface": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoSingleSweptSurface.fbx",
+          "objects": [
+            "PART_PyronadoSingleGroupSweepSurface"
+          ],
+          "vertices": 1449,
+          "triangles": 2560,
+          "dimensions": [
+            8.179952621459961,
+            0.0,
+            4.279974937438965
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSingleGroupSweepSurface": [
+              "PyronadoOneContinuousSweptFire"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1449,
+            "triangles": 2560,
+            "dimensions": [
+              8.179952621459961,
+              6.972964001761284e-07,
+              4.279974937438965
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoActualOrbitTail": {
+          "file": "Exports/Xiangling_PyronadoTrigger_GroupFive_PyronadoActualOrbitTail.fbx",
+          "objects": [
+            "PART_PyronadoActualRecentOrbitTail"
+          ],
+          "vertices": 1127,
+          "triangles": 1920,
+          "dimensions": [
+            8.419947624206543,
+            0.0,
+            4.519974708557129
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoActualRecentOrbitTail": [
+              "PyronadoRecentHistoryTail"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1127,
+            "triangles": 1920,
+            "dimensions": [
+              8.419947624206543,
+              7.363973395513312e-07,
+              4.519974708557129
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 44,
+          "element": "Pyro",
+          "soundRole": "fire",
+          "kind": "one group wheel contact, each actual target only local fire",
+          "targets": [
+            [
+              -7.795000076293945,
+              0.10000000149011612,
+              -0.6800000071525574
+            ],
+            [
+              -6.054999828338623,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ],
+            [
+              -2.765000104904175,
+              0.15000000596046448,
+              1.350000023841858
+            ],
+            [
+              -1.215000033378601,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Original Guoba53frames/5.3s and Pyronado40frames/4.0s decoded in memory;24 timestamped samples of each inspected. Supplied front Guoba/chili and fire stills inspected. Original Guoba expiry not shown; quiet exit authored. Grass fire, enemies, reactions, water splashes and HUD excluded. Guoba geometry authored independently; project screen-parallel wheel deliberately differs from original world-ground orbit.",
+      "scope": "Editable source art, reusable native meshes and preview examples only. No Unity, official tables, state/Count changes, damage or timeline integration.",
+      "hero_frame": 27,
+      "focus": [
+        -4.505000114440918,
+        -0.23999999463558197,
+        0.33000004291534424
+      ],
+      "detailScale": 10.22500030696392,
+      "pyronado": {
+        "wheel": "ONE_PyronadoMovingWheelCenter",
+        "rotor": "ONE_PyronadoIndependentSelfRotation",
+        "spear": "ONE_ReadableCompleteSpear",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "contact": 44,
+        "sweep": "ONE_GroupSweptFireHistory"
+      },
+      "contract": "One complete spear and one wheel. Center orbit in screen XZ plane and independent faster Y-axis self-spin. Single merged target sweep surface and simultaneous local contacts; decorative rotations never add hits. Material angular reveal is source-only and requires explicit reconstruction in a future player. No permanent 3D wheel; existing bottom icon remains a separate UI asset.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiangling_PyronadoTrigger_GroupFive.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    },
+    "Xiangling_PyronadoTrigger_SingleTarget": {
+      "effect": "Xiangling_PyronadoTrigger_SingleTarget",
+      "source": "Blender/Xiangling_PyronadoTrigger_SingleTarget.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/PyronadoTrigger/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Flame": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOneCompleteSpear": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoOneCompleteSpear.fbx",
+          "objects": [
+            "PART_PyronadoSpearShaft",
+            "PART_PyronadoSpearGrip",
+            "PART_PyronadoSharpSpearHead",
+            "PART_PyronadoSpearButt",
+            "PART_PyronadoSpearFineBladeEdge"
+          ],
+          "vertices": 90,
+          "triangles": 146,
+          "dimensions": [
+            0.2293698489665985,
+            0.08725744485855103,
+            1.9389999508857727
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSpearShaft": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearGrip": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSharpSpearHead": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearButt": [
+              "PyronadoWarmSpearMetal"
+            ],
+            "PART_PyronadoSpearFineBladeEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 90,
+            "triangles": 146,
+            "dimensions": [
+              0.2293698489665985,
+              0.08725747466087341,
+              1.9389999508857727
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc0": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoOpenFlameArc0.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl0",
+            "PART_PyronadoThinYellowCurlCore0"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.8041152358055115,
+            0.0,
+            1.040219516842626
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl0": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.8041152358055115,
+              1.6947326501870474e-07,
+              1.040219516842626
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc1": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoOpenFlameArc1.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl1",
+            "PART_PyronadoThinYellowCurlCore1"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.6942881047725677,
+            0.0,
+            0.9812332432484254
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl1": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.6942881047725677,
+              1.5986317787597404e-07,
+              0.9812332432484254
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoOpenFlameArc2": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoOpenFlameArc2.fbx",
+          "objects": [
+            "PART_PyronadoSeparatedCurl2",
+            "PART_PyronadoThinYellowCurlCore2"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            0.9902701377868652,
+            0.0,
+            1.1094118386972696
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSeparatedCurl2": [
+              "Soft"
+            ],
+            "PART_PyronadoThinYellowCurlCore2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              0.9902701377868652,
+              1.807461196962068e-07,
+              1.1094118386972696
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoSingleSweptSurface": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoSingleSweptSurface.fbx",
+          "objects": [
+            "PART_PyronadoSingleGroupSweepSurface"
+          ],
+          "vertices": 1449,
+          "triangles": 2560,
+          "dimensions": [
+            1.599990725517273,
+            0.0,
+            2.2399868965148926
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoSingleGroupSweepSurface": [
+              "PyronadoOneContinuousSweptFire"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1449,
+            "triangles": 2560,
+            "dimensions": [
+              1.599990725517273,
+              3.6494017763288866e-07,
+              2.2399868965148926
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PyronadoActualOrbitTail": {
+          "file": "Exports/Xiangling_PyronadoTrigger_SingleTarget_PyronadoActualOrbitTail.fbx",
+          "objects": [
+            "PART_PyronadoActualRecentOrbitTail"
+          ],
+          "vertices": 1127,
+          "triangles": 1920,
+          "dimensions": [
+            1.8399900197982788,
+            0.0,
+            2.4799840450286865
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PyronadoActualRecentOrbitTail": [
+              "PyronadoRecentHistoryTail"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1127,
+            "triangles": 1920,
+            "dimensions": [
+              1.8399900197982788,
+              4.0404066226074065e-07,
+              2.4799840450286865
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 44,
+          "element": "Pyro",
+          "soundRole": "fire",
+          "kind": "one group wheel contact, each actual target only local fire",
+          "targets": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Original Guoba53frames/5.3s and Pyronado40frames/4.0s decoded in memory;24 timestamped samples of each inspected. Supplied front Guoba/chili and fire stills inspected. Original Guoba expiry not shown; quiet exit authored. Grass fire, enemies, reactions, water splashes and HUD excluded. Guoba geometry authored independently; project screen-parallel wheel deliberately differs from original world-ground orbit.",
+      "scope": "Editable source art, reusable native meshes and preview examples only. No Unity, official tables, state/Count changes, damage or timeline integration.",
+      "hero_frame": 27,
+      "focus": [
+        -4.505000114440918,
+        -0.23999999463558197,
+        -0.6899999380111694
+      ],
+      "detailScale": 7,
+      "pyronado": {
+        "wheel": "ONE_PyronadoMovingWheelCenter",
+        "rotor": "ONE_PyronadoIndependentSelfRotation",
+        "spear": "ONE_ReadableCompleteSpear",
+        "indices": [
+          2
+        ],
+        "contact": 44,
+        "sweep": "ONE_GroupSweptFireHistory"
+      },
+      "contract": "One complete spear and one wheel. Center orbit in screen XZ plane and independent faster Y-axis self-spin. Single merged target sweep surface and simultaneous local contacts; decorative rotations never add hits. Material angular reveal is source-only and requires explicit reconstruction in a future player. No permanent 3D wheel; existing bottom icon remains a separate UI asset.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiangling_PyronadoTrigger_SingleTarget.wav"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged."
+    }
+  }
+}

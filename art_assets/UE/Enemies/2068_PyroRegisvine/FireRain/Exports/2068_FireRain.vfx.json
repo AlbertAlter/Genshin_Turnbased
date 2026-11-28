@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2068_PyroRegisvine/FireRain/2068_FireRain",
+  "source": "art_assets/UE/Enemies/2068_PyroRegisvine/FireRain/Blender/2068_FireRain.blend",
+  "file": "Enemies/2068_PyroRegisvine/FireRain/Exports/2068_FireRain.vfx.bytes",
+  "meshes": 5,
+  "tracks": 224,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 680241
+}

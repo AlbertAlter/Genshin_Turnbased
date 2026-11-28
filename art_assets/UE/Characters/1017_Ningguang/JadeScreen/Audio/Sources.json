@@ -1,0 +1,61 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitute candidates, not extracted original audio. Persistent StarJade and JadeScreen idle stages are intentionally silent; no fabricated constant sound loop. Not auditioned.",
+  "files": [
+    {
+      "file": "Ningguang_JadeScreen_Build.wav",
+      "purpose": "璇玑屏建立的低量岩光候选；整片一次",
+      "seconds": 0.7,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.04,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/EarthSpell_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.700000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.48",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -6.614352625814998,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_JadeScreen_Exit.wav",
+      "purpose": "退出时轻碎玉屑候选；维持阶段不重复播放",
+      "seconds": 0.48,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/EarthSpell_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.480000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.25",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -12.77367594662968,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

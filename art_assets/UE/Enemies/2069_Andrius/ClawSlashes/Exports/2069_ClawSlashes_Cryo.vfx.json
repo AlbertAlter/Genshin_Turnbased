@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2069_Andrius/ClawSlashes/2069_ClawSlashes_Cryo",
+  "source": "art_assets/UE/Enemies/2069_Andrius/ClawSlashes/Blender/2069_ClawSlashes_Cryo.blend",
+  "file": "Enemies/2069_Andrius/ClawSlashes/Exports/2069_ClawSlashes_Cryo.vfx.bytes",
+  "meshes": 9,
+  "tracks": 21,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 103189
+}

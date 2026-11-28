@@ -1,0 +1,246 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1036_Xiao/LemniscaticWindCycling/视觉需求.md",
+  "variants": {
+    "Xiao_LemniscaticWindCycling": {
+      "effect": "Xiao_LemniscaticWindCycling",
+      "source": "Blender/Xiao_LemniscaticWindCycling.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1036_Xiao/LemniscaticWindCycling/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xiao_LemniscaticWindCycling_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xiao_LemniscaticWindCycling_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Xiao_LemniscaticWindCycling_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneGroupWindCycling": {
+          "file": "Exports/Xiao_LemniscaticWindCycling_OneGroupWindCycling.fbx",
+          "objects": [
+            "PART_RushEnclosingWind_-1",
+            "PART_RushEnclosingWind_1",
+            "PART_SharedWindRushSoftBody",
+            "PART_RushCentralWhiteJade",
+            "PART_RushDarkKarmicScar_0",
+            "PART_RushDarkKarmicScar_1",
+            "PART_RushDarkKarmicScar_2"
+          ],
+          "vertices": 2979,
+          "triangles": 5056,
+          "dimensions": [
+            4.149143218994141,
+            0.02500000037252903,
+            9.12785085174255
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RushEnclosingWind_-1": [
+              "Soft"
+            ],
+            "PART_RushEnclosingWind_1": [
+              "Soft"
+            ],
+            "PART_SharedWindRushSoftBody": [
+              "Soft"
+            ],
+            "PART_RushCentralWhiteJade": [
+              "Soft"
+            ],
+            "PART_RushDarkKarmicScar_0": [
+              "Soft"
+            ],
+            "PART_RushDarkKarmicScar_1": [
+              "Soft"
+            ],
+            "PART_RushDarkKarmicScar_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 2979,
+            "triangles": 5056,
+            "dimensions": [
+              4.149143218994141,
+              0.02500148733673746,
+              9.12785085174255
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 17,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Anemo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 17,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Anemo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 17,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Anemo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 17,
+      "focus": [
+        -1.1833332777023315,
+        -0.23000000417232513,
+        -0.004999995231628418
+      ],
+      "detailScale": 14,
+      "referenceBoundary": "Bane375frames/11.25s,WindCycling122frames/3.66s,Normal285frames/8.55s decoded in memory;24 samples of each observed. Mask is authored from visible silhouette/colour cues, not copied topology. Normal GIF is unenhanced; enhanced moves follow project requirements, not original plunges.",
+      "scope": "Source art only. No HP ticking, enemy hit on burst cast, teleport/plunge, new C6 attack or Unity/table integration.",
+      "rushTargetCardIndices": [
+        1,
+        2,
+        3
+      ],
+      "rushContactFrame": 17,
+      "contract": "One source-to-actual-group rush of wind, one contact per real target, no card dash/teleport or repeated activation from C6.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiao_LemniscaticWindCycling.wav"
+      }
+    }
+  }
+}

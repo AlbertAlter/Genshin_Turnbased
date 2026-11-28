@@ -86,6 +86,9 @@ public sealed class RoguelikeRosterSession
     public RoguelikeSaveResult Equipment(Action<RoguelikeInventoryTransaction> command)
         => !CanEdit ? ReadOnly() : AcceptCommit(inventory.CommitWithContext(Context.Flow.StepId, command, RoguelikeSaveReason.EquipmentChanged));
 
+    public RoguelikeSaveResult SaveBattleParty(IEnumerable<int> party, IEnumerable<int> trials, int preset)
+        => !CanEdit ? ReadOnly() : AcceptCommit(flow.SaveBattleParty(Context.Flow.StepId, party, trials, preset));
+
     public RoguelikeSaveResult OpenReliquaries(string stepId, string itemId, int setId, int quantity)
         => !CanEdit ? ReadOnly() : AcceptCommit(Reliquaries.OpenWithContext(stepId, itemId, setId, quantity));
 

@@ -1,0 +1,170 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2014_HydroSamachurl\\HealingRain\\视觉需求.md",
+  "variants": {
+    "2014_HealingRain": {
+      "effect": "2014_HealingRain",
+      "source": "Blender/2014_HealingRain.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2014_HydroSamachurl\\HealingRain\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "RainCloudBody": {
+          "file": "Exports/2014_HealingRain_RainCloudBody.fbx",
+          "objects": [
+            "PART_SoftDarkRainCloud"
+          ],
+          "vertices": 312,
+          "triangles": 576,
+          "dimensions": [
+            2.0,
+            0.6399999856948853,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftDarkRainCloud": [
+              "RainCloud"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 312,
+            "triangles": 576,
+            "dimensions": [
+              2.0,
+              0.6400002837181091,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainCloudRim": {
+          "file": "Exports/2014_HealingRain_RainCloudRim.fbx",
+          "objects": [
+            "PART_SoftBlueGreyCloudRim"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftBlueGreyCloudRim": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainDrop": {
+          "file": "Exports/2014_HealingRain_RainDrop.fbx",
+          "objects": [
+            "PART_ShortBlueWhiteRain"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.029985027387738228,
+            0.0,
+            0.24059924483299255
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortBlueWhiteRain": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.029985027387738228,
+              3.919859103973522e-08,
+              0.24059924483299255
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.3400000035762787
+      ],
+      "elementAppearance": "Hydro",
+      "artOnly": true,
+      "detailScale": 9,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2014_HealingRain.wav"
+      }
+    }
+  }
+}

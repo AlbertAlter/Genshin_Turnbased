@@ -9,7 +9,9 @@ public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHa
     private const string ViewResource = "UI/BattleSkillInfo";
 
     private StatusInstance status;
-    private BattleEntity host;
+    private object host;
+    private BattleManager sourceBattle;
+    private bool cardObject;
     private BattleInputController input;
     private Canvas canvas;
     private RectTransform overlay;
@@ -21,10 +23,21 @@ public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHa
 
     public void Bind(StatusInstance value, BattleEntity statusHost, BattleInputController battleInput)
     {
-        if (!ReferenceEquals(status, value) || !ReferenceEquals(host, statusHost) || input != battleInput) Close();
+        Rebind(value, statusHost, battleInput, null, false);
+    }
+
+    /// <summary>卡底对象已由专用表选出，允许隐藏的场地状态；详情仍读取真实实例及其原宿主。</summary>
+    public void BindCardObject(StatusInstance value, object statusHost, BattleInputController battleInput, BattleManager battle)
+        => Rebind(value, statusHost, battleInput, battle, true);
+
+    private void Rebind(StatusInstance value, object statusHost, BattleInputController battleInput, BattleManager battle, bool isCardObject)
+    {
+        if (!ReferenceEquals(status, value) || !ReferenceEquals(host, statusHost) || input != battleInput
+            || sourceBattle != battle || cardObject != isCardObject) Close();
         status = value;
         host = statusHost;
         input = battleInput;
+        sourceBattle = battle; cardObject = isCardObject;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -54,7 +67,7 @@ public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHa
     {
         if (!open) return;
         if (canvas == null || !canvas.isActiveAndEnabled || view == null || !CanShow()
-            || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
+            || Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel))
         { Close(); return; }
         Refresh(false);
     }
@@ -63,9 +76,16 @@ public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHa
     private void OnApplicationFocus(bool focused) { if (!focused) Close(); }
 
     private bool CanShow()
-        => isActiveAndEnabled && status?.IsActive == true && status.MainData?.Display == 1
-            && host?.IsAlive == true && host.IsOnField && host.HasStatusInstance(status)
-            && BattleManager.Instance?.IsBattleOver != true;
+    {
+        if (!isActiveAndEnabled || status?.IsActive != true || status.MainData == null
+            || (!cardObject && status.MainData.Display != 1)) return false;
+        var battle = sourceBattle != null ? sourceBattle : BattleManager.Instance;
+        if (battle == null || !battle.IsBattleRunning || battle.IsBattleOver) return false;
+        if (host is BattleEntity entity)
+            return entity.IsAlive && entity.IsOnField && entity.HasStatusInstance(status);
+        return cardObject && host is FieldPosition field
+            && battle.Field?.GetSlot(field.Side, field.SlotIndex) == field && field.StatusList.Contains(status);
+    }
 
     internal static bool ShowsCount(StatusInstance status)
     {
@@ -123,7 +143,7 @@ public sealed class BattleStatusDescriptionView : MonoBehaviour, IPointerClickHa
         string langBody = null;
         if (!langError)
         {
-            try { langBody = DataManager.Instance?.GetStatusIconDescriptionText(status, host); }
+            try { langBody = DataManager.Instance?.GetStatusIconDescriptionText(status, host, ProjectUserSettings.English()); }
             catch (FormatException error)
             {
                 Debug.LogError(error.Message, this);

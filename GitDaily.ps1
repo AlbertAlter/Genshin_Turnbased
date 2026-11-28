@@ -15,7 +15,7 @@ $repoRoot = (Resolve-Path $ScriptDirectory).Path
 Set-Location $repoRoot
 
 # 上传范围只在这里设置；目录包含全部子目录，文件必须精确匹配。
-$syncDirectories = @('Genshin_Project', 'Docs', 'Charts', 'PSDfiles')
+$syncDirectories = @('Genshin_Project', 'Docs', 'Charts', 'PSDfiles', 'art_assets')
 $syncFiles = @('.gitignore', '.gitattributes', 'GitDaily.cmd', 'GitDaily.ps1')
 $excludedPaths = @(
     ':(top,icase,literal)Genshin_Project/Assets/StreamingAssets',
@@ -360,7 +360,7 @@ function Save-Work {
 
     Assert-PsdSyncConfiguration
 
-    Write-Host "[2/4] 自动暂存项目修改（包含 PSDfiles 的完整子目录结构）..." -ForegroundColor Cyan
+    Write-Host "[2/4] 自动暂存项目修改（包含 PSDfiles、art_assets 的完整子目录结构）..." -ForegroundColor Cyan
 
     Add-SyncChanges
 
@@ -388,7 +388,7 @@ function Save-Work {
     }
 
     Clear-OutsideSyncHistory
-    Write-Host "[4/4] 上传符合路径设置的 main（含清理后的历史；PSD 由 Git LFS 上传）..." -ForegroundColor Cyan
+    Write-Host "[4/4] 上传符合路径设置的 main（含清理后的历史；PSD 与美术二进制素材由 Git LFS 上传）..." -ForegroundColor Cyan
 
     Push-LocalMain
 

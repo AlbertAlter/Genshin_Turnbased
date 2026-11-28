@@ -1,0 +1,41 @@
+[
+  {
+    "file": "00_原作实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 25,
+    "duration_seconds": 2,
+    "bytes": 1005248,
+    "modified": false,
+    "use": "岩萨满图腾柱和单圈圆形岩光；卡牌位置及公共图层为项目指定适配"
+  },
+  {
+    "file": "01_图腾柱造型截帧.png",
+    "source_file": "00_原作实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 0,
+    "timestamp_seconds": 0,
+    "cropped": false,
+    "retouched": false,
+    "use": "图腾柱的分节、柱帽、侧面岩突与亮纹"
+  },
+  {
+    "file": "02_冲击波展开截帧.png",
+    "source_file": "00_原作实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Geo_Samachurl_Rock_Pillar_Blast.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Geo_Samachurl#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 11,
+    "timestamp_seconds": 0.88,
+    "cropped": false,
+    "retouched": false,
+    "use": "从单根图腾柱向周围展开的一圈冲击"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "type": "live-card-texture-major-contours",
+  "input": "current animated card face at original slot, never full UI root",
+  "samplesTexels": [
+    [
+      -1.4,
+      0
+    ],
+    [
+      1.4,
+      0
+    ],
+    [
+      0,
+      -1.4
+    ],
+    [
+      0,
+      1.4
+    ]
+  ],
+  "edgeThreshold": [
+    0.1,
+    0.35
+  ],
+  "edgeUvInset": [
+    0.015,
+    0.04
+  ],
+  "lineColor": [
+    0.58,
+    0.61,
+    0.63
+  ],
+  "alpha": "originalAlpha * mix(1, edge * uvInset, stealthBlend)",
+  "frameAlpha": "1-stealthBlend",
+  "backAlpha": "1-stealthBlend",
+  "barsAndStatusOverlayAffected": false,
+  "requiresRuntimeShaderRebuild": true
+}

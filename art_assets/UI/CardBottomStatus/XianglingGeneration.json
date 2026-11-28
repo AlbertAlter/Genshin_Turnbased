@@ -1,0 +1,12 @@
+{
+  "created": "2026-11-26",
+  "file": "Pyronado.png",
+  "method": "built-in image_gen",
+  "source_ability_symbol": "art_assets/Skill_Icon/1022/1022_S02.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/BaronBunny.png",
+    "art_assets/UI/CardBottomStatus/JumpyDumptyMine.png"
+  ],
+  "prompt": "Edit reference image 1 (the existing white Xiangling Pyronado ability symbol) into one finished colored game status icon. Reference images 2 and 3 are STYLE REFERENCES ONLY: match their thick clean dark-brown contour, painted two-to-three-tone shadows, soft warm highlights, abstract readable shapes, and Genshin Genius Invokation TCG-like illustrative rendering. Preserve the compact spiral and swept flame shapes of reference 1. Depict a vivid orange-and-gold spinning fire wheel with a clearly recognizable SINGLE diagonal spear inside: visible straight dark-red/brown shaft, golden pointed spearhead and small warm highlight. The spear must remain legible at small UI size. Build the fire wheel body from broad red-orange and golden flame shapes, dark burnt-red inner shadows and creamy highlights; fill the interior with opaque colored vortex material, not transparent holes. Keep all of the drawing inside one compact near-circular footprint, centered in a square image with an even transparent margin, comparable occupancy to the reference status icons. Isolated game UI asset, genuine transparent alpha outside the icon, opaque colored interior, crisp antialiased silhouette. No text, letters, numbers, watermark, extra icons, separate medallion frame, realistic flames, scene, or glow bleeding into the transparent margins. This output will be saved as a new Pyronado.png asset; do not change the existing source references.",
+  "usage": "Colored card-bottom status icon for ST_Xiangling_Pyronado. Transparent outside, opaque red-orange firewheel interior, visible single spear. The static icon and triggered 3D Pyronado effect are separate assets."
+}

@@ -100,7 +100,7 @@ namespace GenshinTurnBased.Tests.EditMode
         }
         [UnityTest] public IEnumerator Rain_WholeEnemyActionConsumesOne_AndHealsOnce_AfterBothHits()
             =>HookTestEnv.AwaitTask(ActionAsync);
-        private async Task ActionAsync()
+        private Task ActionAsync()
         {
             using var e=new BattleFlowTestEnv();Setup(e,attacks:true);var owner=e.Ally.Entity;
             Add(e,"Hydropathic");var rain=Add(e,"RainSwords",duration:4);owner.CurrentHP=500;
@@ -111,10 +111,11 @@ namespace GenshinTurnBased.Tests.EditMode
             e.Manager.EndAllyTurn();e.Flow.AdvanceToPhase(e.Manager,TurnPhase.EnemyPostTurn);
             Assert.That(hits.Count,Is.EqualTo(2));Assert.That(spends.Count,Is.EqualTo(1));Assert.That(rain.RuntimeIntValue,Is.EqualTo(2));
             Assert.That(heals.Count,Is.EqualTo(1));Assert.That(owner.CurrentHP,Is.EqualTo(560f-hits.Sum(f=>f.ActualHPDamage)).Within(.001f));
+            return Task.CompletedTask;
         }
         [UnityTest] public IEnumerator Rain_RainbowRefillsAfterSpend_StillHeals_AndReductionReadsLiveHydro()
             =>HookTestEnv.AwaitTask(RefillAsync);
-        private async Task RefillAsync()
+        private Task RefillAsync()
         {
             using var e=new BattleFlowTestEnv();Setup(e,1,attacks:true);var owner=e.Ally.Entity;
             Add(e,"Hydropathic");Add(e,"Rainbow",duration:4);var rain=Add(e,"RainSwords",duration:4);
@@ -126,6 +127,7 @@ namespace GenshinTurnBased.Tests.EditMode
             using var listener=BattleEventHub.Subscribe<HealEventData>(BattleEventKind.HealResolved,(_,f)=>{if(f.Subject==owner)heals++;},0);
             e.Manager.EndAllyTurn();e.Flow.AdvanceToPhase(e.Manager,TurnPhase.EnemyPostTurn);
             Assert.That(rain.RuntimeIntValue,Is.EqualTo(4));Assert.That(heals,Is.EqualTo(1));
+            return Task.CompletedTask;
         }
         [UnityTest] public IEnumerator Rain_ExpirationAggregatesRemainingCount_RefreshAndRemovalDoNotHeal()
             =>HookTestEnv.AwaitTask(ExpiryAsync);

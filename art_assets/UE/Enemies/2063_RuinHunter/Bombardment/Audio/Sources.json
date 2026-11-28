@@ -1,0 +1,63 @@
+{
+  "scope": "matching substitute sound candidates; no Wwise or Unity bindings",
+  "files": [
+    {
+      "file": "Launch.wav",
+      "role": "Launch",
+      "source": {
+        "category": "missile",
+        "page": "https://opengameart.org/content/missile-sound",
+        "url": "https://opengameart.org/sites/default/files/missile.wav",
+        "author": "mikeask",
+        "license": "CC0-1.0",
+        "licenseObservedInPage": true,
+        "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\missile_missile.wav",
+        "listened": false
+      },
+      "seconds": 2.6935208333333334,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "downward peak ceiling -6.2 dBFS",
+        "gain ceiling 0.62",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ],
+      "originalGameAudio": false,
+      "listened": false,
+      "verification": "decoded; nonempty PCM; source and license recorded; subjective listening pending"
+    },
+    {
+      "file": "Contact.wav",
+      "role": "Contact",
+      "source": {
+        "local": "F:\\Genshin_Turnbased\\art_assets\\UE\\general\\Explosion\\Audio\\Explosion_Standard_01.wav",
+        "page": "https://opengameart.org/content/explosions-4",
+        "url": "https://opengameart.org/sites/default/files/explosion3.ogg",
+        "author": "EZduzziteh",
+        "license": "CC0-1.0",
+        "origin": "existing project CC0 candidate",
+        "sourceProcessing": [
+          "decoded/resampled to 48000 Hz stereo PCM16",
+          "3ms entrance / 20ms exit anti-click fade"
+        ]
+      },
+      "seconds": 1.6936458333333333,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bits": 16,
+      "processing": [
+        "PCM16 stereo 48 kHz",
+        "downward peak ceiling -6.2 dBFS",
+        "gain ceiling 0.7",
+        "6 ms onset / 40 ms exit anti-click fades"
+      ],
+      "originalGameAudio": false,
+      "listened": false,
+      "verification": "decoded; nonempty PCM; source and license recorded; subjective listening pending"
+    }
+  ]
+}

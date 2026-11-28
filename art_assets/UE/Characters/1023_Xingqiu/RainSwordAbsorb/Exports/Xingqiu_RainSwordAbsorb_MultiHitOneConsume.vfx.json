@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1023_Xingqiu/RainSwordAbsorb/Xingqiu_RainSwordAbsorb_MultiHitOneConsume",
+  "source": "art_assets/UE/Characters/1023_Xingqiu/RainSwordAbsorb/Blender/Xingqiu_RainSwordAbsorb_MultiHitOneConsume.blend",
+  "file": "Characters/1023_Xingqiu/RainSwordAbsorb/Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume.vfx.bytes",
+  "meshes": 10,
+  "tracks": 31,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 130667
+}

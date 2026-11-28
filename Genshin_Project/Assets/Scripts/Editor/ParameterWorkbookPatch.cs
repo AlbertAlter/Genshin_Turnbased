@@ -45,18 +45,28 @@ public static class ParameterWorkbookPatch
                 if (cell.GetAttribute("t") == "s") return strings[int.Parse(v, CultureInfo.InvariantCulture)];
                 return cell.GetAttribute("t") == "inlineStr" ? cell.SelectSingleNode("x:is", ns)?.InnerText ?? "" : v;
             }
-            if (Text((XmlElement)document.SelectSingleNode("//x:c[@r='A1']", ns)) != "Key" ||
-                Text((XmlElement)document.SelectSingleNode("//x:c[@r='B1']", ns)) != "Value")
-                throw new InvalidDataException("Parameters前两列必须为Key、Value。");
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var headerRow = document.SelectSingleNode("/x:worksheet/x:sheetData/x:row[@r='1']", ns)
+                ?? throw new InvalidDataException("Parameters缺少第1行表头。");
+            foreach (XmlElement cell in headerRow.SelectNodes("x:c", ns))
+            {
+                string name = Text(cell).Trim().TrimStart('\uFEFF').Trim();
+                if (name.Length == 0) continue;
+                string column = new string(cell.GetAttribute("r").TakeWhile(char.IsLetter).ToArray());
+                if (headers.ContainsKey(name)) throw new InvalidDataException("Parameters表头重复：" + name);
+                headers.Add(name, column);
+            }
+            if (!headers.TryGetValue("Key", out string keyColumn) || !headers.TryGetValue("Value", out string valueColumn))
+                throw new InvalidDataException("Parameters需要Key、Value表头。");
             var changed = new HashSet<string>(StringComparer.Ordinal);
             foreach (XmlElement row in document.SelectNodes("/x:worksheet/x:sheetData/x:row", ns))
             {
                 string rowId = row.GetAttribute("r");
-                string key = Text((XmlElement)row.SelectSingleNode($"x:c[@r='A{rowId}']", ns)).Trim();
+                string key = Text((XmlElement)row.SelectSingleNode($"x:c[@r='{keyColumn}{rowId}']", ns)).Trim();
                 if (!values.TryGetValue(key, out float number)) continue;
                 if (float.IsNaN(number) || float.IsInfinity(number) || !changed.Add(key))
                     throw new InvalidDataException("参数重复或数值无效：" + key);
-                var cell = (XmlElement)row.SelectSingleNode($"x:c[@r='B{rowId}']", ns)
+                var cell = (XmlElement)row.SelectSingleNode($"x:c[@r='{valueColumn}{rowId}']", ns)
                     ?? throw new InvalidDataException("缺少Value单元格：" + key);
                 foreach (XmlNode child in cell.ChildNodes.Cast<XmlNode>().ToArray())
                     if (child.LocalName == "f" || child.LocalName == "v" || child.LocalName == "is") cell.RemoveChild(child);

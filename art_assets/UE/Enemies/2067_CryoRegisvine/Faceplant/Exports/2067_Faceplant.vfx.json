@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2067_CryoRegisvine/Faceplant/2067_Faceplant",
+  "source": "art_assets/UE/Enemies/2067_CryoRegisvine/Faceplant/Blender/2067_Faceplant.blend",
+  "file": "Enemies/2067_CryoRegisvine/Faceplant/Exports/2067_Faceplant.vfx.bytes",
+  "meshes": 3,
+  "tracks": 90,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 299837
+}

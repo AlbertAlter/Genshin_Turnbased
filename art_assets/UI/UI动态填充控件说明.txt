@@ -1,0 +1,165 @@
+UI动态填充控件说明
+
+用途
+本文件用于约定生命条、护盾条、能量槽和技能冷却等动态UI在Photoshop中的分层方式，以及Unity中的实现规则。
+PSD负责提供满状态视觉、图层结构和有效显示范围；Unity负责根据运行时数值控制填充比例、预变化区域和动画效果。
+
+通用要求
+1. 所有动态填充图层均按100%满状态制作，不在PSD中制作10%、20%等不同进度版本。
+2. 背景、填充、边框、图标和文字必须分层，不得把动态填充与固定边框合并。
+3. 若填充范围小于外框范围，应建立独立的FillArea组或边界图层，准确表示可填充区域。
+4. PSD中的预览进度仅用于查看效果，不作为运行时初始值；预览层需明确标记Preview，不导入正式UI。
+5. 动态比例统一限制在0～1之间。
+
+一、普通生命条：当前生命＋预掉血＋三角分界
+
+推荐PSD结构：
+
+HPBar [TrianglePreviewBar]
+├── Frame
+├── FillTexture
+├── Background
+└── ValueText
+
+运行时参数：
+
+CurrentRatio = 当前生命 / 最大生命
+PreviewRatio = 预计受伤后生命 / 最大生命
+
+显示区间：
+
+0 ～ PreviewRatio：正常生命颜色
+PreviewRatio ～ CurrentRatio：预掉血颜色
+CurrentRatio ～ 1：空血条背景
+
+例如当前生命为80%，预计受伤后为50%：
+
+0～50%显示正常生命；50%～80%显示预掉血；80%以后显示空血条背景。
+
+正常生命段和预掉血段的分界采用三角形或斜切形状。Unity使用双比例UI Shader生成分界，避免通过缩放PNG导致三角形变形或消失。
+
+Shader主要参数：
+
+_CurrentRatio
+_PreviewRatio
+_EdgeWidth
+_CurrentColor
+_PreviewColor
+
+FillTexture在PSD中按完整100%长度制作，三角分界由Unity生成。
+
+二、敌方护盾：当前护盾＋预掉盾＋圆角
+
+推荐PSD结构：
+
+EnemyShieldBar [RoundedPreviewBar]
+├── RoundedMask
+│   ├── CurrentShield
+│   └── PreviewShield
+├── Background
+└── Frame
+
+运行时参数：
+
+CurrentRatio = 当前护盾 / 护盾容量
+PreviewRatio = 预计受击后护盾 / 护盾容量
+
+显示区间与普通生命条一致，但整体边缘使用圆角，不使用三角分界。圆角通过圆角遮罩、九宫格图片或UI Shader保持，不直接裁切普通圆角PNG，以免进度较小时圆角变形。
+
+三、能量槽：圆形按钮＋轻微波浪＋由下至上填充
+
+推荐PSD结构：
+
+EnergyButton [WaveCircleFill]
+├── EmptyBackground
+├── CircularMask
+│   └── WaveFill
+├── Icon
+├── Frame
+├── EnergyText
+└── ButtonHitArea
+
+运行时参数：
+
+EnergyRatio = 当前能量 / 最大能量
+
+WaveFill在CircularMask中由下至上填充。液面使用轻微正弦波动画：
+
+水面高度 = EnergyRatio
+波浪偏移 = sin(UV.x × 频率 + 时间 × 速度) × 振幅
+
+波浪振幅应较小、速度较慢，避免影响能量百分比的读取。PSD只需提供空槽背景、满状态能量渐变或纹理、图标、圆形外框和可选液面高光，不需要制作不同百分比图片。
+
+四、技能冷却：从上至下恢复原亮度
+
+推荐PSD结构：
+
+SkillButton [CooldownReveal]
+├── OriginalIcon
+├── DarkOverlay
+├── Frame
+└── CooldownText
+
+OriginalIcon始终完整显示，DarkOverlay覆盖在图标上方。
+
+冷却开始时，DarkOverlay覆盖整个图标；随着冷却时间减少，图标从上至下恢复原亮度。
+
+Unity设置：
+
+DarkOverlay Image Type = Filled
+Fill Method = Vertical
+Fill Origin = Bottom
+FillAmount = 剩余冷却时间 / 总冷却时间
+
+剩余100%：图标全部变暗
+剩余75%：顶部25%恢复亮度
+剩余50%：上半部分恢复亮度
+剩余0%：图标完全恢复亮度
+
+DarkOverlay可以直接由Unity使用黑色半透明Image生成，PSD不必提供单独的深色图标。
+
+五、我方护盾：血条外围从左至右显示的护盾边框
+
+推荐PSD结构：
+
+AllyHPBar
+├── Background
+├── HPFill
+├── HPPreview
+├── HPFrame
+└── ShieldOutlineMask
+    └── FullShieldOutline
+
+护盾边框显示比例默认以角色最大生命值为基准：
+
+ShieldRatio = Clamp01(护盾量 / 最大生命值)
+
+护盾量大于或等于最大生命值时，FullShieldOutline完整包覆血条。
+护盾量小于最大生命值时，ShieldOutlineMask从左向右显示至对应百分比。
+
+实现方式：
+
+MaskWidth = 血条总宽度 × ShieldRatio
+
+ShieldOutlineMask左侧位置固定，只改变宽度。FullShieldOutline保持完整尺寸，由遮罩决定可见范围。
+
+若部分护盾边框的最右端需要显示封口线，可增加ShieldEndCap，并令其移动至ShieldRatio对应的位置；若不需要封口，则直接裁切完整外框。
+
+六、Unity控件类型对应关系
+
+TrianglePreviewBar：双比例UI Shader，显示当前值、预变化值和三角分界。
+RoundedPreviewBar：圆角遮罩或UI Shader，显示当前值和预变化值。
+WaveCircleFill：圆形遮罩加波浪Shader，由下至上填充。
+CooldownReveal：垂直Filled深色覆盖层，随冷却从上至下恢复亮度。
+HorizontalOutlineFill：从左至右展开的完整边框遮罩。
+
+七、交付PSD时需要说明的信息
+
+1. 哪个组对应哪一种动态控件。
+2. 哪个图层是Background、Fill、Frame、Icon和Text。
+3. FillArea或Mask的准确范围。
+4. 填充方向和填充起点。
+5. 当前值、最大值以及预变化值的数据含义。
+6. 正常填充、预掉血、预掉盾和护盾边框的颜色或纹理。
+7. 是否需要数值文字、延迟动画、闪烁、发光或封口效果。
+

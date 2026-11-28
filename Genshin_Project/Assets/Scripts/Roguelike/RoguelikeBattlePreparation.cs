@@ -6,6 +6,7 @@ using System.Linq;
 [Serializable]
 public sealed class RoguelikeBattleAllyBuild
 {
+    public bool IsTrial;
     public int Slot;
     public RoguelikeCharacterProgressData Character;
     public RoguelikeWeaponInstanceData Weapon;
@@ -31,6 +32,9 @@ public sealed class RoguelikeBattleSetup
     public float EnemyATKMultiplier = 1f;
     public List<RoguelikeBattleAllyBuild> Allies = new List<RoguelikeBattleAllyBuild>();
     public List<StageEnemySetup> Enemies = new List<StageEnemySetup>();
+    public List<StageWaveSetup> Waves = new List<StageWaveSetup>();
+    public int MaxRound;
+    public string WinCondition, LoseCondition;
 }
 
 /// <summary>只解析已经确认的战斗内容 ID，不在此重新抽关卡，不使用测试关卡作为兜底。</summary>
@@ -95,13 +99,15 @@ public sealed class RoguelikeBattlePreparation
     private readonly IRoguelikeEncounterCatalog encounters;
     private readonly IRoguelikeEquipmentCatalog equipment;
     private readonly IRoguelikeEnemyCatalog enemies;
+    private readonly ArtifactGenerationConfig trialArtifactConfig;
 
     public RoguelikeBattlePreparation(IRoguelikeEncounterCatalog encounters, IRoguelikeEquipmentCatalog equipment,
-        IRoguelikeEnemyCatalog enemies)
+        IRoguelikeEnemyCatalog enemies, ArtifactGenerationConfig trialArtifactConfig = null)
     {
         this.encounters = encounters ?? throw new ArgumentNullException(nameof(encounters));
         this.equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
         this.enemies = enemies ?? throw new ArgumentNullException(nameof(enemies));
+        this.trialArtifactConfig = trialArtifactConfig;
     }
 
     public RoguelikeSaveResult<RoguelikeBattleSetup> Prepare(RoguelikeFlowContext context)
@@ -115,7 +121,8 @@ public sealed class RoguelikeBattlePreparation
             context.ResumePoint != RoguelikeResumePoint.BeforeBattle ||
             string.IsNullOrWhiteSpace(context.RunId) || string.IsNullOrWhiteSpace(context.BattleId))
             return Invalid("只能从已保存的战前恢复点准备战斗。");
-        if (snapshot.PartyCharacterIds.Count < 1 || snapshot.PartyCharacterIds.Count > 4)
+        var party = flow.Node.BattlePartyCharacterIds ?? snapshot.PartyCharacterIds;
+        if (party.Count < 1 || party.Count > 4)
             return Invalid("进入战斗前必须确认 1～4 名出战角色。");
 
         var stageResult = encounters is IRoguelikeStageEncounterCatalog stageCatalog
@@ -123,13 +130,22 @@ public sealed class RoguelikeBattlePreparation
             : encounters.Resolve(flow.Node.ContentId);
         if (!stageResult.Succeeded) return Failure(stageResult);
         var stage = stageResult.Data;
-        if (stage == null || stage.Enemies == null || stage.Enemies.Count < 1 || stage.Enemies.Count > 5)
-            return Invalid("战斗内容必须包含 1～5 名敌人。");
-        var slots = new HashSet<int>();
-        foreach (var enemy in stage.Enemies)
-            if (enemy == null || enemy.Level < 1 || enemy.Slot < 1 || enemy.Slot > 5 ||
-                !slots.Add(enemy.Slot) || !enemies.ContainsEnemy(enemy.EnemyID))
-                return Invalid("敌人模板、等级或位置无效，或敌方位置重复。");
+        if (stage == null) return Invalid("战斗内容不能为空。");
+        var waves = stage.Waves?.Count > 0 ? stage.Waves : new List<StageWaveSetup> {
+            new StageWaveSetup { Enemies = stage.Enemies } };
+        for (int index = 0; index < waves.Count; index++)
+        {
+            var wave = waves[index];
+            if (wave == null || wave.Wave != index + 1 || wave.Enemies == null || wave.Enemies.Count == 0)
+                return Invalid("敌人波次必须从1连续配置且非空。");
+            foreach (var enemy in wave.Enemies)
+                if (enemy == null || enemy.Level < 1 || enemy.Slot < 1 || enemy.Slot > 5 || !enemies.ContainsEnemy(enemy.EnemyID)
+                    || !(enemy.HPMultiplier > 0) || float.IsInfinity(enemy.HPMultiplier)
+                    || !(enemy.ATKMultiplier > 0) || float.IsInfinity(enemy.ATKMultiplier)
+                    || !(enemy.InitialHPPercent > 0 && enemy.InitialHPPercent <= 100))
+                    return Invalid("敌人模板、等级、位置或属性配置无效。");
+            if (wave.Enemies.All(e => e.IgnoreForVictory)) return Invalid("每波至少需要一名计入胜利条件的敌人。");
+        }
 
         var setup = new RoguelikeBattleSetup
         {
@@ -137,16 +153,26 @@ public sealed class RoguelikeBattlePreparation
             NodeId = flow.Node.NodeId, ContentId = flow.Node.ContentId, ChapterId = snapshot.CurrentChapterId,
             BackgroundId = stage.BattleID, RunSeed = snapshot.RunSeed, RandomStep = snapshot.RandomStep,
             EnemyHPMultiplier = stage.EnemyHPMultiplier, EnemyATKMultiplier = stage.EnemyATKMultiplier,
-            Enemies = stage.Enemies,
+            Enemies = waves[0].Enemies, Waves = waves, MaxRound = stage.MaxRound,
+            WinCondition = stage.WinCondition, LoseCondition = stage.LoseCondition,
         };
         var characters = snapshot.Characters.ToDictionary(item => item.CharacterID);
         var weapons = snapshot.Inventory.Weapons.ToDictionary(item => item.InstanceId, StringComparer.Ordinal);
         var artifacts = snapshot.Inventory.Artifacts.ToDictionary(item => item.InstanceId, StringComparer.Ordinal);
-        foreach (int characterId in snapshot.PartyCharacterIds)
+        var trialBuilds = RoguelikeTrialParty.Build(flow.Node.TrialConfigurations, snapshot, equipment, trialArtifactConfig)
+            .ToDictionary(b => b.Character.CharacterID);
+        foreach (int characterId in party)
         {
+            if (flow.Node.TrialCharacterIds?.Contains(characterId) == true)
+            {
+                if (!trialBuilds.TryGetValue(characterId, out var trial)) return Invalid("缺少已保存的试用构筑：" + characterId);
+                trial.Slot = setup.Allies.Count + 1;
+                setup.Allies.Add(trial);
+                continue;
+            }
             if (!equipment.TryGetCharacterWeaponType(characterId, out int weaponType) || weaponType < 0 || weaponType > 4)
                 return Invalid("角色模板或武器类型尚未配置：" + characterId);
-            var character = characters[characterId];
+            if (!characters.TryGetValue(characterId, out var character)) return Invalid("未拥有出战角色：" + characterId);
             var build = new RoguelikeBattleAllyBuild { Slot = setup.Allies.Count + 1, Character = character };
             if (!string.IsNullOrWhiteSpace(character.EquippedWeaponInstanceId))
             {

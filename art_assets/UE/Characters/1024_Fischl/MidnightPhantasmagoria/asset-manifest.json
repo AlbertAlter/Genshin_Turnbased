@@ -1,0 +1,1273 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/MidnightPhantasmagoria/视觉需求.md",
+  "variants": {
+    "Fischl_MidnightPhantasmagoria_ExistingC4": {
+      "effect": "Fischl_MidnightPhantasmagoria_ExistingC4",
+      "source": "Blender/Fischl_MidnightPhantasmagoria_ExistingC4.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/MidnightPhantasmagoria/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzBody": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_0_72": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OneCircuitActualBolt_0_72.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_0_72_VioletCorona",
+            "PART_OneCircuitActualBolt_0_72_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_0_72_ShortFork_5",
+            "PART_OneCircuitActualBolt_0_72_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_1_84": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OneCircuitActualBolt_1_84.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_1_84_VioletCorona",
+            "PART_OneCircuitActualBolt_1_84_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_1_84_ShortFork_5",
+            "PART_OneCircuitActualBolt_1_84_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_2_61": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OneCircuitActualBolt_2_61.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_2_61_VioletCorona",
+            "PART_OneCircuitActualBolt_2_61_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_2_61_ShortFork_5",
+            "PART_OneCircuitActualBolt_2_61_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_3_36": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OneCircuitActualBolt_3_36.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_3_36_VioletCorona",
+            "PART_OneCircuitActualBolt_3_36_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_3_36_ShortFork_5",
+            "PART_OneCircuitActualBolt_3_36_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_4_49": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OneCircuitActualBolt_4_49.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_4_49_VioletCorona",
+            "PART_OneCircuitActualBolt_4_49_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_4_49_ShortFork_5",
+            "PART_OneCircuitActualBolt_4_49_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzRangeThinArc": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_ExistingC4_OzRangeThinArc.fbx",
+          "objects": [
+            "PART_OzOneRangeDischargeArc"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.055529832839966,
+            0.0,
+            2.055095911026001
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 72,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 72,
+          "element": "Electro",
+          "origin": [
+            -7.795000076293945,
+            -0.23000000417232513,
+            0.9699999690055847
+          ],
+          "target": [
+            -7.795000076293945,
+            -0.2199999988079071,
+            -0.6800000071525574
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 84,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 84,
+          "element": "Electro",
+          "origin": [
+            -6.054999828338623,
+            -0.23000000417232513,
+            3.0
+          ],
+          "target": [
+            -6.054999828338623,
+            -0.2199999988079071,
+            1.350000023841858
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 61,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 61,
+          "element": "Electro",
+          "origin": [
+            -4.505000114440918,
+            -0.23000000417232513,
+            0.9599999785423279
+          ],
+          "target": [
+            -4.505000114440918,
+            -0.2199999988079071,
+            -0.6899999976158142
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "element": "Electro",
+          "origin": [
+            -2.765000104904175,
+            -0.23000000417232513,
+            3.0
+          ],
+          "target": [
+            -2.765000104904175,
+            -0.2199999988079071,
+            1.350000023841858
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 49,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 49,
+          "element": "Electro",
+          "origin": [
+            -1.215000033378601,
+            -0.23000000417232513,
+            0.9599999785423279
+          ],
+          "target": [
+            -1.215000033378601,
+            -0.2199999988079071,
+            -0.6899999976158142
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 12,
+          "element": "Electro",
+          "origin": [
+            -2.765000104904175,
+            -0.10999999940395355,
+            3.640000104904175
+          ],
+          "kind": "one old-location actual range discharge, no second Oz"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 52,
+      "focus": [
+        -4.4670000076293945,
+        0.0,
+        0.12800000607967377
+      ],
+      "detailScale": 18,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "oneCircuit": {
+        "root": "ONE_AuthoredOz_OneContinuousCircuit",
+        "start": 22,
+        "end": 106,
+        "returnToField": 118,
+        "fieldAnchor": [
+          -2.765000104904175,
+          -0.10999999940395355,
+          3.640000104904175
+        ],
+        "previewStateExit": 182,
+        "targetIndices": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "contacts": [
+          {
+            "targetCardIndex": 0,
+            "frame": 72,
+            "angleFraction": 0.644804353942919
+          },
+          {
+            "targetCardIndex": 1,
+            "frame": 84,
+            "angleFraction": 0.8266931318904049
+          },
+          {
+            "targetCardIndex": 2,
+            "frame": 61,
+            "angleFraction": 0.4518332839068715
+          },
+          {
+            "targetCardIndex": 3,
+            "frame": 36,
+            "angleFraction": 0.0718304589086413
+          },
+          {
+            "targetCardIndex": 4,
+            "frame": 49,
+            "angleFraction": 0.24993424641881268
+          }
+        ]
+      },
+      "contract": "One authored Oz completes one whole circuit around actual group bounds, then SAME body returns to field hover. ExistingC4 adds only the explicit old-location actual C4 discharge. Fresh and SingleTarget do not. Preview state is explicitly removed at182; this is not burst ending that body. No character transformation/model or extra circuit.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_MidnightPhantasmagoria_ExistingC4.wav"
+      }
+    },
+    "Fischl_MidnightPhantasmagoria_Fresh": {
+      "effect": "Fischl_MidnightPhantasmagoria_Fresh",
+      "source": "Blender/Fischl_MidnightPhantasmagoria_Fresh.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/MidnightPhantasmagoria/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzBody": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_0_72": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OneCircuitActualBolt_0_72.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_0_72_VioletCorona",
+            "PART_OneCircuitActualBolt_0_72_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_0_72_ShortFork_5",
+            "PART_OneCircuitActualBolt_0_72_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_1_84": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OneCircuitActualBolt_1_84.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_1_84_VioletCorona",
+            "PART_OneCircuitActualBolt_1_84_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_1_84_ShortFork_5",
+            "PART_OneCircuitActualBolt_1_84_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_2_61": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OneCircuitActualBolt_2_61.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_2_61_VioletCorona",
+            "PART_OneCircuitActualBolt_2_61_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_2_61_ShortFork_5",
+            "PART_OneCircuitActualBolt_2_61_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_3_36": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OneCircuitActualBolt_3_36.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_3_36_VioletCorona",
+            "PART_OneCircuitActualBolt_3_36_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_3_36_ShortFork_5",
+            "PART_OneCircuitActualBolt_3_36_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_4_49": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_Fresh_OneCircuitActualBolt_4_49.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_4_49_VioletCorona",
+            "PART_OneCircuitActualBolt_4_49_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_4_49_ShortFork_5",
+            "PART_OneCircuitActualBolt_4_49_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 72,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 72,
+          "element": "Electro",
+          "origin": [
+            -7.795000076293945,
+            -0.23000000417232513,
+            0.9699999690055847
+          ],
+          "target": [
+            -7.795000076293945,
+            -0.2199999988079071,
+            -0.6800000071525574
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 84,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 84,
+          "element": "Electro",
+          "origin": [
+            -6.054999828338623,
+            -0.23000000417232513,
+            3.0
+          ],
+          "target": [
+            -6.054999828338623,
+            -0.2199999988079071,
+            1.350000023841858
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 61,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 61,
+          "element": "Electro",
+          "origin": [
+            -4.505000114440918,
+            -0.23000000417232513,
+            0.9599999785423279
+          ],
+          "target": [
+            -4.505000114440918,
+            -0.2199999988079071,
+            -0.6899999976158142
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "element": "Electro",
+          "origin": [
+            -2.765000104904175,
+            -0.23000000417232513,
+            3.0
+          ],
+          "target": [
+            -2.765000104904175,
+            -0.2199999988079071,
+            1.350000023841858
+          ],
+          "kind": "one actual target lightning"
+        },
+        {
+          "frame": 49,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 49,
+          "element": "Electro",
+          "origin": [
+            -1.215000033378601,
+            -0.23000000417232513,
+            0.9599999785423279
+          ],
+          "target": [
+            -1.215000033378601,
+            -0.2199999988079071,
+            -0.6899999976158142
+          ],
+          "kind": "one actual target lightning"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 52,
+      "focus": [
+        -4.4670000076293945,
+        0.0,
+        0.12800000607967377
+      ],
+      "detailScale": 18,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "oneCircuit": {
+        "root": "ONE_AuthoredOz_OneContinuousCircuit",
+        "start": 22,
+        "end": 106,
+        "returnToField": 118,
+        "fieldAnchor": [
+          -2.765000104904175,
+          -0.10999999940395355,
+          3.640000104904175
+        ],
+        "previewStateExit": 182,
+        "targetIndices": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "contacts": [
+          {
+            "targetCardIndex": 0,
+            "frame": 72,
+            "angleFraction": 0.644804353942919
+          },
+          {
+            "targetCardIndex": 1,
+            "frame": 84,
+            "angleFraction": 0.8266931318904049
+          },
+          {
+            "targetCardIndex": 2,
+            "frame": 61,
+            "angleFraction": 0.4518332839068715
+          },
+          {
+            "targetCardIndex": 3,
+            "frame": 36,
+            "angleFraction": 0.0718304589086413
+          },
+          {
+            "targetCardIndex": 4,
+            "frame": 49,
+            "angleFraction": 0.24993424641881268
+          }
+        ]
+      },
+      "contract": "One authored Oz completes one whole circuit around actual group bounds, then SAME body returns to field hover. ExistingC4 adds only the explicit old-location actual C4 discharge. Fresh and SingleTarget do not. Preview state is explicitly removed at182; this is not burst ending that body. No character transformation/model or extra circuit.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_MidnightPhantasmagoria_Fresh.wav"
+      }
+    },
+    "Fischl_MidnightPhantasmagoria_SingleTarget": {
+      "effect": "Fischl_MidnightPhantasmagoria_SingleTarget",
+      "source": "Blender/Fischl_MidnightPhantasmagoria_SingleTarget.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1024_Fischl/MidnightPhantasmagoria/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzBody": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzBody.fbx",
+          "objects": [
+            "PART_OzAuthoredRavenBody",
+            "PART_OzOverlappingBreastFeather_0",
+            "PART_OzOverlappingBreastFeather_1",
+            "PART_OzOverlappingBreastFeather_2"
+          ],
+          "vertices": 191,
+          "triangles": 329,
+          "dimensions": [
+            0.20000000298023224,
+            0.17000000178813934,
+            0.4399999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzHeadBeakAndEyes": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzHeadBeakAndEyes.fbx",
+          "objects": [
+            "PART_OzAngularRavenHead",
+            "PART_OzPointedRavenBeak",
+            "PART_OzAuthoredAngularFaceEdge_-1",
+            "PART_OzNarrowAngularVioletEye_-1",
+            "PART_OzAuthoredAngularFaceEdge_1",
+            "PART_OzNarrowAngularVioletEye_1"
+          ],
+          "vertices": 162,
+          "triangles": 248,
+          "dimensions": [
+            0.15280470252037048,
+            0.3190000057220459,
+            0.17200001329183578
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm-1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzWingPalm-1.fbx",
+          "objects": [
+            "PART_OzWingPalm_-1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzWingPalm1": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzWingPalm1.fbx",
+          "objects": [
+            "PART_OzWingPalm_1"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.369999997317791,
+            0.05000000074505806,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongFlightFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzLongFlightFeather.fbx",
+          "objects": [
+            "PART_OzLongFlight_FacetedFeather",
+            "PART_OzLongFlight_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.08303034026175737,
+            0.04399999976158142,
+            0.3436871398007497
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzShortCovertFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzShortCovertFeather.fbx",
+          "objects": [
+            "PART_OzShortCovert_FacetedFeather",
+            "PART_OzShortCovert_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07688791351392865,
+            0.04399999976158142,
+            0.2057741112075746
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLongTailFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzLongTailFeather.fbx",
+          "objects": [
+            "PART_OzLongTail_FacetedFeather",
+            "PART_OzLongTail_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.07075215317308903,
+            0.04399999976158142,
+            0.37341333203949034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OzLooseFeather": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OzLooseFeather.fbx",
+          "objects": [
+            "PART_OzLoose_FacetedFeather",
+            "PART_OzLoose_VioletFeatherSpine"
+          ],
+          "vertices": 267,
+          "triangles": 448,
+          "dimensions": [
+            0.06372152641415596,
+            0.04399999976158142,
+            0.1474046518560499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "OneCircuitActualBolt_2_60": {
+          "file": "Exports/Fischl_MidnightPhantasmagoria_SingleTarget_OneCircuitActualBolt_2_60.fbx",
+          "objects": [
+            "PART_OneCircuitActualBolt_2_60_VioletCorona",
+            "PART_OneCircuitActualBolt_2_60_SharpWhiteVioletCore",
+            "PART_OneCircuitActualBolt_2_60_ShortFork_5",
+            "PART_OneCircuitActualBolt_2_60_ShortFork_11"
+          ],
+          "vertices": 308,
+          "triangles": 480,
+          "dimensions": [
+            0.25190239399671555,
+            0.036393760703504086,
+            1.6557940458878875
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 60,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 60,
+          "element": "Electro",
+          "origin": [
+            -4.505000114440918,
+            -0.23000000417232513,
+            0.9599999785423279
+          ],
+          "target": [
+            -4.505000114440918,
+            -0.2199999988079071,
+            -0.6899999976158142
+          ],
+          "kind": "one actual target lightning"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 52,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 18,
+      "referenceBoundary": "Actually inspected front Oz game image, flight screenshot and combat shot screenshot. Nightrider73f/2.92s, Midnight54f/2.7s, NightFlight81f/3.24s decoded in memory;24 timestamped samples each viewed. Pointed layered dark-violet flight feathers, long tail, white-violet face edges and flight-to-hover seen. Feather meshes/runes authored, no copied game mesh/texture. Empty-field footage does not prove on-target lightning timing; one card-group circuit/individual hit placement follows project adaptation.",
+      "scope": "Source art only; world-field Oz is not attached to Fischl or the occupant. No actual targeting, C4 check, damage/state assignment, Unity/timeline/table changes.",
+      "oneCircuit": {
+        "root": "ONE_AuthoredOz_OneContinuousCircuit",
+        "start": 22,
+        "end": 106,
+        "returnToField": 118,
+        "fieldAnchor": [
+          -4.505000114440918,
+          -0.10999999940395355,
+          -2.890000104904175
+        ],
+        "previewStateExit": 182,
+        "targetIndices": [
+          2
+        ],
+        "contacts": [
+          {
+            "targetCardIndex": 2,
+            "frame": 60,
+            "angleFraction": 0.4199999999999999
+          }
+        ]
+      },
+      "contract": "One authored Oz completes one whole circuit around actual group bounds, then SAME body returns to field hover. ExistingC4 adds only the explicit old-location actual C4 discharge. Fresh and SingleTarget do not. Preview state is explicitly removed at182; this is not burst ending that body. No character transformation/model or extra circuit.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Fischl_MidnightPhantasmagoria_SingleTarget.wav"
+      }
+    }
+  }
+}

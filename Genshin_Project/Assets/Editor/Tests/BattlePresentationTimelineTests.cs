@@ -199,6 +199,31 @@ namespace GenshinTurnBased.Tests.EditMode
         }
 
         [Test]
+        public void ReactionText_UsesItsActualHitWithoutRequiringAnEffectTemplate_AndSoloReactionsRemainVisible()
+        {
+            var target = Target(1); var sequence = new BattlePresentationSequence();
+            BattleDeclaration reaction;
+            using (BattleEventHub.BeginEffectExecution(100))
+                reaction = BattleEventHub.Record(new object(), new ReactionEventData(new ReactionOccurrence {
+                    Type = ReactionType.Melt, Target = target, SourceEffectID = "SE_Test",
+                    InvolvedElements = new List<string> { "Cryo", "Pyro" }
+                }), hit: 101);
+            Add(sequence, reaction);
+            using (BattleEventHub.BeginEffectExecution(100))
+                Add(sequence, BattleEventHub.Record(new object(), new DamageEventData(new DamageResolvedEvent {
+                    Target = target, Source = new DamageSourceInfo { SourceEffectID = "SE_Test" },
+                    HitLanded = true, DamageBeforeShield = 10, ActualHPDamage = 10
+                }), hit: 101));
+            Seal(sequence);
+            var cues = BattlePresentationTimeline.Build(sequence);
+            Assert.That(cues[0].DefersReactionPopup, Is.True);
+            Assert.That(cues[1].ReactionPopups.Single().Data, Is.SameAs(reaction.Data));
+            Assert.That(((ReactionEventData)reaction.Data).TriggerElement, Is.EqualTo("Cryo"));
+            var solo = new BattlePresentationSequence(); Add(solo, reaction); Seal(solo);
+            Assert.That(BattlePresentationTimeline.Build(solo).Single().DefersReactionPopup, Is.False);
+        }
+
+        [Test]
         public void ArrowRain_AllThreePerTargetAndCanCrossHitWithoutReorderingOwnTarget()
         {
             var a = Target(1); var b = Target(2); var c = Target(3);

@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-26",
+  "scope": "Source SFX candidates only; no Wwise/Unity event bindings",
+  "files": [
+    {
+      "file": "Barbara_Melody_Appear.wav",
+      "purpose": "音乐水环建立的轻亮音色替代候选",
+      "seconds": 1.609,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -9.533755924566806,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1014_Barbara\\MelodyLoop\\Audio\\Sources\\Magic1_PCM.wav",
+      "processing": [
+        "excerpt 0.000000s to 1.609000s from listed local source",
+        "gain 1.1",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Magic Spell SFX",
+      "creator": "JaggedStone",
+      "sourcePage": "https://opengameart.org/content/magic-spell-sfx",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceFile": "https://opengameart.org/sites/default/files/magical_1.ogg"
+    },
+    {
+      "file": "Barbara_Melody_WaterLoop.wav",
+      "purpose": "低音量流水循环；按状态持有者维持",
+      "seconds": 3.300479166666667,
+      "loop": true,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -20.172676745016034,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1014_Barbara\\MelodyLoop\\Audio\\Sources\\loop_water_01_PCM.wav",
+      "processing": [
+        "excerpt 0.000000s to 3.380479s from listed local source",
+        "gain 0.26",
+        "80ms overlap crossfade; tail continues into the next original head sample"
+      ],
+      "sourceCueSeconds": null,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "40 CC0 water / splash / slime SFX",
+      "creator": "rubberduck",
+      "sourcePage": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+      "sourceFile": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceMember": "loop_water_01.ogg",
+      "waveformCheck": {
+        "wrapStep": 0.0008544921875,
+        "internalStep99_5": 0.016326904296875,
+        "listeningApproved": false
+      }
+    },
+    {
+      "file": "Barbara_Melody_Exit.wav",
+      "purpose": "水环退出气泡短尾",
+      "seconds": 0.6964791666666666,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -11.87734989132603,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1014_Barbara\\MelodyLoop\\Audio\\Sources\\bubble_01_PCM.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.696479s from listed local source",
+        "gain 0.4",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": null,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "40 CC0 water / splash / slime SFX",
+      "creator": "rubberduck",
+      "sourcePage": "https://opengameart.org/content/40-cc0-water-splash-slime-sfx",
+      "sourceFile": "https://opengameart.org/sites/default/files/water-splash-slime-sfx.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceMember": "bubble_01.ogg"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2085_AbyssLector/LightningOrbs/2085_LightningOrbs_ThreeOrbs",
+  "source": "art_assets/UE/Enemies/2085_AbyssLector/LightningOrbs/Blender/2085_LightningOrbs_ThreeOrbs.blend",
+  "file": "Enemies/2085_AbyssLector/LightningOrbs/Exports/2085_LightningOrbs_ThreeOrbs.vfx.bytes",
+  "meshes": 7,
+  "tracks": 72,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 365804
+}

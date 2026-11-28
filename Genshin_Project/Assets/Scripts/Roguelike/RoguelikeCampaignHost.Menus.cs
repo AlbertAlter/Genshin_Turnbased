@@ -5,6 +5,7 @@ using UnityEngine;
 
 public sealed partial class RoguelikeCampaignHost
 {
+    private TMP_Text appearanceCaption;
     private void Menu()
     {
         menu = true;
@@ -20,6 +21,11 @@ public sealed partial class RoguelikeCampaignHost
         });
         screen.Choice(L("btn_main_start_from_chapter"), Chapters);
         screen.Choice(L("btn_main_exit"), ExitGame);
+        var appearance = Game.Appearance.Read();
+        string appearanceTitle = appearance.Succeeded && appearance.Data.AvailableCardBackChoices > 0
+            ? L("btn_main_appearance_choices", appearance.Data.AvailableCardBackChoices) : L("btn_main_appearance");
+        appearanceCaption = screen.Button(screen.Root, appearanceTitle, new Vector2(0, 0), 44, 36, 190, 54, Appearance).GetComponentInChildren<TMP_Text>();
+        screen.Button(screen.Root, L("btn_settings_open"), new Vector2(1, 0), -44, 36, 190, 54, OpenSettings);
         if (!saved.Succeeded && saved.ErrorCode != RoguelikeSaveErrorCode.NotFound && saved.ErrorCode != RoguelikeSaveErrorCode.ActiveRunRequired)
         {
             screen.Notice(saved.Message);
@@ -27,6 +33,32 @@ public sealed partial class RoguelikeCampaignHost
                 screen.Choice(L("btn_main_recover_active_backup"), () => Confirm("ui_main_restore_backup_title", "ui_main_restore_backup_body",
                     "btn_main_recover_backup", () => { Check(Game.RestoreActiveBackup(true)); Menu(); }, screen.CloseWindow));
         }
+    }
+
+    private void Appearance()
+    {
+        var body = screen.Window(L("ui_appearance_title"), "", screen.CloseWindow, true);
+        var gallery = body.gameObject.AddComponent<UICardBackSelection>();
+        gallery.Bind(body, Game.Appearance, font, framePrefab, english, count =>
+        {
+            if (appearanceCaption != null) appearanceCaption.text = count > 0 ? L("btn_main_appearance_choices", count) : L("btn_main_appearance");
+        });
+    }
+
+    private void OpenSettings()
+    {
+        if (settings?.IsOpen == true) return;
+        float? mapPosition = screen.MapScrollPosition;
+        screen.MapScrollPosition = mapPosition; // 停止路线滚动惯性，覆盖层关闭后保留原位置。
+        settings = ProjectSettingsOverlay.Open(settingsPrefab, (RectTransform)screen.Root.parent, () =>
+        {
+            settings = null;
+            bool nextEnglish = ProjectUserSettings.English(english);
+            if (nextEnglish == english) return;
+            english = nextEnglish;
+            if (menu) Menu(); else Progress();
+            screen.MapScrollPosition = mapPosition;
+        });
     }
 
     private string SavedTime(string value) => DateTimeOffset.TryParse(value, out var time)

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/ShatteredLightfallSword/Eula_ShatteredLightfallSword",
+  "source": "art_assets/UE/Characters/1040_Eula/ShatteredLightfallSword/Blender/Eula_ShatteredLightfallSword.blend",
+  "file": "Characters/1040_Eula/ShatteredLightfallSword/Exports/Eula_ShatteredLightfallSword.vfx.bytes",
+  "meshes": 40,
+  "tracks": 120,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 287672
+}

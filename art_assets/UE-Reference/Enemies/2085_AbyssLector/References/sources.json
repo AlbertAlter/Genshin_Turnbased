@@ -1,0 +1,83 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Abyss_Lector:_Violet_Lightning#Abilities",
+  "visual_sources": [
+    {
+      "title": "Electro Lector Thunderbolt.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Lector_Thunderbolt.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/0/0b/Electro_Lector_Thunderbolt.gif/revision/latest?cb=20220628013207",
+      "size_bytes": 5701992,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Electro Lector Thunder Wave.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Lector_Thunder_Wave.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/2/20/Electro_Lector_Thunder_Wave.gif/revision/latest?cb=20220628013200",
+      "size_bytes": 3784231,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Electro Lector Abyssal Light.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Lector_Abyssal_Light.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/10/Electro_Lector_Abyssal_Light.gif/revision/latest?cb=20220628013140",
+      "size_bytes": 3882864,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Electro Lector Storming Sanctum.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Lector_Storming_Sanctum.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/7/7a/Electro_Lector_Storming_Sanctum.gif/revision/latest?cb=20220628013147",
+      "size_bytes": 6567545,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Electro Lector The Violet Lightning.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Electro_Lector_The_Violet_Lightning.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a6/Electro_Lector_The_Violet_Lightning.gif/revision/latest?cb=20220628013153",
+      "size_bytes": 4275522,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": [
+        {
+          "file": "VioletLightning_02100ms.png",
+          "time_ms": 2100,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        },
+        {
+          "file": "VioletLightning_04300ms.png",
+          "time_ms": 4300,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        }
+      ]
+    }
+  ],
+  "audio_sources": [
+    {
+      "url": "https://opengameart.org/content/ice-electricity-magic",
+      "purpose": "电流、雷球、落雷与能量聚合替代候选；不作为已选原作音效",
+      "license_listed": "CC-BY 3.0",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；完整GIF未播放且不保存本地；下列static_frames仅在另有标记时表示已查看。音效未试听、截取或选定。",
+  "implementation_status": "Requirements only. No VFX asset, runtime hook, scene or table changes."
+}

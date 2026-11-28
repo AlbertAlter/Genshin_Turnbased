@@ -11,6 +11,7 @@ public sealed class BattleHitTemplate
     public string AttackType { get; }
     public double AnimationSeconds { get; }
     private readonly double[] times;
+    public int MarkerCount => times.Length;
     public BattleHitTemplate(string id, IEnumerable<double> markers, double repeatInterval, double projectileSeconds = 0,
         int weaponType = -1, string attackType = null, double animationSeconds = 0)
     {
@@ -30,6 +31,8 @@ public sealed class BattleHitTemplate
         return index < times.Length ? times[index] : times[times.Length - 1] + (index - times.Length + 1) * RepeatInterval;
     }
     public BattleHitTemplate WithUniformInterval(double interval) => new BattleHitTemplate(ID, new[] { times[0] }, interval, ProjectileSeconds, WeaponType, AttackType, AnimationSeconds);
+    public BattleHitTemplate WithContext(int weapon, string attackType)
+        => new BattleHitTemplate(ID, times, RepeatInterval, ProjectileSeconds, weapon, attackType, AnimationSeconds);
     public BattleHitTemplate WithMinimumFirstHit(double minimum)
     {
         double shift = Math.Max(0, minimum - times[0]);

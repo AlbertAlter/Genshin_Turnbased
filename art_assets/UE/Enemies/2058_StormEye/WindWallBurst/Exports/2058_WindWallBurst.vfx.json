@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2058_StormEye/WindWallBurst/2058_WindWallBurst",
+  "source": "art_assets/UE/Enemies/2058_StormEye/WindWallBurst/Blender/2058_WindWallBurst.blend",
+  "file": "Enemies/2058_StormEye/WindWallBurst/Exports/2058_WindWallBurst.vfx.bytes",
+  "meshes": 5,
+  "tracks": 90,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 320680
+}

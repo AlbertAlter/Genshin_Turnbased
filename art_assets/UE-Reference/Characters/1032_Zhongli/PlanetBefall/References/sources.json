@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E9%92%9F%E7%A6%BB",
+    "image_url": "https://patchwiki.biligame.com/images/ys/f/f2/57powj04rx33i74qhks004g7tzpmwl7.gif",
+    "title": "天星.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码108帧、3.24秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "原作星岩轮廓、坠落姿态和节奏、敌方场地接触及碎岩余尘。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\zhongli-references\\Zhongli_PlanetBefall_Observation.png",
+    "decoded_frames": 108,
+    "duration_seconds": 3.24,
+    "sampled_frames": [
+      0,
+      5,
+      9,
+      14,
+      19,
+      23,
+      28,
+      33,
+      37,
+      42,
+      47,
+      51,
+      56,
+      60,
+      65,
+      70,
+      74,
+      79,
+      84,
+      88,
+      93,
+      98,
+      102,
+      107
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E9%92%9F%E7%A6%BB",
+    "title": "七圣召唤·钟离",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已找到卡牌资料入口；技能图标及文字不作为动态演出证明，未观看七圣召唤战斗实机。",
+    "use": "辅助搜索卡牌场景的对应技能或状态效果，参考构图与遮挡，不照搬其目标、数值及触发规则。"
+  }
+]

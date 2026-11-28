@@ -1,0 +1,3685 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+  "variants": {
+    "ShieldBreak_Hydro": {
+      "effect": "ShieldBreak_Hydro",
+      "source": "Blender/ShieldBreak_Hydro.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Hydro_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Hydro_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ShieldBreak_Hydro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Hydro.wav"
+      }
+    },
+    "ShieldBreak_Dendro": {
+      "effect": "ShieldBreak_Dendro",
+      "source": "Blender/ShieldBreak_Dendro.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Dendro_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Dendro_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ShieldBreak_Dendro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Dendro.wav"
+      }
+    },
+    "ShieldBreak_Electro": {
+      "effect": "ShieldBreak_Electro",
+      "source": "Blender/ShieldBreak_Electro.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Electro_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Electro_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ShieldBreak_Electro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Electro.wav"
+      }
+    },
+    "ShieldBreak_Geo": {
+      "effect": "ShieldBreak_Geo",
+      "source": "Blender/ShieldBreak_Geo.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Geo_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Geo_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ShieldBreak_Geo_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Geo.wav"
+      }
+    },
+    "ShieldBreak_Pyro": {
+      "effect": "ShieldBreak_Pyro",
+      "source": "Blender/ShieldBreak_Pyro.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Pyro_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Pyro_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ShieldBreak_Pyro_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Pyro.wav"
+      }
+    },
+    "ShieldBreak_Cryo": {
+      "effect": "ShieldBreak_Cryo",
+      "source": "Blender/ShieldBreak_Cryo.blend",
+      "requirement": "art_assets/UE-Reference/general/ShieldBreak/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "CurvedMembranePatches": {
+          "file": "Exports/ShieldBreak_Cryo_CurvedMembranePatches.fbx",
+          "objects": [
+            "PART_CurvedMembrane_0_0",
+            "PART_CurvedMembrane_1_0",
+            "PART_CurvedMembrane_2_0",
+            "PART_CurvedMembrane_3_0",
+            "PART_CurvedMembrane_4_0",
+            "PART_CurvedMembrane_5_0",
+            "PART_CurvedMembrane_6_0",
+            "PART_CurvedMembrane_7_0",
+            "PART_CurvedMembrane_8_0",
+            "PART_CurvedMembrane_9_0",
+            "PART_CurvedMembrane_10_0",
+            "PART_CurvedMembrane_11_0",
+            "PART_CurvedMembrane_12_0",
+            "PART_CurvedMembrane_13_0",
+            "PART_CurvedMembrane_14_0",
+            "PART_CurvedMembrane_15_0",
+            "PART_CurvedMembrane_16_0",
+            "PART_CurvedMembrane_17_0",
+            "PART_CurvedMembrane_18_0",
+            "PART_CurvedMembrane_19_0",
+            "PART_CurvedMembrane_20_0",
+            "PART_CurvedMembrane_21_0",
+            "PART_CurvedMembrane_22_0",
+            "PART_CurvedMembrane_23_0",
+            "PART_CurvedMembrane_24_0",
+            "PART_CurvedMembrane_25_0",
+            "PART_CurvedMembrane_26_0",
+            "PART_CurvedMembrane_27_0",
+            "PART_CurvedMembrane_28_0"
+          ],
+          "vertices": 6552,
+          "triangles": 8918,
+          "dimensions": [
+            2.9700000286102295,
+            0.17801927030086517,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_CurvedMembrane_0_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_1_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_2_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_3_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_4_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_5_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_6_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_7_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_8_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_9_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_10_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_11_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_12_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_13_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_14_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_15_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_16_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_17_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_18_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_19_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_20_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_21_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_22_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_23_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_24_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_25_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_26_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_27_0": [
+              "Soft"
+            ],
+            "PART_CurvedMembrane_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 6552,
+            "triangles": 8918,
+            "dimensions": [
+              2.9700000286102295,
+              0.1780194193124771,
+              3.9899998903274536
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinCrackLines": {
+          "file": "Exports/ShieldBreak_Cryo_ThinCrackLines.fbx",
+          "objects": [
+            "PART_ThinCrack_0_0",
+            "PART_ThinCrack_1_0",
+            "PART_ThinCrack_2_0",
+            "PART_ThinCrack_3_0",
+            "PART_ThinCrack_4_0",
+            "PART_ThinCrack_5_0",
+            "PART_ThinCrack_6_0",
+            "PART_ThinCrack_7_0",
+            "PART_ThinCrack_8_0",
+            "PART_ThinCrack_9_0",
+            "PART_ThinCrack_10_0",
+            "PART_ThinCrack_11_0",
+            "PART_ThinCrack_12_0",
+            "PART_ThinCrack_13_0",
+            "PART_ThinCrack_14_0",
+            "PART_ThinCrack_15_0",
+            "PART_ThinCrack_16_0",
+            "PART_ThinCrack_17_0",
+            "PART_ThinCrack_18_0",
+            "PART_ThinCrack_19_0",
+            "PART_ThinCrack_20_0",
+            "PART_ThinCrack_21_0",
+            "PART_ThinCrack_22_0",
+            "PART_ThinCrack_23_0",
+            "PART_ThinCrack_24_0",
+            "PART_ThinCrack_25_0",
+            "PART_ThinCrack_26_0",
+            "PART_ThinCrack_27_0",
+            "PART_ThinCrack_28_0"
+          ],
+          "vertices": 1477,
+          "triangles": 2184,
+          "dimensions": [
+            2.98799991607666,
+            0.17757685482501984,
+            4.007999897003174
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinCrack_0_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_1_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_2_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_3_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_4_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_5_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_6_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_7_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_8_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_9_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_10_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_11_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_12_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_13_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_14_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_15_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_16_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_17_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_18_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_19_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_20_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_21_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_22_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_23_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_24_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_25_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_26_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_27_0": [
+              "Soft"
+            ],
+            "PART_ThinCrack_28_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 29,
+            "vertices": 1477,
+            "triangles": 2184,
+            "dimensions": [
+              2.98799991607666,
+              0.17757700383663177,
+              4.007999897003174
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 13,
+          "kind": "committed shield break snapshot only",
+          "audioGroup": "one main crack for one shared shield event"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 24,
+      "focus": [
+        -4.505000114440918,
+        0.0,
+        -0.6899999976158142
+      ],
+      "detailScale": 5.8,
+      "actionPhases": {
+        "appear": [
+          2,
+          8
+        ],
+        "crack": [
+          8,
+          16
+        ],
+        "scatter": [
+          13,
+          45
+        ],
+        "clear": 62
+      },
+      "patchLayout": [
+        {
+          "mesh": "PART_CurvedMembrane_0_0",
+          "localCenter": [
+            0.011751311831176281,
+            -0.31616219878196716,
+            -1.820627212524414
+          ],
+          "visibleWidthThreshold": 0.007913341300455408
+        },
+        {
+          "mesh": "PART_CurvedMembrane_1_0",
+          "localCenter": [
+            0.22908321022987366,
+            -0.35290631651878357,
+            0.47214317321777344
+          ],
+          "visibleWidthThreshold": 0.15426478803358495
+        },
+        {
+          "mesh": "PART_CurvedMembrane_2_0",
+          "localCenter": [
+            0.7109588384628296,
+            -0.3108115792274475,
+            -1.257582664489746
+          ],
+          "visibleWidthThreshold": 0.47876016058103
+        },
+        {
+          "mesh": "PART_CurvedMembrane_3_0",
+          "localCenter": [
+            -0.8058072328567505,
+            -0.2875165641307831,
+            -1.554179310798645
+          ],
+          "visibleWidthThreshold": 0.542631133236869
+        },
+        {
+          "mesh": "PART_CurvedMembrane_4_0",
+          "localCenter": [
+            -1.3523328304290771,
+            -0.21003608405590057,
+            -1.803955078125
+          ],
+          "visibleWidthThreshold": 0.9106618386727792
+        },
+        {
+          "mesh": "PART_CurvedMembrane_5_0",
+          "localCenter": [
+            1.2943975925445557,
+            -0.21750760078430176,
+            -1.8233407735824585
+          ],
+          "visibleWidthThreshold": 0.8716482104677142
+        },
+        {
+          "mesh": "PART_CurvedMembrane_6_0",
+          "localCenter": [
+            -0.866649329662323,
+            -0.2990782856941223,
+            -0.5617374181747437
+          ],
+          "visibleWidthThreshold": 0.5836022421968504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_7_0",
+          "localCenter": [
+            -0.13360068202018738,
+            -0.35494154691696167,
+            -0.4025598466396332
+          ],
+          "visibleWidthThreshold": 0.08996678923918341
+        },
+        {
+          "mesh": "PART_CurvedMembrane_8_0",
+          "localCenter": [
+            1.356305718421936,
+            -0.2128835916519165,
+            1.639510989189148
+          ],
+          "visibleWidthThreshold": 0.9133371841225157
+        },
+        {
+          "mesh": "PART_CurvedMembrane_9_0",
+          "localCenter": [
+            -0.583552360534668,
+            -0.33844485878944397,
+            -0.007958936505019665
+          ],
+          "visibleWidthThreshold": 0.3929645525485979
+        },
+        {
+          "mesh": "PART_CurvedMembrane_10_0",
+          "localCenter": [
+            0.27913790941238403,
+            -0.32755693793296814,
+            -1.5217231512069702
+          ],
+          "visibleWidthThreshold": 0.18797165616995556
+        },
+        {
+          "mesh": "PART_CurvedMembrane_11_0",
+          "localCenter": [
+            0.24690483510494232,
+            -0.34230923652648926,
+            -1.0795469284057617
+          ],
+          "visibleWidthThreshold": 0.1662658822255504
+        },
+        {
+          "mesh": "PART_CurvedMembrane_12_0",
+          "localCenter": [
+            -1.29899263381958,
+            -0.2405545711517334,
+            1.0202093124389648
+          ],
+          "visibleWidthThreshold": 0.8747425143566195
+        },
+        {
+          "mesh": "PART_CurvedMembrane_13_0",
+          "localCenter": [
+            0.7352272272109985,
+            -0.31307804584503174,
+            0.7352317571640015
+          ],
+          "visibleWidthThreshold": 0.49510250990639626
+        },
+        {
+          "mesh": "PART_CurvedMembrane_14_0",
+          "localCenter": [
+            -1.0577983856201172,
+            -0.2857821583747864,
+            0.2549203038215637
+          ],
+          "visibleWidthThreshold": 0.712322145198732
+        },
+        {
+          "mesh": "PART_CurvedMembrane_15_0",
+          "localCenter": [
+            1.1258636713027954,
+            -0.27379387617111206,
+            0.002483685966581106
+          ],
+          "visibleWidthThreshold": 0.7581573544126567
+        },
+        {
+          "mesh": "PART_CurvedMembrane_16_0",
+          "localCenter": [
+            1.1501761674880981,
+            -0.26247739791870117,
+            -1.0078001022338867
+          ],
+          "visibleWidthThreshold": 0.7745294057158909
+        },
+        {
+          "mesh": "PART_CurvedMembrane_17_0",
+          "localCenter": [
+            -0.0589296817779541,
+            -0.34289246797561646,
+            1.121749758720398
+          ],
+          "visibleWidthThreshold": 0.03968328739256168
+        },
+        {
+          "mesh": "PART_CurvedMembrane_18_0",
+          "localCenter": [
+            -1.0916593074798584,
+            -0.23281067609786987,
+            1.8026611804962158
+          ],
+          "visibleWidthThreshold": 0.7351241127810494
+        },
+        {
+          "mesh": "PART_CurvedMembrane_19_0",
+          "localCenter": [
+            -1.0546748638153076,
+            -0.26504284143447876,
+            -1.145463228225708
+          ],
+          "visibleWidthThreshold": 0.7102187635119916
+        },
+        {
+          "mesh": "PART_CurvedMembrane_20_0",
+          "localCenter": [
+            -0.428259938955307,
+            -0.3425128161907196,
+            0.5488643646240234
+          ],
+          "visibleWidthThreshold": 0.288390531283035
+        },
+        {
+          "mesh": "PART_CurvedMembrane_21_0",
+          "localCenter": [
+            0.4795445501804352,
+            -0.30202868580818176,
+            1.634743571281433
+          ],
+          "visibleWidthThreshold": 0.32292562301712807
+        },
+        {
+          "mesh": "PART_CurvedMembrane_22_0",
+          "localCenter": [
+            0.6844464540481567,
+            -0.29724523425102234,
+            -1.7700694799423218
+          ],
+          "visibleWidthThreshold": 0.4609067030627318
+        },
+        {
+          "mesh": "PART_CurvedMembrane_23_0",
+          "localCenter": [
+            -0.7820196747779846,
+            -0.30740076303482056,
+            0.9823097586631775
+          ],
+          "visibleWidthThreshold": 0.5266125756080704
+        },
+        {
+          "mesh": "PART_CurvedMembrane_24_0",
+          "localCenter": [
+            -0.29713812470436096,
+            -0.3385087251663208,
+            -1.1930781602859497
+          ],
+          "visibleWidthThreshold": 0.20009301326892992
+        },
+        {
+          "mesh": "PART_CurvedMembrane_25_0",
+          "localCenter": [
+            0.4300362169742584,
+            -0.33648473024368286,
+            -0.6226388812065125
+          ],
+          "visibleWidthThreshold": 0.2895866780971437
+        },
+        {
+          "mesh": "PART_CurvedMembrane_26_0",
+          "localCenter": [
+            -0.6573783755302429,
+            -0.2920977771282196,
+            -1.8179327249526978
+          ],
+          "visibleWidthThreshold": 0.4426790407611063
+        },
+        {
+          "mesh": "PART_CurvedMembrane_27_0",
+          "localCenter": [
+            -0.14592617750167847,
+            -0.35813793540000916,
+            0.21642635762691498
+          ],
+          "visibleWidthThreshold": 0.09826678619641648
+        },
+        {
+          "mesh": "PART_CurvedMembrane_28_0",
+          "localCenter": [
+            0.4820442199707031,
+            -0.34326672554016113,
+            0.03554864972829819
+          ],
+          "visibleWidthThreshold": 0.3246089023371738
+        }
+      ],
+      "adaptation": "Curved thin membrane snapshot; no metal blocks, death burst or ordinary removal trigger.",
+      "runtimeContract": "Supply old shield geometry/color/visible extent snapshot. Real break dedup and new-shield ownership remain runtime work.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ShieldBreak_Cryo.wav"
+      }
+    }
+  }
+}

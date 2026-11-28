@@ -1,0 +1,146 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 wind substitutes for the holder-bound dandelion orbit, not original Genshin audio. Does not add a ground field or healing attack. Optional very quiet idle is one per state. PCM/peak/seam checks only, not auditioned; no Wwise/Unity events.",
+  "files": [
+    {
+      "file": "Jean_Dandelion_Appear.wav",
+      "purpose": "单个持有者的蒲公英与轻风建立；不当作全队治疗施放声",
+      "seconds": 0.55,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.550000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.42",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -47.50009493223686,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Jean_Dandelion_QuietLoop.wav",
+      "purpose": "可选极轻环绕风底声，一名持有者一份；不按种子数量重复",
+      "seconds": 2.4,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": true,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.200000..2.680000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "80ms linear overlap crossfade; continuous source head follows tail"
+      ],
+      "peakDbFS": -44.28405692647013,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      },
+      "waveformSeam": {
+        "wrapStep": 0.000146484375,
+        "internalStep99_5": 0.000457763671875
+      }
+    },
+    {
+      "file": "Jean_Dandelion_Exit.wav",
+      "purpose": "正常移除时种子与余风散尽的短尾；单次治疗不重播退出",
+      "seconds": 0.8,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 1.400000..2.200000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -55.70951298520325,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    }
+  ]
+}

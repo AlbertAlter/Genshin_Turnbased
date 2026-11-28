@@ -1,0 +1,343 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/ClawSlashes/视觉需求.md",
+  "variants": {
+    "2069_ClawSlashes_Cryo": {
+      "effect": "2069_ClawSlashes_Cryo",
+      "source": "Blender/2069_ClawSlashes_Cryo.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/ClawSlashes/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2069_ClawSlashes_Cryo_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2069_ClawSlashes_Cryo_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2069_ClawSlashes_Cryo_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneThreeClawSweep": {
+          "file": "Exports/2069_ClawSlashes_Cryo_OneThreeClawSweep.fbx",
+          "objects": [
+            "PART_ThreeClaws_Cryo_0",
+            "PART_ClawBrightEdge_Cryo_0",
+            "PART_ThreeClaws_Cryo_1",
+            "PART_ClawBrightEdge_Cryo_1",
+            "PART_ThreeClaws_Cryo_2",
+            "PART_ClawBrightEdge_Cryo_2"
+          ],
+          "vertices": 2058,
+          "triangles": 3456,
+          "dimensions": [
+            1.8050658702850342,
+            0.0,
+            1.0647634267807007
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThreeClaws_Cryo_0": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Cryo_0": [
+              "Soft"
+            ],
+            "PART_ThreeClaws_Cryo_1": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Cryo_1": [
+              "Soft"
+            ],
+            "PART_ThreeClaws_Cryo_2": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Cryo_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2058,
+            "triangles": 3456,
+            "dimensions": [
+              1.8050658702850342,
+              1.7347196745731708e-07,
+              1.0647634267807007
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 22,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 22,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 7,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2069_ClawSlashes_Cryo_Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2069_ClawSlashes_Cryo.wav"
+      }
+    },
+    "2069_ClawSlashes_Anemo": {
+      "effect": "2069_ClawSlashes_Anemo",
+      "source": "Blender/2069_ClawSlashes_Anemo.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/ClawSlashes/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/2069_ClawSlashes_Anemo_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneThreeClawSweep": {
+          "file": "Exports/2069_ClawSlashes_Anemo_OneThreeClawSweep.fbx",
+          "objects": [
+            "PART_ThreeClaws_Anemo_0",
+            "PART_ClawBrightEdge_Anemo_0",
+            "PART_ThreeClaws_Anemo_1",
+            "PART_ClawBrightEdge_Anemo_1",
+            "PART_ThreeClaws_Anemo_2",
+            "PART_ClawBrightEdge_Anemo_2"
+          ],
+          "vertices": 2058,
+          "triangles": 3456,
+          "dimensions": [
+            1.8050658702850342,
+            0.0,
+            1.0647634267807007
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThreeClaws_Anemo_0": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Anemo_0": [
+              "Soft"
+            ],
+            "PART_ThreeClaws_Anemo_1": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Anemo_1": [
+              "Soft"
+            ],
+            "PART_ThreeClaws_Anemo_2": [
+              "Soft"
+            ],
+            "PART_ClawBrightEdge_Anemo_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 2058,
+            "triangles": 3456,
+            "dimensions": [
+              1.8050658702850342,
+              1.7347196745731708e-07,
+              1.0647634267807007
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 22,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 22,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 7,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2069_ClawSlashes_Anemo.wav"
+      }
+    }
+  }
+}

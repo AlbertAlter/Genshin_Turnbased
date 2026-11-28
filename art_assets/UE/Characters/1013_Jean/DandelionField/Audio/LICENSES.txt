@@ -1,0 +1,7 @@
+CC0 substitute wind candidates; not original Genshin Impact audio.
+Short wind sound by remaxim / OpenGameArt.
+https://opengameart.org/content/short-wind-sound
+License: CC0-1.0
+https://creativecommons.org/publicdomain/zero/1.0/
+Sources.json records original media, prior edits and each excerpt/fade/loop.
+Not auditioned; no healing, Wwise or Unity events created.

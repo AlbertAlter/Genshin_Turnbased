@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2065_ElectroHypostasis/RockScissorsPaper/2065_RockScissorsPaper",
+  "source": "art_assets/UE/Enemies/2065_ElectroHypostasis/RockScissorsPaper/Blender/2065_RockScissorsPaper.blend",
+  "file": "Enemies/2065_ElectroHypostasis/RockScissorsPaper/Exports/2065_RockScissorsPaper.vfx.bytes",
+  "meshes": 9,
+  "tracks": 214,
+  "frames": 160,
+  "duration": 5.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.3
+  },
+  "bytes": 408318
+}

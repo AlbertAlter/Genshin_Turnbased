@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-23",
+  "scope": "Source audio candidates for this effect; not runtime event bindings",
+  "files": [
+    {
+      "file": "Explosion_Light_01.wav",
+      "purpose": "轻量爆炸，短促接触",
+      "seconds": 0.645042,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -3.349,
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion2.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.645042,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Explosion_Light_02.wav",
+      "purpose": "轻量爆炸备选",
+      "seconds": 0.561646,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -3.598,
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosions4.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 0.561646,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Explosion_Standard_01.wav",
+      "purpose": "标准爆炸，接触与外扩",
+      "seconds": 1.693646,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -3.293,
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion3.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 1.693646,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Explosion_Large_01.wav",
+      "purpose": "大型爆炸，保留较长尾音",
+      "seconds": 4.041646,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -3.932,
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion1_0.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSeconds": 4.041646,
+      "processing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade"
+      ]
+    }
+  ]
+}

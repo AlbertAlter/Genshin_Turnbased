@@ -1,0 +1,748 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/CloudPartingStar/视觉需求.md",
+  "variants": {
+    "Chongyun_CloudPartingStar_ThreeBlades": {
+      "effect": "Chongyun_CloudPartingStar_ThreeBlades",
+      "source": "Blender/Chongyun_CloudPartingStar_ThreeBlades.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/CloudPartingStar/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordBody": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_SpiritSwordBody.fbx",
+          "objects": [
+            "PART_AuthoredFacetedLongSpiritBlade",
+            "PART_SpiritSwordAngularIceGuard",
+            "PART_SpiritSwordCrystallineGrip"
+          ],
+          "vertices": 78,
+          "triangles": 144,
+          "dimensions": [
+            1.2200000286102295,
+            0.26500000059604645,
+            3.609999895095825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredFacetedLongSpiritBlade": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordAngularIceGuard": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordCrystallineGrip": [
+              "ChongyunFacetedBlueSpiritIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 78,
+            "triangles": 144,
+            "dimensions": [
+              1.2200000286102295,
+              0.26500043272972107,
+              3.6099999162755108
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordWhiteEdges": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_SpiritSwordWhiteEdges.fbx",
+          "objects": [
+            "PART_SpiritSwordColdBladeEdge_-1",
+            "PART_SpiritSwordColdBladeEdge_1",
+            "PART_SpiritSwordWhiteSpine"
+          ],
+          "vertices": 175,
+          "triangles": 264,
+          "dimensions": [
+            0.6108724474906921,
+            0.005000010132789612,
+            2.585714123211801
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordColdBladeEdge_-1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordColdBladeEdge_1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordWhiteSpine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 175,
+            "triangles": 264,
+            "dimensions": [
+              0.6108724474906921,
+              0.005000382661819458,
+              2.5857140994630754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordAuthoredSeal": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_SpiritSwordAuthoredSeal.fbx",
+          "objects": [
+            "PART_AuthoredSpiritSwordSeal_0",
+            "PART_AuthoredSpiritSwordSeal_1",
+            "PART_AuthoredSpiritSwordSeal_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.16009414196014404,
+            0.0,
+            1.0569243431091309
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredSpiritSwordSeal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.16009414196014404,
+              1.7881393432617188e-07,
+              1.0569243431091309
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFrostChip": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_SpiritSwordFrostChip.fbx",
+          "objects": [
+            "PART_FiniteSpiritSwordIceChip"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.08414772152900696,
+            0.08487282693386078,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteSpiritSwordIceChip": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.08414772152900696,
+              0.08487287163734436,
+              0.27000001817941666
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFallWake": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_SpiritSwordFallWake.fbx",
+          "objects": [
+            "PART_ShortSpiritSwordFallWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.18000000715255737,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortSpiritSwordFallWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.18000000715255737,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "IceContactWave": {
+          "file": "Exports/Chongyun_CloudPartingStar_ThreeBlades_IceContactWave.fbx",
+          "objects": [
+            "PART_SpiritSwordContactColdWave"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.0691678524017334,
+            0.0,
+            2.0693516731262207
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordContactColdWave": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.0691678524017334,
+              3.371401504637106e-07,
+              2.0693516731262207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 29,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 0
+        },
+        {
+          "frame": 37,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 1
+        },
+        {
+          "frame": 45,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 2
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 28,
+      "detailScale": 14.5,
+      "focus": [
+        -4.441666603088379,
+        -0.20000000298023224,
+        2.1700000762939453
+      ],
+      "referenceBoundary": "Burst62f/2.48s and skill55f/2.2s fully decoded in memory;24 timestamped samples each inspected. White-blue angular spirit swords and separated descending contacts observed; existing frost field and later teal wind are not copied into burst. Sword mesh/runes authored. Suspended field sword, straight talent fall and C1 per-target falls are project adaptations, not original demonstrations of those paths.",
+      "scope": "Source art only. Tip-zero reusable sword parts, explicit target samples; no card lift, status lifecycle, damage, C6 condition evaluation, Unity/timeline/table changes.",
+      "bladeCount": 3,
+      "contract": "One reusable sword per real burst contact:3 or4. Sequential formation/fall/contact with overlapping finite cold tails. Full sword/ice burst is not duplicated per target.",
+      "fallingSpiritBlades": [
+        {
+          "root": "ONE_BurstSword_0",
+          "launch": 17,
+          "contact": 29,
+          "tipTarget": [
+            -4.861666679382324,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        },
+        {
+          "root": "ONE_BurstSword_1",
+          "launch": 25,
+          "contact": 37,
+          "tipTarget": [
+            -4.441666603088379,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        },
+        {
+          "root": "ONE_BurstSword_2",
+          "launch": 33,
+          "contact": 45,
+          "tipTarget": [
+            -4.021666526794434,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Chongyun_CloudPartingStar_ThreeBlades.wav"
+      }
+    },
+    "Chongyun_CloudPartingStar_FourBlades": {
+      "effect": "Chongyun_CloudPartingStar_FourBlades",
+      "source": "Blender/Chongyun_CloudPartingStar_FourBlades.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1025_Chongyun/CloudPartingStar/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordBody": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_SpiritSwordBody.fbx",
+          "objects": [
+            "PART_AuthoredFacetedLongSpiritBlade",
+            "PART_SpiritSwordAngularIceGuard",
+            "PART_SpiritSwordCrystallineGrip"
+          ],
+          "vertices": 78,
+          "triangles": 144,
+          "dimensions": [
+            1.2200000286102295,
+            0.26500000059604645,
+            3.609999895095825
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredFacetedLongSpiritBlade": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordAngularIceGuard": [
+              "ChongyunFacetedBlueSpiritIce"
+            ],
+            "PART_SpiritSwordCrystallineGrip": [
+              "ChongyunFacetedBlueSpiritIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 78,
+            "triangles": 144,
+            "dimensions": [
+              1.2200000286102295,
+              0.26500043272972107,
+              3.6099999162755108
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordWhiteEdges": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_SpiritSwordWhiteEdges.fbx",
+          "objects": [
+            "PART_SpiritSwordColdBladeEdge_-1",
+            "PART_SpiritSwordColdBladeEdge_1",
+            "PART_SpiritSwordWhiteSpine"
+          ],
+          "vertices": 175,
+          "triangles": 264,
+          "dimensions": [
+            0.6108724474906921,
+            0.005000010132789612,
+            2.585714123211801
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordColdBladeEdge_-1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordColdBladeEdge_1": [
+              "Soft"
+            ],
+            "PART_SpiritSwordWhiteSpine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 175,
+            "triangles": 264,
+            "dimensions": [
+              0.6108724474906921,
+              0.005000382661819458,
+              2.5857140994630754
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordAuthoredSeal": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_SpiritSwordAuthoredSeal.fbx",
+          "objects": [
+            "PART_AuthoredSpiritSwordSeal_0",
+            "PART_AuthoredSpiritSwordSeal_1",
+            "PART_AuthoredSpiritSwordSeal_2"
+          ],
+          "vertices": 105,
+          "triangles": 144,
+          "dimensions": [
+            0.16009414196014404,
+            0.0,
+            1.0569243431091309
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredSpiritSwordSeal_0": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_1": [
+              "Soft"
+            ],
+            "PART_AuthoredSpiritSwordSeal_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 105,
+            "triangles": 144,
+            "dimensions": [
+              0.16009414196014404,
+              1.7881393432617188e-07,
+              1.0569243431091309
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFrostChip": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_SpiritSwordFrostChip.fbx",
+          "objects": [
+            "PART_FiniteSpiritSwordIceChip"
+          ],
+          "vertices": 20,
+          "triangles": 36,
+          "dimensions": [
+            0.08414772152900696,
+            0.08487282693386078,
+            0.27000001072883606
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FiniteSpiritSwordIceChip": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 20,
+            "triangles": 36,
+            "dimensions": [
+              0.08414772152900696,
+              0.08487287163734436,
+              0.27000001817941666
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SpiritSwordFallWake": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_SpiritSwordFallWake.fbx",
+          "objects": [
+            "PART_ShortSpiritSwordFallWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.18000000715255737,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortSpiritSwordFallWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.18000000715255737,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "IceContactWave": {
+          "file": "Exports/Chongyun_CloudPartingStar_FourBlades_IceContactWave.fbx",
+          "objects": [
+            "PART_SpiritSwordContactColdWave"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.0691678524017334,
+            0.0,
+            2.0693516731262207
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SpiritSwordContactColdWave": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.0691678524017334,
+              3.371401504637106e-07,
+              2.0693516731262207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 29,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 0
+        },
+        {
+          "frame": 37,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 1
+        },
+        {
+          "frame": 45,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 2
+        },
+        {
+          "frame": 53,
+          "element": "Cryo",
+          "kind": "one sword / one whole-group actual contact",
+          "sword": 3
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 28,
+      "detailScale": 14.5,
+      "focus": [
+        -4.441666603088379,
+        -0.20000000298023224,
+        2.1700000762939453
+      ],
+      "referenceBoundary": "Burst62f/2.48s and skill55f/2.2s fully decoded in memory;24 timestamped samples each inspected. White-blue angular spirit swords and separated descending contacts observed; existing frost field and later teal wind are not copied into burst. Sword mesh/runes authored. Suspended field sword, straight talent fall and C1 per-target falls are project adaptations, not original demonstrations of those paths.",
+      "scope": "Source art only. Tip-zero reusable sword parts, explicit target samples; no card lift, status lifecycle, damage, C6 condition evaluation, Unity/timeline/table changes.",
+      "bladeCount": 4,
+      "contract": "One reusable sword per real burst contact:3 or4. Sequential formation/fall/contact with overlapping finite cold tails. Full sword/ice burst is not duplicated per target.",
+      "fallingSpiritBlades": [
+        {
+          "root": "ONE_BurstSword_0",
+          "launch": 17,
+          "contact": 29,
+          "tipTarget": [
+            -5.071666717529297,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        },
+        {
+          "root": "ONE_BurstSword_1",
+          "launch": 25,
+          "contact": 37,
+          "tipTarget": [
+            -4.651666641235352,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        },
+        {
+          "root": "ONE_BurstSword_2",
+          "launch": 33,
+          "contact": 45,
+          "tipTarget": [
+            -4.231666564941406,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        },
+        {
+          "root": "ONE_BurstSword_3",
+          "launch": 41,
+          "contact": 53,
+          "tipTarget": [
+            -3.811666488647461,
+            -0.20000000298023224,
+            0.6700000166893005
+          ],
+          "verticalOnly": true
+        }
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Chongyun_CloudPartingStar_FourBlades.wav"
+      }
+    }
+  }
+}

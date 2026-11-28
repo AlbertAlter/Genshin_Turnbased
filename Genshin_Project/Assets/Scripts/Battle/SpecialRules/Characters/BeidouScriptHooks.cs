@@ -119,7 +119,7 @@ public sealed class BeidouGuardCount : CountStatusHandler
                 if (before.Value <= 0 || before.Kind != ShieldKind.Skill || before.SourceStatusId != BeidouScriptHooks.ShieldID) continue;
                 bool owned = false;
                 foreach (var child in status.BoundStatuses)
-                    if (child.StatusID2 == BeidouScriptHooks.ShieldID && child.Host == fact.Subject
+                    if (child.StatusID2 == BeidouScriptHooks.ShieldID && ReferenceEquals(child.Host, fact.Subject)
                         && child.ApplyOrder == before.SourceInstanceId && child.Caster == owner) { owned = true; break; }
                 if (!owned) continue;
                 bool remains = false;

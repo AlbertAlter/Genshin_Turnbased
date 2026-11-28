@@ -1,0 +1,348 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitutes, not original Genshin audio. Native source cue samples only; formal hit timing remains with the attack timeline. Optional quiet wind is one bed per state. No sounds prepared for the cancelled allied wind-domain state. PCM/peak/seam checks only; not auditioned. No Wwise/Unity bindings.",
+  "files": [
+    {
+      "file": "Venti_Eye_Form.wav",
+      "purpose": "风眼建立时向中心聚入的轻风候选；整份状态一次",
+      "seconds": 0.6,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.600000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.6",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -42.68308623911784,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Venti_Eye_QuietLoop.wav",
+      "purpose": "可选低量持续风底声；一份风眼只维持一份，不按风带或吸气细丝叠加",
+      "seconds": 2.4,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": true,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.200000..2.680000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.5",
+        "80ms linear overlap crossfade; continuous source head follows tail"
+      ],
+      "peakDbFS": -39.847081934143006,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      },
+      "waveformSeam": {
+        "wrapStep": 0.000244140625,
+        "internalStep99_5": 0.000762939453125
+      }
+    },
+    {
+      "file": "Venti_Eye_Exit.wav",
+      "purpose": "正常移除风眼时的短余风候选；会话立即清理不要求播完",
+      "seconds": 0.8,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 1.400000..2.200000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.45",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -52.18768780408962,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Venti_Pulse_Expand.wav",
+      "purpose": "单次扩散风暴推出的一整组破风候选；不重播状态建立声",
+      "seconds": 0.2800625,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.7",
+        "Resample speed 0.45; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -4.099187521809804,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "Venti_Pulse_Tail.wav",
+      "purpose": "单次扩散后逐渐散去的余风；范围增大不逐卡重复整段",
+      "seconds": 0.45,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.32,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.900000..1.350000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.5",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -42.561202172419776,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Venti_Sonnet_Gather.wav",
+      "purpose": "高天之歌短聚风候选；整片实际目标范围一次",
+      "seconds": 0.25,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.250000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.45",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -55.881031188764254,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Venti_Sonnet_Uprush.wav",
+      "purpose": "高天之歌风场上掀的短破风；源素材接触采样0.12秒",
+      "seconds": 0.22914583333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.12,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.75",
+        "Resample speed 0.55; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -3.502749339879432,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "Venti_Sonnet_Tail.wav",
+      "purpose": "整片风场消退的余风候选；不是逐卡落地撞击声",
+      "seconds": 0.8,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.84,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.900000..1.700000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.4",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -44.4994024325809,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    }
+  ]
+}

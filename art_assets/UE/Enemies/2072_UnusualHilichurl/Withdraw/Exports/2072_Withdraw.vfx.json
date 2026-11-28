@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2072_UnusualHilichurl/Withdraw/2072_Withdraw",
+  "source": "art_assets/UE/Enemies/2072_UnusualHilichurl/Withdraw/Blender/2072_Withdraw.blend",
+  "file": "Enemies/2072_UnusualHilichurl/Withdraw/Exports/2072_Withdraw.vfx.bytes",
+  "meshes": 1,
+  "tracks": 3,
+  "frames": 42,
+  "duration": 1.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 1.3666666666666667
+  },
+  "bytes": 1555
+}

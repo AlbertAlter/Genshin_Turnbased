@@ -1,0 +1,205 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2029_MutantElectroSlime\\HighVoltageArc\\视觉需求.md",
+  "variants": {
+    "2029_HighVoltageArc": {
+      "effect": "2029_HighVoltageArc",
+      "source": "Blender/2029_HighVoltageArc.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2029_MutantElectroSlime\\HighVoltageArc\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SynchronizedArc0Aura": {
+          "file": "Exports/2029_HighVoltageArc_SynchronizedArc0Aura.fbx",
+          "objects": [
+            "PART_SynchronizedArc0Aura"
+          ],
+          "vertices": 105,
+          "triangles": 168,
+          "dimensions": [
+            3.5093124979175627,
+            0.0,
+            0.5157165080308914
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 105,
+            "triangles": 168,
+            "dimensions": [
+              3.5093124979175627,
+              8.402087781078649e-08,
+              0.5157165080308914
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "materialGroups": {
+            "PART_SynchronizedArc0Aura": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SynchronizedArc0Core": {
+          "file": "Exports/2029_HighVoltageArc_SynchronizedArc0Core.fbx",
+          "objects": [
+            "PART_SynchronizedArc0Core"
+          ],
+          "vertices": 105,
+          "triangles": 168,
+          "dimensions": [
+            3.498110346030444,
+            0.0,
+            0.4719226351007819
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 105,
+            "triangles": 168,
+            "dimensions": [
+              3.498110346030444,
+              7.688595382582264e-08,
+              0.4719226351007819
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "materialGroups": {
+            "PART_SynchronizedArc0Core": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SynchronizedArc1Aura": {
+          "file": "Exports/2029_HighVoltageArc_SynchronizedArc1Aura.fbx",
+          "objects": [
+            "PART_SynchronizedArc1Aura"
+          ],
+          "vertices": 105,
+          "triangles": 168,
+          "dimensions": [
+            3.3106983928009868,
+            0.0,
+            0.2175498828291893
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 105,
+            "triangles": 168,
+            "dimensions": [
+              3.3106983928009868,
+              3.544337268124309e-08,
+              0.2175498828291893
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "materialGroups": {
+            "PART_SynchronizedArc1Aura": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SynchronizedArc1Core": {
+          "file": "Exports/2029_HighVoltageArc_SynchronizedArc1Core.fbx",
+          "objects": [
+            "PART_SynchronizedArc1Core"
+          ],
+          "vertices": 105,
+          "triangles": 168,
+          "dimensions": [
+            3.297305262181908,
+            0.0,
+            0.17396508902311325
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 105,
+            "triangles": 168,
+            "dimensions": [
+              3.297305262181908,
+              2.8342508784362508e-08,
+              0.17396508902311325
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "materialGroups": {
+            "PART_SynchronizedArc1Core": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "hero_frame": 43,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Electro",
+      "artOnly": true,
+      "endpointContract": "Measured artwork tips: 2029 and 2025 local(.066,-.13,.60); dominant foreground 2018 local(-.136,-.13,.183). All connections share the same 72-frame phase.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2029_HighVoltageArc.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

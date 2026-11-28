@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/GlacialIlluminationCast/Eula_GlacialIlluminationCast",
+  "source": "art_assets/UE/Characters/1040_Eula/GlacialIlluminationCast/Blender/Eula_GlacialIlluminationCast.blend",
+  "file": "Characters/1040_Eula/GlacialIlluminationCast/Exports/Eula_GlacialIlluminationCast.vfx.bytes",
+  "meshes": 28,
+  "tracks": 107,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 263520
+}

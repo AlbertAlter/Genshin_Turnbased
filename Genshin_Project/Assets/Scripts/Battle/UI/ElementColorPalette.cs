@@ -8,16 +8,31 @@ using UnityEngine;
 public sealed class ElementColorPalette
 {
     public const string FileName = "ElementColors.xlsx";
-    private static readonly string[] Keys = { "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro", "Physical" };
+    public const string ElementIconFolder = "art_assets/ElementSVG/";
+    private static readonly string[] Keys = { "Pyro", "Hydro", "Electro", "Cryo", "Anemo", "Geo", "Dendro", "Physical", "Healing" };
     private readonly Dictionary<string, Color> colors;
+    private readonly Dictionary<ReactionType, string> reactionColors = new Dictionary<ReactionType, string>();
     private readonly Dictionary<string, string> auraIcons = new Dictionary<string, string>(StringComparer.Ordinal);
     public IEnumerable<string> AuraIconPaths => auraIcons.Values;
     public bool TryGetAuraIconPath(string element, out string path) => auraIcons.TryGetValue(element, out path);
+
+    /// <summary>全部元素字形集中在ElementSVG；Unity读取同目录的白色PNG，网页直接读取SVG。</summary>
+    public static string ElementIconPath(string element)
+    {
+        if (element == "Physical" || element == "Healing" || Array.IndexOf(Keys, element) < 0)
+            throw new ArgumentException("没有该元素的图标：" + element, nameof(element));
+        return ElementIconFolder + "Element_" + element + ".png";
+    }
+
+    public static string ElementSvgPath(string element)
+        => Path.ChangeExtension(ElementIconPath(element), ".svg");
 
     private ElementColorPalette(Dictionary<string, Color> colors) { this.colors = colors; }
 
     /// <summary>Project white and Physical share one authoritative table entry.</summary>
     public Color ProjectWhite => colors["Physical"];
+    /// <summary>治疗绿独立于草元素色；治疗跳字和治疗光芒共用此项。</summary>
+    public Color HealingGreen => colors["Healing"];
 
     public static ElementColorPalette Load() => CampaignUiTables.Read(ReadPublished);
     private static ElementColorPalette ReadPublished()
@@ -42,17 +57,48 @@ public sealed class ElementColorPalette
             entries.Add(new KeyValuePair<string, string>(key, color));
         }
         var palette = Parse(entries);
-        headers.Require("SourceIcon");
-        for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
+        // 与角色页复用既有字形，不能把状态图标Components当作全项目元素图标来源。
+        foreach (string key in Keys)
+            if (key != "Physical" && key != "Healing") palette.auraIcons.Add(key, ElementIconPath(key));
+        var reactions = package.Workbook.Worksheets["Reactions"];
+        if (reactions?.Dimension != null)
         {
-            string key = headers.Cell(row, "Element").Text.Trim();
-            if (key.Length == 0 || key == "Physical") continue;
-            string file = headers.Cell(row, "SourceIcon").Text.Trim();
-            if (!HitEffectTextureStyle.ValidFileName(file))
-                throw new InvalidDataException("元素栏图标 SourceIcon 必须是 PNG 文件名：" + key);
-            palette.auraIcons.Add(key, "art_assets/Status_Icon/Element/" + file);
+            var reactionHeaders = ExcelTableHeaders.For(reactions); reactionHeaders.Require("Reaction", "Color");
+            var values = new List<KeyValuePair<string, string>>();
+            for (int row = reactionHeaders.DataStartRow; row <= reactions.Dimension.End.Row; row++)
+            {
+                string key = reactionHeaders.Cell(row, "Reaction").Text.Trim();
+                if (key.Length > 0) values.Add(new KeyValuePair<string, string>(key, reactionHeaders.Cell(row, "Color").Text.Trim()));
+            }
+            palette.ReadReactionColors(values);
         }
         return palette;
+    }
+
+    public void ReadReactionColors(IEnumerable<KeyValuePair<string, string>> entries)
+    {
+        var parsed = new Dictionary<ReactionType, string>();
+        foreach (var entry in entries)
+        {
+            if (!Enum.TryParse(entry.Key, out ReactionType reaction) || !Enum.IsDefined(typeof(ReactionType), reaction) || reaction == ReactionType.None)
+                throw new InvalidDataException("未知反应颜色键：" + entry.Key);
+            string value = (entry.Value ?? "").Trim();
+            if (parsed.ContainsKey(reaction)) throw new InvalidDataException("重复反应颜色：" + entry.Key);
+            if (value != "Trigger" && (value.Length != 7 || value[0] != '#' || !ColorUtility.TryParseHtmlString(value, out _)))
+                throw new InvalidDataException("反应颜色须为Trigger或#RRGGBB：" + entry.Key);
+            parsed.Add(reaction, value);
+        }
+        foreach (ReactionType reaction in Enum.GetValues(typeof(ReactionType)))
+            if (reaction != ReactionType.None && !parsed.ContainsKey(reaction)) throw new InvalidDataException("缺少反应颜色：" + reaction);
+        reactionColors.Clear(); foreach (var entry in parsed) reactionColors.Add(entry.Key, entry.Value);
+    }
+
+    public bool TryGetReactionColor(ReactionType reaction, string triggerElement, out Color color)
+    {
+        color = default;
+        if (!reactionColors.TryGetValue(reaction, out string value)) return false;
+        if (value == "Trigger" && string.IsNullOrWhiteSpace(triggerElement)) return false;
+        return value == "Trigger" ? TryGetColor(triggerElement, out color) : ColorUtility.TryParseHtmlString(value, out color);
     }
 
     public static ElementColorPalette Parse(IEnumerable<KeyValuePair<string, string>> entries)

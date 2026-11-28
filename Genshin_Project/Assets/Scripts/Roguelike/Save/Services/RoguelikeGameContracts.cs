@@ -62,6 +62,7 @@ public interface IRoguelikeGameService
     RoguelikeSaveResult EnterNode(string stepId, RoguelikeNodeSelection node);
     RoguelikeSaveResult BeginBattle(string stepId, string battleId);
     RoguelikeSaveResult RecordBattleVictory(string stepId);
+    RoguelikeSaveResult RecordBattleResult(string stepId, bool victory, int eventEnemyKills = 0);
     RoguelikeSaveResult SavePendingReward(string stepId, PendingRewardData pending);
     RoguelikeSaveResult CompleteNode(string stepId, RoguelikeAcquisition outcome);
     RoguelikeSaveResult ReturnToRoute(string stepId);

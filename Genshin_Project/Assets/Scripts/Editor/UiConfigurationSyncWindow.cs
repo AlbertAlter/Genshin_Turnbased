@@ -12,8 +12,12 @@ public static class UiConfigurationSyncWindow
         try
         {
             UiChartSync.Sync();
+            BattleEffectTableWriter.SyncPublished();
             if (!ReferencedArtAssetsSync.SyncReferencedImages()) return;
             string root = System.IO.Path.GetFullPath(System.IO.Path.Combine(Application.dataPath, "../.."));
+            Debug.Log(EffectArtAssetsSync.Publish(
+                System.IO.Path.Combine(root, "art_assets/UE"),
+                System.IO.Path.Combine(Application.dataPath, "ArtAssets/UE")));
             Debug.Log(CharacterVoiceSync.Publish(root, Application.streamingAssetsPath));
             WishCharacterThemeSync.Publish(root, Application.streamingAssetsPath);
             AssetDatabase.Refresh();
@@ -88,10 +92,15 @@ public static class UiConfigurationSyncWindow
         try
         {
             UiChartSync.SyncAnimation();
+            BattleEffectTableWriter.SyncPublished();
             // In Edit Mode the scene is not touched at all; the next run reads the published table.
             if(EditorApplication.isPlaying)
             {
+                foreach(var preview in UnityEngine.Object.FindObjectsOfType<SkillEffectsPreview>(true))preview.ReloadConfiguration();
                 foreach(var preview in UnityEngine.Object.FindObjectsOfType<ShieldPreviewPanel>(true))preview.RequestReload();
+                foreach(var resources in UnityEngine.Object.FindObjectsOfType<UICardTargetAssets>(true))resources.ReloadParameters();
+                foreach(var resources in UnityEngine.Object.FindObjectsOfType<UICardConductiveAssets>(true))resources.ReloadParameters();
+                foreach(var view in UnityEngine.Object.FindObjectsOfType<BattleUiCardFaceStatus>(true))view.ReloadConfiguration();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldApView>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattlefieldHealthBar>(true))view.ReloadAnimationParameters();
                 foreach(var view in UnityEngine.Object.FindObjectsOfType<BattleUiEnemyShieldBar>(true))view.ReloadAnimationParameters();

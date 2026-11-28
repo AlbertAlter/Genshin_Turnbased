@@ -1,0 +1,51 @@
+[
+  {
+    "file": "01_原作金色重剑弧光.png",
+    "page_url": "https://gurugamer.com/mobile-games/noelle-genshin-impact-complete-guide-18468",
+    "image_url": "https://img.gurugamer.com/resize/740x-/2021/09/09/noelles-elemental-burst-significantly-increases-he-352d.png",
+    "downloaded": "2026-11-26",
+    "use": "宽金色弧光、亮芯与琥珀层次。护盾、人物和环境排除；纵深旋劈为项目指定动作。",
+    "type": "原作实机截图",
+    "modified": false,
+    "format": "JPEG",
+    "size": [
+      740,
+      416
+    ],
+    "frames": 1,
+    "bytes": 58699
+  },
+  {
+    "file": "02_强化岩剑剑体_6.25s.png",
+    "page_url": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+    "downloaded": "2026-11-26",
+    "use": "强化岩剑实体、剑尖和金色光层，仅为武器姿态参考，不标作重击命中。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 125,
+    "time_ms": 6250,
+    "extraction": "Decoded original GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      323,
+      182
+    ],
+    "frames": 1,
+    "bytes": 66233,
+    "source_image_url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif"
+  },
+  {
+    "type": "本批动图核对限制",
+    "motionReview": {
+      "name": "SweepingTime",
+      "page": "https://wiki.biligame.com/ys/%E8%AF%BA%E8%89%BE%E5%B0%94",
+      "url": "https://patchwiki.biligame.com/images/ys/d/dd/rob4i35wmxkach6xxk4l36gdnqghjfu.gif",
+      "note": "Observe cast and golden sword/normal attack motion; depth charged slam is project-specific and not inferred from the original spinning charged attack.",
+      "downloaded": false,
+      "error": "Reference download exceeded bounded analysis time",
+      "inspection": "Use already available stills; do not claim motion observation from a failed request."
+    },
+    "inspection": "Existing original-game frames inspected; bounded online GIF request timed out. No claim of complete motion viewing."
+  }
+]

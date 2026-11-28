@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1018_Beidou/StormbreakerState/Beidou_StormbreakerState",
+  "source": "art_assets/UE/Characters/1018_Beidou/StormbreakerState/Blender/Beidou_StormbreakerState.blend",
+  "file": "Characters/1018_Beidou/StormbreakerState/Exports/Beidou_StormbreakerState.vfx.bytes",
+  "meshes": 4,
+  "tracks": 14,
+  "frames": 289,
+  "duration": 9.6,
+  "loopStart": 0.8,
+  "loopEnd": 4.4,
+  "markers": {
+    "Appear": 0.0,
+    "LoopStart": 0.8,
+    "Cycle1Repeat": 4.4,
+    "Cycle2Repeat": 8.0,
+    "ArbitraryPhaseExit": 8.266666666666667,
+    "Clear": 9.6
+  },
+  "bytes": 159302
+}

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1032_Zhongli/PlanetBefall/Zhongli_PlanetBefall",
+  "source": "art_assets/UE/Characters/1032_Zhongli/PlanetBefall/Blender/Zhongli_PlanetBefall.blend",
+  "file": "Characters/1032_Zhongli/PlanetBefall/Exports/Zhongli_PlanetBefall.vfx.bytes",
+  "meshes": 48,
+  "tracks": 156,
+  "frames": 105,
+  "duration": 3.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.466666666666667
+  },
+  "bytes": 339614
+}

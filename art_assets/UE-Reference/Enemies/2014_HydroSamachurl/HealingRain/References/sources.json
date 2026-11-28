@@ -1,0 +1,28 @@
+[
+  {
+    "file": "00_原作祈雨实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Hydro_Samachurl_Prayer_for_Rain.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Hydro_Samachurl#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 72,
+    "duration_seconds": 5.76,
+    "modified": false,
+    "use": "参考祈雨的短雨丝、水滴与克制蓝白亮部；大范围雨区和蓝色边界不照搬，云团头顶构图为用户指定"
+  },
+  {
+    "file": "01_雨丝与水滴截帧.png",
+    "source_file": "00_原作祈雨实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Hydro_Samachurl_Prayer_for_Rain.gif/revision/latest",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Hydro_Samachurl#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 26,
+    "timestamp_seconds": 2.08,
+    "cropped": false,
+    "retouched": false,
+    "use": "雨丝、水滴与明暗疏密，不把绿色治疗亮部和Wet文字认作云团造型"
+  }
+]

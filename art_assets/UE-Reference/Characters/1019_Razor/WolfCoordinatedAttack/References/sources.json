@@ -1,0 +1,70 @@
+[
+  {
+    "file": "01_雷狼与紫白爪痕形态.png",
+    "page_url": "https://game8.jp/genshin/352606",
+    "image_url": "https://img.game8.jp/5081835/c31efef017c1a52ccf12a1bd261d9128.png/original",
+    "downloaded": "2026-11-26",
+    "use": "只参考狼魂与紫白爪痕造型，不从静态帧推断触发和hit次数。",
+    "type": "原作实机截图",
+    "modified": false,
+    "format": "PNG",
+    "size": [
+      1272,
+      596
+    ],
+    "frames": 1,
+    "bytes": 219025
+  },
+  {
+    "file": "02_协同挥爪_3.4s.png",
+    "page_url": "https://theinformalgamer.wordpress.com/2021/03/28/genshin-impact-best-razor-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/03/razor-burst-1.gif?w=450",
+    "downloaded": "2026-11-26",
+    "use": "普通攻击期间的狼臂挥击与紫色轨迹。金色原攻击刀光和HUD排除。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 34,
+    "time_ms": 3400,
+    "extraction": "Decoded GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      450,
+      338
+    ],
+    "frames": 1,
+    "bytes": 220494,
+    "source_image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/03/razor-burst-1.gif?w=450"
+  },
+  {
+    "file": "03_协同爪痕_3.9s.png",
+    "page_url": "https://theinformalgamer.wordpress.com/2021/03/28/genshin-impact-best-razor-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/03/razor-burst-1.gif?w=450",
+    "downloaded": "2026-11-26",
+    "use": "紫色弧形爪痕与狼魂连续姿态，不使用后段战技画面。",
+    "type": "原作实机动图截帧",
+    "modified": true,
+    "frame": 39,
+    "time_ms": 3900,
+    "extraction": "Decoded GIF frame to PNG only; no crop, retouching, drawing or generated content.",
+    "format": "PNG",
+    "size": [
+      450,
+      338
+    ],
+    "frames": 1,
+    "bytes": 223557,
+    "source_image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/03/razor-burst-1.gif?w=450"
+  },
+  {
+    "type": "本批动图核对限制",
+    "motionReview": {
+      "name": "LightningFang",
+      "page": "https://theinformalgamer.wordpress.com/2021/03/28/genshin-impact-best-razor-build-artifacts-weapons-team-guide/",
+      "url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/03/razor-burst-1.gif?w=450",
+      "downloaded": false,
+      "error": "Reference download exceeded bounded analysis time",
+      "inspection": "Use already available stills; do not claim motion observation from a failed request."
+    },
+    "inspection": "Existing original-game still frames inspected. Online GIF timed out; no claim of complete motion viewing."
+  }
+]

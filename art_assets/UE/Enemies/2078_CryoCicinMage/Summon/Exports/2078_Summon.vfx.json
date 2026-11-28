@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2078_CryoCicinMage/Summon/2078_Summon",
+  "source": "art_assets/UE/Enemies/2078_CryoCicinMage/Summon/Blender/2078_Summon.blend",
+  "file": "Enemies/2078_CryoCicinMage/Summon/Exports/2078_Summon.vfx.bytes",
+  "meshes": 3,
+  "tracks": 108,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 175568
+}

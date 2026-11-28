@@ -1,0 +1,208 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/C6ButterflyFlash/视觉需求.md",
+  "variants": {
+    "HuTao_C6ButterflyFlash": {
+      "effect": "HuTao_C6ButterflyFlash",
+      "source": "Blender/HuTao_C6ButterflyFlash.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1037_HuTao/C6ButterflyFlash/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "ButterflyWing-1": {
+          "file": "Exports/HuTao_C6ButterflyFlash_ButterflyWing-1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_-1",
+            "PART_ButterflyWingVein_-1_0",
+            "PART_ButterflyWingVein_-1_1",
+            "PART_ButterflyWingVein_-1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_-1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_-1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyWing1": {
+          "file": "Exports/HuTao_C6ButterflyFlash_ButterflyWing1.fbx",
+          "objects": [
+            "PART_FireButterflyWing_1",
+            "PART_ButterflyWingVein_1_0",
+            "PART_ButterflyWingVein_1_1",
+            "PART_ButterflyWingVein_1_2"
+          ],
+          "vertices": 525,
+          "triangles": 852,
+          "dimensions": [
+            0.40828701201826334,
+            0.02500000037252903,
+            0.5744444578886032
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflyWing_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_0": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_1": [
+              "Soft"
+            ],
+            "PART_ButterflyWingVein_1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 525,
+            "triangles": 852,
+            "dimensions": [
+              0.40828701201826334,
+              0.02500007721218722,
+              0.5744444578886032
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyBody": {
+          "file": "Exports/HuTao_C6ButterflyFlash_ButterflyBody.fbx",
+          "objects": [
+            "PART_FireButterflySlenderBody"
+          ],
+          "vertices": 24,
+          "triangles": 44,
+          "dimensions": [
+            0.05354434251785278,
+            0.04987088218331337,
+            0.3100000023841858
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FireButterflySlenderBody": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 24,
+            "triangles": 44,
+            "dimensions": [
+              0.05354434251785278,
+              0.0498709324747324,
+              0.3100000023841858
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ButterflyShortTrail": {
+          "file": "Exports/HuTao_C6ButterflyFlash_ButterflyShortTrail.fbx",
+          "objects": [
+            "PART_ButterflyActualCurveTrail"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.035999998450279236,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ButterflyActualCurveTrail": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.035999998450279236,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 26,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "SpiritSoother117frames/3.51s and normal204frames/6.12s decoded;24 samples of each observed. GuideToAfterlife timed out. Exact BloodBlossom marking and independent C6 original scene remain unconfirmed; plum mark/C6 are authored adaptations.",
+      "scope": "Art only; no tables, HP cost, healing, immunity, critical checks or status application. Butterfly wings articulate independently and tails sample their own curves.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\HuTao_C6ButterflyFlash.wav"
+      }
+    }
+  }
+}

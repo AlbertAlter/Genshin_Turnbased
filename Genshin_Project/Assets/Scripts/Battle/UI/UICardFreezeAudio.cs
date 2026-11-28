@@ -13,6 +13,7 @@ public sealed class UICardFreezeAudio : MonoBehaviour
     private readonly uint[] playing = new uint[3];
     private string loadedBank;
     private bool reportedUnavailable;
+    private bool battlePaused;
     public FreezeAudioSettings Settings { get; private set; }
     public string LastError { get; private set; }
     private const string VolumeParameter = "Freeze_VolumeDb";
@@ -21,6 +22,15 @@ public sealed class UICardFreezeAudio : MonoBehaviour
     private const string PitchParameter = "Freeze_PitchSemitones";
 
     private void Start() { ReloadSettings(); Prepare(); }
+    private void Update()
+    {
+        if (battlePaused == BattlePause.IsPaused || !AkUnitySoundEngine.IsInitialized()) return;
+        battlePaused = BattlePause.IsPaused;
+        foreach (uint id in playing)
+            if (id != AkUnitySoundEngine.AK_INVALID_PLAYING_ID)
+                AkUnitySoundEngine.ExecuteActionOnPlayingID(battlePaused ? AkActionOnEventType.AkActionOnEventType_Pause
+                    : AkActionOnEventType.AkActionOnEventType_Resume, id, 0, AkCurveInterpolation.AkCurveInterpolation_Linear);
+    }
 
     public bool ReloadSettings()
     {
@@ -63,7 +73,7 @@ public sealed class UICardFreezeAudio : MonoBehaviour
 
     public bool PlayClick(int completedClicks)
     {
-        if (completedClicks < 1 || completedClicks > 3 || !Prepare()) return false;
+        if (BattlePause.IsPaused || completedClicks < 1 || completedClicks > 3 || !Prepare()) return false;
         string eventName = completedClicks == 1 ? firstClickEvent :
             completedClicks == 2 ? secondClickEvent : thawEvent;
         if (string.IsNullOrEmpty(eventName)) { LastError = "未绑定对应的Wwise音效事件。"; return false; }
@@ -88,7 +98,8 @@ public sealed class UICardFreezeAudio : MonoBehaviour
         if (id == AkUnitySoundEngine.AK_INVALID_PLAYING_ID) return true;
         if (Settings.VolumePercent[index] == 0)
         { AkUnitySoundEngine.StopPlayingID(id); playing[index] = 0; return true; }
-        float db = Mathf.Max(-96, 20 * Mathf.Log10(Settings.VolumePercent[index] / 100));
+        float db = Mathf.Max(-96, 20 * Mathf.Log10(Mathf.Max(.00001f,
+            Settings.VolumePercent[index] / 100 * ProjectUserSettings.Master * ProjectUserSettings.Effects)));
         var volume = AkUnitySoundEngine.SetRTPCValueByPlayingID(VolumeParameter, db, id);
         var pitch = AkUnitySoundEngine.SetRTPCValueByPlayingID(PitchParameter, Settings.PitchSemitones[index], id);
         if (volume == AKRESULT.AK_PlayingIDNotFound || pitch == AKRESULT.AK_PlayingIDNotFound)
@@ -110,5 +121,6 @@ public sealed class UICardFreezeAudio : MonoBehaviour
         System.Array.Clear(playing, 0, playing.Length);
         loadedBank = null;
         reportedUnavailable = false;
+        battlePaused = false;
     }
 }

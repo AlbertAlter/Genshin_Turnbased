@@ -1,0 +1,62 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E7%BD%97%E8%8E%8E%E8%8E%89%E4%BA%9A",
+    "image_url": "https://patchwiki.biligame.com/images/ys/4/45/fyioc4lok6c5q70dbd4tm7llkplss0b.gif",
+    "title": "噬罪的告解.gif",
+    "recorded": "2026-11-27",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码160帧、4.8秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "核对战技两段枪势与冰色刀光；当前为每段整组共用一道主刃的卡牌适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\rosaria-references\\Rosaria_RavagingConfession_Observation.png",
+    "decoded_frames": 160,
+    "duration_seconds": 4.8,
+    "sampled_frames": [
+      0,
+      7,
+      14,
+      21,
+      28,
+      35,
+      41,
+      48,
+      55,
+      62,
+      69,
+      76,
+      83,
+      90,
+      97,
+      104,
+      111,
+      118,
+      124,
+      131,
+      138,
+      145,
+      152,
+      159
+    ]
+  },
+  {
+    "source_type": "官方角色资料",
+    "page_url": "https://wiki.hoyolab.com/pc/genshin/entry/33?lang=en-us",
+    "title": "HoYoWiki·Rosaria",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "检索确认官方角色页入口，未以资料页代替实机动态核对。",
+    "use": "核对角色技能名称及后续原作参考入口，项目范围和持续行为仍以当前项目为准。"
+  },
+  {
+    "source_type": "官方角色演示／音画参考",
+    "page_url": "https://www.youtube.com/watch?v=KJwOW1zS8UM",
+    "title": "New Character Demo - \"Rosaria: No Overtime, Ever\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "已核对官方发布者、标题与入口；未完整观看、逐段试听或截取音频，视频含配乐与语音。",
+    "use": "检索该项动作和音色；尚未确认可独立分离的技能音源，不提供未经核对的时间点。"
+  }
+]

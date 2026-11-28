@@ -229,67 +229,75 @@ public partial class CharacterBattleController
     //  skillType: 0普攻 1重击 2战技 3爆发
     // ================================================================
     public string GetBlockReason(int skillType)
+        => GetBlockIssue(skillType)?.Message;
+
+    /// <summary>One evaluation for both diagnostic detail and localized player feedback.</summary>
+    public bool TryGetBlockReason(int skillType, out string message, out string langKey)
+    {
+        var issue = GetBlockIssue(skillType); message = issue?.Message; langKey = issue?.Key; return issue.HasValue;
+    }
+    private (string Key, string Message)? GetBlockIssue(int skillType)
     {
         if (Entity == null)
-            return "角色实体不存在";
+            return ("tip_character_unavailable", "角色实体不存在");
         if (Entity.IsDead)
-            return "角色已经死亡";
+            return ("tip_character_dead", "角色已经死亡");
         if (Entity.IsOffField)
-            return "角色处于离场状态";
+            return ("tip_character_off_field", "角色处于离场状态");
         if (FrozenReactionHandler.IsFrozen(Entity))
-            return "角色处于冻结状态，无法行动";
+            return ("tip_character_frozen", "角色处于冻结状态，无法行动");
 
         // 通用前置（2026-08-15：爆发例外——文档“该角色无需出战”，未出战角色仍可施放爆发；死亡由调用方另行拦截）
         if (!IsActive && skillType != 3)
-            return "角色未出战";
+            return ("tip_character_not_active", "角色未出战");
 
         if (IsButtonFrozen(skillType))
-            return "按键被冻结";
+            return ("tip_skill_button_frozen", "按键被冻结");
 
         string skillID2;
         switch (skillType)
         {
             case 0:
-                if (string.IsNullOrEmpty(_boundSkills[0])) return "未配置普攻技能";
+                if (string.IsNullOrEmpty(_boundSkills[0])) return ("tip_skill_not_configured", "未配置普攻技能");
                 skillID2 = _boundSkills[0];
                 break;
             case 1:
-                if (string.IsNullOrEmpty(_boundSkills[1])) return "未配置重击技能";
+                if (string.IsNullOrEmpty(_boundSkills[1])) return ("tip_skill_not_configured", "未配置重击技能");
                 skillID2 = _boundSkills[1];
                 break;
             case 2:
-                if (string.IsNullOrEmpty(_boundSkills[2])) return "未配置战技技能";
+                if (string.IsNullOrEmpty(_boundSkills[2])) return ("tip_skill_not_configured", "未配置战技技能");
                 skillID2 = _boundSkills[2];
                 break;
             case 3:
-                if (string.IsNullOrEmpty(_boundSkills[3])) return "未配置爆发技能";
+                if (string.IsNullOrEmpty(_boundSkills[3])) return ("tip_skill_not_configured", "未配置爆发技能");
                 skillID2 = _boundSkills[3];
                 break;
             default:
-                return "未知技能类型";
+                return ("tip_skill_type_invalid", "未知技能类型");
         }
 
         if (_skillById2 == null || !_skillById2.TryGetValue(skillID2, out var sk))
-            return $"技能数据缺失({skillID2})";
+            return ("tip_skill_data_missing", $"技能数据缺失({skillID2})");
 
         int apCost = APCostResolver.ForSkill(Entity, sk, skillType);
-        if (APManager == null) return "战斗行动点系统未初始化";
+        if (APManager == null) return ("tip_ap_unavailable", "战斗行动点系统未初始化");
         if (!APManager.CanAfford(apCost))
-            return $"AP不足（需要{apCost}，当前{APManager.CurrentAP}）";
+            return ("tip_insufficient_ap", $"AP不足（需要{apCost}，当前{APManager.CurrentAP}）");
         if (sk.EnergyUsed > 0 && Entity.CurrentEnergy < sk.EnergyUsed)
-            return $"能量不足（需要{sk.EnergyUsed}，当前{Entity.CurrentEnergy}）";
+            return ("tip_insufficient_energy", $"能量不足（需要{sk.EnergyUsed}，当前{Entity.CurrentEnergy}）");
 
         // 仍有次数时允许继续释放；充能计时可以与剩余可用次数并存。
         if (HasSkillUseAvailable(skillID2, sk)) return null;
         if (_cooldownRemaining.TryGetValue(skillID2, out int cd) && cd > 0)
-            return $"冷却中（剩余{cd}回合）";
+            return ("tip_skill_cooldown", $"冷却中（剩余{cd}回合）");
 
         // 所有带次数的技能都遵守同一规则，而不只检查战技按钮。
         if (sk.MaxCharge > 0)
         {
             int cur = _currentCharges.TryGetValue(skillID2, out int c) ? c : 0;
             if (cur <= 0)
-                return $"技能次数未恢复（{cur}/{sk.MaxCharge}）";
+                return ("tip_skill_no_charges", $"技能次数未恢复（{cur}/{sk.MaxCharge}）");
         }
 
         return null; // 可用

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1022_Xiangling/GuobaBreath/Xiangling_GuobaBreath_SingleTarget",
+  "source": "art_assets/UE/Characters/1022_Xiangling/GuobaBreath/Blender/Xiangling_GuobaBreath_SingleTarget.blend",
+  "file": "Characters/1022_Xiangling/GuobaBreath/Exports/Xiangling_GuobaBreath_SingleTarget.vfx.bytes",
+  "meshes": 37,
+  "tracks": 67,
+  "frames": 130,
+  "duration": 4.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.3
+  },
+  "bytes": 381183
+}

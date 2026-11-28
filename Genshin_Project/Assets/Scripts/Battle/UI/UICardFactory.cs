@@ -8,6 +8,7 @@ using UnityEngine;
 public sealed class UICardFactory : MonoBehaviour
 {
     public const string FramePath = "art_assets/Character_Bare/Frame/01.png";
+    public const string DefaultCardBackPath = UICardBack.DefaultPath;
     public const string InnerShadowPath = "art_assets/UI/BattleField1/UI_components/card/CardInnerShadow.png";
     public const string OuterShadowPath = "art_assets/UI/BattleField1/UI_components/card/CardShadow.png";
     public const string GlowPath = "art_assets/UI/BattleField1/UI_components/card/CardSelectionBorder.png";
@@ -120,6 +121,7 @@ public sealed class UICardFactory : MonoBehaviour
         catch (Exception error) { view.Fail(error.Message); }
         view.MediaResolved = true;
         yield return RefreshFrame(request);
+        yield return RefreshBack(request);
     }
     private string SelectedFrame(RequestState request)
     {
@@ -132,7 +134,20 @@ public sealed class UICardFactory : MonoBehaviour
     private void AppearanceChanged()
     {
         foreach (var request in cards.ToArray())
-            if (request.View != null && request.View.Ready && !request.View.Released) StartCoroutine(RefreshFrame(request));
+            if (request.View != null && request.View.Ready && !request.View.Released)
+            { StartCoroutine(RefreshFrame(request)); StartCoroutine(RefreshBack(request)); }
+    }
+    private IEnumerator RefreshBack(RequestState request)
+    {
+        string desired = string.IsNullOrEmpty(SelectedCardBackPath) ? DefaultCardBackPath : SelectedCardBackPath;
+        yield return EnsureAsset(desired);
+        if (!assets.ContainsKey(desired) && desired != DefaultCardBackPath)
+        { desired = DefaultCardBackPath; yield return EnsureAsset(desired); }
+        var view = request.View;
+        if (view == null || view.Released || !view.Ready) yield break;
+        string current = string.IsNullOrEmpty(SelectedCardBackPath) ? DefaultCardBackPath : SelectedCardBackPath;
+        if (desired != current && !failed.Contains(current)) { yield return RefreshBack(request); yield break; }
+        if (assets.TryGetValue(desired, out var sprite)) view.SetCardBack(sprite);
     }
     private IEnumerator RefreshFrame(RequestState request)
     {
@@ -270,7 +285,7 @@ public sealed class UICardFactory : MonoBehaviour
             {
                 request.View.gameObject.SetActive(request.Active);
                 if (!request.View.Ready || !request.View.MediaResolved) StartCoroutine(Prepare(request));
-                else StartCoroutine(RefreshFrame(request));
+                else { StartCoroutine(RefreshFrame(request)); StartCoroutine(RefreshBack(request)); }
             }
     }
     private void OnDestroy()

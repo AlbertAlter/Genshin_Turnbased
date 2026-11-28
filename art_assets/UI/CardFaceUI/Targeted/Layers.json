@@ -1,0 +1,34 @@
+{
+  "sourcePSD": "PSDfiles/UI/BattleField1.psd",
+  "sourceLayer": "Enemy/EnemyCard1/exec-dd11beab-6443-4c2b-bc77-ff0a38838c47",
+  "bounds": [
+    763,
+    536,
+    919,
+    695
+  ],
+  "pixelSize": [
+    156,
+    159
+  ],
+  "referenceCardWidth": 197,
+  "opacity": 255,
+  "fillOpacity": 255,
+  "staticOpacityBaked": true,
+  "blendMode": "NORMAL",
+  "outerGlowBaked": false,
+  "outerGlow": {
+    "opacityPercent": 74.0,
+    "size": 81.0,
+    "spreadPercent": 0.0,
+    "blendMode": "Nrml"
+  },
+  "parts": [
+    "Ring.png",
+    "Top.png",
+    "Right.png",
+    "Bottom.png",
+    "Left.png",
+    "Silhouette.png"
+  ]
+}

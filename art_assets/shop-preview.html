@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>商店</title>
+<style>
+  @font-face {
+    font-family: ProjectFont;
+    src: url("UI/CharacterList/Font/zh-cn.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+  }
+  :root {
+    --deep: #716758;
+    --light: #998f81;
+    --paper: #f7efdd;
+    --white: #fefefe;
+    --ink: #352d25;
+    --muted: #d8cbb7;
+    --gold: #efcf8d;
+    --line: #d8c6a34a;
+    --frame: url("../art_assets/Character_Bare/Frame/01.png");
+    --ui-font: ProjectFont, "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+    font: 400 24px/1.45 var(--ui-font);
+    font-synthesis: none;
+  }
+  * { box-sizing: border-box; }
+  body {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100dvh;
+    margin: 0;
+    color: var(--paper);
+    background: radial-gradient(ellipse at 68% 38%, #b4a797, transparent 68%), var(--deep);
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; opacity: .46; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  h1, h2, p { margin: 0; }
+  h1, h2, strong, b { font-weight: 400; }
+  img { display: block; object-fit: contain; }
+  [hidden] { display: none !important; }
+
+  .viewport { position: relative; min-height: 0; margin: 10px 12px 4px; overflow: hidden; }
+  .canvas {
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(var(--scale, .5));
+    background: linear-gradient(110deg, #a49989, var(--deep));
+  }
+  .store {
+    position: absolute;
+    inset: 25px 30px;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 100px minmax(0, 1fr);
+    gap: 26px;
+    padding: 28px 63px 44px;
+    border-radius: 23px;
+    overflow: hidden;
+    background:
+      linear-gradient(101deg, #493f34f7, #55493eeb 53%, #756758c4),
+      url("../art_assets/BattleBG/1_BG.png") center / cover,
+      var(--deep);
+  }
+  .store::after, .details::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    border: 64px solid transparent;
+    border-image: var(--frame) 64 / 64px / 0 stretch;
+  }
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  .identity { display: flex; align-items: center; gap: 22px; }
+  .shop-return {
+    flex: none;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: #3129216b;
+    font-size: 20px;
+  }
+  .shop-return:hover { background: #f7efdd19; }
+  .seal {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid #efcf8d68;
+    transform: rotate(45deg);
+  }
+  .seal span { color: var(--gold); font-size: 33px; transform: rotate(-45deg); }
+  h1 { color: var(--paper); font-size: 43px; letter-spacing: .15em; }
+  .tabs {
+    display: flex;
+    gap: 7px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 36px;
+    background: #3129216b;
+  }
+  .tabs button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 185px;
+    height: 52px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 28px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 23px;
+  }
+  html[lang="en"] .tabs button { width: auto; min-width: 176px; padding-inline: 18px; font-size: 20px; }
+  .tabs button:hover { color: var(--white); background: #f7efdd19; }
+  .tabs button[aria-pressed="true"] {
+    color: var(--ink);
+    background: linear-gradient(180deg, #f8efd9, #d7c6a9);
+    box-shadow: inset 0 0 0 1px #fff7e3, 0 2px 6px #30251b67;
+  }
+  .tabs img, .balance img { width: 31px; height: 31px; }
+  .balance {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 19px;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: #30282060;
+    font-variant-numeric: tabular-nums;
+  }
+  .balance span { color: var(--muted); font-size: 17px; }
+  .balance strong { font-size: 26px; }
+
+  .content { display: grid; grid-template-columns: minmax(0, 1fr) 500px; gap: 38px; min-height: 0; }
+  .catalog { display: grid; grid-template-rows: 56px minmax(0, 1fr); gap: 14px; min-height: 0; }
+  .catalog-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .catalog-title { display: flex; align-items: baseline; gap: 16px; }
+  .catalog-title h2 { font-size: 32px; letter-spacing: .06em; }
+  .catalog-title h2::before { content: "◆"; color: var(--gold); font-size: 14px; vertical-align: .25em; margin-right: 12px; }
+  html[lang="en"] #detailName { overflow-wrap: anywhere; }
+  .catalog-title span { color: var(--muted); font-size: 18px; }
+  .catalog-actions { display: flex; align-items: center; gap: 12px; }
+  #search, #category {
+    padding: 7px 16px;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: #352d2566;
+    font-size: 20px;
+  }
+  #search { width: 238px; }
+  #search::placeholder { color: var(--muted); }
+  #category { min-width: 145px; cursor: pointer; }
+  #category option { color: var(--paper); background: #473e34; }
+  .goods {
+    display: grid;
+    align-content: start;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    gap: 19px 18px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #bfae8d #3e352d44;
+    scrollbar-gutter: stable;
+    padding: 5px 13px 8px 5px;
+  }
+  .tile {
+    align-self: start;
+    position: relative;
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 1px solid #d8c6a36b;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #342a22ad;
+    text-align: center;
+    transition: box-shadow .14s, border-color .14s;
+  }
+  .tile:hover { border-color: #f3dfb5; }
+  .tile[aria-pressed="true"] {
+    border-color: #fff1cc;
+    box-shadow: 0 0 0 3px #e3bf7aba, 0 4px 12px #352a21;
+  }
+  .tile:focus-visible { outline-offset: -4px; }
+  .art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--rarity, linear-gradient(#50545c, #858992)) center / cover no-repeat;
+  }
+  .art img { width: 84%; height: 84%; filter: drop-shadow(0 5px 7px #21191a45); }
+  .art.weapon img { width: 96%; height: 96%; }
+  .tile .art img { position: absolute; inset: 0; margin: auto; }
+  .tile[aria-pressed="true"] .art::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 9px;
+    height: 9px;
+    background: var(--white);
+    box-shadow: 0 0 0 1px #443429;
+    transform: rotate(45deg);
+  }
+  .tile.sold .art img { opacity: .46; }
+  .stamp {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 1px 7px;
+    border-radius: 5px;
+    background: #312921db;
+    color: var(--paper);
+    font-size: 15px;
+  }
+  .stamp.sale { color: var(--gold); }
+  .stars {
+    color: #f5d58d;
+    letter-spacing: .08em;
+    text-shadow: 0 1px 3px #35261f;
+  }
+  .tile .stars { position: absolute; z-index: 1; top: -14px; font-size: 17px; line-height: 22px; }
+  .value {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: #f1e9d7;
+    color: var(--ink);
+    font-size: 20px;
+    white-space: nowrap;
+  }
+  .tile .value { height: 37px; }
+  .value img, .money img { width: 24px; height: 24px; }
+  .value s { color: #716758; font-size: 15px; }
+  .name {
+    display: block;
+    min-height: 31px;
+    padding: 5px 7px;
+    color: #f5ebd9;
+    font-size: 17px;
+    line-height: 21px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .empty { grid-column: 1 / -1; padding-top: 155px; color: var(--muted); text-align: center; }
+
+  .details {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 302px minmax(0, 1fr) auto;
+    padding: 20px 34px 30px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: radial-gradient(ellipse at 50% 19%, #bbaa9059, transparent 58%), #3d332bde;
+  }
+  .details::after { border-image-width: 34px; }
+  .showcase { position: relative; display: grid; place-items: center; isolation: isolate; }
+  .showcase::before {
+    content: "";
+    position: absolute;
+    inset: 1px 14px 8px;
+    z-index: -1;
+    background: url("../art_assets/Others/PaimonEmblem_LightBrown.png") center / contain no-repeat;
+    opacity: .24;
+  }
+  #detailArt { width: 226px; border: 1px solid #e9d6ae8c; border-radius: 15px; box-shadow: 0 12px 28px #251a1960; }
+  .detail-copy { min-height: 0; text-align: center; }
+  .details.weapon-details { grid-template-rows: 156px minmax(0, 1fr) auto; }
+  .weapon-details #detailArt { width: 130px; }
+  .weapon-details .detail-copy { display: flex; flex-direction: column; padding-bottom: 12px; }
+  .weapon-details #detailName { font-size: 30px; }
+  .weapon-preview { display: flex; flex: 1; flex-direction: column; min-height: 0; margin-top: 10px; }
+  .weapon-modes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 11px;
+  }
+  .weapon-modes button {
+    min-height: 38px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: #30282060;
+    font-size: 17px;
+  }
+  .weapon-modes button[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+  .weapon-readout {
+    min-height: 0;
+    overflow: auto;
+    padding: 0 8px 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #bfae8d #3e352d44;
+    text-align: left;
+  }
+  #weaponStats { display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; margin: 0; font-size: 19px; }
+  #weaponStats dt { color: var(--muted); }
+  #weaponStats dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  #weaponPassive {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px solid var(--line);
+    color: var(--paper);
+    font-size: 19px;
+    line-height: 1.55;
+    white-space: pre-line;
+  }
+  #detailStars { font-size: 22px; min-height: 26px; }
+  #detailName { color: var(--paper); font-size: 34px; }
+  #detailInfo { margin: 12px auto 0; max-width: 370px; color: var(--muted); font-size: 20px; }
+  .checkout { padding-top: 16px; border-top: 1px solid var(--line); font-size: 21px; }
+  .checkout-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .checkout-row span:first-child { color: var(--muted); }
+  .money { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+  .money s { color: var(--muted); font-size: 17px; }
+  .stepper { display: grid; grid-template-columns: 43px 72px 43px 60px; gap: 5px; text-align: center; }
+  .stepper button, .stepper input {
+    min-width: 0;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #d8c6a36b;
+    border-radius: 7px;
+    background: #b4a18c26;
+    text-align: center;
+  }
+  .stepper input { appearance: textfield; background: #261d1770; }
+  .stepper input::-webkit-inner-spin-button { appearance: none; }
+  .stepper button { touch-action: manipulation; }
+  .stepper button:hover:not(:disabled) { background: #b4a18c5c; }
+  #exchange {
+    width: 100%;
+    height: 57px;
+    margin-top: 8px;
+    border: 1px solid #f7e6c1;
+    border-radius: 30px;
+    color: var(--ink);
+    background: linear-gradient(#f8efda, #d8c7a9);
+    box-shadow: inset 0 0 0 3px #f7efdd78;
+    font-size: 24px;
+    letter-spacing: .10em;
+  }
+  #exchange:hover:not(:disabled) { filter: brightness(1.08); }
+  .tip {
+    position: absolute;
+    z-index: 5;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--white);
+    font-size: 24px;
+    text-shadow: 0 2px 6px #32281b;
+    pointer-events: none;
+  }
+  .tip.active { animation: float-tip 1.75s ease both; }
+  @keyframes float-tip {
+    0% { opacity: 0; translate: 0 8px; }
+    15%, 74% { opacity: 1; }
+    100% { opacity: 0; translate: 0 -17px; }
+  }
+  .controls {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    padding: 4px 12px 8px;
+    color: var(--paper);
+    font: 400 13px/1.35 var(--ui-font);
+  }
+  .controls label { display: flex; align-items: center; gap: 8px; }
+  .controls input, .controls select, .controls button {
+    padding: 3px 9px;
+    border: 1px solid #f7efdd61;
+    border-radius: 5px;
+    background: #473e34;
+  }
+  .controls input { width: 61px; }
+  .controls output { min-width: 46px; font-variant-numeric: tabular-nums; }
+  .controls details { position: relative; }
+  .controls summary { cursor: pointer; }
+  .controls details p {
+    position: absolute;
+    bottom: 26px;
+    right: 0;
+    z-index: 6;
+    width: min(290px, 80vw);
+    padding: 8px 12px;
+    border-radius: 7px;
+    background: #473e34;
+    box-shadow: 0 3px 10px #21191b77;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+    .tip.active { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="viewport" id="viewport">
+  <main class="canvas" id="canvas" aria-label="商店" data-en-label="Shop">
+    <section class="store">
+      <header class="masthead">
+        <div class="identity">
+          <button type="button" class="shop-return" id="routeBack" hidden></button>
+          <span class="seal" aria-hidden="true"><span>✦</span></span><h1 data-en="Shop">商店</h1>
+        </div>
+        <nav class="tabs" id="tabs" aria-label="选择商店" data-en-label="Select a shop"></nav>
+        <div class="balance"><img id="balanceIcon" alt=""><span data-en="Balance">持有</span><strong id="balance"></strong></div>
+      </header>
+      <div class="content">
+        <section class="catalog" aria-labelledby="catalogTitle">
+          <div class="catalog-head">
+            <div class="catalog-title"><h2 id="catalogTitle" data-en="Items">兑换一览</h2><span id="count"></span></div>
+            <div class="catalog-actions">
+              <select id="category" aria-label="按商品种类筛选" data-en-label="Filter by item type" hidden>
+                <option value="" data-en="All Types">全部种类</option>
+                <option value="0" data-en="Sword">单手剑</option>
+                <option value="1" data-en="Claymore">双手剑</option>
+                <option value="2" data-en="Bow">弓箭</option>
+                <option value="3" data-en="Polearm">长枪</option>
+                <option value="4" data-en="Catalyst">法器</option>
+                <option value="material" data-en="Materials">材料</option>
+              </select>
+              <input id="search" type="search" placeholder="搜索商品" aria-label="搜索商品" data-en-label="Search items">
+            </div>
+          </div>
+          <div class="goods" id="goods" aria-label="商品列表" data-en-label="Item list"></div>
+        </section>
+        <aside class="details" id="details" aria-label="商品详情" data-en-label="Item details">
+          <div class="showcase"><div class="art" id="detailArt"><img id="detailIcon" alt=""></div></div>
+          <div class="detail-copy">
+            <div class="stars" id="detailStars"></div>
+            <h2 id="detailName"></h2>
+            <p id="detailInfo"></p>
+            <div class="weapon-preview" id="weaponPreview" hidden>
+              <div class="weapon-modes" id="weaponModes" role="group" aria-label="武器属性档位" data-en-label="Weapon level and refinement">
+                <button type="button" data-weapon-mode="0" aria-pressed="true" data-en="Lv. 1 · R1">1级 · 精炼1阶</button>
+                <button type="button" data-weapon-mode="1" aria-pressed="false" data-en="Lv. 90 · R5">90级 · 精炼5阶</button>
+              </div>
+              <div class="weapon-readout" id="weaponReadout" tabindex="0" aria-label="武器属性与效果" data-en-label="Weapon stats and effect">
+                <dl id="weaponStats"></dl>
+                <p id="weaponPassive"></p>
+              </div>
+            </div>
+          </div>
+          <div class="checkout" id="checkout">
+            <div class="checkout-row"><span data-en="Unit Price">单价</span><strong class="money" id="unitPrice"></strong></div>
+            <div class="checkout-row"><span data-en="Stock Left">剩余可兑换</span><strong id="stock"></strong></div>
+            <div class="checkout-row">
+              <span data-en="Quantity">兑换数量</span>
+              <div class="stepper">
+                <button type="button" id="minus" aria-label="减少兑换数量" data-en-label="Decrease quantity">−</button>
+                <input type="number" id="quantity" aria-label="兑换数量" data-en-label="Quantity" min="1" step="1" value="1">
+                <button type="button" id="plus" aria-label="增加兑换数量" data-en-label="Increase quantity">＋</button>
+                <button type="button" id="max" data-en="Max">最大</button>
+              </div>
+            </div>
+            <div class="checkout-row"><span data-en="Total">合计</span><strong class="money" id="total"></strong></div>
+            <button type="button" id="exchange">确认兑换</button>
+          </div>
+        </aside>
+      </div>
+      <div class="tip" id="tip" role="status"></div>
+    </section>
+  </main>
+</div>
+<footer class="controls" aria-label="演示设置" data-en-label="Preview controls">
+  <label><span data-en="Chapter">章节</span> <select id="chapter"></select></label>
+  <label><span data-en="Node">节点</span> <input id="node" type="number" min="1" max="99" step="1" value="1"></label>
+  <output id="nodeCode" for="chapter node">R601</output>
+  <button type="button" id="reset" data-en="Reset Purchases">重置兑换</button>
+  <button type="button" id="languageSwitch" lang="en" aria-label="Switch to English">EN</button>
+  <details id="issues" hidden><summary id="issueCount"></summary><p id="issueText"></p></details>
+</footer>
+
+<script id="shop-data" type="application/json">{"products":[[{"id":"3026","itemId":"63026","name":"铁蜂刺","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3026_01.png","rarity":4,"weaponType":0,"nameEn":"Iron Sting"},{"id":"3037","itemId":"63037","name":"天目影打刀","price":8,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3037_01.png","rarity":4,"weaponType":0,"nameEn":"Amenoma Kageuchi"},{"id":"3040","itemId":"63040","name":"原木刀","price":8,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3040_01.png","rarity":4,"weaponType":0,"nameEn":"Sapwood Blade"},{"id":"3044","itemId":"63044","name":"海渊终曲","price":8,"opensAt":501,"limit":2,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3044_01.png","rarity":4,"weaponType":0,"nameEn":"Finale of the Deep"},{"id":"3048","itemId":"63048","name":"息燧之笛","price":8,"opensAt":601,"limit":3,"restocks":[{"anchor":601,"offset":3,"amount":1},{"anchor":601,"offset":6,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3048_01.png","rarity":4,"weaponType":0,"nameEn":"Flute of Ezpitzal"},{"id":"3051","itemId":"63051","name":"谧音吹哨","price":8,"opensAt":701,"limit":4,"restocks":[{"anchor":701,"offset":3,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3051_01.png","rarity":4,"weaponType":0,"nameEn":"Serenity's Call"},{"id":"3053","itemId":"63053","name":"试作古华","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3053_01.png","rarity":4,"weaponType":1,"nameEn":"Prototype Archaic"},{"id":"3058","itemId":"63058","name":"白影剑","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3058_01.png","rarity":4,"weaponType":1,"nameEn":"Whiteblind"},{"id":"3064","itemId":"63064","name":"桂木斩长正","price":8,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3064_01.png","rarity":4,"weaponType":1,"nameEn":"Katsuragikiri Nagamasa"},{"id":"3067","itemId":"63067","name":"森林王器","price":8,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3067_01.png","rarity":4,"weaponType":1,"nameEn":"Forest Regalia"},{"id":"3071","itemId":"63071","name":"浪影阔剑","price":8,"opensAt":501,"limit":2,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3071_01.png","rarity":4,"weaponType":1,"nameEn":"Tidal Shadow"},{"id":"3074","itemId":"63074","name":"撼地者","price":8,"opensAt":601,"limit":3,"restocks":[{"anchor":601,"offset":3,"amount":1},{"anchor":601,"offset":6,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3074_01.png","rarity":4,"weaponType":1,"nameEn":"Earth Shaker"},{"id":"3077","itemId":"63077","name":"万能钥匙","price":8,"opensAt":701,"limit":4,"restocks":[{"anchor":701,"offset":3,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3077_01.png","rarity":4,"weaponType":1,"nameEn":"Master Key"},{"id":"3083","itemId":"63083","name":"试作澹月","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3083_01.png","rarity":4,"weaponType":2,"nameEn":"Prototype Crescent"},{"id":"3084","itemId":"63084","name":"钢轮弓","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3084_01.png","rarity":4,"weaponType":2,"nameEn":"Compound Bow"},{"id":"3090","itemId":"63090","name":"破魔之弓","price":8,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3090_01.png","rarity":4,"weaponType":2,"nameEn":"Hamayumi"},{"id":"3095","itemId":"63095","name":"王下近侍","price":8,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3095_01.png","rarity":4,"weaponType":2,"nameEn":"King's Squire"},{"id":"3098","itemId":"63098","name":"静谧之曲","price":8,"opensAt":501,"limit":2,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3098_01.png","rarity":4,"weaponType":2,"nameEn":"Song of Stillness"},{"id":"3101","itemId":"63101","name":"碎链","price":8,"opensAt":601,"limit":3,"restocks":[{"anchor":601,"offset":3,"amount":1},{"anchor":601,"offset":6,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3101_01.png","rarity":4,"weaponType":2,"nameEn":"Chain Breaker"},{"id":"3104","itemId":"63104","name":"罗网勾针","price":8,"opensAt":701,"limit":4,"restocks":[{"anchor":701,"offset":3,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3104_01.png","rarity":4,"weaponType":2,"nameEn":"Snare Hook"},{"id":"3108","itemId":"63108","name":"流月针","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3108_01.png","rarity":4,"weaponType":3,"nameEn":"Crescent Pike"},{"id":"3109","itemId":"63109","name":"试作星镰","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3109_01.png","rarity":4,"weaponType":3,"nameEn":"Prototype Starglitter"},{"id":"3115","itemId":"63115","name":"喜多院十文字","price":8,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3115_01.png","rarity":4,"weaponType":3,"nameEn":"Kitain Cross Spear"},{"id":"3118","itemId":"63118","name":"贯月矢","price":8,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3118_01.png","rarity":4,"weaponType":3,"nameEn":"Moonpiercer"},{"id":"3121","itemId":"63121","name":"公义的酬报","price":8,"opensAt":501,"limit":2,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3121_01.png","rarity":4,"weaponType":3,"nameEn":"Rightful Reward"},{"id":"3124","itemId":"63124","name":"虹的行迹","price":8,"opensAt":601,"limit":3,"restocks":[{"anchor":601,"offset":3,"amount":1},{"anchor":601,"offset":6,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3124_01.png","rarity":4,"weaponType":3,"nameEn":"Footprint of the Rainbow"},{"id":"3127","itemId":"63127","name":"掘金之锹","price":8,"opensAt":701,"limit":4,"restocks":[{"anchor":701,"offset":3,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3127_01.png","rarity":4,"weaponType":3,"nameEn":"Prospector's Shovel"},{"id":"3134","itemId":"63134","name":"万国诸海图谱","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3134_01.png","rarity":4,"weaponType":4,"nameEn":"Mappa Mare"},{"id":"3136","itemId":"63136","name":"试作金珀","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3136_01.png","rarity":4,"weaponType":4,"nameEn":"Prototype Amber"},{"id":"3138","itemId":"63138","name":"忍冬之果","price":8,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3138_01.png","rarity":4,"weaponType":4,"nameEn":"Frostbearer"},{"id":"3141","itemId":"63141","name":"白辰之环","price":8,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3141_01.png","rarity":4,"weaponType":4,"nameEn":"Hakushin Ring"},{"id":"3143","itemId":"63143","name":"盈满之实","price":8,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3143_01.png","rarity":4,"weaponType":4,"nameEn":"Fruit of Fulfillment"},{"id":"3146","itemId":"63146","name":"纯水流华","price":8,"opensAt":501,"limit":2,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3146_01.png","rarity":4,"weaponType":4,"nameEn":"Flowing Purity"},{"id":"3148","itemId":"63148","name":"木棉之环","price":8,"opensAt":601,"limit":3,"restocks":[{"anchor":601,"offset":3,"amount":1},{"anchor":601,"offset":6,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3148_01.png","rarity":4,"weaponType":4,"nameEn":"Ring of Yaxche"},{"id":"3151","itemId":"63151","name":"乌髓孑灯","price":8,"opensAt":701,"limit":4,"restocks":[{"anchor":701,"offset":3,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3151_01.png","rarity":4,"weaponType":4,"nameEn":"Blackmarrow Lantern"},{"id":"3027","itemId":"63027","name":"宗室长剑","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3027_01.png","rarity":4,"weaponType":0,"nameEn":"Royal Longsword"},{"id":"3032","itemId":"63032","name":"黑岩长剑","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3032_01.png","rarity":4,"weaponType":0,"nameEn":"Blackcliff Longsword"},{"id":"3056","itemId":"63056","name":"宗室大剑","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3056_01.png","rarity":4,"weaponType":1,"nameEn":"Royal Greatsword"},{"id":"3060","itemId":"63060","name":"黑岩斩刀","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3060_01.png","rarity":4,"weaponType":1,"nameEn":"Blackcliff Slasher"},{"id":"3080","itemId":"63080","name":"宗室长弓","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3080_01.png","rarity":4,"weaponType":2,"nameEn":"Royal Bow"},{"id":"3085","itemId":"63085","name":"黑岩战弓","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3085_01.png","rarity":4,"weaponType":2,"nameEn":"Blackcliff Warbow"},{"id":"3107","itemId":"63107","name":"黑岩刺枪","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3107_01.png","rarity":4,"weaponType":3,"nameEn":"Blackcliff Pole"},{"id":"3112","itemId":"63112","name":"宗室猎枪","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3112_01.png","rarity":4,"weaponType":3,"nameEn":"Royal Spear"},{"id":"3131","itemId":"63131","name":"黑岩绯玉","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3131_01.png","rarity":4,"weaponType":4,"nameEn":"Blackcliff Agate"},{"id":"3132","itemId":"63132","name":"宗室秘法录","price":9,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3132_01.png","rarity":4,"weaponType":4,"nameEn":"Royal Grimoire"},{"id":"3033","itemId":"63033","name":"黑剑","price":10,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3033_01.png","rarity":4,"weaponType":0,"nameEn":"The Black Sword"},{"id":"3043","itemId":"63043","name":"狼牙","price":10,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3043_01.png","rarity":4,"weaponType":0,"nameEn":"Wolf-Fang"},{"id":"3061","itemId":"63061","name":"螭骨剑","price":10,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3061_01.png","rarity":4,"weaponType":1,"nameEn":"Serpent Spine"},{"id":"3070","itemId":"63070","name":"聊聊棒","price":10,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3070_01.png","rarity":4,"weaponType":1,"nameEn":"Talking Stick"},{"id":"3086","itemId":"63086","name":"苍翠猎弓","price":10,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3086_01.png","rarity":4,"weaponType":2,"nameEn":"The Viridescent Hunt"},{"id":"3097","itemId":"63097","name":"烈阳之嗣","price":10,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3097_01.png","rarity":4,"weaponType":2,"nameEn":"Scion of the Blazing Sun"},{"id":"3110","itemId":"63110","name":"决斗之枪","price":10,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3110_01.png","rarity":4,"weaponType":3,"nameEn":"Deathmatch"},{"id":"3120","itemId":"63120","name":"峡湾长歌","price":10,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3120_01.png","rarity":4,"weaponType":3,"nameEn":"Ballad of the Fjords"},{"id":"3135","itemId":"63135","name":"匣里日月","price":10,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3135_01.png","rarity":4,"weaponType":4,"nameEn":"Solar Pearl"},{"id":"3145","itemId":"63145","name":"遗祀玉珑","price":10,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3145_01.png","rarity":4,"weaponType":4,"nameEn":"Sacrificial Jade"},{"id":"660404","itemId":"660404","name":"智识之冕","price":10,"opensAt":701,"limit":null,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660404.png","rarity":5,"category":"TalentMaterial","nameEn":"Crown of Insight","descriptionEn":"Used to raise a character skill to base level 10."}],[{"id":"3030","itemId":"63030","name":"试作斩岩","price":200,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3030_01.png","rarity":4,"weaponType":0,"nameEn":"Prototype Rancour"},{"id":"3039","itemId":"63039","name":"笼钓瓶一心","price":200,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3039_01.png","rarity":4,"weaponType":0,"nameEn":"Kagotsurube Isshin"},{"id":"3045","itemId":"63045","name":"灰河渡手","price":200,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3045_01.png","rarity":4,"weaponType":0,"nameEn":"Fleuve Cendre Ferryman"},{"id":"3047","itemId":"63047","name":"水仙十字之剑","price":200,"opensAt":501,"limit":1,"restocks":[{"anchor":501,"offset":3,"amount":1},{"anchor":501,"offset":6,"amount":1},{"anchor":501,"offset":9,"amount":1},{"anchor":501,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3047_01.png","rarity":4,"weaponType":0,"nameEn":"Sword of Narzissenkreuz"},{"id":"3062","itemId":"63062","name":"雪葬的星银","price":200,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3062_01.png","rarity":4,"weaponType":1,"nameEn":"Snow-Tombed Starsilver"},{"id":"3091","itemId":"63091","name":"掠食者","price":200,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3091_01.png","rarity":4,"weaponType":2,"nameEn":"Predator"},{"id":"3094","itemId":"63094","name":"竭泽","price":200,"opensAt":401,"limit":1,"restocks":[{"anchor":401,"offset":3,"amount":1},{"anchor":401,"offset":6,"amount":1},{"anchor":401,"offset":9,"amount":1},{"anchor":401,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3094_01.png","rarity":4,"weaponType":2,"nameEn":"End of the Line"},{"id":"3113","itemId":"63113","name":"龙脊长枪","price":200,"opensAt":101,"limit":1,"restocks":[{"anchor":101,"offset":3,"amount":1},{"anchor":101,"offset":6,"amount":1},{"anchor":101,"offset":9,"amount":1},{"anchor":101,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3113_01.png","rarity":4,"weaponType":3,"nameEn":"Dragonspine Spear"},{"id":"3116","itemId":"63116","name":"「渔获」","price":200,"opensAt":301,"limit":1,"restocks":[{"anchor":301,"offset":3,"amount":1},{"anchor":301,"offset":6,"amount":1},{"anchor":301,"offset":9,"amount":1},{"anchor":301,"offset":12,"amount":1}],"description":"","weapon":true,"icon":"Weapon_Icon/3116_01.png","rarity":4,"weaponType":3,"nameEn":"\"The Catch\""},{"id":"3035","itemId":"63035","name":"腐殖之剑","price":200,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3035_01.png","rarity":4,"weaponType":0,"nameEn":"Festering Desire"},{"id":"3038","itemId":"63038","name":"辰砂之纺锤","price":200,"opensAt":301,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3038_01.png","rarity":4,"weaponType":0,"nameEn":"Cinnabar Spindle"},{"id":"3042","itemId":"63042","name":"东花坊时雨","price":200,"opensAt":401,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3042_01.png","rarity":4,"weaponType":0,"nameEn":"Toukabou Shigure"},{"id":"3050","itemId":"63050","name":"厄水之祸","price":200,"opensAt":601,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3050_01.png","rarity":4,"weaponType":0,"nameEn":"Calamity of Eshu"},{"id":"3065","itemId":"63065","name":"衔珠海皇","price":200,"opensAt":301,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3065_01.png","rarity":4,"weaponType":1,"nameEn":"Luxurious Sea-Lord"},{"id":"3069","itemId":"63069","name":"饰铁之花","price":200,"opensAt":401,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3069_01.png","rarity":4,"weaponType":1,"nameEn":"Mailed Flower"},{"id":"3073","itemId":"63073","name":"「究极霸王超级魔剑」","price":200,"opensAt":501,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3073_01.png","rarity":4,"weaponType":1,"nameEn":"\"Ultimate Overlord's Mega Magic Sword\""},{"id":"3076","itemId":"63076","name":"拾慧铸熔","price":200,"opensAt":601,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3076_01.png","rarity":4,"weaponType":1,"nameEn":"Flame-Forged Insight"},{"id":"3088","itemId":"63088","name":"风花之颂","price":200,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3088_01.png","rarity":4,"weaponType":2,"nameEn":"Windblume Ode"},{"id":"3093","itemId":"63093","name":"落霞","price":200,"opensAt":301,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3093_01.png","rarity":4,"weaponType":2,"nameEn":"Fading Twilight"},{"id":"3096","itemId":"63096","name":"鹮穿之喙","price":200,"opensAt":401,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3096_01.png","rarity":4,"weaponType":2,"nameEn":"Ibis Piercer"},{"id":"3100","itemId":"63100","name":"筑云","price":200,"opensAt":501,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3100_01.png","rarity":4,"weaponType":2,"nameEn":"Cloudforged"},{"id":"3103","itemId":"63103","name":"冷寂迸音","price":200,"opensAt":601,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3103_01.png","rarity":4,"weaponType":2,"nameEn":"Sequence of Solitude"},{"id":"3105","itemId":"63105","name":"虹蛇的雨弦","price":200,"opensAt":701,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3105_01.png","rarity":4,"weaponType":2,"nameEn":"Rainbow Serpent's Rain Bow"},{"id":"3119","itemId":"63119","name":"风信之锋","price":200,"opensAt":401,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3119_01.png","rarity":4,"weaponType":3,"nameEn":"Missive Windspear"},{"id":"3123","itemId":"63123","name":"沙中伟贤的对答","price":200,"opensAt":501,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3123_01.png","rarity":4,"weaponType":3,"nameEn":"Dialogues of the Desert Sages"},{"id":"3126","itemId":"63126","name":"且住亭御咄","price":200,"opensAt":601,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3126_01.png","rarity":4,"weaponType":3,"nameEn":"Tamayuratei no Ohanashi"},{"id":"3140","itemId":"63140","name":"嘟嘟可故事集","price":200,"opensAt":101,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3140_01.png","rarity":4,"weaponType":4,"nameEn":"Dodoco Tales"},{"id":"3142","itemId":"63142","name":"证誓之明瞳","price":200,"opensAt":301,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3142_01.png","rarity":4,"weaponType":4,"nameEn":"Oathsworn Eye"},{"id":"3147","itemId":"63147","name":"无垠蔚蓝之歌","price":200,"opensAt":501,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3147_01.png","rarity":4,"weaponType":4,"nameEn":"Ballad of the Boundless Blue"},{"id":"3149","itemId":"63149","name":"苍纹角杯","price":200,"opensAt":601,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3149_01.png","rarity":4,"weaponType":4,"nameEn":"Ash-Graven Drinking Horn"},{"id":"3152","itemId":"63152","name":"天光的纺琴","price":200,"opensAt":701,"limit":5,"restocks":[],"description":"","weapon":true,"icon":"Weapon_Icon/3152_01.png","rarity":4,"weaponType":4,"nameEn":"Etherlight Spindlelute"},{"id":"660404","itemId":"660404","name":"智识之冕","price":250,"opensAt":701,"limit":4,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660404.png","rarity":5,"category":"TalentMaterial","nameEn":"Crown of Insight","descriptionEn":"Used to raise a character skill to base level 10."}],[{"id":"660101","itemId":"660101","name":"流浪者的经验","price":1000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660101.png","rarity":2,"category":"CharacterExperience","nameEn":"Wanderer's Advice","experienceValue":100},{"id":"660102","itemId":"660102","name":"冒险家的经验","price":5000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660102.png","rarity":3,"category":"CharacterExperience","nameEn":"Adventurer's Experience","experienceValue":500},{"id":"660103","itemId":"660103","name":"大英雄的经验","price":10000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660103.png","rarity":4,"category":"CharacterExperience","nameEn":"Hero's Wit","experienceValue":1000},{"id":"660201","itemId":"660201","name":"精锻用杂矿","price":1000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660201.png","rarity":1,"category":"WeaponExperience","nameEn":"Enhancement Ore","experienceValue":100},{"id":"660202","itemId":"660202","name":"精锻用良矿","price":5000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660202.png","rarity":2,"category":"WeaponExperience","nameEn":"Fine Enhancement Ore","experienceValue":500},{"id":"660203","itemId":"660203","name":"精锻用魔矿","price":10000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660203.png","rarity":3,"category":"WeaponExperience","nameEn":"Mystic Enhancement Ore","experienceValue":1000},{"id":"660301","itemId":"660301","name":"祝圣油膏","price":500,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660301.png","rarity":3,"category":"ArtifactExperience","nameEn":"Sanctifying Unction","experienceValue":50},{"id":"660302","itemId":"660302","name":"祝圣精华","price":2000,"opensAt":101,"limit":null,"restocks":[],"weapon":false,"icon":"ItemIcon/660302.png","rarity":4,"category":"ArtifactExperience","nameEn":"Sanctifying Essence","experienceValue":200},{"id":"660401","itemId":"660401","name":"低级天赋书","price":3000,"opensAt":101,"limit":null,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660401.png","rarity":2,"category":"TalentMaterial","nameEn":"Basic Talent Book","descriptionEn":"A basic talent book used to raise character skill levels."},{"id":"660402","itemId":"660402","name":"中级天赋书","price":9000,"opensAt":301,"limit":null,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660402.png","rarity":3,"category":"TalentMaterial","nameEn":"Intermediate Talent Book","descriptionEn":"An intermediate talent book used to raise character skill levels."},{"id":"660403","itemId":"660403","name":"高级天赋书","price":27000,"opensAt":501,"limit":null,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660403.png","rarity":4,"category":"TalentMaterial","nameEn":"Advanced Talent Book","descriptionEn":"An advanced talent book used to raise character skill levels."},{"id":"660404","itemId":"660404","name":"智识之冕","price":243000,"opensAt":701,"limit":4,"restocks":[],"description":"天赋升级材料，按升级需求消耗数量。","weapon":false,"icon":"ItemIcon/660404.png","rarity":5,"category":"TalentMaterial","nameEn":"Crown of Insight","descriptionEn":"Used to raise a character skill to base level 10."},{"id":"660501","itemId":"660501","name":"深秘圣物匣·三等","price":3000,"opensAt":101,"limit":null,"restocks":[],"description":"收纳3星圣遗物的圣物匣。","weapon":false,"icon":"ItemIcon/660501.png","rarity":3,"category":"ArtifactReliquary","nameEn":"Artifact Reliquary III","descriptionEn":"A reliquary containing 3-star Artifacts."},{"id":"660502","itemId":"660502","name":"深秘圣物匣·二等","price":6000,"opensAt":301,"limit":null,"restocks":[],"description":"收纳4星圣遗物的圣物匣。","weapon":false,"icon":"ItemIcon/660502.png","rarity":4,"category":"ArtifactReliquary","nameEn":"Artifact Reliquary II","descriptionEn":"A reliquary containing 4-star Artifacts."},{"id":"660503","itemId":"660503","name":"深秘圣物匣·一等","price":15000,"opensAt":501,"limit":null,"restocks":[],"description":"收纳5星圣遗物的圣物匣。","weapon":false,"icon":"ItemIcon/660503.png","rarity":5,"category":"ArtifactReliquary","nameEn":"Artifact Reliquary I","descriptionEn":"A reliquary containing 5-star Artifacts."}]],"discounts":{"660503":[{"node":601,"delta":-3000},{"node":701,"delta":-3000}]},"errors":[],"chapterLengths":{"1":20},"weapons":{"3026":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":42,"secondary":36,"description":"造成元素伤害后的1回合内，角色造成的伤害提高6%，该效果最多叠加2层。每单次行动只能触发一次。","descriptionEn":"Dealing Elemental DMG increases all DMG dealt by 6% for 1 turn, up to 2 stacks. This can trigger once per action."},{"attack":510.07,"secondary":164.93,"description":"造成元素伤害后的1回合内，角色造成的伤害提高12%，该效果最多叠加2层。每单次行动只能触发一次。","descriptionEn":"Dealing Elemental DMG increases all DMG dealt by 12% for 1 turn, up to 2 stacks. This can trigger once per action."}],"secondaryNameEn":"Elemental Mastery"},"3037":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":41,"secondary":0.12,"description":"施放元素战技后，获得1层胤种，该效果每1回合至多触发一次。胤种持续8回合，至多同时存在3层。施放元素爆发后，会清除持有的所有胤种，并在该回合我方回合结束时，基于消耗的胤种层数，每个为该角色恢复6点元素能量。","descriptionEn":"Using an Elemental Skill grants 1 Succession Seed at most once per turn. Seeds last 8 turns and up to 3 can coexist. Using an Elemental Burst consumes all Seeds. At the end of that allied turn, restore 6 Energy to the wielder for each Seed consumed."},{"attack":453.95,"secondary":0.5511999999999999,"description":"施放元素战技后，获得1层胤种，该效果每1回合至多触发一次。胤种持续8回合，至多同时存在3层。施放元素爆发后，会清除持有的所有胤种，并在该回合我方回合结束时，基于消耗的胤种层数，每个为该角色恢复12点元素能量。","descriptionEn":"Using an Elemental Skill grants 1 Succession Seed at most once per turn. Seeds last 8 turns and up to 3 can coexist. Using an Elemental Burst consumes all Seeds. At the end of that allied turn, restore 12 Energy to the wielder for each Seed consumed."}],"secondaryNameEn":"ATK"},"3040":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"触发任意草元素相关反应后，元素精通提升60点，持续3回合。每5回合最多触发一次。角色处于队伍后台时也能触发。","descriptionEn":"After triggering any Dendro reaction, gain 60 Elemental Mastery for 3 turns. This can trigger once every 5 turns, including while off-field."},{"attack":566.05,"secondary":0.3063,"description":"触发任意草元素相关反应后，元素精通提升120点，持续3回合。每5回合最多触发一次。角色处于队伍后台时也能触发。","descriptionEn":"After triggering any Dendro reaction, gain 120 Elemental Mastery for 3 turns. This can trigger once every 5 turns, including while off-field."}],"secondaryNameEn":"Energy Recharge"},"3044":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"施放元素战技时，攻击力提升12%，持续4回合，并赋予生命值上限25%的生命之契，该效果每3回合至多触发一次。生命之契清除时，基于清除值的2.4%提升至多150点攻击力，持续4回合。","descriptionEn":"Using an Elemental Skill grants 12% ATK for 4 turns and a Bond of Life equal to 25% Max HP. This can trigger once every 3 turns. When the Bond is cleared, gain ATK equal to 2.4% of the amount cleared, up to 150 ATK, for 4 turns."},{"attack":566.05,"secondary":0.27559999999999996,"description":"施放元素战技时，攻击力提升24%，持续4回合，并赋予生命值上限25%的生命之契，该效果每3回合至多触发一次。生命之契清除时，基于清除值的4.8%提升至多300点攻击力，持续4回合。","descriptionEn":"Using an Elemental Skill grants 24% ATK for 4 turns and a Bond of Life equal to 25% Max HP. This can trigger once every 3 turns. When the Bond is cleared, gain ATK equal to 4.8% of the amount cleared, up to 300 ATK, for 4 turns."}],"secondaryNameEn":"ATK"},"3048":{"secondaryName":"防御力","flat":false,"panels":[{"attack":41,"secondary":0.15,"description":"施放元素战技时，防御力提升16%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 16% DEF for 4 turns."},{"attack":453.95,"secondary":0.6909000000000001,"description":"施放元素战技时，防御力提升32%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 32% DEF for 4 turns."}],"secondaryNameEn":"DEF"},"3051":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":41,"secondary":0.133,"description":"触发元素反应后的3回合内，生命值上限提高16%。月兆·满辉：该效果中的生命值上限额外提高16%。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 16% Max HP for 3 turns. Moonsign: Ascendant Gleam further increases that Max HP bonus by 16%. The effect can trigger while the wielder is off-field."},{"attack":453.95,"secondary":0.6136,"description":"触发元素反应后的3回合内，生命值上限提高32%。月兆·满辉：该效果中的生命值上限额外提高32%。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 32% Max HP for 3 turns. Moonsign: Ascendant Gleam further increases that Max HP bonus by 32%. The effect can trigger while the wielder is off-field."}],"secondaryNameEn":"Energy Recharge"},"3053":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"普通攻击和重击命中时，有50%的概率对随机一名被命中的敌人及其相邻目标造成一段240%攻击力的物理伤害。该效果每4回合只能触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 50% chance to deal 240% ATK as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."},{"attack":566.05,"secondary":0.27559999999999996,"description":"普通攻击和重击命中时，有50%的概率对随机一名被命中的敌人及其相邻目标造成一段480%攻击力的物理伤害。该效果每4回合只能触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 50% chance to deal 480% ATK as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."}],"secondaryNameEn":"ATK"},"3058":{"secondaryName":"防御力","flat":false,"panels":[{"attack":42,"secondary":0.113,"description":"普通攻击和重击命中后，攻击力和防御力提高6%。该效果持续2回合，最多叠加4层。","descriptionEn":"Normal and Heavy Attack hits grant 6% ATK and DEF for 2 turns, up to 4 stacks."},{"attack":510.07,"secondary":0.5175000000000001,"description":"普通攻击和重击命中后，攻击力和防御力提高12%。该效果持续2回合，最多叠加4层。","descriptionEn":"Normal and Heavy Attack hits grant 12% ATK and DEF for 2 turns, up to 4 stacks."}],"secondaryNameEn":"DEF"},"3064":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"元素战技造成的伤害提升6%。元素战技命中后，角色流失3点元素能量，并在此后的2回合内，每回合结束时恢复5点元素能量。该效果每3回合至多触发一次，角色处于队伍后台也能触发。","descriptionEn":"Elemental Skill DMG increases by 6%. When a Skill hits, the wielder loses 3 Energy and restores 5 Energy at the end of each of the following 2 turns. This can trigger once every 3 turns, including while off-field."},{"attack":510.07,"secondary":0.4609,"description":"元素战技造成的伤害提升12%。元素战技命中后，角色流失3点元素能量，并在此后的2回合内，每回合结束时恢复8点元素能量。该效果每3回合至多触发一次，角色处于队伍后台也能触发。","descriptionEn":"Elemental Skill DMG increases by 12%. When a Skill hits, the wielder loses 3 Energy and restores 8 Energy at the end of each of the following 2 turns. This can trigger once every 3 turns, including while off-field."}],"secondaryNameEn":"Energy Recharge"},"3067":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"触发任意草元素相关反应后，元素精通提升60点，持续3回合。每5回合至多触发一次。角色处于队伍后台时也能触发。","descriptionEn":"After triggering any Dendro reaction, gain 60 Elemental Mastery for 3 turns. This can trigger once every 5 turns, including while off-field."},{"attack":566.05,"secondary":0.3063,"description":"触发任意草元素相关反应后，元素精通提升120点，持续3回合。每5回合至多触发一次。角色处于队伍后台时也能触发。","descriptionEn":"After triggering any Dendro reaction, gain 120 Elemental Mastery for 3 turns. This can trigger once every 5 turns, including while off-field."}],"secondaryNameEn":"Energy Recharge"},"3071":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"受到治疗时，攻击力提升24%，持续2回合。角色处于队伍后台也能触发。","descriptionEn":"Being healed grants 24% ATK for 2 turns, including while off-field."},{"attack":510.07,"secondary":0.4134,"description":"受到治疗时，攻击力提升48%，持续2回合。角色处于队伍后台也能触发。","descriptionEn":"Being healed grants 48% ATK for 2 turns, including while off-field."}],"secondaryNameEn":"ATK"},"3074":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"队伍中的角色触发火元素相关反应后，装备者元素战技造成的伤害提升16%，持续2回合。该效果队伍中的角色处于队伍后台时也能触发。","descriptionEn":"When a party member triggers a Pyro reaction, the wielder gains 16% Elemental Skill DMG for 2 turns. The party member can trigger this while off-field."},{"attack":566.05,"secondary":0.27559999999999996,"description":"队伍中的角色触发火元素相关反应后，装备者元素战技造成的伤害提升32%，持续2回合。该效果队伍中的角色处于队伍后台时也能触发。","descriptionEn":"When a party member triggers a Pyro reaction, the wielder gains 32% Elemental Skill DMG for 2 turns. The party member can trigger this while off-field."}],"secondaryNameEn":"ATK"},"3077":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":41,"secondary":0.133,"description":"触发元素反应后的3回合内，元素精通提升60点。月兆·满辉：该效果中的元素精通额外提升60点。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 60 Elemental Mastery for 3 turns. Moonsign: Ascendant Gleam increases this bonus by a further 60. The effect can trigger while the wielder is off-field."},{"attack":453.95,"secondary":0.6136,"description":"触发元素反应后的3回合内，元素精通提升120点。月兆·满辉：该效果中的元素精通额外提升120点。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 120 Elemental Mastery for 3 turns. Moonsign: Ascendant Gleam increases this bonus by a further 120. The effect can trigger while the wielder is off-field."}],"secondaryNameEn":"Energy Recharge"},"3083":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"重击命中后，涉及该角色的换人操作不消耗AP，增加36%攻击力，持续2回合。","descriptionEn":"After a Heavy Attack hits, the wielder gains 36% ATK and switching them in or out costs no AP for 2 turns."},{"attack":510.07,"secondary":0.4124,"description":"重击命中后，涉及该角色的换人操作不消耗AP，增加72%攻击力，持续2回合。","descriptionEn":"After a Heavy Attack hits, the wielder gains 72% ATK and switching them in or out costs no AP for 2 turns."}],"secondaryNameEn":"ATK"},"3084":{"secondaryName":"物理伤害加成","flat":false,"panels":[{"attack":41,"secondary":0.15,"description":"普通攻击与重击命中时，提升4%攻击力。该效果持续2回合，最多叠加4层，每次伤害效果只能触发一次。","descriptionEn":"Normal and Heavy Attack hits grant 4% ATK for 2 turns, up to 4 stacks. Each damage effect can trigger this once."},{"attack":453.95,"secondary":0.6909,"description":"普通攻击与重击命中时，提升8%攻击力。该效果持续2回合，最多叠加4层，每次伤害效果只能触发一次。","descriptionEn":"Normal and Heavy Attack hits grant 8% ATK for 2 turns, up to 4 stacks. Each damage effect can trigger this once."}],"secondaryNameEn":"Physical DMG Bonus"},"3090":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":41,"secondary":0.12,"description":"普通攻击造成的伤害提升16%，重击造成的伤害提升12%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。","descriptionEn":"Normal Attack DMG increases by 16% and Heavy Attack DMG by 12%. These bonuses double while the wielder's Energy is full."},{"attack":453.95,"secondary":0.5511999999999999,"description":"普通攻击造成的伤害提升32%，重击造成的伤害提升24%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。","descriptionEn":"Normal Attack DMG increases by 32% and Heavy Attack DMG by 24%. These bonuses double while the wielder's Energy is full."}],"secondaryNameEn":"ATK"},"3095":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":41,"secondary":0.12,"description":"施放元素战技或元素爆发时，将获得「森林教诲」效果，元素精通提升60点，持续3回合，并将在切换角色时移除。持续时间结束或被移除时，对随机一名敌人造成100%攻击力的伤害。森林教诲每5回合至多触发一次。","descriptionEn":"Using an Elemental Skill or Burst grants Teachings of the Forest, increasing Elemental Mastery by 60 for 3 turns. Switching out removes it. When it expires or is removed, deal 100% ATK as DMG to one random enemy. It can be gained once every 5 turns."},{"attack":453.95,"secondary":0.5511999999999999,"description":"施放元素战技或元素爆发时，将获得「森林教诲」效果，元素精通提升140点，持续3回合，并将在切换角色时移除。持续时间结束或被移除时，对随机一名敌人造成180%攻击力的伤害。森林教诲每5回合至多触发一次。","descriptionEn":"Using an Elemental Skill or Burst grants Teachings of the Forest, increasing Elemental Mastery by 140 for 3 turns. Switching out removes it. When it expires or is removed, deal 180% ATK as DMG to one random enemy. It can be gained once every 5 turns."}],"secondaryNameEn":"ATK"},"3098":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"受到治疗后，造成的伤害提升16%，持续2回合。角色处于队伍后台也能触发。","descriptionEn":"Being healed increases DMG by 16% for 2 turns, including while off-field."},{"attack":510.07,"secondary":0.4124,"description":"受到治疗后，造成的伤害提升32%，持续2回合。角色处于队伍后台也能触发。","descriptionEn":"Being healed increases DMG by 32% for 2 turns, including while off-field."}],"secondaryNameEn":"ATK"},"3101":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"队伍中每有一名纳塔角色或与装备者元素类型不同的角色，装备者获得4.8%攻击力提升；上述角色不少于3名时，装备者的元素精通提升24点。","descriptionEn":"For each party member from Natlan or of a different element than the wielder, gain 4.8% ATK. If at least 3 characters qualify, also gain 24 Elemental Mastery."},{"attack":566.05,"secondary":0.27659999999999996,"description":"队伍中每有一名纳塔角色或与装备者元素类型不同的角色，装备者获得9.6%攻击力提升；上述角色不少于3名时，装备者的元素精通提升48点。","descriptionEn":"For each party member from Natlan or of a different element than the wielder, gain 9.6% ATK. If at least 3 characters qualify, also gain 48 Elemental Mastery."}],"secondaryNameEn":"ATK"},"3104":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":41,"secondary":0.133,"description":"触发元素反应后的3回合内，元素精通提升60点。月兆·满辉：该效果中的元素精通额外提升60点。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 60 Elemental Mastery for 3 turns. Moonsign: Ascendant Gleam increases this bonus by a further 60. The effect can trigger while the wielder is off-field."},{"attack":453.95,"secondary":0.6116,"description":"触发元素反应后的3回合内，元素精通提升120点。月兆·满辉：该效果中的元素精通额外提升120点。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering an Elemental Reaction grants 120 Elemental Mastery for 3 turns. Moonsign: Ascendant Gleam increases this bonus by a further 120. The effect can trigger while the wielder is off-field."}],"secondaryNameEn":"Energy Recharge"},"3108":{"secondaryName":"物理伤害加成","flat":false,"panels":[{"attack":44,"secondary":0.075,"description":"能量增加后的1回合内，普通攻击和重击造成伤害时额外造成一段20%攻击力的物理伤害。","descriptionEn":"For 1 turn after gaining Energy, Normal and Heavy Attacks that deal damage deal an extra hit of 20% ATK as Physical DMG."},{"attack":566.05,"secondary":0.3459,"description":"能量增加后的1回合内，普通攻击和重击造成伤害时额外造成一段40%攻击力的物理伤害。","descriptionEn":"For 1 turn after gaining Energy, Normal and Heavy Attacks that deal damage deal an extra hit of 40% ATK as Physical DMG."}],"secondaryNameEn":"Physical DMG Bonus"},"3109":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"施放元素战技后，普通攻击和重击造成的伤害提高8%。该效果持续3回合，最多叠加2层。","descriptionEn":"After using an Elemental Skill, Normal and Heavy Attack DMG increase by 8% for 3 turns, up to 2 stacks."},{"attack":510.07,"secondary":0.4609,"description":"施放元素战技后，普通攻击和重击造成的伤害提高16%。该效果持续3回合，最多叠加2层。","descriptionEn":"After using an Elemental Skill, Normal and Heavy Attack DMG increase by 16% for 3 turns, up to 2 stacks."}],"secondaryNameEn":"Energy Recharge"},"3115":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":44,"secondary":24,"description":"元素战技造成的伤害提升6%。元素战技命中后，角色流失3点元素能量，并在此后的2回合内，我方回合开始及结束时恢复2点元素能量。该效果每3回合至多触发一次，角色处于队伍后台也能触发。","descriptionEn":"Elemental Skill DMG increases by 6%. When a Skill hits, the wielder loses 3 Energy. For the next 2 turns, restore 2 Energy at the start and end of each allied turn. This can trigger once every 3 turns, including while off-field."},{"attack":566.05,"secondary":110.05,"description":"元素战技造成的伤害提升12%。元素战技命中后，角色流失3点元素能量，并在此后的2回合内，我方回合开始及结束时恢复4点元素能量。该效果每3回合至多触发一次，角色处于队伍后台也能触发。","descriptionEn":"Elemental Skill DMG increases by 12%. When a Skill hits, the wielder loses 3 Energy. For the next 2 turns, restore 4 Energy at the start and end of each allied turn. This can trigger once every 3 turns, including while off-field."}],"secondaryNameEn":"Elemental Mastery"},"3118":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":44,"secondary":24,"description":"触发草元素相关反应后，角色攻击力提升16%，持续3回合。每5回合至多触发一次；角色处于队伍后台时也能触发。","descriptionEn":"After triggering a Dendro reaction, gain 16% ATK for 3 turns. This can trigger once every 5 turns, including while off-field."},{"attack":566.05,"secondary":110.05,"description":"触发草元素相关反应后，角色攻击力提升32%，持续3回合。每5回合至多触发一次；角色处于队伍后台时也能触发。","descriptionEn":"After triggering a Dendro reaction, gain 32% ATK for 3 turns. This can trigger once every 5 turns, including while off-field."}],"secondaryNameEn":"Elemental Mastery"},"3121":{"secondaryName":"生命值","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"受到治疗时，恢复8点元素能量。该效果每3回合至多触发一次，角色处于队伍后台时也能触发。","descriptionEn":"Being healed restores 8 Energy. This can trigger once every 3 turns, including while off-field."},{"attack":566.05,"secondary":0.27659999999999996,"description":"受到治疗时，恢复16点元素能量。该效果每3回合至多触发一次，角色处于队伍后台时也能触发。","descriptionEn":"Being healed restores 16 Energy. This can trigger once every 3 turns, including while off-field."}],"secondaryNameEn":"HP"},"3124":{"secondaryName":"防御力","flat":false,"panels":[{"attack":42,"secondary":0.113,"description":"施放元素战技时，防御力提升16%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 16% DEF for 4 turns."},{"attack":510.07,"secondary":0.5175000000000001,"description":"施放元素战技时，防御力提升32%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 32% DEF for 4 turns."}],"secondaryNameEn":"DEF"},"3127":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"感电反应造成的伤害提升48%，月感电反应造成的伤害提升12%。月兆·满辉：月感电反应造成的伤害额外提升12%。","descriptionEn":"Electro-Charged DMG increases by 48% and Lunar-Charged DMG by 12%. Moonsign: Ascendant Gleam further increases Lunar-Charged DMG by 12%."},{"attack":510.07,"secondary":0.4124,"description":"感电反应造成的伤害提升96%，月感电反应造成的伤害提升24%。月兆·满辉：月感电反应造成的伤害额外提升24%。","descriptionEn":"Electro-Charged DMG increases by 96% and Lunar-Charged DMG by 24%. Moonsign: Ascendant Gleam further increases Lunar-Charged DMG by 24%."}],"secondaryNameEn":"ATK"},"3134":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":44,"secondary":24,"description":"触发元素反应后的3回合内，获得8%元素伤害加成，该效果最多可以叠加2层。","descriptionEn":"Triggering an Elemental Reaction grants 8% Elemental DMG Bonus for 3 turns, up to 2 stacks."},{"attack":566.05,"secondary":110.05,"description":"触发元素反应后的3回合内，获得16%元素伤害加成，该效果最多可以叠加2层。","descriptionEn":"Triggering an Elemental Reaction grants 16% Elemental DMG Bonus for 3 turns, up to 2 stacks."}],"secondaryNameEn":"Elemental Mastery"},"3136":{"secondaryName":"生命值","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"施放元素爆发后的2回合内，每回合我方回合开始及结束时，恢复4点元素能量、队伍中的所有角色恢复4%生命值。","descriptionEn":"For 2 turns after using an Elemental Burst, the wielder recovers 4 Energy and all party members recover 4% of their HP at the start and end of each allied turn."},{"attack":510.07,"secondary":0.4124,"description":"施放元素爆发后的2回合内，每回合我方回合开始及结束时，恢复6点元素能量、队伍中的所有角色恢复6%生命值。","descriptionEn":"For 2 turns after using an Elemental Burst, the wielder recovers 6 Energy and all party members recover 6% of their HP at the start and end of each allied turn."}],"secondaryNameEn":"HP"},"3138":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"普通攻击与重击命中敌人时，有60%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，对其及相邻目标造成80%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则变为造成200%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 60% chance to drop an Everfrost Icicle on one random enemy hit, dealing 80% ATK as Cryo DMG to it and adjacent targets. Enemies affected by Cryo take 200% ATK instead. This can trigger once every 3 turns."},{"attack":510.07,"secondary":0.4124,"description":"普通攻击与重击命中敌人时，有100%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，对其及相邻目标造成140%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则变为造成360%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 100% chance to drop an Everfrost Icicle on one random enemy hit, dealing 140% ATK as Cryo DMG to it and adjacent targets. Enemies affected by Cryo take 360% ATK instead. This can trigger once every 3 turns."}],"secondaryNameEn":"ATK"},"3141":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"装备该武器的角色触发雷元素相关反应后，队伍中与该元素反应相关的元素类型角色，获得10%对应元素的元素伤害加成，持续2回合。通过这种方式获得的元素伤害加成无法叠加。","descriptionEn":"When the wielder triggers an Electro reaction, each party member whose element participated gains 10% DMG Bonus for their own element for 2 turns. This bonus cannot stack."},{"attack":566.05,"secondary":0.3063,"description":"装备该武器的角色触发雷元素相关反应后，队伍中与该元素反应相关的元素类型角色，获得20%对应元素的元素伤害加成，持续2回合。通过这种方式获得的元素伤害加成无法叠加。","descriptionEn":"When the wielder triggers an Electro reaction, each party member whose element participated gains 20% DMG Bonus for their own element for 2 turns. This bonus cannot stack."}],"secondaryNameEn":"Energy Recharge"},"3143":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"触发元素反应后，获得「盈缺」效果：元素精通提升24点，攻击力降低5%。至多叠加5层；未触发元素反应时每1回合失去一层。角色处于队伍后台时也能触发和失去。","descriptionEn":"Triggering an Elemental Reaction grants a Wax and Wane stack, increasing Elemental Mastery by 24 and reducing ATK by 5%, up to 5 stacks. Lose 1 stack each turn without triggering a reaction. Stacks can be gained or lost while off-field."},{"attack":510.07,"secondary":0.4609,"description":"触发元素反应后，获得「盈缺」效果：元素精通提升36点，攻击力降低5%。至多叠加5层；未触发元素反应时每1回合失去一层。角色处于队伍后台时也能触发和失去。","descriptionEn":"Triggering an Elemental Reaction grants a Wax and Wane stack, increasing Elemental Mastery by 36 and reducing ATK by 5%, up to 5 stacks. Lose 1 stack each turn without triggering a reaction. Stacks can be gained or lost while off-field."}],"secondaryNameEn":"Energy Recharge"},"3146":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"施放元素战技时，所有元素伤害加成提升8%，持续4回合，并赋予生命值上限24%的生命之契，每3回合至多触发一次。生命之契清除时，每清除1000点将提供2%所有元素伤害加成，至多获得12%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 8% All Elemental DMG Bonus for 4 turns and a Bond of Life equal to 24% Max HP. This can trigger once every 3 turns. Clearing the Bond grants 2% All Elemental DMG Bonus per 1,000 points cleared, up to 12%, for 4 turns."},{"attack":566.05,"secondary":0.27659999999999996,"description":"施放元素战技时，所有元素伤害加成提升16%，持续4回合，并赋予生命值上限24%的生命之契，每3回合至多触发一次。生命之契清除时，每清除1000点将提供4%所有元素伤害加成，至多获得24%，持续4回合。","descriptionEn":"Using an Elemental Skill grants 16% All Elemental DMG Bonus for 4 turns and a Bond of Life equal to 24% Max HP. This can trigger once every 3 turns. Clearing the Bond grants 4% All Elemental DMG Bonus per 1,000 points cleared, up to 24%, for 4 turns."}],"secondaryNameEn":"ATK"},"3148":{"secondaryName":"生命值","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"施放元素战技时，获得「玉锻之冕」效果：每1000点生命值上限都会使普通攻击造成的伤害提升0.6%，持续3回合。通过这种方式至多使普通攻击造成的伤害提升16%。","descriptionEn":"Using an Elemental Skill grants Jade-Forged Crown for 3 turns. Each 1,000 Max HP increases Normal Attack DMG by 0.6%, up to 16%."},{"attack":510.07,"secondary":0.4124,"description":"施放元素战技时，获得「玉锻之冕」效果：每1000点生命值上限都会使普通攻击造成的伤害提升1%，持续3回合。通过这种方式至多使普通攻击造成的伤害提升32%。","descriptionEn":"Using an Elemental Skill grants Jade-Forged Crown for 3 turns. Each 1,000 Max HP increases Normal Attack DMG by 1%, up to 32%."}],"secondaryNameEn":"HP"},"3151":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":41,"secondary":48,"description":"绽放反应造成的伤害提升48%，月绽放反应伤害提升12%。月兆·满辉：月绽放反应伤害额外提升12%。","descriptionEn":"Bloom DMG increases by 48% and Lunar-Bloom DMG by 12%. Moonsign: Ascendant Gleam further increases Lunar-Bloom DMG by 12%."},{"attack":453.95,"secondary":221.05,"description":"绽放反应造成的伤害提升96%，月绽放反应伤害提升24%。月兆·满辉：月绽放反应伤害额外提升24%。","descriptionEn":"Bloom DMG increases by 96% and Lunar-Bloom DMG by 24%. Moonsign: Ascendant Gleam further increases Lunar-Bloom DMG by 24%."}],"secondaryNameEn":"Elemental Mastery"},"3027":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"攻击造成伤害时，暴击率提升8%，最多叠加5层。攻击造成暴击后，移除所有层数。","descriptionEn":"Dealing DMG grants 8% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."},{"attack":510.07,"secondary":0.4134,"description":"攻击造成伤害时，暴击率提升16%，最多叠加5层。攻击造成暴击后，移除所有层数。","descriptionEn":"Dealing DMG grants 16% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."}],"secondaryNameEn":"ATK"},"3032":{"secondaryName":"暴击伤害","flat":false,"panels":[{"attack":44,"secondary":0.08,"description":"击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 12% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."},{"attack":566.05,"secondary":0.3688,"description":"击败敌人后，攻击力提升24%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 24% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."}],"secondaryNameEn":"CRIT DMG"},"3056":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"攻击造成伤害时，暴击率提升8%，最多叠加5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 8% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."},{"attack":566.05,"secondary":0.27559999999999996,"description":"攻击造成伤害时，暴击率提升16%，最多叠加5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 16% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."}],"secondaryNameEn":"ATK"},"3060":{"secondaryName":"暴击伤害","flat":false,"panels":[{"attack":42,"secondary":0.12,"description":"击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 12% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."},{"attack":510.07,"secondary":0.5511999999999999,"description":"击败敌人后，攻击力提升24%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 24% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."}],"secondaryNameEn":"CRIT DMG"},"3080":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"攻击造成伤害时，暴击率提升8%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 8% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."},{"attack":510.07,"secondary":0.4124,"description":"攻击造成伤害时，暴击率提升16%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 16% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."}],"secondaryNameEn":"ATK"},"3085":{"secondaryName":"暴击伤害","flat":false,"panels":[{"attack":44,"secondary":0.08,"description":"击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 12% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."},{"attack":566.05,"secondary":0.3688,"description":"击败敌人后，攻击力提升24%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 24% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."}],"secondaryNameEn":"CRIT DMG"},"3107":{"secondaryName":"暴击伤害","flat":false,"panels":[{"attack":42,"secondary":0.12,"description":"击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 12% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."},{"attack":510.07,"secondary":0.5511999999999999,"description":"击败敌人后，攻击力提升24%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 24% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."}],"secondaryNameEn":"CRIT DMG"},"3112":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"攻击造成伤害时，暴击率提升8%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 8% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."},{"attack":566.05,"secondary":0.27659999999999996,"description":"攻击造成伤害时，暴击率提升16%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 16% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."}],"secondaryNameEn":"ATK"},"3131":{"secondaryName":"暴击伤害","flat":false,"panels":[{"attack":42,"secondary":0.12,"description":"击败敌人后，攻击力提升12%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 12% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."},{"attack":510.07,"secondary":0.5511999999999999,"description":"击败敌人后，攻击力提升24%，持续8回合。该效果至多叠加3层，每层持续时间独立。","descriptionEn":"Defeating an enemy grants 24% ATK for 8 turns, up to 3 stacks. Each stack has its own duration."}],"secondaryNameEn":"CRIT DMG"},"3132":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"攻击造成伤害时，暴击率提升8%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 8% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."},{"attack":566.05,"secondary":0.27659999999999996,"description":"攻击造成伤害时，暴击率提升16%，最多堆叠5层。攻击造成暴击后，移除已有的层数。","descriptionEn":"Dealing DMG grants 16% CRIT Rate, up to 5 stacks. Landing a CRIT Hit removes all stacks."}],"secondaryNameEn":"ATK"},"3033":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"普通攻击与重击造成的伤害提升20%；此外，普通攻击与重击暴击时，回复等同于攻击力60%的生命值。该效果每一回合至多发动一次。","descriptionEn":"Normal and Heavy Attack DMG increases by 20%. CRIT Hits from those attacks restore HP equal to 60% of ATK at most once per turn."},{"attack":510.07,"secondary":0.27559999999999996,"description":"普通攻击与重击造成的伤害提升40%；此外，普通攻击与重击暴击时，回复等同于攻击力100%的生命值。该效果每一回合至多发动一次。","descriptionEn":"Normal and Heavy Attack DMG increases by 40%. CRIT Hits from those attacks restore HP equal to 100% of ATK at most once per turn."}],"secondaryNameEn":"CRIT Rate"},"3043":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"元素战技与元素爆发造成的伤害提升16%。元素战技命中敌人时，元素战技的暴击率提升2%；元素爆发命中敌人时，元素爆发的暴击率提升2%。上述两种效果各自持续3回合，至多叠加4层。","descriptionEn":"Elemental Skill and Burst DMG increase by 16%. Elemental Skill hits grant 2% Elemental Skill CRIT Rate, and Burst hits grant 2% Burst CRIT Rate. Each bonus lasts 3 turns and stacks up to 4 times."},{"attack":510.07,"secondary":0.27559999999999996,"description":"元素战技与元素爆发造成的伤害提升32%。元素战技命中敌人时，元素战技的暴击率提升4%；元素爆发命中敌人时，元素爆发的暴击率提升4%。上述两种效果各自持续3回合，至多叠加4层。","descriptionEn":"Elemental Skill and Burst DMG increase by 32%. Elemental Skill hits grant 4% Elemental Skill CRIT Rate, and Burst hits grant 4% Burst CRIT Rate. Each bonus lasts 3 turns and stacks up to 4 times."}],"secondaryNameEn":"CRIT Rate"},"3061":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"角色在场上时，每次我方回合开始时提升6%造成的伤害，受到的伤害增加3%。该效果最多叠加5层，不随角色退场重置，受到伤害后会减少1层效果。","descriptionEn":"At the start of each allied turn while on-field, gain a stack that increases DMG dealt by 6% and DMG taken by 3%. Up to 5 stacks can coexist. Switching out preserves them. Taking damage removes 1 stack."},{"attack":510.07,"secondary":0.27559999999999996,"description":"角色在场上时，每次我方回合开始时提升10%造成的伤害，受到的伤害增加2%。该效果最多叠加5层，不随角色退场重置，受到伤害后会减少1层效果。","descriptionEn":"At the start of each allied turn while on-field, gain a stack that increases DMG dealt by 10% and DMG taken by 2%. Up to 5 stacks can coexist. Switching out preserves them. Taking damage removes 1 stack."}],"secondaryNameEn":"CRIT Rate"},"3070":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":44,"secondary":0.04,"description":"接触火元素后的4回合内，攻击力提升16%，每3回合至多触发一次；接触水元素、冰元素、雷元素或草元素后的4回合内，所有元素伤害加成提升12%，每3回合至多触发一次。","descriptionEn":"After contact with Pyro, gain 16% ATK for 4 turns. After contact with Hydro, Cryo, Electro, or Dendro, gain 12% All Elemental DMG Bonus for 4 turns. Each effect can trigger once every 3 turns."},{"attack":566.05,"secondary":0.1834,"description":"接触火元素后的4回合内，攻击力提升32%，每3回合至多触发一次；接触水元素、冰元素、雷元素或草元素后的4回合内，所有元素伤害加成提升24%，每3回合至多触发一次。","descriptionEn":"After contact with Pyro, gain 32% ATK for 4 turns. After contact with Hydro, Cryo, Electro, or Dendro, gain 24% All Elemental DMG Bonus for 4 turns. Each effect can trigger once every 3 turns."}],"secondaryNameEn":"CRIT Rate"},"3086":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"普通攻击与重击命中时，有50%几率在随机一个被命中的目标场地及其相邻位置生成一个风之眼，使其伤害降低10%，该位置上的敌人每次行动前受到一段300%攻击力的物理伤害。该效果持续1回合，每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 50% chance to create a Cyclone at one random position hit and its adjacent positions. For 1 turn, enemies there deal 10% less DMG and take 300% ATK as Physical DMG before each action. This can trigger once every 3 turns."},{"attack":510.07,"secondary":0.27659999999999996,"description":"普通攻击与重击命中时，有50%几率在随机一个被命中的目标场地及其相邻位置生成一个风之眼，使其伤害降低10%，该位置上的敌人每次行动前受到一段460%攻击力的物理伤害。该效果持续1回合，每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 50% chance to create a Cyclone at one random position hit and its adjacent positions. For 1 turn, enemies there deal 10% less DMG and take 460% ATK as Physical DMG before each action. This can trigger once every 3 turns."}],"secondaryNameEn":"CRIT Rate"},"3097":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":44,"secondary":0.04,"description":"重击命中敌人后，会向随机一名被命中的敌人降下阳炎矢，造成60%攻击力的伤害，并施加持续3回合的灼心效果。装备者的重击对处于灼心状态下的敌人造成的伤害提升28%。阳炎矢每3回合至多触发一次。","descriptionEn":"When a Heavy Attack hits, a Sunfire Arrow deals 60% ATK as DMG to one random enemy hit and applies Heartsearer for 3 turns. The wielder's Heavy Attacks deal 28% more DMG to marked enemies. The arrow can trigger once every 3 turns."},{"attack":566.05,"secondary":0.1834,"description":"重击命中敌人后，会向随机一名被命中的敌人降下阳炎矢，造成120%攻击力的伤害，并施加持续3回合的灼心效果。装备者的重击对处于灼心状态下的敌人造成的伤害提升56%。阳炎矢每3回合至多触发一次。","descriptionEn":"When a Heavy Attack hits, a Sunfire Arrow deals 120% ATK as DMG to one random enemy hit and applies Heartsearer for 3 turns. The wielder's Heavy Attacks deal 56% more DMG to marked enemies. The arrow can trigger once every 3 turns."}],"secondaryNameEn":"CRIT Rate"},"3110":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":41,"secondary":0.08,"description":"场上至少有2个敌人时，获得16%攻击力提升与16%防御力提升；场上敌人少于2个时，获得24%攻击力提升。","descriptionEn":"With at least 2 enemies present, gain 16% ATK and 16% DEF. With fewer than 2 enemies present, gain 24% ATK instead."},{"attack":453.95,"secondary":0.3688,"description":"场上至少有2个敌人时，获得32%攻击力提升与32%防御力提升；场上敌人少于2个时，获得48%攻击力提升。","descriptionEn":"With at least 2 enemies present, gain 32% ATK and 32% DEF. With fewer than 2 enemies present, gain 48% ATK instead."}],"secondaryNameEn":"CRIT Rate"},"3120":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"队伍中存在至少三种不同元素类型的角色时，元素精通提升120点。","descriptionEn":"Gain 120 Elemental Mastery while the party has at least three different element types."},{"attack":510.07,"secondary":0.27659999999999996,"description":"队伍中存在至少三种不同元素类型的角色时，元素精通提升240点。","descriptionEn":"Gain 240 Elemental Mastery while the party has at least three different element types."}],"secondaryNameEn":"CRIT Rate"},"3135":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":42,"secondary":0.06,"description":"普通攻击命中后的2回合内，元素战技与元素爆发的伤害提高20%；元素战技与元素爆发命中后的2回合内，普通攻击的伤害提高20%。","descriptionEn":"Normal Attack hits increase Elemental Skill and Burst DMG by 20% for 2 turns. Elemental Skill and Burst hits increase Normal Attack DMG by 20% for 2 turns."},{"attack":510.07,"secondary":0.27659999999999996,"description":"普通攻击命中后的2回合内，元素战技与元素爆发的伤害提高40%；元素战技与元素爆发命中后的2回合内，普通攻击的伤害提高40%。","descriptionEn":"Normal Attack hits increase Elemental Skill and Burst DMG by 40% for 2 turns. Elemental Skill and Burst hits increase Normal Attack DMG by 40% for 2 turns."}],"secondaryNameEn":"CRIT Rate"},"3145":{"secondaryName":"暴击率","flat":false,"panels":[{"attack":41,"secondary":0.08,"description":"处于队伍后台超过1回合后，生命值上限提升32%，元素精通提升40点。装备者登场并留在场上2回合后，该效果将失效。","descriptionEn":"After more than 1 turn off-field, gain 32% Max HP and 40 Elemental Mastery. The bonuses expire after the wielder spends 2 turns on-field."},{"attack":453.95,"secondary":0.3688,"description":"处于队伍后台超过1回合后，生命值上限提升64%，元素精通提升80点。装备者登场并留在场上2回合后，该效果将失效。","descriptionEn":"After more than 1 turn off-field, gain 64% Max HP and 80 Elemental Mastery. The bonuses expire after the wielder spends 2 turns on-field."}],"secondaryNameEn":"CRIT Rate"},"3030":{"secondaryName":"物理伤害加成","flat":false,"panels":[{"attack":44,"secondary":0.075,"description":"普通攻击或重击命中时，攻击力和防御力提高4%，持续2回合，最多叠加4层。","descriptionEn":"Normal and Heavy Attack hits grant 4% ATK and DEF for 2 turns, up to 4 stacks."},{"attack":566.05,"secondary":0.3459,"description":"普通攻击或重击命中时，攻击力和防御力提高8%，持续2回合，最多叠加4层。","descriptionEn":"Normal and Heavy Attack hits grant 8% ATK and DEF for 2 turns, up to 4 stacks."}],"secondaryNameEn":"Physical DMG Bonus"},"3039":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"普通攻击和重击命中敌人时，将卷起切落风，对随机一名被命中的目标及其相邻目标造成一段160%攻击力的物理伤害，并且使攻击力提升10%，持续2回合。该效果每2回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits summon a Hewing Gale that deals 160% ATK as Physical DMG to one random target hit and its adjacent targets, and grants 10% ATK for 2 turns. This can trigger once every 2 turns."},{"attack":510.07,"secondary":0.4134,"description":"普通攻击和重击命中敌人时，将卷起切落风，对随机一名被命中的目标及其相邻目标造成一段200%攻击力的物理伤害，并且使攻击力提升20%，持续2回合。该效果每2回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits summon a Hewing Gale that deals 200% ATK as Physical DMG to one random target hit and its adjacent targets, and grants 20% ATK for 2 turns. This can trigger once every 2 turns."}],"secondaryNameEn":"ATK"},"3045":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"元素战技暴击率提升8%；此外，施放元素战技后的1回合内，元素充能效率提升16%。","descriptionEn":"Elemental Skill CRIT Rate increases by 8%. After using an Elemental Skill, gain 16% Energy Recharge for 1 turn."},{"attack":510.07,"secondary":0.4609,"description":"元素战技暴击率提升16%；此外，施放元素战技后的1回合内，元素充能效率提升32%。","descriptionEn":"Elemental Skill CRIT Rate increases by 16%. After using an Elemental Skill, gain 32% Energy Recharge for 1 turn."}],"secondaryNameEn":"Energy Recharge"},"3047":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"装备者不具备「始基力」时：普通攻击和重击命中时，会释放同时具有芒性和荒性的能量冲击，对敌方全体造成一段160%攻击力的自身属性伤害，无元素附着。该效果每3回合至多触发一次。","descriptionEn":"If the wielder lacks Arkhe, Normal and Heavy Attack hits unleash a Pneuma and Ousia energy shockwave. It deals 160% ATK as DMG of the wielder's element to all enemies without applying an element. This can trigger once every 3 turns."},{"attack":510.07,"secondary":0.4134,"description":"装备者不具备「始基力」时：普通攻击和重击命中时，会释放同时具有芒性和荒性的能量冲击，对敌方全体造成一段320%攻击力的自身属性伤害，无元素附着。该效果每3回合至多触发一次。","descriptionEn":"If the wielder lacks Arkhe, Normal and Heavy Attack hits unleash a Pneuma and Ousia energy shockwave. It deals 320% ATK as DMG of the wielder's element to all enemies without applying an element. This can trigger once every 3 turns."}],"secondaryNameEn":"ATK"},"3062":{"secondaryName":"物理伤害加成","flat":false,"panels":[{"attack":44,"secondary":0.075,"description":"普通攻击与重击命中敌人时，有60%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，对其及相邻目标造成80%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则变为造成200%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 60% chance to drop an Everfrost Icicle on one random enemy hit, dealing 80% ATK as Cryo DMG to it and adjacent targets. Enemies affected by Cryo take 200% ATK instead. This can trigger once every 3 turns."},{"attack":566.05,"secondary":0.3459,"description":"普通攻击与重击命中敌人时，有100%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，对其及相邻目标造成140%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则变为造成360%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 100% chance to drop an Everfrost Icicle on one random enemy hit, dealing 140% ATK as Cryo DMG to it and adjacent targets. Enemies affected by Cryo take 360% ATK instead. This can trigger once every 3 turns."}],"secondaryNameEn":"Physical DMG Bonus"},"3091":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"对敌人造成冰元素伤害后，普通攻击与重击造成的伤害提高8%，持续2回合，至多叠加2层。","descriptionEn":"After dealing Cryo DMG to an enemy, gain 8% Normal and Heavy Attack DMG for 2 turns, up to 2 stacks."},{"attack":510.07,"secondary":0.4124,"description":"对敌人造成冰元素伤害后，普通攻击与重击造成的伤害提高16%，持续2回合，至多叠加2层。","descriptionEn":"After dealing Cryo DMG to an enemy, gain 16% Normal and Heavy Attack DMG for 2 turns, up to 2 stacks."}],"secondaryNameEn":"ATK"},"3094":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"施放元素战技后，将获得「沿洄」状态，攻击命中时对随机一名被命中敌人及其相邻目标造成一段80%攻击力的物理伤害。该效果将在4回合后或触发3次伤害后移除，每回合至多造成两次范围伤害，每3回合至多触发一次沿洄。","descriptionEn":"Using an Elemental Skill grants Flowrider. Hits then deal 80% ATK as Physical DMG to one random enemy hit and its adjacent targets. Flowrider ends after 4 turns or 3 damage instances, can deal area damage twice per turn, and can be gained once every 3 turns."},{"attack":510.07,"secondary":0.4609,"description":"施放元素战技后，将获得「沿洄」状态，攻击命中时对随机一名被命中敌人及其相邻目标造成一段160%攻击力的物理伤害。该效果将在4回合后或触发3次伤害后移除，每回合至多造成两次范围伤害，每3回合至多触发一次沿洄。","descriptionEn":"Using an Elemental Skill grants Flowrider. Hits then deal 160% ATK as Physical DMG to one random enemy hit and its adjacent targets. Flowrider ends after 4 turns or 3 damage instances, can deal area damage twice per turn, and can be gained once every 3 turns."}],"secondaryNameEn":"Energy Recharge"},"3113":{"secondaryName":"物理伤害加成","flat":false,"panels":[{"attack":41,"secondary":0.15,"description":"普通攻击与重击命中敌人时，有60%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，造成一段80%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则造成200%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 60% chance to drop an Everfrost Icicle on one random enemy hit, dealing 80% ATK as Cryo DMG. If the enemy is affected by Cryo, it deals 200% ATK instead. This can trigger once every 3 turns."},{"attack":453.95,"secondary":0.6909,"description":"普通攻击与重击命中敌人时，有100%概率在随机一名被命中的敌人上方生成恒冰晶核并坠落，造成一段140%攻击力的冰元素伤害。恒冰晶核命中时，若敌人处于冰元素影响下，则造成360%攻击力的伤害。该效果每3回合至多触发一次。","descriptionEn":"Normal and Heavy Attack hits have a 100% chance to drop an Everfrost Icicle on one random enemy hit, dealing 140% ATK as Cryo DMG. If the enemy is affected by Cryo, it deals 360% ATK instead. This can trigger once every 3 turns."}],"secondaryNameEn":"Physical DMG Bonus"},"3116":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"元素爆发造成的伤害提升16%，元素爆发的暴击率提升6%。","descriptionEn":"Elemental Burst DMG increases by 16% and Burst CRIT Rate by 6%."},{"attack":510.07,"secondary":0.4609,"description":"元素爆发造成的伤害提升32%，元素爆发的暴击率提升12%。","descriptionEn":"Elemental Burst DMG increases by 32% and Burst CRIT Rate by 12%."}],"secondaryNameEn":"Energy Recharge"},"3035":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"元素战技造成的伤害增加16%，元素战技的暴击率提升6%。","descriptionEn":"Elemental Skill DMG increases by 16% and Elemental Skill CRIT Rate by 6%."},{"attack":510.07,"secondary":0.4609,"description":"元素战技造成的伤害增加32%，元素战技的暴击率提升12%。","descriptionEn":"Elemental Skill DMG increases by 32% and Elemental Skill CRIT Rate by 12%."}],"secondaryNameEn":"Energy Recharge"},"3038":{"secondaryName":"防御力","flat":false,"panels":[{"attack":41,"secondary":0.15,"description":"元素战技造成的伤害值提高，提高数值相当于防御力的40%。该效果每回合最多触发两次。","descriptionEn":"Increase Elemental Skill DMG by an amount equal to 40% of DEF. This can trigger twice per turn."},{"attack":453.95,"secondary":0.6909000000000001,"description":"元素战技造成的伤害值提高，提高数值相当于防御力的80%。该效果每回合最多触发两次。","descriptionEn":"Increase Elemental Skill DMG by an amount equal to 80% of DEF. This can trigger twice per turn."}],"secondaryNameEn":"DEF"},"3042":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":42,"secondary":36,"description":"攻击命中敌人后，会为随机一名被命中的敌人施加「纸伞作祟」状态，持续3回合。该效果每4回合至多触发一次；持续期间该敌人被击败时，将清除该效果的冷却时间。装备者对处于「纸伞作祟」状态下的敌人造成的伤害提升16%。","descriptionEn":"After hitting enemies, inflict Cursed Parasol on one random enemy hit for 3 turns. This can trigger once every 4 turns. Defeating the marked enemy before the mark expires resets the cooldown. The wielder deals 16% more DMG to marked enemies."},{"attack":510.07,"secondary":164.93,"description":"攻击命中敌人后，会为随机一名被命中的敌人施加「纸伞作祟」状态，持续3回合。该效果每4回合至多触发一次；持续期间该敌人被击败时，将清除该效果的冷却时间。装备者对处于「纸伞作祟」状态下的敌人造成的伤害提升32%。","descriptionEn":"After hitting enemies, inflict Cursed Parasol on one random enemy hit for 3 turns. This can trigger once every 4 turns. Defeating the marked enemy before the mark expires resets the cooldown. The wielder deals 32% more DMG to marked enemies."}],"secondaryNameEn":"Elemental Mastery"},"3050":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"角色处于护盾庇护下时，普通攻击和重击造成的伤害提升20%，普通攻击和重击的暴击率提升8%。","descriptionEn":"While shielded, Normal and Heavy Attack DMG increase by 20% and their CRIT Rate by 8%."},{"attack":566.05,"secondary":0.27559999999999996,"description":"角色处于护盾庇护下时，普通攻击和重击造成的伤害提升40%，普通攻击和重击的暴击率提升16%。","descriptionEn":"While shielded, Normal and Heavy Attack DMG increase by 40% and their CRIT Rate by 16%."}],"secondaryNameEn":"ATK"},"3065":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":41,"secondary":0.12,"description":"元素爆发造成的伤害提升12%。元素爆发命中敌人时，有100%概率召唤大鲔冲击，对随机三名相邻的敌方目标造成一段100%攻击力的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"Elemental Burst DMG increases by 12%. Burst hits summon a tuna that deals 100% ATK as Physical DMG to 3 random adjacent enemies. This can trigger once every 4 turns."},{"attack":453.95,"secondary":0.5511999999999999,"description":"元素爆发造成的伤害提升24%。元素爆发命中敌人时，有100%概率召唤大鲔冲击，对随机三名相邻的敌方目标造成一段200%攻击力的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"Elemental Burst DMG increases by 24%. Burst hits summon a tuna that deals 200% ATK as Physical DMG to 3 random adjacent enemies. This can trigger once every 4 turns."}],"secondaryNameEn":"ATK"},"3069":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":44,"secondary":24,"description":"元素战技命中敌人或触发元素反应后的2回合内，攻击力提升12%，元素精通提升48点。","descriptionEn":"After an Elemental Skill hits or an Elemental Reaction is triggered, gain 12% ATK and 48 Elemental Mastery for 2 turns."},{"attack":566.05,"secondary":110.05,"description":"元素战技命中敌人或触发元素反应后的2回合内，攻击力提升24%，元素精通提升96点。","descriptionEn":"After an Elemental Skill hits or an Elemental Reaction is triggered, gain 24% ATK and 96 Elemental Mastery for 2 turns."}],"secondaryNameEn":"Elemental Mastery"},"3073":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"攻击力提升12%。","descriptionEn":"Gain 12% ATK."},{"attack":566.05,"secondary":0.3063,"description":"攻击力提升24%。","descriptionEn":"Gain 24% ATK."}],"secondaryNameEn":"Energy Recharge"},"3076":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":42,"secondary":36,"description":"触发感电、月感电、绽放或月绽放反应时，恢复12点元素能量，并在接下来的4回合内使元素精通提升60点。该效果每4回合至多触发一次。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering Electro-Charged, Lunar-Charged, Bloom, or Lunar-Bloom restores 12 Energy and grants 60 Elemental Mastery for 4 turns. This can trigger once every 4 turns, including while off-field."},{"attack":510.07,"secondary":164.93,"description":"触发感电、月感电、绽放或月绽放反应时，恢复24点元素能量，并在接下来的4回合内使元素精通提升120点。该效果每4回合至多触发一次。装备者处于队伍后台时，依然能触发上述效果。","descriptionEn":"Triggering Electro-Charged, Lunar-Charged, Bloom, or Lunar-Bloom restores 24 Energy and grants 120 Elemental Mastery for 4 turns. This can trigger once every 4 turns, including while off-field."}],"secondaryNameEn":"Elemental Mastery"},"3088":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":42,"secondary":36,"description":"施放元素战技时，获得风之花的悠古愿望加持，攻击力提升16%，持续2回合。","descriptionEn":"Using an Elemental Skill grants 16% ATK for 2 turns."},{"attack":510.07,"secondary":164.93,"description":"施放元素战技时，获得风之花的悠古愿望加持，攻击力提升32%，持续2回合。","descriptionEn":"Using an Elemental Skill grants 32% ATK for 2 turns."}],"secondaryNameEn":"Elemental Mastery"},"3093":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"具有夕暮、流霞、朝晖三种状态。每个状态下伤害分别提升6%/10%/14%。攻击命中敌人后，将转换为下一种状态，每2回合至多转换一次；角色处于队伍后台时依旧能触发转换。","descriptionEn":"Cycles through Evengleam, Afterglow, and Dawnblaze, increasing DMG by 6%, 10%, and 14%, respectively. Hitting an enemy advances to the next state at most once every 2 turns, including while off-field."},{"attack":566.05,"secondary":0.3063,"description":"具有夕暮、流霞、朝晖三种状态。每个状态下伤害分别提升12%/20%/28%。攻击命中敌人后，将转换为下一种状态，每2回合至多转换一次；角色处于队伍后台时依旧能触发转换。","descriptionEn":"Cycles through Evengleam, Afterglow, and Dawnblaze, increasing DMG by 12%, 20%, and 28%, respectively. Hitting an enemy advances to the next state at most once every 2 turns, including while off-field."}],"secondaryNameEn":"Energy Recharge"},"3096":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"重击命中敌人后的2回合内，角色元素精通提升40点。该效果至多叠加2层，每次伤害效果至多触发一次。","descriptionEn":"Heavy Attack hits grant 40 Elemental Mastery for 2 turns, up to 2 stacks. Each damage effect can trigger this once."},{"attack":566.05,"secondary":0.27659999999999996,"description":"重击命中敌人后的2回合内，角色元素精通提升80点。该效果至多叠加2层，每次伤害效果至多触发一次。","descriptionEn":"Heavy Attack hits grant 80 Elemental Mastery for 2 turns, up to 2 stacks. Each damage effect can trigger this once."}],"secondaryNameEn":"ATK"},"3100":{"secondaryName":"元素精通","flat":true,"panels":[{"attack":42,"secondary":36,"description":"元素能量减少后，装备者的元素精通提升40点。该效果持续5回合，至多叠加2层。","descriptionEn":"Losing Energy grants 40 Elemental Mastery for 5 turns, up to 2 stacks."},{"attack":510.07,"secondary":164.93,"description":"元素能量减少后，装备者的元素精通提升80点。该效果持续5回合，至多叠加2层。","descriptionEn":"Losing Energy grants 80 Elemental Mastery for 5 turns, up to 2 stacks."}],"secondaryNameEn":"Elemental Mastery"},"3103":{"secondaryName":"生命值","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"攻击命中敌人时，对随机一名被命中的敌人及其相邻目标造成40%生命值上限的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"On hit, deal 40% Max HP as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."},{"attack":510.07,"secondary":0.4124,"description":"攻击命中敌人时，对随机一名被命中的敌人及其相邻目标造成80%生命值上限的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"On hit, deal 80% Max HP as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."}],"secondaryNameEn":"HP"},"3105":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"装备者处于队伍后台时，装备者的攻击命中敌人后的2回合内，攻击力提升28%。","descriptionEn":"While off-field, the wielder gains 28% ATK for 2 turns after an attack hits an enemy."},{"attack":510.07,"secondary":0.4609,"description":"装备者处于队伍后台时，装备者的攻击命中敌人后的2回合内，攻击力提升56%。","descriptionEn":"While off-field, the wielder gains 56% ATK for 2 turns after an attack hits an enemy."}],"secondaryNameEn":"Energy Recharge"},"3119":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"触发元素反应后的3回合内，攻击力提升12%，元素精通提升48点。","descriptionEn":"After triggering an Elemental Reaction, gain 12% ATK and 48 Elemental Mastery for 3 turns."},{"attack":510.07,"secondary":0.4124,"description":"触发元素反应后的3回合内，攻击力提升24%，元素精通提升96点。","descriptionEn":"After triggering an Elemental Reaction, gain 24% ATK and 96 Elemental Mastery for 3 turns."}],"secondaryNameEn":"ATK"},"3123":{"secondaryName":"生命值","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"进行治疗时，恢复8点元素能量。该效果每3回合至多触发一次，角色处于队伍后台时也能触发。","descriptionEn":"Healing restores 8 Energy. This can trigger once every 3 turns, including while off-field."},{"attack":510.07,"secondary":0.4124,"description":"进行治疗时，恢复16点元素能量。该效果每3回合至多触发一次，角色处于队伍后台时也能触发。","descriptionEn":"Healing restores 16 Energy. This can trigger once every 3 turns, including while off-field."}],"secondaryNameEn":"HP"},"3126":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"施放元素战技时，提高20%攻击力，持续3回合。","descriptionEn":"Using an Elemental Skill grants 20% ATK for 3 turns."},{"attack":566.05,"secondary":0.3063,"description":"施放元素战技时，提高40%攻击力，持续3回合。","descriptionEn":"Using an Elemental Skill grants 40% ATK for 3 turns."}],"secondaryNameEn":"Energy Recharge"},"3140":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":41,"secondary":0.12,"description":"普通攻击命中敌人后的2回合内，重击造成的伤害提升16%；重击命中敌人后的2回合内，攻击力提升8%。","descriptionEn":"Normal Attack hits increase Heavy Attack DMG by 16% for 2 turns. Heavy Attack hits grant 8% ATK for 2 turns."},{"attack":453.95,"secondary":0.5511999999999999,"description":"普通攻击命中敌人后的2回合内，重击造成的伤害提升32%；重击命中敌人后的2回合内，攻击力提升16%。","descriptionEn":"Normal Attack hits increase Heavy Attack DMG by 32% for 2 turns. Heavy Attack hits grant 16% ATK for 2 turns."}],"secondaryNameEn":"ATK"},"3142":{"secondaryName":"攻击力","flat":false,"panels":[{"attack":44,"secondary":0.06,"description":"施放元素战技后，元素充能效率提升24%，持续3回合。","descriptionEn":"After using an Elemental Skill, gain 24% Energy Recharge for 3 turns."},{"attack":566.05,"secondary":0.27659999999999996,"description":"施放元素战技后，元素充能效率提升48%，持续3回合。","descriptionEn":"After using an Elemental Skill, gain 48% Energy Recharge for 3 turns."}],"secondaryNameEn":"ATK"},"3147":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":44,"secondary":0.067,"description":"普通攻击或重击命中敌人后的2回合内，普通攻击造成的伤害提升8%，重击造成的伤害提升6%。该效果至多叠加3层。每次伤害效果仅触发一次。","descriptionEn":"Normal and Heavy Attack hits increase Normal Attack DMG by 8% and Heavy Attack DMG by 6% for 2 turns, up to 3 stacks. Each damage effect can trigger this once."},{"attack":566.05,"secondary":0.3063,"description":"普通攻击或重击命中敌人后的2回合内，普通攻击造成的伤害提升16%，重击造成的伤害提升12%。该效果至多叠加3层。每次伤害效果仅触发一次。","descriptionEn":"Normal and Heavy Attack hits increase Normal Attack DMG by 16% and Heavy Attack DMG by 12% for 2 turns, up to 3 stacks. Each damage effect can trigger this once."}],"secondaryNameEn":"Energy Recharge"},"3149":{"secondaryName":"生命值","flat":false,"panels":[{"attack":42,"secondary":0.09,"description":"攻击命中敌人时，对随机一名被命中的目标及其相邻目标造成一段基于生命值上限的40%的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"On hit, deal 40% Max HP as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."},{"attack":510.07,"secondary":0.4124,"description":"攻击命中敌人时，对随机一名被命中的目标及其相邻目标造成一段基于生命值上限的80%的物理伤害。该效果每4回合至多触发一次。","descriptionEn":"On hit, deal 80% Max HP as Physical DMG to one random enemy hit and its adjacent targets. This can trigger once every 4 turns."}],"secondaryNameEn":"HP"},"3152":{"secondaryName":"元素充能效率","flat":false,"panels":[{"attack":42,"secondary":0.1,"description":"施放元素战技后的4回合内，装备者的元素精通提升100点。","descriptionEn":"After using an Elemental Skill, gain 100 Elemental Mastery for 4 turns."},{"attack":510.07,"secondary":0.4609,"description":"施放元素战技后的4回合内，装备者的元素精通提升200点。","descriptionEn":"After using an Elemental Skill, gain 200 Elemental Mastery for 4 turns."}],"secondaryNameEn":"Energy Recharge"}},"experienceTexts":{"CharacterExperience":["每件提供{0}点角色经验。","Grants {0} Character EXP per item."],"WeaponExperience":["每件提供{0}点武器经验。","Grants {0} Weapon EXP per item."],"ArtifactExperience":["每件提供{0}点圣遗物经验。","Grants {0} Artifact EXP per item."]}}</script>
+<script>
+  "use strict";
+  const data = JSON.parse(document.getElementById("shop-data").textContent);
+  const assetRoot = "../art_assets/";
+  const shops = [
+    { names: ["星辉商店", "Starglitter Shop"], unit: ["星辉", "Starglitter"], currency: "680101", balance: 600 },
+    { names: ["星尘商店", "Stardust Shop"], unit: ["星尘", "Stardust"], currency: "680102", balance: 16000 },
+    { names: ["摩拉商店", "Mora Shop"], unit: ["摩拉", "Mora"], currency: "680103", balance: 2100000 },
+  ];
+  const $ = id => document.getElementById(id);
+  let english = false;
+  let routeBackLabels = null;
+  const tr = (zh, en) => english ? en : zh;
+  const numbers = [new Intl.NumberFormat("zh-CN"), new Intl.NumberFormat("en-US")];
+  const format = value => numbers[Number(english)].format(value);
+  const productName = product => tr(product.name, product.nameEn);
+  const localizedLabels = [...document.querySelectorAll("[data-en]")].map(element =>
+    [element, element.textContent]);
+  const localizedAria = [...document.querySelectorAll("[data-en-label]")].map(element =>
+    [element, element.getAttribute("aria-label")]);
+  const currencyIcon = () => "ItemIcon/" + shops[shop].currency + ".png";
+  let shop = 2;
+  let node = 601;
+  let selected = "660503";
+  let quantity = 1;
+  let tipTimeout;
+  let balances = shops.map(store => store.balance);
+  const purchases = shops.map(() => new Map());
+  const groupOf = product => product.weapon ? product.weaponType : product.category;
+  const groupOrder = data.products.map(products => [...new Set(products.map(groupOf))]);
+  let weaponMode = 0;
+  const configuredNodes = data.products.flatMap(products =>
+    products.flatMap(product => [product.opensAt, ...product.restocks.map(restock => restock.anchor)]));
+  for (const rules of Object.values(data.discounts))
+    for (const rule of rules) configuredNodes.push(rule.node);
+  const lastChapter = Math.max(6, ...configuredNodes.map(id => Math.floor(id / 100)));
+  const chapterInput = $("chapter");
+  const nodeInput = $("node");
+  for (let chapter = 1; chapter <= lastChapter; chapter++)
+    chapterInput.add(new Option("", chapter));
+
+  function reached(anchor, offset = 0) {
+    const chapter = Math.floor(node / 100);
+    const startChapter = Math.floor(anchor / 100);
+    if (chapter < startChapter) return false;
+    let distance = node % 100 - anchor % 100;
+    for (let previous = startChapter; previous < chapter; previous++) {
+      const length = data.chapterLengths[previous];
+      if (length === undefined) return true;
+      if (previous === startChapter && anchor % 100 > length) return false;
+      distance += length;
+      if (distance >= offset) return true;
+    }
+    return distance >= offset;
+  }
+
+  function offer(product) {
+    let price = product.price;
+    for (const rule of data.discounts[product.itemId] ?? [])
+      if (reached(rule.node)) price += rule.delta;
+    price = Math.max(0, price);
+    let remaining = product.limit;
+    if (remaining !== null) {
+      for (const restock of product.restocks)
+        if (reached(restock.anchor, restock.offset)) remaining += restock.amount;
+      remaining = Math.max(0, remaining - (purchases[shop].get(product.id) ?? 0));
+    }
+    const max = Math.min(remaining ?? Number.MAX_SAFE_INTEGER,
+      price > 0 ? Math.floor(balances[shop] / price) : Number.MAX_SAFE_INTEGER);
+    return { product, price, remaining, max };
+  }
+
+  function image(path) {
+    const element = document.createElement("img");
+    element.src = assetRoot + path;
+    element.alt = "";
+    element.draggable = false;
+    return element;
+  }
+
+  function text(tag, value, className) {
+    const element = document.createElement(tag);
+    element.textContent = value;
+    if (className) element.className = className;
+    return element;
+  }
+
+  function art(element, icon, product) {
+    const names = { 1: "gray", 2: "green", 3: "blue", 4: "purple", 5: "gold" };
+    const name = names[product.rarity];
+    if (name)
+      element.style.setProperty("--rarity", 'url("' + assetRoot + "RarityBackground/background_" + name + '.png")');
+    else
+      element.style.removeProperty("--rarity");
+    element.classList.toggle("weapon", product.weapon);
+    icon.src = assetRoot + product.icon;
+  }
+
+  function priceContents(container, value, oldPrice) {
+    container.replaceChildren(image(currencyIcon()), text("b", format(value)));
+    if (oldPrice > value) container.append(text("s", format(oldPrice)));
+  }
+
+  function tile(item) {
+    const { product, price, remaining } = item;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "tile" + (remaining === 0 ? " sold" : "");
+    button.dataset.product = product.id;
+    button.setAttribute("aria-pressed", String(selected === product.id));
+    const name = productName(product);
+    button.setAttribute("aria-label", name + tr("，", ", ") + format(price) + " " + tr(...shops[shop].unit));
+    button.title = name;
+    const graphic = document.createElement("span");
+    graphic.className = "art";
+    const icon = document.createElement("img");
+    icon.alt = "";
+    icon.draggable = false;
+    icon.loading = "lazy";
+    art(graphic, icon, product);
+    graphic.append(icon);
+    if (remaining === 0) graphic.append(text("span", tr("已兑完", "Sold Out"), "stamp"));
+    else if (price < product.price) graphic.append(text("span", tr("折扣", "Sale"), "stamp sale"));
+    else if (remaining !== null) graphic.append(text("span", tr("剩余 ", "Left ") + format(remaining), "stamp"));
+    const value = document.createElement("span");
+    value.className = "value";
+    priceContents(value, price, product.price);
+    value.append(text("span", "★".repeat(product.rarity), "stars"));
+    button.append(graphic, value, text("span", name, "name"));
+    return button;
+  }
+
+  function updateQuantity(item, amount) {
+    quantity = item.max ? Math.max(1, Math.min(item.max, Math.trunc(amount) || 1)) : 0;
+    $("quantity").value = quantity;
+    $("quantity").min = item.max ? 1 : 0;
+    $("quantity").max = item.max;
+    $("quantity").disabled = !item.max;
+    $("minus").disabled = quantity <= 1;
+    $("plus").disabled = quantity >= item.max;
+    $("max").disabled = quantity >= item.max;
+    $("exchange").disabled = !item.max;
+    $("exchange").textContent = item.remaining === 0
+      ? tr("已兑完", "Sold Out")
+      : item.max ? tr("确认兑换", "Confirm Exchange") : tr("货币不足", "Insufficient Currency");
+    priceContents($("total"), item.price * quantity);
+  }
+
+  function renderWeapon(product) {
+    const weapon = data.weapons[product.id];
+    const panel = weapon.panels[weaponMode];
+    for (const button of $("weaponModes").children)
+      button.setAttribute("aria-pressed", String(Number(button.dataset.weaponMode) === weaponMode));
+    const secondary = weapon.flat ? format(Math.round(panel.secondary)) : (panel.secondary * 100).toFixed(1) + "%";
+    $("weaponStats").replaceChildren(text("dt", tr("基础攻击力", "Base ATK")), text("dd", format(Math.round(panel.attack))),
+      text("dt", tr(weapon.secondaryName, weapon.secondaryNameEn)), text("dd", secondary));
+    $("weaponPassive").textContent = tr(panel.description, panel.descriptionEn);
+    $("weaponReadout").scrollTop = 0;
+  }
+
+  function itemDescription(product) {
+    const template = data.experienceTexts[product.category];
+    if (!template) return tr(product.description, product.descriptionEn);
+    const amount = english ? format(product.experienceValue) : String(product.experienceValue);
+    return tr(...template).replace("{0}", amount);
+  }
+
+  function renderDetail(item) {
+    const isWeapon = item?.product.weapon === true;
+    $("details").classList.toggle("weapon-details", isWeapon);
+    $("weaponPreview").hidden = !isWeapon;
+    $("detailInfo").hidden = isWeapon;
+    $("checkout").hidden = !item;
+    $("detailArt").hidden = !item;
+    if (!item) {
+      $("detailStars").textContent = "";
+      $("detailName").textContent = tr("暂无商品", "No Items");
+      $("detailInfo").textContent = "";
+      return;
+    }
+    const { product, price, remaining } = item;
+    art($("detailArt"), $("detailIcon"), product);
+    $("detailName").textContent = productName(product);
+    $("detailStars").textContent = "★".repeat(product.rarity);
+    $("detailInfo").textContent = isWeapon ? "" : itemDescription(product);
+    if (isWeapon) renderWeapon(product);
+    $("stock").textContent = remaining === null ? tr("不限", "Unlimited") : format(remaining);
+    priceContents($("unitPrice"), price, product.price);
+    updateQuantity(item, quantity);
+  }
+
+  function displayed() {
+    const query = $("search").value.trim().toLowerCase();
+    const category = $("category").hidden ? "" : $("category").value;
+    return data.products[shop].filter(product => {
+      const type = product.weapon ? String(product.weaponType) : "material";
+      return reached(product.opensAt) && (!category || type === category) &&
+        (product.name.toLowerCase().includes(query) || product.nameEn.toLowerCase().includes(query));
+    });
+  }
+
+  function selectedOffer() {
+    const product = displayed().find(item => item.id === selected);
+    return product ? offer(product) : null;
+  }
+
+  function render({ resetScroll = false, focus = false } = {}) {
+    stopQuantityRepeat();
+    for (const tab of $("tabs").children)
+      tab.setAttribute("aria-pressed", String(Number(tab.dataset.shop) === shop));
+    $("balanceIcon").src = assetRoot + currencyIcon();
+    $("balance").textContent = format(balances[shop]);
+    $("balance").parentElement.setAttribute("aria-label", tr("持有 ", "Balance: ") + format(balances[shop]) + " " + tr(...shops[shop].unit));
+    $("category").hidden = shop === 2;
+    const offers = displayed().map(offer);
+    const groups = groupOrder[shop];
+    const highestRarity = new Map();
+    for (const { product } of offers) {
+      const group = groupOf(product);
+      highestRarity.set(group, Math.max(highestRarity.get(group) ?? 0, product.rarity));
+    }
+    offers.sort((a, b) => {
+      const first = groupOf(a.product);
+      const second = groupOf(b.product);
+      return Number(a.remaining === 0) - Number(b.remaining === 0) ||
+        highestRarity.get(second) - highestRarity.get(first) ||
+        groups.indexOf(first) - groups.indexOf(second) ||
+        b.product.rarity - a.product.rarity ||
+        b.price - a.price;
+    });
+    if (!offers.some(item => item.product.id === selected)) {
+      selected = offers[0]?.product.id ?? null;
+      quantity = 1;
+    }
+    $("count").textContent = format(offers.length) + tr(" 件商品", offers.length === 1 ? " item" : " items");
+    const grid = $("goods");
+    const scrollTop = resetScroll ? 0 : grid.scrollTop;
+    grid.replaceChildren(...offers.map(tile));
+    if (!offers.length) grid.append(text("p", tr("没有符合条件的商品", "No matching items"), "empty"));
+    grid.scrollTop = scrollTop;
+    renderDetail(selectedOffer());
+    if (focus) grid.querySelector('[aria-pressed="true"]')?.focus({ preventScroll: true });
+  }
+
+  function showTip(message) {
+    const tip = $("tip");
+    clearTimeout(tipTimeout);
+    tip.classList.remove("active");
+    tip.textContent = message;
+    void tip.offsetWidth;
+    tip.classList.add("active");
+    tipTimeout = setTimeout(() => { tip.textContent = ""; }, 1750);
+  }
+
+  for (const [index, store] of shops.entries()) {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.dataset.shop = index;
+    tab.append(image("ItemIcon/" + store.currency + ".png"), text("span", tr(...store.names)));
+    $("tabs").append(tab);
+  }
+  $("tabs").addEventListener("click", event => {
+    const tab = event.target.closest("[data-shop]");
+    if (!tab || Number(tab.dataset.shop) === shop) return;
+    shop = Number(tab.dataset.shop);
+    selected = null;
+    quantity = 1;
+    $("search").value = "";
+    $("category").value = "";
+    render({ resetScroll: true });
+  });
+  $("goods").addEventListener("click", event => {
+    const button = event.target.closest("[data-product]");
+    if (!button) return;
+    stopQuantityRepeat();
+    selected = button.dataset.product;
+    quantity = 1;
+    for (const cell of $("goods").querySelectorAll("[data-product]"))
+      cell.setAttribute("aria-pressed", String(cell === button));
+    renderDetail(selectedOffer());
+  });
+  $("weaponModes").addEventListener("click", event => {
+    const button = event.target.closest("[data-weapon-mode]");
+    const item = selectedOffer();
+    if (!button || !item?.product.weapon) return;
+    weaponMode = Number(button.dataset.weaponMode);
+    renderWeapon(item.product);
+  });
+  $("search").addEventListener("input", () => render({ resetScroll: true }));
+  $("category").addEventListener("change", () => render({ resetScroll: true }));
+  $("quantity").addEventListener("change", event => {
+    const item = selectedOffer();
+    if (item) updateQuantity(item, Number(event.target.value));
+  });
+  let repeatDelay;
+  let repeatInterval;
+  let repeatedButton;
+
+  function stopQuantityRepeat() {
+    clearTimeout(repeatDelay);
+    clearInterval(repeatInterval);
+  }
+
+  for (const [id, step] of [["minus", -1], ["plus", 1]]) {
+    const button = $(id);
+    const advance = () => {
+      const item = selectedOffer();
+      if (item) updateQuantity(item, quantity + step);
+      if (!item || button.disabled) stopQuantityRepeat();
+    };
+    button.addEventListener("pointerdown", event => {
+      if (!event.isPrimary || event.button !== 0) return;
+      stopQuantityRepeat();
+      repeatedButton = null;
+      button.setPointerCapture(event.pointerId);
+      repeatDelay = setTimeout(() => {
+        repeatedButton = button;
+        repeatInterval = setInterval(advance, 85);
+        advance();
+      }, 350);
+    });
+    for (const event of ["pointerup", "pointercancel", "lostpointercapture", "blur"])
+      button.addEventListener(event, stopQuantityRepeat);
+    button.addEventListener("click", event => {
+      if (event.detail === 0 || repeatedButton !== button) advance();
+      repeatedButton = null;
+    });
+  }
+  window.addEventListener("blur", stopQuantityRepeat);
+  $("max").addEventListener("click", () => {
+    const item = selectedOffer();
+    if (item) updateQuantity(item, item.max);
+  });
+  $("exchange").addEventListener("click", () => {
+    const item = selectedOffer();
+    if (!item || quantity < 1 || quantity > item.max) return;
+    const { product, price } = item;
+    const amount = quantity;
+    purchases[shop].set(product.id, (purchases[shop].get(product.id) ?? 0) + amount);
+    balances[shop] -= price * amount;
+    quantity = 1;
+    render({ focus: item.remaining !== amount });
+    showTip(tr("已兑换 ", "Exchanged ") + productName(product) + " ×" + format(amount));
+  });
+  function updateNode(chapter, requested) {
+    const max = data.chapterLengths[chapter] ?? 99;
+    const stage = Math.max(1, Math.min(max, Math.trunc(requested) || 1));
+    node = chapter * 100 + stage;
+    chapterInput.value = chapter;
+    nodeInput.max = max;
+    nodeInput.value = stage;
+    $("nodeCode").value = "R" + node;
+  }
+
+  chapterInput.addEventListener("change", () => {
+    updateNode(Number(chapterInput.value), 1);
+    quantity = 1;
+    render({ resetScroll: true });
+  });
+  nodeInput.addEventListener("change", () => {
+    updateNode(Number(chapterInput.value), nodeInput.valueAsNumber);
+    quantity = 1;
+    render({ resetScroll: true });
+  });
+  nodeInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") nodeInput.blur();
+  });
+  $("reset").addEventListener("click", () => {
+    balances = shops.map(store => store.balance);
+    purchases.forEach(ledger => ledger.clear());
+    quantity = 1;
+    render();
+    showTip(tr("兑换记录已重置", "Purchases reset"));
+  });
+  if (data.errors.length) {
+    $("issues").hidden = false;
+    $("issueText").textContent = data.errors.join(" / ");
+  }
+
+  function applyLanguage() {
+    document.documentElement.lang = tr("zh-CN", "en");
+    document.title = tr("商店", "Shop");
+    for (const [element, chinese] of localizedLabels)
+      element.textContent = tr(chinese, element.dataset.en);
+    for (const [element, chinese] of localizedAria)
+      element.setAttribute("aria-label", tr(chinese, element.dataset.enLabel));
+    $("search").placeholder = tr("搜索商品", "Search items");
+    if (routeBackLabels) $("routeBack").textContent = tr(...routeBackLabels);
+    [...$("tabs").children].forEach((tab, index) => { tab.lastElementChild.textContent = tr(...shops[index].names); });
+    for (const option of chapterInput.options)
+      option.textContent = tr("第 " + option.value + " 章", "Chapter " + option.value);
+    $("issueCount").textContent = tr("配表校验 · ", "Data validation · ") + format(data.errors.length);
+    const button = $("languageSwitch");
+    button.textContent = tr("EN", "中文");
+    button.lang = tr("en", "zh-CN");
+    button.setAttribute("aria-label", tr("Switch to English", "切换到中文"));
+  }
+
+  $("languageSwitch").addEventListener("click", () => {
+    english = !english;
+    clearTimeout(tipTimeout);
+    $("tip").textContent = "";
+    applyLanguage();
+    render();
+  });
+
+  function returnToRoute() {
+    if (routeBackLabels) window.parent.postMessage({type:"route-app-back"},"*");
+  }
+  $("routeBack").addEventListener("click",returnToRoute);
+  window.addEventListener("keydown",event=>{
+    if (event.key==="Escape" && routeBackLabels && !event.defaultPrevented) returnToRoute();
+  });
+  window.addEventListener("message",event=>{
+    if (window.parent===window || event.source!==window.parent || event.data?.type!=="shop-preview-context") return;
+    const {chapter,stage,backLabel} = event.data;
+    routeBackLabels = backLabel;
+    $("routeBack").textContent = tr(...routeBackLabels);
+    $("routeBack").hidden = false;
+    updateNode(chapter,stage);
+    render({resetScroll:true});
+  });
+
+  new ResizeObserver(([entry]) => {
+    const { width, height } = entry.contentRect;
+    $("canvas").style.setProperty("--scale", Math.min(width / 1920, height / 1080));
+  }).observe($("viewport"));
+  applyLanguage();
+  updateNode(Math.floor(node / 100), node % 100);
+  render();
+</script>
+</body>
+</html>

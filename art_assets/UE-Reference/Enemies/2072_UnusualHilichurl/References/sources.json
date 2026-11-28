@@ -1,0 +1,80 @@
+{
+  "enemy_id": 2072,
+  "name_id": "UnusualHilichurl",
+  "name": "奇怪的丘丘人",
+  "checked_date": "2026-11-27",
+  "design_source": "用户本次明确指定的项目演出，不声称与原作相同。",
+  "visual_requirements": [
+    {
+      "effect": "Warning",
+      "status": "4207201 / ST_UnusualHilichurl_Warning",
+      "visual": "卡牌上方悬浮的红色感叹号；显露、轻微浮动维持、移除淡去。",
+      "lifecycle": "跟随实际预警状态，普通刷新不重新出现。"
+    },
+    {
+      "effect": "Leaving",
+      "status": "4207202 / ST_UnusualHilichurl_Leaving",
+      "visual": "整卡小幅发抖，短颤线和少量浅色紧张小粒子，起手／持续／结束完整。",
+      "lifecycle": "技能2替换第一预警，第一感叹号退出；状态维持发抖，开溜时停止并衔接左移淡出。"
+    },
+    {
+      "effect": "Withdraw",
+      "effect_id": "20720301 / SE_207203_1",
+      "visual": "整卡向屏幕左侧短移并快速淡出，完成后不回场。",
+      "lifecycle": "20720301施加公共ST_Flee，Duration=1、AddInPhase=6、TriggerPhase=0；当回合敌方结束时自然到期，经STE_Flee_Withdrawn发布真实Withdrawn后驱动演出。保留旧卡原位显示到有限尾效结束。"
+    }
+  ],
+  "identity_reference": "art_assets/Enemy/2072_01.png",
+  "original_media": {
+    "used": false,
+    "downloaded": false,
+    "local_gif_saved": false,
+    "reason": "三项是用户指定的项目改编，无需下载不对应的原作技能演出。"
+  },
+  "audio_sources": [
+    {
+      "type": "replacement_candidate",
+      "effect": "Warning",
+      "title": "UI Sounds",
+      "author": "HaelDB",
+      "url": "https://opengameart.org/content/ui-sounds-0",
+      "license_page_label": "CC0（页面检索文字标注，未下载音频与许可文件）",
+      "purpose": "首次预警的一声短提示，不循环鸣叫。",
+      "listened": false,
+      "downloaded": false,
+      "selected_clip": null
+    },
+    {
+      "type": "replacement_candidate",
+      "effect": "Leaving",
+      "title": "Interface Sounds",
+      "author": "Kenney",
+      "url": "https://opengameart.org/content/interface-sounds",
+      "license_page_label": "CC0（页面检索文字标注，未下载音频与许可文件）",
+      "purpose": "第二阶段轻碎／摩擦声候选，尚未确认直接对应发抖的片段。",
+      "listened": false,
+      "downloaded": false,
+      "selected_clip": null
+    },
+    {
+      "type": "replacement_candidate",
+      "effect": "Withdraw",
+      "title": "Air Whoosh",
+      "url": "https://opengameart.org/content/air-whoosh",
+      "purpose": "左移短淡出的轻短风切候选。",
+      "verification": "沿用既有候选记录，页面此前403，本轮不重复下载。",
+      "listened": false,
+      "downloaded": false,
+      "selected_clip": null
+    }
+  ],
+  "local_audio_search": "本机当前工作区不存在soundtrack目录，art_assets本批此前未找到本项已确认可直接复用的成品音源；不推断其他设备状态。",
+  "technical_check": {
+    "skill_sequence": "实际行动依次207201预警、207202替换预警、207203施加ST_Flee；207203每回合最多一次，当前敌方回合结束阶段由公共状态到期撤离；没有伤害段。",
+    "exit_code": "Assets/Scripts/Battle/SpecialRules/WithdrawnEffect.cs",
+    "exit_behavior": "置HasWithdrawn与HP归零，清理状态和释放占位，发布HPChanged(reason=Withdrawn)及Withdrawn，然后检查战斗结束；不发布Death、Kill或OnDeath。",
+    "ui_check": "当前UI无消费Withdrawn的专用短移淡出播放；BattleUiAnimatedCards现有金色溶解用于死亡退场，不能视为本项已实现。",
+    "future_integration": "公共表现层显式消费真实状态与Withdrawn声明，保留退出对象原位外观、结果去重与有限尾效等待；不在场景复制逻辑，不填写未注册钩子。"
+  },
+  "implementation_boundary": "本次将20720301迁移为公共ST_Flee并设置当前敌方回合结束时到期，更新配表及相关说明；尚未制作专用撤离演出，未修改代码或场景，未运行Unity。"
+}

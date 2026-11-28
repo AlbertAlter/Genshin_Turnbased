@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1035_Ganyu/CelestialShowerIcicles/Ganyu_CelestialShowerIcicles",
+  "source": "art_assets/UE/Characters/1035_Ganyu/CelestialShowerIcicles/Blender/Ganyu_CelestialShowerIcicles.blend",
+  "file": "Characters/1035_Ganyu/CelestialShowerIcicles/Exports/Ganyu_CelestialShowerIcicles.vfx.bytes",
+  "meshes": 34,
+  "tracks": 588,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 670095
+}

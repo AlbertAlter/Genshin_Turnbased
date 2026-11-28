@@ -1,0 +1,1339 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/ElectricRebirth/视觉需求.md",
+  "variants": {
+    "2085_ElectricRebirth_Cast": {
+      "effect": "2085_ElectricRebirth_Cast",
+      "source": "Blender/2085_ElectricRebirth_Cast.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/ElectricRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_ElectricRebirth_Cast_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_ElectricRebirth_Cast_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_ElectricRebirth_Cast_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_25": {
+          "file": "Exports/2085_ElectricRebirth_Cast_GroupBlade_25.fbx",
+          "objects": [
+            "PART_ElectroBody_25",
+            "PART_ElectroBrightEdge_25"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            6.557672023773193,
+            0.0,
+            0.6081138998270035
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ElectroBody_25": [
+              "Soft"
+            ],
+            "PART_ElectroBrightEdge_25": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              6.557672023773193,
+              9.907432207967304e-08,
+              0.6081138998270035
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DecorativeX_25": {
+          "file": "Exports/2085_ElectricRebirth_Cast_DecorativeX_25.fbx",
+          "objects": [
+            "PART_DecorativeX_25"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            3.606656312942505,
+            0.0,
+            0.21990761533379555
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DecorativeX_25": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              3.606656312942505,
+              3.582749563690868e-08,
+              0.21990761533379555
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 25,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_ElectricRebirth_Cast.wav"
+      }
+    },
+    "2085_ElectricRebirth_State": {
+      "effect": "2085_ElectricRebirth_State",
+      "source": "Blender/2085_ElectricRebirth_State.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/ElectricRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/2085_ElectricRebirth_State_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_0": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_0.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_0"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2302554845809937,
+            0.9764528572559357,
+            0.40703123807907104
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2302554845809937,
+              0.9764529168605804,
+              0.40703141689300537
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_1": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_1.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_1"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9582815766334534,
+            1.079844057559967,
+            0.4158153831958771
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9582815766334534,
+              1.0798441171646118,
+              0.415815532207489
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_2": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_2.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_2"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.8825250267982483,
+            1.0799904465675354,
+            0.41583672165870667
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.8825250267982483,
+              1.0799905061721802,
+              0.4158368706703186
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_3": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_3.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_3"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.218213677406311,
+            1.0059610605239868,
+            0.4136039614677429
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.218213677406311,
+              1.0059611201286316,
+              0.41360414028167725
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_4": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_4.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_4"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.231951594352722,
+            0.8448579907417297,
+            0.4151615500450134
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.231951594352722,
+              0.8448580503463745,
+              0.4151616096496582
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_5": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_5.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_5"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.148569941520691,
+            1.0603277087211609,
+            0.4155651405453682
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.148569941520691,
+              1.0603277683258057,
+              0.41556528955698013
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_6": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_6.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_6"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.6543033719062805,
+            1.079993188381195,
+            0.4158591479063034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.6543033719062805,
+              1.0799932479858398,
+              0.41585929691791534
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_7": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_7.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_7"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.113032281398773,
+            1.0703691244125366,
+            0.4156745672225952
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.113032281398773,
+              1.0703691840171814,
+              0.41567474603652954
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_8": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_8.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_8"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.231963038444519,
+            0.8804128170013428,
+            0.4147067666053772
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.231963038444519,
+              0.8804128766059875,
+              0.4147069454193115
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_9": {
+          "file": "Exports/2085_ElectricRebirth_State_OwnRebirthFlow_9.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_9"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.22812557220459,
+            0.9820080995559692,
+            0.40902863442897797
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_9": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.22812557220459,
+              0.9820081889629364,
+              0.4090287685394287
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_ElectricRebirth_State.wav"
+      }
+    },
+    "2085_ElectricRebirth_Overall": {
+      "effect": "2085_ElectricRebirth_Overall",
+      "source": "Blender/2085_ElectricRebirth_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2085_AbyssLector/ElectricRebirth/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2085_ElectricRebirth_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2085_ElectricRebirth_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2085_ElectricRebirth_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_0": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_0.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_0"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.2302554845809937,
+            0.9764528572559357,
+            0.40703123807907104
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.2302554845809937,
+              0.9764529168605804,
+              0.40703141689300537
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_1": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_1.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_1"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.9582815766334534,
+            1.079844057559967,
+            0.4158153831958771
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.9582815766334534,
+              1.0798441171646118,
+              0.415815532207489
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_2": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_2.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_2"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.8825250267982483,
+            1.0799904465675354,
+            0.41583672165870667
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.8825250267982483,
+              1.0799905061721802,
+              0.4158368706703186
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_3": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_3.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_3"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.218213677406311,
+            1.0059610605239868,
+            0.4136039614677429
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.218213677406311,
+              1.0059611201286316,
+              0.41360414028167725
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_4": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_4.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_4"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.231951594352722,
+            0.8448579907417297,
+            0.4151615500450134
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.231951594352722,
+              0.8448580503463745,
+              0.4151616096496582
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_5": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_5.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_5"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.148569941520691,
+            1.0603277087211609,
+            0.4155651405453682
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.148569941520691,
+              1.0603277683258057,
+              0.41556528955698013
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_6": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_6.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_6"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            1.6543033719062805,
+            1.079993188381195,
+            0.4158591479063034
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              1.6543033719062805,
+              1.0799932479858398,
+              0.41585929691791534
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_7": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_7.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_7"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.113032281398773,
+            1.0703691244125366,
+            0.4156745672225952
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.113032281398773,
+              1.0703691840171814,
+              0.41567474603652954
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_8": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_8.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_8"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.231963038444519,
+            0.8804128170013428,
+            0.4147067666053772
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.231963038444519,
+              0.8804128766059875,
+              0.4147069454193115
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OwnRebirthFlow_9": {
+          "file": "Exports/2085_ElectricRebirth_Overall_OwnRebirthFlow_9.fbx",
+          "objects": [
+            "PART_Electro_OwnRebirthFlow_9"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            2.22812557220459,
+            0.9820080995559692,
+            0.40902863442897797
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_OwnRebirthFlow_9": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              2.22812557220459,
+              0.9820081889629364,
+              0.4090287685394287
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_25": {
+          "file": "Exports/2085_ElectricRebirth_Overall_GroupBlade_25.fbx",
+          "objects": [
+            "PART_ElectroBody_25",
+            "PART_ElectroBrightEdge_25"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            6.557672023773193,
+            0.0,
+            0.6081138998270035
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ElectroBody_25": [
+              "Soft"
+            ],
+            "PART_ElectroBrightEdge_25": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              6.557672023773193,
+              9.907432207967304e-08,
+              0.6081138998270035
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DecorativeX_25": {
+          "file": "Exports/2085_ElectricRebirth_Overall_DecorativeX_25.fbx",
+          "objects": [
+            "PART_DecorativeX_25"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            3.606656312942505,
+            0.0,
+            0.21990761533379555
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DecorativeX_25": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              3.606656312942505,
+              3.582749563690868e-08,
+              0.21990761533379555
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 25,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 25,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 26,
+      "focus": [
+        4.621013879776001,
+        -0.08,
+        0.5276098251342773
+      ],
+      "detailScale": 8.064681673049927,
+      "contract": "One committed rebirth blast, then owned edge state; refresh is not another blast; real break/death is separate.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2085_ElectricRebirth_Overall.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 70,
+        "selectedFrame": 26,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

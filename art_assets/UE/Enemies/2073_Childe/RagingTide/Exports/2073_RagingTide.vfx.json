@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2073_Childe/RagingTide/2073_RagingTide",
+  "source": "art_assets/UE/Enemies/2073_Childe/RagingTide/Blender/2073_RagingTide.blend",
+  "file": "Enemies/2073_Childe/RagingTide/Exports/2073_RagingTide.vfx.bytes",
+  "meshes": 5,
+  "tracks": 85,
+  "frames": 135,
+  "duration": 4.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.466666666666667
+  },
+  "bytes": 371187
+}

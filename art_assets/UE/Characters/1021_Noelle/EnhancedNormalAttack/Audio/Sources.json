@@ -1,0 +1,104 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitutes from attributed existing swish, stone spell and magic sources. Whole-group contact is one sound, not one per enemy. Not auditioned, no original game extraction, no Unity/Wwise events or formal timeline.",
+  "files": [
+    {
+      "file": "Noelle_Normal_Sweep.wav",
+      "purpose": "一把主剑的一次挥扫／下劈，不逐目标叠加",
+      "seconds": 0.16158333333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.1,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.4",
+        "Resample speed 0.78; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -8.964134700963598,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "Noelle_Normal_Contact.wav",
+      "purpose": "一次全体同步接触的岩光短声，整组只一份",
+      "seconds": 0.25,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.28,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Starshatter/Audio/Ningguang_Burst_Contact.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.250000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.6",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -22.72433913584102,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "Listed PCM source excerpt 0.000000..0.280000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "5ms entrance and 35ms exit anti-click fade"
+      ]
+    },
+    {
+      "file": "Noelle_Normal_Tail.wav",
+      "purpose": "主剑收势的低量余风",
+      "seconds": 0.10502083333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.4,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.15",
+        "Resample speed 1.2; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -17.482313081827737,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    }
+  ]
+}

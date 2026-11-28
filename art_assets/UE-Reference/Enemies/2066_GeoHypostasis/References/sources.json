@@ -1,0 +1,86 @@
+{
+  "enemy_id": 2066,
+  "name": "无相之岩",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Geo_Hypostasis#Abilities",
+  "verification": "能力条目及MediaWiki媒体地址已核对；未播放完整动图，GIF仅在线链接。视频与音效候选未试听、截取或下载。普通无相版本，未将至纯版本作为主参考。",
+  "visual_sources": [
+    {
+      "title": "Geo Hypostasis Summon Pillars.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/6/66/Geo_Hypostasis_Summon_Pillars.gif/revision/latest?cb=20211129225541",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Summon_Pillars.gif",
+      "purpose": "生成岩柱原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Geo Hypostasis Stone Pellets.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1e/Geo_Hypostasis_Stone_Pellets.gif/revision/latest?cb=20211129225535",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Stone_Pellets.gif",
+      "purpose": "岩弹原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Geo Hypostasis Stone Seal.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/9/91/Geo_Hypostasis_Stone_Seal.gif/revision/latest?cb=20211129225407",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Stone_Seal.gif",
+      "purpose": "岩印原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Geo Hypostasis Shockwave.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/a/a7/Geo_Hypostasis_Shockwave.gif/revision/latest?cb=20211129225400",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Shockwave.gif",
+      "purpose": "单柱冲击波原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Geo Hypostasis Tremors.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1e/Geo_Hypostasis_Tremors.gif/revision/latest?cb=20211129225528",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Tremors.gif",
+      "purpose": "岩柱共振状态与触发原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "title": "Geo Hypostasis Hammerfall.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/5/50/Geo_Hypostasis_Hammerfall.gif/revision/latest?cb=20211129225429",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Geo_Hypostasis_Hammerfall.gif",
+      "purpose": "重锤原作形态参考；段数、目标和生命周期按项目表及用户共鸣复用要求",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=fsVGBJp-eZs",
+      "purpose": "各项技能的原作声音对照；片段时间待试听定位",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "原作对照入口，未提取或声明音频再分发许可"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/impact",
+      "license_page_label": "CC0（页面检索标注，尚未下载文件核对）",
+      "purpose": "单次石质冲击候选；持续低鸣另待选定",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": "本机art_assets下未找到本批对应技能可直接引用的松散音频源；只记录当前设备检索结果，不推断其他设备的制作状态。"
+}

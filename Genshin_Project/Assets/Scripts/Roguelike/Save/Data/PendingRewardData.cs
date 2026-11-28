@@ -6,7 +6,7 @@ public class PendingRewardData
     public string RewardId;
 }
 
-/// <summary>已完成节点的固定奖励清单。胜利/事件完成时固化，入账与清除此记录同次提交。</summary>
+/// <summary>节点首次战斗结束或事件完成时固化的固定奖励。入账、领奖记录和清除此清单同次提交。</summary>
 [Serializable]
 public sealed class RoguelikePendingNodeReward
 {

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2073_Childe/Riptide/2073_Riptide_ElectroTrigger",
+  "source": "art_assets/UE/Enemies/2073_Childe/Riptide/Blender/2073_Riptide_ElectroTrigger.blend",
+  "file": "Enemies/2073_Childe/Riptide/Exports/2073_Riptide_ElectroTrigger.vfx.bytes",
+  "meshes": 10,
+  "tracks": 30,
+  "frames": 70,
+  "duration": 2.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3
+  },
+  "bytes": 248231
+}

@@ -1,0 +1,22 @@
+{
+  "key": "Characters/1017_Ningguang/JadeScreen/Ningguang_JadeScreen",
+  "source": "art_assets/UE/Characters/1017_Ningguang/JadeScreen/Blender/Ningguang_JadeScreen.blend",
+  "file": "Characters/1017_Ningguang/JadeScreen/Exports/Ningguang_JadeScreen.vfx.bytes",
+  "meshes": 6,
+  "tracks": 25,
+  "frames": 361,
+  "duration": 12.0,
+  "loopStart": 0.8,
+  "loopEnd": 5.8,
+  "markers": {
+    "LeftPillar": 0.03333333333333333,
+    "PanelBuild": 0.13333333333333333,
+    "RightPillar": 0.43333333333333335,
+    "LoopStart": 0.8,
+    "Cycle1Repeat": 5.8,
+    "Cycle2Repeat": 10.8,
+    "ArbitraryPhaseExit": 10.933333333333334,
+    "Cleared": 12.0
+  },
+  "bytes": 128469
+}

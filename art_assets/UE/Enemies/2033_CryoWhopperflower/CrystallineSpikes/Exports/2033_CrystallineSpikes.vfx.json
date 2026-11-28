@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2033_CryoWhopperflower/CrystallineSpikes/2033_CrystallineSpikes",
+  "source": "art_assets/UE/Enemies/2033_CryoWhopperflower/CrystallineSpikes/Blender/2033_CrystallineSpikes.blend",
+  "file": "Enemies/2033_CryoWhopperflower/CrystallineSpikes/Exports/2033_CrystallineSpikes.vfx.bytes",
+  "meshes": 15,
+  "tracks": 315,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 357340
+}

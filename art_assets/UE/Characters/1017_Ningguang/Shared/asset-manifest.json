@@ -1,0 +1,98 @@
+{
+  "kind": "Shared native source parts",
+  "builder": "tools/blender/build_ningguang_vfx.py",
+  "parts": {
+    "Ningguang_FacetedGem": {
+      "file": "Ningguang_FacetedGem.fbx",
+      "radius": 0.7824480350479606,
+      "vertices": 84,
+      "triangles": 28,
+      "alpha": [
+        1.0,
+        1.0
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Geo_FacetedAmber_RGBA"
+      ]
+    },
+    "Ningguang_PathRibbon": {
+      "file": "Ningguang_PathRibbon.fbx",
+      "radius": 1.0049875624642353,
+      "vertices": 225,
+      "triangles": 384,
+      "alpha": [
+        0.0,
+        0.6499999761581421
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Geo_SoftGold_RGBA"
+      ]
+    },
+    "Ningguang_SoftGlow": {
+      "file": "Ningguang_SoftGlow.fbx",
+      "radius": 1.0000000204890964,
+      "vertices": 121,
+      "triangles": 200,
+      "alpha": [
+        0.0,
+        0.18000000715255737
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Geo_SoftGold_RGBA"
+      ]
+    },
+    "Ningguang_Glint": {
+      "file": "Ningguang_Glint.fbx",
+      "radius": 0.2052000046910133,
+      "vertices": 25,
+      "triangles": 40,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Geo_SoftGold_RGBA"
+      ]
+    }
+  },
+  "fps": 30,
+  "units": "1 Blender unit = 1 meter; reference art scale 100 design pixels per unit",
+  "axes": "Blender X right, Z up, -Y towards viewer; FBX -Z forward / Y up",
+  "runtimeConnected": false,
+  "reference": "Nine separate cards with actual fronts, frames, backs and sides; all used images packed. Reference objects never exported.",
+  "vertexColor": "VFXColor POINT RGBA, LINEAR export; soft edge alpha and material groups retained. Blender object alpha/reveal and authored clocks require later explicit runtime reconstruction; no Unity integration performed.",
+  "nativeValidation": {
+    "Shared/Ningguang_FacetedGem": {
+      "vertices": 84,
+      "triangles": 28,
+      "rgba": true,
+      "originZero": true,
+      "radius": 0.7824480350479606
+    },
+    "Shared/Ningguang_PathRibbon": {
+      "vertices": 225,
+      "triangles": 384,
+      "rgba": true,
+      "originZero": true,
+      "radius": 1.0049875624642353
+    },
+    "Shared/Ningguang_SoftGlow": {
+      "vertices": 121,
+      "triangles": 200,
+      "rgba": true,
+      "originZero": true,
+      "radius": 1.0000000204890964
+    },
+    "Shared/Ningguang_Glint": {
+      "vertices": 25,
+      "triangles": 40,
+      "rgba": true,
+      "originZero": true,
+      "radius": 0.2052000046910133
+    }
+  }
+}

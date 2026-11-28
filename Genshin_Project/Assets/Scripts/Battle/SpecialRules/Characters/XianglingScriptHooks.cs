@@ -49,7 +49,7 @@ public static class XianglingScriptHooks
             && c?.Status?.StatusID2 == Guoba && !c.Status.IsActive && c.Caster?.IsAlive == true
             && c.Declaration?.Kind == BattleEventKind.StatusRemoved
             && c.Declaration.Get<StatusEventData>() is StatusEventData fact
-            && fact.Host == c.Caster && fact.InstanceId == c.Status.ApplyOrder && fact.Reason == "Replaced");
+            && ReferenceEquals(fact.Host, c.Caster) && fact.InstanceId == c.Status.ApplyOrder && fact.Reason == "Replaced");
         BattleSpecialRules.RegisterCondition("Xiangling_Pyronado", (a, c) => Empty(a) && Requested(c, Pyronado));
         BattleSpecialRules.RegisterCondition("Xiangling_PyronadoEmpty", (a, c) => Empty(a)
             && c?.Status?.StatusID2==Pyronado && c.Status.RuntimeIntValue==0);

@@ -1,0 +1,13 @@
+{
+  "key": "Characters/1013_Jean/DandelionField/Jean_DandelionField_State",
+  "source": "art_assets/UE/Characters/1013_Jean/DandelionField/Blender/Jean_DandelionField_State.blend",
+  "file": "Characters/1013_Jean/DandelionField/Exports/Jean_DandelionField_State.vfx.bytes",
+  "meshes": 3,
+  "tracks": 26,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {},
+  "bytes": 229994
+}

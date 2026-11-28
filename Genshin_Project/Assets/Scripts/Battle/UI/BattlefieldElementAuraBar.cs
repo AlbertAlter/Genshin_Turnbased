@@ -14,6 +14,10 @@ public sealed class BattlefieldElementAuraBar : MonoBehaviour
     private bool initialized;
     private Image[] positionedIcons;
     private RectTransform positionedAnchor;
+    private readonly List<ElementAuraMotionIcon> motionIcons = new List<ElementAuraMotionIcon>();
+    private ElementAuraCollisionFlash collisionFlash;
+    public float IconStep => icons != null && icons.Length > 0 && icons[0] != null
+        ? icons[0].rectTransform.rect.height + gap : 45;
     private (Vector2 min, Vector2 max, Vector2 pivot, Vector2 size, Vector3 scale,
         Quaternion rotation, Vector2 position, float step) lastLayout;
 
@@ -43,6 +47,9 @@ public sealed class BattlefieldElementAuraBar : MonoBehaviour
             icon.gameObject.SetActive(false);
         }
         Layout();
+        // 在选择显示缓存Graphic前分配表现池，运行中的高频附着不再创建图形。
+        EnsureMotionPool(ElementQuery.Elements.Count * 2 + 1);
+        HideMotion();
     }
 
     private bool Layout()
@@ -72,6 +79,7 @@ public sealed class BattlefieldElementAuraBar : MonoBehaviour
     /// <summary>Hide surviving images without initializing or laying out UI during teardown.</summary>
     public void Clear()
     {
+        HideMotion();
         if (icons == null) return;
         foreach (var icon in icons)
         {
@@ -82,8 +90,9 @@ public sealed class BattlefieldElementAuraBar : MonoBehaviour
         }
     }
 
-    public void Present(IReadOnlyList<string> elements, IReadOnlyDictionary<string, Sprite> sprites)
+    public void Present(IReadOnlyList<string> elements, IReadOnlyDictionary<string, Sprite> sprites, ElementColorPalette palette = null)
     {
+        HideMotion();
         if (elements == null || elements.Count == 0 || sprites == null) { Clear(); return; }
         Initialize();
         if (!initialized || !Layout()) { Clear(); return; }
@@ -93,8 +102,68 @@ public sealed class BattlefieldElementAuraBar : MonoBehaviour
             Sprite sprite = null;
             bool visible = i < elements.Count && sprites.TryGetValue(elements[i], out sprite) && sprite != null;
             icons[i].sprite = visible ? sprite : null;
+            if (visible && palette != null) icons[i].color = palette.GetColor(elements[i]);
             icons[i].enabled = visible;
             if (icons[i].gameObject.activeSelf != visible) icons[i].gameObject.SetActive(visible);
         }
+    }
+
+    private void HideMotion()
+    {
+        foreach (var icon in motionIcons) if (icon != null) icon.gameObject.SetActive(false);
+        if (collisionFlash != null) collisionFlash.gameObject.SetActive(false);
+    }
+    private void EnsureMotionPool(int count)
+    {
+        while (motionIcons.Count < count)
+        {
+            var go = new GameObject("ElementAuraMotion", typeof(RectTransform), typeof(CanvasRenderer), typeof(ElementAuraMotionIcon));
+            go.layer = icons[0].gameObject.layer; go.transform.SetParent(icons[0].transform.parent, false);
+            var graphic = go.GetComponent<ElementAuraMotionIcon>(); graphic.raycastTarget = false;
+            motionIcons.Add(graphic);
+        }
+        if (collisionFlash == null)
+        {
+            var go = new GameObject("ElementAuraCollision", typeof(RectTransform), typeof(CanvasRenderer), typeof(ElementAuraCollisionFlash));
+            go.layer = icons[0].gameObject.layer; go.transform.SetParent(icons[0].transform.parent, false);
+            collisionFlash = go.GetComponent<ElementAuraCollisionFlash>(); collisionFlash.raycastTarget = false;
+        }
+    }
+    private void Place(RectTransform rect, float x, float y, float scale)
+    {
+        var first = icons[0].rectTransform;
+        rect.anchorMin = first.anchorMin; rect.anchorMax = first.anchorMax; rect.pivot = first.pivot;
+        rect.sizeDelta = first.sizeDelta; rect.localRotation = first.localRotation;
+        rect.localScale = first.localScale * scale;
+        // 首图标永远保留为可编辑锚点，只移动单独的表现节点。
+        rect.anchoredPosition = first.anchoredPosition + new Vector2((side == BattleSide.Ally ? 1 : -1) * x,
+            (topAligned ? -1 : 1) * y);
+    }
+    public void PresentMotion(IReadOnlyList<ElementAuraMotion.Icon> frame, IReadOnlyDictionary<string, Sprite> sprites,
+        ElementColorPalette palette, float flash, float collisionY, string flashElement, float brightness)
+    {
+        Initialize();
+        if (!initialized || !Layout() || palette == null) { Clear(); return; }
+        foreach (var icon in icons) if (icon != null) { icon.enabled = false; icon.gameObject.SetActive(false); }
+        EnsureMotionPool(frame.Count);
+        for (int i = 0; i < motionIcons.Count; i++)
+        {
+            var icon = motionIcons[i]; if (icon == null) continue;
+            Sprite sprite = null;
+            bool visible = i < frame.Count && frame[i].Opacity > 0 && sprites.TryGetValue(frame[i].Element, out sprite) && sprite != null;
+            icon.gameObject.SetActive(visible); if (!visible) continue;
+            var pose = frame[i]; Place(icon.rectTransform, pose.X, pose.Y, pose.Scale);
+            icon.Set(sprite, palette.GetColor(pose.Element), pose.Glow, pose.Opacity, brightness);
+        }
+        if (collisionFlash != null)
+        {
+            collisionFlash.gameObject.SetActive(flash > 0);
+            if (flash > 0) { Place(collisionFlash.rectTransform, 4, collisionY, 1); collisionFlash.Set(flash, palette.GetColor(flashElement)); }
+        }
+    }
+    private void OnDestroy()
+    {
+        foreach (var icon in motionIcons) if (icon != null) Destroy(icon.gameObject);
+        motionIcons.Clear(); if (collisionFlash != null) Destroy(collisionFlash.gameObject);
     }
 }

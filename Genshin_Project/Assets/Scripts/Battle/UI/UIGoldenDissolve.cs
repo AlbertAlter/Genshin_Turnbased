@@ -106,7 +106,7 @@ public sealed class UIGoldenDissolve : BaseMeshEffect
     {
         if (!IsPlaying) return;
         if (image == null || image.material != ownedMaterial) { ResetEffect(); return; }
-        elapsed += Mathf.Max(0, playbackStyle.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime);
+        elapsed += Mathf.Max(0, playbackStyle.UseUnscaledTime ? BattlePause.DeltaTime : BattlePause.ScaledDeltaTime);
         if (elapsed >= playbackDuration) Finish();
         else ApplyProgress(elapsed / playbackDuration);
     }

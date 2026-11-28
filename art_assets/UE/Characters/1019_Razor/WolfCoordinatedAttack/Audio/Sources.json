@@ -1,0 +1,102 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 electric and swish candidates. No wolf howl substitute was fabricated from an unrelated voice. Not auditioned; source cue samples only, no real hit timeline.",
+  "files": [
+    {
+      "file": "Razor_Claw_Swish.wav",
+      "purpose": "一组狼爪的一次破风，不按三条爪痕重复",
+      "seconds": 0.15754166666666666,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.08,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.48",
+        "Resample speed 0.8; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -7.3872917264528395,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "Razor_Claw_Contact.wav",
+      "purpose": "实际目标处的短接触电光，群体需限制叠加音量",
+      "seconds": 0.24,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.23,
+      "localSource": "art_assets/UE/Characters/1011_Lisa/VioletArc/Audio/Lisa_Strike_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.240000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.36",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -9.87410188847361,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/groundhit.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.985496; no upward normalization"
+      ]
+    },
+    {
+      "file": "Razor_Claw_Tail.wav",
+      "purpose": "短爪痕之后的收势余电",
+      "seconds": 0.22,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.29,
+      "localSource": "art_assets/UE/Characters/1011_Lisa/VioletArc/Audio/Lisa_Crackle_Loop_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.220000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.15",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -41.96621050464785,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Electricity Game Sound Pack",
+      "creator": "faxcorp",
+      "sourcePage": "https://opengameart.org/content/electricity-game-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/crackleelectricityloop.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "excerpt from 0s; 0.45s loop with 0.02s linear crossfade"
+      ]
+    }
+  ]
+}

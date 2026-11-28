@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1014_Barbara/ShiningMiracle/Barbara_Melody_And_Miracle_Preview",
+  "source": "art_assets/UE/Characters/1014_Barbara/ShiningMiracle/Blender/Barbara_Melody_And_Miracle_Preview.blend",
+  "file": "Characters/1014_Barbara/ShiningMiracle/Exports/Barbara_Melody_And_Miracle_Preview.vfx.bytes",
+  "meshes": 12,
+  "tracks": 91,
+  "frames": 313,
+  "duration": 10.4,
+  "loopStart": 0,
+  "loopEnd": 4.4,
+  "markers": {
+    "BurstDuringExistingLoop": 4.4,
+    "StateExit": 9.2
+  },
+  "bytes": 478896
+}

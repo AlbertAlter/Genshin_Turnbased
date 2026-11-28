@@ -7,7 +7,20 @@ internal sealed class AllyFrontline
 
     private readonly IReadOnlyList<CharacterBattleController> _allies;
     private bool _presenceReturnPending;
+    private CharacterBattleController _skillSwitchOutgoing;
     internal bool IsFreeDeathSwitchPending { get; private set; }
+    internal bool IsFreeForcedSwitchPending => IsFreeDeathSwitchPending || _skillSwitchOutgoing != null;
+    internal bool CanSelectForSwitch(CharacterBattleController target) => target?.Entity?.IsOnField == true
+        || (_skillSwitchOutgoing == null && BattleSpecialRules.CanReturnBySwitch(target?.Entity));
+
+    internal void RequestFreeSkillReplacement(BattleEntity outgoing)
+    {
+        var controller = System.Linq.Enumerable.FirstOrDefault(_allies, a => a?.Entity == outgoing && a.IsActive);
+        if (controller == null || outgoing.IsOnField) return;
+        // 无可补位成员时仍允许推进回合，离场不等于全灭。
+        foreach (var ally in _allies)
+            if (ally?.Entity?.IsOnField == true) { _skillSwitchOutgoing = controller; return; }
+    }
 
     internal AllyFrontline(IReadOnlyList<CharacterBattleController> allies) => _allies = allies;
 
@@ -24,7 +37,7 @@ internal sealed class AllyFrontline
 
     internal bool CanSwitchTo(CharacterBattleController target)
     {
-        if (target == null || target.Entity == null || !target.Entity.IsOnField) return false;
+        if (!CanSelectForSwitch(target)) return false;
         var current = GetActiveAlly();
         return current != target && CanLeave(current);
     }
@@ -35,7 +48,7 @@ internal sealed class AllyFrontline
         if (!CanLeave(current)) return false;
 
         foreach (var ally in _allies)
-            if (ally != null && ally != current && ally.Entity != null && ally.Entity.IsOnField)
+            if (ally != null && ally != current && CanSelectForSwitch(ally))
                 return true;
         return false;
     }
@@ -45,16 +58,18 @@ internal sealed class AllyFrontline
         var outgoing = GetActiveAlly();
         if (incoming == null || incoming == outgoing) return 0;
         return APCostResolver.ForSwitch(outgoing != null ? outgoing.Entity : null,
-            incoming.Entity, SwitchAPCost, IsFreeDeathSwitchPending);
+            incoming.Entity, SwitchAPCost, IsFreeForcedSwitchPending);
     }
 
     internal bool TrySwitchManually(CharacterBattleController target, ActionPointManager apManager, bool chargeAP)
     {
         if (!CanSwitchTo(target)) return false;
 
+        using var collection = BattleResolutionContext.BeginCollection();
         int cost = chargeAP ? GetSwitchAPCost(target) : 0;
         if (cost > 0 && (apManager == null || !apManager.ConsumeAP(cost))) return false;
 
+        if (target.Entity.IsOffField) BattleSpecialRules.PrepareOffFieldSwitch(target.Entity);
         CommitSwitch(target, cost);
         return true;
     }
@@ -105,14 +120,16 @@ internal sealed class AllyFrontline
     internal void ClearPendingSwitches()
     {
         IsFreeDeathSwitchPending = false;
+        _skillSwitchOutgoing = null;
         _presenceReturnPending = false;
     }
 
     private void CommitSwitch(CharacterBattleController target, int paidAP, BattleSwitchReason? explicitReason = null)
     {
-        var previous = GetActiveAlly();
+        var previous = GetActiveAlly() ?? _skillSwitchOutgoing;
         BattleSwitchReason reason = explicitReason ?? (IsFreeDeathSwitchPending || previous?.Entity?.IsDead == true
-            ? BattleSwitchReason.DeathForced : previous?.Entity == null ? BattleSwitchReason.InitialEntry : BattleSwitchReason.Manual);
+            ? BattleSwitchReason.DeathForced : _skillSwitchOutgoing != null ? BattleSwitchReason.SkillAutomatic
+            : previous?.Entity == null ? BattleSwitchReason.InitialEntry : BattleSwitchReason.Manual);
 
         // 付款声明保留切换前的布局，响应等整个换人提交后再执行。
         using var collection = BattleResolutionContext.BeginCollection();

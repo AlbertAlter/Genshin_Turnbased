@@ -1,0 +1,20 @@
+{
+  "key": "general/ElementalGround/ElementalGround_Cryo",
+  "source": "art_assets/UE/general/ElementalGround/Blender/ElementalGround_Cryo.blend",
+  "file": "general/ElementalGround/Exports/ElementalGround_Cryo.vfx.bytes",
+  "meshes": 6,
+  "tracks": 21,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 505585
+}

@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-26",
+  "scope": "Source SFX candidates only; no Wwise/Unity event bindings",
+  "files": [
+    {
+      "file": "Klee_SmallBomb_Throw.wav",
+      "purpose": "单次投掷破风",
+      "seconds": 0.12602083333333333,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -5.731592032560612,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1009_Amber\\ArrowRain\\Audio\\ArrowRain_Launch_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.126021s from listed local source",
+        "gain 0.58",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.08,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "sourceMember": "swishes/swish-1.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Klee_SmallBomb_Hit.wav",
+      "purpose": "小炸弹轻量命中",
+      "seconds": 0.6450416666666666,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -8.541492140865577,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\general\\Explosion\\Audio\\Explosion_Light_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.645042s from listed local source",
+        "gain 0.55",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.63,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion2.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

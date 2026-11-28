@@ -1,0 +1,1484 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\general\\ElementalGround\\视觉需求.md",
+  "variants": {
+    "ElementalGround_Pyro": {
+      "effect": "ElementalGround_Pyro",
+      "source": "Blender/ElementalGround_Pyro.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\ElementalGround\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Flame": {
+          "file": "Exports/ElementalGround_Pyro_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LayeredFlameTongue": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 621,
+            "triangles": 1056,
+            "dimensions": [
+              0.6138141751289368,
+              0.5939134955406189,
+              1.1700000762939453
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/ElementalGround_Pyro_ContinuousGround.fbx",
+          "objects": [
+            "PART_Pyro_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Pyro_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/ElementalGround_Pyro_GroundPattern0.fbx",
+          "objects": [
+            "PART_Pyro_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.178231239318848,
+            0.0,
+            10.369296550750732
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Pyro_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.178231239318848,
+              1.6987323760986328e-06,
+              10.369296550750732
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/ElementalGround_Pyro_GroundPattern1.fbx",
+          "objects": [
+            "PART_Pyro_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.022330284118652,
+            0.0,
+            10.641574382781982
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Pyro_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.022330284118652,
+              1.7285346984863281e-06,
+              10.641574382781982
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/ElementalGround_Pyro_GroundPattern2.fbx",
+          "objects": [
+            "PART_Pyro_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.055665969848633,
+            0.0,
+            9.464428901672363
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Pyro_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.055665969848633,
+              1.5348196029663086e-06,
+              9.464428901672363
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 75,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "maskContract": "One full-world surface with unmasked reusable VFXColor RGBA. Blender-only max-union shader offers four live example coverage toggles; runtime must compute coverage from actual statuses. Shared phase; no additive overlap.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ElementalGround_Pyro_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "ElementalGround_Pyro_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ElementalGround_Pyro.wav"
+      },
+      "coveragePreviews": {
+        "04_Single": "Preview/ElementalGround_Pyro_04_Single.png",
+        "05_Adjacent": "Preview/ElementalGround_Pyro_05_Adjacent.png",
+        "06_Separated": "Preview/ElementalGround_Pyro_06_Separated.png",
+        "07_Clear": "Preview/ElementalGround_Pyro_07_Clear.png"
+      },
+      "flowingFlameSurfaceRevision": 1,
+      "flameSurfaceContract": "Curved sparse sheets; continuous RGBA falloff across both sides and ends, with a warmer yellow inner strand. Geometry replaces the visible hard cross-plane seam; current poses, hit cues and particle count unchanged.",
+      "pyroGroundReadabilityRevision": 1,
+      "pyroGroundReadabilityContract": "Darker warm charred base, separate orange heat veins and low flame. Full-world unmasked RGBA retained; live max-union coverage, poses, timing and target layout unchanged."
+    },
+    "ElementalGround_Cryo": {
+      "effect": "ElementalGround_Cryo",
+      "source": "Blender/ElementalGround_Cryo.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\ElementalGround\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/ElementalGround_Cryo_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/ElementalGround_Cryo_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/ElementalGround_Cryo_ContinuousGround.fbx",
+          "objects": [
+            "PART_Cryo_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/ElementalGround_Cryo_GroundPattern0.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.174220085144043,
+            0.0,
+            10.361742496490479
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.174220085144043,
+              1.6987323760986328e-06,
+              10.361742496490479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/ElementalGround_Cryo_GroundPattern1.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.015108108520508,
+            0.0,
+            10.635203838348389
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.015108108520508,
+              1.7285346984863281e-06,
+              10.635203838348389
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/ElementalGround_Cryo_GroundPattern2.fbx",
+          "objects": [
+            "PART_Cryo_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.05208396911621,
+            0.0,
+            9.461855411529541
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.05208396911621,
+              1.5348196029663086e-06,
+              9.461855411529541
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 75,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "maskContract": "One full-world surface with unmasked reusable VFXColor RGBA. Blender-only max-union shader offers four live example coverage toggles; runtime must compute coverage from actual statuses. Shared phase; no additive overlap.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ElementalGround_Cryo_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "ElementalGround_Cryo_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ElementalGround_Cryo.wav"
+      },
+      "coveragePreviews": {
+        "04_Single": "Preview/ElementalGround_Cryo_04_Single.png",
+        "05_Adjacent": "Preview/ElementalGround_Cryo_05_Adjacent.png",
+        "06_Separated": "Preview/ElementalGround_Cryo_06_Separated.png",
+        "07_Clear": "Preview/ElementalGround_Cryo_07_Clear.png"
+      }
+    },
+    "ElementalGround_Electro": {
+      "effect": "ElementalGround_Electro",
+      "source": "Blender/ElementalGround_Electro.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\ElementalGround\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "ContinuousGround": {
+          "file": "Exports/ElementalGround_Electro_ContinuousGround.fbx",
+          "objects": [
+            "PART_Electro_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/ElementalGround_Electro_GroundPattern0.fbx",
+          "objects": [
+            "PART_Electro_ContinuousPattern0"
+          ],
+          "vertices": 1365,
+          "triangles": 1872,
+          "dimensions": [
+            19.174220085144043,
+            0.0,
+            10.361742496490479
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1365,
+            "triangles": 1872,
+            "dimensions": [
+              19.174220085144043,
+              1.6987323760986328e-06,
+              10.361742496490479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/ElementalGround_Electro_GroundPattern1.fbx",
+          "objects": [
+            "PART_Electro_ContinuousPattern1"
+          ],
+          "vertices": 1430,
+          "triangles": 1976,
+          "dimensions": [
+            19.015108108520508,
+            0.0,
+            10.635203838348389
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1430,
+            "triangles": 1976,
+            "dimensions": [
+              19.015108108520508,
+              1.7285346984863281e-06,
+              10.635203838348389
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/ElementalGround_Electro_GroundPattern2.fbx",
+          "objects": [
+            "PART_Electro_ContinuousPattern2"
+          ],
+          "vertices": 1370,
+          "triangles": 1880,
+          "dimensions": [
+            20.05208396911621,
+            0.0,
+            9.461855411529541
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Electro_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1370,
+            "triangles": 1880,
+            "dimensions": [
+              20.05208396911621,
+              1.5348196029663086e-06,
+              9.461855411529541
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc13": {
+          "file": "Exports/ElementalGround_Electro_GroundArc13.fbx",
+          "objects": [
+            "PART_GroundArc13"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7136420232709497,
+            0.0,
+            0.18154634535312653
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc13": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7136420232709497,
+              2.9577652327361648e-08,
+              0.18154634535312653
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc23": {
+          "file": "Exports/ElementalGround_Electro_GroundArc23.fbx",
+          "objects": [
+            "PART_GroundArc23"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7201526863500476,
+            0.0,
+            0.17854757606983185
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc23": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7201526863500476,
+              2.908909113585878e-08,
+              0.17854757606983185
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc24": {
+          "file": "Exports/ElementalGround_Electro_GroundArc24.fbx",
+          "objects": [
+            "PART_GroundArc24"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7189773200079799,
+            0.0,
+            0.18545746803283691
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc24": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7189773200079799,
+              3.021485461829343e-08,
+              0.18545746803283691
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc26": {
+          "file": "Exports/ElementalGround_Electro_GroundArc26.fbx",
+          "objects": [
+            "PART_GroundArc26"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7197005432099104,
+            0.0,
+            0.17731129378080368
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc26": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7197005432099104,
+              2.8887674474731284e-08,
+              0.17731129378080368
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc31": {
+          "file": "Exports/ElementalGround_Electro_GroundArc31.fbx",
+          "objects": [
+            "PART_GroundArc31"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7227502670139074,
+            0.0,
+            0.18451795727014542
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc31": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7227502670139074,
+              3.006179039033441e-08,
+              0.18451795727014542
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc39": {
+          "file": "Exports/ElementalGround_Electro_GroundArc39.fbx",
+          "objects": [
+            "PART_GroundArc39"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7187362676486373,
+            0.0,
+            0.1813497543334961
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc39": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7187362676486373,
+              2.954562372536884e-08,
+              0.1813497543334961
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc49": {
+          "file": "Exports/ElementalGround_Electro_GroundArc49.fbx",
+          "objects": [
+            "PART_GroundArc49"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7166595738381147,
+            0.0,
+            0.17927566170692444
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc49": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7166595738381147,
+              2.920771002834499e-08,
+              0.17927566170692444
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc50": {
+          "file": "Exports/ElementalGround_Electro_GroundArc50.fbx",
+          "objects": [
+            "PART_GroundArc50"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7221198612824082,
+            0.0,
+            0.18866941332817078
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc50": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7221198612824082,
+              3.073814802689867e-08,
+              0.18866941332817078
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc58": {
+          "file": "Exports/ElementalGround_Electro_GroundArc58.fbx",
+          "objects": [
+            "PART_GroundArc58"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7167224045842886,
+            0.0,
+            0.183375746011734
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc58": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7167224045842886,
+              2.987569924783884e-08,
+              0.183375746011734
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc61": {
+          "file": "Exports/ElementalGround_Electro_GroundArc61.fbx",
+          "objects": [
+            "PART_GroundArc61"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7186422301456332,
+            0.0,
+            0.1815657913684845
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc61": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7186422301456332,
+              2.9580820459784718e-08,
+              0.1815657913684845
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc66": {
+          "file": "Exports/ElementalGround_Electro_GroundArc66.fbx",
+          "objects": [
+            "PART_GroundArc66"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7191886766813695,
+            0.0,
+            0.1859491616487503
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc66": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7191886766813695,
+              3.029496298267986e-08,
+              0.1859491616487503
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc76": {
+          "file": "Exports/ElementalGround_Electro_GroundArc76.fbx",
+          "objects": [
+            "PART_GroundArc76"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7167798085138202,
+            0.0,
+            0.1833684891462326
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc76": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7167798085138202,
+              2.987451797054064e-08,
+              0.1833684891462326
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc77": {
+          "file": "Exports/ElementalGround_Electro_GroundArc77.fbx",
+          "objects": [
+            "PART_GroundArc77"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7139326501637697,
+            0.0,
+            0.18186982721090317
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc77": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7139326501637697,
+              2.9630353282072974e-08,
+              0.18186982721090317
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc85": {
+          "file": "Exports/ElementalGround_Electro_GroundArc85.fbx",
+          "objects": [
+            "PART_GroundArc85"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7165896035730839,
+            0.0,
+            0.17907193303108215
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc85": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7165896035730839,
+              2.9174519688979217e-08,
+              0.17907193303108215
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundArc91": {
+          "file": "Exports/ElementalGround_Electro_GroundArc91.fbx",
+          "objects": [
+            "PART_GroundArc91"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.7208417160436511,
+            0.0,
+            0.18895290791988373
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GroundArc91": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.7208417160436511,
+              3.0784335081079917e-08,
+              0.18895290791988373
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 75,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "maskContract": "One full-world surface with unmasked reusable VFXColor RGBA. Blender-only max-union shader offers four live example coverage toggles; runtime must compute coverage from actual statuses. Shared phase; no additive overlap.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ElementalGround_Electro_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "ElementalGround_Electro_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ElementalGround_Electro.wav"
+      },
+      "coveragePreviews": {
+        "04_Single": "Preview/ElementalGround_Electro_04_Single.png",
+        "05_Adjacent": "Preview/ElementalGround_Electro_05_Adjacent.png",
+        "06_Separated": "Preview/ElementalGround_Electro_06_Separated.png",
+        "07_Clear": "Preview/ElementalGround_Electro_07_Clear.png"
+      }
+    },
+    "ElementalGround_Hydro": {
+      "effect": "ElementalGround_Hydro",
+      "source": "Blender/ElementalGround_Hydro.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\ElementalGround\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wave": {
+          "file": "Exports/ElementalGround_Hydro_Wave.fbx",
+          "objects": [
+            "PART_SoftWaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.063961386680603,
+            0.0,
+            2.063999891281128
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.063961386680603,
+              3.362682434726594e-07,
+              2.063999891281128
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ContinuousGround": {
+          "file": "Exports/ElementalGround_Hydro_ContinuousGround.fbx",
+          "objects": [
+            "PART_Hydro_WorldSpaceGround"
+          ],
+          "vertices": 12231,
+          "triangles": 24000,
+          "dimensions": [
+            19.200000762939453,
+            0.0,
+            10.800000190734863
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_WorldSpaceGround": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12231,
+            "triangles": 24000,
+            "dimensions": [
+              19.200000762939453,
+              1.7583370208740234e-06,
+              10.800000190734863
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern0": {
+          "file": "Exports/ElementalGround_Hydro_GroundPattern0.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern0"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.208014488220215,
+            0.0,
+            6.015874624252319
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.208014488220215,
+              9.834766387939453e-07,
+              6.015874624252319
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern1": {
+          "file": "Exports/ElementalGround_Hydro_GroundPattern1.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern1"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.208014488220215,
+            0.0,
+            6.015854120254517
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.208014488220215,
+              9.834766387939453e-07,
+              6.015854120254517
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroundPattern2": {
+          "file": "Exports/ElementalGround_Hydro_GroundPattern2.fbx",
+          "objects": [
+            "PART_Hydro_ContinuousPattern2"
+          ],
+          "vertices": 4025,
+          "triangles": 6400,
+          "dimensions": [
+            19.207877159118652,
+            0.0,
+            6.015819311141968
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_ContinuousPattern2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4025,
+            "triangles": 6400,
+            "dimensions": [
+              19.207877159118652,
+              9.834766387939453e-07,
+              6.015819311141968
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 75,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "maskContract": "One full-world surface with unmasked reusable VFXColor RGBA. Blender-only max-union shader offers four live example coverage toggles; runtime must compute coverage from actual statuses. Shared phase; no additive overlap.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "ElementalGround_Hydro_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "ElementalGround_Hydro_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\ElementalGround_Hydro.wav"
+      },
+      "coveragePreviews": {
+        "04_Single": "Preview/ElementalGround_Hydro_04_Single.png",
+        "05_Adjacent": "Preview/ElementalGround_Hydro_05_Adjacent.png",
+        "06_Separated": "Preview/ElementalGround_Hydro_06_Separated.png",
+        "07_Clear": "Preview/ElementalGround_Hydro_07_Clear.png"
+      }
+    }
+  }
+}

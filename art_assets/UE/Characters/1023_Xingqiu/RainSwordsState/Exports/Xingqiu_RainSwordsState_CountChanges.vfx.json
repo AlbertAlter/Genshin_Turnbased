@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1023_Xingqiu/RainSwordsState/Xingqiu_RainSwordsState_CountChanges",
+  "source": "art_assets/UE/Characters/1023_Xingqiu/RainSwordsState/Blender/Xingqiu_RainSwordsState_CountChanges.blend",
+  "file": "Characters/1023_Xingqiu/RainSwordsState/Exports/Xingqiu_RainSwordsState_CountChanges.vfx.bytes",
+  "meshes": 6,
+  "tracks": 24,
+  "frames": 225,
+  "duration": 7.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 7.466666666666667
+  },
+  "bytes": 123301
+}

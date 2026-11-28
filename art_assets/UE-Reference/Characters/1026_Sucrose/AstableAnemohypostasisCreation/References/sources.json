@@ -1,0 +1,43 @@
+[
+  {
+    "page_url": "https://wiki.biligame.com/ys/%E7%A0%82%E7%B3%96",
+    "image_url": "https://patchwiki.biligame.com/images/ys/7/76/qzkivwkuki4a4ujrl475yjfwehgwr28.gif",
+    "title": "风灵作成·陆叁零捌.gif",
+    "recorded": "2026-11-26",
+    "type": "原作实机动图参考链接",
+    "downloaded": true,
+    "local_file": null,
+    "verification": "2026-11-28在内存完整解码64帧、2.56秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "小型风灵轮廓、战技风流、范围接触与短促消散。卡牌目标区域与界面留白属于项目适配。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\sucrose-references\\Sucrose_AstableAnemohypostasisCreation_Observation.png",
+    "decoded_frames": 64,
+    "duration_seconds": 2.56,
+    "sampled_frames": [
+      0,
+      3,
+      5,
+      8,
+      11,
+      14,
+      16,
+      19,
+      22,
+      25,
+      27,
+      30,
+      33,
+      36,
+      38,
+      41,
+      44,
+      47,
+      49,
+      52,
+      55,
+      58,
+      60,
+      63
+    ]
+  }
+]

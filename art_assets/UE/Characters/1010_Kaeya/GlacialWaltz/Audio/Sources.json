@@ -1,0 +1,266 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitute candidates from existing attributed project sources; not original Genshin audio. PCM, peak and waveform seam checks only; not auditioned. Optional quiet state bed is independent of one-shot launch/contact. No Unity/Wwise events.",
+  "files": [
+    {
+      "file": "Kaeya_State_Form.wav",
+      "purpose": "首次霜气凝成冰棱的轻结晶候选；一组一次，不按冰棱数量叠加",
+      "seconds": 0.4166666666666667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/Contact.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.300000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.48",
+        "Resample speed 0.72; pitch follows speed",
+        "Reversed excerpt",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -12.846706635218332,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Cracking ice #3",
+      "creator": "Joseph SARDIN",
+      "sourcePage": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+      "sourceFile": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "local": "F:\\Genshin_Turnbased\\soundtrack\\SFX\\Freeze_02_Crack.wav",
+          "page": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+          "url": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+          "author": "Joseph SARDIN",
+          "license": "CC0-1.0",
+          "sourceProcessing": "project Freeze_02_Crack: original 0.027..0.327s, presence +2 dB"
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.7",
+          "6 ms onset / 40 ms exit anti-click fades"
+        ]
+      }
+    },
+    {
+      "file": "Kaeya_State_QuietLoop.wav",
+      "purpose": "可选低量环绕冷风底声；持续状态仅一份，不在单次攻击时重启",
+      "seconds": 2.4,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": true,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.200000..2.680000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.32",
+        "80ms linear overlap crossfade; continuous source head follows tail"
+      ],
+      "peakDbFS": -43.723482454465255,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      },
+      "waveformSeam": {
+        "wrapStep": 0.00015625000000000003,
+        "internalStep99_5": 0.00048828125
+      }
+    },
+    {
+      "file": "Kaeya_State_Exit.wav",
+      "purpose": "正常移除时冰棱先散、寒雾随后收完的轻碎冰尾声候选",
+      "seconds": 0.4285833333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/Contact.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.300000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.25",
+        "Resample speed 0.7; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -18.478246319791715,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Cracking ice #3",
+      "creator": "Joseph SARDIN",
+      "sourcePage": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+      "sourceFile": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "local": "F:\\Genshin_Turnbased\\soundtrack\\SFX\\Freeze_02_Crack.wav",
+          "page": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+          "url": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+          "author": "Joseph SARDIN",
+          "license": "CC0-1.0",
+          "sourceProcessing": "project Freeze_02_Crack: original 0.027..0.327s, presence +2 dB"
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.7",
+          "6 ms onset / 40 ms exit anti-click fades"
+        ]
+      }
+    },
+    {
+      "file": "Kaeya_Icicle_Depart.wav",
+      "purpose": "当前轨道冰棱甩出的一次短破风；不重播状态建立声",
+      "seconds": 0.09335416666666667,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.5",
+        "Resample speed 1.35; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -7.0307211473654005,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": [
+        "decoded/resampled to 48000 Hz stereo PCM16",
+        "3ms entrance / 20ms exit anti-click fade",
+        "peak ceiling -1dBFS, gain 0.903811; no upward normalization"
+      ]
+    },
+    {
+      "file": "Kaeya_Icicle_Travel.wav",
+      "purpose": "独立离轨冰棱约0.5秒飞行的轻冷风尾音候选",
+      "seconds": 0.5,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": null,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/State_Loop.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.650000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.23",
+        "Resample speed 1.3; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -49.48736688338735,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Short wind sound",
+      "creator": "remaxim",
+      "sourcePage": "https://opengameart.org/content/short-wind-sound",
+      "sourceFile": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "category": "wind",
+          "page": "https://opengameart.org/content/short-wind-sound",
+          "url": "https://opengameart.org/sites/default/files/short%20wind%20sound.wav",
+          "author": "remaxim",
+          "license": "CC0-1.0",
+          "licenseObservedInPage": true,
+          "local": "F:\\Genshin_Turnbased\\codex_worktable\\enemy_vfx\\audio_sources\\wind_short wind sound.wav",
+          "listened": false
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.22",
+          "80 ms wrap crossfade"
+        ]
+      }
+    },
+    {
+      "file": "Kaeya_Icicle_Contact.wav",
+      "purpose": "实际目标一次碎冰接触候选；素材接触采样0.5秒，正式时点待后续时间轴",
+      "seconds": 0.3,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0.5,
+      "localSource": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationState/Audio/Contact.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.300000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.65",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -10.063308338507436,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Cracking ice #3",
+      "creator": "Joseph SARDIN",
+      "sourcePage": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+      "sourceFile": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "priorSourceProcessing": {
+        "original": {
+          "local": "F:\\Genshin_Turnbased\\soundtrack\\SFX\\Freeze_02_Crack.wav",
+          "page": "https://bigsoundbank.com/cracking-ice-3-s2207.html",
+          "url": "https://bigsoundbank.com/UPLOAD/bwf-en/2207.wav",
+          "author": "Joseph SARDIN",
+          "license": "CC0-1.0",
+          "sourceProcessing": "project Freeze_02_Crack: original 0.027..0.327s, presence +2 dB"
+        },
+        "edits": [
+          "PCM16 stereo 48 kHz",
+          "downward peak ceiling -6.2 dBFS",
+          "gain ceiling 0.7",
+          "6 ms onset / 40 ms exit anti-click fades"
+        ]
+      }
+    }
+  ]
+}

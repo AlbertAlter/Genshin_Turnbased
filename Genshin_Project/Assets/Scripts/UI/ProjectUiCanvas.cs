@@ -14,6 +14,17 @@ public sealed class ProjectUiCanvas : MonoBehaviour
 
     public RectTransform ContentFrame => contentFrame;
 
+    // UI-only hosts pass their explicitly authored background camera. A scene imported
+    // with an old Rect schema can retain a zero viewport even after its YAML is fixed.
+    public static bool EnsureBackgroundViewport(Camera backgroundCamera)
+    {
+        if (backgroundCamera == null || !backgroundCamera.isActiveAndEnabled) return false;
+        Rect viewport = backgroundCamera.rect;
+        if (!(viewport.width > 0) || !(viewport.height > 0))
+            backgroundCamera.rect = new Rect(0, 0, 1, 1);
+        return true;
+    }
+
     public void SetDesignSize(Vector2 size)
     {
         scaler.referenceResolution = size;

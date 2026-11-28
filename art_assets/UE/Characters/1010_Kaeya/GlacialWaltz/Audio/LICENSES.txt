@@ -1,0 +1,17 @@
+Prepared CC0 substitute candidates; not original Genshin Impact audio.
+
+Ice crack: Joseph SARDIN / BigSoundBank, Cracking ice #3.
+https://bigsoundbank.com/cracking-ice-3-s2207.html
+
+Wind: remaxim / OpenGameArt, Short wind sound.
+https://opengameart.org/content/short-wind-sound
+
+Swish: artisticdude / OpenGameArt, Swishes Sound Pack.
+https://opengameart.org/content/swishes-sound-pack
+
+License: CC0-1.0
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Sources.json records the original media links, prior project processing,
+source excerpts, speed/reversal, gain, fade and loop edits for each file.
+Not auditioned; no Wwise or Unity events created.

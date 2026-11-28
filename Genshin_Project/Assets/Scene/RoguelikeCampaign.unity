@@ -99,11 +99,14 @@ MonoBehaviour:
   font: {fileID: 11400000, guid: 7e987bc0203e53a4397707d5edbb2582, type: 2}
   framePrefab: {fileID: 114001, guid: 2f4765a0fbaa452c9801f16950a43fa6, type: 3}
   rewardPopupPrefab: {fileID: 114, guid: 995865f68512435297c2ef2cc52d2fab, type: 3}
+  settingsPrefab: {fileID: 8103, guid: 515b871d524a4c4a94ec60748743dd2d, type: 3}
   english: 0
   battleScene: BattleField1
   rosterScene: RoguelikeRoster
   shopScene: RoguelikeShop
   wishScene: RoguelikeWish
+  eventScene: RoguelikeEvent
+  eventRewardEntry: {fileID: 0}
 --- !u!1 &8200
 GameObject:
   m_ObjectHideFlags: 0

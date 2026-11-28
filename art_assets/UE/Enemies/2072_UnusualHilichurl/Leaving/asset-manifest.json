@@ -1,0 +1,310 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Leaving/视觉需求.md",
+  "variants": {
+    "2072_Leaving": {
+      "effect": "2072_Leaving",
+      "source": "Blender/2072_Leaving.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2072_UnusualHilichurl/Leaving/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SweatDroplet": {
+          "file": "Exports/2072_Leaving_SweatDroplet.fbx",
+          "objects": [
+            "PART_NeutralSweatDroplet"
+          ],
+          "vertices": 96,
+          "triangles": 168,
+          "dimensions": [
+            0.14038962125778198,
+            0.046796537935733795,
+            0.23999999463558197
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_NeutralSweatDroplet": [
+              "Solid"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 96,
+            "triangles": 168,
+            "dimensions": [
+              0.14038962125778198,
+              0.04679657518863678,
+              0.24000000953674316
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor-1_0": {
+          "file": "Exports/2072_Leaving_ShortTremor-1_0.fbx",
+          "objects": [
+            "PART_ShortTremor-1_0"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039531469345
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor-1_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.263698372142244e-08,
+              0.2617039531469345
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor-1_1": {
+          "file": "Exports/2072_Leaving_ShortTremor-1_1.fbx",
+          "objects": [
+            "PART_ShortTremor-1_1"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039605975151
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor-1_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.26369863859577e-08,
+              0.2617039605975151
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor-1_2": {
+          "file": "Exports/2072_Leaving_ShortTremor-1_2.fbx",
+          "objects": [
+            "PART_ShortTremor-1_2"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039680480957
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor-1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.2636990826849797e-08,
+              0.2617039680480957
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor1_0": {
+          "file": "Exports/2072_Leaving_ShortTremor1_0.fbx",
+          "objects": [
+            "PART_ShortTremor1_0"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039531469345
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor1_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.263698372142244e-08,
+              0.2617039531469345
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor1_1": {
+          "file": "Exports/2072_Leaving_ShortTremor1_1.fbx",
+          "objects": [
+            "PART_ShortTremor1_1"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039605975151
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor1_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.26369863859577e-08,
+              0.2617039605975151
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ShortTremor1_2": {
+          "file": "Exports/2072_Leaving_ShortTremor1_2.fbx",
+          "objects": [
+            "PART_ShortTremor1_2"
+          ],
+          "vertices": 56,
+          "triangles": 84,
+          "dimensions": [
+            0.15344858169555664,
+            0.0,
+            0.2617039680480957
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortTremor1_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.15344858169555664,
+              4.2636990826849797e-08,
+              0.2617039680480957
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 7,
+      "contract": "Separate card visual pose only; continuously bounded, no static slot drift. Stop births before Withdrawn.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2072_Leaving.wav"
+      }
+    }
+  }
+}

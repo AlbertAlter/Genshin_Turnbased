@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2051_PyroPotioneer/PotionThrow/2051_PotionThrow_Overall",
+  "source": "art_assets/UE/Enemies/2051_PyroPotioneer/PotionThrow/Blender/2051_PotionThrow_Overall.blend",
+  "file": "Enemies/2051_PyroPotioneer/PotionThrow/Exports/2051_PotionThrow_Overall.vfx.bytes",
+  "meshes": 12,
+  "tracks": 42,
+  "frames": 370,
+  "duration": 12.3,
+  "loopStart": 1.5333333333333334,
+  "loopEnd": 6.333333333333333,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 1.1333333333333333,
+    "Loop_A_start": 1.5333333333333334,
+    "Loop_B_start": 6.333333333333333,
+    "Exit_example_any_phase": 11.133333333333333,
+    "Clear": 12.3
+  },
+  "bytes": 743443
+}

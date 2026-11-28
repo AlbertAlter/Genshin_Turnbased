@@ -1,0 +1,71 @@
+基础攻击贴图接入说明
+本批次使用内置 imagegen 生成11张新增PNG；连同已有5张，共16张。所有源图保存在当前目录，原有图片未覆盖。
+图片是第一版基础素材，不是最终品质验收稿。原图RGB边缘的轻微色偏由渲染器取亮度后按统一元素表着色，不重写PNG。
+
+查看方式
+打开 Genshin_Project/Assets/Scene/HitEffectsPreview.unity 并运行。
+预览包含单手剑、双手剑、长柄、弓、法器的普攻与重击，共10种组合。
+保留原来的我方4人、敌方5人、hit数、暴击率、目标、随机和跳字设置。
+新增攻击者选择：用于弓箭与法器飞行物发射。选择自己作为目标时不画飞行物。
+暂停使用同一预览时钟；停止清理所有临时表现；重读按钮同时重新加载运行时配表和PNG。
+本次按项目规则未启动Unity，未执行PlayMode或截图验收。
+
+已接入的表现
+主体贴图逐段划出，并从尾部擦除；法器冲击使用扩张模式。
+柔光、接触闪光、光屑分别显示和计时；单手剑重击可叠加第二道刀光，但不会增加伤害hit。
+单手剑普攻可从A/B两种主体中选择。位置、角度、深浅仍读取旧HitEffects表；新表另配镜像、高度轻微拉伸等。
+元素颜色使用ElementColors，附魔不需要另画七套相同轮廓。命中位置独立于跳字位置。
+弓箭与法器在预览命中前发射，发射时采样攻击者和目标坐标；落点与随后命中特效共用同一随机点。
+飞行到达不触发伤害，不重排原hit顺序。预览只是整体添加一次飞行前导。
+当前没有接入攻击者前冲、状态持续蓄力、特殊角色技能和正式技能前摇编排。正式战斗结算和现有队列未修改。
+
+配表和发布
+Charts/UI/HitEffectTextures.xlsx：五个武器子表分别配置Normal/Heavy；字段说明子表解释职责。
+HitEffects.xlsx仍负责原有位置、角度、深浅、粒子数量及基本时间，不改其中既有数值。
+运行时读StreamingAssets/Data/UI/HitEffectTextures.xlsx和原有表。
+贴图只从StreamingAssets/art_assets/UI/SlashComponents读取，保持源路径结构。
+Tools/UI/同步命中特效配表会校验并发布新增表与引用贴图，不复制整个美术库。
+以后手工修改源PNG或源配表后，先通过上述菜单同步，再点预览的重读按钮。
+
+脚本
+HitEffectTextureStyle：加载和校验贴图/表现参数。
+HitTextureLibrary：缓存引用贴图，按alpha>=8定位有效范围，忽略外围透明留白，不改原图。
+UIHitTextureGraphic + Resources/UI/HitTexture.shader：支持UI遮罩的贴图划出/擦除，主体Alpha混合，柔光/闪光/碎屑加法混合。
+UIHitTextureEffect：单次命中的独立组件组合，调用者提供已确定的元素、hit编号和视觉种子，并掌握时钟。
+UIHitProjectileEffect：纯表现的起终点飞行。
+所有随机样式使用既有确定性视觉hash，不消耗BattleRandom。
+
+新增图片完整生成提示词
+SwordHeavy_Slash.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: A single wide shallow crescent sword-light slash for a single-handed sword CHARGED attack. A stronger and slightly thicker version of a nimble normal cut, elegant smooth asymmetric arc, long tapering left tail and sharp leading right tip. One to two very thin swept negative-space lines, not furry or noisy. Horizontal landscape sprite, no full ring, no double slash.
+
+ClaymoreNormal_Slash.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: A single imposing heavy blade-light arc for a two-handed CLAYMORE normal attack. Thick dominant angular belly, powerful broad smooth sweeping curve, long sharp tapered ends, a few long carved narrow gaps following the sweep. Horizontal landscape sprite. Clearly heavier and straighter-edged than a thin single-handed sword slash. Not a solid crescent moon, not a full circle.
+
+ClaymoreHeavy_Sweep.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: A single sweeping two-handed CLAYMORE charged-attack blade-light crescent, broad long near-semicircular elliptical arc, low perspective flattened width, strong smooth outer edge and broken wispy inner tail, wide powerful sweep with clearly tapering start and end. Horizontal landscape sprite, clean intentional inner cutouts. Not a closed ring or explosion.
+
+PolearmNormal_Thrust.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: One needle-sharp horizontal spear THRUST streak for a polearm normal attack, long slim lance-shaped light cut pointing RIGHT, fine long left trailing speed lines, small sharp bright contact at right tip but no starburst. Mostly straight, subtle asymmetric streaks tapering toward left. Length about six times thickness. Clean fast precision, not a crescent.
+
+PolearmHeavy_Sweep.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: One long low curving polearm charged-attack sweeping light slash, horizontal wide shallow flowing arc with several thin parallel tapered swept streaks, very long narrow right leading point, graceful but forceful. More elongated and thinner than a claymore crescent, open curve not a ring.
+
+BowNormal_Impact.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: ONE compact arrow impact cut: a narrow horizontal sharp central white needle streak with a small asymmetric open V-shaped feather of kinetic light near the RIGHT contact end; 2 thin short side splinters attached to the main silhouette. Small, crisp, precise physical arrow hit, not an arrow object, not a large explosion, no circle. Horizontal landscape canvas.
+
+BowHeavy_Impact.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: One elegant charged-arrow impact shock shape: compact central elongated lance cut pointing RIGHT surrounded by two thin broken elliptical shock arcs opening to the LEFT, three broad needle-tapered rays attached near the contact point. Crisp layered anime charged shot hit, compact rather than screen-filling explosion. Neutral white, no energy ball, no projectile trail, not a magic rune.
+
+CatalystNormal_Impact.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: One compact stylized magic-bolt contact splash for a catalyst normal attack. Small brilliant irregular central light, with 5 to 7 unequal softly curved pointed lobes curling outward; mostly airy transparent negative space, two short detached crescent slivers near the center. Smooth fluid anime spell light, clean and readable, not a sharp physical sword slash, no full circle or magical symbols. Square canvas.
+
+CatalystHeavy_Burst.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: One strong stylized magic charged-attack impact: an irregular expanding burst silhouette with a bright compact core and a few smoothly curved broad flame-like light tongues flowing outward, plus two broken crescent wave arcs, airy transparent gaps separating lobes. More powerful and broader than a normal small magic splash but restrained for a card UI, NOT fireworks, not a cloud or realistic explosion, no magic symbols. Square canvas.
+
+Bow_Projectile.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: Exactly ONE slim white luminous ARROW projectile facing RIGHT, clean needle-shaped pointed head, long thin central shaft of light and two tiny subtle swept tail fins at left. A very short soft transparent trail fading to the LEFT, not a full-screen speed streak. Horizontal 6:1 silhouette occupying central 75 percent of landscape canvas. Small physical-arrow silhouette rendered as neutral white light so it can also be elemental-tinted. Sharp and lightweight, no impact burst, no surrounding rays.
+
+Catalyst_Projectile.png
+Use case: stylized-concept. Asset type: ONE isolated production 2D Unity card-battle VFX texture on genuine transparent RGBA background. Premium clean hand-painted anime fantasy effects, readable at 200 pixels. Neutral WHITE and light GRAYSCALE only, no baked elemental hue. Crisp silhouette with tapered tips, delicate inner highlight, limited silky semi-transparent trailing edge. NO black outlines, no metal shading, no characters, weapons, cards, environment, text, labels, watermarks, borders or painted checkerboard. No surrounding particles, no central impact star (those are separate components). Keep the full subject inside frame with transparent padding. Subject: Exactly ONE small compact glowing magic ORB projectile travelling to the RIGHT. Near-circular white light head on the right, two or three very short curved soft tapered streamers trailing left, smooth elegant anime spell light with a crisp bright center and translucent soft edge. Horizontal 2:1 overall silhouette, plenty of transparent padding, restrained small spell bolt, not a meteor, not a huge explosion. No surrounding stars or debris, no impact burst, no ring, no runes.
+

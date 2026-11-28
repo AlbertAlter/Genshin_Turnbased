@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1038_Rosaria/RitesOfTerminationMist/Rosaria_RitesOfTerminationMist",
+  "source": "art_assets/UE/Characters/1038_Rosaria/RitesOfTerminationMist/Blender/Rosaria_RitesOfTerminationMist.blend",
+  "file": "Characters/1038_Rosaria/RitesOfTerminationMist/Exports/Rosaria_RitesOfTerminationMist.vfx.bytes",
+  "meshes": 4,
+  "tracks": 59,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 145739
+}

@@ -1,0 +1,20 @@
+﻿资源文件,用途,状态,是否还需处理,Unity处理方式,检查结果
+art_assets/BattleBG/1,战斗背景,可用,否,由代码读取现有背景目录,暂用1号背景且不从PSD重复导出
+art_assets/Character_Icon/{角色ID}_02.png,战斗角色头像,可用,否,按角色ID读取固定使用02文件,目录内已确认117张02头像
+art_assets/Enemy_Icon/{敌人ID}_01.png,战斗敌人头像,可用,否,按敌人ID读取01文件,目录内均为PNG
+UI_components/DeepBrownCircle.png,深色圆形底与内圈,可用,否,Sprite颜色保持白色且等比缩放,300x300且主体色为#716758
+UI_components/LightBrownCircle.png,浅色圆形边框与外圈,可用,否,Sprite颜色保持白色且等比缩放,300x300且主体色为#998F81
+UI_components/Cancel.png,取消图标,可用,否,作为Alpha图标并统一显示为米白色,33x33
+UI_components/Switch.png,换人图标,可用,否,按Alpha遮罩显示米白色且Max Size设为256,源图1254x1254
+UI_components/invalid.png,禁用覆盖图,可用,否,按Alpha遮罩使用且Max Size设为256,源图1254x1254
+UI_components/BloodBond.png,生命之契条,可用,否,作为独立覆盖层,233x27
+UI_components/AvatarFrame/FrameShadow.png,头像框阴影,可用,否,置于头像与底板后方,142x142且最大Alpha约176
+UI_components/AvatarFrame/FrameSquare.png,头像浅色菱形底板,可用,否,作为头像后方底板,124x124实心菱形
+UI_components/AvatarFrame/FrameOutline.png,头像深色菱形描边,可用,否,置于头像上方,134x134且中心已透明
+UI_components/AvatarFrame/FrameInnerShadow.png,头像内阴影层,可用,否,置于头像上方且描边下方,124x124且中心已透明
+UI_components/card/CardShadow.png,卡牌阴影,可用,否,置于卡牌后方,黑色半透明卡牌轮廓
+UI_components/card/CardOverGlow.png,卡牌选中辉光,可用,否,置于卡牌本体后方并仅在选中时显示,中间白色区域由不透明卡牌遮挡
+UI_components/card/CardInnerShadow.png,卡牌内阴影,可用,否,置于卡牌本体上方,中心已透明且不再包含角色卡面
+UI_components/HPBarUpperLight.png,血条上方高光,可用,否,置于动态血量和预览段上方,212x5独立透明细条
+UI_components/HPBarLowerShadow.png,血条下方阴影,可用,否,置于动态血量和预览段上方,212x6独立透明细条
+正式元素图标资源,角色与敌人元素附着,待映射,否,双方共用同一套图标并按左右位置摆放,不从PSD重复导出

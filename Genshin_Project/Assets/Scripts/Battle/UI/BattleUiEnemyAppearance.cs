@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>Optional battle adapter: reads committed AI mode; asks shared card service to crossfade. Never shakes cards.</summary>
+/// <summary>Reads committed mode and configured personal status conditions; shared card service owns the crossfade.</summary>
 [DefaultExecutionOrder(200)]
 [DisallowMultipleComponent]
 public sealed class BattleUiEnemyAppearance : MonoBehaviour
@@ -33,7 +33,7 @@ public sealed class BattleUiEnemyAppearance : MonoBehaviour
         {
             if (binding == null || binding.side != BattleSide.Enemy) continue;
             var entity = cards.battle.GetEntityByPosition(binding.side, binding.slot);
-            if (entity == null || !entity.IsAlive || entity.EnemyCtrl == null || !table.Contains(entity.EntityID) ||
+            if (entity == null || !entity.IsAlive || !table.Contains(entity.EntityID) ||
                 !cards.TryGetCard(binding, out var card)) continue;
             active.Add(binding);
             if (entries.TryGetValue(binding, out var entry) && (entry.Entity != entity || entry.Card != card))
@@ -49,10 +49,12 @@ public sealed class BattleUiEnemyAppearance : MonoBehaviour
                 entries.Add(binding, entry); entry.Loading = StartCoroutine(Prepare(entry));
             }
             if (!entry.Loaded || entry.Failed) continue;
-            int pattern = entity.EnemyCtrl.CurrentPatternID;
-            if (pattern <= 0) continue; // Controller has not finished initialization.
-            if (!table.TryResolve(entity.EntityID, pattern, out int target))
-            { RestoreVisibility(entry); Report(entry, $"敌人{entity.EntityID}模式{pattern}没有差分映射，保留原卡。"); continue; }
+            int pattern = entity.EnemyCtrl?.CurrentPatternID ?? 0;
+            if (!table.TryResolve(entity, out int target))
+            {
+                if (pattern <= 0) continue; // Mode-only mapping is still waiting for controller initialization.
+                RestoreVisibility(entry); Report(entry, $"敌人{entity.EntityID}模式{pattern}没有差分映射，保留原卡。"); continue;
+            }
             if (!entry.Initialized)
             {
                 if (entry.Switcher.SetImmediate(target))

@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2083_PrimoGeovishap/InfusedStones/2083_InfusedStones_PyroOverall",
+  "source": "art_assets/UE/Enemies/2083_PrimoGeovishap/InfusedStones/Blender/2083_InfusedStones_PyroOverall.blend",
+  "file": "Enemies/2083_PrimoGeovishap/InfusedStones/Exports/2083_InfusedStones_PyroOverall.vfx.bytes",
+  "meshes": 8,
+  "tracks": 71,
+  "frames": 391,
+  "duration": 13.0,
+  "loopStart": 1.6333333333333333,
+  "loopEnd": 6.433333333333334,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.8333333333333334,
+    "Loop_A_start": 1.6333333333333333,
+    "Loop_B_start": 6.433333333333334,
+    "Exit_example_any_phase": 11.833333333333334,
+    "Clear": 13.0
+  },
+  "bytes": 1105142
+}

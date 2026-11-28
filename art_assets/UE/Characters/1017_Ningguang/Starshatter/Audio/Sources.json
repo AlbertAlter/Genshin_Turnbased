@@ -1,0 +1,94 @@
+{
+  "scope": "Source SFX candidates; no Unity/Wwise events or integration",
+  "notes": "CC0 substitute candidates, not extracted original audio. Persistent StarJade and JadeScreen idle stages are intentionally silent; no fabricated constant sound loop. Not auditioned.",
+  "files": [
+    {
+      "file": "Ningguang_Burst_Gather.wav",
+      "purpose": "多宝石展开的短促聚亮",
+      "seconds": 0.48,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": 0,
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/Magic2_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.480000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.45",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -21.375515238023137,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Magic Spell SFX",
+      "creator": "JaggedStone",
+      "sourcePage": "https://opengameart.org/content/magic-spell-sfx",
+      "sourceFile": "https://opengameart.org/sites/default/files/magical_2.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_Burst_Release.wav",
+      "purpose": "多枚宝石一组释放；不同来源分批而非逐枚重复强声",
+      "seconds": 0.22914583333333333,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": [
+        0.27,
+        0.41
+      ],
+      "localSource": "art_assets/UE/Characters/1009_Amber/ArrowRain/Audio/ArrowRain_Launch_01.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.126021s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.62",
+        "Resample speed 0.55; pitch follows speed",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -5.156140817748356,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Swishes Sound Pack",
+      "creator": "artisticdude",
+      "sourcePage": "https://opengameart.org/content/swishes-sound-pack",
+      "sourceFile": "https://opengameart.org/sites/default/files/swishes.zip",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Ningguang_Burst_Contact.wav",
+      "purpose": "宝石实际接触的短岩晶声，避免叠成火焰爆炸",
+      "seconds": 0.28,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "loop": false,
+      "sourceCueSeconds": [
+        0.72,
+        0.975
+      ],
+      "localSource": "art_assets/UE/Characters/1017_Ningguang/Shared/Audio/Sources/EarthSpell_PCM.wav",
+      "processing": [
+        "Listed PCM source excerpt 0.000000..0.280000s; resampled to 48kHz stereo if needed",
+        "Uniform gain 0.3",
+        "5ms entrance and 35ms exit anti-click fade"
+      ],
+      "peakDbFS": -18.070923017164,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "auditioned": false,
+      "audioInspection": "Decoded PCM and waveform/peak checks only. Audio-input audition is unavailable; no listening approval claimed.",
+      "sourceTitle": "Earth Element Magic Spell",
+      "creator": "qubodup",
+      "sourcePage": "https://opengameart.org/content/earth-element-magic-spell",
+      "sourceFile": "https://opengameart.org/sites/default/files/Earth%20Element%20Magic%20Spell.ogg",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

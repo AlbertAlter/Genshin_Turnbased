@@ -1,0 +1,459 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/FrostflakeArrowBloom/视觉需求.md",
+  "variants": {
+    "Ganyu_FrostflakeArrowBloom": {
+      "effect": "Ganyu_FrostflakeArrowBloom",
+      "source": "Blender/Ganyu_FrostflakeArrowBloom.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/FrostflakeArrowBloom/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Trail": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_Trail.fbx",
+          "objects": [
+            "PART_TaperedTrail"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.2149999961256981,
+            0.0,
+            1.0067684701643884
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedTrail": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.2149999961256981,
+              1.6402339442223024e-07,
+              1.0067684701643884
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_Projectile.fbx",
+          "objects": [
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0",
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody"
+          ],
+          "vertices": 577,
+          "triangles": 472,
+          "dimensions": [
+            0.3516828268766403,
+            0.3426828235387802,
+            1.2300001680850983
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce": [
+              "Native_Kaeya_Ice_TransientFrostMist"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody": [
+              "Native_Kaeya_Ice_TranslucentIOR131"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 577,
+            "triangles": 472,
+            "dimensions": [
+              0.3516828268766403,
+              0.34268301725387573,
+              1.2300001978874207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FrostflakeArrow": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_FrostflakeArrow.fbx",
+          "objects": [
+            "PART_FrostflakeArrowHead",
+            "PART_ArrowWhiteColdShaft"
+          ],
+          "vertices": 42,
+          "triangles": 62,
+          "dimensions": [
+            0.1941174417734146,
+            0.1933402717113495,
+            1.5899999737739563
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FrostflakeArrowHead": [
+              "Ice"
+            ],
+            "PART_ArrowWhiteColdShaft": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 42,
+            "triangles": 62,
+            "dimensions": [
+              0.1941174417734146,
+              0.19334037601947784,
+              1.5900000035762787
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FrostBloomPetal": {
+          "file": "Exports/Ganyu_FrostflakeArrowBloom_FrostBloomPetal.fbx",
+          "objects": [
+            "PART_SixBranchFrostBloom_0",
+            "PART_FrostflakeChiseledLeaf_0",
+            "PART_FrostflakeWhiteCrystalRidge_0",
+            "PART_SixBranchFrostBloom_1",
+            "PART_FrostflakeChiseledLeaf_1",
+            "PART_FrostflakeWhiteCrystalRidge_1",
+            "PART_SixBranchFrostBloom_2",
+            "PART_FrostflakeChiseledLeaf_2",
+            "PART_FrostflakeWhiteCrystalRidge_2",
+            "PART_SixBranchFrostBloom_3",
+            "PART_FrostflakeChiseledLeaf_3",
+            "PART_FrostflakeWhiteCrystalRidge_3",
+            "PART_SixBranchFrostBloom_4",
+            "PART_FrostflakeChiseledLeaf_4",
+            "PART_FrostflakeWhiteCrystalRidge_4",
+            "PART_SixBranchFrostBloom_5",
+            "PART_FrostflakeChiseledLeaf_5",
+            "PART_FrostflakeWhiteCrystalRidge_5"
+          ],
+          "vertices": 1554,
+          "triangles": 2484,
+          "dimensions": [
+            2.200000047683716,
+            0.07699999958276749,
+            1.9162559509277344
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SixBranchFrostBloom_0": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_0": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_0": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_1": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_1": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_1": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_2": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_2": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_2": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_3": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_3": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_3": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_4": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_4": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_4": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_5": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_5": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 18,
+            "vertices": 1554,
+            "triangles": 2484,
+            "dimensions": [
+              2.200000047683716,
+              0.07700030152957993,
+              1.9162559509277344
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 24,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 36,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 39,
+      "focus": [
+        -4.505000114440918,
+        -0.2199999988079071,
+        -0.6899999976158142
+      ],
+      "detailScale": 10,
+      "referenceBoundary": "CelestialShower135f/5.4s,Normal343f/13.72s,Trail91f/3.64s decoded in memory and24 samples each observed. Normal includes actual two-stage frostflake near10–12.5s. Lotus natural expiry is NOT shown. Pearl scrolls, petals and expiry art are authored interpretations, not traced original topology/texture.",
+      "scope": "Source art only; real state, targets, C6 and counts are not executed. No Unity/tables changed.",
+      "arrowContact": 24,
+      "bloomContact": 36,
+      "targetCardIndices": [
+        1,
+        2,
+        3
+      ],
+      "bloomAnchor": [
+        -4.505000114440918,
+        -0.2199999988079071,
+        -0.6899999976158142
+      ],
+      "contract": "Normal two-stage charged shot and C6 instant use the same arrow/contact/bloom. Empty anchor never reselected.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Ganyu_FrostflakeArrowBloom.wav"
+      }
+    }
+  }
+}

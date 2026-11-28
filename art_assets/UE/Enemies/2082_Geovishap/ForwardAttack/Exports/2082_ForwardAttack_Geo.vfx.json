@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2082_Geovishap/ForwardAttack/2082_ForwardAttack_Geo",
+  "source": "art_assets/UE/Enemies/2082_Geovishap/ForwardAttack/Blender/2082_ForwardAttack_Geo.blend",
+  "file": "Enemies/2082_Geovishap/ForwardAttack/Exports/2082_ForwardAttack_Geo.vfx.bytes",
+  "meshes": 5,
+  "tracks": 34,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 165046
+}

@@ -92,7 +92,7 @@ public sealed class BattleUiSkillInfo : MonoBehaviour
             || battle == null || battle.IsBattleOver || BattleExecution.IsBusy
             || !battle.IsAwaitingAllyInput || showing.Anchor == null || view == null || showing.Actor == null || showing.Actor.Entity?.IsAlive != true
             || showing.Actor.GetBoundSkillID(showing.SkillType) != showing.SkillId
-            || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
+            || Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel))
         { Close(); return; }
         if (layoutSize != ((RectTransform)canvas.transform).rect.size) LayoutPanels(false, false);
     }

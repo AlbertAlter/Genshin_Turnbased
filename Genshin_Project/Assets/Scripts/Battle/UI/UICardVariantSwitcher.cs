@@ -104,6 +104,6 @@ public sealed class UICardVariantSwitcher : MonoBehaviour
         if (Pending && (factory == null || !factory.isActiveAndEnabled || card == null || card.Released ||
             !card.isActiveAndEnabled)) Cancel();
     }
-    private void LateUpdate() { if (AutomaticClock) Advance(Time.unscaledDeltaTime); }
+    private void LateUpdate() { if (AutomaticClock) Advance(BattlePause.DeltaTime); }
     private void OnDisable() => Cancel();
 }

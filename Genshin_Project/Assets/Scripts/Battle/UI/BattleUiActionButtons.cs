@@ -18,6 +18,8 @@ public sealed class BattleUiActionButtons : MonoBehaviour
     public UIAdaptiveFrame projectFrame;
     public TMP_FontAsset hintFont;
     [Min(.05f)] public float holdSeconds = .45f;
+    [Serializable] public sealed class ShortcutVisual { public TMP_Text text; public BattleShortcut shortcut; }
+    public ShortcutVisual[] shortcutVisuals = Array.Empty<ShortcutVisual>();
 
     public readonly struct SkillHold
     {
@@ -40,6 +42,8 @@ public sealed class BattleUiActionButtons : MonoBehaviour
     private TMP_Text hintLabel;
     private readonly Vector3[] corners = new Vector3[4];
     private bool started;
+    private readonly List<(BattleShortcut Shortcut, UIButtonClickFeedback Feedback)> feedbacks = new();
+    private readonly List<BattleShortcutLabel> ownedLabels = new();
     private BattleInputController InputOwner => input != null ? input : legacy != null ? legacy.input : null;
     private bool Switching => switcher != null ? switcher.IsSwitching : legacy != null && legacy.IsSwitching;
 
@@ -47,6 +51,13 @@ public sealed class BattleUiActionButtons : MonoBehaviour
     private void OnEnable() { if (started) Build(); }
     private void Build()
     {
+        foreach (var binding in shortcutVisuals)
+        {
+            if (binding?.text == null) continue;
+            var label = binding.text.GetComponent<BattleShortcutLabel>();
+            if (label == null) { label = binding.text.gameObject.AddComponent<BattleShortcutLabel>(); ownedLabels.Add(label); }
+            label.Bind(binding.text, binding.shortcut);
+        }
         if (view != null)
         {
             foreach (var action in view.actions)
@@ -76,9 +87,9 @@ public sealed class BattleUiActionButtons : MonoBehaviour
                 if (slot != null) BindLegacy(slot.burstButton != null ? slot.burstButton : slot.energyBall?.GetComponent<Button>(), i + 1, 3);
             }
         }
-        AddFunction("F", switchRoot, switchDisc, Switch, () => Switching ? "ui_battle_hint_confirm_switch" : "ui_battle_hint_switch_character");
-        AddFunction("X", cancelRoot, cancelDisc, Cancel, () => "ui_battle_hint_cancel_selection");
-        AddFunction("SPACE", endTurnRoot, endTurnDisc, Space, () => Switching ? "ui_battle_hint_confirm_switch" :
+        AddFunction(BattleShortcut.Switch, switchRoot, switchDisc, Switch, () => Switching ? "ui_battle_hint_confirm_switch" : "ui_battle_hint_switch_character");
+        AddFunction(BattleShortcut.Cancel, cancelRoot, cancelDisc, Cancel, () => "ui_battle_hint_cancel_selection");
+        AddFunction(BattleShortcut.Confirm, endTurnRoot, endTurnDisc, Space, () => Switching ? "ui_battle_hint_confirm_switch" :
             InputOwner != null && InputOwner.IsSelectionVisible ? "ui_battle_hint_confirm_target" : "ui_battle_hint_end_turn");
     }
     private static void Click(Button button)
@@ -116,9 +127,10 @@ public sealed class BattleUiActionButtons : MonoBehaviour
             var previous = current;
             current = null;
             if (previous.HasValue) SkillHoldEnded?.Invoke(previous.Value);
-        });
+        }, slot > 0 && slot <= 4 ? (BattleShortcut)((int)BattleShortcut.Burst1 + slot - 1)
+            : skill >= 0 && skill <= 2 ? (BattleShortcut?)skill : null);
     }
-    private void AddFunction(string shortcut, RectTransform root, RectTransform disc, Action click, Func<string> key)
+    private void AddFunction(BattleShortcut shortcut, RectTransform root, RectTransform disc, Action click, Func<string> key)
     {
         if (root == null) return;
         var anchor = disc != null ? disc : root;
@@ -127,7 +139,7 @@ public sealed class BattleUiActionButtons : MonoBehaviour
             var battle = BattleManager.Instance;
             string command = DataManager.Instance?.GetLangText(hintKey) ?? hintKey;
             string phase = battle == null ? "未绑定战斗" : $"{battle.CurrentPhase}，等待我方操作={battle.IsAwaitingAllyInput}，结算中={BattleExecution.IsBusy}";
-            LogManager.Log(LogCategory.UI, $"{gesture} {shortcut}（{command}），{phase}");
+            LogManager.Log(LogCategory.UI, $"{gesture} {ProjectKeyBindings.Label(shortcut)}（{command}），{phase}");
         }
         AddArea(root, () => {
             Trace("短按", key());
@@ -138,9 +150,9 @@ public sealed class BattleUiActionButtons : MonoBehaviour
             ShowHint(anchor, hintKey);
         }, () => {
             if (hintAnchor == anchor) HideHint();
-        });
+        }, shortcut, anchor);
     }
-    private void AddArea(RectTransform anchor, Action click, Action hold, Action release)
+    private void AddArea(RectTransform anchor, Action click, Action hold, Action release, BattleShortcut? shortcut = null, RectTransform center = null)
     {
         var go = new GameObject("ButtonPressTarget", typeof(RectTransform), typeof(Image), typeof(UIBattlePressArea));
         var rect = (RectTransform)go.transform;
@@ -150,6 +162,14 @@ public sealed class BattleUiActionButtons : MonoBehaviour
         rect.offsetMax = Vector2.Max(Vector2.zero, (Vector2)bounds.max - anchor.rect.max);
         var graphic = go.GetComponent<Image>(); graphic.color = Color.clear; graphic.raycastTarget = true;
         go.GetComponent<UIBattlePressArea>().Bind(holdSeconds, click, hold, release); areas.Add(go);
+        var feedback = go.AddComponent<UIButtonClickFeedback>();
+        feedback.Bind(anchor, center, () => InputOwner?.IsUiInputBlocked != true && !BattlePause.BlocksInput);
+        if (shortcut.HasValue) feedbacks.Add((shortcut.Value, feedback));
+    }
+    private void Update()
+    {
+        foreach (var item in feedbacks)
+            if (item.Feedback != null && ProjectKeyBindings.Down(item.Shortcut)) item.Feedback.Pulse();
     }
     private void ShowHint(RectTransform anchor, string key)
     {
@@ -169,7 +189,7 @@ public sealed class BattleUiActionButtons : MonoBehaviour
             hintLabel.alignment = TextAlignmentOptions.MidlineGeoAligned; hintLabel.enableWordWrapping = false;
             hintLabel.richText = false; hintLabel.raycastTarget = false;
         }
-        hintAnchor = anchor; hintLabel.text = DataManager.Instance.GetLangText(key);
+        hintAnchor = anchor; hintLabel.text = DataManager.Instance.GetLangText(key, ProjectUserSettings.English());
         hint.sizeDelta = new Vector2(Mathf.Ceil(hintLabel.GetPreferredValues(hintLabel.text).x) + 44, 58);
         hint.SetAsLastSibling(); PlaceHint(); hintGroup.alpha = 1;
     }
@@ -225,6 +245,9 @@ public sealed class BattleUiActionButtons : MonoBehaviour
     {
         foreach (var area in areas) if (area != null) { area.SetActive(false); Destroy(area); }
         areas.Clear(); HideHint();
+        feedbacks.Clear();
+        foreach (var label in ownedLabels) if (label != null) { label.enabled = false; Destroy(label); }
+        ownedLabels.Clear();
     }
     private void OnDestroy() { if (hint != null) Destroy(hint.gameObject); }
 }

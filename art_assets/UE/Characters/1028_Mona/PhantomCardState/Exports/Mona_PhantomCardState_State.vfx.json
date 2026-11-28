@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1028_Mona/PhantomCardState/Mona_PhantomCardState_State",
+  "source": "art_assets/UE/Characters/1028_Mona/PhantomCardState/Blender/Mona_PhantomCardState_State.blend",
+  "file": "Characters/1028_Mona/PhantomCardState/Exports/Mona_PhantomCardState_State.vfx.bytes",
+  "meshes": 13,
+  "tracks": 20,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 201853
+}

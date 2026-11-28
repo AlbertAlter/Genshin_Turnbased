@@ -1,0 +1,510 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/FatalBlossoms/视觉需求.md",
+  "variants": {
+    "Albedo_FatalBlossoms": {
+      "effect": "Albedo_FatalBlossoms",
+      "source": "Blender/Albedo_FatalBlossoms.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1034_Albedo/FatalBlossoms/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Shard": {
+          "file": "Exports/Albedo_FatalBlossoms_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "StoneMetal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "TransientRockFlower": {
+          "file": "Exports/Albedo_FatalBlossoms_TransientRockFlower.fbx",
+          "objects": [
+            "PART_TransientPetal0_FacetedPetal",
+            "PART_TransientPetal0_MineralEdge",
+            "PART_TransientPetal1_FacetedPetal",
+            "PART_TransientPetal1_MineralEdge",
+            "PART_TransientPetal2_FacetedPetal",
+            "PART_TransientPetal2_MineralEdge",
+            "PART_TransientPetal3_FacetedPetal",
+            "PART_TransientPetal3_MineralEdge",
+            "PART_TransientPetal4_FacetedPetal",
+            "PART_TransientPetal4_MineralEdge",
+            "PART_TransientPetal5_FacetedPetal",
+            "PART_TransientPetal5_MineralEdge"
+          ],
+          "vertices": 336,
+          "triangles": 468,
+          "dimensions": [
+            1.6111223697662354,
+            0.10499999672174454,
+            1.6393790245056152
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TransientPetal0_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal0_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal1_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal1_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal2_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal2_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal3_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal3_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal4_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal4_MineralEdge": [
+              "Soft"
+            ],
+            "PART_TransientPetal5_FacetedPetal": [
+              "AlbedoCutGoldStone"
+            ],
+            "PART_TransientPetal5_MineralEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 336,
+            "triangles": 468,
+            "dimensions": [
+              1.6111223697662354,
+              0.10500026249883376,
+              1.6393790245056152
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FatalRisingCrown": {
+          "file": "Exports/Albedo_FatalBlossoms_FatalRisingCrown.fbx",
+          "objects": [
+            "PART_FatalBlossomRaisedCrystal_0",
+            "PART_FatalBlossomRaisedCrystal_1",
+            "PART_FatalBlossomRaisedCrystal_2",
+            "PART_FatalBlossomRaisedCrystal_3"
+          ],
+          "vertices": 80,
+          "triangles": 144,
+          "dimensions": [
+            2.2197481393814087,
+            0.5351998396217823,
+            2.219748020172119
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FatalBlossomRaisedCrystal_0": [
+              "AlbedoFatalLightCrystal"
+            ],
+            "PART_FatalBlossomRaisedCrystal_1": [
+              "AlbedoFatalLightCrystal"
+            ],
+            "PART_FatalBlossomRaisedCrystal_2": [
+              "AlbedoFatalLightCrystal"
+            ],
+            "PART_FatalBlossomRaisedCrystal_3": [
+              "AlbedoFatalLightCrystal"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 80,
+            "triangles": 144,
+            "dimensions": [
+              2.2197481393814087,
+              0.5351998955011368,
+              2.2197481393814087
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BloomLightPoint": {
+          "file": "Exports/Albedo_FatalBlossoms_BloomLightPoint.fbx",
+          "objects": [
+            "PART_ShortGoldBloomCore"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ShortGoldBloomCore": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 22,
+          "position": [
+            -7.795000076293945,
+            0.10000000149011612,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 22,
+          "position": [
+            -6.054999828338623,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 22,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 44,
+          "position": [
+            -6.054999828338623,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 44,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 44,
+          "position": [
+            -2.765000104904175,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 66,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 66,
+          "position": [
+            -2.765000104904175,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 66,
+          "position": [
+            -1.215000033378601,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 88,
+          "position": [
+            -7.795000076293945,
+            0.10000000149011612,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 88,
+          "position": [
+            -6.054999828338623,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 88,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 110,
+          "position": [
+            -6.054999828338623,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 110,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 110,
+          "position": [
+            -2.765000104904175,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 132,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 132,
+          "position": [
+            -2.765000104904175,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 132,
+          "position": [
+            -1.215000033378601,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 154,
+          "position": [
+            -7.795000076293945,
+            0.10000000149011612,
+            -0.6800000071525574
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 154,
+          "position": [
+            -6.054999828338623,
+            0.15000000596046448,
+            1.350000023841858
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        },
+        {
+          "frame": 154,
+          "position": [
+            -4.505000114440918,
+            0.10000000149011612,
+            -0.6899999976158142
+          ],
+          "element": "Geo",
+          "purpose": "one actual blossom group contact"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -6.054999828338623,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 11,
+      "referenceBoundary": "Solar181f/5.43s and burst225f/6.75s decoded in memory;24 samples of each observed. Six-petal dark flower/gold edges and separate rising-rock eruption followed by gold flowers are visible. Top-down fine pattern/natural expiry not confirmed; source geometry is authored, not traced original topology/textures.",
+      "scope": "Source art only, no Unity/tables/real counters or target selection.",
+      "groups": [
+        {
+          "targetCardIndices": [
+            0,
+            1,
+            2
+          ],
+          "contact": 22
+        },
+        {
+          "targetCardIndices": [
+            1,
+            2,
+            3
+          ],
+          "contact": 44
+        },
+        {
+          "targetCardIndices": [
+            2,
+            3,
+            4
+          ],
+          "contact": 66
+        },
+        {
+          "targetCardIndices": [
+            0,
+            1,
+            2
+          ],
+          "contact": 88
+        },
+        {
+          "targetCardIndices": [
+            1,
+            2,
+            3
+          ],
+          "contact": 110
+        },
+        {
+          "targetCardIndices": [
+            2,
+            3,
+            4
+          ],
+          "contact": 132
+        },
+        {
+          "targetCardIndices": [
+            0,
+            1,
+            2
+          ],
+          "contact": 154
+        }
+      ],
+      "contract": "Seven independently committed adjacent-group blossoms. One crown per group, no blossom per enemy and no entire-field restart.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Albedo_FatalBlossoms.wav"
+      }
+    }
+  }
+}

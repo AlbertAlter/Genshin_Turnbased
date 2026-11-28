@@ -39,6 +39,9 @@ namespace GenshinTurnBased.Tests.EditMode
             var firstFall = Fall();
             if (!frozenFirst) frozen = Freeze();
             var secondFall = Fall();
+            var initial = AllyControlRelease.GetOldest(ally);
+            Assert.That(initial.VisibleAirborne, Is.SameAs(firstFall), "击飞星星在冻结先施加时也必须可见。");
+            Assert.That(initial.Frozen != null, Is.EqualTo(frozenFirst), "显示击飞不能改变当前解除顺序。");
             long[] orders = frozenFirst
                 ? new[] { frozen.ApplyOrder, firstFall.ApplyOrder, secondFall.ApplyOrder }
                 : new[] { firstFall.ApplyOrder, frozen.ApplyOrder, secondFall.ApplyOrder };
@@ -57,6 +60,7 @@ namespace GenshinTurnBased.Tests.EditMode
             }
             Assert.That(ap.CurrentAP, Is.EqualTo(70));
             Assert.That(AllyControlRelease.GetOldest(ally).Exists, Is.False);
+            Assert.That(AllyControlRelease.GetOldest(ally).VisibleAirborne, Is.Null);
             Assert.That(AllyControlRelease.Click(ally, ap, out _), Is.EqualTo(AllyControlClickResult.Ignored));
         }
 

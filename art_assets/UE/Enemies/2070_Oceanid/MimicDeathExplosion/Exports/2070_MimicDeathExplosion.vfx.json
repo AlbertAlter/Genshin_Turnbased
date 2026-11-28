@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2070_Oceanid/MimicDeathExplosion/2070_MimicDeathExplosion",
+  "source": "art_assets/UE/Enemies/2070_Oceanid/MimicDeathExplosion/Blender/2070_MimicDeathExplosion.blend",
+  "file": "Enemies/2070_Oceanid/MimicDeathExplosion/Exports/2070_MimicDeathExplosion.vfx.bytes",
+  "meshes": 7,
+  "tracks": 106,
+  "frames": 103,
+  "duration": 3.4,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.4
+  },
+  "bytes": 288481
+}

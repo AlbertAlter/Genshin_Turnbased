@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1031_Diona/IcyPaws/Diona_IcyPaws_FiveTargets",
+  "source": "art_assets/UE/Characters/1031_Diona/IcyPaws/Blender/Diona_IcyPaws_FiveTargets.blend",
+  "file": "Characters/1031_Diona/IcyPaws/Exports/Diona_IcyPaws_FiveTargets.vfx.bytes",
+  "meshes": 8,
+  "tracks": 125,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 252831
+}

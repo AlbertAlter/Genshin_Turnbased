@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-26",
+  "scope": "Source SFX candidates only; no Wwise/Unity event bindings",
+  "files": [
+    {
+      "file": "Klee_Charged_Fire.wav",
+      "purpose": "上方花形发射器发射",
+      "seconds": 0.18,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -11.69280859880163,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\Characters\\1009_Amber\\ArrowRain\\Audio\\ArrowRain_FireBurst_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.180000s from listed local source",
+        "gain 0.42",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.25,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Fireball",
+      "creator": "Julien Matthey; uploaded by diligentcircle",
+      "sourcePage": "https://opengameart.org/content/fireball-1",
+      "sourceFile": "https://opengameart.org/sites/default/files/105016__julien-matthey__jm-fx-fireball-01.wav",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "file": "Klee_Charged_GroupHit.wav",
+      "purpose": "整体四叶印重击，只播一次",
+      "seconds": 0.85,
+      "loop": false,
+      "sampleRate": 48000,
+      "channels": 2,
+      "bitsPerSample": 16,
+      "peakDbFS": -8.329427210541212,
+      "originalGameAudio": false,
+      "sourceKind": "CC0 substitute candidate, not original Genshin audio",
+      "localSource": "art_assets\\UE\\general\\Explosion\\Audio\\Explosion_Standard_01.wav",
+      "processing": [
+        "excerpt 0.000000s to 0.850000s from listed local source",
+        "gain 0.56",
+        "5ms entrance / 35ms exit anti-click fade"
+      ],
+      "sourceCueSeconds": 0.34,
+      "auditioned": false,
+      "audioInspection": "Decoded and waveform/peak/seam checked. Current tool does not support audio input, so no listening approval is claimed.",
+      "sourceTitle": "Explosions",
+      "creator": "EZduzziteh",
+      "sourcePage": "https://opengameart.org/content/explosions-4",
+      "sourceFile": "https://opengameart.org/sites/default/files/explosion3.ogg",
+      "sourceMember": null,
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ]
+}

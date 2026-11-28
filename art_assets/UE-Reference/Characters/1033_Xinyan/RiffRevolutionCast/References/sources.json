@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E8%BE%9B%E7%84%B1",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/df/03qr6nd96bsattnsb2puwzf5j6bkofy.gif",
+    "title": "叛逆刮弦.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码82帧、3.28秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "扫弦、初始物理冲击与后续火焰的原作先后和视觉分层；二命复用护盾。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\xinyan-references\\Xinyan_RiffRevolution_Observation.png",
+    "decoded_frames": 82,
+    "duration_seconds": 3.28,
+    "sampled_frames": [
+      0,
+      4,
+      7,
+      11,
+      14,
+      18,
+      21,
+      25,
+      28,
+      32,
+      35,
+      39,
+      42,
+      46,
+      49,
+      53,
+      56,
+      60,
+      63,
+      67,
+      70,
+      74,
+      77,
+      81
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E8%BE%9B%E7%84%B1",
+    "title": "七圣召唤·辛焱",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已读取对应卡牌资料页；没有取得或观看七圣召唤动态战斗画面，卡牌图片与文字不作为动态演出证明。",
+    "use": "辅助搜索卡牌场景的技能与状态表现，参考构图和遮挡；角色战斗实机仍是本次原作视觉依据。"
+  }
+]

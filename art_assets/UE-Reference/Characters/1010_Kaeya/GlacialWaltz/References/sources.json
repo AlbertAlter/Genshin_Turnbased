@@ -1,0 +1,24 @@
+{
+  "scope": "Original in-game visual reference; no asset extraction or exact copying",
+  "sources": [
+    {
+      "page": "https://wiki.biligame.com/ys/%E5%87%AF%E4%BA%9A",
+      "url": "https://patchwiki.biligame.com/images/ys/b/b2/h8aj63ga7jd1v26tak6b5c8c81feil8.gif",
+      "type": "original in-game GIF",
+      "inspection": "Text and original link located; full GIF download timed out. Motion not observed from this source.",
+      "localGifRetained": false
+    },
+    {
+      "page": "https://theinformalgamer.wordpress.com/2021/04/25/genshin-impact-best-kaeya-build-artifacts-weapons-team-guide/",
+      "url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2021/04/kaeya-elemental-burst.gif?w=600",
+      "type": "original in-game capture reproduced in character guide",
+      "decodedFrames": 29,
+      "durationSeconds": 2.9,
+      "sampledSeconds": [0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.9, 1, 1.1, 1.2, 1.3, 1.5, 1.6, 1.7, 1.8, 1.9, 2.1, 2.2, 2.3, 2.4, 2.6, 2.7, 2.8],
+      "analysisFile": "Analysis_24Samples.png",
+      "inspection": "Viewed the sampled contact sheet: initial cast/ice formation, orbit at lower body and thin trailing frost. Normal expiry is not present in this short capture.",
+      "localGifRetained": false,
+      "originalImageProcessing": "Decoded sampled frames combined into a labelled analysis sheet only; no painted or retouched effect shapes."
+    }
+  ]
+}

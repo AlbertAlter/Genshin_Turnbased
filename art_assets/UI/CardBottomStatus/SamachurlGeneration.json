@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-26",
+  "method": "Built-in image_gen for the approved colored icons; user-authorized scripted recoloring for the white HUD variants.",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "assets": [
+    {
+      "file": "AnemoSamachurlTornado.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "subject": "风丘丘萨满的风龙卷卡底彩色对象图标",
+      "related_status": {
+        "id": 4201101,
+        "id2": "ST_AnemoShaman_Tornado"
+      },
+      "prompt": "Use case: stylized-concept. Create ONE new square transparent PNG game UI object icon for an Anemo Samachurl's TORNADO in a Genshin-inspired turn-based card game. This is a colored card-bottom object icon, displayed at 32–64 pixels. Design a fresh illustration from the actual idea of a small turquoise wind funnel; do NOT trace, recolor, or preserve any existing white HUD status glyph. Subject: one compact upright curling tornado, narrow at its bottom and broad at the top, an irregular lively silhouette with three or four overlapping swept wind ribbons and a small curved trailing tip. Clear visual spiral, pale mint/cyan lit planes, medium jade teal body, deep teal separations and clean dark teal outline. Solid painted ribbon surfaces with simple two-tone/cel-shaded sections, slight readable volume, restrained highlights. Match the visual language of Genshin Genius Invokation TCG object icons: concise hand-drawn contours, bold legible closed color areas, modest partition shadows; polished flat game illustration, not photorealism and not a 3D render. Keep the design quiet and readable; no particles, floating leaves, stars, wind-element emblem, numbers, text, character, circular badge, ground, shadow plate or scenery. Exterior truly transparent alpha, no white/black/checkerboard backdrop. Center the COMPLETE isolated object with generous transparent breathing room; all visible strokes and antialiasing entirely within a circle centered on the square whose radius is 40% of canvas width. Approximate total object height 68% of canvas, width 56%, no detached marks. Do not put transparent holes inside solid colored ribbons; separate overlapping planes using dark teal contours and shading. No glow or blurred haze. Deliver just this one icon.",
+      "circle_check": {
+        "alpha_threshold": 8,
+        "outside_pixels": 0,
+        "max_radius_ratio": 0.727724649035324
+      },
+      "white_variant": {
+        "file": "../../Status_Icon/Enemy/AnemoShamanTornado.png",
+        "size": [
+          1024,
+          1024
+        ],
+        "method": "Preserve approved source alpha >= 8, recolor every RGB to [254,254,254], subtract smooth tapered curved separation lines, resize alpha to existing 1024px HUD canvas with Lanczos.",
+        "color_source": "Charts/UI/ElementColors.xlsx / Colors / Physical",
+        "rgba_rgb": [
+          254,
+          254,
+          254
+        ],
+        "separator_width_at_1254px": 22,
+        "cubic_bezier_cuts": [
+          [
+            [
+              304,
+              565
+            ],
+            [
+              442,
+              498
+            ],
+            [
+              805,
+              486
+            ],
+            [
+              899,
+              410
+            ]
+          ],
+          [
+            [
+              340,
+              678
+            ],
+            [
+              402,
+              612
+            ],
+            [
+              690,
+              610
+            ],
+            [
+              839,
+              548
+            ]
+          ],
+          [
+            [
+              432,
+              843
+            ],
+            [
+              465,
+              786
+            ],
+            [
+              754,
+              793
+            ],
+            [
+              866,
+              663
+            ]
+          ],
+          [
+            [
+              535,
+              956
+            ],
+            [
+              550,
+              911
+            ],
+            [
+              663,
+              911
+            ],
+            [
+              710,
+              862
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "file": "DendroSamachurlThorns.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "subject": "草丘丘萨满的荆棘卡底彩色对象图标",
+      "related_status": {
+        "id": 4201201,
+        "id2": "ST_DendroShaman_Thorns"
+      },
+      "prompt": "Use case: stylized-concept. Create ONE new square transparent PNG colored game UI object icon: the THORNY VINES summoned by a Dendro Samachurl in Genshin Impact. Fresh artwork based on the actual plant silhouette: thick living green thorn vines curl upward and loop back over one another, a compact interwoven bramble clump, 2 or 3 strong curled stems, 7–9 clearly visible orange-red triangular thorn tips distributed on the outer curves. Do NOT copy or recolor an existing white HUD status glyph. NOT a thin S-shaped rose stem, not a wreath, no flower, no isolated leaf emblem. Use a dark forest-green outline, substantial olive/jade-green vine bodies with light yellow-green upper faces and deep-green partition shadows, warm rust-orange pointed thorns with dark edges. Each curling vine has believable simple volume, overlaps separated with dark painted contour lines and solid shaded surfaces. Style is a polished Genshin Genius Invokation TCG object icon, readable hand-drawn game illustration, closed areas of flat color plus 2–3 broad cel-shaded planes, matching compact colored card-bottom object icons. Modest detail, no realistic wood bark, no glossy plastic, no photoreal or 3D render. Clearly recognizable as a dangerous tangle of thorny green vines at 32–64 pixels. Center ONE complete isolated connected clump, slightly wider than tall, approximate object width 64% and height 58% of square canvas, with generous transparent margins. Every visible thorn tip and antialiased pixel must lie within a centered circular safe area with radius 40% of canvas width. No separate flying debris, no glowing particles, no pedestal, no soil or ground, no frame, badge, circle background, letters, digits, text, element symbol, character or watermark. Actual exterior transparent alpha, no white/black/checkerboard background. Green vine surfaces are opaque and clearly filled; do not use transparent cut-outs to draw interior shading.",
+      "reference": "../../UE/Enemies/2012_DendroSamachurl/Thorns/References/00_原作实机.webp",
+      "circle_check": {
+        "alpha_threshold": 8,
+        "outside_pixels": 0,
+        "max_radius_ratio": 0.7057745151330879
+      },
+      "white_variant": {
+        "file": "../../Status_Icon/Enemy/DendroShamanThorns.png",
+        "size": [
+          1024,
+          1024
+        ],
+        "method": "Preserve approved source alpha >= 8 and natural vine gaps; recolor every RGB to [254,254,254], resize alpha to existing 1024px HUD canvas with Lanczos.",
+        "color_source": "Charts/UI/ElementColors.xlsx / Colors / Physical",
+        "rgba_rgb": [
+          254,
+          254,
+          254
+        ]
+      }
+    }
+  ],
+  "validation": {
+    "preview_sizes": [
+      32,
+      48,
+      64
+    ],
+    "preview_background": "#998F81",
+    "colored_alpha_preserved": true,
+    "unity_visual_validation": false
+  },
+  "field_visual_requirement": "../../UE/Enemies/2012_DendroSamachurl/DendroField/视觉需求.md",
+  "runtime_binding": "4201101风龙卷、4201201荆棘已接入CardBottomStatus.xlsx/ByStatusID，Instances计数，ShowCount=1，Enabled=1；源表及两张彩色卡底图已发布到StreamingAssets对应目录，复用BattleUiCardBottomStatus与公共状态详情。白色HUD源图已替换，状态表未修改；尚未进行Unity视觉验收。"
+}

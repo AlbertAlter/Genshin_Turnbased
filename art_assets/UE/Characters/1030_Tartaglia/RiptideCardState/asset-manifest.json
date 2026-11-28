@@ -1,0 +1,358 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideCardState/视觉需求.md",
+  "variants": {
+    "Tartaglia_RiptideCardState_State": {
+      "effect": "Tartaglia_RiptideCardState_State",
+      "source": "Blender/Tartaglia_RiptideCardState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideCardState_State_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/Tartaglia_RiptideCardState_State_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Hydro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Actual marked unit/card parent, not a fixed field. One continuous mark, refresh light pulse without reset or second symbol. Follow demo returns reference card to original layout; no real movement/state logic.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideCardState_State.wav"
+      }
+    },
+    "Tartaglia_RiptideCardState_RefreshAndFollow": {
+      "effect": "Tartaglia_RiptideCardState_RefreshAndFollow",
+      "source": "Blender/Tartaglia_RiptideCardState_RefreshAndFollow.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1030_Tartaglia/RiptideCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/Tartaglia_RiptideCardState_RefreshAndFollow_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "HydroRiptideSymbol": {
+          "file": "Exports/Tartaglia_RiptideCardState_RefreshAndFollow_HydroRiptideSymbol.fbx",
+          "objects": [
+            "PART_Hydro_AuthoredRiptideLeaf_0",
+            "PART_Hydro_RiptideLeafColdRim_0",
+            "PART_Hydro_AuthoredRiptideLeaf_1",
+            "PART_Hydro_RiptideLeafColdRim_1",
+            "PART_Hydro_AuthoredRiptideLeaf_2",
+            "PART_Hydro_RiptideLeafColdRim_2",
+            "PART_Hydro_SmallClearRiptideCenter"
+          ],
+          "vertices": 1658,
+          "triangles": 2682,
+          "dimensions": [
+            1.1680020689964294,
+            0.019999999552965164,
+            1.079246610403061
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Hydro_AuthoredRiptideLeaf_0": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_0": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_1": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_1": [
+              "Soft"
+            ],
+            "PART_Hydro_AuthoredRiptideLeaf_2": [
+              "Soft"
+            ],
+            "PART_Hydro_RiptideLeafColdRim_2": [
+              "Soft"
+            ],
+            "PART_Hydro_SmallClearRiptideCenter": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 7,
+            "vertices": 1658,
+            "triangles": 2682,
+            "dimensions": [
+              1.1680020689964294,
+              0.020000087916464793,
+              1.079246610403061
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 84,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 9,
+      "referenceBoundary": "Havoc original66f/6.6s sampled24frames shows BOTH ranged water arrow and melee broad slash, plus a three-leaf blue-white mark. RagingTide200f/6.0s and normal86f/8.6s sampled24each; those do not confirm all four separate Riptide trigger variants. Leaf curves and water bodies are newly authored, not traced/copied textures.",
+      "scope": "Source art only; targets, consumed marks and death are explicit art examples, no real status, damage, random selection, Unity or table changes.",
+      "contract": "Actual marked unit/card parent, not a fixed field. One continuous mark, refresh light pulse without reset or second symbol. Follow demo returns reference card to original layout; no real movement/state logic.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": true,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Tartaglia_RiptideCardState_RefreshAndFollow.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1030_Tartaglia/RiptideCardState/Blender/Tartaglia_RiptideCardState_RefreshAndFollow.blend",
+        "driversConverted": 1,
+        "legacyExpressions": 1,
+        "numericComparisons": 36,
+        "maximumFormulaError": 8.583068844547626e-08,
+        "nativeDrivers": 32,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          84.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          84,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Tartaglia_RiptideCardState_RefreshAndFollow_01_Overall.png",
+        "stillFrame": 84,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

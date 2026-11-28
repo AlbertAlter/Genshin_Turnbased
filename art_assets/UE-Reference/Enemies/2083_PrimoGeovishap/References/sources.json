@@ -1,0 +1,112 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Primo_Geovishap#Abilities",
+  "visual_sources": [
+    {
+      "title": "Primo Geovishap Infused Stone Pyro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Infused_Stone_Pyro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bb/Primo_Geovishap_Infused_Stone_Pyro.gif/revision/latest?cb=20240524125341",
+      "size_bytes": 3895062,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Infused Stone Hydro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Infused_Stone_Hydro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/15/Primo_Geovishap_Infused_Stone_Hydro.gif/revision/latest?cb=20240524115510",
+      "size_bytes": 3067424,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Infused Stone Cryo.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Infused_Stone_Cryo.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/0/07/Primo_Geovishap_Infused_Stone_Cryo.gif/revision/latest?cb=20240524125326",
+      "size_bytes": 2838915,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Infused Stone Electro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Infused_Stone_Electro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/d/de/Primo_Geovishap_Infused_Stone_Electro.gif/revision/latest?cb=20240524125334",
+      "size_bytes": 3132117,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Primordial Shower Pyro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Primordial_Shower_Pyro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/2/27/Primo_Geovishap_Primordial_Shower_Pyro.gif/revision/latest?cb=20240524125408",
+      "size_bytes": 5199613,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": [
+        {
+          "file": "PrimordialShowerPyro_02700ms.png",
+          "time_ms": 2700,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        },
+        {
+          "file": "PrimordialShowerPyro_05300ms.png",
+          "time_ms": 5300,
+          "type": "original_gif_frame",
+          "viewed": true,
+          "viewed_scope": "Two static original frames inspected in contact sheet; full animation not played."
+        }
+      ]
+    },
+    {
+      "title": "Primo Geovishap Primordial Shower Hydro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Primordial_Shower_Hydro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/fb/Primo_Geovishap_Primordial_Shower_Hydro.gif/revision/latest?cb=20240524115522",
+      "size_bytes": 5139411,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Primordial Shower Cryo.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Primordial_Shower_Cryo.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e1/Primo_Geovishap_Primordial_Shower_Cryo.gif/revision/latest?cb=20240524125356",
+      "size_bytes": 5213325,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Primo Geovishap Primordial Shower Electro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Primo_Geovishap_Primordial_Shower_Electro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/2/2a/Primo_Geovishap_Primordial_Shower_Electro.gif/revision/latest?cb=20240524125402",
+      "size_bytes": 5395944,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    }
+  ],
+  "audio_sources": [
+    {
+      "url": "https://www.youtube.com/watch?v=1laWDugU7rw",
+      "purpose": "原作灌注岩石、喷吐、反制声音核对；作者章节0:50反制、9:43全部攻击，未定位逐招音效",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；完整GIF未播放且不保存本地；下列static_frames仅在另有标记时表示已查看。音效未试听、截取或选定。",
+  "implementation_status": "Requirements only. No VFX asset, runtime hook, scene or table changes."
+}

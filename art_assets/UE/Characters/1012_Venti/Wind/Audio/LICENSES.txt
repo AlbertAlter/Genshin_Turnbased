@@ -1,0 +1,14 @@
+CC0 substitute sound candidates; not original Genshin Impact audio.
+
+Wind: remaxim, Short wind sound / OpenGameArt.
+https://opengameart.org/content/short-wind-sound
+
+Swish: artisticdude, Swishes Sound Pack / OpenGameArt.
+https://opengameart.org/content/swishes-sound-pack
+
+License: CC0-1.0
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Sources.json records original media links and all prior and current edits.
+No sounds made for the cancelled allied wind-domain state.
+Not auditioned; no Wwise or Unity events created.

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1010_Kaeya/GlacialWaltz/Kaeya_GlacialWaltz_State",
+  "source": "art_assets/UE/Characters/1010_Kaeya/GlacialWaltz/Blender/Kaeya_GlacialWaltz_State.blend",
+  "file": "Characters/1010_Kaeya/GlacialWaltz/Exports/Kaeya_GlacialWaltz_State.vfx.bytes",
+  "meshes": 35,
+  "tracks": 200,
+  "frames": 217,
+  "duration": 7.2,
+  "loopStart": 0,
+  "loopEnd": 0.8,
+  "markers": {
+    "State_Build_Clear": 0.0,
+    "Loop_Endpoint_A": 0.8,
+    "Loop_Endpoint_B": 3.2,
+    "Loop_Endpoint_C": 5.6,
+    "Removal_From_Current_Phase": 6.0,
+    "State_Clear": 7.2
+  },
+  "bytes": 503493
+}

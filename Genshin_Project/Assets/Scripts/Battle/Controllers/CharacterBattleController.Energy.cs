@@ -30,7 +30,8 @@ public partial class CharacterBattleController
         object host)
     {
         if (effect == null) return;
-        if (!WeaponHooks.TryResolveEnergy(effect, sourceStatus, out float gainedEnergy)
+        if (!BattleSpecialRules.TryResolveEnergyScalar(effect, sourceStatus, out float gainedEnergy)
+            && !WeaponHooks.TryResolveEnergy(effect, sourceStatus, out gainedEnergy)
             && !float.TryParse(effect.Param1, NumberStyles.Float, CultureInfo.InvariantCulture, out gainedEnergy)) return;
         List<BattleEntity> targets = ResolveStatusTargets(effect, sourceStatus, host);
         if (targets == null) return;

@@ -156,7 +156,7 @@ public sealed class UICardFreeze : MonoBehaviour
         ReleaseBackdrop();
     }
 
-    private float Delta => style.Unscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+    private float Delta => style.Unscaled ? BattlePause.DeltaTime : BattlePause.ScaledDeltaTime;
     private void ConfigureMaterial()
     {
         if (shardMaterial == null || style == null) return;

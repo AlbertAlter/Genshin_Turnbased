@@ -1,0 +1,484 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\general\\AbyssMageRite\\视觉需求.md",
+  "variants": {
+    "AbyssMageRite_Cryo": {
+      "effect": "AbyssMageRite_Cryo",
+      "source": "Blender/AbyssMageRite_Cryo.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\AbyssMageRite\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/AbyssMageRite_Cryo_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteBoundary": {
+          "file": "Exports/AbyssMageRite_Cryo_RiteBoundary.fbx",
+          "objects": [
+            "PART_RiteThinBoundary"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.035978317260742,
+            0.0,
+            2.0360000133514404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteThinBoundary": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.035978317260742,
+              3.3170647384395124e-07,
+              2.0360000133514404
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteGlyph": {
+          "file": "Exports/AbyssMageRite_Cryo_RiteGlyph.fbx",
+          "objects": [
+            "PART_RiteGeometricLine"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.908029317855835,
+            0.0,
+            0.4688035547733307
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteGeometricLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.908029317855835,
+              7.637778765001713e-08,
+              0.4688035547733307
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "AbyssMageRite_Cryo_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "AbyssMageRite_Cryo_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\AbyssMageRite_Cryo.wav"
+      },
+      "launchFrames": []
+    },
+    "AbyssMageRite_Hydro": {
+      "effect": "AbyssMageRite_Hydro",
+      "source": "Blender/AbyssMageRite_Hydro.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\AbyssMageRite\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/AbyssMageRite_Hydro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteBoundary": {
+          "file": "Exports/AbyssMageRite_Hydro_RiteBoundary.fbx",
+          "objects": [
+            "PART_RiteThinBoundary"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.035978317260742,
+            0.0,
+            2.0360000133514404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteThinBoundary": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.035978317260742,
+              3.3170647384395124e-07,
+              2.0360000133514404
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteGlyph": {
+          "file": "Exports/AbyssMageRite_Hydro_RiteGlyph.fbx",
+          "objects": [
+            "PART_RiteGeometricLine"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.908029317855835,
+            0.0,
+            0.4688035547733307
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteGeometricLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.908029317855835,
+              7.637778765001713e-08,
+              0.4688035547733307
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "AbyssMageRite_Hydro_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "AbyssMageRite_Hydro_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\AbyssMageRite_Hydro.wav"
+      },
+      "launchFrames": []
+    },
+    "AbyssMageRite_Pyro": {
+      "effect": "AbyssMageRite_Pyro",
+      "source": "Blender/AbyssMageRite_Pyro.blend",
+      "requirement": "art_assets\\UE-Reference\\general\\AbyssMageRite\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/AbyssMageRite_Pyro_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteBoundary": {
+          "file": "Exports/AbyssMageRite_Pyro_RiteBoundary.fbx",
+          "objects": [
+            "PART_RiteThinBoundary"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.035978317260742,
+            0.0,
+            2.0360000133514404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteThinBoundary": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.035978317260742,
+              3.3170647384395124e-07,
+              2.0360000133514404
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteGlyph": {
+          "file": "Exports/AbyssMageRite_Pyro_RiteGlyph.fbx",
+          "objects": [
+            "PART_RiteGeometricLine"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.908029317855835,
+            0.0,
+            0.4688035547733307
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteGeometricLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.908029317855835,
+              7.637778765001713e-08,
+              0.4688035547733307
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "AbyssMageRite_Pyro_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "AbyssMageRite_Pyro_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\AbyssMageRite_Pyro.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

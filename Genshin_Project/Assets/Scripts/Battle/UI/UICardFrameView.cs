@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 /// <summary>Reusable card skin assembly for static or video textures. Borrows art; owns only its hierarchy and silhouette.</summary>
 [DisallowMultipleComponent]
-public sealed class UICardFrameView : MonoBehaviour
+public sealed partial class UICardFrameView : MonoBehaviour
 {
     public RawImage Surface { get; private set; }
     public RectTransform FrontEffects { get; private set; }
@@ -30,6 +30,14 @@ public sealed class UICardFrameView : MonoBehaviour
     private Image frameImage, glowImage, innerImage;
     private Image contentMaskImage, innerMaskImage;
     private RectTransform visuals;
+    private CanvasGroup faceVisibility;
+    internal RectTransform VisualRoot => visuals;
+    internal void SetFaceVisible(bool visible)
+    {
+        if (visuals == null) return;
+        if (faceVisibility == null) faceVisibility = visuals.GetComponent<CanvasGroup>() ?? visuals.gameObject.AddComponent<CanvasGroup>();
+        faceVisibility.alpha = visible ? 1 : 0;
+    }
     private Sprite frame;
     private int maskKey;
     private Texture lastTexture;
@@ -208,6 +216,7 @@ public sealed class UICardFrameView : MonoBehaviour
     }
     public void Clear()
     {
+        ReleaseArtVisibility();
         if (visuals != null) { visuals.gameObject.SetActive(false); Destroy(visuals.gameObject); visuals = null; }
         Surface = null; frameImage = glowImage = innerImage = OuterShadow = contentMaskImage = innerMaskImage = null;
         FrontEffects = BackEffects = FreezeLayer = ShieldLayer = null; frame = null;

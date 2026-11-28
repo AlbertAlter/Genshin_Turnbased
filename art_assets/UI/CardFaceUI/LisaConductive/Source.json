@@ -1,0 +1,24 @@
+{
+  "source": "https://github.com/ReadImpact/GenshinTexturesBefore3.3/blob/master/Texture2D/Eff/Symbol/Eff_Symbol_11.png",
+  "referenceGuide": "https://keqingmains.com/lisa/",
+  "gameplay3Stacks": "https://www.youtube.com/watch?v=QZ8n4LZ1zNk",
+  "originalFile": "Eff_Symbol_11.png",
+  "originalSize": [
+    256,
+    256
+  ],
+  "unchangedOriginal": true,
+  "atlas": {
+    "topLeft": 1,
+    "topRight": 2,
+    "bottomLeft": 3,
+    "bottomRight": 4
+  },
+  "channels": {
+    "R": "glyph core coverage",
+    "G": "outer glow coverage",
+    "B": "preserved, unused",
+    "A": "not used as coverage"
+  },
+  "presentation": "Select quadrants by UV. Use ElementColors Electro tint and project white. Support 0 through 4 independently from business limits."
+}

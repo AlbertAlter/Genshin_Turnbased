@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1035_Ganyu/FrostflakeCharge/Ganyu_FrostflakeCharge_Interrupted",
+  "source": "art_assets/UE/Characters/1035_Ganyu/FrostflakeCharge/Blender/Ganyu_FrostflakeCharge_Interrupted.blend",
+  "file": "Characters/1035_Ganyu/FrostflakeCharge/Exports/Ganyu_FrostflakeCharge_Interrupted.vfx.bytes",
+  "meshes": 2,
+  "tracks": 25,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 188702
+}

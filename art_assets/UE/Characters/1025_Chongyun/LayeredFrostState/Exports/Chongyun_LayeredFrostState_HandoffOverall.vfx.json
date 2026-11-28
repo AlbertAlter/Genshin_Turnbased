@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1025_Chongyun/LayeredFrostState/Chongyun_LayeredFrostState_HandoffOverall",
+  "source": "art_assets/UE/Characters/1025_Chongyun/LayeredFrostState/Blender/Chongyun_LayeredFrostState_HandoffOverall.blend",
+  "file": "Characters/1025_Chongyun/LayeredFrostState/Exports/Chongyun_LayeredFrostState_HandoffOverall.vfx.bytes",
+  "meshes": 13,
+  "tracks": 30,
+  "frames": 124,
+  "duration": 4.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.1
+  },
+  "bytes": 56976
+}

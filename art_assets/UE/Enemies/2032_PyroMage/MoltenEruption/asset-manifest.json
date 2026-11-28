@@ -1,0 +1,702 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2032_PyroMage\\MoltenEruption\\视觉需求.md",
+  "variants": {
+    "2032_MoltenEruption_State": {
+      "effect": "2032_MoltenEruption_State",
+      "source": "Blender/2032_MoltenEruption_State.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2032_PyroMage\\MoltenEruption\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Spark": {
+          "file": "Exports/2032_MoltenEruption_State_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteBoundary": {
+          "file": "Exports/2032_MoltenEruption_State_RiteBoundary.fbx",
+          "objects": [
+            "PART_RiteThinBoundary"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.035978317260742,
+            0.0,
+            2.0360000133514404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteThinBoundary": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.035978317260742,
+              3.3170647384395124e-07,
+              2.0360000133514404
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteGlyph": {
+          "file": "Exports/2032_MoltenEruption_State_RiteGlyph.fbx",
+          "objects": [
+            "PART_RiteGeometricLine"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.908029317855835,
+            0.0,
+            0.4688035547733307
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteGeometricLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.908029317855835,
+              7.637778765001713e-08,
+              0.4688035547733307
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Pyro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2032_MoltenEruption_State.wav"
+      }
+    },
+    "2032_MoltenEruption_Trigger": {
+      "effect": "2032_MoltenEruption_Trigger",
+      "source": "Blender/2032_MoltenEruption_Trigger.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2032_PyroMage\\MoltenEruption\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2032_MoltenEruption_Trigger_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2032_MoltenEruption_Trigger_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "EruptionFire": {
+          "file": "Exports/2032_MoltenEruption_Trigger_EruptionFire.fbx",
+          "objects": [
+            "PART_Eruption_OrangeCurledOuterFire",
+            "PART_Eruption_YellowInnerFire"
+          ],
+          "vertices": 924,
+          "triangles": 1512,
+          "dimensions": [
+            0.8722801208496094,
+            0.04435838758945465,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_Eruption_OrangeCurledOuterFire": [
+              "Basis",
+              "Flutter"
+            ],
+            "PART_Eruption_YellowInnerFire": [
+              "Basis",
+              "Flutter"
+            ]
+          },
+          "materialGroups": {
+            "PART_Eruption_OrangeCurledOuterFire": [
+              "Soft"
+            ],
+            "PART_Eruption_YellowInnerFire": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 924,
+            "triangles": 1512,
+            "dimensions": [
+              0.8722801208496094,
+              0.044358549639582634,
+              1.0000000039656878
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "EruptionSmoke": {
+          "file": "Exports/2032_MoltenEruption_Trigger_EruptionSmoke.fbx",
+          "objects": [
+            "PART_EruptionSoftWarmSmoke"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_EruptionSoftWarmSmoke": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 14,
+          "position": [
+            3.7049999237060547,
+            0.13100001215934753,
+            -0.25
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        },
+        {
+          "frame": 38,
+          "position": [
+            2.075000047683716,
+            0.08100000023841858,
+            -2.2799999713897705
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        },
+        {
+          "frame": 62,
+          "position": [
+            6.994999885559082,
+            0.13100001215934753,
+            -0.25
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 17,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "elementAppearance": "Pyro",
+      "artOnly": true,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2032_MoltenEruption_Trigger.wav"
+      }
+    },
+    "2032_MoltenEruption_Overall": {
+      "effect": "2032_MoltenEruption_Overall",
+      "source": "Blender/2032_MoltenEruption_Overall.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2032_PyroMage\\MoltenEruption\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2032_MoltenEruption_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2032_MoltenEruption_Overall_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteBoundary": {
+          "file": "Exports/2032_MoltenEruption_Overall_RiteBoundary.fbx",
+          "objects": [
+            "PART_RiteThinBoundary"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.035978317260742,
+            0.0,
+            2.0360000133514404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteThinBoundary": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.035978317260742,
+              3.3170647384395124e-07,
+              2.0360000133514404
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RiteGlyph": {
+          "file": "Exports/2032_MoltenEruption_Overall_RiteGlyph.fbx",
+          "objects": [
+            "PART_RiteGeometricLine"
+          ],
+          "vertices": 91,
+          "triangles": 144,
+          "dimensions": [
+            1.908029317855835,
+            0.0,
+            0.4688035547733307
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RiteGeometricLine": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 91,
+            "triangles": 144,
+            "dimensions": [
+              1.908029317855835,
+              7.637778765001713e-08,
+              0.4688035547733307
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "EruptionFire": {
+          "file": "Exports/2032_MoltenEruption_Overall_EruptionFire.fbx",
+          "objects": [
+            "PART_Eruption_OrangeCurledOuterFire",
+            "PART_Eruption_YellowInnerFire"
+          ],
+          "vertices": 924,
+          "triangles": 1512,
+          "dimensions": [
+            0.8722801208496094,
+            0.04435838758945465,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_Eruption_OrangeCurledOuterFire": [
+              "Basis",
+              "Flutter"
+            ],
+            "PART_Eruption_YellowInnerFire": [
+              "Basis",
+              "Flutter"
+            ]
+          },
+          "materialGroups": {
+            "PART_Eruption_OrangeCurledOuterFire": [
+              "Soft"
+            ],
+            "PART_Eruption_YellowInnerFire": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 924,
+            "triangles": 1512,
+            "dimensions": [
+              0.8722801208496094,
+              0.044358549639582634,
+              1.0000000039656878
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "EruptionSmoke": {
+          "file": "Exports/2032_MoltenEruption_Overall_EruptionSmoke.fbx",
+          "objects": [
+            "PART_EruptionSoftWarmSmoke"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_EruptionSoftWarmSmoke": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 65,
+          "position": [
+            3.7049999237060547,
+            0.13100001215934753,
+            -0.25
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        },
+        {
+          "frame": 89,
+          "position": [
+            2.075000047683716,
+            0.08100000023841858,
+            -2.2799999713897705
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        },
+        {
+          "frame": 113,
+          "position": [
+            6.994999885559082,
+            0.13100001215934753,
+            -0.25
+          ],
+          "purpose": "one short upward fire eruption at actual target feet; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 116,
+      "focus": [
+        1.0565383434295654,
+        -0.08,
+        -0.2467883825302124
+      ],
+      "elementAppearance": "Pyro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2032_MoltenEruption_Overall.wav"
+      },
+      "detailScale": 16.200405225753784,
+      "posterSelection": {
+        "previousFrame": 65,
+        "selectedFrame": 116,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

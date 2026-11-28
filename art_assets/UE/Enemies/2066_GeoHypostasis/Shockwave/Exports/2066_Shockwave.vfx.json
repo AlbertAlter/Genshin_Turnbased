@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2066_GeoHypostasis/Shockwave/2066_Shockwave",
+  "source": "art_assets/UE/Enemies/2066_GeoHypostasis/Shockwave/Blender/2066_Shockwave.blend",
+  "file": "Enemies/2066_GeoHypostasis/Shockwave/Exports/2066_Shockwave.vfx.bytes",
+  "meshes": 3,
+  "tracks": 3,
+  "frames": 130,
+  "duration": 4.3,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.3
+  },
+  "bytes": 30060
+}

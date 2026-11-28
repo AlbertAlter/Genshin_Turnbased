@@ -100,7 +100,7 @@ public static class QiqiScriptHooks
     {
         var mark = context?.Status; var hit = context?.DamageEvent; var attacker = hit?.Source?.SourceEntity;
         return mark?.StatusID2 == Talisman && Active(mark) && hit?.HitLanded == true && hit.Source.CountsAsHit
-            && mark.Host == hit.Target && attacker?.IsAlive == true && attacker.CharacterCtrl != null
+            && ReferenceEquals(mark.Host, hit.Target) && attacker?.IsAlive == true && attacker.CharacterCtrl != null
             && attacker.Side == mark.Caster.Side ? attacker : null;
     }
     private static BattleEntity Reactor(ScriptHookContext context)

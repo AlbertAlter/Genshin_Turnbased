@@ -102,8 +102,8 @@
 0309:Boss/0310:头像/component:FrameInnerShadow,FrameInnerShadow,Layer,TopLeft,482.5,-95.5,93.0,93.0,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameInnerShadow.png,,,,FrameInnerShadow,False,,,,,
 0309:Boss/0310:头像/component:FrameOutline,FrameOutline,Layer,TopLeft,482.5,-95.5,100.5,100.5,Uniform,Streaming,,art_assets/UI/BattleField1/UI_components/AvatarFrame/FrameOutline.png,,,,FrameOutline,False,,,,,
 0309:Boss/0313:Lv.99,Lv.99,Layer,TopLeft,542.0,-51.0,58,18,Fixed,Text,,-,,,,EnemyLevel,False,,Lv.99,,,
-0309:Boss/0314:水史莱姆,水史莱姆,Layer,TopCenter,-1.0,-33.5,116,27,Fixed,Text,,-,,,,EnemyName,False,,水史莱姆,,,
-0309:Boss/0315:众水的歌者,众水的歌者,Layer,TopCenter,-1.0,-68.0,124,24,Fixed,Text,,-,,,,EnemyTitle,False,,众水的歌者,,,
+0309:Boss/0314:水史莱姆,水史莱姆,Layer,TopCenter,-1.0,-33.5,116,27,Fixed,Text,,-,,,,EnemyName,False,,水史莱姆,29.16667,,Center
+0309:Boss/0315:众水的歌者,众水的歌者,Layer,TopCenter,-1.0,-68.0,124,24,Fixed,Text,,-,,,,EnemyTitle,False,,众水的歌者,25,,Center
 0309:Boss/0316:血条1,血条1,Group,TopCenter,-1.0,-85.0,840,36,Fixed,Group,,-,,,,,False,,,,,
 0309:Boss/0316:血条1/0317:矩形 7,矩形 7,Layer,TopCenter,-0.5,-99.5,835,13,StretchX,Generated,,-,,,,ValueBar,False,,,,,
 0309:Boss/0316:血条1/0318:血条上方柔光,血条上方柔光,Layer,TopCenter,0.0,-91.0,836,4,StretchX,Ignore,,art_assets/UI/BattleField1/UI_components/HPBarUpperLight.png,,,,HpUpperLight,False,,,,,
@@ -157,7 +157,7 @@
 0371:AP_Panel/0372:AP: 80/100,AP: 80/100,Layer,BottomRight,-109.0,307.0,166,24,Fixed,Text,,-,,,,APValue,False,,AP: 80/100,29.16667,,MidlineLeft
 0371:AP_Panel/0373:-20,-20,Layer,BottomRight,-120.5,343.0,53,24,Fixed,Text,,-,,,,APSpendHint,False,,-20,29.16667,,MidlineRight
 0371:AP_Panel/0374:+5,+5,Layer,BottomRight,-113.5,343.0,35,24,Fixed,Text,,-,,,,APGainHint,False,,+5,29.16667,,MidlineRight
-0008:character/0018:CharacterCard1/0019:元素附着,元素附着,Layer,BottomRight,-626.5,322.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
-0008:character/0018:CharacterCard1/0020:元素附着,元素附着,Layer,MiddleRight,-626.5,-172.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
-0022:Enemy/0031:EnemyCard1/virtual:EnemyElementAura1,EnemyElementAura1,Layer,BottomCenter,-247.5,321.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
-0022:Enemy/0031:EnemyCard1/virtual:EnemyElementAura2,EnemyElementAura2,Layer,MiddleCenter,-247.5,-173.5,39,41,Uniform,DynamicStreaming,,art_assets/Status_Icon/Element/{ElementIcon}.png,,,,ElementAura,False,,,,,
+0008:character/0018:CharacterCard1/0019:元素附着,元素附着,Layer,BottomRight,-626.5,322.5,39,41,Uniform,DynamicStreaming,,art_assets/ElementSVG/Element_{ElementIcon}.png,,,,ElementAura,False,,,,,
+0008:character/0018:CharacterCard1/0020:元素附着,元素附着,Layer,MiddleRight,-626.5,-172.5,39,41,Uniform,DynamicStreaming,,art_assets/ElementSVG/Element_{ElementIcon}.png,,,,ElementAura,False,,,,,
+0022:Enemy/0031:EnemyCard1/virtual:EnemyElementAura1,EnemyElementAura1,Layer,BottomCenter,-247.5,321.5,39,41,Uniform,DynamicStreaming,,art_assets/ElementSVG/Element_{ElementIcon}.png,,,,ElementAura,False,,,,,
+0022:Enemy/0031:EnemyCard1/virtual:EnemyElementAura2,EnemyElementAura2,Layer,MiddleCenter,-247.5,-173.5,39,41,Uniform,DynamicStreaming,,art_assets/ElementSVG/Element_{ElementIcon}.png,,,,ElementAura,False,,,,,

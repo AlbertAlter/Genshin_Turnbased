@@ -52,7 +52,7 @@ public static class NoelleScriptHooks
             && c?.Caster?.IsAlive == true && c.Status?.StatusID2 == Breastplate && !c.Status.IsActive
             && c.Declaration?.Kind == BattleEventKind.StatusRemoved
             && c.Declaration.Get<StatusEventData>() is StatusEventData fact
-            && fact.InstanceId == c.Status.ApplyOrder && fact.Host == c.Caster
+            && fact.InstanceId == c.Status.ApplyOrder && ReferenceEquals(fact.Host, c.Caster)
             && (fact.Reason == "ShieldBroken" || fact.Reason == "Replaced"));
         BattleSpecialRules.RegisterTargets("Noelle_DevotionTarget()", (battle, owner) =>
         {

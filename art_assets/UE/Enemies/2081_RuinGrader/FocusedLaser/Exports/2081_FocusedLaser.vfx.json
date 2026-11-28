@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2081_RuinGrader/FocusedLaser/2081_FocusedLaser",
+  "source": "art_assets/UE/Enemies/2081_RuinGrader/FocusedLaser/Blender/2081_FocusedLaser.blend",
+  "file": "Enemies/2081_RuinGrader/FocusedLaser/Exports/2081_FocusedLaser.vfx.bytes",
+  "meshes": 5,
+  "tracks": 17,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 90244
+}

@@ -1,0 +1,15 @@
+{
+  "key": "Characters/1016_Klee/SparksNSplash/Klee_Sparks_CombinedPreview",
+  "source": "art_assets/UE/Characters/1016_Klee/SparksNSplash/Blender/Klee_Sparks_CombinedPreview.blend",
+  "file": "Characters/1016_Klee/SparksNSplash/Exports/Klee_Sparks_CombinedPreview.vfx.bytes",
+  "meshes": 10,
+  "tracks": 73,
+  "frames": 301,
+  "duration": 10.0,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "ExplicitActionDuringState": 4.2
+  },
+  "bytes": 224595
+}

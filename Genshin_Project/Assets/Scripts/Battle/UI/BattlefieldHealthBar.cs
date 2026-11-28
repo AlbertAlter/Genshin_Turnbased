@@ -49,7 +49,7 @@ public sealed class BattlefieldHealthBar : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (boundSource != null) Present(boundSource.GetHealth(side, slot), Time.unscaledDeltaTime);
+        if (boundSource != null) Present(boundSource.GetHealth(side, slot), BattlePause.DeltaTime);
     }
 
     public void Present(BattleUiMeterState state, float deltaTime)

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2071_Stormterror/RendingVortex/2071_RendingVortex",
+  "source": "art_assets/UE/Enemies/2071_Stormterror/RendingVortex/Blender/2071_RendingVortex.blend",
+  "file": "Enemies/2071_Stormterror/RendingVortex/Exports/2071_RendingVortex.vfx.bytes",
+  "meshes": 9,
+  "tracks": 31,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 206679
+}

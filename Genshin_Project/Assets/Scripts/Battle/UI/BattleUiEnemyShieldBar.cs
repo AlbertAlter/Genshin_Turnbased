@@ -33,7 +33,7 @@ public sealed class BattleUiEnemyShieldBar : MonoBehaviour
     public void ReloadAnimationParameters() => transitionSeconds = BattlefieldAnimationParameters.Load().Get("Health.TransitionDuration", .2f);
     private void LateUpdate()
     {
-        if (source != null) Present(source.GetEnemyShield(slot), Time.unscaledDeltaTime);
+        if (source != null) Present(source.GetEnemyShield(slot), BattlePause.DeltaTime);
     }
 
     public void Present(BattleUiMeterState state, float deltaTime)

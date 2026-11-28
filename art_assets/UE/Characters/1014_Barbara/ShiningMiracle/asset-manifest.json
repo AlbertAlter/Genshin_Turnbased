@@ -1,0 +1,274 @@
+{
+  "effect": "Barbara / ShiningMiracle",
+  "parts": {
+    "Miracle_Star_Hydro": {
+      "file": "Miracle_Star_Hydro.fbx",
+      "radius": 1.1400000022587022,
+      "vertices": 31,
+      "triangles": 50,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_Star_Pearl": {
+      "file": "Miracle_Star_Pearl.fbx",
+      "radius": 1.1400000022587022,
+      "vertices": 31,
+      "triangles": 50,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_Star_Gold": {
+      "file": "Miracle_Star_Gold.fbx",
+      "radius": 1.1400000022587022,
+      "vertices": 31,
+      "triangles": 50,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_Star_Rose": {
+      "file": "Miracle_Star_Rose.fbx",
+      "radius": 1.1400000022587022,
+      "vertices": 31,
+      "triangles": 50,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_Bubble": {
+      "file": "Miracle_Bubble.fbx",
+      "radius": 1.0320000521776276,
+      "vertices": 1188,
+      "triangles": 2064,
+      "alpha": [
+        0.0,
+        0.7200000286102295
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_SoftWaterLight": {
+      "file": "Miracle_SoftWaterLight.fbx",
+      "radius": 1.0000000204890964,
+      "vertices": 121,
+      "triangles": 200,
+      "alpha": [
+        0.0,
+        0.18000000715255737
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_SmallGlint": {
+      "file": "Miracle_SmallGlint.fbx",
+      "radius": 1.1400000022587022,
+      "vertices": 25,
+      "triangles": 40,
+      "alpha": [
+        0.0,
+        0.8500000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    },
+    "Miracle_HealRipple": {
+      "file": "Miracle_HealRipple.fbx",
+      "radius": 1.1319999674706067,
+      "vertices": 729,
+      "triangles": 1280,
+      "alpha": [
+        0.0,
+        0.550000011920929
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Miracle_HydroStars"
+      ]
+    }
+  },
+  "source": "Blender/Barbara_ShiningMiracle.blend",
+  "duration": 2.4,
+  "gather": [
+    0,
+    0.25
+  ],
+  "bloom": 0.29,
+  "clearedAt": 2.4,
+  "healedReferenceCards": 4,
+  "controls": [
+    "PlaybackSpeed",
+    "Opacity",
+    "StarSize",
+    "Spread"
+  ],
+  "preview": "Preview/Barbara_ShiningMiracle_Full.mp4",
+  "fps": 30,
+  "axes": "Blender X right, Z up, -Y towards viewer; FBX -Z forward / Y up",
+  "runtimeConnected": false,
+  "reference": "Nine separate cards with actual fronts, frames, backs and sides; all used images packed. Reference objects never exported.",
+  "vertexColor": "VFXColor POINT RGBA, LINEAR export; soft edge alpha and material groups retained. Blender object alpha/reveal and authored clocks require later explicit runtime reconstruction; no Unity integration performed.",
+  "units": "1 Blender unit = 1 meter; reference art scale 100 design pixels per unit",
+  "validation": {
+    "packedImages": 12,
+    "effectObjects": 58,
+    "sourceScenes": 1,
+    "startEndCleared": true,
+    "nativePartsReimported": 8,
+    "nativeGeometry": "Triangulated, zero attachment origin, dimensions, materials, RGBA alpha gradient and expected shape keys checked.",
+    "video": {
+      "name": "Barbara_ShiningMiracle_Full",
+      "relative": "1014_Barbara/ShiningMiracle",
+      "decodedFrames": 73,
+      "fps": 30.0,
+      "samples": [
+        1,
+        4,
+        7,
+        10,
+        14,
+        17,
+        20,
+        23,
+        26,
+        29,
+        32,
+        35,
+        39,
+        42,
+        45,
+        48,
+        51,
+        54,
+        57,
+        60,
+        64,
+        67,
+        70,
+        73
+      ]
+    },
+    "unityPublished": false,
+    "unityTestsRun": false
+  },
+  "partsPreview": "Preview/07_Separate_Native_Parts.png",
+  "combinedDemo": {
+    "source": "Blender/Barbara_Melody_And_Miracle_Preview.blend",
+    "video": "Preview/Barbara_Combined_Full.mp4",
+    "existingMelodyPhaseUnchanged": true,
+    "burstAtSeconds": 4.4,
+    "decoded": {
+      "name": "Barbara_Combined_Full",
+      "relative": "1014_Barbara/ShiningMiracle",
+      "decodedFrames": 313,
+      "fps": 30.0,
+      "samples": [
+        1,
+        15,
+        28,
+        42,
+        55,
+        69,
+        82,
+        96,
+        110,
+        123,
+        137,
+        150,
+        164,
+        177,
+        191,
+        204,
+        218,
+        232,
+        245,
+        259,
+        272,
+        286,
+        299,
+        313
+      ]
+    }
+  },
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "clips": 2,
+    "originalGameAudio": false,
+    "auditioned": false,
+    "status": "Decoded PCM and waveform checks; substitute candidates; no Unity/Wwise integration."
+  },
+  "mediaValidation": [
+    {
+      "source": "Barbara_ShiningMiracle",
+      "video": "Preview/Barbara_ShiningMiracle_Full.mp4",
+      "framesDecoded": 73,
+      "fps": 30,
+      "motionSheet": "Preview/Barbara_ShiningMiracle_Full_MotionSheet.png",
+      "poster": "Preview/Barbara_ShiningMiracle_Full_Current.png",
+      "posterFrame": 17,
+      "renderedFromCurrentSavedSource": true
+    },
+    {
+      "source": "Barbara_Melody_And_Miracle_Preview",
+      "video": "Preview/Barbara_Combined_Full.mp4",
+      "framesDecoded": 313,
+      "fps": 30,
+      "motionSheet": "Preview/Barbara_Combined_Full_MotionSheet.png",
+      "poster": "Preview/Barbara_Combined_Full_Current.png",
+      "posterFrame": 150,
+      "renderedFromCurrentSavedSource": true
+    }
+  ],
+  "sourceValidation": {
+    "Barbara_ShiningMiracle": {
+      "sourceReopened": true,
+      "packedImages": 12,
+      "referenceCards": 9,
+      "firstAndFinalClear": true,
+      "frameEnd": 73,
+      "noPersistentMusicRingObjects": true
+    },
+    "Barbara_Melody_And_Miracle_Preview": {
+      "sourceReopened": true,
+      "packedImages": 12,
+      "referenceCards": 9,
+      "firstAndFinalClear": true,
+      "frameEnd": 313,
+      "existingMusicRingPhaseContinuesDuringBurst": true
+    }
+  },
+  "combinedPreview": {
+    "source": "Blender/Barbara_Melody_And_Miracle_Preview.blend",
+    "preview": "Preview/Barbara_Combined_Full.mp4",
+    "actionOffsetSeconds": 4.4,
+    "stateSource": "../MelodyLoop/Blender/Barbara_MelodyLoop.blend",
+    "existingStatePhasePreserved": true
+  }
+}

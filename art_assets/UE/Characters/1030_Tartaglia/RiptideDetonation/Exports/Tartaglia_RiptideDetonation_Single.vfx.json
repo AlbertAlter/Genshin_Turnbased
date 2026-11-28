@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1030_Tartaglia/RiptideDetonation/Tartaglia_RiptideDetonation_Single",
+  "source": "art_assets/UE/Characters/1030_Tartaglia/RiptideDetonation/Blender/Tartaglia_RiptideDetonation_Single.blend",
+  "file": "Characters/1030_Tartaglia/RiptideDetonation/Exports/Tartaglia_RiptideDetonation_Single.vfx.bytes",
+  "meshes": 10,
+  "tracks": 30,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 278091
+}

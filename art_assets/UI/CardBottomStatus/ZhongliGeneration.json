@@ -1,0 +1,21 @@
+{
+  "asset": "StoneStele.png",
+  "method": "built-in image_gen",
+  "date": "2026-11-26",
+  "initial_edit_target": "art_assets/Skill_Icon/1032/1032_S01.png",
+  "edit_target": "art_assets/UI/CardBottomStatus/StoneStele.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/KeqingStiletto.png",
+    "art_assets/UI/CardBottomStatus/Pyronado.png"
+  ],
+  "initial_prompt": "Use case: precise-object-edit. Asset type: one transparent colored card-bottom status icon for Zhongli's Stone Stele in the current Genshin-inspired card-battle project. Image 1 is the official local elemental-skill glyph, the SHAPE EDIT TARGET. Images 2 and 3 are STYLE REFERENCES ONLY: existing Keqing stiletto and Xiangling pyronado colored icons. Create a compact and immediately recognizable single Stone Stele: one tall, chunky rectangular Geo stone pillar with a clear carved diamond motif on its front, a restrained angular cap and solid geometric base, following the main central pillar silhouette of image 1. Simplify the tiny side decorative spikes so the central stele reads at small UI size. Warm ochre stone and amber-gold lit carved details, deep brown contours, cream-gold edge highlights, and 2-3 clean painted shadow bands, matching the outlined Genius Invokation TCG-like volume of the style references. Abstract stylized painted UI symbol, substantial stone volume, not photorealistic, not an architectural product render. Keep all visible geometry inside a roughly circular footprint centered on a square transparent canvas with modest padding. Solid pillar surfaces, no transparent holes inside the pillar body, genuinely transparent background outside. No character, hands, scenery, text, numbers, arrows, badge, full background disc, border/frame, or purple lightning/flames/spear copied from style references. Deliver only one golden Stone Stele icon.",
+  "prompt": "Use case: precise-object-edit. Edit ONLY the supplied existing Zhongli Stone Stele colored UI icon. Preserve its amber/ochre palette, deep brown contours, painted faceted shading, central glowing carved diamond motif, centered upright composition, and transparent background. Correct the actual solid geometry in three connected ways. (1) REMOVE the entire oversized top cap/cornice: the pillar must have a plain flat top, the same continuous straight-sided cross-section as its shaft, with only a small visible top plane and modest edge bevels. No separate lid, crown, brim, top slab, wider shoulder, or overhanging capital. (2) REMOVE the wide diamond-shaped pedestal. The foot/base must share exactly the SAME polygon orientation and matching edge directions as the pillar shaft. Corresponding faces and corners line up vertically; each foot edge is parallel to its corresponding shaft edge. It must not be rotated 45 degrees, inscribed, or show a forward-pointing diamond platform beneath a differently oriented column. (3) The base is almost flush with the pillar footprint: at most a very thin subtle ledge, approximately 0-3 percent outward on each side, no wide plinth, no prominent lateral wings, no broad gold diamond rim. It should read as one coherent tall monolithic Geo stone pillar, flat-topped and nearly flush-footed, retaining the existing glowing diamond carving and readable Genius Invokation TCG-like painted icon style. Keep all visible shapes centered with appropriate transparent padding, with solid opaque stone faces and true transparent background outside. Do not add text, numbers, arrows, scenery, character, frame, disc, extra spikes, or any new decorative elements. Change the structural geometry rather than simply painting over the original cap and pedestal.",
+  "revision_date": "2026-11-26",
+  "geometry_correction": "柱顶平顶无独立盖子；底座与柱身截面同向、对应边对齐，底座几乎不外突，不做内切或旋转菱形台。",
+  "status_id": 4103201,
+  "status_id2": "ST_Zhongli_Stele",
+  "count_mode": "Instances",
+  "show_count": false,
+  "host": "actual enemy FieldPosition; persists on empty field while the status remains active; C1 allows two independent positions",
+  "display_note": "The brief 3D appearance ending must not remove the real status or bottom icon."
+}

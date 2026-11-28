@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2068_PyroRegisvine/PyroSeed/2068_PyroSeed_Summon",
+  "source": "art_assets/UE/Enemies/2068_PyroRegisvine/PyroSeed/Blender/2068_PyroSeed_Summon.blend",
+  "file": "Enemies/2068_PyroRegisvine/PyroSeed/Exports/2068_PyroSeed_Summon.vfx.bytes",
+  "meshes": 4,
+  "tracks": 54,
+  "frames": 72,
+  "duration": 2.3666666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.3666666666666667
+  },
+  "bytes": 153010
+}

@@ -1,0 +1,657 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/GuobaBreath/视觉需求.md",
+  "variants": {
+    "Xiangling_GuobaBreath_SingleTarget": {
+      "effect": "Xiangling_GuobaBreath_SingleTarget",
+      "source": "Blender/Xiangling_GuobaBreath_SingleTarget.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/GuobaBreath/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Flame": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaSeatedBody": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaSeatedBody.fbx",
+          "objects": [
+            "PART_GuobaRoundBody",
+            "PART_GuobaCreamBelly",
+            "PART_GuobaBackTail"
+          ],
+          "vertices": 780,
+          "triangles": 1440,
+          "dimensions": [
+            0.7365759015083313,
+            0.6240000128746033,
+            0.7599999904632568
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaHeadAndFace": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaHeadAndFace.fbx",
+          "objects": [
+            "PART_GuobaBroadCheekHead",
+            "PART_GuobaRoundEar-1",
+            "PART_GuobaDarkInnerEar-1",
+            "PART_GuobaDarkEyePatch-1",
+            "PART_GuobaSmallCreamEye-1",
+            "PART_GuobaRoundEar1",
+            "PART_GuobaDarkInnerEar1",
+            "PART_GuobaDarkEyePatch1",
+            "PART_GuobaSmallCreamEye1",
+            "PART_GuobaDarkMaskBridge",
+            "PART_GuobaCreamMuzzleLeft",
+            "PART_GuobaCreamMuzzleRight",
+            "PART_GuobaCreamForehead",
+            "PART_GuobaSmallNose"
+          ],
+          "vertices": 3640,
+          "triangles": 6720,
+          "dimensions": [
+            0.8500000238418579,
+            0.5279000103473663,
+            0.6890000104904175
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaMouth": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaMouth.fbx",
+          "objects": [
+            "PART_GuobaMouthOpening"
+          ],
+          "vertices": 260,
+          "triangles": 480,
+          "dimensions": [
+            0.1720000058412552,
+            0.02800000086426735,
+            0.10999999940395355
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaPaw-1": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaPaw-1.fbx",
+          "objects": [
+            "PART_GuobaRoundPaw-1",
+            "PART_GuobaPawCreamClaw-10",
+            "PART_GuobaPawCreamClaw-11",
+            "PART_GuobaPawCreamClaw-12"
+          ],
+          "vertices": 1040,
+          "triangles": 1920,
+          "dimensions": [
+            0.27000001072883606,
+            0.25,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaFoot-1": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaFoot-1.fbx",
+          "objects": [
+            "PART_GuobaSeatedFoot-1",
+            "PART_GuobaDarkSole-1",
+            "PART_GuobaToePad-10",
+            "PART_GuobaToePad-11",
+            "PART_GuobaToePad-12"
+          ],
+          "vertices": 1300,
+          "triangles": 2400,
+          "dimensions": [
+            0.3399999886751175,
+            0.4049999862909317,
+            0.25999999046325684
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaPaw1": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaPaw1.fbx",
+          "objects": [
+            "PART_GuobaRoundPaw1",
+            "PART_GuobaPawCreamClaw10",
+            "PART_GuobaPawCreamClaw11",
+            "PART_GuobaPawCreamClaw12"
+          ],
+          "vertices": 1040,
+          "triangles": 1920,
+          "dimensions": [
+            0.27000001072883606,
+            0.25,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaFoot1": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaFoot1.fbx",
+          "objects": [
+            "PART_GuobaSeatedFoot1",
+            "PART_GuobaDarkSole1",
+            "PART_GuobaToePad10",
+            "PART_GuobaToePad11",
+            "PART_GuobaToePad12"
+          ],
+          "vertices": 1300,
+          "triangles": 2400,
+          "dimensions": [
+            0.3399999886751175,
+            0.4049999862909317,
+            0.25999999046325684
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_0_Outer": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaJet_29_0_Outer.fbx",
+          "objects": [
+            "PART_GuobaJet_29_0_Outer"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_0_Core": {
+          "file": "Exports/Xiangling_GuobaBreath_SingleTarget_GuobaJet_29_0_Core.fbx",
+          "objects": [
+            "PART_GuobaJet_29_0_Core"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 42,
+          "soundRole": "fire",
+          "element": "Pyro",
+          "kind": "one Guoba breath, actual targets share one contact",
+          "targets": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "launchFrames": [
+        29
+      ],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Original Guoba53frames/5.3s and Pyronado40frames/4.0s decoded in memory;24 timestamped samples of each inspected. Supplied front Guoba/chili and fire stills inspected. Original Guoba expiry not shown; quiet exit authored. Grass fire, enemies, reactions, water splashes and HUD excluded. Guoba geometry authored independently; project screen-parallel wheel deliberately differs from original world-ground orbit.",
+      "scope": "Editable source art, reusable native meshes and preview examples only. No Unity, official tables, state/Count changes, damage or timeline integration.",
+      "hero_frame": 42,
+      "focus": [
+        1.1750000715255737,
+        -0.10000000149011612,
+        -1.3799999952316284
+      ],
+      "detailScale": 5.7,
+      "actualHolderCardIndex": 5,
+      "guobaBody": "ONE_GuobaBodyAndPuppet",
+      "breathRoots": [
+        {
+          "start": 29,
+          "contact": 42,
+          "mouth": [
+            0.6250460147857666,
+            -0.15274527668952942,
+            -1.4813995361328125
+          ],
+          "targets": [
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "contract": "One articulated Guoba follows the actual status holder. Body, round ears, dark face mask, cream muzzle/belly, paws and feet remain separate native parts. Idle breath/head/paw phases are continuous. Existing mouth socket supplies each fire root; body returns to sitting and remains after finite fire. Overall demonstrates two breaths without respawning the body. Axial UV tail cutoff needs future material reconstruction; no gameplay trigger or lifetime is inferred.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiangling_GuobaBreath_SingleTarget.wav"
+      }
+    },
+    "Xiangling_GuobaBreath_ThreeTargets": {
+      "effect": "Xiangling_GuobaBreath_ThreeTargets",
+      "source": "Blender/Xiangling_GuobaBreath_ThreeTargets.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1022_Xiangling/GuobaBreath/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Spark": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Flame": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_Flame.fbx",
+          "objects": [
+            "PART_LayeredFlameTongue"
+          ],
+          "vertices": 621,
+          "triangles": 1056,
+          "dimensions": [
+            0.6138141751289368,
+            0.5939133167266846,
+            1.1699999868869781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaSeatedBody": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaSeatedBody.fbx",
+          "objects": [
+            "PART_GuobaRoundBody",
+            "PART_GuobaCreamBelly",
+            "PART_GuobaBackTail"
+          ],
+          "vertices": 780,
+          "triangles": 1440,
+          "dimensions": [
+            0.7365759015083313,
+            0.6240000128746033,
+            0.7599999904632568
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaHeadAndFace": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaHeadAndFace.fbx",
+          "objects": [
+            "PART_GuobaBroadCheekHead",
+            "PART_GuobaRoundEar-1",
+            "PART_GuobaDarkInnerEar-1",
+            "PART_GuobaDarkEyePatch-1",
+            "PART_GuobaSmallCreamEye-1",
+            "PART_GuobaRoundEar1",
+            "PART_GuobaDarkInnerEar1",
+            "PART_GuobaDarkEyePatch1",
+            "PART_GuobaSmallCreamEye1",
+            "PART_GuobaDarkMaskBridge",
+            "PART_GuobaCreamMuzzleLeft",
+            "PART_GuobaCreamMuzzleRight",
+            "PART_GuobaCreamForehead",
+            "PART_GuobaSmallNose"
+          ],
+          "vertices": 3640,
+          "triangles": 6720,
+          "dimensions": [
+            0.8500000238418579,
+            0.5279000103473663,
+            0.6890000104904175
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaMouth": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaMouth.fbx",
+          "objects": [
+            "PART_GuobaMouthOpening"
+          ],
+          "vertices": 260,
+          "triangles": 480,
+          "dimensions": [
+            0.1720000058412552,
+            0.02800000086426735,
+            0.10999999940395355
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaPaw-1": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaPaw-1.fbx",
+          "objects": [
+            "PART_GuobaRoundPaw-1",
+            "PART_GuobaPawCreamClaw-10",
+            "PART_GuobaPawCreamClaw-11",
+            "PART_GuobaPawCreamClaw-12"
+          ],
+          "vertices": 1040,
+          "triangles": 1920,
+          "dimensions": [
+            0.27000001072883606,
+            0.25,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaFoot-1": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaFoot-1.fbx",
+          "objects": [
+            "PART_GuobaSeatedFoot-1",
+            "PART_GuobaDarkSole-1",
+            "PART_GuobaToePad-10",
+            "PART_GuobaToePad-11",
+            "PART_GuobaToePad-12"
+          ],
+          "vertices": 1300,
+          "triangles": 2400,
+          "dimensions": [
+            0.3399999886751175,
+            0.4049999862909317,
+            0.25999999046325684
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaPaw1": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaPaw1.fbx",
+          "objects": [
+            "PART_GuobaRoundPaw1",
+            "PART_GuobaPawCreamClaw10",
+            "PART_GuobaPawCreamClaw11",
+            "PART_GuobaPawCreamClaw12"
+          ],
+          "vertices": 1040,
+          "triangles": 1920,
+          "dimensions": [
+            0.27000001072883606,
+            0.25,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaFoot1": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaFoot1.fbx",
+          "objects": [
+            "PART_GuobaSeatedFoot1",
+            "PART_GuobaDarkSole1",
+            "PART_GuobaToePad10",
+            "PART_GuobaToePad11",
+            "PART_GuobaToePad12"
+          ],
+          "vertices": 1300,
+          "triangles": 2400,
+          "dimensions": [
+            0.3399999886751175,
+            0.4049999862909317,
+            0.25999999046325684
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_0_Outer": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_0_Outer.fbx",
+          "objects": [
+            "PART_GuobaJet_29_0_Outer"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_0_Core": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_0_Core.fbx",
+          "objects": [
+            "PART_GuobaJet_29_0_Core"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_1_Outer": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_1_Outer.fbx",
+          "objects": [
+            "PART_GuobaJet_29_1_Outer"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_1_Core": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_1_Core.fbx",
+          "objects": [
+            "PART_GuobaJet_29_1_Core"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_2_Outer": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_2_Outer.fbx",
+          "objects": [
+            "PART_GuobaJet_29_2_Outer"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "GuobaJet_29_2_Core": {
+          "file": "Exports/Xiangling_GuobaBreath_ThreeTargets_GuobaJet_29_2_Core.fbx",
+          "objects": [
+            "PART_GuobaJet_29_2_Core"
+          ],
+          "vertices": 490,
+          "triangles": 952,
+          "dimensions": [
+            1.0405105948448181,
+            0.8484227061271667,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 42,
+          "soundRole": "fire",
+          "element": "Pyro",
+          "kind": "one Guoba breath, actual targets share one contact",
+          "targets": [
+            [
+              -7.795000076293945,
+              0.10000000149011612,
+              -0.6800000071525574
+            ],
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ],
+            [
+              -1.215000033378601,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "launchFrames": [
+        29
+      ],
+      "casterCardIndex": 5,
+      "referenceBoundary": "Original Guoba53frames/5.3s and Pyronado40frames/4.0s decoded in memory;24 timestamped samples of each inspected. Supplied front Guoba/chili and fire stills inspected. Original Guoba expiry not shown; quiet exit authored. Grass fire, enemies, reactions, water splashes and HUD excluded. Guoba geometry authored independently; project screen-parallel wheel deliberately differs from original world-ground orbit.",
+      "scope": "Editable source art, reusable native meshes and preview examples only. No Unity, official tables, state/Count changes, damage or timeline integration.",
+      "hero_frame": 42,
+      "focus": [
+        1.1750000715255737,
+        -0.10000000149011612,
+        -1.3799999952316284
+      ],
+      "detailScale": 5.7,
+      "actualHolderCardIndex": 5,
+      "guobaBody": "ONE_GuobaBodyAndPuppet",
+      "breathRoots": [
+        {
+          "start": 29,
+          "contact": 42,
+          "mouth": [
+            0.6250460147857666,
+            -0.15274527668952942,
+            -1.4813995361328125
+          ],
+          "targets": [
+            [
+              -7.795000076293945,
+              0.10000000149011612,
+              -0.6800000071525574
+            ],
+            [
+              -4.505000114440918,
+              0.10000000149011612,
+              -0.6899999976158142
+            ],
+            [
+              -1.215000033378601,
+              0.10000000149011612,
+              -0.6899999976158142
+            ]
+          ]
+        }
+      ],
+      "contract": "One articulated Guoba follows the actual status holder. Body, round ears, dark face mask, cream muzzle/belly, paws and feet remain separate native parts. Idle breath/head/paw phases are continuous. Existing mouth socket supplies each fire root; body returns to sitting and remains after finite fire. Overall demonstrates two breaths without respawning the body. Axial UV tail cutoff needs future material reconstruction; no gameplay trigger or lifetime is inferred.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xiangling_GuobaBreath_ThreeTargets.wav"
+      }
+    }
+  }
+}

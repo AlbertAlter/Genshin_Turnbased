@@ -24,7 +24,15 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     public BattlefieldSelectionPresentation selectionPresentation;
     private int playbackGeneration;
     private int waitingForSelection;
-    internal bool HasPendingResults => waitingForSelection > 0 || playback?.IsBusy == true;
+    private readonly List<BattlePresentationSequence> unsequenced = new List<BattlePresentationSequence>();
+    private sealed class Prepared
+    {
+        public BattlePresentationSequence Sequence;
+        public IReadOnlyList<BattlePresentationCue> Cues;
+        public readonly List<IBattlePresentationSequenceView> Views = new List<IBattlePresentationSequenceView>();
+    }
+    private Prepared pendingUnsequenced;
+    internal bool HasPendingResults => unsequenced.Count > 0 || waitingForSelection > 0 || playback?.IsBusy == true;
     public bool VoicesEnabled => skillTimeline == null || (skillTimeline.tracks & BattleSkillTracks.Voice) != 0;
     public BattleActionStyle ActionStyle => configuration?.ActionStyle;
 
@@ -42,7 +50,7 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
             enabled = false; return;
         }
         runtimeOwner = this;
-        playback = new BattlePresentationPlayback(Present, CancelViews, HasPendingHits);
+        playback = new BattlePresentationPlayback(Present, CancelViews, HasPendingHits, CanPresentCue, () => BattlePause.IsPaused);
         if (skillTimeline == null) skillTimeline = Resources.Load<BattleSkillTimelineTemplate>(BattleSkillTimelineTemplate.DefaultResource);
         if (skillTimeline == null) Debug.LogError("缺少默认技能时间轴模板，临时使用公共默认轨道。", this);
         ReloadConfiguration();
@@ -86,62 +94,126 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
     public void ShowResult(BattlePresentationRequest request, Action readyToContinue) => readyToContinue();
     public void Cancel(BattlePresentationRequest request) => CancelResults();
 
-    public async Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
+    public Task PlayResultsAsync(BattlePresentationSequence sequence, CancellationToken cancellation)
+        => PlayPreparedAsync(sequence, cancellation);
+
+    private Prepared Prepare(BattlePresentationSequence sequence)
     {
-        if (!isActiveAndEnabled || playback == null) return;
-        int generation = playbackGeneration;
-        if (selectionPresentation != null)
-        {
-            waitingForSelection++;
-            try { await selectionPresentation.WaitForSelectionExit(configuration.SelectionExitSeconds, cancellation); }
-            finally { waitingForSelection--; }
-        }
-        cancellation.ThrowIfCancellationRequested();
-        if (generation != playbackGeneration || !isActiveAndEnabled || playback == null) return;
         var cues = skillTimeline != null ? skillTimeline.Build(sequence, configuration.For)
             : BattleSkillTimeline.Build(sequence, configuration.For, BattleSkillTracks.All, BattleVoiceAnchor.CastStart);
         if (configuration.Attacks != null) cues = BattleAttackAnimationTimeline.Build(cues, configuration.Attacks.Find);
-        bool voicePrepared = false;
-        if (VoicesEnabled)
-            foreach (var view in views)
-                if (view is ICharacterVoiceSequenceView voice && (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled))
-                {
-                    voicePrepared = true;
-                    voice.PrepareVoices(cues);
-                }
-        if (!voicePrepared && LogManager.IsEnabled(LogCategory.Voice))
-            foreach (var cue in cues)
-                if (cue.SkillMarker == BattleSkillMarker.CastStart && cue.Result.TargetSide == BattleSide.Ally && cue.Result.Data is ActionEventData action)
-                    LogManager.Log(LogCategory.Voice, $"跳过 {action.SubjectId} {action.SkillId}，" +
-                        (VoicesEnabled ? "场景没有启用并注册的角色语音组件。" : "时间轴关闭了语音轨道。"));
-        await playback.Enqueue(cues, cancellation);
+        return PrepareViews(sequence, cues);
+    }
+    private Prepared PrepareViews(BattlePresentationSequence sequence, IReadOnlyList<BattlePresentationCue> cues)
+    {
+        var result = new Prepared { Sequence = sequence, Cues = cues };
+        try
+        {
+            // 先冻结历史附着，再等待选择退出，避免实时最终状态提前露出。
+            foreach (var view in views.ToArray())
+                if (view is IBattlePresentationSequenceView sequenceView &&
+                    (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled))
+                { result.Views.Add(sequenceView); sequenceView.PrepareSequence(sequence, cues); }
+            return result;
+        }
+        catch { Release(result); throw; }
+    }
+    private static void Release(Prepared prepared)
+    {
+        if (prepared == null) return;
+        foreach (var view in prepared.Views)
+            if (!(view is MonoBehaviour component) || component != null) view.ReleaseSequence(prepared.Sequence.ID);
+    }
+    private async Task PlayPreparedAsync(BattlePresentationSequence sequence, CancellationToken cancellation, Prepared prepared = null)
+    {
+        if (!isActiveAndEnabled || playback == null) { Release(prepared); return; }
+        int generation = playbackGeneration;
+        prepared = prepared ?? Prepare(sequence);
+        var cues = prepared.Cues;
+        try
+        {
+            if (selectionPresentation != null)
+            {
+                waitingForSelection++;
+                try { await selectionPresentation.WaitForSelectionExit(configuration.SelectionExitSeconds, cancellation); }
+                finally { waitingForSelection--; }
+            }
+            cancellation.ThrowIfCancellationRequested();
+            if (generation != playbackGeneration || !isActiveAndEnabled || playback == null) return;
+            bool voicePrepared = false;
+            if (VoicesEnabled)
+                foreach (var view in views)
+                    if (view is ICharacterVoiceSequenceView voice && (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled))
+                    {
+                        voicePrepared = true;
+                        voice.PrepareVoices(cues);
+                    }
+            if (!voicePrepared && LogManager.IsEnabled(LogCategory.Voice))
+                foreach (var cue in cues)
+                    if (cue.SkillMarker == BattleSkillMarker.CastStart && cue.Result.TargetSide == BattleSide.Ally && cue.Result.Data is ActionEventData action)
+                        LogManager.Log(LogCategory.Voice, $"跳过 {action.SubjectId} {action.SkillId}，" +
+                            (VoicesEnabled ? "场景没有启用并注册的角色语音组件。" : "时间轴关闭了语音轨道。"));
+            await playback.Enqueue(cues, cancellation);
+        }
+        finally { Release(prepared); }
     }
     public void SkipResults()
     {
         playbackGeneration++;
+        ClearUnsequenced();
         selectionPresentation?.SkipSelectionExit();
         playback?.Skip();
+        CancelViews(-1);
     }
     public void CancelResults()
     {
         playbackGeneration++;
+        ClearUnsequenced();
         selectionPresentation?.SkipSelectionExit();
         playback?.Cancel();
+        CancelViews(-1);
     }
 
     private void OnUnsequenced(BattlePresentationSequence sequence)
-        => BattleExecution.Observe(PlayResultsAsync(sequence, CancellationToken.None));
+    {
+        unsequenced.Add(sequence);
+        // 独立声明可在同一次同步结算中分别发布。每次补齐关联事实并立即冻结Before，
+        // 到下一次播放器Update才播放；不等LateUpdate后再捕获已经变化的实时元素池。
+        bool changesAuras = false;
+        foreach (var r in sequence.Results)
+            if (IsElementResult(r)) { changesAuras = true; break; }
+        if (!changesAuras) return;
+        Release(pendingUnsequenced); pendingUnsequenced = null;
+        var combined = BattlePresentationSequence.Combine(unsequenced);
+        var snapshots = new List<BattlePresentationCue>();
+        foreach (var r in combined.Results)
+            if (IsElementResult(r)) snapshots.Add(new BattlePresentationCue(r, 0, new BattlePresentationTiming()) {
+                SkillTracks = (skillTimeline != null ? skillTimeline.tracks : BattleSkillTracks.All) & BattleSkillTracks.ReactionIcons });
+        // 此阶段只冻结元素历史；完整的命中/语音/动作时间轴每帧统一建立一次。
+        pendingUnsequenced = PrepareViews(combined, snapshots);
+    }
+    private static bool IsElementResult(BattlePresentationResult r)
+        => r.Data is ElementContactEventData || r.Data is ReactionEventData || r.Data is AuraChangedEventData;
+    private void ClearUnsequenced()
+    {
+        Release(pendingUnsequenced); pendingUnsequenced = null; unsequenced.Clear();
+    }
     private void Update()
     {
         if (runtimeOwner != this) return;
+        if (unsequenced.Count > 0)
+        {
+            var sequence = BattlePresentationSequence.Combine(unsequenced);
+            ClearUnsequenced();
+            BattleExecution.Observe(PlayResultsAsync(sequence, CancellationToken.None));
+        }
         if (!BattleExecution.IsBusy) BattleExecution.TryInstallDefaultPlayer(this);
-        playback?.Advance(Mathf.Max(0, Time.unscaledDeltaTime));
+        playback?.Advance(Mathf.Max(0, BattlePause.DeltaTime));
     }
     private void OnSessionReset()
     {
+        // CancelResults也清除已派发后独立收尾的表现。
         CancelResults();
-        // 重置也清除已发出但仍在飘散的文字，-1表示该场景全部表现。
-        CancelViews(-1);
         BattleExecution.TryInstallDefaultPlayer(this);
     }
 
@@ -155,6 +227,13 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
                 return false;
             }
         return false;
+    }
+    private bool CanPresentCue(long id, BattlePresentationCue cue)
+    {
+        foreach (var view in views)
+            if (view is IBattlePresentationCueBarrier barrier &&
+                (!(view is MonoBehaviour component) || component != null && component.isActiveAndEnabled) && !barrier.CanPresent(id, cue)) return false;
+        return true;
     }
     private void Present(long id, BattlePresentationCue cue, Action<Exception> completed)
     {
@@ -197,7 +276,7 @@ public sealed class BattlefieldPresentationPlayer : MonoBehaviour, IBattleResult
         BattlePresentationResults.Unsequenced -= OnUnsequenced;
         BattleEventHub.SessionReset -= OnSessionReset;
         BattleExecution.ReleasePlayer(this);
-        CancelResults(); CancelViews(-1); views.Clear(); tickets.Clear(); playback = null;
+        CancelResults(); views.Clear(); tickets.Clear(); playback = null;
         if (runtimeOwner == this) runtimeOwner = null;
     }
 }

@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2062_RuinGuard/SpiralCloseIn/2062_SpiralCloseIn",
+  "source": "art_assets/UE/Enemies/2062_RuinGuard/SpiralCloseIn/Blender/2062_SpiralCloseIn.blend",
+  "file": "Enemies/2062_RuinGuard/SpiralCloseIn/Exports/2062_SpiralCloseIn.vfx.bytes",
+  "meshes": 6,
+  "tracks": 330,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 1238949
+}

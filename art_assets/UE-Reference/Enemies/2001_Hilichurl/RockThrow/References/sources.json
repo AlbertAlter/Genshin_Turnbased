@@ -1,0 +1,45 @@
+[
+  {
+    "file": "00_投石原作实机.webp",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Hilichurl#Abilities",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Hilichurl_Rock_Throw.gif/revision/latest",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "animated WebP",
+    "bytes": 1359084,
+    "width": 480,
+    "height": 270,
+    "frame_count": 45,
+    "duration_seconds": 3.6,
+    "modified": false,
+    "use": "造型、弹道和接触对照；原作人物准备、举持与等待动作不制作"
+  },
+  {
+    "file": "01_投石飞行截帧.png",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Hilichurl#Abilities",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Hilichurl_Rock_Throw.gif/revision/latest",
+    "source_file": "00_投石原作实机.webp",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 27,
+    "timestamp_seconds": 2.16,
+    "width": 480,
+    "height": 270,
+    "cropped": false,
+    "retouched": false,
+    "use": "投出后的石块及方向"
+  },
+  {
+    "file": "02_石块接近目标截帧.png",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Hilichurl#Abilities",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1b/Hilichurl_Rock_Throw.gif/revision/latest",
+    "source_file": "00_投石原作实机.webp",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 30,
+    "timestamp_seconds": 2.4,
+    "width": 480,
+    "height": 270,
+    "cropped": false,
+    "retouched": false,
+    "use": "接近目标时的尺度；不参考人物闪避"
+  }
+]

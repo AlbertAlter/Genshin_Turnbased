@@ -1,0 +1,99 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2040_Geochanter\\CrystalShield\\视觉需求.md",
+  "variants": {
+    "2040_CrystalShield": {
+      "effect": "2040_CrystalShield",
+      "source": "Blender/2040_CrystalShield.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2040_Geochanter\\CrystalShield\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "UpperCrystalShield": {
+          "file": "Exports/2040_CrystalShield_UpperCrystalShield.fbx",
+          "objects": [
+            "PART_UpperHalfHeightFadeShield"
+          ],
+          "vertices": 1625,
+          "dimensions": [
+            2.319999933242798,
+            1.0399999618530273,
+            2.0299999713897705
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 3072,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 1625,
+            "triangles": 3072,
+            "dimensions": [
+              2.319999933242798,
+              1.040000319480896,
+              2.0300000561085128
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_UpperHalfHeightFadeShield": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Geo",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2040_CrystalShield.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

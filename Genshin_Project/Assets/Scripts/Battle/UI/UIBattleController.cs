@@ -142,6 +142,7 @@ public class UIBattleController : MonoBehaviour
 
     void Update()
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return;
         // input 兜底：BattleInputController 由 BattleTester.Start 动态挂载，
         // 脚本执行顺序不确定，每帧尝试直到找到（找到后缓存）
         if (input == null) input = FindObjectOfType<BattleInputController>();
@@ -157,11 +158,11 @@ public class UIBattleController : MonoBehaviour
         RefreshFieldArea(bm); // 目标选择命中数显示 + 位置色块淡色（2026-08-14）
 
         // 出战角色若在我方回合开始时已经阵亡，自动进入不可取消的免费换人界面。
-        if (!_switching && bm.IsFreeDeathSwitchPending)
+        if (!_switching && bm.IsFreeForcedSwitchPending && !BattleExecution.IsBusy)
             BeginSwitch(true);
 
         // 按F进入换人（选择阶段内外均可，2026-08-14）；换人界面内F=确认
-        if (!_switching && Input.GetKeyDown(KeyCode.F))
+        if (!_switching && ProjectKeyBindings.Down(BattleShortcut.Switch))
         {
             OnSwitchButton();
             return;
@@ -170,10 +171,10 @@ public class UIBattleController : MonoBehaviour
         // 换人界面键盘操作（A/D切换，F/回车确认，X/Esc取消）
         if (_switching)
         {
-            if (Input.GetKeyDown(KeyCode.A)) MoveSwitchHighlight(-1);
-            else if (Input.GetKeyDown(KeyCode.D)) MoveSwitchHighlight(1);
-            else if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Space)) ConfirmSwitch();
-            else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X)) CancelSwitch();
+            if (ProjectKeyBindings.Down(BattleShortcut.Previous)) MoveSwitchHighlight(-1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Next)) MoveSwitchHighlight(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Switch) || ProjectKeyBindings.Down(BattleShortcut.Confirm)) ConfirmSwitch();
+            else if (Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel)) CancelSwitch();
         }
     }
 
@@ -597,7 +598,7 @@ public class UIBattleController : MonoBehaviour
             return;
         }
 
-        bool freeDeathSwitch = bm.IsFreeDeathSwitchPending;
+        bool freeDeathSwitch = bm.IsFreeForcedSwitchPending;
         int cost = bm.GetSwitchAPCost(_switchIndex);
         if (!bm.TrySwitchActiveAllyWithAPCost(_switchIndex))
         {
@@ -609,7 +610,7 @@ public class UIBattleController : MonoBehaviour
         }
 
         input.UICancelSelection();
-        LogManager.Log(LogCategory.UI, $"切换出战角色 -> {_switchIndex}{(freeDeathSwitch ? "（阵亡免费换人）" : string.Empty)}");
+        LogManager.Log(LogCategory.UI, $"切换出战角色 -> {_switchIndex}{(freeDeathSwitch ? "（免费强制换人）" : string.Empty)}");
         input.enabled = true; //退出换人界面：恢复战斗输入（2026-08-14）
         _switching = false;
         _forcedDeathSwitch = false;
@@ -617,7 +618,7 @@ public class UIBattleController : MonoBehaviour
 
     void CancelSwitch()
     {
-        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeDeathSwitchPending))
+        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeForcedSwitchPending))
             return;
         if (input != null) input.enabled = true; //退出换人界面：恢复战斗输入（2026-08-14）
         _switching = false;

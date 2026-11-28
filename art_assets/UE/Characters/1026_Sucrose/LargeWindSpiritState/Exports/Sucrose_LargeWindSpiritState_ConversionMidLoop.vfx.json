@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1026_Sucrose/LargeWindSpiritState/Sucrose_LargeWindSpiritState_ConversionMidLoop",
+  "source": "art_assets/UE/Characters/1026_Sucrose/LargeWindSpiritState/Blender/Sucrose_LargeWindSpiritState_ConversionMidLoop.blend",
+  "file": "Characters/1026_Sucrose/LargeWindSpiritState/Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop.vfx.bytes",
+  "meshes": 17,
+  "tracks": 43,
+  "frames": 348,
+  "duration": 11.566666666666666,
+  "loopStart": 0.8,
+  "loopEnd": 5.6,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.0,
+    "Loop_A_start": 0.8,
+    "Loop_B_start": 5.6,
+    "Exit_example_any_phase": 10.4,
+    "Clear": 11.566666666666666
+  },
+  "bytes": 466660
+}

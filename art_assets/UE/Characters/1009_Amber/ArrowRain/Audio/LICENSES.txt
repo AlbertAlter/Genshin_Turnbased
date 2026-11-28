@@ -1,0 +1,22 @@
+Audio sources and license
+
+All source works below are marked CC0 1.0 by their respective source pages.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+Format conversion, excerpts, crossfades and gain changes are listed per file in Sources.json.
+
+Swishes Sound Pack
+Creator: artisticdude
+Source: https://opengameart.org/content/swishes-sound-pack
+
+Fireball
+Creator: Julien Matthey; uploaded by diligentcircle
+Source: https://opengameart.org/content/fireball-1
+
+Fireplace Sound loop
+Creator: PagDev
+Source: https://opengameart.org/content/fireplace-sound-loop
+
+Fire Crackling
+Creator: AntumDeluge
+Source: https://opengameart.org/content/fire-crackling

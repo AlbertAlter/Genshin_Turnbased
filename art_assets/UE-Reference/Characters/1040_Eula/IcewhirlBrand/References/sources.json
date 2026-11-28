@@ -1,0 +1,54 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E4%BC%98%E8%8F%88",
+    "image_url": "https://patchwiki.biligame.com/images/ys/8/86/h1h3szxmlof0v9xrdd1dejdv21bcbwg.gif",
+    "title": "冰潮的涡旋.gif",
+    "recorded": "2026-11-27",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码16帧、2.4秒，实际查看跨全片的16张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "原作冰涡之剑的剑形、旋转/出射与命中；尚未核对完整对应片段。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\eula-references\\Eula_IcetideVortex_Observation.png",
+    "decoded_frames": 16,
+    "duration_seconds": 2.4,
+    "sampled_frames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ]
+  },
+  {
+    "source_type": "官方角色演示／视觉参考",
+    "page_url": "https://www.youtube.com/watch?v=Go7SeJ-yOL4",
+    "title": "New Character Demo - \"Eula: Flickering Candlelight\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已核对官方发布者、标题和入口，未完整观看或逐帧核对。",
+    "use": "检索该项原作模型、动作和效果，不能将演示入口等同于已确认所有阶段。"
+  },
+  {
+    "source_type": "音效参考",
+    "page_url": "https://www.youtube.com/watch?v=Go7SeJ-yOL4",
+    "title": "优菈官方演示音色检索",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "视频含配乐和语音，未逐段试听或提取，未确认可独立分离的技能音源。",
+    "use": "检索对应出现、动作、接触或退出音色；不提供未经核对的时间点。"
+  }
+]

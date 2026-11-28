@@ -1,0 +1,77 @@
+{
+  "recorded": "2026-11-27",
+  "ability_page": "https://genshin-impact.fandom.com/wiki/Geovishap#Abilities",
+  "visual_sources": [
+    {
+      "title": "Geovishap Spike Attack Geo.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Spike_Attack_Geo.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/53/Geovishap_Spike_Attack_Geo.gif/revision/latest?cb=20211211000742",
+      "size_bytes": 5486178,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Geovishap Spike Attack Pyro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Spike_Attack_Pyro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Geovishap_Spike_Attack_Pyro.gif/revision/latest?cb=20211211000752",
+      "size_bytes": 6955323,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Geovishap Spike Attack Hydro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Spike_Attack_Hydro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f1/Geovishap_Spike_Attack_Hydro.gif/revision/latest?cb=20211211000747",
+      "size_bytes": 6682747,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Geovishap Spike Attack Cryo.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Spike_Attack_Cryo.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/4/4a/Geovishap_Spike_Attack_Cryo.gif/revision/latest?cb=20211211000725",
+      "size_bytes": 5666510,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Geovishap Spike Attack Electro.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Spike_Attack_Electro.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f4/Geovishap_Spike_Attack_Electro.gif/revision/latest?cb=20211211000738",
+      "size_bytes": 7936774,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    },
+    {
+      "title": "Geovishap Jump Attack Geo.gif",
+      "page": "https://genshin-impact.fandom.com/wiki/File:Geovishap_Jump_Attack_Geo.gif",
+      "media_url": "https://static.wikia.nocookie.net/gensin-impact/images/5/5d/Geovishap_Jump_Attack_Geo.gif/revision/latest?cb=20211211000926",
+      "size_bytes": 7547374,
+      "metadata_verified": true,
+      "full_animation_viewed": false,
+      "local_gif_saved": false,
+      "static_frames": []
+    }
+  ],
+  "audio_sources": [
+    {
+      "url": "https://opengameart.org/content/impact",
+      "purpose": "岩刺／跳砸接触与碎屑的替代候选；具体文件待选定",
+      "listened": false,
+      "downloaded": false,
+      "time_range": null
+    }
+  ],
+  "inspection_scope": "能力条目与媒体元数据已核对；完整GIF未播放且不保存本地；下列static_frames仅在另有标记时表示已查看。音效未试听、截取或选定。",
+  "implementation_status": "Requirements only. No VFX asset, runtime hook, scene or table changes."
+}

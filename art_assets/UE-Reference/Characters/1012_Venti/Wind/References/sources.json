@@ -1,0 +1,32 @@
+{
+  "purpose": "Original Genshin Impact still references for Venti; not runtime textures or model extraction.",
+  "references": [
+    {
+      "file": "skyward_sonnet_ground.webp",
+      "role": "Skyward Sonnet press: ornamented ground ring, rolled wind and upward volume",
+      "article": "https://www.hoyolab.com/article/266614",
+      "image": "https://upload-os-bbs.hoyolab.com/upload/2021/03/25/3252499/54c0bbb42cb4bd4e33a150e2d81704ea_4938581060093467704.png"
+    },
+    {
+      "file": "skyward_sonnet_hold.webp",
+      "role": "Skyward Sonnet hold release: broad ground ornament, curled wind and fine streaks",
+      "article": "https://www.hoyolab.com/article/266614",
+      "image": "https://upload-os-bbs.hoyolab.com/upload/2021/03/25/3252499/1b7ae7ee0af0d7815f68da60c1ad3cfc_7416320733070906155.png"
+    },
+    {
+      "file": "upcurrent_reference.webp",
+      "role": "Wind current: transparent vertical streaks and depth; still only",
+      "article": "https://www.hoyolab.com/article/251372",
+      "image": "https://upload-os-bbs.hoyolab.com/upload/2021/03/18/55413681/6cc096f6e3ab8cd351ad449ae45d9b04_7615059071680892329.png"
+    },
+    {
+      "file": "stormeye_burst.webp",
+      "role": "Stormeye volume; distinct from Skyward Sonnet",
+      "article": "https://www.hoyolab.com/article/266614",
+      "image": "https://upload-os-bbs.hoyolab.com/upload/2021/03/25/3252499/dc45b31030875f4b44981c8c8009206b_47496301331925151.png"
+    }
+  ],
+  "official_demonstration": "https://www.youtube.com/watch?v=uwNXNHazS-I",
+  "inspection_boundary": "Existing downloaded static gameplay screenshots reviewed for shape and depth. The official demonstration link was located earlier but was not played. Stills do not prove animation timing or a complete lifecycle.",
+  "localGifOrVideoRetained": false
+}

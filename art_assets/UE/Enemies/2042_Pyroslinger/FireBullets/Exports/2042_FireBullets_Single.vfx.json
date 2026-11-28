@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2042_Pyroslinger/FireBullets/2042_FireBullets_Single",
+  "source": "art_assets/UE/Enemies/2042_Pyroslinger/FireBullets/Blender/2042_FireBullets_Single.blend",
+  "file": "Enemies/2042_Pyroslinger/FireBullets/Exports/2042_FireBullets_Single.vfx.bytes",
+  "meshes": 5,
+  "tracks": 28,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 95995
+}

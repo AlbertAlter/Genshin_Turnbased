@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public sealed class RoguelikeSaveValidator
 {
@@ -73,10 +74,14 @@ public sealed class RoguelikeSaveValidator
                     ? save.ResumePoint == RoguelikeResumePoint.BeforeBattle
                     : step == RoguelikeFlowStep.Settlement
                         ? save.ResumePoint == RoguelikeResumePoint.BattleVictory ||
+                          save.ResumePoint == RoguelikeResumePoint.BattleDefeat ||
                           save.ResumePoint == RoguelikeResumePoint.Event ||
                           save.ResumePoint == RoguelikeResumePoint.RewardSelection
                         : save.ResumePoint == RoguelikeResumePoint.ChapterCompleted;
             if (!matches) return Invalid("肉鸽流程步骤与存档恢复点不一致。");
+            if (save.ResumePoint == RoguelikeResumePoint.BattleDefeat && !save.Snapshot.Flow.BattleDefeated ||
+                save.ResumePoint == RoguelikeResumePoint.BattleVictory && save.Snapshot.Flow.BattleDefeated)
+                return Invalid("战斗胜负与结算恢复点不一致。");
         }
         return RoguelikeSaveResult.Success();
     }
@@ -137,7 +142,7 @@ public sealed class RoguelikeSaveValidator
             var pending = snapshot.PendingNodeReward;
             if (snapshot.Flow?.Step != RoguelikeFlowStep.Settlement || pending.NodeId != snapshot.CurrentNodeId ||
                 pending.StageId != (long)snapshot.CurrentChapterId * 100 + snapshot.CurrentStageIndex + 1 ||
-                pending.Items == null || pending.Items.Count == 0)
+                snapshot.Flow.Node?.FixedRewardClaimed == true || pending.Items == null || pending.Items.Count == 0)
                 return Invalid("待发节点奖励与当前结算节点不一致。");
             var rewardItems = new HashSet<string>(StringComparer.Ordinal);
             foreach (var item in pending.Items)
@@ -156,6 +161,9 @@ public sealed class RoguelikeSaveValidator
         if (snapshot.Flow != null)
         {
             var flow = snapshot.Flow;
+            if (flow.EventEnemyKills < 0) return Invalid("事件击杀数不能为负数。");
+            if (flow.BattleDefeated && flow.Step != RoguelikeFlowStep.Settlement)
+                return Invalid("战败结果只能存在于结算步骤。");
             if (!Enum.IsDefined(typeof(RoguelikeFlowStep), flow.Step) || string.IsNullOrWhiteSpace(flow.StepId))
                 return Invalid("肉鸽流程必须包含有效步骤和 StepId。");
             bool needsNode = flow.Step == RoguelikeFlowStep.Node || flow.Step == RoguelikeFlowStep.Battle ||
@@ -168,8 +176,11 @@ public sealed class RoguelikeSaveValidator
                     node.NodeId != snapshot.CurrentNodeId || node.StageIndex != snapshot.CurrentStageIndex ||
                     !snapshot.SelectedRouteNodeIds.Contains(node.NodeId) || snapshot.ClearedNodeIds.Contains(node.NodeId))
                     return Invalid("肉鸽当前节点上下文与路线进度不一致。");
-                if (flow.Step == RoguelikeFlowStep.Battle && node.Kind == RoguelikeNodeKind.Event)
-                    return Invalid("事件节点不能处于战斗步骤。");
+                if (flow.Step == RoguelikeFlowStep.Battle && node.Kind == RoguelikeNodeKind.Event &&
+                    string.IsNullOrWhiteSpace(node.EventBattleContentId))
+                    return Invalid("事件战斗缺少已确认的战斗配置。");
+                if (node.Kind != RoguelikeNodeKind.Event && !string.IsNullOrEmpty(node.EventBattleContentId))
+                    return Invalid("非事件节点不能携带事件战斗配置。");
                 if (node.IsChapterFinalBoss && node.Kind != RoguelikeNodeKind.Boss) return Invalid("章底Boss标记与节点类型不符。");
                 if (flow.AppearanceParticipants != null)
                 {
@@ -242,6 +253,23 @@ public sealed class RoguelikeSaveValidator
             if (!partyIds.Add(characterId))
                 return Invalid("队伍成员不能重复：" + characterId + "。");
         }
+
+        var battleNode = snapshot.Flow?.Node;
+        if (battleNode?.BattlePartyCharacterIds != null)
+        {
+            var members = new HashSet<int>(battleNode.BattlePartyCharacterIds);
+            var trials = new HashSet<int>(battleNode.TrialCharacterIds ?? new List<int>());
+            if (members.Count < 1 || members.Count > 4 || members.Count != battleNode.BattlePartyCharacterIds.Count ||
+                battleNode.TrialCharacterIds == null || trials.Count != battleNode.TrialCharacterIds.Count ||
+                !trials.IsSubsetOf(members) || members.Any(id => id <= 0 || !trials.Contains(id) && !characterIds.Contains(id)))
+                return Invalid("本场试用队伍成员无效。");
+            var configs = battleNode.TrialConfigurations;
+            if (configs == null || configs.Count != trials.Count || configs.Any(c => c == null || !trials.Contains(c.CharacterID) ||
+                string.IsNullOrWhiteSpace(c.ConfigID) || c.WeaponID <= 0 || c.ArtifactSetID <= 0 || c.Constellation < 0 || c.Constellation > 6 || c.Refinement < 1 || c.Refinement > 5) ||
+                configs.Select(c => c.CharacterID).Distinct().Count() != configs.Count)
+                return Invalid("本场试用构筑无效。");
+        }
+        else if (battleNode?.TrialCharacterIds != null || battleNode?.TrialConfigurations != null) return Invalid("试用构筑缺少本场出战队伍。");
 
         if (snapshot.PartyPresets != null)
         {

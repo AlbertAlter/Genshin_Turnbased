@@ -1,0 +1,441 @@
+{
+  "characterID": 1013,
+  "effect": "JeanDandelionSelfOrbit",
+  "fps": 30,
+  "loopFrames": [
+    25,
+    169
+  ],
+  "source": "Blender/Jean_DandelionField_State.blend",
+  "reference": "Existing Venti_StormEye_State.blend wind-arc mesh; Jean dandelion seeds with a mild mint elemental glow.",
+  "preview": "Preview/Jean_DandelionField_State.mp4",
+  "deliveryScope": "Blender art source and three native parts; Unity DandelionWindOrbit public playback, tunable parameters and numeric status mapping are integrated. Unity visual verification remains pending.",
+  "design": [
+    "one local-space spiral around the actual status holder",
+    "from above: front LEFT to RIGHT, right around to back, rear RIGHT to LEFT",
+    "counterclockwise around the card vertical axis, rising through three horizontal turns",
+    "soft tapered helical wind tail derived from Venti",
+    "white pappus seeds with warm seed bodies",
+    "mild mint elemental glow at each seed crown"
+  ],
+  "parts": {
+    "WindRibbon": {
+      "file": "Exports/Jean_WindRibbon.fbx",
+      "referenceRadius": 1.0725649501011658,
+      "vertices": 585
+    },
+    "SoftGlow": {
+      "file": "Exports/Jean_SoftGlow.fbx",
+      "referenceRadius": 1.0000000372529023,
+      "vertices": 193
+    },
+    "DandelionSeed": {
+      "file": "Exports/Jean_DandelionSeed.fbx",
+      "referenceRadius": 0.2778188121651846,
+      "vertices": 908
+    }
+  },
+  "runtime": "Bind the orbit to the actual status holder and status instance; no allied group footprint. Persistent state owns lifetime. Fade on removal. Source loop does not execute healing or damage.",
+  "audioBySource": {
+    "Jean_DandelionField_State": [
+      "Jean_Dandelion_Appear.wav",
+      "Jean_Dandelion_QuietLoop.wav",
+      "Jean_Dandelion_Exit.wav"
+    ]
+  },
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "files": 3,
+    "originalGameAudio": false,
+    "auditioned": false,
+    "runtimeConnected": false
+  },
+  "sourceLifecycle": {
+    "source": "Blender/Jean_DandelionField_State.blend",
+    "sourceFrames": [
+      1,
+      367
+    ],
+    "appearanceFrames": [
+      1,
+      25
+    ],
+    "loopFrames": [
+      25,
+      169
+    ],
+    "duplicateLoopEndpoints": [
+      169,
+      313
+    ],
+    "removalExampleFrames": [
+      331,
+      367
+    ],
+    "originalLoopFrames": [
+      1,
+      145
+    ],
+    "cycleSeconds": 4.8,
+    "holderBound": true,
+    "groupGroundField": false,
+    "meshes": 38,
+    "nativeModuloDriversRewritten": 98,
+    "scope": "Source-state appearance and removal only; no healing, hit or Unity changes."
+  },
+  "originalLoopFrames": [
+    1,
+    145
+  ],
+  "sourceStillValidation": {
+    "Jean_DandelionField_State": {
+      "poster": "Preview/Jean_DandelionField_State_Current.png",
+      "frame": 61,
+      "sourceFrameRange": [
+        1,
+        367
+      ],
+      "sourceReopened": true,
+      "referenceLayoutUnchanged": true,
+      "videosGenerated": false
+    }
+  },
+  "sourceLifecycleValidation": {
+    "originalLoopSamples": [
+      {
+        "frame": 1,
+        "error": 2.9802322387695312e-08
+      },
+      {
+        "frame": 25,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 61,
+        "error": 5.960464477539063e-08
+      },
+      {
+        "frame": 97,
+        "error": 1.1920928955078125e-07
+      },
+      {
+        "frame": 145,
+        "error": 1.1920928955078125e-07
+      },
+      {
+        "frame": 134.4,
+        "error": 1.0460615158081055e-05
+      },
+      {
+        "frame": 43.2,
+        "error": 2.5853514671325684e-06
+      }
+    ],
+    "originalComparison": "Underlying orbit/alpha plus retained original baked tilt recovered in memory; source reloaded before new-state checks.",
+    "loopEndpointFrames": [
+      25,
+      169,
+      313
+    ],
+    "phaseSamples": [
+      {
+        "frame": 1,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "frame": 8,
+        "alpha": [
+          0.0,
+          0.08860929310321808
+        ]
+      },
+      {
+        "frame": 18,
+        "alpha": [
+          0.018808063119649887,
+          0.5907801985740662
+        ]
+      },
+      {
+        "frame": 25,
+        "alpha": [
+          0.0,
+          0.8569347858428955
+        ]
+      },
+      {
+        "frame": 169,
+        "alpha": [
+          0.0,
+          0.8569347858428955
+        ]
+      },
+      {
+        "frame": 313,
+        "alpha": [
+          0.0,
+          0.8569347858428955
+        ]
+      },
+      {
+        "frame": 331,
+        "alpha": [
+          0.020609768107533455,
+          0.8598084449768066
+        ]
+      },
+      {
+        "frame": 349,
+        "alpha": [
+          0.0,
+          0.36041268706321716
+        ]
+      },
+      {
+        "frame": 367,
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "arbitraryRemovalChecks": [
+      {
+        "releaseFrame": 278.4,
+        "poseAtReleaseError": 1.0460615158081055e-05,
+        "clearFrame": 314.4
+      },
+      {
+        "releaseFrame": 331.2,
+        "poseAtReleaseError": 2.5853514671325684e-06,
+        "clearFrame": 367.2
+      }
+    ],
+    "stopNewBirthChecks": [
+      {
+        "object": "VFX_WindRibbon_00",
+        "lastAllowedFrame": 433.0000305175781
+      },
+      {
+        "object": "VFX_WindRibbon_01",
+        "lastAllowedFrame": 409.0000305175781
+      },
+      {
+        "object": "VFX_WindRibbon_02",
+        "lastAllowedFrame": 385.0
+      },
+      {
+        "object": "VFX_WindRibbon_03",
+        "lastAllowedFrame": 361.0
+      },
+      {
+        "object": "VFX_WindRibbon_04",
+        "lastAllowedFrame": 337.0
+      },
+      {
+        "object": "VFX_WindRibbon_05",
+        "lastAllowedFrame": 457.0000305175781
+      },
+      {
+        "object": "VFX_DandelionSeed_00",
+        "lastAllowedFrame": 433.0000305175781
+      },
+      {
+        "object": "VFX_SeedElementGlow_00",
+        "lastAllowedFrame": 433.0000305175781
+      },
+      {
+        "object": "VFX_DandelionSeed_01",
+        "lastAllowedFrame": 418.6000061035156
+      },
+      {
+        "object": "VFX_SeedElementGlow_01",
+        "lastAllowedFrame": 418.6000061035156
+      },
+      {
+        "object": "VFX_DandelionSeed_02",
+        "lastAllowedFrame": 404.20001220703125
+      },
+      {
+        "object": "VFX_SeedElementGlow_02",
+        "lastAllowedFrame": 404.20001220703125
+      },
+      {
+        "object": "VFX_DandelionSeed_03",
+        "lastAllowedFrame": 389.8000183105469
+      },
+      {
+        "object": "VFX_SeedElementGlow_03",
+        "lastAllowedFrame": 389.8000183105469
+      },
+      {
+        "object": "VFX_DandelionSeed_04",
+        "lastAllowedFrame": 375.4000244140625
+      },
+      {
+        "object": "VFX_SeedElementGlow_04",
+        "lastAllowedFrame": 375.4000244140625
+      },
+      {
+        "object": "VFX_DandelionSeed_05",
+        "lastAllowedFrame": 361.0
+      },
+      {
+        "object": "VFX_SeedElementGlow_05",
+        "lastAllowedFrame": 361.0
+      },
+      {
+        "object": "VFX_DandelionSeed_06",
+        "lastAllowedFrame": 346.6000061035156
+      },
+      {
+        "object": "VFX_SeedElementGlow_06",
+        "lastAllowedFrame": 346.6000061035156
+      },
+      {
+        "object": "VFX_DandelionSeed_07",
+        "lastAllowedFrame": 332.20001220703125
+      },
+      {
+        "object": "VFX_SeedElementGlow_07",
+        "lastAllowedFrame": 332.20001220703125
+      },
+      {
+        "object": "VFX_DandelionSeed_08",
+        "lastAllowedFrame": 461.8000183105469
+      },
+      {
+        "object": "VFX_SeedElementGlow_08",
+        "lastAllowedFrame": 461.8000183105469
+      },
+      {
+        "object": "VFX_DandelionSeed_09",
+        "lastAllowedFrame": 447.4000244140625
+      },
+      {
+        "object": "VFX_SeedElementGlow_09",
+        "lastAllowedFrame": 447.4000244140625
+      },
+      {
+        "object": "VFX_DandelionSeed_10",
+        "lastAllowedFrame": 433.0000305175781
+      },
+      {
+        "object": "VFX_SeedElementGlow_10",
+        "lastAllowedFrame": 433.0000305175781
+      },
+      {
+        "object": "VFX_DandelionSeed_11",
+        "lastAllowedFrame": 418.6000061035156
+      },
+      {
+        "object": "VFX_SeedElementGlow_11",
+        "lastAllowedFrame": 418.6000061035156
+      },
+      {
+        "object": "VFX_DandelionSeed_12",
+        "lastAllowedFrame": 404.20001220703125
+      },
+      {
+        "object": "VFX_SeedElementGlow_12",
+        "lastAllowedFrame": 404.20001220703125
+      },
+      {
+        "object": "VFX_DandelionSeed_13",
+        "lastAllowedFrame": 389.8000183105469
+      },
+      {
+        "object": "VFX_SeedElementGlow_13",
+        "lastAllowedFrame": 389.8000183105469
+      },
+      {
+        "object": "VFX_DandelionSeed_14",
+        "lastAllowedFrame": 375.4000244140625
+      },
+      {
+        "object": "VFX_SeedElementGlow_14",
+        "lastAllowedFrame": 375.4000244140625
+      },
+      {
+        "object": "VFX_DandelionSeed_15",
+        "lastAllowedFrame": 361.0
+      },
+      {
+        "object": "VFX_SeedElementGlow_15",
+        "lastAllowedFrame": 361.0
+      }
+    ],
+    "countChecks": [
+      {
+        "seeds": 0,
+        "wind": 0,
+        "visibleMeshes": 0
+      },
+      {
+        "seeds": 16,
+        "wind": 6,
+        "visibleMeshes": 38
+      },
+      {
+        "seeds": 10,
+        "wind": 6,
+        "visibleMeshes": 26
+      }
+    ],
+    "fullCycleSecondsChecked": [
+      2.4,
+      4.8,
+      6.0
+    ],
+    "holderBound": true,
+    "disabledAutoExecutionCheck": {
+      "validNativeDrivers": 387,
+      "noEmbeddedScripts": true
+    },
+    "packedUsedImages": 12,
+    "sourceReopened": true,
+    "stills": [
+      {
+        "frame": 1,
+        "file": "Preview/Jean_DandelionField_State_00_Clear.png"
+      },
+      {
+        "frame": 8,
+        "file": "Preview/Jean_DandelionField_State_01_LightWind.png"
+      },
+      {
+        "frame": 18,
+        "file": "Preview/Jean_DandelionField_State_02_SeedsAppear.png"
+      },
+      {
+        "frame": 61,
+        "file": "Preview/Jean_DandelionField_State_Current.png"
+      },
+      {
+        "frame": 169,
+        "file": "Preview/Jean_DandelionField_State_03_Loop.png"
+      },
+      {
+        "frame": 340,
+        "file": "Preview/Jean_DandelionField_State_04_Release.png"
+      },
+      {
+        "frame": 355,
+        "file": "Preview/Jean_DandelionField_State_05_RemainingGlow.png"
+      },
+      {
+        "frame": 367,
+        "file": "Preview/Jean_DandelionField_State_06_Clear.png"
+      }
+    ],
+    "scope": "Blender source only; no FBX or Unity changes.",
+    "startEndNativePngMeanAbsoluteDifference": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+}

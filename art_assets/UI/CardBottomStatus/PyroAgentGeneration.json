@@ -1,0 +1,28 @@
+{
+  "tool": "builtin image_gen",
+  "mode": "edit",
+  "asset": "art_assets/UI/CardBottomStatus/PyroAgentClone.png",
+  "runtime_asset": "Genshin_Project/Assets/StreamingAssets/art_assets/UI/CardBottomStatus/PyroAgentClone.png",
+  "runtime_guid": "04ca7e5373f6491ebb7ba607ca870bbd",
+  "references": [
+    {
+      "path": "art_assets/Enemy_Icon/2060_01.png",
+      "role": "identity and hood/mask shape"
+    },
+    {
+      "path": "art_assets/UI/CardBottomStatus/MutantElectroCharge.png",
+      "role": "clean small UI icon finish and transparent padding only"
+    }
+  ],
+  "prompt": "Use case: identity-preserve / stylized game UI icon. Asset: transparent PNG card-bottom status icon for a Pyro Agent shadow clone. Transform the FIRST reference portrait into a new, greatly simplified hooded mask head icon. The first reference is the identity reference: retain the sharp pointed hood, angular central mask, slanted glowing eyes and recognizable cheek shapes, but simplify aggressively for readability at 32 and 48 pixels. The SECOND reference is only the project's clean small status-icon finish and generous transparent padding, not a subject or palette reference. Main palette must be BLACK and DARK RED: near-black charcoal hood, deep crimson mask, restrained scarlet-red edge accents and two small red-orange eyes. Reduce the original silver/white armor to dark crimson facets; no large pale or gold areas. A single centered head with only a very small collar, no body, no multiple heads, no number or text. Bold clean silhouette, flat or softly cel-shaded two-to-three-tone shapes, very few large facets, no realistic textures, fine etching, grain, haze or glow cloud. Genuine transparent background, no colored disc, no square backdrop, no badge rim, no frame, no fake checkerboard. Keep every visible part comfortably inside a centered circular safe area of radius 40% of the square canvas; the overall subject should occupy about 68–74% of the canvas height, with generous clear padding around the pointed hood and collar. Entire hood must be visible, not cropped. It should remain readable on the project's muted brown battlefield. This is a shadow-clone status token, not a full portrait illustration.",
+  "output": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "width": 1254,
+    "height": 1254,
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "max_normalized_radius_at_alpha8": 0.7200996677631208
+  },
+  "verification": "32/48/64 pixel previews inspected on the project brown background; source and runtime copied without resizing, recoloring or alpha editing. New GUID checked unique. Existing public card-bottom component uses Instances for 4206005; Unity visual import/play verification not run."
+}

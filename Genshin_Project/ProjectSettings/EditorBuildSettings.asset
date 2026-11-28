@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scene/RoguelikeShop.unity
     guid: 14ed9e8e0b534af7a103320dadb54359
+  - enabled: 1
+    path: Assets/Scene/RoguelikeEvent.unity
+    guid: 4dac6792a0ba4a7f88e92e6d4fd147a1
   m_configObjects: {}

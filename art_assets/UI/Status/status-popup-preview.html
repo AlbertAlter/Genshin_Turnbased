@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>状态名称与 Buff / Debuff 特效预览</title>
+  <link rel="stylesheet" href="status-popup.css">
+  <script src="vendor/jszip.min.js" defer></script>
+  <script src="status-popup.js" defer></script>
+  <script src="status-popup-excel.js" defer></script>
+  <script src="card-orbit-preview.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div><h1>状态特效 · 预览</h1><p class="subtitle">名称浮层 · Buff 上升 · Debuff 下降</p></div>
+    <a href="status-name-background.svg" target="_blank" rel="noopener">查看透明背景 SVG</a>
+  </header>
+  <main>
+    <aside class="controls" aria-label="预览设置"><div class="control-scroll">
+      <label class="section-title" for="status-text">状态名称</label>
+      <textarea id="status-text" spellcheck="false" aria-describedby="text-help">攻击力提升</textarea>
+      <p id="text-help" class="help">输入后即时预览；支持手动换行和长名称自动换行。</p>
+      <div class="samples" aria-label="示例文字">
+        <button type="button" data-sample="护盾强化">短名称</button>
+        <button type="button" data-sample="攻击力与元素精通同时提高">长名称</button>
+        <button type="button" data-sample="白垩之术\n元素精通提升">两行</button>
+        <button type="button" data-sample="Elemental Mastery Increased">English</button>
+      </div>
+      <details open id="orbit-controls"><summary>Buff / Debuff 状态箭头</summary>
+        <label class="select-label" for="orbit-mode">效果类型<select id="orbit-mode"><option value="Buff">Buff · 向上</option><option value="Debuff">Debuff · 向下</option></select></label>
+        <div class="excel-actions"><button type="button" id="orbit-play">施加状态</button><button type="button" id="orbit-pause">暂停</button><button type="button" id="orbit-stop">停止</button></div>
+        <p class="help">施加时短暂显示，箭头和基本动线固定位置直上 / 直下。</p>
+        <details><summary>移动、箭头与光效参数</summary><div id="orbit-settings"></div><div id="orbit-colors"></div></details>
+        <a class="workbook-link" href="../../../Charts/UI/StatusPopUp/CardOrbitArrows.xlsx">Charts/UI/StatusPopUp/CardOrbitArrows.xlsx</a>
+        <div class="excel-actions"><button id="orbit-excel-connect" type="button">连接箭头Excel</button><button id="orbit-excel-read" type="button" disabled>重新读取</button><button id="orbit-excel-save" type="button" disabled>写回Excel</button></div>
+        <p id="orbit-excel-status" class="help" role="status">调整先用于预览，点击写回才保存。Unity 临时场景：StatusEffectsPreview。</p>
+      </details>
+      <details open class="excel-panel"><summary>Excel 参数表</summary>
+        <a class="workbook-link" href="../../../Charts/UI/StatusPopUp/StatusPopupPreview.xlsx">Charts/UI/StatusPopUp/StatusPopupPreview.xlsx</a>
+        <div class="excel-actions"><button id="excel-connect" type="button">连接Excel</button><button id="excel-read" type="button" disabled>重新读取</button><button id="excel-save" type="button" disabled>写回Excel</button></div>
+        <p id="excel-status" class="help" role="status">连接 Charts/UI/StatusPopUp 下的参数表。只在点击写回时保存。</p>
+      </details>
+      <details open><summary>位置与卡牌</summary>
+        <p class="help">默认锚定卡牌上沿，底边留出卡高3%的间距。X向右为正，Y向上为正。</p>
+        <label class="select-label" for="anchor">锚点<select id="anchor"><option value="1">卡牌上沿</option><option value="0.5">卡牌中线</option><option value="0">卡牌下沿</option></select></label>
+        <div id="position-settings"></div>
+        <label class="check"><input id="guides" type="checkbox" checked>显示锚点与起点辅助线</label>
+        <button id="unity-reset" class="text-button" type="button">恢复 Unity 位置与动效参数</button>
+      </details>
+      <details open><summary>动效与连续弹出</summary><div id="motion-settings"></div><p class="help" id="timing-summary"></p></details>
+      <details><summary>字号、换行与留白</summary><div id="text-settings"></div><p class="help">默认25号，沿用技能长按弹窗正文。底板随文字宽高适配，换行后向上增高。</p></details>
+      <details><summary>底板、金边与颜色</summary><div id="background-settings"></div><div id="color-settings"></div></details>
+      <label class="check"><input id="background-only" type="checkbox">隐藏文字，仅看底板</label>
+      <label class="check"><input id="loop" type="checkbox">循环播放弹出效果</label>
+      <div class="tools"><button id="copy-settings" class="text-button" type="button">复制当前参数</button><button id="reset" class="text-button" type="button">恢复全部默认</button></div>
+      <details id="export-panel" hidden><summary>当前参数</summary><textarea id="export-text" readonly spellcheck="false" aria-label="导出参数"></textarea></details>
+      <p class="help" id="save-note" role="status">参数在本机记住，刷新后保留。</p>
+      </div><div class="actions-box">
+      <div class="actions">
+        <button id="play" type="button">模拟弹出</button>
+        <button id="still" class="secondary" type="button">静止查看</button>
+        <button id="burst" class="secondary burst" type="button">连续弹出3条</button>
+      </div>
+      <p class="help">Ctrl + Enter 重播 · Esc 静止查看</p>
+      </div></aside>
+    <section class="preview" aria-label="卡牌模拟">
+      <div class="preview-head"><h2>卡牌模拟</h2><span class="mode" id="mode" role="status">静止查看</span></div>
+      <div class="stage" id="stage">
+        <div class="canvas">
+          <canvas id="orbit-behind" class="orbit-canvas" width="960" height="720" aria-hidden="true"></canvas>
+          <div class="card">
+            <img class="card-art" src="../../Character_Bare/1009_01.png" alt="安柏卡面" draggable="false">
+            <img class="card-frame" src="../../Character_Bare/Frame/01.png" alt="" draggable="false">
+          </div>
+          <div class="card-health" aria-hidden="true"></div>
+          <div class="card-caption">安柏</div>
+          <canvas id="orbit-front" class="orbit-canvas" width="960" height="720" aria-hidden="true"></canvas>
+          <div class="guide card-guide" aria-hidden="true"><span>卡牌上沿</span></div>
+          <div class="guide popup-guide" aria-hidden="true"><span>浮层起点底边</span></div>
+          <div class="anchor-cross" aria-hidden="true"></div>
+          <div id="popup-layer" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="preview-foot"><span>卡牌、文字和底板整体等比缩放</span><output id="measurements" aria-label="浮层尺寸"></output></div>
+      <p class="position-info" id="position-info"></p>
+    </section>
+  </main>
+  <template id="popup-template"><div class="status-name"><span></span></div></template>
+</body>
+</html>

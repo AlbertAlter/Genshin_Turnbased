@@ -1,0 +1,78 @@
+[
+  {
+    "file": "00_原作跃起重砸实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bd/Large_Cryo_Slime_Leap.gif/revision/latest?cb=20220104115950",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "downloaded": "2026-11-26",
+    "type": "原作实机动图",
+    "format": "WEBP",
+    "width": 480,
+    "height": 270,
+    "frame_count": 67,
+    "duration_seconds": 5.36,
+    "modified": false,
+    "use": "参考下砸和接触冰屑；项目按用户要求让卡牌原位消失后从目标上方落下，不照搬原作起跳过程。"
+  },
+  {
+    "file": "01_PVZ倭瓜攻击动作.webp",
+    "image_url": "https://static.wikia.nocookie.net/plantsvszombies/images/b/b3/Squash_Attack.gif/revision/latest?cb=20200625173726",
+    "page_url": "https://plantsvszombies.fandom.com/wiki/Squash/Gallery",
+    "downloaded": "2026-11-26",
+    "type": "PVZ原游戏攻击动作透明动图，非完整实机画面；项目动作节奏参考",
+    "format": "WEBP",
+    "width": 600,
+    "height": 600,
+    "frame_count": 61,
+    "duration_seconds": 2.55,
+    "modified": false,
+    "use": "参考倭瓜快速压落和落地压扁的节奏、重量感；项目卡牌从目标上方出现，不使用原位起跳过程。"
+  },
+  {
+    "file": "02_原作重砸接触截帧.png",
+    "source_file": "00_原作跃起重砸实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bd/Large_Cryo_Slime_Leap.gif/revision/latest?cb=20220104115950",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 46,
+    "timestamp_seconds": 3.68,
+    "cropped": false,
+    "retouched": false,
+    "use": "下砸接触的短促蓝白亮部和冰屑，不照搬起跳"
+  },
+  {
+    "file": "03_原作冰屑外散截帧.png",
+    "source_file": "00_原作跃起重砸实机.webp",
+    "image_url": "https://static.wikia.nocookie.net/gensin-impact/images/b/bd/Large_Cryo_Slime_Leap.gif/revision/latest?cb=20220104115950",
+    "page_url": "https://genshin-impact.fandom.com/wiki/Large_Cryo_Slime#Abilities",
+    "type": "原作实机动图截帧",
+    "frame_index_zero_based": 49,
+    "timestamp_seconds": 3.92,
+    "cropped": false,
+    "retouched": false,
+    "use": "接触后冰片外散与冷雾收尾"
+  },
+  {
+    "file": "04_倭瓜下砸动作截帧.png",
+    "source_file": "01_PVZ倭瓜攻击动作.webp",
+    "image_url": "https://static.wikia.nocookie.net/plantsvszombies/images/b/b3/Squash_Attack.gif/revision/latest?cb=20200625173726",
+    "page_url": "https://plantsvszombies.fandom.com/wiki/Squash/Gallery",
+    "type": "PVZ游戏攻击动作透明动图截帧，非实机截图",
+    "frame_index_zero_based": 44,
+    "timestamp_seconds": 1.59,
+    "cropped": false,
+    "retouched": false,
+    "use": "快速压落时的形变与重心"
+  },
+  {
+    "file": "05_倭瓜落地压扁截帧.png",
+    "source_file": "01_PVZ倭瓜攻击动作.webp",
+    "image_url": "https://static.wikia.nocookie.net/plantsvszombies/images/b/b3/Squash_Attack.gif/revision/latest?cb=20200625173726",
+    "page_url": "https://plantsvszombies.fandom.com/wiki/Squash/Gallery",
+    "type": "PVZ游戏攻击动作透明动图截帧，非实机截图",
+    "frame_index_zero_based": 47,
+    "timestamp_seconds": 1.68,
+    "cropped": false,
+    "retouched": false,
+    "use": "落地横展、纵向压扁的重量感"
+  }
+]

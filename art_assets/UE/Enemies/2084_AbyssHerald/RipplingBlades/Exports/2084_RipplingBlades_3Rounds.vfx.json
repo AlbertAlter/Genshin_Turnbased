@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2084_AbyssHerald/RipplingBlades/2084_RipplingBlades_3Rounds",
+  "source": "art_assets/UE/Enemies/2084_AbyssHerald/RipplingBlades/Blender/2084_RipplingBlades_3Rounds.blend",
+  "file": "Enemies/2084_AbyssHerald/RipplingBlades/Exports/2084_RipplingBlades_3Rounds.vfx.bytes",
+  "meshes": 6,
+  "tracks": 255,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 740136
+}

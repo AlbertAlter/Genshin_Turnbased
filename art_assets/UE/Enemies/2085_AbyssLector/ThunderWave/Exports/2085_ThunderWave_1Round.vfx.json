@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2085_AbyssLector/ThunderWave/2085_ThunderWave_1Round",
+  "source": "art_assets/UE/Enemies/2085_AbyssLector/ThunderWave/Blender/2085_ThunderWave_1Round.blend",
+  "file": "Enemies/2085_AbyssLector/ThunderWave/Exports/2085_ThunderWave_1Round.vfx.bytes",
+  "meshes": 11,
+  "tracks": 68,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 255989
+}

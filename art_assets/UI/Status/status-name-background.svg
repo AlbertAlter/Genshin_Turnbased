@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="72" viewBox="0 0 600 72" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="ends" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="white" stop-opacity="0"/>
+      <stop offset=".08" stop-color="white" stop-opacity=".35"/>
+      <stop offset=".20" stop-color="white"/>
+      <stop offset=".80" stop-color="white"/>
+      <stop offset=".92" stop-color="white" stop-opacity=".35"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="fade" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+      <rect width="1" height="1" fill="url(#ends)"/>
+    </mask>
+  </defs>
+  <g mask="url(#fade)">
+    <rect width="600" height="72" fill="#30251c" fill-opacity=".20"/>
+    <path d="M0 .75 H600 M0 71.25 H600" fill="none" stroke="#ddbf85" stroke-opacity=".88" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+  </g>
+</svg>

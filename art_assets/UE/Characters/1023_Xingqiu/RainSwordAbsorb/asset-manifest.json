@@ -1,0 +1,1597 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+  "variants": {
+    "Xingqiu_RainSwordAbsorb_ConsumeOne": {
+      "effect": "Xingqiu_RainSwordAbsorb_ConsumeOne",
+      "source": "Blender/Xingqiu_RainSwordAbsorb_ConsumeOne.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLocalBlockFan": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_ConsumeOne_RainSwordLocalBlockFan.fbx",
+          "objects": [
+            "PART_ThinLocalRainSwordBlockWater"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            0.2757723480463028,
+            0.0,
+            0.8820608854293823
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinLocalRainSwordBlockWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              0.2757723480463028,
+              1.4370594669799175e-07,
+              0.8820608854293823
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 45,
+          "soundRole": "bubble",
+          "kind": "one actual local sword consumption after incoming action; no extra outgoing damage"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 47,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "rainSwordAbsorb": {
+        "host": 5,
+        "before": 3,
+        "after": 2,
+        "contact": 45,
+        "consumedIndex": 1,
+        "refill": null,
+        "otherHost": null,
+        "otherCount": 4
+      },
+      "contract": "One local sword only. Remaining identities keep running and ease spacing. BurstRefill rebuilds only the consumed gap after local break; partial incoming hits do not consume more swords. Last sword goes visually0, without inventing a new ring or a second expiry. No real state/Count/heal transaction.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_RainSwordAbsorb_ConsumeOne.wav"
+      }
+    },
+    "Xingqiu_RainSwordAbsorb_BurstRefill": {
+      "effect": "Xingqiu_RainSwordAbsorb_BurstRefill",
+      "source": "Blender/Xingqiu_RainSwordAbsorb_BurstRefill.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLocalBlockFan": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_BurstRefill_RainSwordLocalBlockFan.fbx",
+          "objects": [
+            "PART_ThinLocalRainSwordBlockWater"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            0.2757723480463028,
+            0.0,
+            0.8820608854293823
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinLocalRainSwordBlockWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              0.2757723480463028,
+              1.4370594669799175e-07,
+              0.8820608854293823
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 45,
+          "soundRole": "bubble",
+          "kind": "one actual local sword consumption after incoming action; no extra outgoing damage"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 47,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "rainSwordAbsorb": {
+        "host": 5,
+        "before": 3,
+        "after": 2,
+        "contact": 45,
+        "consumedIndex": 1,
+        "refill": 57,
+        "otherHost": null,
+        "otherCount": 4
+      },
+      "contract": "One local sword only. Remaining identities keep running and ease spacing. BurstRefill rebuilds only the consumed gap after local break; partial incoming hits do not consume more swords. Last sword goes visually0, without inventing a new ring or a second expiry. No real state/Count/heal transaction.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_RainSwordAbsorb_BurstRefill.wav"
+      }
+    },
+    "Xingqiu_RainSwordAbsorb_LastSword": {
+      "effect": "Xingqiu_RainSwordAbsorb_LastSword",
+      "source": "Blender/Xingqiu_RainSwordAbsorb_LastSword.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLocalBlockFan": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_LastSword_RainSwordLocalBlockFan.fbx",
+          "objects": [
+            "PART_ThinLocalRainSwordBlockWater"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            0.2757723480463028,
+            0.0,
+            0.8820608854293823
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinLocalRainSwordBlockWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              0.2757723480463028,
+              1.4370594669799175e-07,
+              0.8820608854293823
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 45,
+          "soundRole": "bubble",
+          "kind": "one actual local sword consumption after incoming action; no extra outgoing damage"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 47,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "rainSwordAbsorb": {
+        "host": 5,
+        "before": 1,
+        "after": 0,
+        "contact": 45,
+        "consumedIndex": 0,
+        "refill": null,
+        "otherHost": null,
+        "otherCount": 4
+      },
+      "contract": "One local sword only. Remaining identities keep running and ease spacing. BurstRefill rebuilds only the consumed gap after local break; partial incoming hits do not consume more swords. Last sword goes visually0, without inventing a new ring or a second expiry. No real state/Count/heal transaction.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_RainSwordAbsorb_LastSword.wav"
+      }
+    },
+    "Xingqiu_RainSwordAbsorb_MultiHitOneConsume": {
+      "effect": "Xingqiu_RainSwordAbsorb_MultiHitOneConsume",
+      "source": "Blender/Xingqiu_RainSwordAbsorb_MultiHitOneConsume.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLocalBlockFan": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_MultiHitOneConsume_RainSwordLocalBlockFan.fbx",
+          "objects": [
+            "PART_ThinLocalRainSwordBlockWater"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            0.2757723480463028,
+            0.0,
+            0.8820608854293823
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinLocalRainSwordBlockWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              0.2757723480463028,
+              1.4370594669799175e-07,
+              0.8820608854293823
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 45,
+          "soundRole": "bubble",
+          "kind": "one actual local sword consumption after incoming action; no extra outgoing damage"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 47,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "rainSwordAbsorb": {
+        "host": 5,
+        "before": 3,
+        "after": 2,
+        "contact": 45,
+        "consumedIndex": 1,
+        "refill": null,
+        "otherHost": null,
+        "otherCount": 4
+      },
+      "contract": "One local sword only. Remaining identities keep running and ease spacing. BurstRefill rebuilds only the consumed gap after local break; partial incoming hits do not consume more swords. Last sword goes visually0, without inventing a new ring or a second expiry. No real state/Count/heal transaction.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_RainSwordAbsorb_MultiHitOneConsume.wav"
+      }
+    },
+    "Xingqiu_RainSwordAbsorb_OtherCardUnaffected": {
+      "effect": "Xingqiu_RainSwordAbsorb_OtherCardUnaffected",
+      "source": "Blender/Xingqiu_RainSwordAbsorb_OtherCardUnaffected.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/RainSwordAbsorb/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLocalBlockFan": {
+          "file": "Exports/Xingqiu_RainSwordAbsorb_OtherCardUnaffected_RainSwordLocalBlockFan.fbx",
+          "objects": [
+            "PART_ThinLocalRainSwordBlockWater"
+          ],
+          "vertices": 343,
+          "triangles": 576,
+          "dimensions": [
+            0.2757723480463028,
+            0.0,
+            0.8820608854293823
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinLocalRainSwordBlockWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 343,
+            "triangles": 576,
+            "dimensions": [
+              0.2757723480463028,
+              1.4370594669799175e-07,
+              0.8820608854293823
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 45,
+          "soundRole": "bubble",
+          "kind": "one actual local sword consumption after incoming action; no extra outgoing damage"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 47,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 7,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "rainSwordAbsorb": {
+        "host": 5,
+        "before": 3,
+        "after": 2,
+        "contact": 45,
+        "consumedIndex": 1,
+        "refill": null,
+        "otherHost": 7,
+        "otherCount": 4
+      },
+      "contract": "One local sword only. Remaining identities keep running and ease spacing. BurstRefill rebuilds only the consumed gap after local break; partial incoming hits do not consume more swords. Last sword goes visually0, without inventing a new ring or a second expiry. No real state/Count/heal transaction.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_RainSwordAbsorb_OtherCardUnaffected.wav"
+      }
+    }
+  }
+}

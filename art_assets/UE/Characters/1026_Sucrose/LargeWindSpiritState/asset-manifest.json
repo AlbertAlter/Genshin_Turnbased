@@ -1,0 +1,2021 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1026_Sucrose/LargeWindSpiritState/视觉需求.md",
+  "variants": {
+    "Sucrose_LargeWindSpiritState_State": {
+      "effect": "Sucrose_LargeWindSpiritState_State",
+      "source": "Blender/Sucrose_LargeWindSpiritState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1026_Sucrose/LargeWindSpiritState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "WindWingUpper-1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_WindWingUpper-1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_-1",
+            "PART_FlowingWingVein_Upper_-1_0",
+            "PART_FlowingWingVein_Upper_-1_1",
+            "PART_FlowingWingVein_Upper_-1_2",
+            "PART_BrokenWindWingEdge_Upper_-1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_-1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_-1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingUpper1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_WindWingUpper1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_1",
+            "PART_FlowingWingVein_Upper_1_0",
+            "PART_FlowingWingVein_Upper_1_1",
+            "PART_FlowingWingVein_Upper_1_2",
+            "PART_BrokenWindWingEdge_Upper_1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindLightMote": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_WindLightMote.fbx",
+          "objects": [
+            "PART_FineWindLightMote"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04362872242927551,
+            0.04362872242927551,
+            0.17999999970197678
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FineWindLightMote": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04362872242927551,
+              0.0436287522315979,
+              0.17999999970197678
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon0.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_0"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.2734357118606567,
+            0.4899982810020447,
+            0.34663158655166626
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.2734357118606567,
+              0.4899983467059599,
+              0.34663164615631104
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon1.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_1"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.4673446118831635,
+            0.4899982810020447,
+            0.35569170117378235
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.4673446118831635,
+              0.48999833432205975,
+              0.3556917607784271
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon2.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_2"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6428615748882294,
+            0.4899982810020447,
+            0.34741343557834625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6428615748882294,
+              0.48999835149338367,
+              0.3474135249853134
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon3": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon3.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_3"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.282889574766159,
+            0.4899982810020447,
+            0.35515373945236206
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.282889574766159,
+              0.48999834681356447,
+              0.35515379905700684
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon4": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon4.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_4"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.458085983991623,
+            0.4899982810020447,
+            0.3470391631126404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.458085983991623,
+              0.4899983341985674,
+              0.34703922271728516
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon5": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_State_SelfWindRibbon5.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_5"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6519649922847748,
+            0.4899982810020447,
+            0.35618574172258377
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6519649922847748,
+              0.4899983516327282,
+              0.35618583112955093
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 72,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Skill64f/2.56s and burst154f/7.7s fully decoded in memory;24 timestamped samples each observed. Pointed translucent mint upper/lower wings, dark central core, inward wind then brief updraft and multiple burst pulses observed. Conversion close-up not separately confirmed; partial tints follow project requirement. Self-card orbit is the requested adaptation, not the original enemy-field position.",
+      "scope": "Source art only. Real target lists are explicit examples, no force-lift/card layout changes, targeting, conversion choice, damage or Unity/table changes.",
+      "contract": "One holder-card5 wind orbit continues during the independent enemy pulse. Appearance/144-frame repeat/any-phase exit; partial conversion glints join current phase without restarting the main anemo ribbons.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Sucrose_LargeWindSpiritState_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1026_Sucrose/LargeWindSpiritState/Blender/Sucrose_LargeWindSpiritState_State.blend",
+        "driversConverted": 26,
+        "legacyExpressions": 26,
+        "numericComparisons": 936,
+        "maximumFormulaError": 4.266816178155608e-08,
+        "nativeDrivers": 139,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          72.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          72,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Sucrose_LargeWindSpiritState_State_01_Overall.png",
+        "stillFrame": 72,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Sucrose_LargeWindSpiritState_ConversionMidLoop": {
+      "effect": "Sucrose_LargeWindSpiritState_ConversionMidLoop",
+      "source": "Blender/Sucrose_LargeWindSpiritState_ConversionMidLoop.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1026_Sucrose/LargeWindSpiritState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "WindWingUpper-1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_WindWingUpper-1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_-1",
+            "PART_FlowingWingVein_Upper_-1_0",
+            "PART_FlowingWingVein_Upper_-1_1",
+            "PART_FlowingWingVein_Upper_-1_2",
+            "PART_BrokenWindWingEdge_Upper_-1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_-1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_-1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingUpper1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_WindWingUpper1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_1",
+            "PART_FlowingWingVein_Upper_1_0",
+            "PART_FlowingWingVein_Upper_1_1",
+            "PART_FlowingWingVein_Upper_1_2",
+            "PART_BrokenWindWingEdge_Upper_1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindLightMote": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_WindLightMote.fbx",
+          "objects": [
+            "PART_FineWindLightMote"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04362872242927551,
+            0.04362872242927551,
+            0.17999999970197678
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FineWindLightMote": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04362872242927551,
+              0.0436287522315979,
+              0.17999999970197678
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon0.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_0"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.2734357118606567,
+            0.4899982810020447,
+            0.34663158655166626
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.2734357118606567,
+              0.4899983467059599,
+              0.34663164615631104
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon1.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_1"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.4673446118831635,
+            0.4899982810020447,
+            0.35569170117378235
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.4673446118831635,
+              0.48999833432205975,
+              0.3556917607784271
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon2.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_2"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6428615748882294,
+            0.4899982810020447,
+            0.34741343557834625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6428615748882294,
+              0.48999835149338367,
+              0.3474135249853134
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon3": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon3.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_3"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.282889574766159,
+            0.4899982810020447,
+            0.35515373945236206
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.282889574766159,
+              0.48999834681356447,
+              0.35515379905700684
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon4": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon4.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_4"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.458085983991623,
+            0.4899982810020447,
+            0.3470391631126404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.458085983991623,
+              0.4899983341985674,
+              0.34703922271728516
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon5": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_ConversionMidLoop_SelfWindRibbon5.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_5"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6519649922847748,
+            0.4899982810020447,
+            0.35618574172258377
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6519649922847748,
+              0.4899983516327282,
+              0.35618583112955093
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 72,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Skill64f/2.56s and burst154f/7.7s fully decoded in memory;24 timestamped samples each observed. Pointed translucent mint upper/lower wings, dark central core, inward wind then brief updraft and multiple burst pulses observed. Conversion close-up not separately confirmed; partial tints follow project requirement. Self-card orbit is the requested adaptation, not the original enemy-field position.",
+      "scope": "Source art only. Real target lists are explicit examples, no force-lift/card layout changes, targeting, conversion choice, damage or Unity/table changes.",
+      "contract": "One holder-card5 wind orbit continues during the independent enemy pulse. Appearance/144-frame repeat/any-phase exit; partial conversion glints join current phase without restarting the main anemo ribbons.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Sucrose_LargeWindSpiritState_ConversionMidLoop.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1026_Sucrose/LargeWindSpiritState/Blender/Sucrose_LargeWindSpiritState_ConversionMidLoop.blend",
+        "driversConverted": 26,
+        "legacyExpressions": 26,
+        "numericComparisons": 936,
+        "maximumFormulaError": 4.266816178155608e-08,
+        "nativeDrivers": 159,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          72.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          72,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Sucrose_LargeWindSpiritState_ConversionMidLoop_01_Overall.png",
+        "stillFrame": 72,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Sucrose_LargeWindSpiritState_Overall": {
+      "effect": "Sucrose_LargeWindSpiritState_Overall",
+      "source": "Blender/Sucrose_LargeWindSpiritState_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1026_Sucrose/LargeWindSpiritState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingUpper-1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindWingUpper-1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_-1",
+            "PART_FlowingWingVein_Upper_-1_0",
+            "PART_FlowingWingVein_Upper_-1_1",
+            "PART_FlowingWingVein_Upper_-1_2",
+            "PART_BrokenWindWingEdge_Upper_-1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_-1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_-1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_-1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingLower-1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindWingLower-1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Lower_-1",
+            "PART_FlowingWingVein_Lower_-1_0",
+            "PART_FlowingWingVein_Lower_-1_1",
+            "PART_BrokenWindWingEdge_Lower_-1"
+          ],
+          "vertices": 1309,
+          "triangles": 2224,
+          "dimensions": [
+            1.696550971828401,
+            0.11999999731779099,
+            1.0887811183929443
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Lower_-1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Lower_-1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Lower_-1_1": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Lower_-1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 1309,
+            "triangles": 2224,
+            "dimensions": [
+              1.696550971828401,
+              0.12000010907649994,
+              1.0887811370193958
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingUpper1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindWingUpper1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Upper_1",
+            "PART_FlowingWingVein_Upper_1_0",
+            "PART_FlowingWingVein_Upper_1_1",
+            "PART_FlowingWingVein_Upper_1_2",
+            "PART_BrokenWindWingEdge_Upper_1"
+          ],
+          "vertices": 1540,
+          "triangles": 2608,
+          "dimensions": [
+            2.2993089240044355,
+            0.11999999731779099,
+            1.4318494126200676
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Upper_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Upper_1_2": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Upper_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 1540,
+            "triangles": 2608,
+            "dimensions": [
+              2.2993089240044355,
+              0.12000021628062996,
+              1.431849405169487
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindWingLower1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindWingLower1.fbx",
+          "objects": [
+            "PART_AuthoredWindWing_Lower_1",
+            "PART_FlowingWingVein_Lower_1_0",
+            "PART_FlowingWingVein_Lower_1_1",
+            "PART_BrokenWindWingEdge_Lower_1"
+          ],
+          "vertices": 1309,
+          "triangles": 2224,
+          "dimensions": [
+            1.696550971828401,
+            0.11999999731779099,
+            1.0887811183929443
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredWindWing_Lower_1": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Lower_1_0": [
+              "Soft"
+            ],
+            "PART_FlowingWingVein_Lower_1_1": [
+              "Soft"
+            ],
+            "PART_BrokenWindWingEdge_Lower_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 1309,
+            "triangles": 2224,
+            "dimensions": [
+              1.696550971828401,
+              0.12000010907649994,
+              1.0887811370193958
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindSpiritCore": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindSpiritCore.fbx",
+          "objects": [
+            "PART_SmallClearWindSpiritCore"
+          ],
+          "vertices": 176,
+          "triangles": 320,
+          "dimensions": [
+            0.36000001430511475,
+            0.36000001430511475,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallClearWindSpiritCore": [
+              "WindSpiritSoftEmissionCore"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 176,
+            "triangles": 320,
+            "dimensions": [
+              0.36000001430511475,
+              0.3600000739097595,
+              0.3600000739097595
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindPressureArc": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindPressureArc.fbx",
+          "objects": [
+            "PART_ThinBrokenWindPressure"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.0899616479873657,
+            0.0,
+            2.088467240333557
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinBrokenWindPressure": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.0899616479873657,
+              3.4025448769625655e-07,
+              2.088467240333557
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WindLightMote": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_WindLightMote.fbx",
+          "objects": [
+            "PART_FineWindLightMote"
+          ],
+          "vertices": 12,
+          "triangles": 20,
+          "dimensions": [
+            0.04362872242927551,
+            0.04362872242927551,
+            0.17999999970197678
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_FineWindLightMote": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 12,
+            "triangles": 20,
+            "dimensions": [
+              0.04362872242927551,
+              0.0436287522315979,
+              0.17999999970197678
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon0.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_0"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.2734357118606567,
+            0.4899982810020447,
+            0.34663158655166626
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.2734357118606567,
+              0.4899983467059599,
+              0.34663164615631104
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon1.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_1"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.4673446118831635,
+            0.4899982810020447,
+            0.35569170117378235
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.4673446118831635,
+              0.48999833432205975,
+              0.3556917607784271
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon2.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_2"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6428615748882294,
+            0.4899982810020447,
+            0.34741343557834625
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6428615748882294,
+              0.48999835149338367,
+              0.3474135249853134
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon3": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon3.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_3"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.282889574766159,
+            0.4899982810020447,
+            0.35515373945236206
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.282889574766159,
+              0.48999834681356447,
+              0.35515379905700684
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon4": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon4.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_4"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.458085983991623,
+            0.4899982810020447,
+            0.3470391631126404
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.458085983991623,
+              0.4899983341985674,
+              0.34703922271728516
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "SelfWindRibbon5": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_SelfWindRibbon5.fbx",
+          "objects": [
+            "PART_SelfWindRibbon_5"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            1.6519649922847748,
+            0.4899982810020447,
+            0.35618574172258377
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SelfWindRibbon_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              1.6519649922847748,
+              0.4899983516327282,
+              0.35618583112955093
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_0.fbx",
+          "objects": [
+            "PART_GatheringWind_89_0"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            4.885833352804184,
+            0.15999944508075714,
+            1.4817371796816587
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              4.885833352804184,
+              0.15999968675720977,
+              1.4817372057586908
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_1.fbx",
+          "objects": [
+            "PART_GatheringWind_89_1"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            4.427801251411438,
+            0.0873110443353653,
+            1.595038264989853
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              4.427801251411438,
+              0.08731130510568619,
+              1.5950382947921753
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_2.fbx",
+          "objects": [
+            "PART_GatheringWind_89_2"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.413834109902382,
+            0.20703963562846184,
+            2.6131121702492237
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.413834109902382,
+              0.20704006776213646,
+              2.613112196326256
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_3": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_3.fbx",
+          "objects": [
+            "PART_GatheringWind_89_3"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.9469014406204224,
+            0.25847040116786957,
+            2.4068952798843384
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.9469014406204224,
+              0.2584707885980606,
+              2.4068953096866608
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_4": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_4.fbx",
+          "objects": [
+            "PART_GatheringWind_89_4"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            4.828656435012817,
+            0.16984857618808746,
+            1.3433014452457428
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              4.828656435012817,
+              0.16984879970550537,
+              1.3433014750480652
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_5": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_5.fbx",
+          "objects": [
+            "PART_GatheringWind_89_5"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            4.548461079597473,
+            0.07867518067359924,
+            1.8929405622184277
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              4.548461079597473,
+              0.07867548614740372,
+              1.8929405882954597
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GatheringWind_89_6": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_GatheringWind_89_6.fbx",
+          "objects": [
+            "PART_GatheringWind_89_6"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.579158127307892,
+            0.19753630459308624,
+            3.013988673686981
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_GatheringWind_89_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              2.579158127307892,
+              0.19753678888082504,
+              3.0139887034893036
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactAnemo0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactAnemo0.fbx",
+          "objects": [
+            "PART_LocalWindContact_Anemo_0"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Anemo_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactAnemo1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactAnemo1.fbx",
+          "objects": [
+            "PART_LocalWindContact_Anemo_1"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Anemo_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactAnemo2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactAnemo2.fbx",
+          "objects": [
+            "PART_LocalWindContact_Anemo_2"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Anemo_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactHydro0": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactHydro0.fbx",
+          "objects": [
+            "PART_LocalWindContact_Hydro_0"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Hydro_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactHydro1": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactHydro1.fbx",
+          "objects": [
+            "PART_LocalWindContact_Hydro_1"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Hydro_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "LocalWindContactHydro2": {
+          "file": "Exports/Sucrose_LargeWindSpiritState_Overall_LocalWindContactHydro2.fbx",
+          "objects": [
+            "PART_LocalWindContact_Hydro_2"
+          ],
+          "vertices": 175,
+          "triangles": 288,
+          "dimensions": [
+            0.23747171834111214,
+            0.0,
+            0.733812540769577
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_LocalWindContact_Hydro_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 175,
+            "triangles": 288,
+            "dimensions": [
+              0.23747171834111214,
+              1.1955322776202593e-07,
+              0.733812540769577
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 89,
+          "element": "Anemo",
+          "kind": "ONE articulated wind spirit / ONE whole actual group pressure contact"
+        },
+        {
+          "frame": 91,
+          "element": "Hydro",
+          "soundRole": "bubble",
+          "kind": "actual additional converted-element contact, same spirit retained; no second flap"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 72,
+      "focus": [
+        2.075000047683716,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Skill64f/2.56s and burst154f/7.7s fully decoded in memory;24 timestamped samples each observed. Pointed translucent mint upper/lower wings, dark central core, inward wind then brief updraft and multiple burst pulses observed. Conversion close-up not separately confirmed; partial tints follow project requirement. Self-card orbit is the requested adaptation, not the original enemy-field position.",
+      "scope": "Source art only. Real target lists are explicit examples, no force-lift/card layout changes, targeting, conversion choice, damage or Unity/table changes.",
+      "contract": "One holder-card5 wind orbit continues during the independent enemy pulse. Appearance/144-frame repeat/any-phase exit; partial conversion glints join current phase without restarting the main anemo ribbons.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav",
+          "Contact_bubble.wav": "Sucrose_LargeWindSpiritState_Overall_Contact_bubble.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Sucrose_LargeWindSpiritState_Overall.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1026_Sucrose/LargeWindSpiritState/Blender/Sucrose_LargeWindSpiritState_Overall.blend",
+        "driversConverted": 26,
+        "legacyExpressions": 26,
+        "numericComparisons": 936,
+        "maximumFormulaError": 4.266816178155608e-08,
+        "nativeDrivers": 216,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          72.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          72,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Sucrose_LargeWindSpiritState_Overall_01_Overall.png",
+        "stillFrame": 72,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

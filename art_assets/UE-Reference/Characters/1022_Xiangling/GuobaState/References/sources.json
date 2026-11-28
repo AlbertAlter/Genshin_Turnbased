@@ -1,0 +1,69 @@
+[
+  {
+    "file": "01_锅巴正面与吃辣椒姿态.jpg",
+    "page_url": "https://gurugamer.com/mobile-games/stove-god-genshin-impact-18782",
+    "image_url": "https://img.gurugamer.com/resize/740x-/2021/10/04/guoba-will-attacks-four-times-dd39.jpg",
+    "downloaded": "2026-11-26",
+    "use": "锅巴圆耳、面纹、口鼻、肚皮与吃辣椒姿态，黄色提示符号及HUD排除。",
+    "type": "原作实机截图",
+    "modified": false,
+    "format": "JPEG",
+    "size": [
+      740,
+      416
+    ],
+    "frames": 1,
+    "bytes": 41765
+  },
+  {
+    "page_url": "https://theinformalgamer.wordpress.com/2020/12/14/genshin-impact-best-xiangling-build-artifacts-weapons-team-guide/",
+    "image_url": "https://theinformalgamer.wordpress.com/wp-content/uploads/2020/12/ezgif.com-gif-maker-1-min-2.gif?w=450",
+    "downloaded": true,
+    "use": "原页面战技演示：锅巴出现、坐定和喷火；未完整展示自然到期，退出按项目需求补足。",
+    "type": "原作实机动图（450像素宽版本）",
+    "modified": false,
+    "format": "GIF",
+    "size": [
+      450,
+      329
+    ],
+    "frames": 53,
+    "bytes": 5701124,
+    "former_local_file": "02_锅巴原作实机动图.gif",
+    "title": "02_锅巴原作实机动图",
+    "storage": "link_only",
+    "previously_downloaded_on": "2026-11-26",
+    "local_file_removed_on": "2026-11-26",
+    "local_gif_retained": false,
+    "verification": "2026-11-28在内存完整解码53帧、5.3秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\xiangling-references\\Xiangling_Guoba_Observation.png",
+    "decoded_frames": 53,
+    "duration_seconds": 5.3,
+    "sampled_frames": [
+      0,
+      2,
+      5,
+      7,
+      9,
+      11,
+      14,
+      16,
+      18,
+      20,
+      23,
+      25,
+      27,
+      29,
+      32,
+      34,
+      36,
+      38,
+      41,
+      43,
+      45,
+      47,
+      50,
+      52
+    ]
+  }
+]

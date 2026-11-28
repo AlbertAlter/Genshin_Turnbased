@@ -1,0 +1,766 @@
+{
+  "entities": [
+    {
+      "id": 1009,
+      "name": "Amber",
+      "label": "安柏",
+      "folder": "Characters/1009_Amber"
+    },
+    {
+      "id": 1010,
+      "name": "Kaeya",
+      "label": "凯亚",
+      "folder": "Characters/1010_Kaeya"
+    },
+    {
+      "id": 1011,
+      "name": "Lisa",
+      "label": "丽莎",
+      "folder": "Characters/1011_Lisa"
+    },
+    {
+      "id": 1012,
+      "name": "Venti",
+      "label": "温迪",
+      "folder": "Characters/1012_Venti"
+    },
+    {
+      "id": 1013,
+      "name": "Jean",
+      "label": "琴",
+      "folder": "Characters/1013_Jean"
+    },
+    {
+      "id": 1014,
+      "name": "Barbara",
+      "label": "芭芭拉",
+      "folder": "Characters/1014_Barbara"
+    },
+    {
+      "id": 1015,
+      "name": "Diluc",
+      "label": "迪卢克",
+      "folder": "Characters/1015_Diluc"
+    },
+    {
+      "id": 1016,
+      "name": "Klee",
+      "label": "可莉",
+      "folder": "Characters/1016_Klee"
+    },
+    {
+      "id": 1017,
+      "name": "Ningguang",
+      "label": "凝光",
+      "folder": "Characters/1017_Ningguang"
+    },
+    {
+      "id": 1018,
+      "name": "Beidou",
+      "label": "北斗",
+      "folder": "Characters/1018_Beidou"
+    },
+    {
+      "id": 1019,
+      "name": "Razor",
+      "label": "雷泽",
+      "folder": "Characters/1019_Razor"
+    },
+    {
+      "id": 1020,
+      "name": "Bennett",
+      "label": "班尼特",
+      "folder": "Characters/1020_Bennett"
+    },
+    {
+      "id": 1021,
+      "name": "Noelle",
+      "label": "诺艾尔",
+      "folder": "Characters/1021_Noelle"
+    },
+    {
+      "id": 1022,
+      "name": "Xiangling",
+      "label": "香菱",
+      "folder": "Characters/1022_Xiangling"
+    },
+    {
+      "id": 1023,
+      "name": "Xingqiu",
+      "label": "行秋",
+      "folder": "Characters/1023_Xingqiu"
+    },
+    {
+      "id": 1024,
+      "name": "Fischl",
+      "label": "菲谢尔",
+      "folder": "Characters/1024_Fischl"
+    },
+    {
+      "id": 1025,
+      "name": "Chongyun",
+      "label": "重云",
+      "folder": "Characters/1025_Chongyun"
+    },
+    {
+      "id": 1026,
+      "name": "Sucrose",
+      "label": "砂糖",
+      "folder": "Characters/1026_Sucrose"
+    },
+    {
+      "id": 1027,
+      "name": "Qiqi",
+      "label": "七七",
+      "folder": "Characters/1027_Qiqi"
+    },
+    {
+      "id": 1028,
+      "name": "Mona",
+      "label": "莫娜",
+      "folder": "Characters/1028_Mona"
+    },
+    {
+      "id": 1029,
+      "name": "Keqing",
+      "label": "刻晴",
+      "folder": "Characters/1029_Keqing"
+    },
+    {
+      "id": 1030,
+      "name": "Tartaglia",
+      "label": "达达利亚",
+      "folder": "Characters/1030_Tartaglia"
+    },
+    {
+      "id": 1031,
+      "name": "Diona",
+      "label": "迪奥娜",
+      "folder": "Characters/1031_Diona"
+    },
+    {
+      "id": 1032,
+      "name": "Zhongli",
+      "label": "钟离",
+      "folder": "Characters/1032_Zhongli"
+    },
+    {
+      "id": 1033,
+      "name": "Xinyan",
+      "label": "辛焱",
+      "folder": "Characters/1033_Xinyan"
+    },
+    {
+      "id": 1034,
+      "name": "Albedo",
+      "label": "阿贝多",
+      "folder": "Characters/1034_Albedo"
+    },
+    {
+      "id": 1035,
+      "name": "Ganyu",
+      "label": "甘雨",
+      "folder": "Characters/1035_Ganyu"
+    },
+    {
+      "id": 1036,
+      "name": "Xiao",
+      "label": "魈",
+      "folder": "Characters/1036_Xiao"
+    },
+    {
+      "id": 1037,
+      "name": "Hu_Tao",
+      "label": "胡桃",
+      "folder": "Characters/1037_Hu_Tao"
+    },
+    {
+      "id": 1038,
+      "name": "Rosaria",
+      "label": "罗莎莉亚",
+      "folder": "Characters/1038_Rosaria"
+    },
+    {
+      "id": 1039,
+      "name": "Yanfei",
+      "label": "烟绯",
+      "folder": "Characters/1039_Yanfei"
+    },
+    {
+      "id": 1040,
+      "name": "Eula",
+      "label": "优菈",
+      "folder": "Characters/1040_Eula"
+    },
+    {
+      "id": 2001,
+      "name": "Hilichurl",
+      "label": "丘丘人",
+      "folder": "Enemies/2001_Hilichurl"
+    },
+    {
+      "id": 2002,
+      "name": "CryoShooter",
+      "label": "冰箭丘丘人",
+      "folder": "Enemies/2002_CryoShooter"
+    },
+    {
+      "id": 2003,
+      "name": "ElectroShooter",
+      "label": "雷箭丘丘人",
+      "folder": "Enemies/2003_ElectroShooter"
+    },
+    {
+      "id": 2004,
+      "name": "Berserker",
+      "label": "冲锋丘丘人",
+      "folder": "Enemies/2004_Berserker"
+    },
+    {
+      "id": 2005,
+      "name": "Fighter",
+      "label": "打手丘丘人",
+      "folder": "Enemies/2005_Fighter"
+    },
+    {
+      "id": 2006,
+      "name": "Grenadier",
+      "label": "爆弹丘丘人",
+      "folder": "Enemies/2006_Grenadier"
+    },
+    {
+      "id": 2007,
+      "name": "Shooter",
+      "label": "射手丘丘人",
+      "folder": "Enemies/2007_Shooter"
+    },
+    {
+      "id": 2008,
+      "name": "PyroShooter",
+      "label": "火箭丘丘人",
+      "folder": "Enemies/2008_PyroShooter"
+    },
+    {
+      "id": 2009,
+      "name": "RockGuard",
+      "label": "岩盾丘丘人",
+      "folder": "Enemies/2009_RockGuard"
+    },
+    {
+      "id": 2010,
+      "name": "WoodGuard",
+      "label": "木盾丘丘人",
+      "folder": "Enemies/2010_WoodGuard"
+    },
+    {
+      "id": 2011,
+      "name": "AnemoSamachurl",
+      "label": "风丘丘萨满",
+      "folder": "Enemies/2011_AnemoSamachurl"
+    },
+    {
+      "id": 2012,
+      "name": "DendroSamachurl",
+      "label": "草丘丘萨满",
+      "folder": "Enemies/2012_DendroSamachurl"
+    },
+    {
+      "id": 2013,
+      "name": "GeoSamachurl",
+      "label": "岩丘丘萨满",
+      "folder": "Enemies/2013_GeoSamachurl"
+    },
+    {
+      "id": 2014,
+      "name": "HydroSamachurl",
+      "label": "水丘丘萨满",
+      "folder": "Enemies/2014_HydroSamachurl"
+    },
+    {
+      "id": 2015,
+      "name": "AnemoSlime",
+      "label": "风史莱姆",
+      "folder": "Enemies/2015_AnemoSlime"
+    },
+    {
+      "id": 2016,
+      "name": "CryoSlime",
+      "label": "冰史莱姆",
+      "folder": "Enemies/2016_CryoSlime"
+    },
+    {
+      "id": 2017,
+      "name": "DendroSlime",
+      "label": "草史莱姆",
+      "folder": "Enemies/2017_DendroSlime"
+    },
+    {
+      "id": 2018,
+      "name": "ElectroSlime",
+      "label": "雷史莱姆",
+      "folder": "Enemies/2018_ElectroSlime"
+    },
+    {
+      "id": 2019,
+      "name": "GeoSlime",
+      "label": "岩史莱姆",
+      "folder": "Enemies/2019_GeoSlime"
+    },
+    {
+      "id": 2020,
+      "name": "HydroSlime",
+      "label": "水史莱姆",
+      "folder": "Enemies/2020_HydroSlime"
+    },
+    {
+      "id": 2021,
+      "name": "PyroSlime",
+      "label": "火史莱姆",
+      "folder": "Enemies/2021_PyroSlime"
+    },
+    {
+      "id": 2022,
+      "name": "LargeAnemoSlime",
+      "label": "大型风史莱姆",
+      "folder": "Enemies/2022_LargeAnemoSlime"
+    },
+    {
+      "id": 2023,
+      "name": "LargeCryoSlime",
+      "label": "大型冰史莱姆",
+      "folder": "Enemies/2023_LargeCryoSlime"
+    },
+    {
+      "id": 2024,
+      "name": "LargeDendroSlime",
+      "label": "大型草史莱姆",
+      "folder": "Enemies/2024_LargeDendroSlime"
+    },
+    {
+      "id": 2025,
+      "name": "LargeElectroSlime",
+      "label": "大型雷史莱姆",
+      "folder": "Enemies/2025_LargeElectroSlime"
+    },
+    {
+      "id": 2026,
+      "name": "LargeGeoSlime",
+      "label": "大型岩史莱姆",
+      "folder": "Enemies/2026_LargeGeoSlime"
+    },
+    {
+      "id": 2027,
+      "name": "LargeHydroSlime",
+      "label": "大型水史莱姆",
+      "folder": "Enemies/2027_LargeHydroSlime"
+    },
+    {
+      "id": 2028,
+      "name": "LargePyroSlime",
+      "label": "大型火史莱姆",
+      "folder": "Enemies/2028_LargePyroSlime"
+    },
+    {
+      "id": 2029,
+      "name": "MutantElectroSlime",
+      "label": "变异雷史莱姆",
+      "folder": "Enemies/2029_MutantElectroSlime"
+    },
+    {
+      "id": 2030,
+      "name": "CryoMage",
+      "label": "冰深渊法师",
+      "folder": "Enemies/2030_CryoMage"
+    },
+    {
+      "id": 2031,
+      "name": "HydroMage",
+      "label": "水深渊法师",
+      "folder": "Enemies/2031_HydroMage"
+    },
+    {
+      "id": 2032,
+      "name": "PyroMage",
+      "label": "火深渊法师",
+      "folder": "Enemies/2032_PyroMage"
+    },
+    {
+      "id": 2033,
+      "name": "CryoWhopperflower",
+      "label": "冰霜骗骗花",
+      "folder": "Enemies/2033_CryoWhopperflower"
+    },
+    {
+      "id": 2034,
+      "name": "PyroWhopperflower",
+      "label": "炽热骗骗花",
+      "folder": "Enemies/2034_PyroWhopperflower"
+    },
+    {
+      "id": 2035,
+      "name": "ElectroCicin",
+      "label": "雷萤",
+      "folder": "Enemies/2035_ElectroCicin"
+    },
+    {
+      "id": 2036,
+      "name": "HydroCicin",
+      "label": "水萤",
+      "folder": "Enemies/2036_HydroCicin"
+    },
+    {
+      "id": 2037,
+      "name": "Anemoboxer",
+      "label": "愚人众先遣队·风拳前锋军",
+      "folder": "Enemies/2037_Anemoboxer"
+    },
+    {
+      "id": 2038,
+      "name": "Cryogunner",
+      "label": "愚人众先遣队·冰铳重卫士",
+      "folder": "Enemies/2038_Cryogunner"
+    },
+    {
+      "id": 2039,
+      "name": "Electrohammer",
+      "label": "愚人众先遣队·雷锤前锋军",
+      "folder": "Enemies/2039_Electrohammer"
+    },
+    {
+      "id": 2040,
+      "name": "Geochanter",
+      "label": "愚人众先遣队·岩使游击兵",
+      "folder": "Enemies/2040_Geochanter"
+    },
+    {
+      "id": 2041,
+      "name": "Hydrogunner",
+      "label": "愚人众先遣队·水铳重卫士",
+      "folder": "Enemies/2041_Hydrogunner"
+    },
+    {
+      "id": 2042,
+      "name": "Pyroslinger",
+      "label": "愚人众先遣队·火铳游击兵",
+      "folder": "Enemies/2042_Pyroslinger"
+    },
+    {
+      "id": 2043,
+      "name": "Crusher",
+      "label": "盗宝团·粉碎者",
+      "folder": "Enemies/2043_Crusher"
+    },
+    {
+      "id": 2044,
+      "name": "CryoPotioneer",
+      "label": "盗宝团·冰之药剂师",
+      "folder": "Enemies/2044_CryoPotioneer"
+    },
+    {
+      "id": 2045,
+      "name": "ElectroPotioneer",
+      "label": "盗宝团·雷之药剂师",
+      "folder": "Enemies/2045_ElectroPotioneer"
+    },
+    {
+      "id": 2046,
+      "name": "Gravedigger",
+      "label": "盗宝团·掘墓者",
+      "folder": "Enemies/2046_Gravedigger"
+    },
+    {
+      "id": 2047,
+      "name": "Handyman",
+      "label": "盗宝团·杂工",
+      "folder": "Enemies/2047_Handyman"
+    },
+    {
+      "id": 2048,
+      "name": "HydroPotioneer",
+      "label": "盗宝团·水之药剂师",
+      "folder": "Enemies/2048_HydroPotioneer"
+    },
+    {
+      "id": 2049,
+      "name": "Marksman",
+      "label": "盗宝团·神射手",
+      "folder": "Enemies/2049_Marksman"
+    },
+    {
+      "id": 2050,
+      "name": "Pugilist",
+      "label": "盗宝团·拳术家",
+      "folder": "Enemies/2050_Pugilist"
+    },
+    {
+      "id": 2051,
+      "name": "PyroPotioneer",
+      "label": "盗宝团·火之药剂师",
+      "folder": "Enemies/2051_PyroPotioneer"
+    },
+    {
+      "id": 2052,
+      "name": "Scout",
+      "label": "盗宝团·斥候",
+      "folder": "Enemies/2052_Scout"
+    },
+    {
+      "id": 2053,
+      "name": "Seaman",
+      "label": "盗宝团·海上男儿",
+      "folder": "Enemies/2053_Seaman"
+    },
+    {
+      "id": 2054,
+      "name": "BlazingAxe",
+      "label": "火斧丘丘暴徒",
+      "folder": "Enemies/2054_BlazingAxe"
+    },
+    {
+      "id": 2055,
+      "name": "Rockwall",
+      "label": "岩盾丘丘暴徒",
+      "folder": "Enemies/2055_Rockwall"
+    },
+    {
+      "id": 2056,
+      "name": "Woodwall",
+      "label": "木盾丘丘暴徒",
+      "folder": "Enemies/2056_Woodwall"
+    },
+    {
+      "id": 2057,
+      "name": "Stonehide",
+      "label": "丘丘岩盔王",
+      "folder": "Enemies/2057_Stonehide"
+    },
+    {
+      "id": 2058,
+      "name": "StormEye",
+      "label": "狂风之核",
+      "folder": "Enemies/2058_StormEye"
+    },
+    {
+      "id": 2059,
+      "name": "CicinMage",
+      "label": "愚人众·雷萤术士",
+      "folder": "Enemies/2059_CicinMage"
+    },
+    {
+      "id": 2060,
+      "name": "PyroAgent",
+      "label": "愚人众·火之债务处理人",
+      "folder": "Enemies/2060_PyroAgent"
+    },
+    {
+      "id": 2061,
+      "name": "GeovishapHatchling",
+      "label": "幼岩龙蜥",
+      "folder": "Enemies/2061_GeovishapHatchling"
+    },
+    {
+      "id": 2062,
+      "name": "RuinGuard",
+      "label": "遗迹守卫",
+      "folder": "Enemies/2062_RuinGuard"
+    },
+    {
+      "id": 2063,
+      "name": "RuinHunter",
+      "label": "遗迹猎者",
+      "folder": "Enemies/2063_RuinHunter"
+    },
+    {
+      "id": 2064,
+      "name": "AnemoHypostasis",
+      "label": "无相之风",
+      "folder": "Enemies/2064_AnemoHypostasis"
+    },
+    {
+      "id": 2065,
+      "name": "ElectroHypostasis",
+      "label": "无相之雷",
+      "folder": "Enemies/2065_ElectroHypostasis"
+    },
+    {
+      "id": 2066,
+      "name": "GeoHypostasis",
+      "label": "无相之岩",
+      "folder": "Enemies/2066_GeoHypostasis"
+    },
+    {
+      "id": 2067,
+      "name": "CryoRegisvine",
+      "label": "急冻树",
+      "folder": "Enemies/2067_CryoRegisvine"
+    },
+    {
+      "id": 2068,
+      "name": "PyroRegisvine",
+      "label": "爆炎树",
+      "folder": "Enemies/2068_PyroRegisvine"
+    },
+    {
+      "id": 2069,
+      "name": "Andrius",
+      "label": "北风的王狼，奔狼的领主",
+      "folder": "Enemies/2069_Andrius"
+    },
+    {
+      "id": 2070,
+      "name": "Oceanid",
+      "label": "纯水精灵",
+      "folder": "Enemies/2070_Oceanid"
+    },
+    {
+      "id": 2071,
+      "name": "Stormterror",
+      "label": "裂空的魔龙",
+      "folder": "Enemies/2071_Stormterror"
+    },
+    {
+      "id": 2072,
+      "name": "UnusualHilichurl",
+      "label": "奇怪的丘丘人",
+      "folder": "Enemies/2072_UnusualHilichurl"
+    },
+    {
+      "id": 2073,
+      "name": "Childe",
+      "label": "「公子」",
+      "folder": "Enemies/2073_Childe"
+    },
+    {
+      "id": 2074,
+      "name": "CryoCicin",
+      "label": "冰萤",
+      "folder": "Enemies/2074_CryoCicin"
+    },
+    {
+      "id": 2075,
+      "name": "CryoGrenadier",
+      "label": "冰弹丘丘人",
+      "folder": "Enemies/2075_CryoGrenadier"
+    },
+    {
+      "id": 2076,
+      "name": "CryoGuard",
+      "label": "冰盾丘丘人",
+      "folder": "Enemies/2076_CryoGuard"
+    },
+    {
+      "id": 2077,
+      "name": "CryoShaman",
+      "label": "冰丘丘萨满",
+      "folder": "Enemies/2077_CryoShaman"
+    },
+    {
+      "id": 2078,
+      "name": "CryoCicinMage",
+      "label": "愚人众·冰萤术士",
+      "folder": "Enemies/2078_CryoCicinMage"
+    },
+    {
+      "id": 2079,
+      "name": "Cryowall",
+      "label": "冰盾丘丘暴徒",
+      "folder": "Enemies/2079_Cryowall"
+    },
+    {
+      "id": 2080,
+      "name": "Frostarm",
+      "label": "丘丘霜铠王",
+      "folder": "Enemies/2080_Frostarm"
+    },
+    {
+      "id": 2081,
+      "name": "RuinGrader",
+      "label": "遗迹重机",
+      "folder": "Enemies/2081_RuinGrader"
+    },
+    {
+      "id": 2082,
+      "name": "Geovishap",
+      "label": "岩龙蜥",
+      "folder": "Enemies/2082_Geovishap"
+    },
+    {
+      "id": 2083,
+      "name": "PrimoGeovishap",
+      "label": "古岩龙蜥",
+      "folder": "Enemies/2083_PrimoGeovishap"
+    },
+    {
+      "id": 2084,
+      "name": "AbyssHerald",
+      "label": "深渊使徒·激流",
+      "folder": "Enemies/2084_AbyssHerald"
+    },
+    {
+      "id": 2085,
+      "name": "AbyssLector",
+      "label": "深渊咏者·紫电",
+      "folder": "Enemies/2085_AbyssLector"
+    },
+    {
+      "id": 2601,
+      "name": "HydroMimicRaptor",
+      "label": "水幻形·飞鸢",
+      "folder": "Enemies/2601_HydroMimicRaptor"
+    },
+    {
+      "id": 2602,
+      "name": "HydroMimicCrane",
+      "label": "水幻形·鹤",
+      "folder": "Enemies/2602_HydroMimicCrane"
+    },
+    {
+      "id": 2603,
+      "name": "HydroMimicFerret",
+      "label": "水幻形·松鼠",
+      "folder": "Enemies/2603_HydroMimicFerret"
+    },
+    {
+      "id": 2604,
+      "name": "HydroMimicCrab",
+      "label": "水幻形·蟹",
+      "folder": "Enemies/2604_HydroMimicCrab"
+    },
+    {
+      "id": 2605,
+      "name": "HydroMimicFrog",
+      "label": "水幻形·蛙",
+      "folder": "Enemies/2605_HydroMimicFrog"
+    },
+    {
+      "id": 2606,
+      "name": "HydroMimicBoar",
+      "label": "水幻形·野猪",
+      "folder": "Enemies/2606_HydroMimicBoar"
+    },
+    {
+      "id": 2607,
+      "name": "HydroMimicFinch",
+      "label": "水幻形·雀",
+      "folder": "Enemies/2607_HydroMimicFinch"
+    },
+    {
+      "id": 2608,
+      "name": "HydroMimicMallard",
+      "label": "水幻形·鸭",
+      "folder": "Enemies/2608_HydroMimicMallard"
+    },
+    {
+      "id": 2609,
+      "name": "GeoPillar",
+      "label": "岩柱",
+      "folder": "Enemies/2609_GeoPillar"
+    },
+    {
+      "id": 2610,
+      "name": "PyroSeed",
+      "label": "火种",
+      "folder": "Enemies/2610_PyroSeed"
+    }
+  ]
+}

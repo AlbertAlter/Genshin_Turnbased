@@ -71,6 +71,10 @@ public static class BattleSkillTimeline
                 case BattleSkillMarker.AuraChange:
                     cue.SkillTracks = enabled & BattleSkillTracks.ReactionIcons;
                     break;
+                case BattleSkillMarker.None:
+                    // Persistent VFX consume the committed lifecycle, including empty field slots.
+                    if (result.Data is StatusEventData) cue.SkillTracks = enabled & BattleSkillTracks.HitEffects;
+                    break;
             }
         }
         foreach (var cast in casts.Values)

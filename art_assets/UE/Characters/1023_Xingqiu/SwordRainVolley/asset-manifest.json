@@ -1,0 +1,1767 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+  "variants": {
+    "Xingqiu_SwordRainVolley_ThreeStaggered": {
+      "effect": "Xingqiu_SwordRainVolley_ThreeStaggered",
+      "source": "Blender/Xingqiu_SwordRainVolley_ThreeStaggered.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeStaggered_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 0
+        },
+        {
+          "frame": 37,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 1
+        },
+        {
+          "frame": 43,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 2
+        }
+      ],
+      "launchFrames": [
+        13,
+        19,
+        25
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -1.3250000476837158,
+        -0.21500001847743988,
+        0.029999971389770508
+      ],
+      "detailScale": 15,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "volleyProjectiles": [
+        {
+          "root": "ONE_ActualVolleyProjectile_0",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.579999923706055,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_1",
+          "launch": 19,
+          "contact": 37,
+          "tipTarget": [
+            -4.505000114440918,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_2",
+          "launch": 25,
+          "contact": 43,
+          "tipTarget": [
+            -4.430000305175781,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        }
+      ],
+      "retainedOrbitHosts": {},
+      "contract": "One main flying sword per actual hit.3/4 and simultaneous/staggered variants keep explicit tips/targets. StrongFour changes trail/contact strength, never count. Tip-zero geometry preserves contact when local sword size changes. Volley blades are separate from protective orbit; no extra downward rain, retargeting or original fixed2/3/5 sequence.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_SwordRainVolley_ThreeStaggered.wav"
+      }
+    },
+    "Xingqiu_SwordRainVolley_FourStaggered": {
+      "effect": "Xingqiu_SwordRainVolley_FourStaggered",
+      "source": "Blender/Xingqiu_SwordRainVolley_FourStaggered.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_SwordRainVolley_FourStaggered_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 0
+        },
+        {
+          "frame": 36,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 1
+        },
+        {
+          "frame": 41,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 2
+        },
+        {
+          "frame": 46,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 3
+        }
+      ],
+      "launchFrames": [
+        13,
+        18,
+        23,
+        28
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -1.3250000476837158,
+        -0.21500001847743988,
+        0.029999971389770508
+      ],
+      "detailScale": 15,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "volleyProjectiles": [
+        {
+          "root": "ONE_ActualVolleyProjectile_0",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.617500305175781,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_1",
+          "launch": 18,
+          "contact": 36,
+          "tipTarget": [
+            -4.542500019073486,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_2",
+          "launch": 23,
+          "contact": 41,
+          "tipTarget": [
+            -4.46750020980835,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_3",
+          "launch": 28,
+          "contact": 46,
+          "tipTarget": [
+            -4.392499923706055,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        }
+      ],
+      "retainedOrbitHosts": {},
+      "contract": "One main flying sword per actual hit.3/4 and simultaneous/staggered variants keep explicit tips/targets. StrongFour changes trail/contact strength, never count. Tip-zero geometry preserves contact when local sword size changes. Volley blades are separate from protective orbit; no extra downward rain, retargeting or original fixed2/3/5 sequence.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_SwordRainVolley_FourStaggered.wav"
+      }
+    },
+    "Xingqiu_SwordRainVolley_ThreeSimultaneous": {
+      "effect": "Xingqiu_SwordRainVolley_ThreeSimultaneous",
+      "source": "Blender/Xingqiu_SwordRainVolley_ThreeSimultaneous.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_SwordRainVolley_ThreeSimultaneous_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 0
+        },
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 1
+        },
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 2
+        }
+      ],
+      "launchFrames": [
+        13
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -1.3250000476837158,
+        -0.21500001847743988,
+        0.029999971389770508
+      ],
+      "detailScale": 15,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "volleyProjectiles": [
+        {
+          "root": "ONE_ActualVolleyProjectile_0",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.579999923706055,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_1",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.505000114440918,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_2",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.430000305175781,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        }
+      ],
+      "retainedOrbitHosts": {},
+      "contract": "One main flying sword per actual hit.3/4 and simultaneous/staggered variants keep explicit tips/targets. StrongFour changes trail/contact strength, never count. Tip-zero geometry preserves contact when local sword size changes. Volley blades are separate from protective orbit; no extra downward rain, retargeting or original fixed2/3/5 sequence.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_SwordRainVolley_ThreeSimultaneous.wav"
+      }
+    },
+    "Xingqiu_SwordRainVolley_StrongFour": {
+      "effect": "Xingqiu_SwordRainVolley_StrongFour",
+      "source": "Blender/Xingqiu_SwordRainVolley_StrongFour.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_SwordRainVolley_StrongFour_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 0
+        },
+        {
+          "frame": 36,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 1
+        },
+        {
+          "frame": 41,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 2
+        },
+        {
+          "frame": 46,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 3
+        }
+      ],
+      "launchFrames": [
+        13,
+        18,
+        23,
+        28
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -1.3250000476837158,
+        -0.21500001847743988,
+        0.029999971389770508
+      ],
+      "detailScale": 15,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "volleyProjectiles": [
+        {
+          "root": "ONE_ActualVolleyProjectile_0",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.617500305175781,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_1",
+          "launch": 18,
+          "contact": 36,
+          "tipTarget": [
+            -4.542500019073486,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_2",
+          "launch": 23,
+          "contact": 41,
+          "tipTarget": [
+            -4.46750020980835,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_3",
+          "launch": 28,
+          "contact": 46,
+          "tipTarget": [
+            -4.392499923706055,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        }
+      ],
+      "retainedOrbitHosts": {},
+      "contract": "One main flying sword per actual hit.3/4 and simultaneous/staggered variants keep explicit tips/targets. StrongFour changes trail/contact strength, never count. Tip-zero geometry preserves contact when local sword size changes. Volley blades are separate from protective orbit; no extra downward rain, retargeting or original fixed2/3/5 sequence.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_SwordRainVolley_StrongFour.wav"
+      }
+    },
+    "Xingqiu_SwordRainVolley_OverallWithState": {
+      "effect": "Xingqiu_SwordRainVolley_OverallWithState",
+      "source": "Blender/Xingqiu_SwordRainVolley_OverallWithState.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1023_Xingqiu/SwordRainVolley/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordWaterBody": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordWaterBody.fbx",
+          "objects": [
+            "PART_ThinRainSwordWaterBlade",
+            "PART_AuthoredRainSwordScrollWaterVolume",
+            "PART_RainSwordUpperWaterPoint"
+          ],
+          "vertices": 675,
+          "triangles": 1326,
+          "dimensions": [
+            0.348870113492012,
+            0.07000000029802322,
+            1.649999976158142
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinRainSwordWaterBlade": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_AuthoredRainSwordScrollWaterVolume": [
+              "RainSwordClearFlowingWater"
+            ],
+            "PART_RainSwordUpperWaterPoint": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 675,
+            "triangles": 1326,
+            "dimensions": [
+              0.348870113492012,
+              0.07000026851892471,
+              1.6499999818603657
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordFineLight": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordFineLight.fbx",
+          "objects": [
+            "PART_RainSwordFineWhiteSpine",
+            "PART_RainSwordUpperFineLight"
+          ],
+          "vertices": 238,
+          "triangles": 384,
+          "dimensions": [
+            0.03400000184774399,
+            0.0,
+            1.5949999950826168
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_RainSwordFineWhiteSpine": [
+              "Soft"
+            ],
+            "PART_RainSwordUpperFineLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 238,
+            "triangles": 384,
+            "dimensions": [
+              0.03400000184774399,
+              2.5704503059387207e-07,
+              1.5949999876320362
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordMovingWaterGlint": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordMovingWaterGlint.fbx",
+          "objects": [
+            "PART_SmallMovingRainSwordWaterLight"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallMovingRainSwordWaterLight": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordShortWake": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordShortWake.fbx",
+          "objects": [
+            "PART_ThinDirectionMatchedRainSwordWake"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.07000000029802322,
+            0.0,
+            1.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinDirectionMatchedRainSwordWake": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.07000000029802322,
+              1.6292067073209182e-07,
+              1.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordLiquidDrop": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordLiquidDrop.fbx",
+          "objects": [
+            "PART_SmallRainSwordLiquidDrop"
+          ],
+          "vertices": 108,
+          "triangles": 192,
+          "dimensions": [
+            0.09000000357627869,
+            0.09000000357627869,
+            0.09000000357627869
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SmallRainSwordLiquidDrop": [
+              "RainSwordClearFlowingWater"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 108,
+            "triangles": 192,
+            "dimensions": [
+              0.09000000357627869,
+              0.09000001847743988,
+              0.09000001847743988
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "RainSwordBrokenWaterSection": {
+          "file": "Exports/Xingqiu_SwordRainVolley_OverallWithState_RainSwordBrokenWaterSection.fbx",
+          "objects": [
+            "PART_SoftCurvedBrokenRainSwordWater"
+          ],
+          "vertices": 231,
+          "triangles": 384,
+          "dimensions": [
+            0.16038164123892784,
+            0.0,
+            0.5015398859977722
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftCurvedBrokenRainSwordWater": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 231,
+            "triangles": 384,
+            "dimensions": [
+              0.16038164123892784,
+              8.171121734790177e-08,
+              0.5015398859977722
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 31,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 0
+        },
+        {
+          "frame": 37,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 1
+        },
+        {
+          "frame": 43,
+          "element": "Hydro",
+          "kind": "one actual main rain sword tip contact",
+          "projectile": 2
+        }
+      ],
+      "launchFrames": [
+        13,
+        19,
+        25
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 25,
+      "focus": [
+        -1.3250000476837158,
+        -0.21500001847743988,
+        0.029999971389770508
+      ],
+      "detailScale": 15,
+      "referenceBoundary": "Actually inspected HoYoLAB original scroll-sword image and original volley/absorb stills. Skill61f/3.05s, absorb118f/3.54s, volley138f/4.14s decoded in memory;24 timestamped samples each viewed. Clear curled upper water shape/downward narrow blade, one broken sword while others remain, independent projectiles seen. Volley footage has no enemy contact; exact target contact shape is authored with the supplied combat still. No traced game mesh/texture; project per-card count/regen follows requested adaptation.",
+      "scope": "Source art only. Per-card visual counts and target examples do not execute Count/status/damage/healing or Unity/timeline/table changes.",
+      "volleyProjectiles": [
+        {
+          "root": "ONE_ActualVolleyProjectile_0",
+          "launch": 13,
+          "contact": 31,
+          "tipTarget": [
+            -4.579999923706055,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_1",
+          "launch": 19,
+          "contact": 37,
+          "tipTarget": [
+            -4.505000114440918,
+            -0.20000001788139343,
+            -0.6200000047683716
+          ]
+        },
+        {
+          "root": "ONE_ActualVolleyProjectile_2",
+          "launch": 25,
+          "contact": 43,
+          "tipTarget": [
+            -4.430000305175781,
+            -0.20000001788139343,
+            -0.7599999904632568
+          ]
+        }
+      ],
+      "retainedOrbitHosts": {
+        "5": 3,
+        "7": 2
+      },
+      "contract": "One main flying sword per actual hit.3/4 and simultaneous/staggered variants keep explicit tips/targets. StrongFour changes trail/contact strength, never count. Tip-zero geometry preserves contact when local sword size changes. Volley blades are separate from protective orbit; no extra downward rain, retargeting or original fixed2/3/5 sequence.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Xingqiu_SwordRainVolley_OverallWithState.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1023_Xingqiu/SwordRainVolley/Blender/Xingqiu_SwordRainVolley_OverallWithState.blend",
+        "driversConverted": 10,
+        "legacyExpressions": 10,
+        "numericComparisons": 340,
+        "maximumFormulaError": 4.03769069290405e-08,
+        "nativeDrivers": 214,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          25,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Xingqiu_SwordRainVolley_OverallWithState_01_Overall.png",
+        "stillFrame": 25,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

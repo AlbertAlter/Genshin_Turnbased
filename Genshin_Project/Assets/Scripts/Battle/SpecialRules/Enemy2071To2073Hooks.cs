@@ -210,7 +210,7 @@ public static class Enemy2071To2073Hooks
     {
         var damage = c?.DamageEvent;
         if (damage?.HitLanded != true || damage.Source?.SourceEntity != c.Caster
-            || damage.Source.SourceKind != ReactionSourceKind.EnemySkill || damage.Target != c.StatusHost) return false;
+            || damage.Source.SourceKind != ReactionSourceKind.EnemySkill || !ReferenceEquals(damage.Target, c.StatusHost)) return false;
         string skill = damage.Source.SourceSkillID;
         if (new[] { "SK_Childe_FinalVortex", "SK_Childe_FinalDashes", "SK_Childe_FinalLeapRelease" }.Contains(skill)) return true;
         return mark == Hydro ? new[] { "SK_Childe_Airstrike", "SK_Childe_WhaleRelease", "SK_Childe_FinalWhaleRelease" }.Contains(skill)

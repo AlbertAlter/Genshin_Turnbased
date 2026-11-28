@@ -1,0 +1,642 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/ShieldCounter/视觉需求.md",
+  "variants": {
+    "2073_ShieldCounter_HydroState": {
+      "effect": "2073_ShieldCounter_HydroState",
+      "source": "Blender/2073_ShieldCounter_HydroState.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/ShieldCounter/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "ExistingPublicMembrane": {
+          "file": "Exports/2073_ShieldCounter_HydroState_ExistingPublicMembrane.fbx",
+          "objects": [
+            "PART_PSDPublicMembraneSnapshot"
+          ],
+          "vertices": 7081,
+          "triangles": 13824,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PSDPublicMembraneSnapshot": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 7081,
+            "triangles": 13824,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "runtimeConnected": false,
+      "reuse": "Actual public shieldcard/shieldbar/mask alpha sampled into reference membrane; break reuses general/ShieldBreak; ordinary removal is not a break.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_ShieldCounter_HydroState.wav"
+      }
+    },
+    "2073_ShieldCounter_ElectroState": {
+      "effect": "2073_ShieldCounter_ElectroState",
+      "source": "Blender/2073_ShieldCounter_ElectroState.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/ShieldCounter/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "ExistingPublicMembrane": {
+          "file": "Exports/2073_ShieldCounter_ElectroState_ExistingPublicMembrane.fbx",
+          "objects": [
+            "PART_PSDPublicMembraneSnapshot"
+          ],
+          "vertices": 7081,
+          "triangles": 13824,
+          "dimensions": [
+            2.9700000286102295,
+            0.1850000023841858,
+            3.990000009536743
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_PSDPublicMembraneSnapshot": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 7081,
+            "triangles": 13824,
+            "dimensions": [
+              2.9700000286102295,
+              0.18500065803527832,
+              3.990000009536743
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "runtimeConnected": false,
+      "reuse": "Actual public shieldcard/shieldbar/mask alpha sampled into reference membrane; break reuses general/ShieldBreak; ordinary removal is not a break.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2073_ShieldCounter_ElectroState_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "2073_ShieldCounter_ElectroState_State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_ShieldCounter_ElectroState.wav"
+      }
+    },
+    "2073_ShieldCounter_HydroCounter": {
+      "effect": "2073_ShieldCounter_HydroCounter",
+      "source": "Blender/2073_ShieldCounter_HydroCounter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/ShieldCounter/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_ShieldCounter_HydroCounter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_ShieldCounter_HydroCounter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_ShieldCounter_HydroCounter_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2073_ShieldCounter_HydroCounter_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_29": {
+          "file": "Exports/2073_ShieldCounter_HydroCounter_GroupBlade_29.fbx",
+          "objects": [
+            "PART_HydroBody_29",
+            "PART_HydroBrightEdge_29"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_HydroBody_29": [
+              "Soft"
+            ],
+            "PART_HydroBrightEdge_29": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 29,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Hydro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 15,
+          "kind": "actual counter only, short metallic parry; not ordinary shield absorption",
+          "soundRole": "metal",
+          "visualHoldFrames": 4,
+          "pauseAudio": false
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        3.629271626472473,
+        -0.08,
+        1.5574584007263184
+      ],
+      "detailScale": 5.0,
+      "runtimeConnected": false,
+      "reuse": "Actual public shieldcard/shieldbar/mask alpha sampled into reference membrane; break reuses general/ShieldBreak; ordinary removal is not a break.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav",
+          "Contact_metal.wav": "2073_ShieldCounter_HydroCounter_Contact_metal.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_ShieldCounter_HydroCounter.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    },
+    "2073_ShieldCounter_ElectroCounter": {
+      "effect": "2073_ShieldCounter_ElectroCounter",
+      "source": "Blender/2073_ShieldCounter_ElectroCounter.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2073_Childe/ShieldCounter/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2073_ShieldCounter_ElectroCounter_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2073_ShieldCounter_ElectroCounter_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/2073_ShieldCounter_ElectroCounter_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "GroupBlade_29": {
+          "file": "Exports/2073_ShieldCounter_ElectroCounter_GroupBlade_29.fbx",
+          "objects": [
+            "PART_ElectroBody_29",
+            "PART_ElectroBrightEdge_29"
+          ],
+          "vertices": 910,
+          "triangles": 1536,
+          "dimensions": [
+            1.7208548784255981,
+            0.0,
+            0.588304340839386
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ElectroBody_29": [
+              "Soft"
+            ],
+            "PART_ElectroBrightEdge_29": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 2,
+            "vertices": 910,
+            "triangles": 1536,
+            "dimensions": [
+              1.7208548784255981,
+              9.58469348333324e-08,
+              0.588304340839386
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 29,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Electro",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 15,
+          "kind": "actual counter only, short metallic parry; not ordinary shield absorption",
+          "soundRole": "metal",
+          "visualHoldFrames": 4,
+          "pauseAudio": false
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 30,
+      "focus": [
+        3.629271626472473,
+        -0.08,
+        1.5574584007263184
+      ],
+      "detailScale": 5.0,
+      "runtimeConnected": false,
+      "reuse": "Actual public shieldcard/shieldbar/mask alpha sampled into reference membrane; break reuses general/ShieldBreak; ordinary removal is not a break.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "2073_ShieldCounter_ElectroCounter_Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav",
+          "Contact_metal.wav": "2073_ShieldCounter_ElectroCounter_Contact_metal.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2073_ShieldCounter_ElectroCounter.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 25,
+        "selectedFrame": 30,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

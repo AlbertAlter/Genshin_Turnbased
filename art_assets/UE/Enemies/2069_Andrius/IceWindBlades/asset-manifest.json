@@ -1,0 +1,353 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/IceWindBlades/视觉需求.md",
+  "variants": {
+    "2069_IceWindBlades": {
+      "effect": "2069_IceWindBlades",
+      "source": "Blender/2069_IceWindBlades.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2069_Andrius/IceWindBlades/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2069_IceWindBlades_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/2069_IceWindBlades_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2069_IceWindBlades_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/2069_IceWindBlades_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "CryoUprightBlade": {
+          "file": "Exports/2069_IceWindBlades_CryoUprightBlade.fbx",
+          "objects": [
+            "PART_Cryo_BladeThickness",
+            "PART_Cryo_BladeBrightCrest",
+            "PART_Cryo_ContinuousBladeSlipstream"
+          ],
+          "vertices": 1708,
+          "triangles": 3160,
+          "dimensions": [
+            2.6264126002788544,
+            0.6579271629452705,
+            2.848590612411499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Cryo_BladeThickness": [
+              "IceBladeVolume"
+            ],
+            "PART_Cryo_BladeBrightCrest": [
+              "Soft"
+            ],
+            "PART_Cryo_ContinuousBladeSlipstream": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 1708,
+            "triangles": 3160,
+            "dimensions": [
+              2.6264126002788544,
+              0.6579276332631707,
+              2.8485907316207886
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "AnemoUprightBlade": {
+          "file": "Exports/2069_IceWindBlades_AnemoUprightBlade.fbx",
+          "objects": [
+            "PART_Anemo_BladeThickness",
+            "PART_Anemo_BladeBrightCrest",
+            "PART_Anemo_ContinuousBladeSlipstream"
+          ],
+          "vertices": 1708,
+          "triangles": 3160,
+          "dimensions": [
+            2.6264126002788544,
+            0.6579271629452705,
+            2.848590612411499
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_Anemo_BladeThickness": [
+              "SoftBladeVolume"
+            ],
+            "PART_Anemo_BladeBrightCrest": [
+              "Soft"
+            ],
+            "PART_Anemo_ContinuousBladeSlipstream": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 1708,
+            "triangles": 3160,
+            "dimensions": [
+              2.6264126002788544,
+              0.6579276332631707,
+              2.8485907316207886
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 33,
+          "position": [
+            2.075000047683716,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 33,
+          "position": [
+            3.7049999237060547,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 33,
+          "position": [
+            5.364999771118164,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 33,
+          "position": [
+            6.994999885559082,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 70,
+          "position": [
+            2.075000047683716,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 70,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 70,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 70,
+          "position": [
+            6.994999885559082,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        }
+      ],
+      "launchFrames": [
+        10,
+        47
+      ],
+      "hero_frame": 51,
+      "focus": [
+        -4.009625792503357,
+        -0.08,
+        0.056734323501586914
+      ],
+      "detailScale": 8.686239149305555,
+      "contract": "Two shared group passes: Cryo then Anemo. Blade plane upright to screen with thickness and upward cant; trajectory still source-to-target.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2069_IceWindBlades.wav"
+      },
+      "posterSelection": {
+        "previousFrame": 26,
+        "selectedFrame": 51,
+        "method": "Actual visible geometry at authored launch/contact-adjacent samples; not a timing change",
+        "sourceDefaultFrameUnchanged": true
+      }
+    }
+  }
+}

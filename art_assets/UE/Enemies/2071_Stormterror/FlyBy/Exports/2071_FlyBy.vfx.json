@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2071_Stormterror/FlyBy/2071_FlyBy",
+  "source": "art_assets/UE/Enemies/2071_Stormterror/FlyBy/Blender/2071_FlyBy.blend",
+  "file": "Enemies/2071_Stormterror/FlyBy/Exports/2071_FlyBy.vfx.bytes",
+  "meshes": 4,
+  "tracks": 21,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 81985
+}

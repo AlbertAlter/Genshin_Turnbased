@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using OfficeOpenXml;
 using UnityEngine;
 
@@ -19,13 +20,20 @@ public sealed class RoguelikeNodeContentCatalog : IRoguelikeStageEncounterCatalo
         public int Weight = 1;
         public int Background = 1;
         public List<StageEnemySetup> Enemies;
-        public bool HasAdditionalWaves;
+        public List<StageWaveSetup> Waves;
+        public bool EventBattleOnly;
+        public int MaxRound;
+        public string WinCondition, LoseCondition;
+        public string ConditionKey;
+        public List<StageTrialSetup> Trials = new List<StageTrialSetup>();
+        public RoguelikeEventEncounter Event;
     }
 
     private readonly Dictionary<string, Candidate> contents = new Dictionary<string, Candidate>(StringComparer.Ordinal);
     private readonly Dictionary<int, (int Level, float HP, float ATK, int[] Weights)> stages =
         new Dictionary<int, (int, float, float, int[])>();
     private readonly Dictionary<int, int> chapterEnds = new Dictionary<int, int>();
+    private readonly Dictionary<string, List<(string Item, int Quantity, string Hook)>> eventRewards = new();
     private readonly SortedDictionary<int, Roguelike.Tests.RouteGeneration.RouteStageConfig> routeStages = new();
 
     internal IEnumerable<int> StageIds => stages.Keys;
@@ -45,8 +53,20 @@ public sealed class RoguelikeNodeContentCatalog : IRoguelikeStageEncounterCatalo
         foreach (string path in Directory.GetFiles(Path.Combine(directory, "Battle"), "BattleConfig*.xlsx")
             .OrderBy(path => path, StringComparer.Ordinal))
             catalog.ReadBattles(path);
-        string events = Path.Combine(directory, "EventConfig.xlsx");
-        if (File.Exists(events)) catalog.ReadEvents(events);
+        // 每章一张小表：EventConfig1.xlsx对应第一章。旧分支树不参与。
+        string eventDirectory = Path.Combine(directory, "Event");
+        if (Directory.Exists(eventDirectory))
+            foreach (string path in Directory.GetFiles(eventDirectory, "EventBattleConfig*.xlsx").Where(path =>
+                Regex.IsMatch(Path.GetFileNameWithoutExtension(path), @"^EventBattleConfig[1-9]\d*$")).OrderBy(path => path))
+                catalog.ReadEventBattles(path);
+        string[] eventBooks = Directory.Exists(eventDirectory)
+            ? Directory.GetFiles(eventDirectory, "EventConfig*.xlsx").Where(path =>
+                Regex.IsMatch(Path.GetFileNameWithoutExtension(path), @"^EventConfig[1-9]\d*$")).OrderBy(path => path).ToArray()
+            : Array.Empty<string>();
+        foreach (string path in eventBooks) catalog.ReadChapterEvents(path);
+        // 兼容尚未发布章节小表的旧包；存在新表时不再混入早期示例遭遇。
+        string events = Path.Combine(eventDirectory, "EventEncounters.xlsx");
+        if (eventBooks.Length == 0 && File.Exists(events)) catalog.ReadEvents(events);
         foreach (var stage in catalog.stages)
         {
             foreach (RoguelikeNodeKind kind in Enum.GetValues(typeof(RoguelikeNodeKind)))
@@ -111,30 +131,33 @@ public sealed class RoguelikeNodeContentCatalog : IRoguelikeStageEncounterCatalo
         if (node == null || !TryGetStageId(chapter, node.StageIndex, out int stageId) ||
             !stages.TryGetValue(stageId, out var stage) ||
             !contents.TryGetValue(node.ContentId ?? string.Empty, out var candidate) || candidate.Enemies == null ||
-            candidate.Kind != node.Kind || stageId < candidate.From || stageId > candidate.To)
+            candidate.Kind != node.Kind || stageId < candidate.From || stageId > candidate.To ||
+            !string.IsNullOrEmpty(node.EventBattleContentId) && candidate.Event?.BattleContentId != node.EventBattleContentId)
             return InvalidBattle("已选战斗与当前章节层或节点类型不匹配。");
         return BuildBattle(candidate, stage.Level, stage.HP, stage.ATK);
     }
 
     private static RoguelikeSaveResult<StageSetupData> BuildBattle(Candidate candidate, int level, float hp, float atk)
     {
-        if (candidate.HasAdditionalWaves)
-            return InvalidBattle($"{candidate.Id} 包含后续波次，当前战斗入口仅支持单波。");
+        var waves = RoguelikeSaveJson.DeepClone(candidate.Waves ?? new List<StageWaveSetup> {
+            new StageWaveSetup { Enemies = candidate.Enemies } });
+        foreach (var enemy in waves.SelectMany(w => w.Enemies))
+            if (enemy.Level <= 0) enemy.Level = level;
         return RoguelikeSaveResult<StageSetupData>.Success(new StageSetupData
         {
             StageName = candidate.Id,
             BattleID = candidate.Background,
             EnemyHPMultiplier = hp,
             EnemyATKMultiplier = atk,
-            Enemies = candidate.Enemies.Select(enemy => new StageEnemySetup
-            {
-                EnemyID = enemy.EnemyID, Slot = enemy.Slot, Level = level,
-            }).ToList(),
+            Enemies = waves[0].Enemies, Waves = waves, MaxRound = candidate.MaxRound,
+            WinCondition = candidate.WinCondition, LoseCondition = candidate.LoseCondition,
+            ConditionKey = candidate.ConditionKey,
+            Trials = RoguelikeSaveJson.DeepClone(candidate.Trials),
         });
     }
 
     private IEnumerable<Candidate> Candidates(int stage, RoguelikeNodeKind kind)
-        => contents.Values.Where(entry => entry.Kind == kind &&
+        => contents.Values.Where(entry => !entry.EventBattleOnly && entry.Kind == kind &&
             (entry.Chapter == 0 || entry.Chapter == stage / 100) && stage >= entry.From && stage <= entry.To)
             .OrderBy(entry => entry.Id, StringComparer.Ordinal);
 
@@ -201,70 +224,175 @@ public sealed class RoguelikeNodeContentCatalog : IRoguelikeStageEncounterCatalo
             if (from > to || from / 100 != to / 100 || !stages.ContainsKey(from) || !stages.ContainsKey(to))
                 throw new InvalidDataException($"{where}：开放区间须是同一章内存在的起止节点。");
             var battle = new Candidate { Id = id, Kind = kind, Chapter = from / 100, From = from, To = to };
+            battle.ConditionKey = headers.Optional("ConditionKey") > 0 ? Field("ConditionKey") : null;
             string bg = Field("BattleBG");
             if (bg.Length != 0) battle.Background = ReadInt(bg, 1, int.MaxValue, where + "/BattleBG");
             Add(battle, where);
             battles.Add(id, battle);
         }
-        ReadFormations(RequireSheet(book, "Battle_Enemy", path), battles);
+        var formations = RoguelikeBattleWaves.Read(book.Workbook, battles.Keys);
+        foreach (var entry in battles)
+        {
+            entry.Value.Waves = formations[entry.Key];
+            entry.Value.Enemies = entry.Value.Waves[0].Enemies;
+        }
         foreach (var battle in battles.Values)
             if (battle.Enemies == null)
                 throw new InvalidDataException($"{battle.Id} 缺少第一波敌人。");
     }
 
-    private static void ReadFormations(ExcelWorksheet sheet, Dictionary<string, Candidate> battles)
+    private void ReadEventBattles(string path)
     {
-        int Column(string name)
+        int chapter = int.Parse(Path.GetFileNameWithoutExtension(path).Substring("EventBattleConfig".Length), CultureInfo.InvariantCulture);
+        if (!chapterEnds.TryGetValue(chapter, out int end)) throw new InvalidDataException("事件战斗表对应章节不存在：" + path);
+        using var book = new ExcelPackage(new FileInfo(path));
+        var sheet = RequireSheet(book, "Main", path); var headers = ExcelTableHeaders.For(sheet);
+        headers.Require("BattleID", "BattleBG", "WinCondition", "LoseCondition", "MaxRound");
+        var battles = new Dictionary<string, Candidate>(StringComparer.Ordinal);
+        for (int row = headers.DataStartRow; row <= sheet.Dimension.End.Row; row++)
         {
-            // Slot1～5 后面的同名列只供 Excel 显示敌人名称。
-            for (int col = 1; col <= (sheet.Dimension?.End.Column ?? 0); col++)
-                if (string.Equals(ExcelTableHeaders.Normalize(sheet.Cells[1, col].Text), name, StringComparison.OrdinalIgnoreCase))
-                    return col;
-            throw new InvalidDataException($"Battle_Enemy 缺少 {name}。");
+            string Field(string name) => headers.Cell(row, name).Text.Trim();
+            string id = Field("BattleID"); if (id.Length == 0) continue;
+            var candidate = new Candidate { Id = id, Kind = RoguelikeNodeKind.Battle, EventBattleOnly = true,
+                Chapter = chapter, From = chapter * 100 + 1, To = end,
+                MaxRound = Field("MaxRound").Length == 0 ? 0 : ReadInt(Field("MaxRound"), 1, int.MaxValue, id + "/MaxRound"),
+                WinCondition = Field("WinCondition"), LoseCondition = Field("LoseCondition") };
+            candidate.ConditionKey = headers.Optional("ConditionKey") > 0 ? Field("ConditionKey") : null;
+            if (Field("BattleBG").Length > 0) candidate.Background = ReadInt(Field("BattleBG"), 1, int.MaxValue, id + "/BattleBG");
+            _ = new BattleEventObjective(candidate.WinCondition, candidate.LoseCondition, candidate.MaxRound);
+            candidate.Trials = RoguelikeTrialParty.Read(book.Workbook,
+                headers.Optional("Tryout") > 0 ? Field("Tryout") : "",
+                headers.Optional("TryoutConfig") > 0 ? Field("TryoutConfig") : "");
+            Add(candidate, path + "/Main第" + row + "行"); battles.Add(id, candidate);
         }
-
-        int idColumn = Column("BattleID"), waveColumn = Column("Wave");
-        int[] slots = Enumerable.Range(1, 5).Select(slot => Column("Slot" + slot)).ToArray();
-        for (int row = 2; row <= (sheet.Dimension?.End.Row ?? 0); row++)
-        {
-            string id = sheet.Cells[row, idColumn].Text.Trim();
-            if (id.Length == 0 || row == 2 && id == "string") continue;
-            string where = $"Battle_Enemy 第 {row} 行（{id}）";
-            if (!battles.TryGetValue(id, out var battle)) throw new InvalidDataException(where + "：未知 BattleID。");
-            int wave = ReadInt(sheet.Cells[row, waveColumn].Text, 1, int.MaxValue, where + "/Wave");
-            if (wave != 1) { battle.HasAdditionalWaves = true; continue; }
-            if (battle.Enemies != null) throw new InvalidDataException(where + "：第一波重复。");
-            battle.Enemies = new List<StageEnemySetup>();
-            for (int slot = 0; slot < slots.Length; slot++)
-            {
-                string value = sheet.Cells[row, slots[slot]].Text.Trim();
-                if (value.Length == 0) continue;
-                int enemy = ReadInt(value, 1, int.MaxValue, where + $"/Slot{slot + 1}");
-                battle.Enemies.Add(new StageEnemySetup { EnemyID = enemy, Slot = slot + 1 });
-            }
-            if (battle.Enemies.Count == 0) throw new InvalidDataException(where + "：第一波为空。");
-        }
+        var formations = RoguelikeBattleWaves.Read(book.Workbook, battles.Keys, allowUnfilledBattles: true);
+        foreach (var entry in battles)
+            if (formations[entry.Key].Count > 0)
+            { entry.Value.Waves = formations[entry.Key]; entry.Value.Enemies = entry.Value.Waves[0].Enemies; }
     }
 
     private void ReadEvents(string path)
     {
         using var book = new ExcelPackage(new FileInfo(path));
-        var sheet = RequireSheet(book, "Event_Main", path);
+        var sheet = RequireSheet(book, "Encounters", path);
         var headers = ExcelTableHeaders.For(sheet);
-        headers.Require("EventID", "Enabled");
+        headers.Require("EventID", "Enabled", "AvailableStageFrom", "AvailableStageTo", "Weight",
+            "TitleKey", "TextKey", "PlaceKey", "ActionKey", "BattleID", "PreviewEnemyID");
         for (int row = headers.DataStartRow; row <= (sheet.Dimension?.End.Row ?? 0); row++)
         {
-            string id = headers.Cell(row, "EventID").Text.Trim();
+            string Field(string name) => headers.Cell(row, name).Text.Trim();
+            string id = Field("EventID");
             if (id.Length == 0 || headers.Cell(row, "Enabled").Text.Trim() != "1") continue;
-            string where = $"EventConfig/Event_Main 第 {row} 行";
-            int chapter = ReadInt(headers.Cell(row, "ChapterID").Text, 0, int.MaxValue, where + "/ChapterID");
-            int weight = ReadInt(headers.Cell(row, "Weight").Text, 1, int.MaxValue, where + "/Weight");
-            int condition = headers.Optional("EntryConditionGroupID");
-            if (condition > 0 && !string.IsNullOrWhiteSpace(sheet.Cells[row, condition].Text))
-                throw new InvalidDataException(where + "：事件出现条件需由事件模块接入后启用。");
-            Add(new Candidate { Id = id, Kind = RoguelikeNodeKind.Event, Chapter = chapter, To = int.MaxValue, Weight = weight }, where);
+            string where = $"EventEncounters/Encounters 第 {row} 行";
+            int from = RoguelikeStageId.Parse(Field("AvailableStageFrom"), where);
+            int to = RoguelikeStageId.Parse(Field("AvailableStageTo"), where);
+            if (from > to || from / 100 != to / 100 || !stages.ContainsKey(from) || !stages.ContainsKey(to))
+                throw new InvalidDataException(where + "：事件区间须是本章存在的节点。");
+            if (!contents.TryGetValue(Field("BattleID"), out var battle) || battle.Kind == RoguelikeNodeKind.Event ||
+                battle.Enemies == null)
+                throw new InvalidDataException(where + "：BattleID须引用已有的战斗。");
+            int preview = ReadInt(Field("PreviewEnemyID"), 1, int.MaxValue, where);
+            if (!battle.Enemies.Any(enemy => enemy.EnemyID == preview))
+                throw new InvalidDataException(where + "：预览敌人须属于该战斗。");
+            foreach (string key in new[] { "TitleKey", "TextKey", "PlaceKey", "ActionKey" })
+                if (Field(key).Length == 0) throw new InvalidDataException(where + "：缺少" + key);
+            var detail = new RoguelikeEventEncounter { EventId = id, TitleKey = Field("TitleKey"),
+                TextKey = Field("TextKey"), PlaceKey = Field("PlaceKey"), ActionKey = Field("ActionKey"),
+                BattleContentId = battle.Id, PreviewEnemyId = preview,
+                EnemyIds = battle.Enemies.Select(enemy => enemy.EnemyID).ToArray() };
+            Add(new Candidate { Id = id, Kind = RoguelikeNodeKind.Event, Chapter = from / 100, From = from, To = to,
+                Weight = ReadInt(Field("Weight"), 1, int.MaxValue, where), Event = detail,
+                Background = battle.Background, Enemies = battle.Enemies, Waves = battle.Waves,
+                MaxRound = battle.MaxRound, WinCondition = battle.WinCondition, LoseCondition = battle.LoseCondition,
+                ConditionKey = headers.Optional("ConditionKey") > 0 && Field("ConditionKey").Length > 0 ? Field("ConditionKey") : battle.ConditionKey,
+                Trials = battle.Trials }, where);
         }
     }
+
+    private void ReadChapterEvents(string path)
+    {
+        string number = Path.GetFileNameWithoutExtension(path).Substring("EventConfig".Length);
+        if (!int.TryParse(number, out int chapter) || !chapterEnds.TryGetValue(chapter, out int end))
+            throw new InvalidDataException("事件表对应的章节尚未配置：" + path);
+        using var book = new ExcelPackage(new FileInfo(path));
+        var sheet = RequireSheet(book, "Encounters", path);
+        var headers = ExcelTableHeaders.For(sheet);
+        headers.Require("EventID", "Weight", "TitleKey", "DescriptionKey", "OptionKey", "ConditionKey", "BattleID");
+        for (int row = headers.DataStartRow; row <= (sheet.Dimension?.End.Row ?? 0); row++)
+        {
+            string Field(string name) => headers.Cell(row, name).Text.Trim();
+            string id = Field("EventID"); if (id.Length == 0) continue;
+            string where = Path.GetFileName(path) + "/Encounters 第" + row + "行";
+            int weight = ReadInt(Field("Weight"), 0, int.MaxValue, where);
+            if (weight == 0) continue;
+            foreach (string key in new[] { "TitleKey", "DescriptionKey", "OptionKey" })
+                if (Field(key).Length == 0) throw new InvalidDataException(where + "：缺少" + key);
+            Candidate battle = null;
+            string battleId = Field("BattleID");
+            if (battleId.Length > 0 && (!contents.TryGetValue(battleId, out battle) ||
+                battle.Kind == RoguelikeNodeKind.Event || battle.Enemies == null))
+                throw new InvalidDataException(where + "：BattleID须引用已有的战斗。");
+            // 战斗列允许暂空：可以查看事件或离开，但不能用其他敌阵代替进入战斗。
+            var detail = new RoguelikeEventEncounter { EventId = id, TitleKey = Field("TitleKey"),
+                TextKey = Field("DescriptionKey"), ActionKey = Field("OptionKey"), ConditionKey = Field("ConditionKey"),
+                BattleContentId = battleId, PreviewEnemyId = battle?.Enemies.OrderBy(enemy => enemy.Slot).First().EnemyID ?? 0,
+                EnemyIds = battle?.Enemies.Select(enemy => enemy.EnemyID).ToArray() ?? Array.Empty<int>() };
+            Add(new Candidate { Id = id, Kind = RoguelikeNodeKind.Event, Chapter = chapter, From = chapter * 100 + 1,
+                To = end, Weight = weight, Event = detail, Background = battle?.Background ?? 1, Enemies = battle?.Enemies, Waves = battle?.Waves,
+                MaxRound = battle?.MaxRound ?? 0, WinCondition = battle?.WinCondition, LoseCondition = battle?.LoseCondition,
+                ConditionKey = Field("ConditionKey").Length > 0 ? Field("ConditionKey") : battle?.ConditionKey,
+                Trials = battle?.Trials ?? new List<StageTrialSetup>() }, where);
+        }
+        ReadEventRewards(book.Workbook);
+    }
+
+    public List<RoguelikeItemStackData> EventRewards(string eventId, int defeatedEnemies)
+    {
+        if (defeatedEnemies < 0) throw new ArgumentOutOfRangeException(nameof(defeatedEnemies));
+        if (!eventRewards.TryGetValue(eventId ?? "", out var rows)) return new List<RoguelikeItemStackData>();
+        return rows.Select(r => new RoguelikeItemStackData { ItemId = r.Item,
+            Quantity = checked(r.Quantity + (r.Hook == "RE103()" ? defeatedEnemies / 10 : 0)) }).Where(r => r.Quantity > 0).ToList();
+    }
+
+    private void ReadEventRewards(ExcelWorkbook book)
+    {
+        var sheet = book.Worksheets["Rewards"]; if (sheet?.Dimension == null) return;
+        var h = ExcelTableHeaders.For(sheet); h.Require("EventID", "ItemID", "Quantity", "RewardHook");
+        string current = null;
+        for (int row = h.DataStartRow; row <= sheet.Dimension.End.Row; row++)
+        {
+            string id = h.Cell(row, "EventID").Text.Trim(), item = h.Cell(row, "ItemID").Text.Trim();
+            if (id.Length > 0) current = id;
+            if (item.Length == 0) continue;
+            if (current == null || !contents.TryGetValue(current, out var entry) || entry.Kind != RoguelikeNodeKind.Event)
+                throw new InvalidDataException("Rewards引用未知事件：" + current);
+            string hook = h.Cell(row, "RewardHook").Text.Trim();
+            if (hook.Length > 0 && (hook != "RE103()" || current != "RE103")) throw new InvalidDataException("未知事件奖励钩子：" + hook);
+            if (!eventRewards.TryGetValue(current, out var rewards)) eventRewards.Add(current, rewards = new());
+            if (rewards.Any(r => r.Item == item)) throw new InvalidDataException("事件奖励物品重复：" + current + "/" + item);
+            rewards.Add((item, ReadInt(h.Cell(row, "Quantity").Text, 0, int.MaxValue, current + "/Quantity"), hook));
+        }
+    }
+
+    public int EventEnemyLevel(int chapter, RoguelikeNodeSelection node)
+        => TryGetStageId(chapter, node.StageIndex, out int stage) && stages.TryGetValue(stage, out var entry)
+            ? entry.Level : throw new InvalidDataException("事件所在层不存在。");
+
+    public RoguelikeSaveResult<RoguelikeEventEncounter> ResolveEvent(int chapter, RoguelikeNodeSelection node)
+    {
+        if (node == null || node.Kind != RoguelikeNodeKind.Event ||
+            !TryGetStageId(chapter, node.StageIndex, out int stage) ||
+            !contents.TryGetValue(node.ContentId ?? "", out var candidate) || candidate.Event == null ||
+            stage < candidate.From || stage > candidate.To)
+            return RoguelikeSaveResult<RoguelikeEventEncounter>.Failure(RoguelikeSaveErrorCode.ValidationFailed, "当前事件与节点配置不匹配。");
+        return RoguelikeSaveResult<RoguelikeEventEncounter>.Success(RoguelikeSaveJson.DeepClone(candidate.Event));
+    }
+
+    /// <summary>独立场景只读预览；不生成测试存档，也不推进正式流程。</summary>
+    public RoguelikeSaveResult<RoguelikeEventEncounter> PreviewEvent(string id)
+        => contents.TryGetValue(id ?? "", out var candidate) && candidate.Event != null
+            ? RoguelikeSaveResult<RoguelikeEventEncounter>.Success(RoguelikeSaveJson.DeepClone(candidate.Event))
+            : RoguelikeSaveResult<RoguelikeEventEncounter>.Failure(RoguelikeSaveErrorCode.NotFound, "事件配置不存在：" + id);
 
     private void Add(Candidate candidate, string where)
     {

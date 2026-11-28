@@ -1,0 +1,1771 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1029_Keqing/StarwardSword/视觉需求.md",
+  "variants": {
+    "Keqing_StarwardSword_Full": {
+      "effect": "Keqing_StarwardSword_Full",
+      "source": "Blender/Keqing_StarwardSword_Full.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1029_Keqing/StarwardSword/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Keqing_StarwardSword_Full_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Keqing_StarwardSword_Full_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "InitialElectroDomain": {
+          "file": "Exports/Keqing_StarwardSword_Full_InitialElectroDomain.fbx",
+          "objects": [
+            "PART_OpeningElectroDomainEdge"
+          ],
+          "vertices": 903,
+          "triangles": 1536,
+          "dimensions": [
+            8.811974048614502,
+            0.0,
+            5.000000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningElectroDomainEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 903,
+            "triangles": 1536,
+            "dimensions": [
+              8.811974048614502,
+              8.146034247147327e-07,
+              5.000000476837158
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc0": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc0.fbx",
+          "objects": [
+            "PART_OpeningFineArc0"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.1808311939239502,
+            0.0,
+            4.951172351837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.1808311939239502,
+              8.066483303537098e-07,
+              4.951172351837158
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc1": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc1.fbx",
+          "objects": [
+            "PART_OpeningFineArc1"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17896461486816406,
+            0.0,
+            4.949308395385742
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17896461486816406,
+              8.063446443884459e-07,
+              4.949308395385742
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc2": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc2.fbx",
+          "objects": [
+            "PART_OpeningFineArc2"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17697179317474365,
+            0.0,
+            4.94866418838501
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17697179317474365,
+              8.062396830155194e-07,
+              4.94866418838501
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc3": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc3.fbx",
+          "objects": [
+            "PART_OpeningFineArc3"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17999912798404694,
+            0.0,
+            4.951382160186768
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17999912798404694,
+              8.066825216701545e-07,
+              4.951382160186768
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc4": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc4.fbx",
+          "objects": [
+            "PART_OpeningFineArc4"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.18036603927612305,
+            0.0,
+            4.948960304260254
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.18036603927612305,
+              8.062879146564228e-07,
+              4.948960304260254
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc5": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc5.fbx",
+          "objects": [
+            "PART_OpeningFineArc5"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17951321601867676,
+            0.0,
+            4.948646783828735
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17951321601867676,
+              8.062368408445764e-07,
+              4.948646783828735
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc6": {
+          "file": "Exports/Keqing_StarwardSword_Full_OpeningFineArc6.fbx",
+          "objects": [
+            "PART_OpeningFineArc6"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17748093605041504,
+            0.0,
+            4.951437711715698
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17748093605041504,
+              8.06691531352044e-07,
+              4.951437711715698
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash1": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash1.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_1",
+            "PART_OnePurpleBladeWake_1",
+            "PART_OneSharpWhiteBlade_1"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.492952346801758,
+            0.0,
+            4.510806083679199
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_1": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_1": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.492952346801758,
+              7.349035513470881e-07,
+              4.510806083679199
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash2": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash2.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_2",
+            "PART_OnePurpleBladeWake_2",
+            "PART_OneSharpWhiteBlade_2"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.808608531951904,
+            0.0,
+            5.79428768157959
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_2": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_2": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.808608531951904,
+              9.440092298973468e-07,
+              5.79428768157959
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash3": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash3.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_3",
+            "PART_OnePurpleBladeWake_3",
+            "PART_OneSharpWhiteBlade_3"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.408731937408447,
+            0.0,
+            6.357532978057861
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_3": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_3": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.408731937408447,
+              1.0357734936405905e-06,
+              6.357532978057861
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash4": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash4.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_4",
+            "PART_OnePurpleBladeWake_4",
+            "PART_OneSharpWhiteBlade_4"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.675703048706055,
+            0.0,
+            3.973111867904663
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_4": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_4": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.675703048706055,
+              6.473020448538591e-07,
+              3.973111867904663
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash5": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash5.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_5",
+            "PART_OnePurpleBladeWake_5",
+            "PART_OneSharpWhiteBlade_5"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.045144081115723,
+            0.0,
+            5.506986141204834
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_5": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_5": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.045144081115723,
+              8.972018576969276e-07,
+              5.506986141204834
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash6": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash6.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_6",
+            "PART_OnePurpleBladeWake_6",
+            "PART_OneSharpWhiteBlade_6"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.40767765045166,
+            0.0,
+            6.321224689483643
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_6": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_6": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.40767765045166,
+              1.0298581401002593e-06,
+              6.321224689483643
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash7": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash7.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_7",
+            "PART_OnePurpleBladeWake_7",
+            "PART_OneSharpWhiteBlade_7"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.701339721679688,
+            0.0,
+            3.9551029205322266
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_7": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_7": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.701339721679688,
+              6.443680149459396e-07,
+              3.9551029205322266
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash8": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash8.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_8",
+            "PART_OnePurpleBladeWake_8",
+            "PART_OneSharpWhiteBlade_8"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.286080360412598,
+            0.0,
+            4.985896110534668
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_8": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_8": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.286080360412598,
+              8.123055295072845e-07,
+              4.985896110534668
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash9": {
+          "file": "Exports/Keqing_StarwardSword_Full_OneCommittedSlash9.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_9",
+            "PART_OnePurpleBladeWake_9",
+            "PART_OneSharpWhiteBlade_9",
+            "PART_FinaleAttachedCrescent"
+          ],
+          "vertices": 2766,
+          "triangles": 4736,
+          "dimensions": [
+            8.769614219665527,
+            0.0,
+            3.771623134613037
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_9": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_9": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_9": [
+              "Soft"
+            ],
+            "PART_FinaleAttachedCrescent": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 4,
+            "vertices": 2766,
+            "triangles": 4736,
+            "dimensions": [
+              8.769614219665527,
+              6.144753683656745e-07,
+              3.771623134613037
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BackgroundOnlyDimming": {
+          "file": "Exports/Keqing_StarwardSword_Full_BackgroundOnlyDimming.fbx",
+          "objects": [
+            "PART_SeparateBackgroundOnlyDarkening"
+          ],
+          "vertices": 4,
+          "triangles": 2,
+          "dimensions": [
+            22.0,
+            0.0,
+            12.399999618530273
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SeparateBackgroundOnlyDarkening": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 2,
+            "dimensions": [
+              22.0,
+              1.9073486328125e-06,
+              12.399999618530273
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 37,
+          "element": "Electro",
+          "kind": "opening domain, one whole-group actual contact",
+          "group": 0
+        },
+        {
+          "frame": 43,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 1,
+          "angleRadians": -0.3
+        },
+        {
+          "frame": 47,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 2,
+          "angleRadians": 0.55
+        },
+        {
+          "frame": 52,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 3,
+          "angleRadians": -0.66
+        },
+        {
+          "frame": 56,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 4,
+          "angleRadians": 0.18
+        },
+        {
+          "frame": 61,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 5,
+          "angleRadians": -0.48
+        },
+        {
+          "frame": 65,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 6,
+          "angleRadians": 0.67
+        },
+        {
+          "frame": 70,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 7,
+          "angleRadians": -0.16
+        },
+        {
+          "frame": 74,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 8,
+          "angleRadians": 0.39
+        },
+        {
+          "frame": 101,
+          "element": "Electro",
+          "soundRole": "electro",
+          "kind": "one whole-group finale",
+          "group": 9,
+          "angleRadians": -0.1
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 102,
+      "focus": [
+        -4.4670000076293945,
+        0.12000000476837158,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "contacts": [
+        37,
+        43,
+        47,
+        52,
+        56,
+        61,
+        65,
+        70,
+        74,
+        101
+      ],
+      "mainBladeCount": 9,
+      "openingDomainContacts": 1,
+      "backgroundOnlyDimming": true,
+      "cancelExample": null,
+      "referenceBoundary": "Original103frames/4.12s decoded in memory,24samples observed: initial violet domain, tightly interleaved diagonals around1.4–2.5s, retained residuals/pause, stronger final sweep around3.3s. Source37/43/47/52/56/61/65/70/74/101 is an authored timing interpretation, not claimed exact original per-hit timestamps. No full character clones/models or camera cuts.",
+      "contract": "Full variant has10contacts:1opening+8distinct rapid whole-group blades+1stronger finale. One main blade per group, local glints only per target. CancelAfterCombo has9contacts and no late finale; adjustable background fade is separate and never dims borrowed card art.",
+      "scope": "Source art only; no real hit execution, post-cancel business submission, Lang/timeline/Unity changes.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "Contact_swish.wav": "Keqing_StarwardSword_Full_Contact_swish.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Keqing_StarwardSword_Full.wav"
+      }
+    },
+    "Keqing_StarwardSword_CancelAfterCombo": {
+      "effect": "Keqing_StarwardSword_CancelAfterCombo",
+      "source": "Blender/Keqing_StarwardSword_CancelAfterCombo.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1029_Keqing/StarwardSword/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Spark": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_Spark.fbx",
+          "objects": [
+            "PART_TaperedSpark"
+          ],
+          "vertices": 21,
+          "triangles": 24,
+          "dimensions": [
+            0.06498244218528271,
+            0.0,
+            0.8009368479251862
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TaperedSpark": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 21,
+            "triangles": 24,
+            "dimensions": [
+              0.06498244218528271,
+              1.3048916969182756e-07,
+              0.8009368479251862
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "InitialElectroDomain": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_InitialElectroDomain.fbx",
+          "objects": [
+            "PART_OpeningElectroDomainEdge"
+          ],
+          "vertices": 903,
+          "triangles": 1536,
+          "dimensions": [
+            8.811974048614502,
+            0.0,
+            5.000000476837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningElectroDomainEdge": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 903,
+            "triangles": 1536,
+            "dimensions": [
+              8.811974048614502,
+              8.146034247147327e-07,
+              5.000000476837158
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc0": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc0.fbx",
+          "objects": [
+            "PART_OpeningFineArc0"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.1808311939239502,
+            0.0,
+            4.951172351837158
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.1808311939239502,
+              8.066483303537098e-07,
+              4.951172351837158
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc1": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc1.fbx",
+          "objects": [
+            "PART_OpeningFineArc1"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17896461486816406,
+            0.0,
+            4.949308395385742
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17896461486816406,
+              8.063446443884459e-07,
+              4.949308395385742
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc2": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc2.fbx",
+          "objects": [
+            "PART_OpeningFineArc2"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17697179317474365,
+            0.0,
+            4.94866418838501
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17697179317474365,
+              8.062396830155194e-07,
+              4.94866418838501
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc3": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc3.fbx",
+          "objects": [
+            "PART_OpeningFineArc3"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17999912798404694,
+            0.0,
+            4.951382160186768
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17999912798404694,
+              8.066825216701545e-07,
+              4.951382160186768
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc4": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc4.fbx",
+          "objects": [
+            "PART_OpeningFineArc4"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.18036603927612305,
+            0.0,
+            4.948960304260254
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.18036603927612305,
+              8.062879146564228e-07,
+              4.948960304260254
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc5": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc5.fbx",
+          "objects": [
+            "PART_OpeningFineArc5"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17951321601867676,
+            0.0,
+            4.948646783828735
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17951321601867676,
+              8.062368408445764e-07,
+              4.948646783828735
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OpeningFineArc6": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OpeningFineArc6.fbx",
+          "objects": [
+            "PART_OpeningFineArc6"
+          ],
+          "vertices": 119,
+          "triangles": 192,
+          "dimensions": [
+            0.17748093605041504,
+            0.0,
+            4.951437711715698
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OpeningFineArc6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 119,
+            "triangles": 192,
+            "dimensions": [
+              0.17748093605041504,
+              8.06691531352044e-07,
+              4.951437711715698
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash1": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash1.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_1",
+            "PART_OnePurpleBladeWake_1",
+            "PART_OneSharpWhiteBlade_1"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.492952346801758,
+            0.0,
+            4.510806083679199
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_1": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_1": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.492952346801758,
+              7.349035513470881e-07,
+              4.510806083679199
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash2": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash2.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_2",
+            "PART_OnePurpleBladeWake_2",
+            "PART_OneSharpWhiteBlade_2"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.808608531951904,
+            0.0,
+            5.79428768157959
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_2": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_2": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.808608531951904,
+              9.440092298973468e-07,
+              5.79428768157959
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash3": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash3.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_3",
+            "PART_OnePurpleBladeWake_3",
+            "PART_OneSharpWhiteBlade_3"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.408731937408447,
+            0.0,
+            6.357532978057861
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_3": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_3": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.408731937408447,
+              1.0357734936405905e-06,
+              6.357532978057861
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash4": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash4.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_4",
+            "PART_OnePurpleBladeWake_4",
+            "PART_OneSharpWhiteBlade_4"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.675703048706055,
+            0.0,
+            3.973111867904663
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_4": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_4": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.675703048706055,
+              6.473020448538591e-07,
+              3.973111867904663
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash5": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash5.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_5",
+            "PART_OnePurpleBladeWake_5",
+            "PART_OneSharpWhiteBlade_5"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.045144081115723,
+            0.0,
+            5.506986141204834
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_5": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_5": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.045144081115723,
+              8.972018576969276e-07,
+              5.506986141204834
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash6": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash6.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_6",
+            "PART_OnePurpleBladeWake_6",
+            "PART_OneSharpWhiteBlade_6"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            7.40767765045166,
+            0.0,
+            6.321224689483643
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_6": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_6": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              7.40767765045166,
+              1.0298581401002593e-06,
+              6.321224689483643
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash7": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash7.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_7",
+            "PART_OnePurpleBladeWake_7",
+            "PART_OneSharpWhiteBlade_7"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.701339721679688,
+            0.0,
+            3.9551029205322266
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_7": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_7": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.701339721679688,
+              6.443680149459396e-07,
+              3.9551029205322266
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneCommittedSlash8": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_OneCommittedSlash8.fbx",
+          "objects": [
+            "PART_OneGroupElectroSweepBody_8",
+            "PART_OnePurpleBladeWake_8",
+            "PART_OneSharpWhiteBlade_8"
+          ],
+          "vertices": 2087,
+          "triangles": 3584,
+          "dimensions": [
+            8.286080360412598,
+            0.0,
+            4.985896110534668
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneGroupElectroSweepBody_8": [
+              "Soft"
+            ],
+            "PART_OnePurpleBladeWake_8": [
+              "Soft"
+            ],
+            "PART_OneSharpWhiteBlade_8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 3,
+            "vertices": 2087,
+            "triangles": 3584,
+            "dimensions": [
+              8.286080360412598,
+              8.123055295072845e-07,
+              4.985896110534668
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BackgroundOnlyDimming": {
+          "file": "Exports/Keqing_StarwardSword_CancelAfterCombo_BackgroundOnlyDimming.fbx",
+          "objects": [
+            "PART_SeparateBackgroundOnlyDarkening"
+          ],
+          "vertices": 4,
+          "triangles": 2,
+          "dimensions": [
+            22.0,
+            0.0,
+            12.399999618530273
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SeparateBackgroundOnlyDarkening": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 4,
+            "triangles": 2,
+            "dimensions": [
+              22.0,
+              1.9073486328125e-06,
+              12.399999618530273
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 37,
+          "element": "Electro",
+          "kind": "opening domain, one whole-group actual contact",
+          "group": 0
+        },
+        {
+          "frame": 43,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 1,
+          "angleRadians": -0.3
+        },
+        {
+          "frame": 47,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 2,
+          "angleRadians": 0.55
+        },
+        {
+          "frame": 52,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 3,
+          "angleRadians": -0.66
+        },
+        {
+          "frame": 56,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 4,
+          "angleRadians": 0.18
+        },
+        {
+          "frame": 61,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 5,
+          "angleRadians": -0.48
+        },
+        {
+          "frame": 65,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 6,
+          "angleRadians": 0.67
+        },
+        {
+          "frame": 70,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 7,
+          "angleRadians": -0.16
+        },
+        {
+          "frame": 74,
+          "element": "Electro",
+          "soundRole": "swish",
+          "kind": "one whole-group rapid slash",
+          "group": 8,
+          "angleRadians": 0.39
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 61,
+      "focus": [
+        -4.4670000076293945,
+        0.12000000476837158,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "contacts": [
+        37,
+        43,
+        47,
+        52,
+        56,
+        61,
+        65,
+        70,
+        74
+      ],
+      "mainBladeCount": 8,
+      "openingDomainContacts": 1,
+      "backgroundOnlyDimming": true,
+      "cancelExample": 83,
+      "referenceBoundary": "Original103frames/4.12s decoded in memory,24samples observed: initial violet domain, tightly interleaved diagonals around1.4–2.5s, retained residuals/pause, stronger final sweep around3.3s. Source37/43/47/52/56/61/65/70/74/101 is an authored timing interpretation, not claimed exact original per-hit timestamps. No full character clones/models or camera cuts.",
+      "contract": "Full variant has10contacts:1opening+8distinct rapid whole-group blades+1stronger finale. One main blade per group, local glints only per target. CancelAfterCombo has9contacts and no late finale; adjustable background fade is separate and never dims borrowed card art.",
+      "scope": "Source art only; no real hit execution, post-cancel business submission, Lang/timeline/Unity changes.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "Contact_swish.wav": "Keqing_StarwardSword_CancelAfterCombo_Contact_swish.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Keqing_StarwardSword_CancelAfterCombo.wav"
+      }
+    }
+  }
+}

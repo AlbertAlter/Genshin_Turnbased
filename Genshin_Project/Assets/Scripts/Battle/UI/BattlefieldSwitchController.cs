@@ -30,6 +30,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         _fadeIn = parameters.Get("ActionIndicator.FadeInDuration", .12f);
         _fadeOut = parameters.Get("ActionIndicator.FadeOutDuration", .1f);
         CacheControls();
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return;
     }
 
     private void Update()
@@ -45,7 +46,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
             return;
         }
 
-        if (!_switching && battle.IsFreeDeathSwitchPending)
+        if (!_switching && battle.IsFreeForcedSwitchPending && !BattleExecution.IsBusy)
         {
             BeginSwitch(true);
             RefreshButton(battle);
@@ -55,14 +56,14 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         RefreshButton(battle);
         if (_switching)
         {
-            if (Input.GetKeyDown(KeyCode.A)) UIMoveSwitch(-1);
-            else if (Input.GetKeyDown(KeyCode.D)) UIMoveSwitch(1);
-            else if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Space)) UIConfirmSwitch();
-            else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X)) UICancelSwitch();
+            if (ProjectKeyBindings.Down(BattleShortcut.Previous)) UIMoveSwitch(-1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Next)) UIMoveSwitch(1);
+            else if (ProjectKeyBindings.Down(BattleShortcut.Switch) || ProjectKeyBindings.Down(BattleShortcut.Confirm)) UIConfirmSwitch();
+            else if (Input.GetKeyDown(KeyCode.Escape) || ProjectKeyBindings.Down(BattleShortcut.Cancel)) UICancelSwitch();
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.F)) UIBeginSwitch();
+        if (ProjectKeyBindings.Down(BattleShortcut.Switch)) UIBeginSwitch();
     }
 
     private void LateUpdate()
@@ -93,6 +94,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     /// <summary>UI/A/D：按编队槽位循环，并跳过空位和阵亡角色。</summary>
     public void UIMoveSwitch(int direction)
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return;
         BattleManager battle = BattleManager.Instance;
         if (!_switching || battle == null || direction == 0) return;
         _selectedSlot = battle.FindNextLivingAllySlot(_selectedSlot, direction);
@@ -101,6 +103,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     /// <summary>UI/F/Space：确认换人。</summary>
     public bool UIConfirmSwitch()
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return false;
         BattleManager battle = BattleManager.Instance;
         if (!_switching || battle == null) return false;
         if (!battle.CanSwitchActiveAllyTo(_selectedSlot))
@@ -109,7 +112,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
             return false;
         }
 
-        bool freeDeathSwitch = battle.IsFreeDeathSwitchPending;
+        bool freeDeathSwitch = battle.IsFreeForcedSwitchPending;
         int cost = battle.GetSwitchAPCost(_selectedSlot);
         if (!battle.TrySwitchActiveAllyWithAPCost(_selectedSlot))
         {
@@ -124,7 +127,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
 
         if (_input != null && _input.IsSelecting) _input.UICancelSelection();
         LogManager.Log(LogCategory.UI,
-            $"切换出战角色 -> {_selectedSlot}{(freeDeathSwitch ? "（阵亡免费换人）" : string.Empty)}");
+            $"切换出战角色 -> {_selectedSlot}{(freeDeathSwitch ? "（免费强制换人）" : string.Empty)}");
         CloseSwitch();
         return true;
     }
@@ -132,10 +135,11 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
     /// <summary>UI/X/Esc：取消普通换人；阵亡强制换人不可取消。</summary>
     public void UICancelSwitch()
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return;
         if (!_switching) return;
-        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeDeathSwitchPending))
+        if (_forcedDeathSwitch || (BattleManager.Instance != null && BattleManager.Instance.IsFreeForcedSwitchPending))
         {
-            LogManager.Log(LogCategory.UI, "出战角色已阵亡，必须确认换人");
+            LogManager.Log(LogCategory.UI, "必须先完成免费补位");
             return;
         }
         LogManager.Log(LogCategory.UI, "取消换人");
@@ -144,6 +148,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
 
     private bool BeginSwitch(bool forcedDeathSwitch)
     {
+        if (BattlePause.BlocksInput || ProjectKeyBindings.InputSuppressed) return false;
         BattleManager battle = BattleManager.Instance;
         if (!isActiveAndEnabled || battle == null || !battle.CanSwitchActiveAlly())
         {
@@ -159,7 +164,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         if (_input != null) _input.enabled = false;
         _restoreInputInLateUpdate = false;
         _switching = true;
-        _forcedDeathSwitch = forcedDeathSwitch || battle.IsFreeDeathSwitchPending;
+        _forcedDeathSwitch = forcedDeathSwitch || battle.IsFreeForcedSwitchPending;
 
         CharacterBattleController active = battle.GetActiveAlly();
         _selectedSlot = active != null && active.Entity != null
@@ -234,7 +239,7 @@ public sealed class BattlefieldSwitchController : MonoBehaviour
         float target = showDisabled ? 1f : 0f;
         float duration = showDisabled ? _fadeIn : _fadeOut;
         _disabledProgress = !acceptingInput ? 0f : duration <= 0 ? target
-            : Mathf.MoveTowards(_disabledProgress, target, Time.unscaledDeltaTime / duration);
+            : Mathf.MoveTowards(_disabledProgress, target, BattlePause.DeltaTime / duration);
         // Fade through transparent so the arrows and prohibition mark never share a visible frame.
         float disabledAlpha = Mathf.Clamp01(2f * _disabledProgress - 1f);
         _disabledOverlay.enabled = disabledAlpha > 0 && _disabledOverlay.sprite != null;

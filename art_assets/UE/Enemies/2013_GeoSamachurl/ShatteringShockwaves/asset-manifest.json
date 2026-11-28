@@ -1,0 +1,227 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2013_GeoSamachurl\\ShatteringShockwaves\\视觉需求.md",
+  "variants": {
+    "2013_ShatteringShockwaves": {
+      "effect": "2013_ShatteringShockwaves",
+      "source": "Blender/2013_ShatteringShockwaves.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2013_GeoSamachurl\\ShatteringShockwaves\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/2013_ShatteringShockwaves_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Totem": {
+          "file": "Exports/2013_ShatteringShockwaves_Totem.fbx",
+          "objects": [
+            "PART_TotemBase",
+            "PART_TotemBody",
+            "PART_TotemCap",
+            "PART_TotemSideStone-1",
+            "PART_TotemSideStone1",
+            "PART_TotemIlluminatedCarving"
+          ],
+          "vertices": 139,
+          "triangles": 238,
+          "dimensions": [
+            0.973989874124527,
+            0.8983780145645142,
+            1.300000011920929
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_TotemBase": [
+              "MatteStone"
+            ],
+            "PART_TotemBody": [
+              "MatteStone"
+            ],
+            "PART_TotemCap": [
+              "MatteStone"
+            ],
+            "PART_TotemSideStone-1": [
+              "MatteStone"
+            ],
+            "PART_TotemSideStone1": [
+              "MatteStone"
+            ],
+            "PART_TotemIlluminatedCarving": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 6,
+            "vertices": 139,
+            "triangles": 238,
+            "dimensions": [
+              0.973989874124527,
+              0.8983780443668365,
+              1.3000001311302185
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveFront": {
+          "file": "Exports/2013_ShatteringShockwaves_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveFront": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveFront": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.063934326171875,
+              7.830619324522559e-06,
+              48.06399917602539
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "WaveAfterglow": {
+          "file": "Exports/2013_ShatteringShockwaves_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {
+            "PART_WaveAfterglow": [
+              "Basis",
+              "Expanded",
+              "WidthDouble"
+            ]
+          },
+          "materialGroups": {
+            "PART_WaveAfterglow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 455,
+            "triangles": 768,
+            "dimensions": [
+              48.149776458740234,
+              7.84463009040337e-06,
+              48.150001525878906
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true
+      },
+      "cues": [
+        {
+          "frame": 14,
+          "waveCenter": [
+            3.7199997901916504,
+            0.1899999976158142,
+            -0.6800000071525574
+          ],
+          "reach": 3.8,
+          "layer": "below ALL card fronts/backs/frames"
+        }
+      ],
+      "hero_frame": 19,
+      "focus": [
+        3.7199997901916504,
+        0.10000000149011612,
+        -0.6800000071525574
+      ],
+      "elementAppearance": "Geo",
+      "artOnly": true,
+      "exampleTargetSlots": [
+        0,
+        2
+      ],
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2013_ShatteringShockwaves.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "effect": "Jean / GaleBlade",
+  "parts": {
+    "GaleFront": {
+      "file": "GaleFront.fbx",
+      "radius": 1.0357830453173191,
+      "vertices": 657,
+      "triangles": 1152,
+      "alpha": [
+        0.0,
+        0.550000011920929
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Gale_TranslucentWind"
+      ]
+    },
+    "TrailingRibbon": {
+      "file": "TrailingRibbon.fbx",
+      "radius": 3.804258719541293,
+      "vertices": 477,
+      "triangles": 832,
+      "alpha": [
+        0.0,
+        0.4000000059604645
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Gale_TranslucentWind"
+      ]
+    },
+    "ContactCurl": {
+      "file": "ContactCurl.fbx",
+      "radius": 0.8576725468304082,
+      "vertices": 477,
+      "triangles": 832,
+      "alpha": [
+        0.0,
+        0.5799999833106995
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Gale_TranslucentWind"
+      ]
+    },
+    "WindWisp": {
+      "file": "WindWisp.fbx",
+      "radius": 1.802344920628255,
+      "vertices": 297,
+      "triangles": 512,
+      "alpha": [
+        0.0,
+        0.6000000238418579
+      ],
+      "shapeKeys": [],
+      "materials": [
+        "Gale_TranslucentWind"
+      ]
+    }
+  },
+  "source": "Blender/Jean_GaleBlade.blend",
+  "duration": 1.4,
+  "release": 0.14,
+  "contactSamples": [
+    {
+      "slot": 4,
+      "seconds": 0.20319051927141069
+    },
+    {
+      "slot": 3,
+      "seconds": 0.29627437041544047
+    }
+  ],
+  "restoredAt": 1.25,
+  "cardMotion": "Complete card, vertical-axis right-to-left 360-degree yaw, early normal-axis lift, accelerated fall. Layout roots stay unchanged.",
+  "controls": [
+    "PlaybackSpeed",
+    "Opacity",
+    "WindThickness",
+    "TrailLength",
+    "LiftMeters"
+  ],
+  "preview": "Preview/Jean_GaleBlade_Full.mp4",
+  "fps": 30,
+  "axes": "Blender X right, Z up, -Y towards viewer; FBX -Z forward / Y up",
+  "runtimeConnected": false,
+  "reference": "Nine separate cards with actual fronts, frames, backs and sides; all used images packed. Reference objects never exported.",
+  "vertexColor": "VFXColor POINT RGBA, LINEAR export; soft edge alpha and material groups retained. Blender object alpha/reveal and authored clocks require later explicit runtime reconstruction; no Unity integration performed.",
+  "units": "1 Blender unit = 1 meter; reference art scale 100 design pixels per unit",
+  "validation": {
+    "packedImages": 12,
+    "effectObjects": 36,
+    "sourceScenes": 1,
+    "startEndCleared": true,
+    "bothCardsRestored": true,
+    "nativePartsReimported": 4,
+    "nativeGeometry": "Triangulated, zero attachment origin, dimensions, materials, RGBA alpha gradient and expected shape keys checked.",
+    "video": {
+      "name": "Jean_GaleBlade_Full",
+      "relative": "1013_Jean/GaleBlade",
+      "decodedFrames": 43,
+      "fps": 30.0,
+      "samples": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        17,
+        19,
+        21,
+        23,
+        25,
+        27,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38,
+        39,
+        41,
+        43
+      ]
+    },
+    "unityPublished": false,
+    "unityTestsRun": false
+  },
+  "partsPreview": "Preview/07_Separate_Native_Parts.png",
+  "yawRadians": -6.283185307179586,
+  "yawDirection": "Corrected: negative Blender Z yaw, right edge towards viewer, full 360 degrees.",
+  "sourceValidation": {
+    "Jean_GaleBlade": {
+      "sourceReopened": true,
+      "referenceCards": 9,
+      "packedImages": 12,
+      "effectObjects": 36,
+      "startAndEndClear": true,
+      "frameEnd": 43,
+      "correctedYawRadians": -6.283185307179586
+    }
+  },
+  "nativeValidation": {
+    "1013_Jean/GaleBlade/GaleFront": {
+      "vertices": 657,
+      "triangles": 1152,
+      "shapeKeys": [],
+      "rgba": true
+    },
+    "1013_Jean/GaleBlade/TrailingRibbon": {
+      "vertices": 477,
+      "triangles": 832,
+      "shapeKeys": [],
+      "rgba": true
+    },
+    "1013_Jean/GaleBlade/ContactCurl": {
+      "vertices": 477,
+      "triangles": 832,
+      "shapeKeys": [],
+      "rgba": true
+    },
+    "1013_Jean/GaleBlade/WindWisp": {
+      "vertices": 297,
+      "triangles": 512,
+      "shapeKeys": [],
+      "rgba": true
+    }
+  },
+  "mediaValidation": [
+    {
+      "source": "Jean_GaleBlade",
+      "video": "Preview/Jean_GaleBlade_Full.mp4",
+      "framesDecoded": 43,
+      "fps": 30.0,
+      "motionSheet": "Preview/Jean_GaleBlade_Full_MotionSheet.png"
+    }
+  ],
+  "audio": {
+    "sources": "Audio/Sources.json",
+    "clips": 3,
+    "originalGameAudio": false,
+    "auditioned": false,
+    "status": "Decoded PCM and waveform checks; substitute candidates; no Unity/Wwise integration."
+  }
+}

@@ -89,17 +89,27 @@ internal sealed class BattleStatusPhaseScheduler
         if (!_triggerByPhase.TryGetValue((int)phase, out var list) || list.Count == 0) yield break;
         var scheduled = new List<(StatusInstance inst, object host)>(list);
         scheduled.Sort((left, right) => left.inst.ApplyOrder.CompareTo(right.inst.ApplyOrder));
+        foreach (var batch in GroupScheduled(scheduled))
+            yield return BattleExecution.Wait(StatusActionDispatch.ExecuteBatchAsync(batch, "OnItsTurn", prompts));
+    }
+
+    // Only consecutive members are joined: unrelated intervening statuses keep their original gameplay order.
+    private static IEnumerable<List<(StatusInstance inst, object host, List<StatusActionData> actions)>> GroupScheduled(
+        List<(StatusInstance inst, object host)> scheduled)
+    {
+        List<(StatusInstance inst, object host, List<StatusActionData> actions)> batch = null;
+        long previous = 0;
+        string statusID = null;
         foreach (var item in scheduled)
         {
-            if (!StatusHostAccess.Contains(item.host, item.inst)) continue;
-            var actions = GetStatusActions(item.inst.StatusID2);
-            if (actions == null) continue;
-            if (StatusActionDispatch.HasExecutor(item.inst.Caster))
-            {
-                LogManager.Log(LogCategory.Status, $"OnItsTurn {item.inst.StatusID2} on {item.host} at phase {(int)phase}");
-                yield return StatusActionDispatch.ExecuteAsync(item.inst, actions, item.host, "OnItsTurn", prompts);
-            }
+            long source = BattleStatusPresentationBatch.Source(item.inst);
+            if (batch != null && (source == 0 || source != previous || item.inst.StatusID2 != statusID))
+            { yield return batch; batch = null; }
+            if (batch == null) batch = new List<(StatusInstance, object, List<StatusActionData>)>();
+            batch.Add((item.inst, item.host, GetStatusActions(item.inst.StatusID2)));
+            previous = source; statusID = item.inst.StatusID2;
         }
+        if (batch != null) yield return batch;
     }
 
     /// <summary>
@@ -118,25 +128,22 @@ internal sealed class BattleStatusPhaseScheduler
         var expired = new List<(StatusInstance inst, object host)>();
         var scheduled = new List<(StatusInstance inst, object host)>(list);
         scheduled.Sort((left, right) => left.inst.ApplyOrder.CompareTo(right.inst.ApplyOrder));
-        foreach (var item in scheduled)
-        {
-            if (!StatusHostAccess.Contains(item.host, item.inst)) continue;
-            if (turn < item.inst.EarliestTimerTurn) continue;
-            if (!item.inst.IsPermanent)
-                item.inst.RemainingPhaseCount--;
-            // 显式 TriggerPhase 已在触发集合执行 OnItsTurn，不能在计时阶段再执行一次。
-            // 未配置触发阶段的旧状态仍在 AddInPhase 执行自己的回合行动。
-            if (item.inst.TriggerPhase <= 0 && StatusActionDispatch.HasExecutor(item.inst.Caster))
-            {
-                var acts = GetStatusActions(item.inst.StatusID2);
-                if (acts != null)
+        var ticked = new HashSet<StatusInstance>();
+        foreach (var batch in GroupScheduled(scheduled))
+            yield return BattleExecution.Wait(StatusActionDispatch.ExecuteBatchAsync(batch, "OnItsTurn", prompts,
+                item =>
                 {
-                    yield return StatusActionDispatch.ExecuteAsync(item.inst, acts, item.host, "OnItsTurn", prompts);
-                }
-            }
-            if (!item.inst.IsPermanent && item.inst.RemainingPhaseCount <= 0)
-                expired.Add(item);
-        }
+                    if (turn < item.inst.EarliestTimerTurn) return false;
+                    ticked.Add(item.inst);
+                    if (!item.inst.IsPermanent) item.inst.RemainingPhaseCount--;
+                    // Explicit TriggerPhase already ran its OnItsTurn in the trigger set.
+                    return item.inst.TriggerPhase <= 0;
+                },
+                item =>
+                {
+                    if (ticked.Contains(item.inst) && !item.inst.IsPermanent && item.inst.RemainingPhaseCount <= 0)
+                        expired.Add(item);
+                }));
 
         // 到期统一处理（同样按大顺序）：OnEnd → 子状态清理 → 移除 + 注销
         if (expired.Count == 0) yield break;

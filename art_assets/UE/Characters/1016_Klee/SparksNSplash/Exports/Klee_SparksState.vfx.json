@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1016_Klee/SparksNSplash/Klee_SparksState",
+  "source": "art_assets/UE/Characters/1016_Klee/SparksNSplash/Blender/Klee_SparksState.blend",
+  "file": "Characters/1016_Klee/SparksNSplash/Exports/Klee_SparksState.vfx.bytes",
+  "meshes": 3,
+  "tracks": 29,
+  "frames": 301,
+  "duration": 10.0,
+  "loopStart": 0.6,
+  "loopEnd": 4.6,
+  "markers": {
+    "Appear": 0.0,
+    "LoopStart": 0.6,
+    "Cycle1Repeat": 4.6,
+    "Cycle2Repeat": 8.6,
+    "FractionalPhaseExit": 8.933333333333334,
+    "Cleared": 10.0
+  },
+  "bytes": 118300
+}

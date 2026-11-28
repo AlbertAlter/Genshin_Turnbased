@@ -1,0 +1,554 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets\\UE-Reference\\Enemies\\2059_CicinMage\\ElectroSurround\\视觉需求.md",
+  "variants": {
+    "2059_ElectroSurround": {
+      "effect": "2059_ElectroSurround",
+      "source": "Blender/2059_ElectroSurround.blend",
+      "requirement": "art_assets\\UE-Reference\\Enemies\\2059_CicinMage\\ElectroSurround\\视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "SurroundArc0": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc0.fbx",
+          "objects": [
+            "PART_SurroundArc0"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.24126732349395752,
+            0.28152868151664734,
+            0.5144468545913696
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.24126732349395752,
+              0.2815287688155479,
+              0.5144469141960144
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc1": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc1.fbx",
+          "objects": [
+            "PART_SurroundArc1"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.3046441674232483,
+            0.26227425038814545,
+            0.5223289411514997
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.3046441674232483,
+              0.2622743397951126,
+              0.522328985389322
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc2": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc2.fbx",
+          "objects": [
+            "PART_SurroundArc2"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.57366494089365,
+            0.10525593161582947,
+            0.5275935381650925
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.57366494089365,
+              0.10525599122047424,
+              0.5275935530662537
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc3": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc3.fbx",
+          "objects": [
+            "PART_SurroundArc3"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.610057920217514,
+            0.1070498526096344,
+            0.532080352306366
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.610057920217514,
+              0.10704994201660156,
+              0.5320803821086884
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc3": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc4": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc4.fbx",
+          "objects": [
+            "PART_SurroundArc4"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.3553612232208252,
+            0.2631258890032768,
+            0.5320185422897339
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.3553612232208252,
+              0.2631259858608246,
+              0.5320185422897339
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc4": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc5": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc5.fbx",
+          "objects": [
+            "PART_SurroundArc5"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.361147940158844,
+            0.28099069092422724,
+            0.5235903263092041
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.361147940158844,
+              0.2809907756745815,
+              0.5235903859138489
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc6": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc6.fbx",
+          "objects": [
+            "PART_SurroundArc6"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.6208967566490173,
+            0.15126043558120728,
+            0.5320934057235718
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.6208967566490173,
+              0.15126052498817444,
+              0.532093406538479
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc6": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc7": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc7.fbx",
+          "objects": [
+            "PART_SurroundArc7"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.6549188420176506,
+            0.05965757369995117,
+            0.5354095250368118
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.6549188420176506,
+              0.05965763330459595,
+              0.535409539937973
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc7": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc8": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc8.fbx",
+          "objects": [
+            "PART_SurroundArc8"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.510150134563446,
+            0.23667971789836884,
+            0.5346994400024414
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.510150134563446,
+              0.236679807305336,
+              0.5346995145082474
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc8": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc9": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc9.fbx",
+          "objects": [
+            "PART_SurroundArc9"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.23095136880874634,
+            0.29111766815185547,
+            0.5162643790245056
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.23095136880874634,
+              0.29111775010824203,
+              0.5162644386291504
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc9": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc10": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc10.fbx",
+          "objects": [
+            "PART_SurroundArc10"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.4884794056415558,
+            0.19264119863510132,
+            0.5285601019859314
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.4884794056415558,
+              0.19264128804206848,
+              0.5285601317882538
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc10": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc11": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc11.fbx",
+          "objects": [
+            "PART_SurroundArc11"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.6221278607845306,
+            0.024230599403381348,
+            0.5254359608516097
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.6221278607845306,
+              0.024230659008026123,
+              0.5254359380633105
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc11": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc12": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc12.fbx",
+          "objects": [
+            "PART_SurroundArc12"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.44726091623306274,
+            0.20299863815307617,
+            0.5272188931703568
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.44726091623306274,
+              0.20299872756004333,
+              0.5272189378738403
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc12": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        },
+        "SurroundArc13": {
+          "file": "Exports/2059_ElectroSurround_SurroundArc13.fbx",
+          "objects": [
+            "PART_SurroundArc13"
+          ],
+          "vertices": 56,
+          "dimensions": [
+            0.13466119766235352,
+            0.2923455908894539,
+            0.515687882900238
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "triangles": 84,
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 56,
+            "triangles": 84,
+            "dimensions": [
+              0.13466119766235352,
+              0.29234567284584045,
+              0.5156879127025604
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          },
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SurroundArc13": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": []
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "hero_frame": 65,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "elementAppearance": "Electro",
+      "artOnly": true,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2059_ElectroSurround.wav"
+      },
+      "launchFrames": []
+    }
+  }
+}

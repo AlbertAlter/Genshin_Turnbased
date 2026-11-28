@@ -1,0 +1,18 @@
+{
+  "key": "Characters/1014_Barbara/ShiningMiracle/Barbara_ShiningMiracle",
+  "source": "art_assets/UE/Characters/1014_Barbara/ShiningMiracle/Blender/Barbara_ShiningMiracle.blend",
+  "file": "Characters/1014_Barbara/ShiningMiracle/Exports/Barbara_ShiningMiracle.vfx.bytes",
+  "meshes": 8,
+  "tracks": 58,
+  "frames": 73,
+  "duration": 2.4,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Gather": 0.0,
+    "Bloom": 0.3,
+    "Afterglow": 1.0,
+    "Cleared": 2.4
+  },
+  "bytes": 140916
+}

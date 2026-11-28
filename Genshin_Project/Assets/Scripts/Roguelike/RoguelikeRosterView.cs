@@ -188,6 +188,7 @@ public sealed partial class RoguelikeRosterView : MonoBehaviour
 
     private void OnDisable()
     {
+        CloseFormationEnemyPreview();
         if (shell == null) return;
         if (motion != null) StopCoroutine(motion);
         motion = null;
@@ -258,6 +259,7 @@ public sealed partial class RoguelikeRosterView : MonoBehaviour
     {
         if (shell == null || !shell.gameObject.activeInHierarchy || !tileSkinReady) return false;
         if (filterPopup != null) CloseFilterPopup();
+        else if (formationEnemyPreviewOpen) CloseFormationEnemyPreview();
         else if (picking) Attempt(() => { CloseEquipmentPicker(false); Render(); });
         else if (training != null || skillMode) Attempt(CloseTraining);
         else if (!inBag && characterId != 0) Attempt(BackFromCharacter);
@@ -301,6 +303,8 @@ public sealed partial class RoguelikeRosterView : MonoBehaviour
         if (showFormation) RetainFormationCards();
         else ReleaseFormationCards();
         Clear(formationHost, formationCardParking);
+        formationEnemyPreviewOverlay = null;
+        if (!showFormation) formationEnemyPreviewOpen = false;
         formationHost.gameObject.SetActive(showFormation);
         bool showRoster = !showFormation && !inBag && session.Snapshot != null && Character == null;
         rosterBody.gameObject.SetActive(showRoster);

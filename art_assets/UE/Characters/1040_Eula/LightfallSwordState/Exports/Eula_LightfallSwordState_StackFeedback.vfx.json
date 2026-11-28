@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1040_Eula/LightfallSwordState/Eula_LightfallSwordState_StackFeedback",
+  "source": "art_assets/UE/Characters/1040_Eula/LightfallSwordState/Blender/Eula_LightfallSwordState_StackFeedback.blend",
+  "file": "Characters/1040_Eula/LightfallSwordState/Exports/Eula_LightfallSwordState_StackFeedback.vfx.bytes",
+  "meshes": 23,
+  "tracks": 31,
+  "frames": 112,
+  "duration": 3.7,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.7
+  },
+  "bytes": 133232
+}

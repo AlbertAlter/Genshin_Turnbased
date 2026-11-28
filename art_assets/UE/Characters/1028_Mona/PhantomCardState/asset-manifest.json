@@ -1,0 +1,782 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomCardState/视觉需求.md",
+  "variants": {
+    "Mona_PhantomCardState_State": {
+      "effect": "Mona_PhantomCardState_State",
+      "source": "Blender/Mona_PhantomCardState_State.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomCardState_State_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomCardState_State_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomCardState_State_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomCardState_State_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomCardState_State_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "contract": "World slot anchor persists with empty occupant. Independent second phantom has own phase/exit; periodic pulse does not destroy the original. Ordinary expiry is a quiet fade, not a phantom explosion.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomCardState_State.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1028_Mona/PhantomCardState/Blender/Mona_PhantomCardState_State.blend",
+        "driversConverted": 8,
+        "legacyExpressions": 8,
+        "numericComparisons": 272,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 70,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Mona_PhantomCardState_State_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Mona_PhantomCardState_PeriodicPulse": {
+      "effect": "Mona_PhantomCardState_PeriodicPulse",
+      "source": "Blender/Mona_PhantomCardState_PeriodicPulse.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomQuietPulse": {
+          "file": "Exports/Mona_PhantomCardState_PeriodicPulse_PhantomQuietPulse.fbx",
+          "objects": [
+            "PART_ThinNonBreakingPhantomPulse"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            2.0339795351028442,
+            0.0,
+            2.0339999198913574
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 86,
+          "element": "Hydro",
+          "kind": "one actual periodic phantom pulse; intact phantom retained, no rupture fragments"
+        },
+        {
+          "frame": 158,
+          "element": "Hydro",
+          "kind": "one actual periodic phantom pulse; intact phantom retained, no rupture fragments"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "contract": "World slot anchor persists with empty occupant. Independent second phantom has own phase/exit; periodic pulse does not destroy the original. Ordinary expiry is a quiet fade, not a phantom explosion.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomCardState_PeriodicPulse.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1028_Mona/PhantomCardState/Blender/Mona_PhantomCardState_PeriodicPulse.blend",
+        "driversConverted": 8,
+        "legacyExpressions": 8,
+        "numericComparisons": 272,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 78,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Mona_PhantomCardState_PeriodicPulse_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Mona_PhantomCardState_EmptyAnchor": {
+      "effect": "Mona_PhantomCardState_EmptyAnchor",
+      "source": "Blender/Mona_PhantomCardState_EmptyAnchor.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomCardState_EmptyAnchor_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomCardState_EmptyAnchor_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomCardState_EmptyAnchor_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomCardState_EmptyAnchor_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomCardState_EmptyAnchor_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "emptyFieldDemo": {
+        "cardIndex": 2,
+        "probeFrame": 150,
+        "hiddenAfterFrame": 90
+      },
+      "contract": "World slot anchor persists with empty occupant. Independent second phantom has own phase/exit; periodic pulse does not destroy the original. Ordinary expiry is a quiet fade, not a phantom explosion.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomCardState_EmptyAnchor.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1028_Mona/PhantomCardState/Blender/Mona_PhantomCardState_EmptyAnchor.blend",
+        "driversConverted": 8,
+        "legacyExpressions": 8,
+        "numericComparisons": 272,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 70,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Mona_PhantomCardState_EmptyAnchor_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    },
+    "Mona_PhantomCardState_TwoInstances": {
+      "effect": "Mona_PhantomCardState_TwoInstances",
+      "source": "Blender/Mona_PhantomCardState_TwoInstances.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1028_Mona/PhantomCardState/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "AstralStar": {
+          "file": "Exports/Mona_PhantomCardState_TwoInstances_AstralStar.fbx",
+          "objects": [
+            "PART_SmallFourPointAstralStar"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.2800000011920929,
+            0.0,
+            0.36000001430511475
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "MonaWaterDrop": {
+          "file": "Exports/Mona_PhantomCardState_TwoInstances_MonaWaterDrop.fbx",
+          "objects": [
+            "PART_MonaSmallBlueDrop"
+          ],
+          "vertices": 80,
+          "triangles": 140,
+          "dimensions": [
+            0.08774351328611374,
+            0.05841432511806488,
+            0.11249999701976776
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomHollowWater": {
+          "file": "Exports/Mona_PhantomCardState_TwoInstances_PhantomHollowWater.fbx",
+          "objects": [
+            "PART_HollowHourglassWaterPhantom",
+            "PART_PhantomWaterLip_0",
+            "PART_PhantomWaterLip_1"
+          ],
+          "vertices": 2447,
+          "triangles": 4352,
+          "dimensions": [
+            1.2200000286102295,
+            0.4000000059604645,
+            1.5720000267028809
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomWaterCrown": {
+          "file": "Exports/Mona_PhantomCardState_TwoInstances_PhantomWaterCrown.fbx",
+          "objects": [
+            "PART_AuthoredPhantomWaterCrown_0",
+            "PART_AuthoredPhantomWaterCrown_1",
+            "PART_AuthoredPhantomWaterCrown_2",
+            "PART_AuthoredPhantomWaterCrown_3",
+            "PART_AuthoredPhantomWaterCrown_4",
+            "PART_AuthoredPhantomWaterCrown_5"
+          ],
+          "vertices": 126,
+          "triangles": 144,
+          "dimensions": [
+            0.9730401635169983,
+            0.27819713950157166,
+            0.37837928533554077
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhantomReturnWater": {
+          "file": "Exports/Mona_PhantomCardState_TwoInstances_PhantomReturnWater.fbx",
+          "objects": [
+            "PART_PhantomReturnWaterSpiral",
+            "PART_PhantomInnerWetCurl"
+          ],
+          "vertices": 1190,
+          "triangles": 2016,
+          "dimensions": [
+            1.223322868347168,
+            0.2599714547395706,
+            1.1675788760185242
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 70,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 8,
+      "referenceBoundary": "Stellaris118f/3.54s and Phantom140f/5.64s decoded in memory,24 samples each observed; astrolabe/starry water, hollow phantom/pulses/expiry seen. Additional actual-game screenshot shows hollow hourglass-like phantom and upper water crown. Normal90f/3.61s sampled24; final raised-water dome observed but no target contact. Independent charged file remains inaccessible. Fine constellation links, phantom crown and charged target adaptation are authored, not traced game assets.",
+      "scope": "Source art only. Fixed-field phantom is distinct from unit bubble and independently lasting omen. No status assignment, healing, damage or Unity/table changes.",
+      "contract": "World slot anchor persists with empty occupant. Independent second phantom has own phase/exit; periodic pulse does not destroy the original. Ordinary expiry is a quiet fade, not a phantom explosion.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Mona_PhantomCardState_TwoInstances.wav"
+      },
+      "nativeMathValidation": {
+        "source": "art_assets/UE/Characters/1028_Mona/PhantomCardState/Blender/Mona_PhantomCardState_TwoInstances.blend",
+        "driversConverted": 16,
+        "legacyExpressions": 16,
+        "numericComparisons": 544,
+        "maximumFormulaError": 4.170672018855015e-08,
+        "nativeDrivers": 138,
+        "frames": [
+          1.0,
+          1.4,
+          24.6,
+          25.0,
+          38.4,
+          70.0,
+          73.0,
+          121.0,
+          169.0,
+          312.6,
+          313.0,
+          330.4,
+          348.0
+        ],
+        "arbitraryExitInputs": [
+          137.4,
+          211.2
+        ],
+        "sourceReopened": true,
+        "autoexecDisabled": true,
+        "negativeModulo": "fmod(fmod(a,b)+b,b), preserving divisor-sign wrapping",
+        "defaultFramePreserved": [
+          70,
+          0.0
+        ],
+        "defaultRenderOutputInsideProject": true,
+        "still": "Preview/Mona_PhantomCardState_TwoInstances_01_Overall.png",
+        "stillFrame": 70,
+        "noGeometryActionOrControlEdits": true,
+        "noExportsOrVideo": true,
+        "noUnityWrites": true
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "created": "2026-11-27",
+  "file": "AndriusTrial.png",
+  "method": "built-in image_gen",
+  "identity_reference": "art_assets/Enemy_Icon/2069_01.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/PyroAgentClone.png"
+  ],
+  "prompt": "Use case: stylized-concept\nAsset type: transparent colored card-bottom status icon for a game, readable at 32–64 pixels.\nPrimary request: one simplified frontal head of Andrius, the wolf in reference image 1. This is the trial-layer icon, not the engraved approval sigil.\nInput images: Image 1 is the exact character identity and palette reference. Image 2 is a style reference only: crisp simplified painted facets, dark outline, clear silhouette. Do not use its hood, human face or red palette.\nSubject: a symmetrical frontal wolf head with tall upright ears, dark navy and icy-blue angular forehead, central long cyan forehead marking, small icy-blue eyes, white cheek and chin fur. Retain the recognisable face in image 1; simplify fur into large clean angular shapes.\nComposition: centered square, generous fully transparent padding on every side; silhouette about 72% of canvas width and height, complete ears and mane, nothing clipped.\nStyle: polished game UI painted icon, a few clear value shapes, clean antialiased edge. Bold shapes for small-size readability, modest shading, no photoreal fur.\nBackdrop: truly transparent alpha outside the head.\nConstraints: one head only; no text, numbers, frame, circular badge, stone wall, outer glow, cast shadow, decorative particles or extra objects. Preserve solid opaque interior faces and transparency outside.",
+  "usage": "北风的试炼4206902；正面彩色狼头卡底图标，按有效普通状态实例数显示层数。卡面认可纹样另写Blender需求，本图不是石刻纹样。",
+  "transparent_background": true,
+  "generated_file": "C:/Users/1/.codex/generated_images/01a04c66-ac0d-7dd2-8d1d-b23930c333b2/exec-f61e593d-3909-4daa-ac94-eb51fb38a15f.png",
+  "published_file": "Genshin_Project/Assets/StreamingAssets/art_assets/UI/CardBottomStatus/AndriusTrial.png"
+}

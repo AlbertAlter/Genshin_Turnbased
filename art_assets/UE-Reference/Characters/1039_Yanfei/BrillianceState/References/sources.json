@@ -1,0 +1,62 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E7%83%9F%E7%BB%AF",
+    "image_url": "https://patchwiki.biligame.com/images/ys/d/d7/72stxz6sxs1qph6le7ufg6axry8a282.gif",
+    "title": "凭此结契.gif",
+    "recorded": "2026-11-27",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码47帧、1.88秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "检索灼灼持续表现，尚未确认完整循环与自然退出。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\yanfei-references\\Yanfei_DoneDeal_Observation.png",
+    "decoded_frames": 47,
+    "duration_seconds": 1.88,
+    "sampled_frames": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46
+    ]
+  },
+  {
+    "source_type": "官方角色资料",
+    "page_url": "https://wiki.hoyolab.com/pc/genshin/entry/24?lang=en-us",
+    "title": "HoYoWiki·Yanfei",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "检索确认官方角色页入口，未作为实机动态核对。",
+    "use": "角色与技能资料检索，项目目标、Count和AP仍沿当前项目。"
+  },
+  {
+    "source_type": "官方角色演示／音画参考",
+    "page_url": "https://www.youtube.com/watch?v=y43rmAQ-l_M",
+    "title": "New Character Demo - \"Yanfei: Legal Expertise\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "已核对官方发布者、标题与入口；未完整观看、逐段试听或截取音频。视频含配乐与语音，未确认独立纯技能音源。",
+    "use": "检索本项动作和音色，不提供未经核对的时间点。"
+  }
+]

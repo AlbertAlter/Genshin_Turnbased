@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2084_AbyssHerald/RipplingBlades/2084_RipplingBlades_2Rounds",
+  "source": "art_assets/UE/Enemies/2084_AbyssHerald/RipplingBlades/Blender/2084_RipplingBlades_2Rounds.blend",
+  "file": "Enemies/2084_AbyssHerald/RipplingBlades/Exports/2084_RipplingBlades_2Rounds.vfx.bytes",
+  "meshes": 6,
+  "tracks": 170,
+  "frames": 165,
+  "duration": 5.466666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 5.466666666666667
+  },
+  "bytes": 529481
+}

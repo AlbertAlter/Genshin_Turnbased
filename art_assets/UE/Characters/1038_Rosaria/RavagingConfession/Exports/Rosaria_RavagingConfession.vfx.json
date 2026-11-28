@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1038_Rosaria/RavagingConfession/Rosaria_RavagingConfession",
+  "source": "art_assets/UE/Characters/1038_Rosaria/RavagingConfession/Blender/Rosaria_RavagingConfession.blend",
+  "file": "Characters/1038_Rosaria/RavagingConfession/Exports/Rosaria_RavagingConfession.vfx.bytes",
+  "meshes": 7,
+  "tracks": 94,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 215941
+}

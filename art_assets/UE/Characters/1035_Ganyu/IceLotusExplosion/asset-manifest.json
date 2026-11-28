@@ -1,0 +1,471 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/IceLotusExplosion/视觉需求.md",
+  "variants": {
+    "Ganyu_IceLotusExplosion": {
+      "effect": "Ganyu_IceLotusExplosion",
+      "source": "Blender/Ganyu_IceLotusExplosion.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1035_Ganyu/IceLotusExplosion/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Ganyu_IceLotusExplosion_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Ganyu_IceLotusExplosion_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Ganyu_IceLotusExplosion_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Projectile": {
+          "file": "Exports/Ganyu_IceLotusExplosion_Projectile.fbx",
+          "objects": [
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1",
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1",
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1",
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0",
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody"
+          ],
+          "vertices": 577,
+          "triangles": 472,
+          "dimensions": [
+            0.3516828268766403,
+            0.3426828235387802,
+            1.2300001680850983
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "ASSET_KaeyaOrbit_Icicle1_MilkyTrappedIce": [
+              "Native_Kaeya_Ice_TransientFrostMist"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_InternalFissure0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FissureBranch0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_3": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_2": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_1": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_FacetGleam_0": [
+              "Native_Kaeya_Ice_FineFrostEdges"
+            ],
+            "ASSET_KaeyaOrbit_Icicle1_CrystalBody": [
+              "Native_Kaeya_Ice_TranslucentIOR131"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 12,
+            "vertices": 577,
+            "triangles": 472,
+            "dimensions": [
+              0.3516828268766403,
+              0.34268301725387573,
+              1.2300001978874207
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BriefIceLotus": {
+          "file": "Exports/Ganyu_IceLotusExplosion_BriefIceLotus.fbx",
+          "objects": [
+            "PART_AuthoredShortIceLotusPetal_0_0",
+            "PART_AuthoredShortIceLotusPetal_0_1",
+            "PART_AuthoredShortIceLotusPetal_0_2",
+            "PART_AuthoredShortIceLotusPetal_0_3",
+            "PART_AuthoredShortIceLotusPetal_0_4",
+            "PART_AuthoredShortIceLotusPetal_0_5",
+            "PART_AuthoredShortIceLotusPetal_0_6",
+            "PART_AuthoredShortIceLotusPetal_0_7",
+            "PART_AuthoredShortIceLotusPetal_1_0",
+            "PART_AuthoredShortIceLotusPetal_1_1",
+            "PART_AuthoredShortIceLotusPetal_1_2",
+            "PART_AuthoredShortIceLotusPetal_1_3",
+            "PART_AuthoredShortIceLotusPetal_1_4"
+          ],
+          "vertices": 663,
+          "triangles": 832,
+          "dimensions": [
+            1.7999999523162842,
+            0.25999999046325684,
+            1.7999999523162842
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredShortIceLotusPetal_0_0": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_1": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_2": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_3": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_4": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_5": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_6": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_0_7": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_1_0": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_1_1": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_1_2": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_1_3": [
+              "LotusIce"
+            ],
+            "PART_AuthoredShortIceLotusPetal_1_4": [
+              "LotusIce"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 13,
+            "vertices": 663,
+            "triangles": 832,
+            "dimensions": [
+              1.7999999523162842,
+              0.2600002861034625,
+              1.800000011920929
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FrostBloomPetal": {
+          "file": "Exports/Ganyu_IceLotusExplosion_FrostBloomPetal.fbx",
+          "objects": [
+            "PART_SixBranchFrostBloom_0",
+            "PART_FrostflakeChiseledLeaf_0",
+            "PART_FrostflakeWhiteCrystalRidge_0",
+            "PART_SixBranchFrostBloom_1",
+            "PART_FrostflakeChiseledLeaf_1",
+            "PART_FrostflakeWhiteCrystalRidge_1",
+            "PART_SixBranchFrostBloom_2",
+            "PART_FrostflakeChiseledLeaf_2",
+            "PART_FrostflakeWhiteCrystalRidge_2",
+            "PART_SixBranchFrostBloom_3",
+            "PART_FrostflakeChiseledLeaf_3",
+            "PART_FrostflakeWhiteCrystalRidge_3",
+            "PART_SixBranchFrostBloom_4",
+            "PART_FrostflakeChiseledLeaf_4",
+            "PART_FrostflakeWhiteCrystalRidge_4",
+            "PART_SixBranchFrostBloom_5",
+            "PART_FrostflakeChiseledLeaf_5",
+            "PART_FrostflakeWhiteCrystalRidge_5"
+          ],
+          "vertices": 1554,
+          "triangles": 2484,
+          "dimensions": [
+            2.200000047683716,
+            0.07699999958276749,
+            1.9162559509277344
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SixBranchFrostBloom_0": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_0": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_0": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_1": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_1": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_1": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_2": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_2": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_2": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_3": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_3": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_3": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_4": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_4": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_4": [
+              "Soft"
+            ],
+            "PART_SixBranchFrostBloom_5": [
+              "Soft"
+            ],
+            "PART_FrostflakeChiseledLeaf_5": [
+              "FrostflakeCrystalLeaves"
+            ],
+            "PART_FrostflakeWhiteCrystalRidge_5": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 18,
+            "vertices": 1554,
+            "triangles": 2484,
+            "dimensions": [
+              2.200000047683716,
+              0.07700030152957993,
+              1.9162559509277344
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 28,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 28,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 28,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 28,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 28,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 29,
+      "focus": [
+        -4.505000114440918,
+        -0.23000000417232513,
+        -0.6899999976158142
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "CelestialShower135f/5.4s,Normal343f/13.72s,Trail91f/3.64s decoded in memory and24 samples each observed. Normal includes actual two-stage frostflake near10–12.5s. Lotus natural expiry is NOT shown. Pearl scrolls, petals and expiry art are authored interpretations, not traced original topology/texture.",
+      "scope": "Source art only; real state, targets, C6 and counts are not executed. No Unity/tables changed.",
+      "recordedLotusAnchor": [
+        -4.505000114440918,
+        -0.23000000417232513,
+        -0.6899999976158142
+      ],
+      "contract": "One brief lotus at original slot, one all-enemy contact28. Existing IceLotus bottom icon remains the only persistent display; replacement/cancellation never creates an explosion.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Ganyu_IceLotusExplosion.wav"
+      }
+    }
+  }
+}

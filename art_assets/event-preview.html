@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>事件与遭遇 · 交互预览</title>
+  <!-- 样式与脚本内嵌；直接双击本HTML，无需服务器或第三方脚本。 -->
+  <style>
+@font-face{font-family:ProjectFont;src:url("UI/CharacterList/Font/zh-cn.ttf") format("truetype");font-weight:400;font-display:swap}
+:root{--deep:#716758;--light:#998f81;--paper:#f7efdd;--white:#fefefe;--ink:#352d25;--muted:#d8cbb7;--gold:#efd5a2;--line:#d8c6a34a;--font:ProjectFont,"Microsoft YaHei",sans-serif;font-family:var(--font);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:#3c352e;color:var(--paper)}
+button,input,select{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:default;opacity:.42}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:4px}h1,h2,h3,p{margin:0;font-weight:400}button{touch-action:manipulation}[hidden]{display:none!important}
+.playground{position:relative;flex:1;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 70% 20%,#b0a38e,#736756)}
+.game-canvas{width:1920px;height:1080px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--scale,.5));transform-origin:center;overflow:hidden;background:linear-gradient(112deg,#a39785,#736757);color:var(--paper);font-size:28px;isolation:isolate}
+.game-canvas:before{content:"";position:absolute;inset:0;z-index:-1;background:url("Others/PaimonEmblem_LightBrown.png") 55% 48%/1150px no-repeat;opacity:.12;pointer-events:none}
+.scene{position:absolute;inset:30px;border:1px solid #e8d6ae70;border-radius:16px;background:linear-gradient(115deg,#51463ce8,#5e5144d9);overflow:hidden;animation:scene-in .26s ease-out}
+.scene:after{content:"";position:absolute;inset:10px;border:1px solid #d8c6a322;border-radius:9px;pointer-events:none}
+.page-header{height:115px;display:flex;align-items:center;gap:18px;padding:0 57px;border-bottom:1px solid var(--line)}
+.page-header h1{font-size:36px}.page-header .context{margin-left:auto;font-size:24px;color:var(--muted)}
+.title-diamond{width:17px;height:17px;transform:rotate(45deg);border:2px solid var(--gold);box-shadow:0 0 0 5px #efd5a218;margin:0 5px}
+.page-close{margin-left:23px;display:grid;place-items:center;width:54px;height:54px;border:1px solid #d8c6a360;background:#302b263c;border-radius:50%;transition:background .15s,transform .12s}
+.page-close img{width:28px;height:28px;object-fit:contain}.page-close:hover{background:#c9b28c42}.page-close:active{transform:scale(.91)}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:15px;min-height:60px;padding:10px 35px;border-radius:8px;border:1px solid #c6ac7e;color:var(--paper);background:#5f5141;transition:transform .12s,background .16s,box-shadow .16s}
+.btn:hover:not(:disabled){background:#78664f;box-shadow:0 0 0 3px #efd5a21f}.btn:active:not(:disabled){transform:scale(.965)}.btn.primary{background:#e6cf9f;color:#30291f;border-color:#ffe6b6;box-shadow:inset 0 0 0 3px #f6e3bd55}.btn.primary:hover:not(:disabled){background:#f4dfb6}.btn.small{min-height:45px;padding:6px 20px;font-size:22px}
+.route-header{height:142px;padding:38px 65px 22px;display:flex;align-items:center;gap:24px}.route-header h1{font-size:42px}.route-header p{font-size:23px;color:var(--muted);margin-top:9px}.route-stats{margin-left:auto;text-align:right;font-size:25px;color:var(--gold)}
+.route-scroll{position:absolute;left:35px;right:35px;top:145px;bottom:110px;overflow-x:auto;overflow-y:hidden;scrollbar-color:#b6a180 #4b4135;scrollbar-width:thin;overscroll-behavior:contain}
+.route-map{position:relative;height:780px;min-width:100%;user-select:none}.route-lines{position:absolute;inset:0;overflow:visible;pointer-events:none}.route-lines path{fill:none;stroke:#e8dccb55;stroke-width:6;stroke-linecap:round;stroke-dasharray:5 15}.route-lines path.reached{stroke:#e5c99a;opacity:.9}
+.stage-label{position:absolute;top:30px;transform:translateX(-50%);font-size:23px;color:#ddcdb7;white-space:nowrap}.stage-label small{display:block;text-align:center;font-size:18px;color:#c2b29b;margin-top:7px}
+.map-node{position:absolute;width:90px;height:90px;transform:translate(-50%,-50%);border-radius:50%;border:2px solid #b9a58780;background:#584d40;display:grid;place-items:center;opacity:.34;transition:opacity .2s,background .2s,box-shadow .2s}
+.map-node img{width:49px;height:49px;object-fit:contain;filter:brightness(0) invert(1);pointer-events:none}.map-node.available{opacity:1;border-color:#f1d4a0;background:#8d7859;box-shadow:0 0 0 8px #e4cda01a,0 0 30px #f2cf8a15}.map-node.available:hover{background:#b1976e;box-shadow:0 0 0 9px #efdbb241,0 0 32px #efd7a838}.map-node.visited{opacity:.95;background:#c7ad7d;border-color:#e5cf9d}.map-node.visited:after{content:"✓";position:absolute;right:-5px;bottom:-3px;width:30px;height:30px;border-radius:50%;background:#e6cf9f;color:#4b3d2b;font-size:24px}
+.map-node.pending{box-shadow:0 0 0 10px #efd5a238}.map-node.Event.available{background:#a08a68}.map-node.Boss{width:112px;height:112px}.map-node.Boss img{width:72px;height:72px;filter:none}
+.node-caption{position:absolute;top:99px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:20px;color:var(--paper);pointer-events:none}
+.route-footer{position:absolute;bottom:38px;left:65px;right:65px;display:flex;align-items:center;gap:28px}.legend{display:flex;align-items:center;gap:25px;color:var(--muted);font-size:22px}.legend span{display:flex;align-items:center;gap:10px}.legend img{width:24px;height:24px;object-fit:contain;filter:brightness(0) invert(1)}.route-help{margin-left:auto;font-size:22px;color:var(--muted)}
+.event-content{height:calc(100% - 115px);display:grid;grid-template-columns:700px 1fr;gap:50px;padding:68px 90px 78px}
+.event-art{position:relative;display:grid;place-items:center;align-self:stretch;isolation:isolate}.event-art:before{content:"";position:absolute;width:610px;height:610px;border:1px solid #e3cc9555;border-radius:50%;box-shadow:0 0 0 25px #dfcba009,0 0 0 80px #dfcba007;z-index:-1}
+.event-art:after{content:"";position:absolute;width:490px;height:490px;border:1px solid #e3cc9533;transform:rotate(45deg);z-index:-1}.event-art .art-card{width:370px;height:635px;transform:rotate(-4deg);box-shadow:18px 22px 35px #201c2355}
+.event-place{position:absolute;bottom:8px;font-size:22px;color:var(--muted);letter-spacing:5px}
+.event-copy{padding:36px 0 10px;display:flex;flex-direction:column;align-items:flex-start}.eyebrow{font-size:23px;color:#ddc59a;letter-spacing:6px;margin-bottom:20px}.event-copy h1{font-size:54px;line-height:1.4;color:#f7ead0}
+.flourish{height:1px;width:100%;background:linear-gradient(90deg,#d6bc89aa,transparent);margin:25px 0 34px;position:relative}.flourish:before{content:"";position:absolute;top:-4px;width:9px;height:9px;background:#dbc18e;transform:rotate(45deg)}
+.story{display:grid;gap:23px;line-height:1.9;font-size:28px;color:#ede3d2}.event-enemies{display:flex;gap:14px;align-items:center;margin-top:30px;color:#cfc0a9;font-size:22px}.enemy-count{padding:6px 16px;border:1px solid #d8c6a340;border-radius:5px}
+.event-actions{margin-top:auto;display:flex;flex-direction:column;width:100%;gap:19px;padding-top:35px}.event-actions .primary{font-size:29px;min-height:78px;justify-content:space-between;padding:12px 28px}.event-actions .leave{align-self:flex-end;background:transparent;border-color:#b8a17c80;font-size:24px;min-width:160px}.action-diamond{width:12px;height:12px;background:#776240;transform:rotate(45deg)}
+.art-card{position:relative;border-radius:17px;overflow:hidden;background:#938065;border:4px solid #e4d3ab;isolation:isolate}.art-card .card-image{width:100%;height:100%;object-fit:cover;display:block}.art-card:after{content:"";position:absolute;inset:0;border-radius:13px;box-shadow:inset 0 0 0 2px #59432d88,inset 0 -60px 45px -30px #25211dc9;pointer-events:none}.card-name{position:absolute;bottom:14px;left:9px;right:9px;background:#29241dcc;text-align:center;padding:9px 5px;z-index:1;font-size:27px;border-radius:5px}
+.formation-meta{text-align:center;padding-top:33px}.formation-meta h2{font-size:35px}.formation-meta p{font-size:22px;color:var(--muted);margin-top:13px}.preset-tabs{display:flex;justify-content:center;gap:10px;margin-top:23px}.preset-tabs button{width:61px;height:47px;background:#6a5b48;border:1px solid #bcaa8855;border-radius:5px;font-size:24px}.preset-tabs .selected{background:#e6cf9f;color:#382f24;border-color:#f4dfb5}
+.party-board{display:flex;justify-content:center;gap:38px;margin-top:30px}.party-slot{width:264px;text-align:center;position:relative}.party-slot>.art-card{width:264px;height:450px;padding:0;cursor:pointer;transition:transform .16s,box-shadow .16s}.party-slot>.art-card:hover{transform:translateY(-5px);box-shadow:0 12px 24px #241d2638}.slot-index{position:absolute;top:12px;left:12px;z-index:2;background:#e3c995;color:#3d3020;border-radius:4px;padding:2px 10px;font-size:24px}.party-slot .level{font-size:24px;margin-top:15px;color:#f2e1c0}.remove{margin-top:12px;background:#584a3b;border:1px solid #a18b6a;border-radius:5px;padding:6px 21px;font-size:22px}
+.empty-slot{display:grid;place-items:center;border:2px dashed #c0aa7e90;background:#b4a0801c;color:#dac59c}.empty-slot b{font-size:78px;font-weight:400}.empty-slot span{display:block;font-size:22px;margin-top:15px}
+.formation-footer{position:absolute;left:60px;right:60px;bottom:35px;border-top:1px solid var(--line);padding-top:22px;display:flex;align-items:center;gap:18px}.formation-footer .push{margin-left:auto;color:var(--muted);font-size:26px}
+.overlay{position:absolute;inset:0;z-index:10;background:#211e1c99;display:grid;place-items:center;backdrop-filter:blur(4px)}.picker{position:absolute;right:25px;top:25px;bottom:25px;width:850px;background:#b8ab96;color:#352d25;border:2px solid #e0cba0;border-radius:12px;box-shadow:-25px 0 75px #211c2540;padding:35px;display:flex;flex-direction:column}
+.picker-head{display:flex;justify-content:space-between;align-items:center;font-size:31px;border-bottom:1px solid #74634b55;padding-bottom:24px}.picker-head button{border:0;background:#675744;color:#fff;border-radius:50%;width:44px;height:44px}
+.picker p{font-size:21px;margin-top:20px;color:#625442}.roster-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:19px 14px;margin-top:30px;overflow:auto;align-content:start;padding:5px}.roster-pick{padding:0;border:3px solid transparent;background:#78624c;border-radius:8px;position:relative;overflow:hidden;color:#fff}.roster-pick img{display:block;width:100%;height:145px;object-fit:cover;object-position:50% 18%}.roster-pick span{display:block;padding:8px 0;font-size:21px}.roster-pick.selected{border-color:#f6e4b0;box-shadow:0 0 0 3px #886e31}.pick-number{position:absolute;left:5px;top:5px;width:29px;height:29px;border-radius:4px;display:grid;place-items:center;background:#f4dca5;color:#48351e;font-size:21px}.picker-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:25px;border-top:1px solid #74634b55}
+.battle-scene{background:linear-gradient(#28322e70,#161e2390),url("BattleBG/1_BG.png") center/cover}.battle-top{height:90px;border-bottom:0;background:linear-gradient(#202b2ca8,transparent)}.battle-top h1{font-size:30px}.battle-turn{margin-left:auto;font-size:24px;color:#e3d2b0}.battle-row{position:absolute;display:flex;justify-content:center;gap:35px;left:60px;right:60px}.battle-row.enemies{top:125px}.battle-row.allies{top:565px}
+.battle-card{width:170px}.battle-card .art-card{height:289px;border-width:3px;border-radius:11px;width:100%;padding:0;display:block}.battle-card .card-name{font-size:20px;bottom:8px;padding:5px}.battle-card .card-level{text-align:center;font-size:19px;margin-top:6px;color:#f4e6cc}.hp-track{height:9px;background:#2e2922;border-radius:9px;margin-top:9px;overflow:hidden;border:1px solid #cab88e60}.hp-fill{height:100%;width:100%;background:#78935c;border-radius:9px}.hp-text{text-align:center;font-size:19px;color:#eee2cb;margin-top:6px}.battle-card.active .art-card{box-shadow:0 0 0 5px #e9d39c,0 0 30px #ead39b55}
+.battle-divider{position:absolute;top:505px;left:calc(50% - 130px);width:260px;text-align:center;font-size:24px;letter-spacing:8px;color:#e2d0a5}.battle-bottom{position:absolute;left:65px;right:65px;bottom:29px;display:flex;align-items:center;gap:20px;font-size:24px}.battle-bottom .ap{margin-left:auto;color:#f4ddb2}.battle-bottom .skill-stub{background:#625c4cd9;border:1px solid #d7c29366;border-radius:7px;padding:12px 25px;opacity:.7}
+.outcome{width:850px;text-align:center;background:linear-gradient(115deg,#504538,#6b5c48);border:1px solid #e6cd9a;border-radius:13px;padding:65px}.outcome h2{font-size:48px;color:#f0d8aa}.outcome p{line-height:1.8;color:#e1d2b9;font-size:26px;margin:25px 0 40px}.outcome .buttons{display:flex;gap:22px;justify-content:center}.reward-items{display:flex;gap:20px;justify-content:center;margin:36px 0 42px}.reward-tile{width:150px;background:#a38864;border:1px solid #dfc99d;border-radius:7px;overflow:hidden}.reward-tile img{width:120px;height:110px;object-fit:contain;margin:12px auto;display:block}.reward-tile .reward-label{background:#f8f0dd;color:#443622;font-size:22px;padding:8px 5px}.reward-tile small{display:block;font-size:19px;margin-top:5px}.loading{height:100%;display:grid;place-content:center;text-align:center;gap:26px;font-size:28px}.loading i{width:46px;height:46px;border:3px solid #ead9af44;border-top-color:#ead9af;border-radius:50%;animation:spin 1s linear infinite;justify-self:center}.error-screen{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:25px;padding:80px;text-align:center}.error-screen h1{font-size:40px}.error-screen p{font-size:25px;color:var(--muted);line-height:1.8}.error-screen input{font-size:22px;max-width:650px}
+.preview-tools{flex:none;position:relative;z-index:20;background:#302d28;color:#d1c5b1;border-top:1px solid #d0b99044;font:13px/1.5 system-ui,"Microsoft YaHei",sans-serif;padding:9px 18px 8px}.preview-topline{display:flex;align-items:center;gap:10px;min-height:28px}.preview-tag{color:#f2d9a9;margin-right:10px}.preview-tools input{width:105px;background:#24221f;border:1px solid #736651;border-radius:4px;color:#e8d7ba;padding:4px 7px;font-size:13px}.preview-tools button,.preview-tools summary{border:1px solid #72644f;background:#443c31;color:#e5d2b1;border-radius:4px;padding:4px 10px;font-size:12px}.preview-tools button:hover:not(:disabled){background:#65533c}.preview-tools button:disabled{opacity:.3}.tools-spacer{flex:1}.config-label{opacity:.8}.preview-status{display:flex;gap:20px;color:#b0a38e;font-size:12px;margin-top:5px}.preview-status>span:last-child{margin-left:auto}.preview-status output{color:#e7d3af}#trace-panel{position:relative}#trace-panel summary{cursor:pointer;list-style:none}#trace-log{position:absolute;bottom:34px;right:0;width:390px;max-height:370px;overflow:auto;background:#2d2924;border:1px solid #8e7a59;border-radius:7px;margin:0;padding:18px 18px 18px 42px;font:12px/1.9 ui-monospace,monospace;box-shadow:0 8px 30px #1118}
+@keyframes scene-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:0s!important;transition-duration:0s!important}}
+@media(max-width:900px){.config-label{display:none}.preview-tools{padding:6px 10px}.preview-tag{display:none}.preview-status>span:last-child{display:none}.preview-status{font-size:11px}.preview-topline{gap:6px}}
+
+  </style>
+</head>
+<body>
+  <main class="playground" aria-label="游戏画面">
+    <div id="game" class="game-canvas"><div class="loading"><i></i><p>正在准备预览…</p></div></div>
+  </main>
+  <!-- 预览工具位于游戏画幅之外；不属于将来Unity的产品界面。 -->
+  <footer class="preview-tools" aria-label="HTML预览工具">
+    <div class="preview-topline">
+      <span class="preview-tag">HTML 流程预览</span>
+      <label>种子 <input id="seed" type="number" value="2713" step="1" aria-label="路线种子"></label>
+      <button id="regenerate" type="button">重新生成</button>
+      <span class="config-label" id="config-status">内嵌路线配置</span>
+      <span class="tools-spacer"></span>
+      <button id="demo-victory" type="button" disabled>演示胜利</button>
+      <button id="demo-defeat" type="button" disabled>演示战败</button>
+      <details id="trace-panel"><summary>流程记录</summary><ol id="trace-log"></ol></details>
+    </div>
+    <div class="preview-status"><output id="flow-status">准备中</output><span id="weight-status"></span>
+      <span>战斗仅展示入战画面，结算由演示按钮触发</span></div>
+  </footer>
+  <script>
+(function(){
+'use strict';
+// 独立HTML预览：CSS、流程逻辑、测试遭遇及配表快照均在本文件内。
+// 仅图片和字体沿用本地art_assets目录，不依赖JSZip、模块加载器、CDN或本地服务器。
+// 下列数据来自Charts/Roguelike/#StageConfig.xlsx与NodeRewards.xlsx的Chapter1，2026-11-27提取。
+// 保留原节点权重与奖励数量，不运行时请求Excel，不将本HTML测试数据自动移植到Unity。
+const previewStageRows=[{"StageID":"R101","MinEncounter":1,"MaxEncounter":1,"Battle":100,"Event":0,"Elite":0,"Boss":0,"EnemyLevel":1},{"StageID":"R102","MinEncounter":2,"MaxEncounter":2,"Battle":70,"Event":30,"Elite":0,"Boss":0,"EnemyLevel":2},{"StageID":"R103","MinEncounter":2,"MaxEncounter":3,"Battle":70,"Event":30,"Elite":0,"Boss":0,"EnemyLevel":3},{"StageID":"R104","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":30,"Elite":0,"Boss":0,"EnemyLevel":4},{"StageID":"R105","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":5},{"StageID":"R106","MinEncounter":4,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":6},{"StageID":"R107","MinEncounter":4,"MaxEncounter":5,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":7},{"StageID":"R108","MinEncounter":4,"MaxEncounter":5,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":8},{"StageID":"R109","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":9},{"StageID":"R110","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":10,"Elite":20,"Boss":0,"EnemyLevel":10},{"StageID":"R111","MinEncounter":3,"MaxEncounter":3,"Battle":5,"Event":5,"Elite":90,"Boss":0,"EnemyLevel":11},{"StageID":"R112","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":10,"Elite":20,"Boss":0,"EnemyLevel":12},{"StageID":"R113","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":13},{"StageID":"R114","MinEncounter":4,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":14},{"StageID":"R115","MinEncounter":4,"MaxEncounter":5,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":15},{"StageID":"R116","MinEncounter":4,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":16},{"StageID":"R117","MinEncounter":3,"MaxEncounter":4,"Battle":70,"Event":20,"Elite":10,"Boss":0,"EnemyLevel":17},{"StageID":"R118","MinEncounter":3,"MaxEncounter":3,"Battle":70,"Event":30,"Elite":0,"Boss":0,"EnemyLevel":18},{"StageID":"R119","MinEncounter":2,"MaxEncounter":3,"Battle":70,"Event":30,"Elite":0,"Boss":0,"EnemyLevel":19},{"StageID":"R120","MinEncounter":1,"MaxEncounter":1,"Battle":0,"Event":0,"Elite":0,"Boss":100,"EnemyLevel":20}];
+const previewRewardRows=[{"StageID":"R101","ItemID":660101,"Name":"流浪者的经验","Quantity":6},{"StageID":"R101","ItemID":660201,"Name":"精锻用杂矿","Quantity":15},{"StageID":"R101","ItemID":660301,"Name":"祝圣油膏","Quantity":19},{"StageID":"R101","ItemID":660401,"Name":"低级天赋书","Quantity":1},{"StageID":"R101","ItemID":680103,"Name":"摩拉","Quantity":12450},{"StageID":"R101","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":3},{"StageID":"R102","ItemID":660101,"Name":"流浪者的经验","Quantity":17},{"StageID":"R102","ItemID":660201,"Name":"精锻用杂矿","Quantity":15},{"StageID":"R102","ItemID":660301,"Name":"祝圣油膏","Quantity":19},{"StageID":"R102","ItemID":660401,"Name":"低级天赋书","Quantity":1},{"StageID":"R102","ItemID":680103,"Name":"摩拉","Quantity":13050},{"StageID":"R102","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":3},{"StageID":"R103","ItemID":660101,"Name":"流浪者的经验","Quantity":28},{"StageID":"R103","ItemID":660201,"Name":"精锻用杂矿","Quantity":16},{"StageID":"R103","ItemID":660301,"Name":"祝圣油膏","Quantity":20},{"StageID":"R103","ItemID":660401,"Name":"低级天赋书","Quantity":2},{"StageID":"R103","ItemID":680103,"Name":"摩拉","Quantity":13650},{"StageID":"R103","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":3},{"StageID":"R104","ItemID":660101,"Name":"流浪者的经验","Quantity":39},{"StageID":"R104","ItemID":660201,"Name":"精锻用杂矿","Quantity":16},{"StageID":"R104","ItemID":660301,"Name":"祝圣油膏","Quantity":20},{"StageID":"R104","ItemID":660401,"Name":"低级天赋书","Quantity":2},{"StageID":"R104","ItemID":680103,"Name":"摩拉","Quantity":14250},{"StageID":"R104","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":4},{"StageID":"R105","ItemID":660101,"Name":"流浪者的经验","Quantity":14},{"StageID":"R105","ItemID":660201,"Name":"精锻用杂矿","Quantity":16},{"StageID":"R105","ItemID":660301,"Name":"祝圣油膏","Quantity":20},{"StageID":"R105","ItemID":660401,"Name":"低级天赋书","Quantity":2},{"StageID":"R105","ItemID":680103,"Name":"摩拉","Quantity":14850},{"StageID":"R105","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":4},{"StageID":"R106","ItemID":660101,"Name":"流浪者的经验","Quantity":15},{"StageID":"R106","ItemID":660201,"Name":"精锻用杂矿","Quantity":17},{"StageID":"R106","ItemID":660301,"Name":"祝圣油膏","Quantity":21},{"StageID":"R106","ItemID":660401,"Name":"低级天赋书","Quantity":2},{"StageID":"R106","ItemID":680103,"Name":"摩拉","Quantity":15450},{"StageID":"R106","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":4},{"StageID":"R107","ItemID":660101,"Name":"流浪者的经验","Quantity":16},{"StageID":"R107","ItemID":660201,"Name":"精锻用杂矿","Quantity":17},{"StageID":"R107","ItemID":660301,"Name":"祝圣油膏","Quantity":21},{"StageID":"R107","ItemID":660401,"Name":"低级天赋书","Quantity":3},{"StageID":"R107","ItemID":680103,"Name":"摩拉","Quantity":16050},{"StageID":"R107","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":4},{"StageID":"R108","ItemID":660101,"Name":"流浪者的经验","Quantity":17},{"StageID":"R108","ItemID":660201,"Name":"精锻用杂矿","Quantity":17},{"StageID":"R108","ItemID":660301,"Name":"祝圣油膏","Quantity":22},{"StageID":"R108","ItemID":660401,"Name":"低级天赋书","Quantity":3},{"StageID":"R108","ItemID":680103,"Name":"摩拉","Quantity":16650},{"StageID":"R108","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":4},{"StageID":"R109","ItemID":660101,"Name":"流浪者的经验","Quantity":18},{"StageID":"R109","ItemID":660201,"Name":"精锻用杂矿","Quantity":18},{"StageID":"R109","ItemID":660301,"Name":"祝圣油膏","Quantity":22},{"StageID":"R109","ItemID":660401,"Name":"低级天赋书","Quantity":3},{"StageID":"R109","ItemID":680103,"Name":"摩拉","Quantity":17250},{"StageID":"R109","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":5},{"StageID":"R110","ItemID":660101,"Name":"流浪者的经验","Quantity":19},{"StageID":"R110","ItemID":660201,"Name":"精锻用杂矿","Quantity":18},{"StageID":"R110","ItemID":660301,"Name":"祝圣油膏","Quantity":22},{"StageID":"R110","ItemID":660401,"Name":"低级天赋书","Quantity":3},{"StageID":"R110","ItemID":680103,"Name":"摩拉","Quantity":17850},{"StageID":"R110","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":5},{"StageID":"R111","ItemID":660101,"Name":"流浪者的经验","Quantity":20},{"StageID":"R111","ItemID":660201,"Name":"精锻用杂矿","Quantity":18},{"StageID":"R111","ItemID":660301,"Name":"祝圣油膏","Quantity":23},{"StageID":"R111","ItemID":660401,"Name":"低级天赋书","Quantity":4},{"StageID":"R111","ItemID":680103,"Name":"摩拉","Quantity":18450},{"StageID":"R111","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":5},{"StageID":"R112","ItemID":660101,"Name":"流浪者的经验","Quantity":21},{"StageID":"R112","ItemID":660201,"Name":"精锻用杂矿","Quantity":18},{"StageID":"R112","ItemID":660301,"Name":"祝圣油膏","Quantity":23},{"StageID":"R112","ItemID":660401,"Name":"低级天赋书","Quantity":4},{"StageID":"R112","ItemID":680103,"Name":"摩拉","Quantity":19050},{"StageID":"R112","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":5},{"StageID":"R113","ItemID":660101,"Name":"流浪者的经验","Quantity":22},{"StageID":"R113","ItemID":660201,"Name":"精锻用杂矿","Quantity":19},{"StageID":"R113","ItemID":660301,"Name":"祝圣油膏","Quantity":23},{"StageID":"R113","ItemID":660401,"Name":"低级天赋书","Quantity":4},{"StageID":"R113","ItemID":680103,"Name":"摩拉","Quantity":19650},{"StageID":"R113","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":6},{"StageID":"R114","ItemID":660101,"Name":"流浪者的经验","Quantity":23},{"StageID":"R114","ItemID":660201,"Name":"精锻用杂矿","Quantity":19},{"StageID":"R114","ItemID":660301,"Name":"祝圣油膏","Quantity":24},{"StageID":"R114","ItemID":660401,"Name":"低级天赋书","Quantity":5},{"StageID":"R114","ItemID":680103,"Name":"摩拉","Quantity":20250},{"StageID":"R114","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":6},{"StageID":"R115","ItemID":660101,"Name":"流浪者的经验","Quantity":24},{"StageID":"R115","ItemID":660201,"Name":"精锻用杂矿","Quantity":19},{"StageID":"R115","ItemID":660301,"Name":"祝圣油膏","Quantity":24},{"StageID":"R115","ItemID":660401,"Name":"低级天赋书","Quantity":5},{"StageID":"R115","ItemID":680103,"Name":"摩拉","Quantity":20850},{"StageID":"R115","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":6},{"StageID":"R116","ItemID":660101,"Name":"流浪者的经验","Quantity":25},{"StageID":"R116","ItemID":660201,"Name":"精锻用杂矿","Quantity":20},{"StageID":"R116","ItemID":660301,"Name":"祝圣油膏","Quantity":25},{"StageID":"R116","ItemID":660401,"Name":"低级天赋书","Quantity":5},{"StageID":"R116","ItemID":680103,"Name":"摩拉","Quantity":21450},{"StageID":"R116","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":6},{"StageID":"R117","ItemID":660101,"Name":"流浪者的经验","Quantity":26},{"StageID":"R117","ItemID":660201,"Name":"精锻用杂矿","Quantity":20},{"StageID":"R117","ItemID":660301,"Name":"祝圣油膏","Quantity":25},{"StageID":"R117","ItemID":660401,"Name":"低级天赋书","Quantity":5},{"StageID":"R117","ItemID":680103,"Name":"摩拉","Quantity":22050},{"StageID":"R117","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":6},{"StageID":"R118","ItemID":660101,"Name":"流浪者的经验","Quantity":27},{"StageID":"R118","ItemID":660201,"Name":"精锻用杂矿","Quantity":20},{"StageID":"R118","ItemID":660301,"Name":"祝圣油膏","Quantity":25},{"StageID":"R118","ItemID":660401,"Name":"低级天赋书","Quantity":6},{"StageID":"R118","ItemID":680103,"Name":"摩拉","Quantity":22650},{"StageID":"R118","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":7},{"StageID":"R119","ItemID":660101,"Name":"流浪者的经验","Quantity":28},{"StageID":"R119","ItemID":660201,"Name":"精锻用杂矿","Quantity":21},{"StageID":"R119","ItemID":660301,"Name":"祝圣油膏","Quantity":26},{"StageID":"R119","ItemID":660401,"Name":"低级天赋书","Quantity":6},{"StageID":"R119","ItemID":680103,"Name":"摩拉","Quantity":23250},{"StageID":"R119","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":7},{"StageID":"R120","ItemID":660101,"Name":"流浪者的经验","Quantity":29},{"StageID":"R120","ItemID":660201,"Name":"精锻用杂矿","Quantity":21},{"StageID":"R120","ItemID":660301,"Name":"祝圣油膏","Quantity":26},{"StageID":"R120","ItemID":660401,"Name":"低级天赋书","Quantity":6},{"StageID":"R120","ItemID":680103,"Name":"摩拉","Quantity":23850},{"StageID":"R120","ItemID":660501,"Name":"深秘圣物匣·三等","Quantity":7}];
+// HTML交互预览专用。以下遭遇、角色等级、生命值和初始编队均为测试数据。
+// 禁止默认移植到Unity；只有用户精准要求对应测试数据时才可移植。
+// 路线概率取本HTML内嵌的原配表快照，打开页面时不读取工作簿。
+const previewRoster = [
+  {id:1009,name:'安柏',element:'Pyro',level:24,hp:3280},
+  {id:1010,name:'凯亚',element:'Cryo',level:24,hp:3840},
+  {id:1011,name:'丽莎',element:'Electro',level:24,hp:3060},
+  {id:1014,name:'芭芭拉',element:'Hydro',level:24,hp:4120},
+  {id:1015,name:'迪卢克',element:'Pyro',level:24,hp:4360},
+  {id:1017,name:'凝光',element:'Geo',level:24,hp:3520},
+  {id:1023,name:'行秋',element:'Hydro',level:24,hp:3680},
+  {id:1039,name:'烟绯',element:'Pyro',level:24,hp:3440},
+];
+const previewEvents = [
+  {id:'HTML_EVENT_FROST',title:'霜雾中的访客',place:'林间小径',
+    paragraphs:['越过林间的小径，一阵不合时宜的寒意忽然袭来。草叶上结起薄霜，前方的灌木也随之晃动。',
+      '一只大型冰史莱姆从雾中缓缓挪出，挡住了通往前方的路。你可以迎战，也可以绕开这里，继续旅途。'],
+    action:'迎战',enemies:[{id:2023,name:'大型冰史莱姆',element:'Cryo'}]},
+  {id:'HTML_EVENT_CAMP',title:'被占据的路口',place:'荒野岔路',
+    paragraphs:['远处传来木棒敲击盾牌的声音。几只丘丘人守在路口，似乎正在等待下一个途经此地的旅人。',
+      '清理这处营地，或许能找回它们搜集的物资。你也可以选择离开，不惊动这群守卫。'],
+    action:'清理营地',enemies:[{id:2001,name:'丘丘人',element:'Physical'},{id:2001,name:'丘丘人',element:'Physical'}]},
+  {id:'HTML_EVENT_WOLF',title:'奔狼领的试炼',place:'古老的试炼场',
+    paragraphs:['山风掠过石台，四周忽然安静下来。一道冰蓝色的身影在风中凝聚，古老的目光审视着来访者。',
+      '这并非一场必须接受的挑战。如果已经做好准备，就走入场中，回应北风的试炼。'],
+    action:'接受试炼',enemies:[{id:2069,name:'北风的王狼',element:'Cryo'}]},
+];
+const defaultParty = [1009,1010,1011,1014];
+const fallbackEnemy = {id:2001,name:'丘丘人',element:'Physical'};
+
+// 新HTML流程模型，未复用旧main-interface/character-roster网页逻辑。
+// 当前Unity参考：
+// RoguelikeCampaignHost.Progress -> BeforeBattle -> ShowFormation
+// ConfirmFormation保存队伍 -> BeginBattle -> RecordBattleVictory
+// -> ReturnToRoute提交奖励/完成节点 -> 战斗内奖励浮层 -> 返回路线操作。
+// Event->战斗在当前Unity尚未接通；这里仅演示简化事件接入同一入战顺序。
+// Unity移植时需要显式事件战斗子流程，不能把Event强转Battle绕过现有校验。
+const nodeLabels={Battle:'普通战斗',Event:'事件',Elite:'精英战斗',Boss:'首领战斗'};
+function seededRandom(seed) {
+  let value=Number(seed)>>>0;
+  return ()=>{value+=0x6D2B79F5;let t=value;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};
+}
+function stageRows(rows) {
+  const stages=rows.filter(r=>/^R\d+$/.test(String(r.StageID))).map(r=>{
+    const s={id:String(r.StageID),min:Number(r.MinEncounter),max:Number(r.MaxEncounter),
+      level:Number(r.EnemyLevel)||1,weights:Object.fromEntries(Object.keys(nodeLabels).map(k=>[k,Number(r[k])]))};
+    if(!Number.isInteger(s.min)||!Number.isInteger(s.max)||s.min<1||s.max<s.min||
+      Object.values(s.weights).some(w=>!Number.isFinite(w)||w<0)||
+      !Object.values(s.weights).some(w=>w>0)) throw new Error('节点配置无效：'+s.id);
+    return s;
+  });
+  if(!stages.length||new Set(stages.map(s=>s.id)).size!==stages.length)throw new Error('路线层配置为空或ID重复');
+  return stages;
+}
+function weightedKind(weights,random) {
+  const entries=Object.entries(weights).filter(([,w])=>w>0),total=entries.reduce((n,[,w])=>n+w,0);
+  if(!total)throw new Error('节点总权重必须大于0');
+  let value=random()*total;
+  for(const[k,w]of entries){value-=w;if(value<0)return k;}
+  return entries.at(-1)[0];
+}
+function generateRoute(stages,seed) {
+  const random=seededRandom(seed),nodes=[],edges=[],columns=[];
+  for(let stage=0;stage<stages.length;stage++){
+    const config=stages[stage],count=config.min+Math.floor(random()*(config.max-config.min+1));
+    const column=Array.from({length:count},(_,slot)=>{
+      const node={id:config.id+':'+slot,stage,slot,kind:weightedKind(config.weights,random),
+        x:165+stage*205,y:count===1?430:210+slot*450/(count-1)+(random()-.5)*35};
+      nodes.push(node);return node;
+    });columns.push(column);
+  }
+  const add=(a,b)=>{if(!edges.some(e=>e[0]===a.id&&e[1]===b.id))edges.push([a.id,b.id]);};
+  for(let i=0;i<columns.length-1;i++){
+    const a=columns[i],b=columns[i+1];
+    for(let j=0;j<a.length;j++){
+      const k=a.length===1?Math.floor((b.length-1)/2):Math.round(j*(b.length-1)/(a.length-1));
+      add(a[j],b[k]);
+      if(b[k+1]&&random()<.38)add(a[j],b[k+1]);
+    }
+    for(const node of b)if(!edges.some(e=>e[1]===node.id))
+      add(a.reduce((near,n)=>Math.abs(n.y-node.y)<Math.abs(near.y-node.y)?n:near,a[0]),node);
+  }
+  return{nodes,edges,columns,width:330+(stages.length-1)*205};
+}
+const clone=value=>JSON.parse(JSON.stringify(value));
+class EventPreviewFlow {
+  constructor({stages,seed,events,roster,party,rewards=[]}){
+    this.stages=stages;this.seed=seed;this.route=generateRoute(stages,seed);
+    this.events=events;this.roster=roster;this.rewardRows=rewards;
+    this.party=party.slice();this.presets=Array.from({length:10},(_,i)=>i===0?party.slice():[]);
+    this.preset=0;this.view='route';this.cursor=null;this.pending=null;
+    this.visited=new Set();this.occurrences=new Map();this.inventory=new Map();
+    this.trace=[];this.revision=0;this.rewardOverlay=null;this.picker=null;
+    this.log('RouteReady');
+  }
+  log(command){this.trace.push({command,node:this.pending?.node.id??this.cursor,view:this.view});this.revision++;}
+  get node(){return this.pending?.node??null;}
+  get stage(){return this.stages[this.node?.stage??(this.cursor?this.route.nodes.find(n=>n.id===this.cursor).stage:0)];}
+  available(){
+    if(this.pending)return[this.pending.node.id];
+    return this.cursor?this.route.edges.filter(e=>e[0]===this.cursor).map(e=>e[1]):this.route.columns[0].map(n=>n.id);
+  }
+  enter(id){
+    if(this.view!=='route'||this.rewardOverlay!==null||!this.available().includes(id)||this.visited.has(id))return false;
+    const node=this.route.nodes.find(n=>n.id===id);
+    if(!this.pending){
+      let occurrence=this.occurrences.get(id);
+      if(!occurrence){
+        const random=seededRandom(this.seed+node.stage*131+node.slot*7919);
+        occurrence=clone(this.events[Math.floor(random()*this.events.length)]);
+        if(node.kind!=='Event')occurrence={...occurrence,id:'HTML_'+id,title:nodeLabels[node.kind]+' · '+this.stages[node.stage].id};
+        this.occurrences.set(id,occurrence);
+      }
+      this.pending={node,occurrence};this.log('EnterNode');
+    }
+    this.view=node.kind==='Event'?'event':'formation';
+    if(this.view==='formation')this.openFormation();
+    else this.log('ShowEncounter');
+    return true;
+  }
+  acceptEvent(){if(this.view!=='event')return false;this.log('AcceptEncounter');this.openFormation();return true;}
+  openFormation(){
+    this.view='formation';this.draft=this.party.slice();this.draftPreset=this.preset;this.picker=null;this.log('BeforeBattle');
+  }
+  cancel(){
+    if(this.picker!==null){this.picker=null;this.log('ClosePicker');return;}
+    if(['event','formation','defeat'].includes(this.view)){this.view='route';this.log('ReturnToRouteOverview');}
+  }
+  leaveEvent(){
+    if(this.view!=='event')return false;
+    const id=this.node.id;this.visited.add(id);this.cursor=id;this.log('LeaveEncounterWithoutReward');
+    this.pending=null;this.view='route';this.log('CompleteSkippedEvent');return true;
+  }
+  selectPreset(index){
+    if(this.view!=='formation'||index<0||index>9)return;
+    this.draftPreset=index;this.draft=this.presets[index].slice();this.picker=null;this.log('SelectPreset');
+  }
+  chooseSlot(index){if(this.view==='formation'){this.picker=index;this.picks=[];this.log('OpenPicker');}}
+  removeSlot(index){if(this.view==='formation'){this.draft[index]=null;this.log('RemoveCharacter');}}
+  pick(id){
+    if(this.view!=='formation'||this.picker===null||!this.roster.some(h=>h.id===id))return;
+    if(this.picker===-1){
+      this.picks=this.picks.includes(id)?this.picks.filter(x=>x!==id):this.picks.length<4?[...this.picks,id]:this.picks;
+    }else{
+      const old=this.draft.indexOf(id),displaced=this.draft[this.picker];
+      if(old>=0)this.draft[old]=displaced??null;
+      this.draft[this.picker]=id;this.picker=null;
+    }
+    this.log('PickCharacter');
+  }
+  applyQuick(){if(this.picker===-1){this.draft=this.picks.slice();this.picker=null;this.log('ApplyQuickFormation');}}
+  confirmFormation(){
+    const party=(this.draft??[]).filter(Boolean);
+    if(this.view!=='formation'||!party.length||party.length>4||new Set(party).size!==party.length)return false;
+    this.party=party.slice();this.preset=this.draftPreset;this.presets[this.preset]=party.slice();
+    this.log('SaveParty');this.battleParty=party.slice();this.view='battle';this.log('BeginBattle');return true;
+  }
+  resolveBattle(victory){
+    if(this.view!=='battle')return false;
+    if(!victory){this.view='defeat';this.log('BattleDefeatKeepBeforeBattle');return true;}
+    this.view='settlement';
+    this.pendingRewards=this.rewardRows.filter(r=>String(r.StageID)===this.stage.id)
+      .map(r=>({id:String(r.ItemID),name:String(r.Name),quantity:Number(r.Quantity)}))
+      .filter(r=>r.id&&Number.isFinite(r.quantity)&&r.quantity>0);
+    this.log('RecordBattleVictory');return true;
+  }
+  commitVictory(){
+    if(this.view!=='settlement')return false;
+    const id=this.node.id;
+    for(const r of this.pendingRewards)this.inventory.set(r.id,(this.inventory.get(r.id)??0)+r.quantity);
+    this.visited.add(id);this.cursor=id;this.rewardOverlay=clone(this.pendingRewards);
+    this.log('ReturnToRouteCommitReward');this.view='victory';this.log('PresentRewardOverlay');return true;
+  }
+  closeRewards(){this.rewardOverlay=null;this.log('CloseRewardDisplayOnly');}
+  returnAfterVictory(){
+    if(this.view!=='victory'||this.rewardOverlay!==null)return false;
+    this.pending=null;this.view='route';this.log('ReturnToRouteScene');return true;
+  }
+}
+
+
+// 页面只绑定模型和布局。没有调用旧网页，也不读写localStorage或Unity存档。
+// 正式移植时：选节点 -> 当前内容ID -> Unity BeforeBattle/ShowFormation
+// -> 保存编队 -> BeginBattle持久化恢复点 -> battleScene。
+// 事件的“离开无奖励”是本次简化遭遇预览约定，不套旧行为树的回避奖励。
+const root=document.querySelector('#game');
+const asset=path=>new URL(path,document.baseURI).href;
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// 新预览共用文字集中在这里；示例事件正文单独位于fixtures，不能当作正式Lang数据。
+const text={route:'冒险路线',chapter:'第1章 · 蒙德',event:'旅途遭遇',formation:'战前编队',
+  back:'返回路线',confirm:'确认编队',quick:'快速编队',leave:'离开',won:'挑战成功',lost:'战斗失败'};
+let flow=null,config=null,rewardRows=[],routeScroll=0,lastCursor=null,lastView=null,settlementTimer=null;
+const $=selector=>document.querySelector(selector);
+const command=(name,label,extra='',cls='btn')=>'<button type="button" class="'+cls+'" data-command="'+name+'" '+extra+'>'+label+'</button>';
+const closeButton=()=>'<button type="button" class="page-close" data-command="back" aria-label="返回路线"><img src="'+asset('UI/Wish/WishCloseIcon.png')+'" alt=""></button>';
+function header(title,context,close=true){
+  return'<header class="page-header"><span class="title-diamond" aria-hidden="true"></span><h1>'+esc(title)+
+    '</h1><span class="context">'+esc(context)+'</span>'+(close?closeButton():'')+'</header>';
+}
+function cardImage(id,enemy=false){
+  return'<img class="card-image" src="'+asset((enemy?'Enemy/':'Character_Bare/')+id+'_01.png')+'" alt="" draggable="false">';
+}
+function portrait(id,enemy=false,name=''){
+  return'<div class="art-card">'+cardImage(id,enemy)+(name?'<div class="card-name">'+esc(name)+'</div>':'')+'</div>';
+}
+const hero=id=>previewRoster.find(h=>h.id===id);
+const nodeIcon=kind=>kind==='Boss'?'rouge/routeicon/boss_icon/2069.png':
+  'rouge/routeicon/'+({Battle:'Battle_v1',Event:'Event_v1',Elite:'Elite_v3'}[kind])+'.png';
+
+function routePage(){
+  const route=flow.route,available=flow.available(),byId=new Map(route.nodes.map(n=>[n.id,n]));
+  const lines=route.edges.map(([a,b])=>{
+    const x=byId.get(a),y=byId.get(b),done=flow.visited.has(a)&&(flow.visited.has(b)||available.includes(b));
+    return'<path class="'+(done?'reached':'')+'" d="M '+x.x+' '+x.y+' C '+(x.x+90)+' '+x.y+' '+(y.x-90)+' '+y.y+' '+y.x+' '+y.y+'"/>';
+  }).join('');
+  const labels=route.columns.map((column,i)=>'<div class="stage-label" style="left:'+column[0].x+'px">第 '+(i+1)+' 层<small>'+esc(flow.stages[i].id)+'</small></div>').join('');
+  const nodes=route.nodes.map(n=>{
+    const can=available.includes(n.id)&&!flow.visited.has(n.id),visited=flow.visited.has(n.id),pending=flow.node?.id===n.id;
+    const label=flow.stages[n.stage].id+' · '+nodeLabels[n.kind];
+    return'<button class="map-node '+n.kind+(can?' available':'')+(visited?' visited':'')+(pending?' pending':'')+
+      '" style="left:'+n.x+'px;top:'+n.y+'px" data-command="enter-node" data-node="'+esc(n.id)+'" aria-label="'+esc(label)+'" '+
+      (can?'':'disabled')+'><img src="'+asset(nodeIcon(n.kind))+'" alt=""><span class="node-caption">'+esc(nodeLabels[n.kind])+'</span></button>';
+  }).join('');
+  const legend=['Battle','Event','Elite'].map(k=>'<span><img src="'+asset(nodeIcon(k))+'" alt="">'+nodeLabels[k]+'</span>').join('');
+  return'<section class="scene route-scene" aria-label="路线图"><header class="route-header"><span class="title-diamond"></span><div><h1>'+text.route+
+    '</h1><p>'+text.chapter+'</p></div><div class="route-stats">已完成 '+flow.visited.size+' 个节点<p>'+
+    (flow.pending?'当前遭遇已保留':'沿相连的路径前进')+'</p></div></header>'+
+    '<div class="route-scroll" tabindex="0" aria-label="横向路线图"><div class="route-map" style="width:'+route.width+'px">'+
+    '<svg class="route-lines" width="'+route.width+'" height="780" aria-hidden="true">'+lines+'</svg>'+labels+nodes+'</div></div>'+
+    '<footer class="route-footer"><div class="legend">'+legend+'</div><span class="route-help">'+
+    (available.length?'点击亮起的节点 · 滚轮或拖动查看路线':'本章路线已完成 · 可在下方重新生成预览')+'</span>'+
+    command('scroll-back','‹','aria-label="路线向左"','btn small')+command('scroll-forward','›','aria-label="路线向右"','btn small')+'</footer></section>';
+}
+function eventPage(){
+  const event=flow.pending.occurrence,enemy=event.enemies[0],stage=flow.stage;
+  return'<section class="scene event-scene" aria-label="事件遭遇">'+header(text.event,stage.id+' · 第 '+(flow.node.stage+1)+' 层')+
+    '<div class="event-content"><figure class="event-art">'+portrait(enemy.id,true)+
+    '<figcaption class="event-place">'+esc(event.place)+'</figcaption></figure>'+
+    '<article class="event-copy"><p class="eyebrow">不期而遇</p><h1>'+esc(event.title)+'</h1><div class="flourish"></div>'+
+    '<div class="story">'+event.paragraphs.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
+    '<div class="event-enemies"><span>遭遇敌人</span><span class="enemy-count">'+esc(enemy.name)+
+    (event.enemies.length>1?' × '+event.enemies.length:'')+'</span><span>Lv. '+stage.level+'</span></div>'+
+    '<div class="event-actions">'+command('accept-event','<span>'+esc(event.action)+'</span><span class="action-diamond"></span>','','btn primary')+
+    command('leave-event',text.leave,'','btn leave')+'</div></article></div></section>';
+}
+function partySlot(id,index){
+  const h=hero(id);
+  if(!h)return'<div class="party-slot"><button class="art-card empty-slot" data-command="choose-slot" data-index="'+index+'" aria-label="选择第'+(index+1)+'位角色"><div><b>＋</b><span>选择角色</span></div></button><p class="level">位置 '+(index+1)+'</p></div>';
+  return'<div class="party-slot"><button class="art-card" data-command="choose-slot" data-index="'+index+'" aria-label="更换'+esc(h.name)+'">'+
+    '<span class="slot-index">'+(index+1)+'</span>'+cardImage(h.id)+'<span class="card-name">'+esc(h.name)+'</span></button>'+
+    '<p class="level">Lv. '+h.level+'</p>'+command('remove-slot','移出','data-index="'+index+'"','remove')+'</div>';
+}
+function picker(){
+  const quick=flow.picker===-1;
+  const selected=quick?flow.picks:flow.draft;
+  const cards=previewRoster.map(h=>{
+    const at=selected.indexOf(h.id);
+    return'<button class="roster-pick'+(at>=0?' selected':'')+'" data-command="pick-character" data-id="'+h.id+'" aria-label="选择'+h.name+'">'+
+      '<img src="'+asset('Character_Bare/'+h.id+'_01.png')+'" alt="">'+(at>=0?'<b class="pick-number">'+(at+1)+'</b>':'')+'<span>'+h.name+'</span></button>';
+  }).join('');
+  return'<div class="overlay picker-overlay"><section class="picker" role="dialog" aria-modal="true" aria-label="'+(quick?'快速编队':'选择角色')+'">'+
+    '<header class="picker-head"><h2>'+(quick?'快速编队':'选择第 '+(flow.picker+1)+' 位角色')+'</h2>'+
+    command('close-picker','×','aria-label="关闭角色选择"','')+'</header><p>'+(quick?'按选择顺序安排队伍，最多四名角色。':'选择已在队伍中的角色时，将与当前卡位交换。')+'</p>'+
+    '<div class="roster-grid">'+cards+'</div><footer class="picker-footer"><span>'+(quick?flow.picks.length+' / 4':'可选角色 '+previewRoster.length)+'</span>'+
+    (quick?command('apply-quick','应用编队',flow.picks.length?'':'disabled','btn primary'):'')+'</footer></section></div>';
+}
+function formationPage(){
+  const event=flow.pending.occurrence,count=flow.draft.filter(Boolean).length;
+  return'<section class="scene formation-scene" aria-label="战前编队">'+header(text.formation,flow.stage.id+' · 第 '+(flow.node.stage+1)+' 层')+
+    '<div class="formation-meta"><h2>'+esc(event.title)+'</h2><p>点击卡位选择角色，或用快速编队一次安排多个位置。</p>'+
+    '<div class="preset-tabs" aria-label="十个编队预设">'+Array.from({length:10},(_,i)=>command('preset',String(i+1),'data-index="'+i+'" aria-label="编队'+(i+1)+'" aria-pressed="'+(i===flow.draftPreset)+'"',i===flow.draftPreset?'selected':'')).join('')+'</div></div>'+
+    '<div class="party-board">'+Array.from({length:4},(_,i)=>partySlot(flow.draft[i],i)).join('')+'</div>'+
+    '<footer class="formation-footer">'+command('back',text.back)+'<span class="push">'+count+' / 4</span>'+command('quick',text.quick)+
+    command('confirm-formation',text.confirm,count?'':'disabled','btn primary')+'</footer>'+(flow.picker!==null?picker():'')+'</section>';
+}
+function battleCard(h,index,enemy){
+  const level=enemy?flow.stage.level:h.level,hp=enemy?600+level*80:h.hp;
+  return'<div class="battle-card'+(!enemy&&index===0?' active':'')+'">'+portrait(h.id,enemy,h.name)+
+    '<div class="card-level">Lv. '+level+'</div><div class="hp-track"><div class="hp-fill"></div></div>'+
+    '<div class="hp-text">'+hp.toLocaleString()+' / '+hp.toLocaleString()+'</div></div>';
+}
+function battlePage(){
+  const event=flow.pending.occurrence;
+  return'<section class="scene battle-scene" aria-label="战斗画面">'+header(event.title,flow.stage.id+' · Lv. '+flow.stage.level,false)+
+    '<div class="battle-row enemies">'+event.enemies.map((e,i)=>battleCard(e,i,true)).join('')+'</div>'+
+    '<div class="battle-divider">我方回合</div><div class="battle-row allies">'+flow.battleParty.map((id,i)=>battleCard(hero(id),i,false)).join('')+'</div>'+
+    '<footer class="battle-bottom"><span>回合 1</span><span class="ap">行动点数 100 / 100</span><span class="skill-stub">普通攻击</span><span class="skill-stub">元素战技</span></footer>'+
+    (flow.view==='victory'&&flow.rewardOverlay===null?'<div class="overlay"><section class="outcome"><h2>'+text.won+'</h2><p>奖励已获得，可以继续前进。</p>'+command('return-after-victory','返回路线','','btn primary')+'</section></div>':'')+
+    (flow.view==='settlement'?'<div class="overlay"><div class="loading"><i></i><p>战斗胜利</p></div></div>':'')+'</section>';
+}
+function defeatPage(){
+  return battlePage()+'<div class="overlay"><section class="outcome" role="dialog" aria-modal="true" aria-label="战斗失败"><h2>'+text.lost+
+    '</h2><p>本次节点尚未完成。原遭遇与战前队伍均已保留，可以重新准备后再次挑战。</p><div class="buttons">'+
+    command('back','返回路线')+command('retry-battle','重新编队','','btn primary')+'</div></section></div>';
+}
+function rewardOverlay(){
+  const items=flow.rewardOverlay.map(r=>'<div class="reward-tile"><img src="'+asset('ItemIcon/'+r.id+'.png')+'" alt="'+esc(r.name)+'"><div class="reward-label">'+
+    esc(r.name)+'<small>× '+r.quantity+'</small></div></div>').join('');
+  return'<div class="overlay" data-command="close-rewards"><section class="outcome" role="dialog" aria-modal="true" aria-label="获得奖励"><h2>'+
+    (items?'获得奖励':text.won)+'</h2><div class="reward-items">'+items+'</div>'+
+    command('close-rewards','确认','','btn primary')+'</section></div>';
+}
+function scaleCanvas(){
+  const rect=$('.playground').getBoundingClientRect();
+  root.style.setProperty('--scale',Math.min(rect.width/1920,rect.height/1080));
+}
+new ResizeObserver(scaleCanvas).observe($('.playground'));
+
+function render(){
+  if(!flow)return;
+  const scroller=root.querySelector('.route-scroll');
+  if(scroller)routeScroll=scroller.scrollLeft;
+  const view=flow.view;
+  root.innerHTML=view==='route'?routePage():view==='event'?eventPage():view==='formation'?formationPage():
+    view==='defeat'?defeatPage():battlePage();
+  if(flow.rewardOverlay!==null)root.insertAdjacentHTML('beforeend',rewardOverlay());
+  root.dataset.view=view;root.dataset.ready='true';
+  const nextScroller=root.querySelector('.route-scroll');
+  if(nextScroller){
+    nextScroller.scrollLeft=routeScroll;
+    if(lastCursor!==flow.cursor&&flow.cursor){
+      const node=flow.route.nodes.find(n=>n.id===(flow.available()[0]??flow.cursor));
+      nextScroller.scrollLeft=Math.max(0,node.x-400);
+    }
+    bindRouteDrag(nextScroller);
+  }
+  lastCursor=flow.cursor;
+  if(lastView!==view)root.querySelector('.btn.primary')?.focus({preventScroll:true});
+  lastView=view;
+  $('#demo-victory').disabled=$('#demo-defeat').disabled=view!=='battle';
+  const label={route:'路线图',event:'事件遭遇',formation:'战前编队',battle:'已进入战斗',defeat:'战败，节点保留',settlement:'胜利结算',victory:'战斗胜利，奖励已结算'}[view];
+  $('#flow-status').textContent=label+(flow.node?' · '+flow.node.id:'');
+  const next=flow.route.nodes.find(n=>n.id===flow.available()[0]);
+  const s=flow.stages[flow.node?.stage??next?.stage??flow.stages.length-1],total=Object.values(s.weights).reduce((a,b)=>a+b,0);
+  $('#weight-status').textContent=s.id+'：'+Object.entries(s.weights).filter(([,w])=>w>0).map(([kind,w])=>nodeLabels[kind]+' '+Math.round(w/total*100)+'%').join(' · ');
+  $('#trace-log').innerHTML=flow.trace.slice(-24).map(t=>'<li>'+esc(t.command)+(t.node?' · '+esc(t.node):'')+'</li>').join('');
+}
+function bindRouteDrag(scroller){
+  let drag=null;
+  scroller.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();scroller.scrollLeft+=e.deltaY;}},{passive:false});
+  scroller.addEventListener('pointerdown',e=>{
+    if(e.button!==0||e.target.closest('button'))return;
+    drag={x:e.clientX,left:scroller.scrollLeft};scroller.setPointerCapture(e.pointerId);
+  });
+  scroller.addEventListener('pointermove',e=>{if(drag)scroller.scrollLeft=drag.left-(e.clientX-drag.x)/Math.min($('.playground').clientWidth/1920,$('.playground').clientHeight/1080);});
+  for(const event of['pointerup','pointercancel'])scroller.addEventListener(event,()=>{drag=null;});
+}
+// 所有同名操作（鼠标、Esc、A/D）进入同一模型入口，一次点击只提交一次。
+root.addEventListener('click',event=>{
+  const b=event.target.closest('[data-command]');if(!b||b.disabled||!flow)return;
+  if(b.classList.contains('overlay')&&event.target!==b)return;
+  const action=b.dataset.command,index=Number(b.dataset.index);
+  switch(action){
+    case'enter-node':flow.enter(b.dataset.node);break;
+    case'accept-event':flow.acceptEvent();break;
+    case'leave-event':flow.leaveEvent();break;
+    case'back':flow.cancel();break;
+    case'preset':flow.selectPreset(index);break;
+    case'choose-slot':flow.chooseSlot(index);break;
+    case'remove-slot':flow.removeSlot(index);break;
+    case'quick':flow.chooseSlot(-1);break;
+    case'pick-character':flow.pick(Number(b.dataset.id));break;
+    case'close-picker':flow.cancel();break;
+    case'apply-quick':flow.applyQuick();break;
+    case'confirm-formation':flow.confirmFormation();break;
+    case'retry-battle':if(flow.view==='defeat')flow.openFormation();break;
+    case'close-rewards':flow.closeRewards();break;
+    case'return-after-victory':flow.returnAfterVictory();break;
+    case'scroll-back':root.querySelector('.route-scroll')?.scrollBy({left:-650,behavior:'smooth'});return;
+    case'scroll-forward':root.querySelector('.route-scroll')?.scrollBy({left:650,behavior:'smooth'});return;
+    default:return;
+  }
+  render();
+});
+addEventListener('keydown',event=>{
+  if(!flow||event.defaultPrevented||event.isComposing||event.target.matches('input,select,textarea'))return;
+  if(event.key==='Escape'){
+    event.preventDefault();if(flow.rewardOverlay!==null)flow.closeRewards();else flow.cancel();render();
+  }else if(flow.view==='formation'&&flow.picker===null&&['a','A','d','D'].includes(event.key)){
+    event.preventDefault();flow.selectPreset((flow.draftPreset+(['a','A'].includes(event.key)?9:1))%10);render();
+  }
+});
+function demoResult(victory){
+  if(!flow?.resolveBattle(victory))return;
+  render();
+  if(victory){
+    const captured=flow;
+    // HTML结果按钮代表战斗已结束。短暂显示结算过渡，再按Unity当前顺序
+    // 先提交ReturnToRoute，留在战斗画面播放纯奖励浮层；关闭后开放返回路线。
+    settlementTimer=setTimeout(()=>{if(flow===captured&&flow.commitVictory())render();},350);
+  }
+}
+$('#demo-victory').addEventListener('click',()=>demoResult(true));
+$('#demo-defeat').addEventListener('click',()=>demoResult(false));
+$('#regenerate').addEventListener('click',()=>{
+  if(!config)return;clearTimeout(settlementTimer);
+  flow=new EventPreviewFlow({stages:config,seed:Number($('#seed').value)||0,events:previewEvents,roster:previewRoster,party:defaultParty,rewards:rewardRows});
+  routeScroll=0;lastCursor=null;lastView=null;render();
+});
+// 配表快照与页面代码均已内嵌：直接打开HTML即可，不请求Excel、不等待网络。
+// 后续修改源表不会自动影响本预览；需要时更新本段快照。Unity正式数据读取规则不变。
+function initialize(){
+  try{
+    config=stageRows(previewStageRows);rewardRows=previewRewardRows;
+    $('#config-status').textContent='内嵌配置 · Chapter1 · '+config.length+'层';
+    $('#regenerate').click();
+  }catch(error){
+    root.dataset.ready='false';
+    root.innerHTML='<section class="error-screen"><h1>预览初始化失败</h1><p>'+esc(error.message)+'</p></section>';
+    $('#config-status').textContent='内嵌配置无效';
+    $('#flow-status').textContent='初始化失败';
+  }
+}
+scaleCanvas();initialize();
+
+})();
+  </script>
+</body>
+</html>

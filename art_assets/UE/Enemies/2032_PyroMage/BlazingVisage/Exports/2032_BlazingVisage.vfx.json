@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2032_PyroMage/BlazingVisage/2032_BlazingVisage",
+  "source": "art_assets/UE/Enemies/2032_PyroMage/BlazingVisage/Blender/2032_BlazingVisage.blend",
+  "file": "Enemies/2032_PyroMage/BlazingVisage/Exports/2032_BlazingVisage.vfx.bytes",
+  "meshes": 19,
+  "tracks": 111,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 328248
+}

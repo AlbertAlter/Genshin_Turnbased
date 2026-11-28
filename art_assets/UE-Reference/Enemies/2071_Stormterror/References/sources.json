@@ -1,0 +1,195 @@
+{
+  "enemy_id": 2071,
+  "name_id": "Stormterror",
+  "name": "裂空的魔龙／风魔龙",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Stormterror_Dvalin#Abilities",
+  "user_requirements": [
+    "技能1卡牌冲锋及横向划痕",
+    "技能2复用风萨满卡底龙卷图标",
+    "技能3与1类似，范围全体",
+    "技能4较大的原作脉冲风弹，保留项目两枚",
+    "技能5原作特殊裂隙地面",
+    "技能6原作巨型风弹，蓄力沿用公共收束动线",
+    "瘫痪复用眩晕星星；星星跟真实眩晕绑定，敌我使用同一特效"
+  ],
+  "visual_sources": [
+    {
+      "effect": "低空掠袭",
+      "title": "Dvalin Fly By.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/8b/Dvalin_Fly_By.gif/revision/latest?cb=20211109050659",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Fly_By.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "风龙涤流",
+      "title": "Dvalin Dragon Breath.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/e/ef/Dvalin_Dragon_Breath.gif/revision/latest?cb=20211109050651",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Dragon_Breath.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "撕咬横扫",
+      "title": "Dvalin Bite.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/5/56/Dvalin_Bite.gif/revision/latest?cb=20211109050643",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Bite.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "风弹齐射",
+      "title": "Dvalin Pulse Bombs.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f8/Dvalin_Pulse_Bombs.gif/revision/latest?cb=20211109050639",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Pulse_Bombs.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "终天闭幕曲",
+      "title": "Dvalin Caelestinum Finale Termini.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f3/Dvalin_Caelestinum_Finale_Termini.gif/revision/latest?cb=20211109050646",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Caelestinum_Finale_Termini.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "巨型风弹",
+      "title": "Dvalin Omega Bomb.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/7/71/Dvalin_Omega_Bomb.gif/revision/latest?cb=20211109050630",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Omega_Bomb.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "原作造型与材质对照；项目次数、范围和用户改编优先。"
+    },
+    {
+      "effect": "瘫痪原作对照",
+      "title": "Dvalin Paralyzed.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/1e/Dvalin_Paralyzed.gif/revision/latest?cb=20211109050634",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Dvalin_Paralyzed.gif",
+      "metadata_verified": true,
+      "local_gif_saved": false,
+      "animation_played": false,
+      "purpose": "只记录原作入口；用户选择公共眩晕星星，本次不制作趴伏差分。"
+    }
+  ],
+  "local_frames": [
+    {
+      "effect": "RiftGround",
+      "frames": [
+        {
+          "file": "RiftGround_06000ms.png",
+          "time_ms": 6000
+        },
+        {
+          "file": "RiftGround_12000ms.png",
+          "time_ms": 12000
+        },
+        {
+          "file": "RiftGround_15000ms.png",
+          "time_ms": 15000
+        }
+      ],
+      "viewed": true,
+      "gif_saved": false,
+      "verification": "已查看所列三张静帧组成的对照图；未播放完整动图。"
+    },
+    {
+      "effect": "PulseBombs",
+      "frames": [
+        {
+          "file": "PulseBombs_01600ms.png",
+          "time_ms": 1600
+        },
+        {
+          "file": "PulseBombs_03200ms.png",
+          "time_ms": 3200
+        },
+        {
+          "file": "PulseBombs_04800ms.png",
+          "time_ms": 4800
+        }
+      ],
+      "viewed": true,
+      "gif_saved": false,
+      "verification": "已查看所列三张静帧组成的对照图；未播放完整动图。"
+    },
+    {
+      "effect": "RendingVortex",
+      "frames": [
+        {
+          "file": "RendingVortex_03600ms.png",
+          "time_ms": 3600
+        },
+        {
+          "file": "RendingVortex_05600ms.png",
+          "time_ms": 5600
+        },
+        {
+          "file": "RendingVortex_07200ms.png",
+          "time_ms": 7200
+        }
+      ],
+      "viewed": true,
+      "gif_saved": false,
+      "verification": "已查看所列三张静帧组成的对照图；未播放完整动图。"
+    }
+  ],
+  "frame_summary": "共九张PNG静帧，核对青蓝核心／白亮旋流风弹、蓝白发光裂缝地面与巨型弹体／爆开造型；静帧不替代连续运动验收。",
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "title": "Stormterror Dvalin - All Attacks and Animations (Genshin Impact)",
+      "url": "https://www.youtube.com/watch?v=uSXLSs2BIOs",
+      "verification": "只核对检索到的作者章节元信息，未试听或截取。",
+      "creator_chapter_seconds": {
+        "FlyBy": 17,
+        "Cleansing": 30,
+        "Slash": 52,
+        "Barrage": 61,
+        "Finale": 69,
+        "Vortex": 88,
+        "Paralyzed": 118
+      },
+      "listened": false,
+      "downloaded": false,
+      "local_file": null,
+      "time_range": null,
+      "usage": "未选定正式音源，未提取或声明再分发许可。"
+    }
+  ],
+  "local_audio_search": "沿用本批本机检查，art_assets未找到能直接复用到这些新招式的松散音源；不代表其他设备状态。",
+  "status_audit": {
+    "source": "运行时Data/Enemies、Data/EnemyStatus与Data/StatusData_Overall.xlsx",
+    "direct_skill_references": 11,
+    "direct_enemy_status_references": 14,
+    "core_paralysis_reference": 1,
+    "common_stun": "40041 / ST_Stun_Enemy",
+    "dvalin_parent": "4207104 / ST_Dvalin_Weakness通过420710401绑定公共眩晕",
+    "finding": "业务绑定已存在；原星星仅接我方击飞，现已补公共实际眩晕显示，显示查询不按Side限制。",
+    "visual": "敌我共用UICardStunStars；实际眩晕三颗，我方击飞仍读剩余解控点击数。",
+    "boundary": "未改变业务眩晕的施加资格、持续时间与行动限制。"
+  },
+  "icon_mapping": {
+    "status_id": 4207112,
+    "icon": "AnemoSamachurlTornado.png",
+    "count_mode": "Instances",
+    "show_count": 1,
+    "pinned": 0,
+    "hidden_helper": 4207113,
+    "implemented": true
+  },
+  "implementation_boundary": "公共眩晕星星与卡底图标已接；六项Blender需求已写，新冲锋、弹体、裂隙地面和公共持续蓄力的正式播放尚未接入，本次不填写未注册动画钩子。"
+}

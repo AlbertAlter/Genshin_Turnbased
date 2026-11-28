@@ -1,0 +1,9 @@
+{
+  "source": "art_assets/Skill_Icon/1027/1027_S02.png",
+  "unchangedOriginal": true,
+  "usage": "度厄真符卡面标记复用现有官方技能字形，不声称为原作敌人标记贴图。",
+  "shader": "UI/CardFaceGlyph, _UseAlpha=1; original alpha core and GPU neighbor halo",
+  "colors": "ElementColors.xlsx: Physical/project white core, Cryo halo",
+  "statusID": 4102702,
+  "statusID2": "ST_Qiqi_Talisman"
+}

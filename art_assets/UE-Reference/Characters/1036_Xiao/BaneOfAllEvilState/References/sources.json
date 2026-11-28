@@ -1,0 +1,51 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E9%AD%88",
+    "image_url": "https://patchwiki.biligame.com/images/ys/e/e2/nikmi7axxyimrgdm0md76b1fc1089u1.gif",
+    "title": "靖妖傩舞.gif",
+    "recorded": "2026-11-26",
+    "downloaded": true,
+    "verification": "2026-11-28在内存完整解码375帧、11.25秒，实际查看跨全片的24张标时截帧；不是连续实时播放，也不等于每帧造型、自然到期或所有技能变体均已确认。具体观察边界见本项视觉需求和源清单。",
+    "use": "核对原作傩面、青绿风光和深色业障气息；将其组织为自身卡牌周围的起手、循环与退出。",
+    "local_gif_retained": false,
+    "analysis_sheet": "codex_worktable\\enemy_vfx\\xiao-references\\Xiao_BaneOfAllEvil_Observation.png",
+    "decoded_frames": 375,
+    "duration_seconds": 11.25,
+    "sampled_frames": [
+      0,
+      16,
+      33,
+      49,
+      65,
+      81,
+      98,
+      114,
+      130,
+      146,
+      163,
+      179,
+      195,
+      211,
+      228,
+      244,
+      260,
+      276,
+      293,
+      309,
+      325,
+      341,
+      358,
+      374
+    ]
+  },
+  {
+    "source_type": "七圣召唤卡牌资料",
+    "page_url": "https://wiki.biligame.com/ys/%E5%8D%A1%E7%89%8C%EF%BC%9A%E9%AD%88",
+    "title": "七圣召唤·魈",
+    "recorded": "2026-11-26",
+    "downloaded": false,
+    "verification": "已读取对应卡牌资料页，未观看七圣召唤动态战斗画面。",
+    "use": "辅助搜索靖妖傩舞的卡牌范围适配与遮挡；角色实机仍为造型依据，资料页不作为已观看动态效果。"
+  }
+]

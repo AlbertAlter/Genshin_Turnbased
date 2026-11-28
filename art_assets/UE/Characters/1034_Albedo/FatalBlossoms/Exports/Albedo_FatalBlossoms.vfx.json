@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1034_Albedo/FatalBlossoms/Albedo_FatalBlossoms",
+  "source": "art_assets/UE/Characters/1034_Albedo/FatalBlossoms/Blender/Albedo_FatalBlossoms.blend",
+  "file": "Characters/1034_Albedo/FatalBlossoms/Exports/Albedo_FatalBlossoms.vfx.bytes",
+  "meshes": 18,
+  "tracks": 182,
+  "frames": 205,
+  "duration": 6.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 6.8
+  },
+  "bytes": 556034
+}

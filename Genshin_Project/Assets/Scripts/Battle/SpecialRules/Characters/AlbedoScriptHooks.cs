@@ -131,6 +131,11 @@ public static class AlbedoScriptHooks
         if (!(host is BattleEntity owner) || state.Caster != owner || owner.EntityID != 1034)
             throw new InvalidOperationException("阿贝多专属计数与瑰银必须由本人持有。");
     }
+    /// <summary>瑰银是独立计时的普通实例；卡底只读真实份数，不执行条件钩子或增减状态。</summary>
+    internal static int CountSilver(BattleEntity owner)
+        => owner?.EntityID == 1034 && owner.IsAlive
+            ? owner.GetStatusInstances(Silver).Count(state => state.Caster == owner && Active(state)) : 0;
+
     internal static StatusInstance FindSolar(BattleEntity owner)
     {
         var field = BattleManager.Instance?.Field;

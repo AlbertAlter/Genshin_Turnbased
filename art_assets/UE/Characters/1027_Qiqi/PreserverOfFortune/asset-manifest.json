@@ -1,0 +1,658 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/PreserverOfFortune/视觉需求.md",
+  "variants": {
+    "Qiqi_PreserverOfFortune_CastOnly": {
+      "effect": "Qiqi_PreserverOfFortune_CastOnly",
+      "source": "Blender/Qiqi_PreserverOfFortune_CastOnly.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/PreserverOfFortune/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FortuneSealRay": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_FortuneSealRay.fbx",
+          "objects": [
+            "PART_OneAuthoredThinSealRay"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.1119055300951004,
+            0.0,
+            0.7467149496078491
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneAuthoredThinSealRay": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.1119055300951004,
+              1.2165530449692596e-07,
+              0.7467149496078491
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave0": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_OneWholeFortuneWave0.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_0"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.06994366645813,
+            0.0,
+            2.069891333580017
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.06994366645813,
+              3.3722808723268827e-07,
+              2.069891333580017
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave1": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_OneWholeFortuneWave1.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_1"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.0118313431739807,
+            0.0,
+            2.081969141960144
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.0118313431739807,
+              3.3919582165253814e-07,
+              2.081969141960144
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave2": {
+          "file": "Exports/Qiqi_PreserverOfFortune_CastOnly_OneWholeFortuneWave2.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_2"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.093976140022278,
+            0.0,
+            2.0939669609069824
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.093976140022278,
+              3.4115049629690475e-07,
+              2.0939669609069824
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 35,
+          "element": "Cryo",
+          "kind": "one whole-group fortune release; same actual contact for all five targets"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 35,
+      "focus": [
+        -4.4670000076293945,
+        0.23999999463558197,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One whole-group release, all five actual targets share frame35. Existing public talisman follows actual application and outlives cast tail; C6 revival uses public green healing, no new dedicated revival effect.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_PreserverOfFortune_CastOnly.wav"
+      }
+    },
+    "Qiqi_PreserverOfFortune_WithTalismanHandoff": {
+      "effect": "Qiqi_PreserverOfFortune_WithTalismanHandoff",
+      "source": "Blender/Qiqi_PreserverOfFortune_WithTalismanHandoff.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/PreserverOfFortune/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "FortuneSealRay": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_FortuneSealRay.fbx",
+          "objects": [
+            "PART_OneAuthoredThinSealRay"
+          ],
+          "vertices": 28,
+          "triangles": 36,
+          "dimensions": [
+            0.1119055300951004,
+            0.0,
+            0.7467149496078491
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_OneAuthoredThinSealRay": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 28,
+            "triangles": 36,
+            "dimensions": [
+              0.1119055300951004,
+              1.2165530449692596e-07,
+              0.7467149496078491
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave0": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_OneWholeFortuneWave0.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_0"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.06994366645813,
+            0.0,
+            2.069891333580017
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_0": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.06994366645813,
+              3.3722808723268827e-07,
+              2.069891333580017
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave1": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_OneWholeFortuneWave1.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_1"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.0118313431739807,
+            0.0,
+            2.081969141960144
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_1": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.0118313431739807,
+              3.3919582165253814e-07,
+              2.081969141960144
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "OneWholeFortuneWave2": {
+          "file": "Exports/Qiqi_PreserverOfFortune_WithTalismanHandoff_OneWholeFortuneWave2.fbx",
+          "objects": [
+            "PART_WholeFortuneColdWave_2"
+          ],
+          "vertices": 679,
+          "triangles": 1152,
+          "dimensions": [
+            2.093976140022278,
+            0.0,
+            2.0939669609069824
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_WholeFortuneColdWave_2": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 679,
+            "triangles": 1152,
+            "dimensions": [
+              2.093976140022278,
+              3.4115049629690475e-07,
+              2.0939669609069824
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 35,
+          "element": "Cryo",
+          "kind": "one whole-group fortune release; same actual contact for all five targets"
+        }
+      ],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 35,
+      "focus": [
+        -4.4670000076293945,
+        0.23999999463558197,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "One whole-group release, all five actual targets share frame35. Existing public talisman follows actual application and outlives cast tail; C6 revival uses public green healing, no new dedicated revival effect.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_PreserverOfFortune_WithTalismanHandoff.wav"
+      }
+    },
+    "Qiqi_PreserverOfFortune_PassiveTalismanOnly": {
+      "effect": "Qiqi_PreserverOfFortune_PassiveTalismanOnly",
+      "source": "Blender/Qiqi_PreserverOfFortune_PassiveTalismanOnly.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1027_Qiqi/PreserverOfFortune/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Qiqi_PreserverOfFortune_PassiveTalismanOnly_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "casterCardIndex": 5,
+      "hero_frame": 48,
+      "focus": [
+        -4.505000114440918,
+        0.10000000149011612,
+        -0.6899999976158142
+      ],
+      "detailScale": 6,
+      "referenceBoundary": "Herald224f/8.96s, burst71f/2.84s and passive51f/2.04s fully decoded in memory;24 timestamped samples each actually inspected. Dark rune centre/white curved rim/short cold orbit trail, gathered seal light and broad icy release observed. Fine seal strokes are authored; no traced game textures. Passive footage shows a target mark but no full expiry demonstration.",
+      "scope": "Source art only. One herald owned by Qiqi herself, with independent actual attack contacts. Existing public QiqiTalisman is borrowed only for preview handoff. No real damage/healing/revival, status assignment, tables or Unity changes.",
+      "contract": "Only the existing shared card glyph and a finite appearance glint after passive application; no burst, false damage or extra healing.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Qiqi_PreserverOfFortune_PassiveTalismanOnly.wav"
+      }
+    }
+  }
+}

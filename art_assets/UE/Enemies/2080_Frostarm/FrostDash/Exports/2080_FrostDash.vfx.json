@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2080_Frostarm/FrostDash/2080_FrostDash",
+  "source": "art_assets/UE/Enemies/2080_Frostarm/FrostDash/Blender/2080_FrostDash.blend",
+  "file": "Enemies/2080_Frostarm/FrostDash/Exports/2080_FrostDash.vfx.bytes",
+  "meshes": 3,
+  "tracks": 80,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 197420
+}

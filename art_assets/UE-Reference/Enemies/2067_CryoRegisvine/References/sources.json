@@ -1,0 +1,99 @@
+{
+  "enemy_id": 2067,
+  "name": "急冻树",
+  "checked_date": "2026-11-27",
+  "page": "https://genshin-impact.fandom.com/wiki/Cryo_Regisvine#Abilities",
+  "verification": "能力条目与媒体地址已核对，完整GIF未播放，GIF仅在线引用。音效未试听、下载或截取。",
+  "user_overrides": [
+    "射线只做一轮双束交叉扫射，对应原有两hit",
+    "两树头砸只做单体与全体两段命中特效，不做树头或卡牌下砸",
+    "两树扫击只在命中附近显示以对应树卡牌为圆心的弧段",
+    "暴风雪为快速弥漫的寒雾与冰粒，单次全体接触",
+    "爆炎树对应头砸和扫击结构相同，四发火弹及八发火雨保留配表"
+  ],
+  "visual_sources": [
+    {
+      "effect": "冰核心再生",
+      "title": null,
+      "url": null,
+      "description_url": null,
+      "purpose": "独立对应GIF未定位，不用其他动作冒充；能力页及视频作为后续形态对照",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "冰冻射线",
+      "title": "Cryo Regisvine Ice Beams.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/8/88/Cryo_Regisvine_Ice_Beams.gif/revision/latest?cb=20240524075426",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Cryo_Regisvine_Ice_Beams.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "追踪冰锥",
+      "title": "Cryo Regisvine Homing Icicles.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/1/17/Cryo_Regisvine_Homing_Icicles.gif/revision/latest?cb=20240524075420",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Cryo_Regisvine_Homing_Icicles.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "头砸命中两段",
+      "title": "Cryo Regisvine Body Slam Single.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/e/e2/Cryo_Regisvine_Body_Slam_Single.gif/revision/latest?cb=20240524075352",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Cryo_Regisvine_Body_Slam_Single.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "旋转扫击与冻结地面",
+      "title": "Cryo Regisvine Spin.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/f/f9/Cryo_Regisvine_Spin.gif/revision/latest?cb=20240524075450",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Cryo_Regisvine_Spin.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    },
+    {
+      "effect": "暴风雪",
+      "title": "Cryo Regisvine Blizzard.gif",
+      "url": "https://static.wikia.nocookie.net/gensin-impact/images/3/34/Cryo_Regisvine_Blizzard.gif/revision/latest?cb=20240524075344",
+      "description_url": "https://genshin-impact.fandom.com/wiki/File:Cryo_Regisvine_Blizzard.gif",
+      "purpose": "原作形态／材质参考；用户命中特效简化及项目次数优先",
+      "downloaded": false,
+      "animation_viewed": false,
+      "local_file": null
+    }
+  ],
+  "audio_sources": [
+    {
+      "type": "original_gameplay_reference",
+      "url": "https://www.youtube.com/watch?v=ttyq7GMZK0M",
+      "purpose": "各项原作声音对照，片段时点待试听定位",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null,
+      "usage": "未提取或声明音频再分发许可"
+    },
+    {
+      "type": "replacement_candidate",
+      "url": "https://opengameart.org/content/air-whoosh",
+      "license_page_label": "CC0（页面检索标注，尚未下载文件核对）",
+      "purpose": "空气掠过替代层，冰粒／冰体接触仍待选定",
+      "listened": false,
+      "time_range": null,
+      "downloaded": false,
+      "local_file": null
+    }
+  ],
+  "local_audio_search": "本机art_assets当前未找到可直接引用到本批技能的松散音源；只记录当前设备结果。"
+}

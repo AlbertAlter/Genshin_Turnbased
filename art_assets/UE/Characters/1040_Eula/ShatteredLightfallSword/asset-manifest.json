@@ -1,0 +1,331 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1040_Eula/ShatteredLightfallSword/视觉需求.md",
+  "variants": {
+    "Eula_ShatteredLightfallSword": {
+      "effect": "Eula_ShatteredLightfallSword",
+      "source": "Blender/Eula_ShatteredLightfallSword.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1040_Eula/ShatteredLightfallSword/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Eula_ShatteredLightfallSword_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow.001"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Mist": {
+          "file": "Exports/Eula_ShatteredLightfallSword_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist.001"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "Shard": {
+          "file": "Exports/Eula_ShatteredLightfallSword_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment.001"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallBlade": {
+          "file": "Exports/Eula_ShatteredLightfallSword_LightfallBlade.fbx",
+          "objects": [
+            "PART_FacetedPaleSwordBlade",
+            "PART_RaisedChiselBladeRidge"
+          ],
+          "vertices": 172,
+          "triangles": 334,
+          "dimensions": [
+            0.5192697942256927,
+            0.19500000029802322,
+            0.9094394445419312
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallWings": {
+          "file": "Exports/Eula_ShatteredLightfallSword_LightfallWings.fbx",
+          "objects": [
+            "PART_SweptWingGuard_-1",
+            "PART_GuardLayeredFeather_-1_0",
+            "PART_GuardLayeredFeather_-1_1",
+            "PART_GuardLayeredFeather_-1_2",
+            "PART_WhiteGoldWingEdge_-1",
+            "PART_WingFeatherInset_-1",
+            "PART_SweptWingGuard_1",
+            "PART_GuardLayeredFeather_1_0",
+            "PART_GuardLayeredFeather_1_1",
+            "PART_GuardLayeredFeather_1_2",
+            "PART_WhiteGoldWingEdge_1",
+            "PART_WingFeatherInset_1"
+          ],
+          "vertices": 638,
+          "triangles": 1168,
+          "dimensions": [
+            1.430220127105713,
+            0.17500000074505806,
+            0.6259009540081024
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallHilt": {
+          "file": "Exports/Eula_ShatteredLightfallSword_LightfallHilt.fbx",
+          "objects": [
+            "PART_NarrowLightGrip",
+            "PART_GuardDiamond"
+          ],
+          "vertices": 110,
+          "triangles": 212,
+          "dimensions": [
+            0.30681782960891724,
+            0.15600000321865082,
+            0.8427460193634033
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "LightfallInlay": {
+          "file": "Exports/Eula_ShatteredLightfallSword_LightfallInlay.fbx",
+          "objects": [
+            "PART_SwordLuminousInlay_0",
+            "PART_SwordLuminousInlay_1",
+            "PART_SwordLuminousInlay_2",
+            "PART_SwordLuminousInlay_3",
+            "PART_BladeColdBevel_-1",
+            "PART_BladeColdBevel_1"
+          ],
+          "vertices": 154,
+          "triangles": 192,
+          "dimensions": [
+            1.2191342115402222,
+            0.07000000774860382,
+            1.1536298096179962
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "SwordGlint": {
+          "file": "Exports/Eula_ShatteredLightfallSword_SwordGlint.fbx",
+          "objects": [
+            "PART_SwordFourPointGlint"
+          ],
+          "vertices": 8,
+          "triangles": 6,
+          "dimensions": [
+            0.23999999463558197,
+            0.0,
+            0.3199999928474426
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhysicalBurstFan": {
+          "file": "Exports/Eula_ShatteredLightfallSword_PhysicalBurstFan.fbx",
+          "objects": [
+            "PART_OnePaleGoldPhysicalBurst"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhysicalBlastColdWhiteCore": {
+          "file": "Exports/Eula_ShatteredLightfallSword_PhysicalBlastColdWhiteCore.fbx",
+          "objects": [
+            "PART_PhysicalBlastBriefChampagneCore"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "PhysicalRadialLight": {
+          "file": "Exports/Eula_ShatteredLightfallSword_PhysicalRadialLight.fbx",
+          "objects": [
+            "PART_PalePhysicalRadialLight_0",
+            "PART_PalePhysicalRadialLight_1",
+            "PART_PalePhysicalRadialLight_2",
+            "PART_PalePhysicalRadialLight_3",
+            "PART_PalePhysicalRadialLight_4",
+            "PART_PalePhysicalRadialLight_5",
+            "PART_PalePhysicalRadialLight_6",
+            "PART_PalePhysicalRadialLight_7",
+            "PART_PalePhysicalRadialLight_8",
+            "PART_PalePhysicalRadialLight_9"
+          ],
+          "vertices": 1750,
+          "triangles": 2880,
+          "dimensions": [
+            1.9905468225479126,
+            0.0,
+            1.9633294343948364
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WaveFront": {
+          "file": "Exports/Eula_ShatteredLightfallSword_WaveFront.fbx",
+          "objects": [
+            "PART_WaveFront"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.063934326171875,
+            0.0,
+            48.06399917602539
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        },
+        "WaveAfterglow": {
+          "file": "Exports/Eula_ShatteredLightfallSword_WaveAfterglow.fbx",
+          "objects": [
+            "PART_WaveAfterglow"
+          ],
+          "vertices": 455,
+          "triangles": 768,
+          "dimensions": [
+            48.149776458740234,
+            0.0,
+            48.150001525878906
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded"
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 20,
+          "waveCenter": [
+            -4.4670000076293945,
+            0.1899999976158142,
+            0.12800000607967377
+          ],
+          "reach": 4.6680000257492065,
+          "layer": "below ALL card fronts/backs/frames"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Physical",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Physical",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Physical",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Physical",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 20,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Physical",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 21,
+      "focus": [
+        -4.4670000076293945,
+        0.12000000476837158,
+        0.12800000607967377
+      ],
+      "detailScale": 13,
+      "casterCardIndex": 5,
+      "referenceBoundary": "Short-tap 16-frame original GIF sampled in full. Burst download timed out; complete sword detailing, detonation and ice-brand trajectories are authored interpretations awaiting original-motion comparison.",
+      "scope": "Editable source art only, no Unity/tables/gameplay. Card local sword anchors are examples; runtime must bind actual holder and sword instance.",
+      "contract": "One pale physical group burst, distinct from cryo cast. The miniature broken sword has no sustained charge phase. Source is an authored trigger interpretation, not confirmed original frame timing.",
+      "refinement": "2026-11-28 visual review: improved authored forms, colour hierarchy and material. Same hosts, targets, cues and lifecycle; no new video.",
+      "previewVideoCurrent": false,
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "Contact_metal.wav": "Eula_ShatteredLightfallSword_Contact_metal.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Eula_ShatteredLightfallSword.wav"
+      }
+    }
+  }
+}

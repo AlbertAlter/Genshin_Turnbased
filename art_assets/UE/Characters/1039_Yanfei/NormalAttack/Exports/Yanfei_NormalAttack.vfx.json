@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1039_Yanfei/NormalAttack/Yanfei_NormalAttack",
+  "source": "art_assets/UE/Characters/1039_Yanfei/NormalAttack/Blender/Yanfei_NormalAttack.blend",
+  "file": "Characters/1039_Yanfei/NormalAttack/Exports/Yanfei_NormalAttack.vfx.bytes",
+  "meshes": 8,
+  "tracks": 31,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 133777
+}

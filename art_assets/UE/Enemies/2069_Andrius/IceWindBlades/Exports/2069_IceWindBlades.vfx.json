@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2069_Andrius/IceWindBlades/2069_IceWindBlades",
+  "source": "art_assets/UE/Enemies/2069_Andrius/IceWindBlades/Blender/2069_IceWindBlades.blend",
+  "file": "Enemies/2069_Andrius/IceWindBlades/Exports/2069_IceWindBlades.vfx.bytes",
+  "meshes": 10,
+  "tracks": 82,
+  "frames": 115,
+  "duration": 3.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.8
+  },
+  "bytes": 426283
+}

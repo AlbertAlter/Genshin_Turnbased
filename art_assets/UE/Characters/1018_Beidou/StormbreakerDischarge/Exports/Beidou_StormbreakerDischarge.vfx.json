@@ -1,0 +1,17 @@
+{
+  "key": "Characters/1018_Beidou/StormbreakerDischarge/Beidou_StormbreakerDischarge",
+  "source": "art_assets/UE/Characters/1018_Beidou/StormbreakerDischarge/Blender/Beidou_StormbreakerDischarge.blend",
+  "file": "Characters/1018_Beidou/StormbreakerDischarge/Exports/Beidou_StormbreakerDischarge.vfx.bytes",
+  "meshes": 5,
+  "tracks": 19,
+  "frames": 34,
+  "duration": 1.1,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Contact_1": 0.06666666666666667,
+    "Contact_2": 0.16666666666666666,
+    "Contact_3": 0.26666666666666666
+  },
+  "bytes": 17054
+}

@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1020_Bennett/FantasticVoyageState/Bennett_FantasticVoyageState",
+  "source": "art_assets/UE/Characters/1020_Bennett/FantasticVoyageState/Blender/Bennett_FantasticVoyageState.blend",
+  "file": "Characters/1020_Bennett/FantasticVoyageState/Exports/Bennett_FantasticVoyageState.vfx.bytes",
+  "meshes": 6,
+  "tracks": 18,
+  "frames": 319,
+  "duration": 10.6,
+  "loopStart": 0.8,
+  "loopEnd": 4.8,
+  "markers": {
+    "Appearance": 0.0,
+    "LoopStart": 0.8,
+    "Cycle1Repeat": 4.8,
+    "Cycle2Repeat": 8.8,
+    "ArbitraryPhaseExit": 9.166666666666666,
+    "Clear": 10.6
+  },
+  "bytes": 177892
+}

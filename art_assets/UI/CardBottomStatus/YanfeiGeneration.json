@@ -1,0 +1,24 @@
+{
+  "created": "2026-11-27",
+  "asset": "ScarletSeal.png",
+  "character_id": 1039,
+  "status_id": 4103901,
+  "mode": "built-in image_gen",
+  "use_case": "stylized-concept",
+  "identity_reference": "art_assets/Skill_Icon/1039/1039_C06.png",
+  "style_reference": "art_assets/UI/CardBottomStatus/KleeSpark.png",
+  "identity_note": "以项目现有官方六命字形为形状参考的彩色改编，不声称为原作丹火印专用贴图。",
+  "prompt": "Use case: stylized-concept.\nAsset type: one small Genshin Impact Genius Invokation TCG style card-bottom status icon, Scarlet Seal / 丹火印 for Yanfei.\nReference image 1 is Yanfei's official 1039_C06.png glyph: use its interwoven angular seal/knot silhouette, central maze-like geometric strokes and small upper/lower diamond tips as the identity reference. Preserve this recognizable geometric structure.\nReference image 2, KleeSpark.png, is style only: match its bold dark warm outline, sculpted simplified highlight/shadow bands, strong readable colored silhouette and restrained TCG illustration finish. Do not include its flame-ball subject.\nCreate a compact opaque vermilion/scarlet seal medallion with the referenced gold interwoven angular glyph embossed across it. The backing seal body fills the inner spaces with deep red so there are no transparent holes inside the icon. Gold-orange lit edges, warm gold glyph, dark red/brown recessed shadows, a few broad light/shadow regions. Abstract ornamental game icon, not photorealistic, no scenery. Keep the official angular details readable at small size without adding tiny filigree.\nComposition centered inside a roughly circular footprint, with generous transparent margins on a square canvas; no enclosing circular frame, no background disk beyond the seal body, no text, no numbers, no arrows, no count badges, no watermark. The outer background must be genuinely transparent.",
+  "generated_source": "C:/Users/1/.codex/generated_images/01a1b408-f588-7650-9218-4be6b3dc4f7e/exec-2add375c-a2c0-42a2-986a-2952ff25a1e2.png",
+  "saved_paths": [
+    "art_assets/UI/CardBottomStatus/ScarletSeal.png",
+    "Genshin_Project/Assets/StreamingAssets/art_assets/UI/CardBottomStatus/ScarletSeal.png"
+  ],
+  "size": [
+    1254,
+    1254
+  ],
+  "format": "RGBA PNG",
+  "transparent_background": true,
+  "display": "一个卡底图标，右下数字读取真实Count；0隐藏，普通上限3枚、六命4枚由业务控制，图片不画数字。"
+}

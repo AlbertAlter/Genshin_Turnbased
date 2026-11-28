@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2023_LargeCryoSlime/FrigidMist/2023_FrigidMist_Trigger",
+  "source": "art_assets/UE/Enemies/2023_LargeCryoSlime/FrigidMist/Blender/2023_FrigidMist_Trigger.blend",
+  "file": "Enemies/2023_LargeCryoSlime/FrigidMist/Exports/2023_FrigidMist_Trigger.vfx.bytes",
+  "meshes": 3,
+  "tracks": 15,
+  "frames": 120,
+  "duration": 3.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 3.966666666666667
+  },
+  "bytes": 83398
+}

@@ -1,0 +1,585 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Characters/1031_Diona/IcyPaws/视觉需求.md",
+  "variants": {
+    "Diona_IcyPaws_FiveTargets": {
+      "effect": "Diona_IcyPaws_FiveTargets",
+      "source": "Blender/Diona_IcyPaws_FiveTargets.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1031_Diona/IcyPaws/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Diona_IcyPaws_FiveTargets_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Diona_IcyPaws_FiveTargets_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Diona_IcyPaws_FiveTargets_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PawProjectile": {
+          "file": "Exports/Diona_IcyPaws_FiveTargets_PawProjectile.fbx",
+          "objects": [
+            "PART_AuthoredIcyPawPad",
+            "PART_IcyPawToe_0",
+            "PART_IcyPawToe_1",
+            "PART_IcyPawToe_2",
+            "PART_IcyPawToe_3"
+          ],
+          "vertices": 452,
+          "triangles": 804,
+          "dimensions": [
+            0.6110225319862366,
+            0.07649999856948853,
+            0.5429542362689972
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredIcyPawPad": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_0": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_1": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_2": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_3": [
+              "DionaSoftClearIcePaw"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 452,
+            "triangles": 804,
+            "dimensions": [
+              0.6110225319862366,
+              0.07650003209710121,
+              0.5429542362689972
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            -7.795000076293945,
+            -0.07000000029802322,
+            -0.6800000071525574
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -6.054999828338623,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -2.765000104904175,
+            -0.07000000029802322,
+            1.350000023841858
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -1.215000033378601,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        8
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 18,
+      "scope": "Source art only, no real shield/healing, targets or turn phases; no Unity/tables changed.",
+      "referenceBoundary": "IcyPaws104f/4.16s and labelled SignatureMix117f/3.51s decoded in memory;24 samples each observed. Paw trails/shield and expanding cold field are visible. The supplied field footage reads strongly blue-white and fine paw pattern is unclear; requested pink-purple palette and authored pad pattern follow project requirements, not an exact texture reconstruction.",
+      "focus": [
+        -1.25600004196167,
+        -0.015000000596046448,
+        -0.18599998950958252
+      ],
+      "detailScale": 14,
+      "paws": [
+        {
+          "index": 0,
+          "targetCardIndex": 0,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.3,
+          "curveSide": -0.3
+        },
+        {
+          "index": 1,
+          "targetCardIndex": 1,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.48,
+          "curveSide": -0.15
+        },
+        {
+          "index": 2,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.6599999999999999,
+          "curveSide": 0.0
+        },
+        {
+          "index": 3,
+          "targetCardIndex": 3,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.8400000000000001,
+          "curveSide": 0.15
+        },
+        {
+          "index": 4,
+          "targetCardIndex": 4,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 1.02,
+          "curveSide": 0.3
+        }
+      ],
+      "contract": "Exactly five independently curved paw bodies, same explicit launch/contact group in this example; repeated-target variant keeps all five. No shield calculation or spawn, retargeting or arbitrary extra firing delay.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Diona_IcyPaws_FiveTargets.wav"
+      }
+    },
+    "Diona_IcyPaws_RepeatedTarget": {
+      "effect": "Diona_IcyPaws_RepeatedTarget",
+      "source": "Blender/Diona_IcyPaws_RepeatedTarget.blend",
+      "requirement": "art_assets/UE-Reference/Characters/1031_Diona/IcyPaws/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Glow": {
+          "file": "Exports/Diona_IcyPaws_RepeatedTarget_Glow.fbx",
+          "objects": [
+            "PART_SoftContactGlow"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.0,
+            0.0,
+            2.0
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftContactGlow": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.0,
+              3.2584134146418364e-07,
+              2.0
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Mist": {
+          "file": "Exports/Diona_IcyPaws_RepeatedTarget_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Shard": {
+          "file": "Exports/Diona_IcyPaws_RepeatedTarget_Shard.fbx",
+          "objects": [
+            "PART_SolidFragment"
+          ],
+          "vertices": 15,
+          "triangles": 26,
+          "dimensions": [
+            0.16829544305801392,
+            0.16974565386772156,
+            0.3200000002980232
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SolidFragment": [
+              "Ice"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 15,
+            "triangles": 26,
+            "dimensions": [
+              0.16829544305801392,
+              0.16974570602178574,
+              0.3200000301003456
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "PawProjectile": {
+          "file": "Exports/Diona_IcyPaws_RepeatedTarget_PawProjectile.fbx",
+          "objects": [
+            "PART_AuthoredIcyPawPad",
+            "PART_IcyPawToe_0",
+            "PART_IcyPawToe_1",
+            "PART_IcyPawToe_2",
+            "PART_IcyPawToe_3"
+          ],
+          "vertices": 452,
+          "triangles": 804,
+          "dimensions": [
+            0.6110225319862366,
+            0.07649999856948853,
+            0.5429542362689972
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_AuthoredIcyPawPad": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_0": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_1": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_2": [
+              "DionaSoftClearIcePaw"
+            ],
+            "PART_IcyPawToe_3": [
+              "DionaSoftClearIcePaw"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 5,
+            "vertices": 452,
+            "triangles": 804,
+            "dimensions": [
+              0.6110225319862366,
+              0.07650003209710121,
+              0.5429542362689972
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        },
+        {
+          "frame": 27,
+          "position": [
+            -4.505000114440918,
+            -0.07000000029802322,
+            -0.6899999976158142
+          ],
+          "element": "Cryo",
+          "purpose": "one visual contact; no gameplay result generated"
+        }
+      ],
+      "launchFrames": [
+        8
+      ],
+      "casterCardIndex": 5,
+      "hero_frame": 18,
+      "scope": "Source art only, no real shield/healing, targets or turn phases; no Unity/tables changed.",
+      "referenceBoundary": "IcyPaws104f/4.16s and labelled SignatureMix117f/3.51s decoded in memory;24 samples each observed. Paw trails/shield and expanding cold field are visible. The supplied field footage reads strongly blue-white and fine paw pattern is unclear; requested pink-purple palette and authored pad pattern follow project requirements, not an exact texture reconstruction.",
+      "focus": [
+        -1.2750003337860107,
+        -0.02500000223517418,
+        -0.5950000286102295
+      ],
+      "detailScale": 14,
+      "paws": [
+        {
+          "index": 0,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.3,
+          "curveSide": -0.3
+        },
+        {
+          "index": 1,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.48,
+          "curveSide": -0.15
+        },
+        {
+          "index": 2,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.6599999999999999,
+          "curveSide": 0.0
+        },
+        {
+          "index": 3,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 0.8400000000000001,
+          "curveSide": 0.15
+        },
+        {
+          "index": 4,
+          "targetCardIndex": 2,
+          "launch": 8,
+          "contact": 27,
+          "curveArch": 1.02,
+          "curveSide": 0.3
+        }
+      ],
+      "contract": "Exactly five independently curved paw bodies, same explicit launch/contact group in this example; repeated-target variant keeps all five. No shield calculation or spawn, retargeting or arbitrary extra firing delay.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav"
+        },
+        "silentSustained": false,
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\Diona_IcyPaws_RepeatedTarget.wav"
+      }
+    }
+  }
+}

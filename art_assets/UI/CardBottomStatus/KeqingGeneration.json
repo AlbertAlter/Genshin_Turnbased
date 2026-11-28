@@ -1,0 +1,16 @@
+{
+  "asset": "KeqingStiletto.png",
+  "method": "built-in image_gen",
+  "date": "2026-11-26",
+  "edit_target": "art_assets/Skill_Icon/1029/1029_S01.png",
+  "style_references": [
+    "art_assets/UI/CardBottomStatus/KleeSpark.png",
+    "art_assets/UI/CardBottomStatus/Pyronado.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Asset type: one transparent colored card-bottom state icon for Keqing's Lightning Stiletto in a Genshin-inspired card battle. Image 1 is the official monochrome elemental-skill glyph and is the edit/shape target; images 2 and 3 are STYLE REFERENCES ONLY (existing Klee spark and Xiangling pyronado card-bottom icons). Convert the official lightning-stiletto identity into a compact, extremely readable colored status icon: a single sharp faceted purple lightning wedge/dagger pointing down in the same general orientation as the official glyph, a pale lavender-white blade edge and small diamond-like upper grip, restrained violet angular electric arcs around it and a small thin locating oval below its tip, preserving the main official stiletto silhouette. Use saturated violet and lavender with deep plum contours and 2-3 painted shadow/highlight bands, matching the outlined Genius Invokation TCG-like volume of the existing icons. Abstract stylized UI symbol, chunky readable silhouette, not realistic, not a weapon product render. Keep the design within a roughly circular footprint centered in a square with modest padding. No full circular background disc, no frame, no badge, no text, no numbers, no extra arrow badge, no spear or flame from the style references. Solid readable shapes inside the main dagger, transparent negative space between the arcs, genuinely transparent background outside. Do not include a character, hands, scenery, screenshot, or UI panel.",
+  "status_id": 4102901,
+  "status_id2": "ST_Keqing_Stiletto",
+  "count_mode": "Instances",
+  "show_count": false,
+  "host": "actual enemy FieldPosition, persists on empty field while active"
+}

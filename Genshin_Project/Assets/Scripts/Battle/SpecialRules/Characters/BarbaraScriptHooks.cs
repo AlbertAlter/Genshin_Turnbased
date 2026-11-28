@@ -19,7 +19,7 @@ public static class BarbaraScriptHooks
             && context.Caster?.EntityID == 1014 && context.Caster.IsAlive
             && context.Status.Caster == context.Caster && context.Status.IsActive
             && !context.Status.IsPermanent && context.Status.RemainingPhaseCount <= 0
-            && context.StatusHost == context.Caster && context.Caster.HasStatusInstance(context.Status)
+            && ReferenceEquals(context.StatusHost, context.Caster) && context.Caster.HasStatusInstance(context.Status)
             && context.Caster.CurrentEnergy < context.Caster.MaxEnergy);
         BarbaraRevivalHooks.Register();
     }

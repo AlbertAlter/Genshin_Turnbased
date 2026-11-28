@@ -118,12 +118,12 @@ public sealed class UICardVideoPlayer : MonoBehaviour
         if (!Ready) return;
         bool visible = false;
         if (bound != null) foreach (var target in bound) if (target != null && target.isActiveAndEnabled) { visible = true; break; }
-        if (paused || Frozen || (!visible && !keepDecodingWhenHidden)) { if (decoder.isPlaying) decoder.Pause(); }
+        if (BattlePause.IsPaused || paused || Frozen || (!visible && !keepDecodingWhenHidden)) { if (decoder.isPlaying) decoder.Pause(); }
         else if (!decoder.isPlaying) decoder.Play();
     }
     public void Step()
     {
-        if (Frozen) return;
+        if (Frozen || BattlePause.IsPaused) return;
         paused = true;
         if (!Ready) return;
         decoder.Pause();
@@ -131,7 +131,7 @@ public sealed class UICardVideoPlayer : MonoBehaviour
     }
     public void Restart()
     {
-        if (!Ready || Frozen) return;
+        if (!Ready || Frozen || BattlePause.IsPaused) return;
         paused = false; decoder.time = 0; ApplyPlaybackState();
     }
     private void RestoreTargets()

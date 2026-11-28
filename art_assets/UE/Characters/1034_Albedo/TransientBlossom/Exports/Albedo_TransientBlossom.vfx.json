@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1034_Albedo/TransientBlossom/Albedo_TransientBlossom",
+  "source": "art_assets/UE/Characters/1034_Albedo/TransientBlossom/Blender/Albedo_TransientBlossom.blend",
+  "file": "Characters/1034_Albedo/TransientBlossom/Exports/Albedo_TransientBlossom.vfx.bytes",
+  "meshes": 14,
+  "tracks": 22,
+  "frames": 90,
+  "duration": 2.966666666666667,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.966666666666667
+  },
+  "bytes": 50176
+}

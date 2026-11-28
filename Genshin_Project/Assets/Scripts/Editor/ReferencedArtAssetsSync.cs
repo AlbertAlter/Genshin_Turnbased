@@ -15,6 +15,7 @@ using UnityEngine;
 public static class ReferencedArtAssetsSync
 {
     private const string PreferredCharacterVideoFolder = "Character_AnimatedwithBG";
+    private const string PreferredEnemyVideoFolder = "Enemy_AnimatedwithBG";
 
     private static readonly HashSet<string> ImageExtensions = new HashSet<string>(
         new[] { ".png", ".jpg", ".jpeg", ".bmp", ".tga", ".tif", ".tiff", ".gif", ".webp", ".svg", ".exr", ".hdr" },
@@ -49,6 +50,9 @@ public static class ReferencedArtAssetsSync
         CollectAppearanceArt(sourceRoot, required);
         CollectWishArt(dataRoot, sourceRoot, required, warnings);
         CollectItemListArt(required);
+        string bottomIcons = SafeCombine(sourceRoot, "UI/CardBottomStatus");
+        if (Directory.Exists(bottomIcons))
+            foreach (string icon in Directory.EnumerateFiles(bottomIcons, "*.png")) required.Add(GetRelativePath(sourceRoot, icon));
         required.Add(UIProjectMenuBackground.EmblemPath.Substring("art_assets/".Length));
         required.Add(RoguelikeShopView.EmblemArtPath.Substring("art_assets/".Length));
         CollectRosterArt(dataRoot, sourceRoot, required, warnings);
@@ -61,6 +65,11 @@ public static class ReferencedArtAssetsSync
         required.Add(UIPageNavigation.CloseIconPath.Substring("art_assets/".Length));
         required.Add("Others/PaimonEmblem_ProjectWhite.png");
         required.Add("UI/Status/status-name-background.svg");
+        // Card-face overlays are explicitly selected by public components and preview scenes.
+        string cardFaceUi = SafeCombine(sourceRoot, "UI/CardFaceUI");
+        if (Directory.Exists(cardFaceUi))
+            foreach (string image in Directory.EnumerateFiles(cardFaceUi, "*", SearchOption.AllDirectories))
+                if (ImageExtensions.Contains(Path.GetExtension(image))) required.Add(GetRelativePath(sourceRoot, image));
         // Card overlays can be serialized in existing scenes without UI-table rows.
         required.Add("UI/BattleField1/UI_components/card/CardShadow.png");
         required.Add("UI/BattleField1/UI_components/card/CardInnerShadow.png");
@@ -206,7 +215,8 @@ public static class ReferencedArtAssetsSync
             result.Add(characterList + asset);
         foreach (string element in new[] { "Anemo", "Cryo", "Dendro", "Electro", "Geo", "Hydro", "Pyro" })
         {
-            result.Add(characterList + $"Details/element{element}.png");
+            result.Add(ElementColorPalette.ElementIconPath(element).Substring("art_assets/".Length));
+            result.Add(ElementColorPalette.ElementSvgPath(element).Substring("art_assets/".Length));
             result.Add(characterList + $"Details/disc{element}.png");
         }
     }
@@ -288,7 +298,7 @@ public static class ReferencedArtAssetsSync
             throw new ArgumentException("Unknown animated card folder: " + folder);
         var videos = new HashSet<string>(StringComparer.Ordinal);
         // Both sources publish to the existing canonical path. Source priority is resolved only here.
-        foreach (string sourceFolder in character ? new[] { PreferredCharacterVideoFolder, folder } : new[] { folder })
+        foreach (string sourceFolder in new[] { character ? PreferredCharacterVideoFolder : PreferredEnemyVideoFolder, folder })
         {
             string directory = SafeCombine(sourceRoot, sourceFolder);
             if (!Directory.Exists(directory)) continue;
@@ -359,7 +369,12 @@ public static class ReferencedArtAssetsSync
         {
             var palette = ElementColorPalette.Load();
             foreach (string path in palette.AuraIconPaths)
-                if (TryNormalizeImagePath(path, out string relative)) result.Add(relative);
+                if (TryNormalizeImagePath(path, out string relative))
+                {
+                    result.Add(relative);
+                    // 字形源SVG与Unity用的白色PNG一起发布，目录与命名保持一致。
+                    result.Add(Path.ChangeExtension(relative, ".svg"));
+                }
         }
         catch (Exception error) { warnings.Add("元素栏图标配表未加载：" + error.Message); }
     }
@@ -427,11 +442,16 @@ public static class ReferencedArtAssetsSync
             }
 
             var seen = new HashSet<int>();
+            var appearancePath = Path.Combine(dataRoot, "UI", EnemyAppearanceTable.FileName);
+            var appearance = File.Exists(appearancePath) ? EnemyAppearanceTable.ReadFile(appearancePath) : null;
+            var enemyIds = new SortedSet<int>(appearance?.ConfiguredEnemies ?? Enumerable.Empty<int>());
             for (int row = 2; row <= sheet.Dimension.End.Row; row++)
             {
-                if (!int.TryParse(sheet.Cells[row, idColumn].Text.Trim(), out int enemyId) ||
-                    enemyId <= 0 || !seen.Add(enemyId))
-                    continue;
+                if (int.TryParse(sheet.Cells[row, idColumn].Text.Trim(), out int id) && id > 0) enemyIds.Add(id);
+            }
+            foreach (int enemyId in enemyIds)
+            {
+                if (!seen.Add(enemyId)) continue;
 
                 string relativePath = $"Enemy/{enemyId}_01.png";
                 if (!File.Exists(SafeCombine(sourceRoot, relativePath)))

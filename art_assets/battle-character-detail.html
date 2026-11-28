@@ -1,0 +1,1725 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>战斗角色详情</title>
+<link rel="stylesheet" href="battle-character-detail.css">
+<script defer src="battle-character-detail.js"></script>
+</head>
+<body>
+<main class="battle-viewport" aria-label="战斗画面">
+  <div class="arena" id="arena">
+    <div class="enemy-hud" id="enemy-hud" aria-hidden="true"></div>
+    <div id="enemies" aria-hidden="true"></div>
+    <div id="allies"></div>
+    <div class="battle-party" id="battle-party"></div>
+    <div class="battle-controls" id="battle-controls" aria-hidden="true"></div>
+  </div>
+</main>
+
+<dialog id="character-page" aria-labelledby="character-name" autofocus>
+  <div class="character-layout">
+    <aside class="character-side">
+      <div class="side-caption"><span class="diamond" aria-hidden="true"></span><span data-copy="title">角色详情</span></div>
+      <div class="portrait" id="portrait"></div>
+      <div class="identity" id="identity"></div>
+      <div class="party-switch" id="party-switch" role="group" aria-label="切换队伍角色"></div>
+    </aside>
+    <section class="character-content">
+      <header class="top">
+        <div class="tabs" id="tabs" role="tablist" aria-label="角色详情"></div>
+        <form method="dialog">
+          <button class="close" id="close" value="close" type="submit" aria-label="关闭">×</button>
+        </form>
+      </header>
+      <div id="panels"></div>
+    </section>
+  </div>
+</dialog>
+
+<!-- The four sample characters' localized text and level tables are from character-roster.html. -->
+<script type="application/json" id="character-catalog">
+{
+  "profiles": [
+    {
+      "id": 1015,
+      "name": "迪卢克",
+      "english": "Diluc",
+      "elementKey": "Pyro",
+      "type": 1,
+      "skills": [
+        {
+          "name": "淬炼之剑·普攻",
+          "icon": "skill1_1",
+          "description": "对单个敌人造成一段物理伤害。"
+        },
+        {
+          "name": "淬炼之剑·重击",
+          "icon": "skill1_2",
+          "description": "挥动大剑，对三个相邻敌人各造成一段物理伤害。"
+        },
+        {
+          "name": "逆焰之刃",
+          "icon": "skill1015_S01",
+          "description": "消耗15点AP，对单个敌人造成一段火元素伤害，并产出2点元素能量。本回合内可继续施放第二段。冷却2回合。"
+        },
+        {
+          "name": "黎明",
+          "icon": "skill1015_S02",
+          "description": "消耗40点元素能量，释放火鸟，从右至左依次对所有敌人造成一段火元素伤害，随后爆炸，再造成两段火元素伤害。迪卢克获得持续2回合的火元素附魔，使普通攻击与重击转为火元素伤害。冷却3回合。"
+        }
+      ],
+      "talents": [
+        {
+          "index": 1,
+          "name": "永不休止",
+          "threshold": 20,
+          "icon": "skill1015_T01",
+          "description": "重击消耗的AP减少10点。"
+        },
+        {
+          "index": 2,
+          "name": "熔毁之翼",
+          "threshold": 60,
+          "icon": "skill1015_T02",
+          "description": "黎明提供的火元素附魔延长1回合。施放黎明后，火元素伤害加成提高20%，持续3回合。"
+        }
+      ],
+      "cons": [
+        {
+          "index": 1,
+          "name": "罪罚裁断",
+          "bonus": null,
+          "icon": "skill1015_C01",
+          "description": "对生命值高于50%的敌人造成的伤害提高15%。"
+        },
+        {
+          "index": 2,
+          "name": "炙热余烬",
+          "bonus": null,
+          "icon": "skill1015_C02",
+          "description": "受到伤害后，攻击力提高10%，普攻和重击消耗的AP减少1点，持续3回合。至多叠加3层，每层独立计时，每回合至多触发2次。"
+        },
+        {
+          "index": 3,
+          "name": "钢铁炽焰",
+          "bonus": [
+            2,
+            3
+          ],
+          "icon": "skill1015_C03",
+          "description": "逆焰之刃的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 4,
+          "name": "流火焦灼",
+          "bonus": null,
+          "icon": "skill1015_C04",
+          "description": "在逆焰之刃的连段期间，其他队友通过行动消耗AP后，下一段逆焰之刃造成的伤害提高40%。本次连段结束时移除。"
+        },
+        {
+          "index": 5,
+          "name": "昭告黎明的火之鸟",
+          "bonus": [
+            3,
+            3
+          ],
+          "icon": "skill1015_C05",
+          "description": "黎明的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 6,
+          "name": "清算黑暗的炎之剑",
+          "bonus": null,
+          "icon": "skill1015_C06",
+          "description": "施放黎明后，接下来的2次普攻伤害提高30%，普攻消耗的AP减少10点，持续1回合。"
+        }
+      ],
+      "enSkills": [
+        "Tempered Sword · Normal Attack",
+        "Tempered Sword · Heavy Attack",
+        "Searing Onslaught",
+        "Dawn"
+      ]
+    },
+    {
+      "id": 1023,
+      "name": "行秋",
+      "english": "Xingqiu",
+      "elementKey": "Hydro",
+      "type": 0,
+      "skills": [
+        {
+          "name": "古华剑法·普攻",
+          "icon": "skill0_1",
+          "description": "挥动长剑，对一名敌人连续造成两段物理伤害。"
+        },
+        {
+          "name": "古华剑法·重击",
+          "icon": "skill0_2",
+          "description": "连续挥出两剑，对一名敌人造成物理伤害，并对其相邻敌人造成较低的伤害。"
+        },
+        {
+          "name": "古华剑·画雨笼山",
+          "icon": "skill1023_S01",
+          "description": "使出两段剑技，对三名相邻敌人造成水元素伤害，并对中间的敌人再造成一次水元素伤害。为我方全体生成3柄雨帘剑，持续4回合，并为自身施加水元素附着。雨帘剑可降低受到的伤害；每受到一次攻击，消耗1柄。行秋当前水元素伤害加成的20%会转为额外减伤，至多额外降低24%的伤害。战技命中时产生10点能量。"
+        },
+        {
+          "name": "古华剑·裁雨留虹",
+          "icon": "skill1023_S02",
+          "description": "展开虹剑势，持续4回合，并为我方全体生成最大数量的雨帘剑。期间我方角色普通攻击命中后，会向其中随机一名被命中的敌人发起剑雨协同攻击，剑雨段数等于行秋当前的雨帘剑数量，每回合至多触发3次。虹剑势存在时，雨帘剑在消耗后立即补至最大数量。"
+        }
+      ],
+      "talents": [
+        {
+          "index": 1,
+          "name": "化水为雨",
+          "threshold": 20,
+          "icon": "skill1023_T01",
+          "description": "雨帘剑被消耗或持续时间结束时，每柄消失的雨帘剑为受益角色恢复其生命值上限6%的生命值。剩余雨帘剑一同到期时，合并恢复相应生命值。"
+        },
+        {
+          "index": 2,
+          "name": "虚实工笔",
+          "threshold": 60,
+          "icon": "skill1023_T02",
+          "description": "行秋获得20%水元素伤害加成。"
+        }
+      ],
+      "cons": [
+        {
+          "index": 1,
+          "name": "重帘留香",
+          "bonus": null,
+          "icon": "skill1023_C01",
+          "description": "雨帘剑的最大数量增加1柄。"
+        },
+        {
+          "index": 2,
+          "name": "天青现虹",
+          "bonus": null,
+          "icon": "skill1023_C02",
+          "description": "虹剑势的持续时间延长1回合；受到剑雨攻击的敌人，水元素抗性降低15%，持续1回合。"
+        },
+        {
+          "index": 3,
+          "name": "织诗成锦",
+          "bonus": [
+            3,
+            3
+          ],
+          "icon": "skill1023_C03",
+          "description": "古华剑·裁雨留虹的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 4,
+          "name": "孤舟斩蛟",
+          "bonus": null,
+          "icon": "skill1023_C04",
+          "description": "虹剑势持续期间，古华剑·画雨笼山的技能伤害倍率提高50%。"
+        },
+        {
+          "index": 5,
+          "name": "雨深闭门",
+          "bonus": [
+            2,
+            3
+          ],
+          "icon": "skill1023_C05",
+          "description": "古华剑·画雨笼山的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 6,
+          "name": "万文集此",
+          "bonus": null,
+          "icon": "skill1023_C06",
+          "description": "虹剑势每触发两轮剑雨，下一轮剑雨造成的伤害提高50%；该轮剑雨每命中一次，为行秋恢复3点元素能量。"
+        }
+      ],
+      "enSkills": [
+        "Guhua Style · Normal Attack",
+        "Guhua Style · Heavy Attack",
+        "Guhua Sword: Fatal Rainscreen",
+        "Guhua Sword: Raincutter"
+      ]
+    },
+    {
+      "id": 1020,
+      "name": "班尼特",
+      "english": "Bennett",
+      "elementKey": "Pyro",
+      "type": 0,
+      "skills": [
+        {
+          "name": "好运剑·普攻",
+          "icon": "skill0_1",
+          "description": "挥剑向前攻击，对一名敌人造成物理伤害。"
+        },
+        {
+          "name": "好运剑·重击",
+          "icon": "skill0_2",
+          "description": "挥出两道剑芒，对一名敌人造成两段物理伤害，并对相邻敌人造成溅射伤害。"
+        },
+        {
+          "name": "热情过载",
+          "icon": "skill1020_S01",
+          "description": "将火焰与冒险的热情凝聚于剑上，对一名敌人造成火元素伤害，并提供4点能量。选择目标时再次点击战技，可改为施放二段或三段热情过载。"
+        },
+        {
+          "name": "美妙旅程",
+          "icon": "skill1020_S02",
+          "description": "选定两名相邻的我方角色作为鼓舞对象，对所有敌人造成火元素伤害，并自动展开鼓舞领域，持续3回合。我方及敌方回合结束时，为生命值低于70%的我方角色恢复生命值，并为我方全体施加火元素附着。领域存在时，生命值高于70%的鼓舞对象获得基于班尼特基础攻击力的攻击力加成。"
+        }
+      ],
+      "talents": [
+        {
+          "index": 1,
+          "name": "热情复燃",
+          "threshold": 20,
+          "icon": "skill1020_T01",
+          "description": "施放美妙旅程后，热情过载的冷却时间减少1回合。"
+        },
+        {
+          "index": 2,
+          "name": "无畏的热血",
+          "threshold": 60,
+          "icon": "skill1020_T02",
+          "description": "鼓舞领域存在时，热情过载消耗的AP降低50%，且三段热情过载不会将班尼特自身击飞。"
+        }
+      ],
+      "cons": [
+        {
+          "index": 1,
+          "name": "冒险憧憬",
+          "bonus": null,
+          "icon": "skill1020_C01",
+          "description": "鼓舞对象的攻击力提升不再受生命值限制，提升比例额外增加班尼特基础攻击力的20%。"
+        },
+        {
+          "index": 2,
+          "name": "踏破绝境",
+          "bonus": null,
+          "icon": "skill1020_C02",
+          "description": "班尼特的生命值低于70%时，元素充能效率提高30%。"
+        },
+        {
+          "index": 3,
+          "name": "火热激情",
+          "bonus": [
+            2,
+            3
+          ],
+          "icon": "skill1020_C03",
+          "description": "热情过载的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 4,
+          "name": "热情不灭",
+          "bonus": null,
+          "icon": "skill1020_C04",
+          "description": "施放二段或三段热情过载后，下次普通攻击结束时，对该次普通攻击命中的目标追加一次火焰攻击，造成135%攻击力的火元素伤害。"
+        },
+        {
+          "index": 5,
+          "name": "开拓的心魂",
+          "bonus": [
+            3,
+            3
+          ],
+          "icon": "skill1020_C05",
+          "description": "美妙旅程的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 6,
+          "name": "烈火与勇气",
+          "bonus": null,
+          "icon": "skill1020_C06",
+          "description": "鼓舞对象获得15%火元素伤害加成；单手剑、双手剑及长柄武器角色额外获得火元素附魔。"
+        }
+      ],
+      "enSkills": [
+        "Strike of Fortune · Normal Attack",
+        "Strike of Fortune · Heavy Attack",
+        "Passion Overload",
+        "Fantastic Voyage"
+      ]
+    },
+    {
+      "id": 1026,
+      "name": "砂糖",
+      "english": "Sucrose",
+      "elementKey": "Anemo",
+      "type": 4,
+      "skills": [
+        {
+          "name": "简式风灵作成·普攻",
+          "icon": "skill4_1",
+          "description": "驱使小型风灵，造成一次风元素伤害。"
+        },
+        {
+          "name": "简式风灵作成·重击",
+          "icon": "skill4_2",
+          "description": "汇聚风元素的力量，对三个相邻敌人造成风元素伤害。"
+        },
+        {
+          "name": "风灵作成·陆叁零捌",
+          "icon": "skill1026_S01",
+          "description": "召唤小型风灵，对三个相邻敌人造成风元素伤害，将其击飞1回合，并产生7点能量。"
+        },
+        {
+          "name": "禁·风灵作成·柒伍同构贰型",
+          "icon": "skill1026_S02",
+          "description": "砂糖投掷不稳定的烧瓶，唤出持续2回合的大型风灵。每回合我方回合结束时，风灵对所有敌人造成风元素伤害，并将其击飞1回合。触发元素转化后，还会造成对应元素的附加伤害。每次施放只会发生一次元素转化。"
+        }
+      ],
+      "talents": [
+        {
+          "index": 1,
+          "name": "触媒置换",
+          "threshold": 20,
+          "icon": "skill1026_T01",
+          "description": "砂糖触发扩散反应时，使队伍中对应元素类型角色的元素精通提高50点，持续2回合。"
+        },
+        {
+          "index": 2,
+          "name": "小小的慧风",
+          "threshold": 60,
+          "icon": "skill1026_T02",
+          "description": "风灵作成·陆叁零捌或大型风灵命中敌人后，其他队友的元素精通提高，提高数值为砂糖当前元素精通的20%，持续2回合。重复触发时刷新持续时间，不叠加。"
+        }
+      ],
+      "cons": [
+        {
+          "index": 1,
+          "name": "堆叠真空域",
+          "bonus": null,
+          "icon": "skill1026_C01",
+          "description": "风灵作成·陆叁零捌的可使用次数增加一次。"
+        },
+        {
+          "index": 2,
+          "name": "不羁型贝特",
+          "bonus": null,
+          "icon": "skill1026_C02",
+          "description": "大型风灵的持续时间延长1回合。"
+        },
+        {
+          "index": 3,
+          "name": "零失误少女",
+          "bonus": [
+            2,
+            3
+          ],
+          "icon": "skill1026_C03",
+          "description": "风灵作成·陆叁零捌的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 4,
+          "name": "炼金的偏执",
+          "bonus": null,
+          "icon": "skill1026_C04",
+          "description": "砂糖的普通攻击或重击每命中一名敌人，有10%的概率使风灵作成·陆叁零捌的冷却时间减少1回合。"
+        },
+        {
+          "index": 5,
+          "name": "认真普通瓶",
+          "bonus": [
+            3,
+            3
+          ],
+          "icon": "skill1026_C05",
+          "description": "禁·风灵作成·柒伍同构贰型的技能等级提高3级，至多提升至15级。"
+        },
+        {
+          "index": 6,
+          "name": "混元熵增论",
+          "bonus": null,
+          "icon": "skill1026_C06",
+          "description": "大型风灵发生元素转化后，在其持续期间，使队伍中所有角色获得20%的对应元素伤害加成。"
+        }
+      ],
+      "enSkills": [
+        "Wind Spirit Creation · Normal Attack",
+        "Wind Spirit Creation · Heavy Attack",
+        "Astable Anemohypostasis Creation - 6308",
+        "Forbidden Creation - Isomer 75 / Type II"
+      ]
+    }
+  ],
+  "text": {
+    "character_1015_normal_desc": {
+      "zh": "对一名敌人造成相当于{0}%攻击力的物理伤害。\\n消耗25点AP。",
+      "en": "Deals {0}% ATK as Physical DMG to one enemy.\\nCosts 25 AP.",
+      "parameters": {
+        "0": {
+          "skill": 0,
+          "values": [
+            134,
+            144.9,
+            155.8,
+            171.4,
+            182.3,
+            194.8,
+            211.9,
+            229,
+            246.2,
+            264.9,
+            286.3,
+            307.7,
+            329.1,
+            350.5,
+            372
+          ]
+        }
+      }
+    },
+    "character_1015_heavy_desc": {
+      "zh": "对三名相邻敌人造成相当于{0}%攻击力的物理伤害。\\n消耗35点AP。",
+      "en": "Deals {0}% ATK as Physical DMG to 3 adjacent enemies.\\nCosts 35 AP.",
+      "parameters": {
+        "0": {
+          "skill": 1,
+          "values": [
+            68.8,
+            74.4,
+            80,
+            88,
+            93.6,
+            100,
+            108.8,
+            117.6,
+            126.4,
+            136,
+            147,
+            158,
+            169,
+            180,
+            191
+          ]
+        }
+      }
+    },
+    "character_1015_skill_desc": {
+      "zh": "第一段\\n对一名敌人造成相当于{0}%攻击力的#1火元素伤害#。本回合内可继续施放第二段。施放时产生2点能量。\\n消耗15点AP，冷却2回合。\\n\\n第二段\\n对一名敌人造成相当于{1}%攻击力的#1火元素伤害#。本回合内可继续施放第三段。施放时产生2点能量。\\n消耗15点AP。\\n\\n第三段\\n对一名敌人造成相当于{2}%攻击力的#1火元素伤害#，结束本次连段。施放时产生3点能量。\\n消耗15点AP。\\n\\n#8逆焰连段#\\n第一段、第二段施放后，可在同一回合内继续下一段。第三段结束或本回合未继续时，战技恢复为第一段。",
+      "en": "First cast\\nDeals {0}% ATK as #1Pyro DMG# to one enemy. A second stage can be used this turn. Generates 2 Energy on cast.\\nCosts 15 AP, 2-turn cooldown.\\n\\nSecond cast\\nDeals {1}% ATK as #1Pyro DMG# to one enemy. A third stage can be used this turn. Generates 2 Energy on cast.\\nCosts 15 AP.\\n\\nThird cast\\nDeals {2}% ATK as #1Pyro DMG# to one enemy and ends the combo. Generates 3 Energy on cast.\\nCosts 15 AP.\\n\\n#8Searing Onslaught Combo#\\nThe first and second casts allow a follow-up in the same turn. After the third cast or when the combo window expires, the Skill returns to its first cast.",
+      "parameters": {
+        "0": {
+          "skill": 2,
+          "values": [
+            94.4,
+            101.5,
+            108.6,
+            118,
+            125.1,
+            132.2,
+            141.6,
+            151,
+            160.5,
+            169.9,
+            179.4,
+            188.8,
+            200.6,
+            212.4,
+            224.2
+          ]
+        },
+        "1": {
+          "skill": 2,
+          "values": [
+            97.6,
+            104.9,
+            112.2,
+            122,
+            129.3,
+            136.6,
+            146.4,
+            156.2,
+            165.9,
+            175.7,
+            185.4,
+            195.2,
+            207.4,
+            219.6,
+            231.8
+          ]
+        },
+        "2": {
+          "skill": 2,
+          "values": [
+            128.8,
+            138.5,
+            148.1,
+            161,
+            170.7,
+            180.3,
+            193.2,
+            206.1,
+            219,
+            231.8,
+            244.7,
+            257.6,
+            273.7,
+            289.8,
+            305.9
+          ]
+        }
+      }
+    },
+    "character_1015_burst_desc": {
+      "zh": "对所有敌人造成三段#1火元素伤害#。首段为{0}%攻击力，后两段各为{1}%攻击力。获得持续2回合的#1火元素附魔#。\\n消耗40点元素能量，冷却3回合。\\n\\n#1火元素附魔#\\n将普攻和重击中原本的物理伤害转为#1火元素伤害#。",
+      "en": "Deals 3 hits of #1Pyro DMG# to all enemies. The first hit deals {0}% ATK and the next two each deal {1}% ATK. Grants #1Pyro Infusion# for 2 turns.\\nCosts 40 Energy, 3-turn cooldown.\\n\\n#1Pyro Infusion#\\nConverts the Physical DMG of Normal and Heavy Attacks into #1Pyro DMG#.",
+      "parameters": {
+        "0": {
+          "skill": 3,
+          "values": [
+            60,
+            64.5,
+            69,
+            75,
+            79.5,
+            84,
+            90,
+            96,
+            102,
+            108,
+            114,
+            120,
+            127.5,
+            135,
+            142.5
+          ]
+        },
+        "1": {
+          "skill": 3,
+          "values": [
+            204,
+            219.3,
+            234.6,
+            255,
+            270.3,
+            285.6,
+            306,
+            326.4,
+            346.8,
+            367.2,
+            387.6,
+            408,
+            433.5,
+            459,
+            484.5
+          ]
+        }
+      }
+    },
+    "character_1015_talent_1_desc": {
+      "zh": "重击消耗的AP减少10点。",
+      "en": "Reduces Heavy Attack AP cost by 10.",
+      "parameters": {}
+    },
+    "character_1015_talent_2_desc": {
+      "zh": "黎明提供的#1火元素附魔#延长1回合。施放黎明后，#1火元素伤害加成#提高20%，持续3回合。",
+      "en": "Extends the #1Pyro Infusion# granted by Dawn by 1 turn. Casting Dawn grants Diluc 20% #1Pyro DMG Bonus# for 3 turns.",
+      "parameters": {}
+    },
+    "character_1015_constellation_1_desc": {
+      "zh": "对生命值高于50%的敌人造成的伤害提高15%。",
+      "en": "Increases damage against enemies above 50% HP by 15%.",
+      "parameters": {}
+    },
+    "character_1015_constellation_2_desc": {
+      "zh": "受到伤害后，攻击力提高10%，普攻和重击消耗的AP减少1点，持续3回合。至多叠加3层，每层独立计时，每回合至多触发2次。",
+      "en": "Taking damage grants Diluc 10% ATK and reduces his Normal and Heavy Attack costs by 1 AP for 3 turns. Up to 3 stacks with independent durations. Can trigger twice per turn.",
+      "parameters": {}
+    },
+    "character_1015_constellation_3_desc": {
+      "zh": "逆焰之刃的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Searing Onslaught by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1015_constellation_4_desc": {
+      "zh": "在逆焰之刃的连段期间，其他队友通过行动消耗AP后，下一段逆焰之刃造成的伤害提高40%。本次连段结束时移除。",
+      "en": "If another ally spent AP between Skill stages, the next Skill stage deals 40% more damage.",
+      "parameters": {}
+    },
+    "character_1015_constellation_5_desc": {
+      "zh": "黎明的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Dawn by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1015_constellation_6_desc": {
+      "zh": "施放黎明后，接下来的2次普攻伤害提高30%，普攻消耗的AP减少10点，持续1回合。",
+      "en": "Casting Dawn empowers Diluc's next 2 Normal Attacks for 1 turn. They deal 30% more damage and cost 10 less AP.",
+      "parameters": {}
+    },
+    "character_1023_normal_desc": {
+      "zh": "对一名敌人造成两段物理伤害，每段相当于{0}%攻击力。\\n消耗20点AP。",
+      "en": "Deals 2 hits of Physical DMG at {0}% ATK each to one enemy.\\nCosts 20 AP.",
+      "parameters": {
+        "0": {
+          "skill": 0,
+          "values": [
+            35.9,
+            38.8,
+            41.7,
+            45.9,
+            48.8,
+            52.1,
+            56.7,
+            61.3,
+            65.9,
+            70.9,
+            76.6,
+            82.4,
+            88.1,
+            93.8,
+            99.5
+          ]
+        }
+      }
+    },
+    "character_1023_heavy_desc": {
+      "zh": "对一名敌人造成两段{0}%，{1}%攻击力的物理伤害，并对相邻敌人造成50%的溅射伤害。\\n消耗30点AP。",
+      "en": "Deals 2 hits of Physical DMG at {0}% and {1}% ATK to one enemy and deals 50% splash DMG to adjacent enemies.\\nCosts 30 AP.",
+      "parameters": {
+        "0": {
+          "skill": 1,
+          "values": [
+            26.2,
+            28.4,
+            30.5,
+            33.6,
+            35.7,
+            38.1,
+            41.5,
+            44.9,
+            48.2,
+            51.9,
+            56.1,
+            60.3,
+            64.5,
+            68.6,
+            72.8
+          ]
+        },
+        "1": {
+          "skill": 1,
+          "values": [
+            31.2,
+            33.7,
+            36.2,
+            39.9,
+            42.4,
+            45.3,
+            49.3,
+            53.3,
+            57.2,
+            61.6,
+            66.6,
+            71.6,
+            76.5,
+            81.5,
+            86.5
+          ]
+        }
+      }
+    },
+    "character_1023_skill_desc": {
+      "zh": "对三名相邻敌人造成相当于{0}%攻击力的#2水元素伤害#，再对中间目标追加一段相当于{1}%攻击力的#2水元素伤害#。为全队生成3柄#8雨帘剑#，持续4回合，并为行秋施加#2水元素附着#。命中后产生10点能量。\\n消耗30点AP，冷却5回合。\\n\\n#8雨帘剑#\\n每名队友各自持有，持续4回合，初始及上限均为3柄。持有#8雨帘剑#时，受到的伤害降低{2}%，并将行秋当前#2水元素伤害加成#的20%额外转为减伤，转换部分最多提供24%减伤。敌人的一次完整攻击命中持有者后，消耗1柄，护盾吸收或免疫命中也会消耗。#8虹剑势#存在时，消耗后立即补满。",
+      "en": "Deals {0}% ATK as #2Hydro DMG# to 3 adjacent enemies, then an extra hit of {1}% ATK as #2Hydro DMG# to the center target. Gives each ally 3 #8Rain Swords# for 4 turns and applies #2Hydro# to Xingqiu. On hit, generates 10 Energy.\\nCosts 30 AP, 5-turn cooldown.\\n\\n#8Rain Swords#\\nEach ally holds a separate set for 4 turns, up to 3 swords. While swords remain, incoming DMG is reduced by {2}% plus 20% of Xingqiu's current #2Hydro DMG Bonus#, capped at 24% additional reduction. One sword is consumed after a complete enemy attack hits the holder, including shielded or immune hits. #8Rainbow Bladework# immediately replenishes consumed swords.",
+      "parameters": {
+        "0": {
+          "skill": 2,
+          "values": [
+            168,
+            180.6,
+            193.2,
+            210,
+            222.6,
+            235.2,
+            252,
+            268.8,
+            285.6,
+            302.4,
+            319.2,
+            336,
+            357,
+            378,
+            399
+          ]
+        },
+        "1": {
+          "skill": 2,
+          "values": [
+            191.2,
+            205.5,
+            219.9,
+            239,
+            253.3,
+            267.7,
+            286.8,
+            305.9,
+            325,
+            344.2,
+            363.3,
+            382.4,
+            406.3,
+            430,
+            453.7
+          ]
+        },
+        "2": {
+          "skill": 2,
+          "values": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            29,
+            29,
+            29,
+            29,
+            29
+          ]
+        }
+      }
+    },
+    "character_1023_burst_desc": {
+      "zh": "获得持续4回合的#8虹剑势#，并为全队补满#8雨帘剑#。我方普攻命中后可引发剑雨，#8雨帘剑#消耗后会立即补满。\\n消耗80点元素能量，冷却5回合。\\n\\n#8虹剑势#\\n持续4回合。期间我方#8雨帘剑#消耗后立即补满。我方角色的普攻命中并结束后，从命中的敌人中随机选择一名，发动剑雨。剑雨段数等于当时行秋持有的#8雨帘剑#数量，每段造成相当于{0}%攻击力的#2水元素#爆发伤害。每回合至多3轮。\\n\\n#8雨帘剑#\\n每名队友各自持有，持续4回合，初始及上限均为3柄。持有#8雨帘剑#时，受到的伤害降低{1}%，并将行秋当前#2水元素伤害加成#的20%额外转为减伤，转换部分最多提供24%减伤。敌人的一次完整攻击命中持有者后，消耗1柄，护盾吸收或免疫命中也会消耗。#8虹剑势#存在时，消耗后立即补满。",
+      "en": "Grants #8Rainbow Bladework# for 4 turns and replenishes all allies' #8Rain Swords#. Allied Normal Attack hits can trigger sword rain, and consumed #8Rain Swords# are immediately replenished.\\nCosts 80 Energy, 5-turn cooldown.\\n\\n#8Rainbow Bladework#\\nLasts 4 turns. During this time, allies' #8Rain Swords# are replenished immediately when consumed. After an ally completes a Normal Attack that hits, one of the enemies hit is randomly selected for a sword-rain volley. It strikes that enemy once for each Rain Sword Xingqiu currently holds, dealing {0}% ATK as #2Hydro# Burst DMG per hit. Up to 3 volleys per turn.\\n\\n#8Rain Swords#\\nEach ally holds a separate set for 4 turns, up to 3 swords. While swords remain, incoming DMG is reduced by {1}% plus 20% of Xingqiu's current #2Hydro DMG Bonus#, capped at 24% additional reduction. One sword is consumed after a complete enemy attack hits the holder, including shielded or immune hits. #8Rainbow Bladework# immediately replenishes consumed swords.",
+      "parameters": {
+        "0": {
+          "skill": 3,
+          "values": [
+            54.3,
+            58.3,
+            62.4,
+            67.8,
+            71.9,
+            76,
+            81.4,
+            86.8,
+            92.3,
+            97.7,
+            103.1,
+            108.5,
+            115.3,
+            122,
+            128.7
+          ]
+        },
+        "1": {
+          "skill": 2,
+          "values": [
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            29,
+            29,
+            29,
+            29,
+            29
+          ]
+        }
+      }
+    },
+    "character_1023_talent_1_desc": {
+      "zh": "#8雨帘剑#被消耗或持续时间结束时，每柄消失的#8雨帘剑#为受益角色恢复其生命值上限6%的生命值。剩余#8雨帘剑#一同到期时，合并恢复相应生命值。",
+      "en": "Each Rain Sword consumed heals its holder for 6% of their Max HP. On expiry, the remaining swords heal the holder together. A sword replenished by #8Rainbow Bladework# still provides this healing.",
+      "parameters": {}
+    },
+    "character_1023_talent_2_desc": {
+      "zh": "行秋获得20%#2水元素伤害加成#。",
+      "en": "Xingqiu gains 20% #2Hydro DMG Bonus#, which also contributes to #8Rain Swords#' live conversion of #2Hydro DMG Bonus# into damage reduction.",
+      "parameters": {}
+    },
+    "character_1023_constellation_1_desc": {
+      "zh": "#8雨帘剑#的最大数量增加1柄。",
+      "en": "Raises the #8Rain Sword# maximum by 1, to 4 swords when replenished. A volley triggered while Xingqiu holds the maximum accordingly has 4 hits.",
+      "parameters": {}
+    },
+    "character_1023_constellation_2_desc": {
+      "zh": "#8虹剑势#的持续时间延长1回合；受到剑雨攻击的敌人，#2水元素抗性#降低15%，持续1回合。",
+      "en": "#8Rainbow Bladework# lasts 1 extra turn. Sword-rain hits reduce the target's #2Hydro RES# by 15% for 1 turn.",
+      "parameters": {}
+    },
+    "character_1023_constellation_3_desc": {
+      "zh": "古华剑·裁雨留虹的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Guhua Sword: Raincutter by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1023_constellation_4_desc": {
+      "zh": "#8虹剑势#持续期间，古华剑·画雨笼山的技能伤害倍率提高50%。",
+      "en": "While #8Rainbow Bladework# lasts, both hits of Guhua Sword: Fatal Rainscreen use 150% of their original skill multipliers.",
+      "parameters": {}
+    },
+    "character_1023_constellation_5_desc": {
+      "zh": "古华剑·画雨笼山的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Guhua Sword: Fatal Rainscreen by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1023_constellation_6_desc": {
+      "zh": "#8虹剑势#每触发两轮剑雨，下一轮剑雨造成的伤害提高50%；该轮剑雨每命中一次，为行秋恢复3点元素能量。",
+      "en": "After every 2 volleys of sword rain from #8Rainbow Bladework#, the next volley deals 50% more damage. Each successful hit in that volley restores 3 Energy to Xingqiu.",
+      "parameters": {}
+    },
+    "character_1020_normal_desc": {
+      "zh": "对一名敌人造成相当于{0}%攻击力的物理伤害。\\n消耗20点AP。",
+      "en": "Deals {0}% ATK as Physical DMG to one enemy.\\nCosts 20 AP.",
+      "parameters": {
+        "0": {
+          "skill": 0,
+          "values": [
+            71.9,
+            77.8,
+            83.6,
+            92,
+            97.8,
+            104.5,
+            113.7,
+            122.9,
+            132.1,
+            142.1,
+            152.2,
+            162.2,
+            172.2,
+            182.2,
+            192.3
+          ]
+        }
+      }
+    },
+    "character_1020_heavy_desc": {
+      "zh": "对一名敌人造成两段{0}%，{1}%攻击力的物理伤害，并对相邻敌人造成50%的溅射伤害。\\n消耗30点AP。",
+      "en": "Deals 2 hits of Physical DMG at {0}% and {1}% ATK to one enemy and deals 50% splash DMG to adjacent enemies.\\nCosts 30 AP.",
+      "parameters": {
+        "0": {
+          "skill": 1,
+          "values": [
+            27.7,
+            29.9,
+            32.2,
+            35.4,
+            37.6,
+            40.2,
+            43.7,
+            47.3,
+            50.8,
+            54.7,
+            58.5,
+            62.4,
+            66.2,
+            70.1,
+            74
+          ]
+        },
+        "1": {
+          "skill": 1,
+          "values": [
+            30,
+            32.5,
+            34.9,
+            38.4,
+            40.9,
+            43.7,
+            47.5,
+            51.3,
+            55.2,
+            59.4,
+            63.6,
+            67.8,
+            72,
+            76.1,
+            80.3
+          ]
+        }
+      }
+    },
+    "character_1020_skill_desc": {
+      "zh": "一段\\n对一名敌人造成相当于{0}%攻击力的#1火元素伤害#。选择目标时再次点击战技，可切换为二段或三段。施放时产生4点能量。\\n消耗10点AP，冷却1回合。\\n\\n二段\\n对三名相邻敌人造成两段#1火元素伤害#，各段倍率依次为{1}%和{2}%攻击力，并将可被控制的敌人击飞1回合。施放时产生6点能量。\\n消耗20点AP，冷却2回合。\\n\\n三段\\n对三名相邻敌人造成三段#1火元素伤害#，各段倍率依次为{3}%、{4}%和{5}%攻击力，并将班尼特和可被控制的敌人击飞1回合。施放时产生6点能量。\\n消耗30点AP，冷却3回合。\\n\\n#8击飞#\\n使目标暂时无法行动。护盾可以抵挡对我方角色施加的#8击飞#。出战角色被击飞后，可点击控制标记三次并消耗10点AP提前解除一份#8击飞#。",
+      "en": "First form\\nDeals {0}% ATK as #1Pyro DMG# to one enemy. Press the Skill button again during target selection to switch to the second or third stage. Generates 4 Energy on cast.\\nCosts 10 AP, 1-turn cooldown.\\n\\nSecond form\\nDeals 2 hits of #1Pyro DMG# at {1}% ATK and {2}% ATK respectively to 3 adjacent enemies and makes susceptible enemies airborne for 1 turn. Generates 6 Energy on cast.\\nCosts 20 AP, 2-turn cooldown.\\n\\nThird form\\nDeals 3 hits of #1Pyro DMG# at {3}% ATK, {4}% ATK, and {5}% ATK respectively to 3 adjacent enemies and makes Bennett and susceptible enemies airborne for 1 turn. Generates 6 Energy on cast.\\nCosts 30 AP, 3-turn cooldown.\\n\\n#8Airborne#\\nPrevents the target from acting. A shield can block #8Airborne# on an ally. The active ally can end one #8Airborne# effect early by clicking the control indicator 3 times and paying 10 AP.",
+      "parameters": {
+        "0": {
+          "skill": 2,
+          "values": [
+            137.6,
+            147.9,
+            158.2,
+            172,
+            182.3,
+            192.6,
+            206.4,
+            220.2,
+            233.9,
+            247.7,
+            261.4,
+            275.2,
+            292.4,
+            310,
+            327.6
+          ]
+        },
+        "1": {
+          "skill": 2,
+          "values": [
+            84,
+            90.3,
+            96.6,
+            105,
+            111.3,
+            117.6,
+            126,
+            134.4,
+            142.8,
+            151.2,
+            159.6,
+            168,
+            178.5,
+            189,
+            199.5
+          ]
+        },
+        "2": {
+          "skill": 2,
+          "values": [
+            92,
+            98.9,
+            105.8,
+            115,
+            121.9,
+            128.8,
+            138,
+            147.2,
+            156.4,
+            165.6,
+            174.8,
+            184,
+            195.5,
+            207,
+            218.5
+          ]
+        },
+        "3": {
+          "skill": 2,
+          "values": [
+            88,
+            94.6,
+            101.2,
+            110,
+            116.6,
+            123.2,
+            132,
+            140.8,
+            149.6,
+            158.4,
+            167.2,
+            176,
+            187,
+            198,
+            209
+          ]
+        },
+        "4": {
+          "skill": 2,
+          "values": [
+            96,
+            103.2,
+            110.4,
+            120,
+            127.2,
+            134.4,
+            144,
+            153.6,
+            163.2,
+            172.8,
+            182.4,
+            192,
+            204,
+            216,
+            228
+          ]
+        },
+        "5": {
+          "skill": 2,
+          "values": [
+            132,
+            141.9,
+            151.8,
+            165,
+            174.9,
+            184.8,
+            198,
+            211.2,
+            224.4,
+            237.6,
+            250.8,
+            264,
+            280.5,
+            297,
+            313.5
+          ]
+        }
+      }
+    },
+    "character_1020_burst_desc": {
+      "zh": "选择两名相邻我方角色作为#8鼓舞对象#，对所有敌人造成相当于{0}%攻击力的#1火元素伤害#，并展开持续3回合的#8鼓舞领域#。\\n消耗60点元素能量，冷却4回合。\\n\\n#8鼓舞领域#\\n持续3回合。#8鼓舞对象#的生命值高于70%时，获得相当于班尼特基础攻击力{1}%的攻击力加成。我方和敌方回合结束时，为生命值低于70%的我方角色恢复相当于{2}%生命值上限 + {3}的生命值，并为我方全体施加#1火元素附着#。",
+      "en": "Selects 2 adjacent allies as Inspiration Targets, deals {0}% ATK as #1Pyro DMG# to all enemies, and creates an #8Inspiration Field# for 3 turns.\\nCosts 60 Energy, 4-turn cooldown.\\n\\n#8Inspiration Field#\\nLasts 3 turns. Inspiration Targets above 70% HP gain ATK equal to {1}% of Bennett's Base ATK. At the end of each allied and enemy turn, heals allies below 70% HP for {2}% Max HP + {3} and applies #1Pyro# to all allies.",
+      "parameters": {
+        "0": {
+          "skill": 3,
+          "values": [
+            232.8,
+            250.3,
+            267.7,
+            291,
+            308.5,
+            325.9,
+            349.2,
+            372.5,
+            395.8,
+            419,
+            442.3,
+            465.6,
+            494.7,
+            524,
+            553.3
+          ]
+        },
+        "1": {
+          "skill": 3,
+          "values": [
+            56,
+            60.2,
+            64.4,
+            70,
+            74.2,
+            78.4,
+            84,
+            89.6,
+            95.2,
+            100.8,
+            106.4,
+            112,
+            119,
+            126,
+            133
+          ]
+        },
+        "2": {
+          "skill": 3,
+          "values": [
+            12,
+            12.9,
+            13.8,
+            15,
+            15.9,
+            16.8,
+            18,
+            19.2,
+            20.4,
+            21.6,
+            22.8,
+            24,
+            25.5,
+            27,
+            28.5
+          ]
+        },
+        "3": {
+          "skill": 3,
+          "values": [
+            1154,
+            1270,
+            1394,
+            1530,
+            1674,
+            1828,
+            1990,
+            2164,
+            2348,
+            2540,
+            2742,
+            2954,
+            3174,
+            3406,
+            3638
+          ]
+        }
+      }
+    },
+    "character_1020_talent_1_desc": {
+      "zh": "施放美妙旅程后，热情过载的冷却时间减少1回合。",
+      "en": "Casting Fantastic Voyage reduces the cooldown of Passion Overload by 1 turn.",
+      "parameters": {}
+    },
+    "character_1020_talent_2_desc": {
+      "zh": "#8鼓舞领域#存在时，热情过载消耗的AP降低50%，且三段热情过载不会将班尼特自身击飞。",
+      "en": "While #8Inspiration Field# exists, Bennett's Skill costs 50% less AP and its third stage does not make Bennett himself airborne.",
+      "parameters": {}
+    },
+    "character_1020_constellation_1_desc": {
+      "zh": "#8鼓舞对象#的攻击力提升不再受生命值限制，提升比例额外增加班尼特基础攻击力的20%。",
+      "en": "Removes the HP requirement for Inspiration Targets' ATK bonus and adds another 20% of Bennett's Base ATK to that bonus.",
+      "parameters": {}
+    },
+    "character_1020_constellation_2_desc": {
+      "zh": "班尼特的生命值低于70%时，元素充能效率提高30%。",
+      "en": "Bennett's Energy Recharge increases by 30% while his HP is below 70%.",
+      "parameters": {}
+    },
+    "character_1020_constellation_3_desc": {
+      "zh": "热情过载的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Passion Overload by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1020_constellation_4_desc": {
+      "zh": "施放二段或三段热情过载后，下次普通攻击结束时，对该次普通攻击命中的目标追加一次火焰攻击，造成135%攻击力的#1火元素伤害#。",
+      "en": "After the second or third form of Passion Overload, Bennett's next Normal Attack deals a follow-up hit of #1Pyro DMG# equal to 135% ATK to its primary target when it hits.",
+      "parameters": {}
+    },
+    "character_1020_constellation_5_desc": {
+      "zh": "美妙旅程的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Fantastic Voyage by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1020_constellation_6_desc": {
+      "zh": "#8鼓舞对象#获得15%#1火元素伤害加成#；单手剑、双手剑及长柄武器角色额外获得#1火元素附魔#。",
+      "en": "Inspiration Targets gain 15% #1Pyro DMG Bonus#. Sword, claymore, and polearm users among them also gain #1Pyro Infusion#.",
+      "parameters": {}
+    },
+    "character_1026_normal_desc": {
+      "zh": "对一名敌人造成相当于{0}%攻击力的#5风元素伤害#。\\n消耗20点AP。",
+      "en": "Deals {0}% ATK as #5Anemo DMG# to one enemy.\\nCosts 20 AP.",
+      "parameters": {
+        "0": {
+          "skill": 0,
+          "values": [
+            47.9,
+            51.5,
+            55.1,
+            59.9,
+            63.5,
+            67.1,
+            71.9,
+            76.7,
+            81.5,
+            86.3,
+            91,
+            95.8,
+            100.6,
+            105.4,
+            110.2
+          ]
+        }
+      }
+    },
+    "character_1026_heavy_desc": {
+      "zh": "对三名相邻敌人造成相当于{0}%攻击力的#5风元素伤害#。\\n消耗30点AP。",
+      "en": "Deals {0}% ATK as #5Anemo DMG# to 3 adjacent enemies.\\nCosts 30 AP.",
+      "parameters": {
+        "0": {
+          "skill": 1,
+          "values": [
+            25.4,
+            27.3,
+            29.2,
+            31.7,
+            33.6,
+            35.6,
+            38.1,
+            40.6,
+            43.2,
+            45.7,
+            48.3,
+            50.8,
+            53.3,
+            55.9,
+            58.4
+          ]
+        }
+      }
+    },
+    "character_1026_skill_desc": {
+      "zh": "对三名相邻敌人造成相当于{0}%攻击力的#5风元素伤害#，并将可被控制的敌人击飞1回合。命中后产生7点能量。\\n消耗30点AP，冷却4回合。\\n\\n#8击飞#\\n使目标暂时无法行动。护盾可以抵挡对我方角色施加的#8击飞#。出战角色被击飞后，可点击控制标记三次并消耗10点AP提前解除一份#8击飞#。",
+      "en": "Deals {0}% ATK as #5Anemo DMG# to 3 adjacent enemies and makes susceptible enemies airborne for 1 turn. On hit, generates 7 Energy.\\nCosts 30 AP, 4-turn cooldown.\\n\\n#8Airborne#\\nPrevents the target from acting. A shield can block #8Airborne# on an ally. The active ally can end one #8Airborne# effect early by clicking the control indicator 3 times and paying 10 AP.",
+      "parameters": {
+        "0": {
+          "skill": 2,
+          "values": [
+            211.2,
+            227,
+            242.9,
+            264,
+            279.8,
+            295.7,
+            316.8,
+            337.9,
+            359,
+            380.2,
+            401.3,
+            422.4,
+            448.8,
+            475.2,
+            501.6
+          ]
+        }
+      }
+    },
+    "character_1026_burst_desc": {
+      "zh": "召唤持续2回合的#8大型风灵#。#8大型风灵#在我方回合结束时攻击全体敌人，触发扩散后可以追加转化元素的伤害。\\n消耗80点元素能量，冷却5回合。\\n\\n#8大型风灵#\\n持续2回合。我方回合结束时，对所有敌人造成相当于{0}%攻击力的#5风元素#爆发伤害，并将可被控制的敌人击飞1回合。触发扩散后，按火、雷、冰、水顺序选定并锁定一种元素。转化当次及后续每轮风伤之后，追加相当于{1}%攻击力的该元素的爆发伤害。\\n\\n#8击飞#\\n使目标暂时无法行动。护盾可以抵挡对我方角色施加的#8击飞#。出战角色被击飞后，可点击控制标记三次并消耗10点AP提前解除一份#8击飞#。\\n\\n#8元素转化#\\n触发扩散后，首次选定并锁定一种转化元素，之后可额外造成该元素的伤害。选取优先级及追加伤害的时点由对应技能决定。",
+      "en": "Summons a #8Large Wind Spirit# for 2 turns. The #8Large Wind Spirit# attacks all enemies at the end of each allied turn and can deal additional damage of the absorbed element after triggering Swirl.\\nCosts 80 Energy, 5-turn cooldown.\\n\\n#8Large Wind Spirit#\\nLasts 2 turns. At the end of each allied turn, deals {0}% ATK as #5Anemo# Burst DMG to all enemies and makes susceptible enemies airborne for 1 turn. After triggering Swirl, locks in one absorbed element in the order #1Pyro#, #3Electro#, #4Cryo#, #2Hydro#. The triggering #5Anemo# hit and each later pulse are followed by {1}% ATK as Burst DMG of the absorbed element.\\n\\n#8Airborne#\\nPrevents the target from acting. A shield can block #8Airborne# on an ally. The active ally can end one #8Airborne# effect early by clicking the control indicator 3 times and paying 10 AP.\\n\\n#8Elemental Absorption#\\nAfter triggering Swirl, locks in one absorbed element and can deal additional damage of that element. The ability determines element priority and the timing of the added damage.",
+      "parameters": {
+        "0": {
+          "skill": 3,
+          "values": [
+            148,
+            159.1,
+            170.2,
+            185,
+            196.1,
+            207.2,
+            222,
+            236.8,
+            251.6,
+            266.4,
+            281.2,
+            296,
+            314.5,
+            333,
+            351.5
+          ]
+        },
+        "1": {
+          "skill": 3,
+          "values": [
+            44,
+            47.3,
+            50.6,
+            55,
+            58.3,
+            61.6,
+            66,
+            70.4,
+            74.8,
+            79.2,
+            83.6,
+            88,
+            93.5,
+            99,
+            104.5
+          ]
+        }
+      }
+    },
+    "character_1026_talent_1_desc": {
+      "zh": "砂糖触发扩散反应时，使队伍中对应元素类型角色的元素精通提高50点，持续2回合。",
+      "en": "Sucrose triggering Swirl grants party members matching the swirled element 50 Elemental Mastery for 2 turns.",
+      "parameters": {}
+    },
+    "character_1026_talent_2_desc": {
+      "zh": "风灵作成·陆叁零捌或#8大型风灵#命中敌人后，其他队友的元素精通提高，提高数值为砂糖当前元素精通的20%，持续2回合。重复触发时刷新持续时间，不叠加。",
+      "en": "When Astable Anemohypostasis Creation - 6308 or the #8Large Wind Spirit# hits, the other allies gain Elemental Mastery equal to 20% of Sucrose's current Elemental Mastery for 2 turns. The amount follows her current Elemental Mastery. A new hit refreshes the duration.",
+      "parameters": {}
+    },
+    "character_1026_constellation_1_desc": {
+      "zh": "风灵作成·陆叁零捌的可使用次数增加一次。",
+      "en": "Astable Anemohypostasis Creation - 6308 gains 1 additional use.",
+      "parameters": {}
+    },
+    "character_1026_constellation_2_desc": {
+      "zh": "#8大型风灵#的持续时间延长1回合。",
+      "en": "The #8Large Wind Spirit# lasts 1 extra turn, for a total of 3 turns.",
+      "parameters": {}
+    },
+    "character_1026_constellation_3_desc": {
+      "zh": "风灵作成·陆叁零捌的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Astable Anemohypostasis Creation - 6308 by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1026_constellation_4_desc": {
+      "zh": "砂糖的普通攻击或重击每命中一名敌人，有10%的概率使风灵作成·陆叁零捌的冷却时间减少1回合。",
+      "en": "Each enemy hit by each strike of Sucrose's Normal or Heavy Attack independently has a 10% chance to reduce her Skill cooldown by 1 turn.",
+      "parameters": {}
+    },
+    "character_1026_constellation_5_desc": {
+      "zh": "禁·风灵作成·柒伍同构贰型的技能等级提高3级，最高15级。",
+      "en": "Increases the level of Forbidden Creation - Isomer 75 / Type II by 3, up to Level 15.",
+      "parameters": {}
+    },
+    "character_1026_constellation_6_desc": {
+      "zh": "#8大型风灵#发生#8元素转化#后，在其持续期间，使队伍中所有角色获得20%的对应元素伤害加成。",
+      "en": "After #8Elemental Absorption#, grants all allies 20% DMG Bonus for the absorbed element while the #8Large Wind Spirit# remains.",
+      "parameters": {}
+    }
+  },
+  "names": {
+    "character_1015_name": "Diluc",
+    "character_1015_talent_1_name": "Relentless",
+    "character_1015_talent_2_name": "Blessing of Phoenix",
+    "character_1015_constellation_1_name": "Conviction",
+    "character_1015_constellation_2_name": "Searing Ember",
+    "character_1015_constellation_3_name": "Fire and Steel",
+    "character_1015_constellation_4_name": "Flowing Flame",
+    "character_1015_constellation_5_name": "Phoenix, Harbinger of Dawn",
+    "character_1015_constellation_6_name": "Flaming Sword, Nemesis of the Dark",
+    "character_1023_name": "Xingqiu",
+    "character_1023_talent_1_name": "Hydropathic",
+    "character_1023_talent_2_name": "Blades Amidst Raindrops",
+    "character_1023_constellation_1_name": "The Scent Remained",
+    "character_1023_constellation_2_name": "Rainbow Upon the Azure Sky",
+    "character_1023_constellation_3_name": "Weaver of Verses",
+    "character_1023_constellation_4_name": "Evilsoother",
+    "character_1023_constellation_5_name": "Embrace of Rain",
+    "character_1023_constellation_6_name": "Hence, Call Them My Own Verses",
+    "character_1020_name": "Bennett",
+    "character_1020_talent_1_name": "Rekindle",
+    "character_1020_talent_2_name": "Fearnaught",
+    "character_1020_constellation_1_name": "Grand Expectation",
+    "character_1020_constellation_2_name": "Impasse Conqueror",
+    "character_1020_constellation_3_name": "Unstoppable Fervor",
+    "character_1020_constellation_4_name": "Unexpected Odyssey",
+    "character_1020_constellation_5_name": "True Explorer",
+    "character_1020_constellation_6_name": "Fire Ventures With Me",
+    "character_1026_name": "Sucrose",
+    "character_1026_talent_1_name": "Catalyst Conversion",
+    "character_1026_talent_2_name": "Mollis Favonius",
+    "character_1026_constellation_1_name": "Clustered Vacuum Field",
+    "character_1026_constellation_2_name": "Beth: Unbound Form",
+    "character_1026_constellation_3_name": "Flawless Alchemistress",
+    "character_1026_constellation_4_name": "Alchemania",
+    "character_1026_constellation_5_name": "Caution: Standard Flask",
+    "character_1026_constellation_6_name": "Chaotic Entropy"
+  },
+  "weapons": {
+    "3029": {
+      "stars": 4,
+      "name": "西风剑",
+      "english": "Favonius Sword",
+      "title": [
+        "顺风而行",
+        "Windfall"
+      ],
+      "description": [
+        "攻击造成暴击时，有{0}%的几率为全队恢复6点元素能量。该效果每{1}回合只能触发一次。",
+        "CRIT Hits have a {0}% chance to restore 6 Energy to the party. This can trigger once every {1} turns."
+      ],
+      "params": {
+        "0": [
+          60,
+          70,
+          80,
+          90,
+          100
+        ],
+        "1": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      }
+    },
+    "3031": {
+      "stars": 4,
+      "name": "祭礼剑",
+      "english": "Sacrificial Sword",
+      "title": [
+        "气定神闲",
+        "Composed"
+      ],
+      "description": [
+        "元素战技造成伤害时，有{0}%的概率重置该技能的冷却时间，该效果每{1}回合只能触发一次。",
+        "Dealing Elemental Skill DMG has a {0}% chance to reset that Skill's cooldown. This can trigger once every {1} turns."
+      ],
+      "params": {
+        "0": [
+          40,
+          50,
+          60,
+          70,
+          80
+        ],
+        "1": [
+          8,
+          7,
+          6,
+          5,
+          4
+        ]
+      }
+    },
+    "3133": {
+      "stars": 4,
+      "name": "祭礼残章",
+      "english": "Sacrificial Fragments",
+      "title": [
+        "气定神闲",
+        "Composed"
+      ],
+      "description": [
+        "元素战技造成伤害时，有{0}%的概率重置该技能的冷却时间，该效果每{1}回合只能触发一次。",
+        "Dealing Elemental Skill DMG has a {0}% chance to reset that Skill's cooldown. This can trigger once every {1} turns."
+      ],
+      "params": {
+        "0": [
+          40,
+          50,
+          60,
+          70,
+          80
+        ],
+        "1": [
+          8,
+          7,
+          6,
+          5,
+          4
+        ]
+      }
+    },
+    "3170": {
+      "stars": 5,
+      "name": "狼的末路",
+      "english": "Wolf's Gravestone",
+      "title": [
+        "如狼般狩猎者",
+        "Wolfish Tracker"
+      ],
+      "description": [
+        "攻击力提高{0}%；攻击命中生命值低于30%的敌人时，我方全体攻击力提高{1}%，持续3回合，每7回合至多触发一次。",
+        "Gain {0}% ATK. Hitting an enemy below 30% HP grants the party {1}% ATK for 3 turns. This can trigger once every 7 turns."
+      ],
+      "params": {
+        "0": [
+          20,
+          25,
+          30,
+          35,
+          40
+        ],
+        "1": [
+          40,
+          50,
+          60,
+          70,
+          80
+        ]
+      }
+    }
+  },
+  "sets": {
+    "523": {
+      "name": "炽烈的炎之魔女",
+      "english": "Crimson Witch of Flames",
+      "effects": {
+        "2": [
+          "获得15%#1火元素伤害加成#。",
+          "Gain 15% #1Pyro DMG Bonus#."
+        ],
+        "4": [
+          "超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的3回合内，2件套的效果提高50%，该效果最多叠加3次。",
+          "Overloaded, Burning, and Burgeon DMG increase by 40%. Vaporize and Melt reaction bonuses increase by 15%. Using an Elemental Skill increases the 2-piece effect by 50% for 3 turns, up to 3 stacks."
+        ]
+      }
+    },
+    "537": {
+      "name": "绝缘之旗印",
+      "english": "Emblem of Severed Fate",
+      "effects": {
+        "2": [
+          "元素充能效率提高20%。",
+          "Gain 20% Energy Recharge."
+        ],
+        "4": [
+          "基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。",
+          "Gain Elemental Burst DMG Bonus equal to 25% of Energy Recharge, up to 75%."
+        ]
+      }
+    },
+    "524": {
+      "name": "昔日宗室之仪",
+      "english": "Noblesse Oblige",
+      "effects": {
+        "2": [
+          "元素爆发造成的伤害提升20%。",
+          "Elemental Burst DMG increases by 20%."
+        ],
+        "4": [
+          "施放元素爆发后，队伍中所有角色攻击力提升20%，持续3回合。该效果不可叠加。",
+          "After using an Elemental Burst, the party gains 20% ATK for 3 turns. This effect cannot stack."
+        ]
+      }
+    },
+    "519": {
+      "name": "翠绿之影",
+      "english": "Viridescent Venerer",
+      "effects": {
+        "2": [
+          "获得15%#5风元素伤害加成#。",
+          "Gain 15% #5Anemo DMG Bonus#."
+        ],
+        "4": [
+          "扩散反应造成的伤害提升60%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续3回合。同元素类型的抗性降低效果无法叠加。",
+          "Swirl DMG increases by 60%. Swirl reduces affected enemies' RES to the Swirled element by 40% for 3 turns. RES reductions for the same element cannot stack."
+        ]
+      }
+    },
+    "518": {
+      "name": "角斗士的终幕礼",
+      "english": "Gladiator's Finale",
+      "effects": {
+        "2": [
+          "攻击力提高18%。",
+          "Gain 18% ATK."
+        ],
+        "4": [
+          "装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。",
+          "If the wearer uses a sword, claymore, or polearm, Normal Attack DMG increases by 35%."
+        ]
+      }
+    }
+  },
+  "colors": [
+    "#FFD780",
+    "#FFA971",
+    "#08E4FF",
+    "#DEBAFF",
+    "#CFFFFF",
+    "#A6F7CF",
+    "#F5D761",
+    "#B1EB29",
+    "#FEFEFE"
+  ],
+  "enemies": [
+    {
+      "id": 2008,
+      "name": [
+        "火箭丘丘人",
+        "Pyro Hilichurl Shooter"
+      ]
+    },
+    {
+      "id": 2020,
+      "name": [
+        "水史莱姆",
+        "Hydro Slime"
+      ]
+    },
+    {
+      "id": 2014,
+      "name": [
+        "水丘丘萨满",
+        "Hydro Samachurl"
+      ]
+    },
+    {
+      "id": 2010,
+      "name": [
+        "木盾丘丘人",
+        "Wooden Shield Hilichurl Guard"
+      ]
+    },
+    {
+      "id": 2005,
+      "name": [
+        "打手丘丘人",
+        "Hilichurl Fighter"
+      ]
+    }
+  ],
+  "ui": {
+    "ui_stat_hp": [
+      "生命值",
+      "HP"
+    ],
+    "ui_stat_max_hp": [
+      "生命值上限",
+      "Max HP"
+    ],
+    "ui_stat_atk": [
+      "攻击力",
+      "ATK"
+    ],
+    "ui_stat_def": [
+      "防御力",
+      "DEF"
+    ],
+    "ui_stat_elemental_mastery": [
+      "元素精通",
+      "Elemental Mastery"
+    ],
+    "ui_stat_crit_rate": [
+      "暴击率",
+      "CRIT Rate"
+    ],
+    "ui_stat_crit_dmg": [
+      "暴击伤害",
+      "CRIT DMG"
+    ],
+    "ui_stat_energy_recharge": [
+      "元素充能效率",
+      "Energy Recharge"
+    ],
+    "ui_stat_elemental_dmg_bonus": [
+      "元素伤害加成",
+      "Elemental DMG Bonus"
+    ],
+    "ui_stat_physical_dmg_bonus": [
+      "物理伤害加成",
+      "Physical DMG Bonus"
+    ],
+    "ui_stat_pyro_dmg_bonus": [
+      "#1火元素伤害加成#",
+      "#1Pyro DMG Bonus#"
+    ],
+    "ui_stat_hydro_dmg_bonus": [
+      "#2水元素伤害加成#",
+      "#2Hydro DMG Bonus#"
+    ],
+    "ui_stat_electro_dmg_bonus": [
+      "#3雷元素伤害加成#",
+      "#3Electro DMG Bonus#"
+    ],
+    "ui_stat_cryo_dmg_bonus": [
+      "#4冰元素伤害加成#",
+      "#4Cryo DMG Bonus#"
+    ],
+    "ui_stat_anemo_dmg_bonus": [
+      "#5风元素伤害加成#",
+      "#5Anemo DMG Bonus#"
+    ],
+    "ui_stat_geo_dmg_bonus": [
+      "#6岩元素伤害加成#",
+      "#6Geo DMG Bonus#"
+    ],
+    "ui_stat_dendro_dmg_bonus": [
+      "#7草元素伤害加成#",
+      "#7Dendro DMG Bonus#"
+    ],
+    "ui_talent_unlocked": [
+      "已解锁",
+      "Unlocked"
+    ],
+    "ui_constellation_activated": [
+      "已激活",
+      "Activated"
+    ]
+  }
+}
+</script>
+</body>
+</html>

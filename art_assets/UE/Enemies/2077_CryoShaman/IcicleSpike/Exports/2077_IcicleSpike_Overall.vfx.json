@@ -1,0 +1,20 @@
+{
+  "key": "Enemies/2077_CryoShaman/IcicleSpike/2077_IcicleSpike_Overall",
+  "source": "art_assets/UE/Enemies/2077_CryoShaman/IcicleSpike/Blender/2077_IcicleSpike_Overall.blend",
+  "file": "Enemies/2077_CryoShaman/IcicleSpike/Exports/2077_IcicleSpike_Overall.vfx.bytes",
+  "meshes": 16,
+  "tracks": 40,
+  "frames": 392,
+  "duration": 13.033333333333333,
+  "loopStart": 1.6666666666666667,
+  "loopEnd": 6.466666666666667,
+  "markers": {
+    "Preview_start": 0.0,
+    "Appear": 0.8666666666666667,
+    "Loop_A_start": 1.6666666666666667,
+    "Loop_B_start": 6.466666666666667,
+    "Exit_example_any_phase": 11.866666666666667,
+    "Clear": 13.033333333333333
+  },
+  "bytes": 778087
+}

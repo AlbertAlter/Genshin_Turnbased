@@ -1,0 +1,1902 @@
+{
+  "generatedBy": "common_enemy_vfx_v1",
+  "unityIntegrated": false,
+  "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/RiftGround/视觉需求.md",
+  "variants": {
+    "2071_RiftGround_State": {
+      "effect": "2071_RiftGround_State",
+      "source": "Blender/2071_RiftGround_State.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/RiftGround/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/2071_RiftGround_State_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DeepCrackEdges": {
+          "file": "Exports/2071_RiftGround_State_DeepCrackEdges.fbx",
+          "objects": [
+            "PART_DeepCrackEdges_0",
+            "PART_DeepCrackEdges_1",
+            "PART_DeepCrackEdges_2",
+            "PART_DeepCrackEdges_3",
+            "PART_DeepCrackEdges_4",
+            "PART_DeepCrackEdges_5",
+            "PART_DeepCrackEdges_6",
+            "PART_DeepCrackEdges_7",
+            "PART_DeepCrackEdges_8",
+            "PART_DeepCrackEdges_9",
+            "PART_DeepCrackEdges_10",
+            "PART_DeepCrackEdges_11",
+            "PART_DeepCrackEdges_12",
+            "PART_DeepCrackEdges_13",
+            "PART_DeepCrackEdges_14",
+            "PART_DeepCrackEdges_15",
+            "PART_DeepCrackEdges_16",
+            "PART_DeepCrackEdges_17",
+            "PART_DeepCrackEdges_18",
+            "PART_DeepCrackEdges_19",
+            "PART_DeepCrackEdges_20",
+            "PART_DeepCrackEdges_21",
+            "PART_DeepCrackEdges_22",
+            "PART_DeepCrackEdges_23",
+            "PART_DeepCrackEdges_24",
+            "PART_DeepCrackEdges_25",
+            "PART_DeepCrackEdges_26",
+            "PART_DeepCrackEdges_27",
+            "PART_DeepCrackEdges_28",
+            "PART_DeepCrackEdges_29",
+            "PART_DeepCrackEdges_30",
+            "PART_DeepCrackEdges_31",
+            "PART_DeepCrackEdges_32",
+            "PART_DeepCrackEdges_33",
+            "PART_DeepCrackEdges_34",
+            "PART_DeepCrackEdges_35",
+            "PART_DeepCrackEdges_36",
+            "PART_DeepCrackEdges_37",
+            "PART_DeepCrackEdges_38",
+            "PART_DeepCrackEdges_39",
+            "PART_DeepCrackEdges_40",
+            "PART_DeepCrackEdges_41",
+            "PART_DeepCrackEdges_42",
+            "PART_DeepCrackEdges_43",
+            "PART_DeepCrackEdges_44",
+            "PART_DeepCrackEdges_45",
+            "PART_DeepCrackEdges_46",
+            "PART_DeepCrackEdges_47",
+            "PART_DeepCrackEdges_48",
+            "PART_DeepCrackEdges_49",
+            "PART_DeepCrackEdges_50",
+            "PART_DeepCrackEdges_51",
+            "PART_DeepCrackEdges_52",
+            "PART_DeepCrackEdges_53",
+            "PART_DeepCrackEdges_54",
+            "PART_DeepCrackEdges_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.503520011901855,
+            0.0,
+            9.269111633300781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DeepCrackEdges_0": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_1": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_2": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_3": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_4": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_5": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_6": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_7": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_8": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_9": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_10": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_11": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_12": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_13": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_14": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_15": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_16": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_17": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_18": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_19": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_20": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_21": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_22": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_23": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_24": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_25": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_26": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_27": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_28": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_29": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_30": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_31": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_32": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_33": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_34": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_35": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_36": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_37": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_38": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_39": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_40": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_41": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_42": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_43": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_44": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_45": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_46": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_47": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_48": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_49": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_50": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_51": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_52": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_53": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_54": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.503520011901855,
+              1.519918441772461e-06,
+              9.269111633300781
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BlueWhiteBranchingRifts": {
+          "file": "Exports/2071_RiftGround_State_BlueWhiteBranchingRifts.fbx",
+          "objects": [
+            "PART_BlueWhiteBranchingRifts_0",
+            "PART_BlueWhiteBranchingRifts_1",
+            "PART_BlueWhiteBranchingRifts_2",
+            "PART_BlueWhiteBranchingRifts_3",
+            "PART_BlueWhiteBranchingRifts_4",
+            "PART_BlueWhiteBranchingRifts_5",
+            "PART_BlueWhiteBranchingRifts_6",
+            "PART_BlueWhiteBranchingRifts_7",
+            "PART_BlueWhiteBranchingRifts_8",
+            "PART_BlueWhiteBranchingRifts_9",
+            "PART_BlueWhiteBranchingRifts_10",
+            "PART_BlueWhiteBranchingRifts_11",
+            "PART_BlueWhiteBranchingRifts_12",
+            "PART_BlueWhiteBranchingRifts_13",
+            "PART_BlueWhiteBranchingRifts_14",
+            "PART_BlueWhiteBranchingRifts_15",
+            "PART_BlueWhiteBranchingRifts_16",
+            "PART_BlueWhiteBranchingRifts_17",
+            "PART_BlueWhiteBranchingRifts_18",
+            "PART_BlueWhiteBranchingRifts_19",
+            "PART_BlueWhiteBranchingRifts_20",
+            "PART_BlueWhiteBranchingRifts_21",
+            "PART_BlueWhiteBranchingRifts_22",
+            "PART_BlueWhiteBranchingRifts_23",
+            "PART_BlueWhiteBranchingRifts_24",
+            "PART_BlueWhiteBranchingRifts_25",
+            "PART_BlueWhiteBranchingRifts_26",
+            "PART_BlueWhiteBranchingRifts_27",
+            "PART_BlueWhiteBranchingRifts_28",
+            "PART_BlueWhiteBranchingRifts_29",
+            "PART_BlueWhiteBranchingRifts_30",
+            "PART_BlueWhiteBranchingRifts_31",
+            "PART_BlueWhiteBranchingRifts_32",
+            "PART_BlueWhiteBranchingRifts_33",
+            "PART_BlueWhiteBranchingRifts_34",
+            "PART_BlueWhiteBranchingRifts_35",
+            "PART_BlueWhiteBranchingRifts_36",
+            "PART_BlueWhiteBranchingRifts_37",
+            "PART_BlueWhiteBranchingRifts_38",
+            "PART_BlueWhiteBranchingRifts_39",
+            "PART_BlueWhiteBranchingRifts_40",
+            "PART_BlueWhiteBranchingRifts_41",
+            "PART_BlueWhiteBranchingRifts_42",
+            "PART_BlueWhiteBranchingRifts_43",
+            "PART_BlueWhiteBranchingRifts_44",
+            "PART_BlueWhiteBranchingRifts_45",
+            "PART_BlueWhiteBranchingRifts_46",
+            "PART_BlueWhiteBranchingRifts_47",
+            "PART_BlueWhiteBranchingRifts_48",
+            "PART_BlueWhiteBranchingRifts_49",
+            "PART_BlueWhiteBranchingRifts_50",
+            "PART_BlueWhiteBranchingRifts_51",
+            "PART_BlueWhiteBranchingRifts_52",
+            "PART_BlueWhiteBranchingRifts_53",
+            "PART_BlueWhiteBranchingRifts_54",
+            "PART_BlueWhiteBranchingRifts_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.45896339416504,
+            0.0,
+            9.216726303100586
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BlueWhiteBranchingRifts_0": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_1": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_2": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_3": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_4": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_5": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_6": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_7": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_8": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_9": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_10": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_11": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_12": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_13": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_14": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_15": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_16": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_17": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_18": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_19": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_20": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_21": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_22": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_23": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_24": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_25": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_26": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_27": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_28": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_29": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_30": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_31": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_32": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_33": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_34": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_35": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_36": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_37": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_38": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_39": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_40": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_41": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_42": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_43": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_44": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_45": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_46": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_47": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_48": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_49": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_50": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_51": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_52": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_53": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_54": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.45896339416504,
+              1.4901161193847656e-06,
+              9.216726303100586
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinInnerEnergy": {
+          "file": "Exports/2071_RiftGround_State_ThinInnerEnergy.fbx",
+          "objects": [
+            "PART_ThinInnerEnergy_0",
+            "PART_ThinInnerEnergy_1",
+            "PART_ThinInnerEnergy_2",
+            "PART_ThinInnerEnergy_3",
+            "PART_ThinInnerEnergy_4",
+            "PART_ThinInnerEnergy_5",
+            "PART_ThinInnerEnergy_6",
+            "PART_ThinInnerEnergy_7",
+            "PART_ThinInnerEnergy_8",
+            "PART_ThinInnerEnergy_9",
+            "PART_ThinInnerEnergy_10",
+            "PART_ThinInnerEnergy_11",
+            "PART_ThinInnerEnergy_12",
+            "PART_ThinInnerEnergy_13",
+            "PART_ThinInnerEnergy_14",
+            "PART_ThinInnerEnergy_15",
+            "PART_ThinInnerEnergy_16",
+            "PART_ThinInnerEnergy_17",
+            "PART_ThinInnerEnergy_18",
+            "PART_ThinInnerEnergy_19",
+            "PART_ThinInnerEnergy_20",
+            "PART_ThinInnerEnergy_21",
+            "PART_ThinInnerEnergy_22",
+            "PART_ThinInnerEnergy_23",
+            "PART_ThinInnerEnergy_24",
+            "PART_ThinInnerEnergy_25",
+            "PART_ThinInnerEnergy_26",
+            "PART_ThinInnerEnergy_27",
+            "PART_ThinInnerEnergy_28",
+            "PART_ThinInnerEnergy_29",
+            "PART_ThinInnerEnergy_30",
+            "PART_ThinInnerEnergy_31",
+            "PART_ThinInnerEnergy_32",
+            "PART_ThinInnerEnergy_33",
+            "PART_ThinInnerEnergy_34",
+            "PART_ThinInnerEnergy_35",
+            "PART_ThinInnerEnergy_36",
+            "PART_ThinInnerEnergy_37",
+            "PART_ThinInnerEnergy_38",
+            "PART_ThinInnerEnergy_39",
+            "PART_ThinInnerEnergy_40",
+            "PART_ThinInnerEnergy_41",
+            "PART_ThinInnerEnergy_42",
+            "PART_ThinInnerEnergy_43",
+            "PART_ThinInnerEnergy_44",
+            "PART_ThinInnerEnergy_45",
+            "PART_ThinInnerEnergy_46",
+            "PART_ThinInnerEnergy_47",
+            "PART_ThinInnerEnergy_48",
+            "PART_ThinInnerEnergy_49",
+            "PART_ThinInnerEnergy_50",
+            "PART_ThinInnerEnergy_51",
+            "PART_ThinInnerEnergy_52",
+            "PART_ThinInnerEnergy_53",
+            "PART_ThinInnerEnergy_54",
+            "PART_ThinInnerEnergy_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.446395874023438,
+            0.0,
+            9.201951026916504
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinInnerEnergy_0": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_1": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_2": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_3": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_4": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_5": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_6": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_7": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_8": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_9": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_10": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_11": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_12": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_13": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_14": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_15": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_16": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_17": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_18": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_19": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_20": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_21": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_22": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_23": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_24": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_25": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_26": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_27": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_28": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_29": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_30": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_31": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_32": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_33": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_34": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_35": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_36": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_37": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_38": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_39": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_40": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_41": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_42": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_43": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_44": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_45": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_46": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_47": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_48": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_49": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_50": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_51": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_52": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_53": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_54": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.446395874023438,
+              1.4901161193847656e-06,
+              9.201951026916504
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Distinct blue-white branching erosion, one continuous max-union field. Establishment has no hit; triggers do not rebuild or stack the ground.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2071_RiftGround_State.wav"
+      }
+    },
+    "2071_RiftGround_Trigger": {
+      "effect": "2071_RiftGround_Trigger",
+      "source": "Blender/2071_RiftGround_Trigger.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/RiftGround/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Wisp": {
+          "file": "Exports/2071_RiftGround_Trigger_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 16,
+          "position": [
+            2.075000047683716,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 16,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 16,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 16,
+          "position": [
+            6.994999885559082,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 29,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Distinct blue-white branching erosion, one continuous max-union field. Establishment has no hit; triggers do not rebuild or stack the ground.",
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2071_RiftGround_Trigger.wav"
+      }
+    },
+    "2071_RiftGround_Overall": {
+      "effect": "2071_RiftGround_Overall",
+      "source": "Blender/2071_RiftGround_Overall.blend",
+      "requirement": "art_assets/UE-Reference/Enemies/2071_Stormterror/RiftGround/视觉需求.md",
+      "fps": 30,
+      "axes": "XZ screen plane; +Z up; -Y toward viewer. Ground y=.19 behind all cards.",
+      "unityIntegrated": false,
+      "parts": {
+        "Mist": {
+          "file": "Exports/2071_RiftGround_Overall_Mist.fbx",
+          "objects": [
+            "PART_ThinIrregularMist"
+          ],
+          "vertices": 513,
+          "triangles": 960,
+          "dimensions": [
+            2.1416279077529907,
+            0.0,
+            2.091437876224518
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinIrregularMist": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 513,
+            "triangles": 960,
+            "dimensions": [
+              2.1416279077529907,
+              3.4073845256443747e-07,
+              2.091437876224518
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "Wisp": {
+          "file": "Exports/2071_RiftGround_Overall_Wisp.fbx",
+          "objects": [
+            "PART_SoftWindWisp"
+          ],
+          "vertices": 532,
+          "triangles": 900,
+          "dimensions": [
+            2.1098456382751465,
+            1.100000023841858,
+            0.4042544290423393
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_SoftWindWisp": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 1,
+            "vertices": 532,
+            "triangles": 900,
+            "dimensions": [
+              2.1098456382751465,
+              1.1000000834465027,
+              0.40425460785627365
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "DeepCrackEdges": {
+          "file": "Exports/2071_RiftGround_Overall_DeepCrackEdges.fbx",
+          "objects": [
+            "PART_DeepCrackEdges_0",
+            "PART_DeepCrackEdges_1",
+            "PART_DeepCrackEdges_2",
+            "PART_DeepCrackEdges_3",
+            "PART_DeepCrackEdges_4",
+            "PART_DeepCrackEdges_5",
+            "PART_DeepCrackEdges_6",
+            "PART_DeepCrackEdges_7",
+            "PART_DeepCrackEdges_8",
+            "PART_DeepCrackEdges_9",
+            "PART_DeepCrackEdges_10",
+            "PART_DeepCrackEdges_11",
+            "PART_DeepCrackEdges_12",
+            "PART_DeepCrackEdges_13",
+            "PART_DeepCrackEdges_14",
+            "PART_DeepCrackEdges_15",
+            "PART_DeepCrackEdges_16",
+            "PART_DeepCrackEdges_17",
+            "PART_DeepCrackEdges_18",
+            "PART_DeepCrackEdges_19",
+            "PART_DeepCrackEdges_20",
+            "PART_DeepCrackEdges_21",
+            "PART_DeepCrackEdges_22",
+            "PART_DeepCrackEdges_23",
+            "PART_DeepCrackEdges_24",
+            "PART_DeepCrackEdges_25",
+            "PART_DeepCrackEdges_26",
+            "PART_DeepCrackEdges_27",
+            "PART_DeepCrackEdges_28",
+            "PART_DeepCrackEdges_29",
+            "PART_DeepCrackEdges_30",
+            "PART_DeepCrackEdges_31",
+            "PART_DeepCrackEdges_32",
+            "PART_DeepCrackEdges_33",
+            "PART_DeepCrackEdges_34",
+            "PART_DeepCrackEdges_35",
+            "PART_DeepCrackEdges_36",
+            "PART_DeepCrackEdges_37",
+            "PART_DeepCrackEdges_38",
+            "PART_DeepCrackEdges_39",
+            "PART_DeepCrackEdges_40",
+            "PART_DeepCrackEdges_41",
+            "PART_DeepCrackEdges_42",
+            "PART_DeepCrackEdges_43",
+            "PART_DeepCrackEdges_44",
+            "PART_DeepCrackEdges_45",
+            "PART_DeepCrackEdges_46",
+            "PART_DeepCrackEdges_47",
+            "PART_DeepCrackEdges_48",
+            "PART_DeepCrackEdges_49",
+            "PART_DeepCrackEdges_50",
+            "PART_DeepCrackEdges_51",
+            "PART_DeepCrackEdges_52",
+            "PART_DeepCrackEdges_53",
+            "PART_DeepCrackEdges_54",
+            "PART_DeepCrackEdges_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.503520011901855,
+            0.0,
+            9.269111633300781
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_DeepCrackEdges_0": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_1": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_2": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_3": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_4": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_5": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_6": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_7": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_8": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_9": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_10": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_11": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_12": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_13": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_14": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_15": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_16": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_17": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_18": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_19": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_20": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_21": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_22": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_23": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_24": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_25": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_26": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_27": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_28": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_29": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_30": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_31": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_32": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_33": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_34": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_35": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_36": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_37": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_38": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_39": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_40": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_41": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_42": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_43": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_44": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_45": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_46": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_47": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_48": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_49": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_50": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_51": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_52": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_53": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_54": [
+              "Soft"
+            ],
+            "PART_DeepCrackEdges_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.503520011901855,
+              1.519918441772461e-06,
+              9.269111633300781
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "BlueWhiteBranchingRifts": {
+          "file": "Exports/2071_RiftGround_Overall_BlueWhiteBranchingRifts.fbx",
+          "objects": [
+            "PART_BlueWhiteBranchingRifts_0",
+            "PART_BlueWhiteBranchingRifts_1",
+            "PART_BlueWhiteBranchingRifts_2",
+            "PART_BlueWhiteBranchingRifts_3",
+            "PART_BlueWhiteBranchingRifts_4",
+            "PART_BlueWhiteBranchingRifts_5",
+            "PART_BlueWhiteBranchingRifts_6",
+            "PART_BlueWhiteBranchingRifts_7",
+            "PART_BlueWhiteBranchingRifts_8",
+            "PART_BlueWhiteBranchingRifts_9",
+            "PART_BlueWhiteBranchingRifts_10",
+            "PART_BlueWhiteBranchingRifts_11",
+            "PART_BlueWhiteBranchingRifts_12",
+            "PART_BlueWhiteBranchingRifts_13",
+            "PART_BlueWhiteBranchingRifts_14",
+            "PART_BlueWhiteBranchingRifts_15",
+            "PART_BlueWhiteBranchingRifts_16",
+            "PART_BlueWhiteBranchingRifts_17",
+            "PART_BlueWhiteBranchingRifts_18",
+            "PART_BlueWhiteBranchingRifts_19",
+            "PART_BlueWhiteBranchingRifts_20",
+            "PART_BlueWhiteBranchingRifts_21",
+            "PART_BlueWhiteBranchingRifts_22",
+            "PART_BlueWhiteBranchingRifts_23",
+            "PART_BlueWhiteBranchingRifts_24",
+            "PART_BlueWhiteBranchingRifts_25",
+            "PART_BlueWhiteBranchingRifts_26",
+            "PART_BlueWhiteBranchingRifts_27",
+            "PART_BlueWhiteBranchingRifts_28",
+            "PART_BlueWhiteBranchingRifts_29",
+            "PART_BlueWhiteBranchingRifts_30",
+            "PART_BlueWhiteBranchingRifts_31",
+            "PART_BlueWhiteBranchingRifts_32",
+            "PART_BlueWhiteBranchingRifts_33",
+            "PART_BlueWhiteBranchingRifts_34",
+            "PART_BlueWhiteBranchingRifts_35",
+            "PART_BlueWhiteBranchingRifts_36",
+            "PART_BlueWhiteBranchingRifts_37",
+            "PART_BlueWhiteBranchingRifts_38",
+            "PART_BlueWhiteBranchingRifts_39",
+            "PART_BlueWhiteBranchingRifts_40",
+            "PART_BlueWhiteBranchingRifts_41",
+            "PART_BlueWhiteBranchingRifts_42",
+            "PART_BlueWhiteBranchingRifts_43",
+            "PART_BlueWhiteBranchingRifts_44",
+            "PART_BlueWhiteBranchingRifts_45",
+            "PART_BlueWhiteBranchingRifts_46",
+            "PART_BlueWhiteBranchingRifts_47",
+            "PART_BlueWhiteBranchingRifts_48",
+            "PART_BlueWhiteBranchingRifts_49",
+            "PART_BlueWhiteBranchingRifts_50",
+            "PART_BlueWhiteBranchingRifts_51",
+            "PART_BlueWhiteBranchingRifts_52",
+            "PART_BlueWhiteBranchingRifts_53",
+            "PART_BlueWhiteBranchingRifts_54",
+            "PART_BlueWhiteBranchingRifts_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.45896339416504,
+            0.0,
+            9.216726303100586
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_BlueWhiteBranchingRifts_0": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_1": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_2": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_3": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_4": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_5": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_6": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_7": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_8": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_9": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_10": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_11": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_12": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_13": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_14": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_15": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_16": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_17": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_18": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_19": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_20": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_21": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_22": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_23": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_24": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_25": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_26": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_27": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_28": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_29": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_30": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_31": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_32": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_33": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_34": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_35": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_36": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_37": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_38": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_39": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_40": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_41": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_42": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_43": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_44": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_45": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_46": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_47": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_48": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_49": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_50": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_51": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_52": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_53": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_54": [
+              "Soft"
+            ],
+            "PART_BlueWhiteBranchingRifts_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.45896339416504,
+              1.4901161193847656e-06,
+              9.216726303100586
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        },
+        "ThinInnerEnergy": {
+          "file": "Exports/2071_RiftGround_Overall_ThinInnerEnergy.fbx",
+          "objects": [
+            "PART_ThinInnerEnergy_0",
+            "PART_ThinInnerEnergy_1",
+            "PART_ThinInnerEnergy_2",
+            "PART_ThinInnerEnergy_3",
+            "PART_ThinInnerEnergy_4",
+            "PART_ThinInnerEnergy_5",
+            "PART_ThinInnerEnergy_6",
+            "PART_ThinInnerEnergy_7",
+            "PART_ThinInnerEnergy_8",
+            "PART_ThinInnerEnergy_9",
+            "PART_ThinInnerEnergy_10",
+            "PART_ThinInnerEnergy_11",
+            "PART_ThinInnerEnergy_12",
+            "PART_ThinInnerEnergy_13",
+            "PART_ThinInnerEnergy_14",
+            "PART_ThinInnerEnergy_15",
+            "PART_ThinInnerEnergy_16",
+            "PART_ThinInnerEnergy_17",
+            "PART_ThinInnerEnergy_18",
+            "PART_ThinInnerEnergy_19",
+            "PART_ThinInnerEnergy_20",
+            "PART_ThinInnerEnergy_21",
+            "PART_ThinInnerEnergy_22",
+            "PART_ThinInnerEnergy_23",
+            "PART_ThinInnerEnergy_24",
+            "PART_ThinInnerEnergy_25",
+            "PART_ThinInnerEnergy_26",
+            "PART_ThinInnerEnergy_27",
+            "PART_ThinInnerEnergy_28",
+            "PART_ThinInnerEnergy_29",
+            "PART_ThinInnerEnergy_30",
+            "PART_ThinInnerEnergy_31",
+            "PART_ThinInnerEnergy_32",
+            "PART_ThinInnerEnergy_33",
+            "PART_ThinInnerEnergy_34",
+            "PART_ThinInnerEnergy_35",
+            "PART_ThinInnerEnergy_36",
+            "PART_ThinInnerEnergy_37",
+            "PART_ThinInnerEnergy_38",
+            "PART_ThinInnerEnergy_39",
+            "PART_ThinInnerEnergy_40",
+            "PART_ThinInnerEnergy_41",
+            "PART_ThinInnerEnergy_42",
+            "PART_ThinInnerEnergy_43",
+            "PART_ThinInnerEnergy_44",
+            "PART_ThinInnerEnergy_45",
+            "PART_ThinInnerEnergy_46",
+            "PART_ThinInnerEnergy_47",
+            "PART_ThinInnerEnergy_48",
+            "PART_ThinInnerEnergy_49",
+            "PART_ThinInnerEnergy_50",
+            "PART_ThinInnerEnergy_51",
+            "PART_ThinInnerEnergy_52",
+            "PART_ThinInnerEnergy_53",
+            "PART_ThinInnerEnergy_54",
+            "PART_ThinInnerEnergy_55"
+          ],
+          "vertices": 3416,
+          "triangles": 5184,
+          "dimensions": [
+            20.446395874023438,
+            0.0,
+            9.201951026916504
+          ],
+          "rgba": "VFXColor POINT FLOAT_COLOR",
+          "origin": "local attachment/contact zero; reference cards excluded",
+          "shapeKeys": {},
+          "materialGroups": {
+            "PART_ThinInnerEnergy_0": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_1": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_2": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_3": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_4": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_5": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_6": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_7": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_8": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_9": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_10": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_11": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_12": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_13": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_14": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_15": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_16": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_17": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_18": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_19": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_20": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_21": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_22": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_23": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_24": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_25": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_26": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_27": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_28": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_29": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_30": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_31": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_32": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_33": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_34": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_35": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_36": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_37": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_38": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_39": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_40": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_41": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_42": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_43": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_44": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_45": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_46": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_47": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_48": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_49": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_50": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_51": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_52": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_53": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_54": [
+              "Soft"
+            ],
+            "PART_ThinInnerEnergy_55": [
+              "Soft"
+            ]
+          },
+          "previewOnlyMaterials": [],
+          "fbxReimport": {
+            "meshes": 56,
+            "vertices": 3416,
+            "triangles": 5184,
+            "dimensions": [
+              20.446395874023438,
+              1.4901161193847656e-06,
+              9.201951026916504
+            ],
+            "rgba": true,
+            "triangulated": true,
+            "materialIndices": true
+          }
+        }
+      },
+      "preview": {
+        "cards": 9,
+        "separateFrontFrameBack": true,
+        "backgroundDepth": 3.0
+      },
+      "cues": [
+        {
+          "frame": 74,
+          "position": [
+            2.075000047683716,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 74,
+          "position": [
+            3.7049999237060547,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 74,
+          "position": [
+            5.364999771118164,
+            -0.09000000357627869,
+            -0.6800000071525574
+          ],
+          "kind": "one resolved Anemo contact"
+        },
+        {
+          "frame": 74,
+          "position": [
+            6.994999885559082,
+            -0.09000000357627869,
+            1.350000023841858
+          ],
+          "kind": "one resolved Anemo contact"
+        }
+      ],
+      "launchFrames": [],
+      "hero_frame": 70,
+      "focus": [
+        3.7049999237060547,
+        0.15000000596046448,
+        1.350000023841858
+      ],
+      "detailScale": 9,
+      "contract": "Distinct blue-white branching erosion, one continuous max-union field. Establishment has no hit; triggers do not rebuild or stack the ground.",
+      "phases": {
+        "appear": [
+          1,
+          25
+        ],
+        "loop": [
+          25,
+          169
+        ],
+        "repeatEndpoint": 169,
+        "twoCycles": [
+          25,
+          313
+        ],
+        "exitExample": [
+          313,
+          348
+        ],
+        "arbitraryExit": "CTRL StateStartFrame / ExitFrame / ExitFrames; no automatic lifetime in runtime"
+      },
+      "audio": {
+        "candidateSources": "Audio/Sources.json",
+        "files": {
+          "Launch.wav": "Launch.wav",
+          "Contact.wav": "Contact.wav",
+          "State_Start.wav": "State_Start.wav",
+          "State_Loop.wav": "State_Loop.wav",
+          "State_Exit.wav": "State_Exit.wav"
+        },
+        "subjectiveListeningVerified": false,
+        "previewMix": "codex_worktable\\enemy_vfx\\mixes\\2071_RiftGround_Overall.wav"
+      }
+    }
+  }
+}

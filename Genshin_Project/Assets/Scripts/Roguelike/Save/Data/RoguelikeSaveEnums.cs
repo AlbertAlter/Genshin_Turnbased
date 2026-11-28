@@ -12,6 +12,7 @@ public enum RoguelikeResumePoint
     RewardSelection = 3,
     Event = 4,
     ChapterCompleted = 5,
+    BattleDefeat = 6,
 }
 
 public enum RoguelikeSaveReason
@@ -30,4 +31,5 @@ public enum RoguelikeSaveReason
     PendingRewardGenerated = 11,
     InventoryChanged = 12,
     ShopPurchased = 13,
+    BattleDefeat = 14,
 }

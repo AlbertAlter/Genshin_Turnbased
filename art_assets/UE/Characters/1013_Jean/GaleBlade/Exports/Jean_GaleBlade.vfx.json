@@ -1,0 +1,20 @@
+{
+  "key": "Characters/1013_Jean/GaleBlade/Jean_GaleBlade",
+  "source": "art_assets/UE/Characters/1013_Jean/GaleBlade/Blender/Jean_GaleBlade.blend",
+  "file": "Characters/1013_Jean/GaleBlade/Exports/Jean_GaleBlade.vfx.bytes",
+  "meshes": 4,
+  "tracks": 36,
+  "frames": 43,
+  "duration": 1.4,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Gather": 0.0,
+    "Release": 0.13333333333333333,
+    "RightContact": 0.2,
+    "LeftContact": 0.3,
+    "WindGone": 0.8,
+    "Restored": 1.2666666666666666
+  },
+  "bytes": 127646
+}

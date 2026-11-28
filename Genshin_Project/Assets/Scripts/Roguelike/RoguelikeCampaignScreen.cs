@@ -5,6 +5,7 @@ using System.Linq;
 using Roguelike.Tests.RouteGeneration;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>Shared campaign presentation. Every scene explicitly supplies its content frame.</summary>
@@ -25,6 +26,18 @@ internal sealed class RoguelikeCampaignScreen
     private int choices, links;
     private bool ready = true;
     private readonly List<StreamingSpriteReference> readinessArt = new();
+    private ScrollRect mapScroll;
+    private float? mapScrollRestore;
+    internal float? MapScrollPosition
+    {
+        get => mapScroll != null ? mapScroll.horizontalNormalizedPosition : null;
+        set
+        {
+            mapScrollRestore = value;
+            if (mapScroll != null && value.HasValue)
+            { mapScroll.velocity = Vector2.zero; mapScroll.horizontalNormalizedPosition = value.Value; }
+        }
+    }
     internal bool Ready
     {
         get
@@ -69,6 +82,7 @@ internal sealed class RoguelikeCampaignScreen
     }
     internal void Clear()
     {
+        mapScroll = null; mapScrollRestore = null;
         Remove(page); modal = null; modalBack = null; modalChildBack = null;
         page = Rect("Campaign controls", mount); Stretch(page); choices = links = 0; ready = true;
     }
@@ -114,6 +128,8 @@ internal sealed class RoguelikeCampaignScreen
     {
         Clear(); Fill(page, new Color32(170, 153, 125, 255));
     }
+    internal void RouteSettings(string title, Action open)
+        => Button(page, title, new Vector2(0, 1), 114, -28, 120, 54, open);
     private Button RouteTool(string title, Vector2 anchor, float x, float y, Action action, string art = null, Vector2[][] strokes = null)
     {
         var rect = Rect(title, page); Place(rect, anchor, x, y, 62, 62);
@@ -169,12 +185,16 @@ internal sealed class RoguelikeCampaignScreen
     }
     internal RectTransform Window(string title, string subtitle, Action close, bool wide = false)
     {
+        page.SetAsLastSibling();
+        EventSystem.current?.SetSelectedGameObject(null);
         CloseWindow(); modalBack = close; modal = Rect("Campaign modal", page); Stretch(modal);
         var dismiss = Fill(modal, new Color32(26, 21, 17, 170), true);
         var outside = modal.gameObject.AddComponent<Button>(); outside.targetGraphic = dismiss;
         outside.onClick.AddListener(() => dispatch(close)); outside.navigation = new Navigation { mode = Navigation.Mode.None };
         var panel = Rect("Window", modal); Place(panel, Vector2.one * .5f, 0, 0, wide ? 1536 : 1018, wide ? 864 : 810);
-        Fill(panel, Deep, true);
+        var panelFill = Fill(panel, Deep, true);
+        var panelInput = panel.gameObject.AddComponent<Button>(); panelInput.targetGraphic = panelFill;
+        panelInput.transition = Selectable.Transition.None; panelInput.navigation = new Navigation { mode = Navigation.Mode.None };
         if (frame != null)
         {
             var border = UnityEngine.Object.Instantiate(frame, panel, false);
@@ -225,7 +245,7 @@ internal sealed class RoguelikeCampaignScreen
         var map = routes.Map(snapshot); var allowed = routes.Next(snapshot).Select(node => node.Id).ToHashSet();
         var viewport = Rect("Route", page); Stretch(viewport); viewport.SetAsFirstSibling();
         Fill(viewport, new Color32(153, 143, 129, 255), true); viewport.gameObject.AddComponent<RectMask2D>();
-        var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport;
+        var scroll = viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport = viewport; mapScroll = scroll;
         var content = Rect("Map", viewport); Place(content, new Vector2(0, .5f), 0, 0, map.ContentWidth, routes.Settings.RouteHeight);
         scroll.content = content; scroll.horizontal = true; scroll.vertical = false; scroll.movementType = ScrollRect.MovementType.Clamped;
         foreach (int direction in new[] { -1, 1 })
@@ -241,7 +261,9 @@ internal sealed class RoguelikeCampaignScreen
             if (view == null || viewport == null) return;
             view.Render(map, routes.Settings); Canvas.ForceUpdateCanvases();
             float range = map.ContentWidth - viewport.rect.width;
-            scroll.horizontalNormalizedPosition = range <= 0 ? 0 : Mathf.Clamp01((routes.Settings.StageStartX + snapshot.CurrentStageIndex * routes.Settings.StageWidth - viewport.rect.width / 2) / range);
+            // 语言切换后的异步美术准备完成时也保留打开设置前的浏览位置。
+            scroll.horizontalNormalizedPosition = mapScrollRestore ?? (range <= 0 ? 0 : Mathf.Clamp01((routes.Settings.StageStartX + snapshot.CurrentStageIndex * routes.Settings.StageWidth - viewport.rect.width / 2) / range));
+            mapScrollRestore = null;
         }
         IEnumerator Style()
         {

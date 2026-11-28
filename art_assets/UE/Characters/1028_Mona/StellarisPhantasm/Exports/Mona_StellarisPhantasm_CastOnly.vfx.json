@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1028_Mona/StellarisPhantasm/Mona_StellarisPhantasm_CastOnly",
+  "source": "art_assets/UE/Characters/1028_Mona/StellarisPhantasm/Blender/Mona_StellarisPhantasm_CastOnly.blend",
+  "file": "Characters/1028_Mona/StellarisPhantasm/Exports/Mona_StellarisPhantasm_CastOnly.vfx.bytes",
+  "meshes": 28,
+  "tracks": 61,
+  "frames": 145,
+  "duration": 4.8,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.8
+  },
+  "bytes": 133930
+}

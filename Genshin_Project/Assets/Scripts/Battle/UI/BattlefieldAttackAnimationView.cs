@@ -4,14 +4,36 @@ using UnityEngine;
 
 /// <summary>Scene adapter for the shared per-effect attacker and per-hit receiver animations. Never settles gameplay.</summary>
 [DisallowMultipleComponent]
-public sealed class BattlefieldAttackAnimationView : MonoBehaviour, IBattleAttackAnimationView
+public sealed class BattlefieldAttackAnimationView : MonoBehaviour, IBattleAttackAnimationView, IBattlePresentationCueBarrier, IBattleVisualCompletion
 {
     public BattleUiLayout layout;
     private UICardAttackMotion motion;
+    public bool HasPendingVisuals => motion != null && motion.ActiveCount > 0;
     private UIHitShakeController screenShake;
     private BattleUiAnimatedCards cardViews;
     private BattlefieldPresentationPlayer player;
     private readonly Dictionary<(long, long, long, string), long> self = new Dictionary<(long, long, long, string), long>();
+    private (long, long, long, string, long)? lastHit;
+    private static (long, long, long, string, long) HitKey(long playback, BattlePresentationCue cue)
+    {
+        var key = BattleAttackAnimationTimeline.PresentationHitKey(cue);
+        return (playback,key.Item1,key.Item2,key.Item3,key.Item4);
+    }
+    public bool CanPresent(long playbackID, BattlePresentationCue cue)
+    {
+        if (!isActiveAndEnabled || motion == null || cue.AttackAnimation == null) return true;
+        if (cue.IsAttackStart) return motion.ActiveCount == 0;
+        if (!(cue.Result.Data is DamageEventData damage) || !damage.HitLanded) return true;
+        var hit = HitKey(playbackID,cue);
+        bool shared = cue.StatusBatchLane != 0 && lastHit == hit;
+        if (lastHit != hit && motion.HasActiveHits) return false;
+        var r = cue.Result;
+        if (!shared && motion.HasHit(Card(r.TargetSide, r.TargetSlot, r.Data.Subject))) return false;
+        var spec = cue.AttackAnimation; var execution = BattleAttackAnimationTimeline.ExecutionKey(r);
+        return cue.IsAnticipation || !spec.HasScreenShake || screenShake == null || !screenShake.isActiveAndEnabled ||
+            screenShake.CanPulseScreen(playbackID, r.Header.SessionId, hit.Item3, hit.Item4,
+                cue.StatusBatchLane != 0 ? cue.VisualHitIndex : damage.HitIndex, "AttackScreen/" + spec.EffectID);
+    }
     private void OnEnable()
     {
         motion = GetComponent<UICardAttackMotion>() ?? gameObject.AddComponent<UICardAttackMotion>();
@@ -49,14 +71,18 @@ public sealed class BattlefieldAttackAnimationView : MonoBehaviour, IBattleAttac
             }
             if (r.Data is DamageEventData damage)
             {
+                var hit = HitKey(playbackID,cue);
+                bool sharedReceiver = cue.StatusBatchLane != 0 && lastHit == hit && motion.HasHit(target);
+                lastHit = hit;
                 if (self.TryGetValue(key, out long handle)) motion.Impact(handle);
                 if (damage.HitLanded && spec.HasScreenShake && screenShake != null && screenShake.isActiveAndEnabled)
                 {
                     var shake = HitShakeStyle.AttackScreen(spec);
                     uint seed = HitEffectMath.CueSeed(unchecked((int)r.Header.SessionId), damage.HitIndex, 0);
-                    screenShake.PulseScreen(playbackID, r.Header.SessionId, execution.Item2, r.EffectID, damage.HitIndex, shake, seed);
+                    screenShake.PulseScreen(playbackID, r.Header.SessionId, hit.Item3, hit.Item4,
+                        cue.StatusBatchLane != 0 ? cue.VisualHitIndex : damage.HitIndex, shake, seed);
                 }
-                if (damage.HitLanded && target != null)
+                if (damage.HitLanded && target != null && !sharedReceiver)
                 {
                     uint seed = HitEffectMath.CueSeed(unchecked((int)r.Header.SessionId), damage.HitIndex, r.Header.TargetIndex);
                     motion.PlayHit(playbackID, target, spec.HitAnimation, direction, seed, spec.Strength, completed, spec);
@@ -69,6 +95,7 @@ public sealed class BattlefieldAttackAnimationView : MonoBehaviour, IBattleAttac
     }
     public void Cancel(long playbackID)
     {
+        if (playbackID < 0 || lastHit?.Item1 == playbackID) lastHit = null;
         motion?.Cancel(playbackID);
         screenShake?.CancelScreen(playbackID);
         foreach (var key in new List<(long, long, long, string)>(self.Keys)) if (playbackID < 0 || key.Item1 == playbackID) self.Remove(key);

@@ -1,0 +1,16 @@
+{
+  "key": "Characters/1039_Yanfei/BlazingEye/Yanfei_BlazingEye",
+  "source": "art_assets/UE/Characters/1039_Yanfei/BlazingEye/Blender/Yanfei_BlazingEye.blend",
+  "file": "Characters/1039_Yanfei/BlazingEye/Exports/Yanfei_BlazingEye.vfx.bytes",
+  "meshes": 4,
+  "tracks": 72,
+  "frames": 88,
+  "duration": 2.9,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 2.9
+  },
+  "bytes": 176239
+}

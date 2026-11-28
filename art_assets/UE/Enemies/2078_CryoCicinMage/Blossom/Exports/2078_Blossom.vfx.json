@@ -1,0 +1,16 @@
+{
+  "key": "Enemies/2078_CryoCicinMage/Blossom/2078_Blossom",
+  "source": "art_assets/UE/Enemies/2078_CryoCicinMage/Blossom/Blender/2078_Blossom.blend",
+  "file": "Enemies/2078_CryoCicinMage/Blossom/Exports/2078_Blossom.vfx.bytes",
+  "meshes": 4,
+  "tracks": 69,
+  "frames": 125,
+  "duration": 4.133333333333334,
+  "loopStart": 0,
+  "loopEnd": 0,
+  "markers": {
+    "Start": 0.0,
+    "End": 4.133333333333334
+  },
+  "bytes": 193623
+}

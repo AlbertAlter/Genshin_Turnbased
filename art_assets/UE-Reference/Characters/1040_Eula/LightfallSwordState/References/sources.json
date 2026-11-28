@@ -1,0 +1,32 @@
+[
+  {
+    "source_type": "原作战斗资料",
+    "page_url": "https://wiki.biligame.com/ys/%E4%BC%98%E8%8F%88",
+    "image_url": "https://patchwiki.biligame.com/images/ys/a/af/alc5dt3dwu4qeftbhll7r9j7f0d2gwj.gif",
+    "title": "凝浪之光剑.gif",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已读取角色页并确认GIF直链，未下载或完整观看；具体视觉核对边界见用途。",
+    "use": "核对原作光剑完整造型与悬浮；逐层反馈和30层特殊展示为用户指定。"
+  },
+  {
+    "source_type": "官方角色演示／视觉参考",
+    "page_url": "https://www.youtube.com/watch?v=Go7SeJ-yOL4",
+    "title": "New Character Demo - \"Eula: Flickering Candlelight\" | Genshin Impact",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "verification": "已核对官方发布者、标题和入口，未完整观看或逐帧核对。",
+    "use": "检索该项原作模型、动作和效果，不能将演示入口等同于已确认所有阶段。"
+  },
+  {
+    "source_type": "音效参考",
+    "page_url": "https://www.youtube.com/watch?v=Go7SeJ-yOL4",
+    "title": "优菈官方演示音色检索",
+    "recorded": "2026-11-27",
+    "downloaded": false,
+    "auditioned": false,
+    "extracted": false,
+    "verification": "视频含配乐和语音，未逐段试听或提取，未确认可独立分离的技能音源。",
+    "use": "检索对应出现、动作、接触或退出音色；不提供未经核对的时间点。"
+  }
+]
